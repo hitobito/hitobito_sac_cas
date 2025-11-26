@@ -1,0 +1,28 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- stimulus_ctrl = 'form-field-check-dependent'
+
+%div{data: { controller: "#{stimulus_ctrl} disable-toggle", "#{stimulus_ctrl}-select-dependent-checkboxes-value": true }}
+  .row.mb-2
+    .col-md-3.col-xl-2.pb-1
+    .col-md-9.col-xl-7.col-xxl6
+      .alert.alert-info
+        %strong=t('data_retention_info_title', scope:)
+        %p=t('data_retention_info_text', scope:)
+        %p=t('entry_fee_info_text', scope:)
+        = f.label(:data_retention_consent, class: 'row mb-2') do
+          .col
+            = f.check_box :data_retention_consent, {class: 'align-middle', data: { action: "#{stimulus_ctrl}#toggleMain", "#{stimulus_ctrl}-target" => "main" }}
+            = t('data_retention_consent', scope:)
+        = f.label(:entry_fee_consent, class: 'row mb-2') do
+          .col
+            = f.check_box :entry_fee_consent, class: 'align-middle', data: { action: "disable-toggle#toggle" }
+            = f.label(:entry_fee_consent, class: 'required') do
+              = t('entry_fee_consent', scope:)
+  = render 'wizards/shared/inline_checkbox', label: t("subscribe_newsletter", scope:), key: :subscribe_newsletter, form: f, stimulus_ctrl:
+  = render 'wizards/shared/inline_checkbox', label: t("subscribe_fundraising_list", scope:), key: :subscribe_fundraising_list, form: f, stimulus_ctrl:
+  = yield(:additional_checkbox) if content_for?(:additional_checkbox)
+  = yield

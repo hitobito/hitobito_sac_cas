@@ -62,11 +62,12 @@ Rails.application.routes.draw do
         resources :sac_remarks, only: %i[index edit update], module: :person
         resource :join_zusatzsektion, module: :memberships, only: [:show, :create]
         resource :switch_stammsektion, module: :memberships, only: [:show, :create]
-        resource :terminate_sac_membership, module: :memberships, only: [:show, :create]
         resources :roles, only: [] do
           resource :change_zusatzsektion_to_family, module: :memberships, only: [:create]
           resource :leave_zusatzsektion, module: :memberships, only: [:show, :create]
           resource :undo_termination, module: :memberships, only: [:new, :create]
+          resource :terminate_sac_membership, module: :memberships, only: [:show, :create]
+          resource :terminate_abo_magazin_abonnent, module: :memberships, only: [:show, :create]
         end
         member do
           get "external_invoices" => "people/external_invoices#index"

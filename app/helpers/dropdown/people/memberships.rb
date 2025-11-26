@@ -17,7 +17,7 @@ module Dropdown
     ].freeze
 
     delegate :current_ability, :current_user, :group_person_join_zusatzsektion_path,
-      :group_person_terminate_sac_membership_path, :group_person_switch_stammsektion_path,
+      :group_person_role_terminate_sac_membership_path, :group_person_switch_stammsektion_path,
       to: :template
 
     delegate :can?, to: :current_ability
@@ -73,8 +73,9 @@ module Dropdown
 
       add_item(
         translate(:terminate_sac_membership_link),
-        group_person_terminate_sac_membership_path(
+        group_person_role_terminate_sac_membership_path(
           group_id: sac_membership.stammsektion_role.group_id,
+          role_id: sac_membership.stammsektion_role.id,
           person_id: person.id
         )
       )

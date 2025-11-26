@@ -3,6 +3,16 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- @sheet = Sheet::Memberships::TerminateSacMembership.new(self, nil, group)
+= standard_form(form_object, url: group_person_role_terminate_sac_membership_path(group_id: group.id, person_id: person.id)) do |f|
+  = render "common_fields", f: f
 
-= render 'form'
+  = if for_someone_else?
+    - content_for(:additional_checkbox) do
+      = render 'wizards/shared/inline_checkbox', label: t("inform_mitglied_via_email", scope: "wizards.steps.termination.summary"), key: :inform_mitglied_via_email, form: f
+
+  = render "data_protection_fields", f: f, scope: "wizards.steps.termination.summary" do
+
+    -# nested as we control buttons from data_protection_fields
+    .btn-toolbar.align-with-form
+      = submit_button(f, t("wizards.steps.termination.summary.next_button"), {disabled: !f.object.entry_fee_consent, data: { "disable-toggle-target" => "toggled"}})
+      = link_to(ti(:"button.cancel"), group_person_path(group, person), class: "link cancel mt-2 pt-1")

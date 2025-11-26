@@ -37,6 +37,7 @@ class SacPersonSeeder < PersonSeeder
   def person_attributes(role_type)
     attrs = super
     attrs[:confirmed_at] = Time.current
+    attrs[:end_of] = Time.zone.current.end_of_year if role_type == "Abonnent"
     attrs.delete(:nickname)
     attrs
   end
