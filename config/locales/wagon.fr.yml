@@ -62,8 +62,8 @@ fr:
         reference_date: "Stichtag"
         membership_years: "Nombre d'années d'adhésion"
       people/export/period_form:
-        from: "Von"
-        to: "Bis"
+        from: "De"
+        to: "Jusqu'à"
       people/membership/invoice_form:
         reference_date: "Date de référence"
         invoice_date: "Date de réservation"
@@ -110,7 +110,7 @@ fr:
         now: immédiatement
       memberships/termination_form:
         terminate_on: Austrittsdatum
-        termination_reason_id: Austrittsgrund
+        termination_reason_id: Motif de sortie
       people/neuanmeldungen/reject:
         note: Remarque
       self_inscription:
@@ -1084,20 +1084,20 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_ressorts/leserecht:
-        one: Leserecht
-        description: Leserecht
+        one: Droit de lecture
+        description: Droit de lecture
       group/sektions_ressorts/schreibrecht:
-        one: Schreibrecht
-        description: Schreibrecht
+        one: Droit d’écriture
+        description: Droit d’écriture
       group/sektions_ressort/leitung:
-        one: Leitung
-        description: Leitung
+        one: Direction
+        description: Direction
       group/sektions_ressort/mitglied:
-        one: Mitglied
-        description: Mitglied
+        one: Membre
+        description: Membre
       group/sektions_ressort/andere:
-        one: Andere
-        description: Andere
+        one: Autres
+        description: Autres
       group/sektions_vorstand/praesidium:
         one: Présidence
         description: Présidence
@@ -1564,37 +1564,37 @@ fr:
       country: Pays
 
   export/tabular/people/jubilare:
-    sheet_name: "Mitglieder per %{reference_date}"
+    sheet_name: "Membres par %{reference_date}"
 
   export/xlsx/mitglieder_statistics:
-    sheet_name: Mitglieder
-    total: Anzahl Total
-    thereof: Davon
+    sheet_name: Membres
+    total: Nombre Total
+    thereof: Dont
     gender:
-      label: Geschlecht
+      label: Sexe
       m: m
-      w: w
+      w: f
       nil: d
     language:
-      label: Sprache
+      label: Langue
     age:
-      label: Altersgruppe
+      label: Groupe d'âge
     beitragskategorie:
-      label: Beitragskategorie
-      adult: Einzel
-      family_main: Familie
+      label: "Catégories de cotisation "
+      adult: Individuelle
+      family_main: Famille
       family_adult: FreiFam
       family_child: FreiKind
-      youth: Jugend
+      youth: Jeunesse
     self_registration_reason:
-      label: Eintrittsgrund
-      nil: Keine Angabe
+      label: Motif d’entrée
+      nil: Aucune indication
     termination_reason:
-      label: Austrittsgrund
-      nil: Keine Angabe
-    section_active: "Aktive Mitglieder am %{to}"
-    section_eintritte: "Eintritte %{from} - %{to}"
-    section_austritte: "Austritte %{from} - %{to}"
+      label: Motif de sortie
+      nil: Aucune indication
+    section_active: "Membres actifs le %{to}"
+    section_eintritte: "Entrées %{from} - %{to}"
+    section_austritte: "Départs %{from} - %{to}"
 
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de course
@@ -1636,7 +1636,7 @@ fr:
         already_subscribed_to_abo: Tu es déjà destinataire de ce magazine. Tu ne peux donc pas commander le magazine une deuxième fois.
         already_member_of_tourenportal: Tu es déjà membre du Portail des courses du CAS. Tu ne peux donc pas créer une autre adhésion.
 
-        existing_family_notice: Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
+        existing_family_notice: Tu es rattaché à une famille. Contacte le secrétariat du CAS.
         signed_up_notice: Ton inscription a été enregistrée avec succès.
 
       agreement_link:
@@ -1899,11 +1899,11 @@ fr:
     export:
       popover_jubilare:
         title: "Jubliare exportieren"
-        download: Herunterladen
+        download: Télécharger
         membership_years_help: "leer = beliebige Anzahl"
 
       popover_period:
-        download: Herunterladen
+        download: Télécharger
 
     membership:
       verify:
@@ -1989,7 +1989,7 @@ fr:
     filename: Jubilare_per
 
   people/export/mitglieder_statistics:
-    filename: Mitgliederstatistik
+    filename: Statistiques des membres
 
   people/neuanmeldungen/approves:
     new:

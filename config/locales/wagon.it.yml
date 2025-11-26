@@ -62,8 +62,8 @@ it:
         reference_date: "Stichtag"
         membership_years: "Numero di anni di appartenenza"
       people/export/period_form:
-        from: "Von"
-        to: "Bis"
+        from: "Da"
+        to: "Fino a"
       people/membership/invoice_form:
         reference_date: "Scadenza"
         invoice_date: "Data di prenotazione"
@@ -95,7 +95,7 @@ it:
         phone_number: Telefono
       wizards/steps/signup/sektion/various_fields:
         register_on: Data di adesione dal
-        self_registration_reason_id: Motivo dell’adesione
+        self_registration_reason_id: Motivo dell'ingresso
       wizards/steps/signup/sektion/summary_fields:
         sektion_statuten: Statuto della sezione
         adult_consent: Dichiarazione di consenso del tutore legale
@@ -110,7 +110,7 @@ it:
         now: subito
       memberships/termination_form:
         terminate_on: Austrittsdatum
-        termination_reason_id: Austrittsgrund
+        termination_reason_id: Motivo della disdetta
       people/neuanmeldungen/reject:
         note: Osservazione
       self_inscription:
@@ -449,7 +449,7 @@ it:
         birthday: Data di nascita
         membership_years: Numero di anni di affiliazione
         terminate_on: Data di partenza
-        termination_reason: Motivo della partenza
+        termination_reason: Motivo della disdetta
         membership_number: Socio n.
         navision_id: Navision n.
         salutations:
@@ -832,8 +832,9 @@ it:
         one: Ressorts
         other: Ressorts
       group/sektions_ressort:
-        one: Ressort
-        other: Ressorts
+        one: Dipartimento
+        many: Dipartimenti
+        other: Dipartimenti
       group/sektions_touren_und_kurse:
         one: Visite e corsi
         many: Visite e corsi
@@ -1082,20 +1083,20 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_ressorts/leserecht:
-        one: Leserecht
-        description: Leserecht
+        one: Autorizzazione lettura
+        description: Autorizzazione lettura
       group/sektions_ressorts/schreibrecht:
-        one: Schreibrecht
-        description: Schreibrecht
+        one: Autorizzazione scrittura
+        description: Autorizzazione scrittura
       group/sektions_ressort/leitung:
-        one: Leitung
-        description: Leitung
+        one: Direzione
+        description: Direzione
       group/sektions_ressort/mitglied:
-        one: Mitglied
-        description: Mitglied
+        one: Membro
+        description: Membro
       group/sektions_ressort/andere:
-        one: Andere
-        description: Andere
+        one: Altro
+        description: Altro
       group/sektions_vorstand/praesidium:
         one: Presidenza
         description: Presidenza
@@ -1562,36 +1563,36 @@ it:
       country: Paese
 
   export/tabular/people/jubilare:
-    sheet_name: "Mitglieder per %{reference_date}"
+    sheet_name: "Membri per %{reference_date}"
 
   export/xlsx/mitglieder_statistics:
-    sheet_name: Mitglieder
-    total: Anzahl Total
-    thereof: Davon
+    sheet_name: Membri
+    total: Numero Totale
+    thereof: Di cui
     gender:
-      label: Geschlecht
+      label: Sesso
       m: m
-      w: w
+      w: f
       nil: d
     language:
-      label: Sprache
+      label: Lingua
     age:
-      label: Altersgruppe
+      label: Gruppo di età
     beitragskategorie:
-      label: Beitragskategorie
-      adult: Einzel
-      family_main: Familie
+      label: "Categorie di contributo "
+      adult: Individuale
+      family_main: Famiglia
       family_adult: FreiFam
       family_child: FreiKind
-      youth: Jugend
+      youth: Jeunesse
     self_registration_reason:
-      label: Eintrittsgrund
-      nil: Keine Angabe
+      label: Motivo dell'ingresso
+      nil: Non specificato
     termination_reason:
-      label: Austrittsgrund
-      nil: Keine Angabe
-    section_active: "Aktive Mitglieder am %{to}"
-    section_eintritte: "Eintritte %{from} - %{to}"
+      label: Motivo della disdetta
+      nil: Non specificato
+    section_active: "Membri attivi su %{to}"
+    section_eintritte: "Ingressi %{from} - %{to}"
     section_austritte: "Austritte %{from} - %{to}"
 
   filter_navigation/people:
@@ -1634,7 +1635,7 @@ it:
         already_subscribed_to_abo: "Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta."
         already_member_of_tourenportal: "Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
 
-        existing_family_notice: Du bist einer Familie zugeordnet. Kontaktiere bitte die SAC-Geschäftsstelle.
+        existing_family_notice: Siete stati assegnati a una famiglia. Contattare l'ufficio CAS.
         signed_up_notice: La tua registrazione è stata salvata con successo.
 
       agreement_link:
@@ -1851,14 +1852,14 @@ it:
       dates: Datum
       participant_count: Anzahl Teilnehmende
       teamer_count: Anzahl Kurskader
-      member_no: Mitglieder-Nr.
+      member_no: Membro n.
       firstname: Nome
       lastname: Cognome
       street: Via
       town: Wohnort
       email: E-Mail
       phone: Telefonnummer
-      language: Sprache
+      language: Lingua
       gender: Sesso
       section: Sektion
       emergency_contact: Notfallkontakt
@@ -1897,11 +1898,11 @@ it:
     export:
       popover_jubilare:
         title: "Jubliare exportieren"
-        download: Herunterladen
+        download: Scarica
         membership_years_help: "leer = beliebige Anzahl"
 
       popover_period:
-        download: Herunterladen
+        download: Scarica
 
     membership:
       verify:
@@ -1987,7 +1988,7 @@ it:
     filename: Jubilare_per
 
   people/export/mitglieder_statistics:
-    filename: Mitgliederstatistik
+    filename: Statistiche dei membri
 
   people/neuanmeldungen/approves:
     new:
@@ -2151,7 +2152,7 @@ it:
       confirmed_at: E-mail confermata su
       beitrittsdatum: Adesione dal
       terminate_on: Data di partenza
-      termination_reason: Motivo della partenza
+      termination_reason: Motivo della disdetta
 
   termination_reasons:
     destroy:
