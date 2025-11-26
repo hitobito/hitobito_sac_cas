@@ -12,6 +12,14 @@ module Export::Tabular::People
       super(entry, group, format)
     end
 
+    def start_on
+      membership_role.start_on
+    end
+
+    def self_registration_reason
+      entry.self_registration_reason&.text
+    end
+
     def sac_is_new_entry
       membership_role == roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES).first
     end

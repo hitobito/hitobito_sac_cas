@@ -30,6 +30,8 @@ describe Export::Tabular::People::Eintritte do
       :sac_is_re_entry,
       :sac_is_section_new_entry,
       :sac_is_section_change,
+      :start_on,
+      :self_registration_reason,
       :membership_years,
       :sac_entry_on,
       :sektion_entry_on,
@@ -53,6 +55,43 @@ describe Export::Tabular::People::Eintritte do
       :zip_code,
       :town,
       :country
+    ]
+  end
+
+  it "has expected labels" do
+    expect(build.labels).to eq [
+      "Mitgliedernummer",
+      "Mitgliedschaften",
+      "Sektion",
+      "Ist SAC Neueintritt",
+      "Ist SAC Wiedereintritt",
+      "Ist Sektion Ersteintritt",
+      "Ist Sektionswechsel",
+      "Eintrittsdatum",
+      "Eintrittsgrund",
+      "Anzahl Mitgliedsjahre",
+      "Frühestes Beitrittsdatum beim SAC",
+      "Frühestes Beitrittsdatum in der Sektion",
+      "Austritt geplant",
+      "Typ",
+      "Beitragskategorie",
+      "Ist Ehrenmitglied",
+      "Ist Begünstigt",
+      "Nachname",
+      "Vorname",
+      "Geschlecht",
+      "Geburtsdatum",
+      "Korrespondenz",
+      "E-Mail",
+      "Mobil",
+      "Festnetz",
+      "Postfach",
+      "Strasse",
+      "Hausnummer",
+      "Adresszusatz",
+      "PLZ",
+      "Ort",
+      "Land"
     ]
   end
 
@@ -222,6 +261,7 @@ describe Export::Tabular::People::Eintritte do
 
     describe "common" do
       let(:rows) { build_rows("1.1.2015-31.12.2015") }
+      let(:reason) { SelfRegistrationReason.all.min_by(&:text) }
 
       it "contains all attributes" do
         mitglied.update!(
@@ -230,8 +270,10 @@ describe Export::Tabular::People::Eintritte do
           gender: "m",
           birthday: "21.04.1972"
         )
+
         mitglied.phone_numbers.create!(label: "landline", number: "031 333 44 55")
         mitglied.phone_numbers.create!(label: "mobile", number: "079 333 44 55")
+        Person.update_all(self_registration_reason_id: reason.id) # ro attr, might be set on model directly
 
         expect(row_for(mitglied).to_h).to eq({
           id: 600001,
@@ -241,6 +283,8 @@ describe Export::Tabular::People::Eintritte do
           sac_is_re_entry: "nein",
           sac_is_section_new_entry: "ja",
           sac_is_section_change: "nein",
+          start_on: "01.01.2015",
+          self_registration_reason: "Wegen dem Tourenangebot in den Sektionen.",
           membership_years: 10,
           sac_entry_on: "01.01.2015",
           sektion_entry_on: "01.01.2015",
