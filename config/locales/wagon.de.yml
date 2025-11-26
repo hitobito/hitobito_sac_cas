@@ -1524,7 +1524,9 @@ de:
       sac_is_re_entry: Ist SAC Wiedereintritt
       sac_is_section_new_entry: Ist Sektion Ersteintritt
       sac_is_section_change: Ist Sektionswechsel
+      start_on: Eintrittsdatum
       terminate_on: Austritt geplant
+      self_registration_reason: Eintrittsgrund
       type: Typ
       types:
         mitglied: Stammsektion

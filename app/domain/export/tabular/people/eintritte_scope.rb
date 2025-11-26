@@ -7,6 +7,10 @@
 
 module Export::Tabular::People
   class EintritteScope < MutatedRolesScope
+    def roles
+      super.includes(person: :self_registration_reason)
+    end
+
     private
 
     def multiple_roles_in_range

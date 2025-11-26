@@ -15,6 +15,8 @@ module Export::Tabular::People
       :sac_is_re_entry,
       :sac_is_section_new_entry,
       :sac_is_section_change,
+      :start_on,
+      :self_registration_reason,
       :membership_years,
       :sac_entry_on,
       :sektion_entry_on,
