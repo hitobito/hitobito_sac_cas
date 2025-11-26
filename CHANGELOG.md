@@ -6,6 +6,7 @@
 * Neuer Gruppentyp Ressort (HIT-1011 / hitobito_sac_cas#2044)
 * Rechnungsempfänger*in kann neu alle Familienmitglieder verwalten (HIT-1297 / hitobito_sac_cas#2002)
 * Nächtliches Aufräumen von veralteten NV Neuanmeldungsrollen und Rechnungen (HIT-1337 / hitobito_sac_cas#2062)
+* Auf Personenlisten werden die Spalten Austrittsdatum und -grund neu auch für zukünftige Austritte angezeigt (HIT-1322 / hitobito_sac_cas#2033)
 
 ## Version 2.6
 

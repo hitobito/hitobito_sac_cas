@@ -19,7 +19,11 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
 
   before do
     allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(sektion_mitglieder)
-    roles(:mitglied).update!(end_on: Date.new(2025, 3, 10))
+    Roles::Termination.new(
+      role: roles(:mitglied),
+      terminate_on: Date.new(2025, 3, 10),
+      validate_terminate_on: false
+    ).call
   end
 
   [

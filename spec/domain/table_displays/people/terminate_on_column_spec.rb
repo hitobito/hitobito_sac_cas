@@ -17,18 +17,22 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
 
   before do
     people(:mitglied).roles_unscoped.destroy_all
-    # rubocop:todo Layout/LineLength
-    allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
-    # rubocop:enable Layout/LineLength
+    allow_any_instance_of(ActionView::Base)
+      .to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
   end
 
   def create_membership_role(start_on, end_on)
-    # rubocop:todo Layout/LineLength
-    Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:bluemlisalp_mitglieder),
-      # rubocop:enable Layout/LineLength
+    Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+      group: groups(:bluemlisalp_mitglieder),
       person: people(:mitglied),
       start_on: start_on,
       end_on: end_on)
+  end
+
+  def create_terminated_membership_role(start_on, end_on)
+    create_membership_role(start_on, 1.day.from_now).tap do |role|
+      Roles::Termination.new(role:, terminate_on: end_on, validate_terminate_on: false).call
+    end
   end
 
   context "only having active role" do
@@ -44,9 +48,9 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
     }
   end
 
-  context "with recently ended roles" do
+  context "with recently terminated roles" do
     before do
-      create_membership_role(2.years.ago, 11.months.ago)
+      create_terminated_membership_role(2.years.ago, 11.months.ago)
     end
 
     it_behaves_like "table display", {
@@ -57,9 +61,22 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
     }
   end
 
-  context "with long ago ended roles" do
+  context "with terminated role in the future" do
     before do
-      create_membership_role(10.years.ago, 5.years.ago)
+      create_terminated_membership_role(1.year.ago, 1.year.from_now)
+    end
+
+    it_behaves_like "table display", {
+      column: :terminate_on,
+      header: "Austrittsdatum",
+      value: I18n.l(1.year.from_now.to_date),
+      permission: :show_full
+    }
+  end
+
+  context "with long ago terminated roles" do
+    before do
+      create_terminated_membership_role(10.years.ago, 5.years.ago)
     end
 
     it_behaves_like "table display", {
@@ -70,10 +87,10 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
     }
   end
 
-  context "with multiple ended roles" do
+  context "with multiple terminated roles" do
     before do
-      create_membership_role(11.years.ago, 10.years.ago)
-      create_membership_role(6.years.ago, 5.months.ago)
+      create_terminated_membership_role(11.years.ago, 10.years.ago)
+      create_terminated_membership_role(6.years.ago, 5.months.ago)
     end
 
     it_behaves_like "table display", {
@@ -84,9 +101,9 @@ describe TableDisplays::People::TerminateOnColumn, type: :helper do
     }
   end
 
-  context "with ended role and active membership role" do
+  context "with terminated role and active membership role" do
     before do
-      create_membership_role(3.years.ago, 2.years.ago)
+      create_terminated_membership_role(3.years.ago, 2.years.ago)
       create_membership_role(1.year.ago, 1.year.from_now)
     end
 

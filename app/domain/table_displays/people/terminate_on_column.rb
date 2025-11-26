@@ -8,8 +8,6 @@
 module TableDisplays::People
   class TerminateOnColumn < TerminationColumn
     def value(terminated_role)
-      return if terminated_role.nil?
-
       I18n.l(terminated_role.end_on)
     end
   end
