@@ -16,7 +16,9 @@ module SacCas::EventAbility
         .for_participations_full_events
 
       permission(:group_full).may(:index_full_participations).in_same_group
+      permission(:group_full).may(:create_tags).none
       permission(:group_and_below_full).may(:index_full_participations).in_same_group_or_below
+      permission(:group_and_below_full).may(:create_tags).none
       permission(:layer_full).may(:index_full_participations).in_same_layer
       permission(:layer_and_below_full).may(:index_full_participations).in_same_layer_or_below
 
@@ -25,7 +27,7 @@ module SacCas::EventAbility
         .in_same_layer_group
       permission(:layer_events_full)
         .may(:create, :update, :destroy, :application_market, :qualify,
-          :manage_tags, :manage_attachments)
+          :create_tags, :assign_tags, :manage_attachments)
         .in_same_layer_group_if_active
     end
 
