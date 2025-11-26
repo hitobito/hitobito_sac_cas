@@ -1538,7 +1538,9 @@ it:
       sac_is_re_entry: Il rientro del SAC è
       sac_is_section_new_entry: È la sezione Prima voce
       sac_is_section_change: È la modifica della sezione
+      start_on: Eintrittsdatum
       terminate_on: Uscita prevista
+      self_registration_reason: Eintrittsgrund
       type: Tipo
       types:
         mitglied: Sezione centrale

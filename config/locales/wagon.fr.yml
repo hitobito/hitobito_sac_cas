@@ -1539,7 +1539,9 @@ fr:
       sac_is_re_entry: Est la rentrée du CAS
       sac_is_section_new_entry: Section réelle Première entrée
       sac_is_section_change: Est Changement de section
+      start_on: Eintrittsdatum
       terminate_on: Départ prévu
+      self_registration_reason: Eintrittsgrund
       type: Type
       types:
         mitglied: Section de base
