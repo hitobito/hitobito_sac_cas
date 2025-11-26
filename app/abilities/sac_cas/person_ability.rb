@@ -30,6 +30,9 @@ module SacCas::PersonAbility
       permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
       permission(:any).may(:log).if_backoffice_or_backoffice_readonly
 
+      permission(:group_full).may(:create_tags).none
+      permission(:group_and_below_full).may(:create_tags).none
+
       for_self_or_manageds do
         # In the core, the following permissions are not allowed for basic_permissions_roles.
         # The SAC wagon relaxes these. See https://github.com/hitobito/hitobito/pull/3757#discussion_r2541422585
