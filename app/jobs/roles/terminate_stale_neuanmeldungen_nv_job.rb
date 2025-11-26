@@ -17,6 +17,7 @@ class Roles::TerminateStaleNeuanmeldungenNvJob < RecurringJob
     stale_roles.in_batches(of: 25) do |roles|
       Role.transaction do
         terminate_roles_and_cancel_invoices(roles)
+        reset_primary_group_for_roleless_people
       end
     end
   end
@@ -26,7 +27,15 @@ class Roles::TerminateStaleNeuanmeldungenNvJob < RecurringJob
       invoice.update!(state: :cancelled)
       Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
     end
+
     roles.update_all(end_on: Time.zone.yesterday, terminated: true)
+  end
+
+  def reset_primary_group_for_roleless_people
+    Person
+      .where.missing(:roles)
+      .where.not(primary_group_id: nil)
+      .update_all(primary_group_id: nil)
   end
 
   def cancellable_invoices_for(roles)

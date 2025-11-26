@@ -33,9 +33,11 @@ describe Roles::TerminateStaleNeuanmeldungenNvJob do
   end
 
   it "terminates neuanmeldungen nv roles starting more than 4 months ago and deletes open invoices" do
-    create_role("Neuanmeldung", neuanmeldungen_nv, 5.months.ago)
+    other = create_role("Neuanmeldung", neuanmeldungen_nv, 5.months.ago).person
     create_role("NeuanmeldungZusatzsektion", neuanmeldungen_nv, 5.months.ago, person)
     expect { job.perform }.to change { Role.count }.by(-2)
+      .and change { other.reload.primary_group }.from(neuanmeldungen_nv).to(nil)
+      .and not_change { person.reload.primary_group }
   end
 
   it "ignores neuanmeldungen nv roles starting more than 4 months ago that have been already processed" do
