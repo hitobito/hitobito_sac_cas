@@ -14,10 +14,6 @@ describe Groups::SelfRegistrationController, type: :controller do
   let(:person) { people(:abonnent) }
 
   context "with feature enabled" do
-    before do
-      allow(Settings.groups.self_registration).to receive(:enabled).and_return(true)
-    end
-
     context "GET#show" do
       context "when registration active" do
         before do
