@@ -41,3 +41,5 @@ spec/fixtures/files/sac_imports_src/.~lock*
 Gemfile.local
 Gemfile.local.lock
 
+db/schema.rb
+db/schema.rb.diff
