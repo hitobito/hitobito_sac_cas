@@ -9,6 +9,15 @@ module Memberships
   class TerminateSacMembershipsController < TerminationController
     private
 
+    def send_confirmation_mail
+      Memberships::TerminateMembershipMailer.terminate_membership(
+        person,
+        role.layer_group,
+        form_object.terminate_on_date_value,
+        form_object.inform_mitglied_via_email
+      ).deliver_later
+    end
+
     def model_params
       params
         .require(:memberships_terminate_sac_membership_form)
