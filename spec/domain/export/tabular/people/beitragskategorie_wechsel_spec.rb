@@ -107,20 +107,33 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
       expect(build("2.1.2024-30.6.2024").people_scope).to match_array [earlier, adult2family]
       expect(build("1.6.2024-31.12.2024").people_scope).to match_array [adult2family, family2adult]
 
-      expect(build("1.6.2024-1.6.2025").people_scope).to match_array [
+      # pp [
+      #   youth2adult, earlier, adult2family, family2adult, family2youth, youth2family,
+      #   youth2youth, family2adult2family,
+      #   youth2adult2youth, youth2adult_with_gap
+      # ].map(&:to_s)
+
+      expect(build("1.6.2024-30.5.2025").people_scope.map(&:to_s)).to match_array [
         youth2adult,
         adult2family,
         family2adult,
         family2youth,
         youth2family,
         youth2adult_with_gap
-      ]
+      ].map(&:to_s)
 
-      expect(build("10.1.2025-1.6.2025").people_scope).to match_array [
+      expect(build("1.1.2025-1.6.2025").people_scope.map(&:to_s)).to match_array [
+        youth2adult,
+        family2youth,
+        youth2family
+      ].map(&:to_s)
+
+      expect(build("10.1.2025-1.6.2025").people_scope.map(&:to_s)).to match_array [
         youth2family,
         youth2adult2youth,
         family2adult2family
-      ]
+      ].map(&:to_s)
+
       expect(build("1.1.2026-31.12.2026").people_scope).to be_empty
     end
   end

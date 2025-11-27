@@ -64,7 +64,8 @@ module Export::Tabular::People
 
     def people_scope
       readable_people
-        .includes(:phone_number_landline, :phone_number_mobile, :roles_unscoped)
+        .includes(:phone_number_landline, :phone_number_mobile, :roles_unscoped,
+          :self_registration_reason)
         .joins(:roles_unscoped)
         .where("people.id IN (?)", new_entries.select(:person_id)) # rubocop:disable Rails/WhereEquals
         .where(roles: {start_on: ..Time.zone.today})

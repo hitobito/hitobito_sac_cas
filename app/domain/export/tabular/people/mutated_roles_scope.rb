@@ -33,7 +33,6 @@ module Export::Tabular::People
         group_id: @group.id,
         type: relevant_role_types
       )
-      # .where(person_id: 600001, group_id: 380959420)
     end
 
     def relevant_role_types

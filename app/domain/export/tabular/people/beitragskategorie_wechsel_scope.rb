@@ -25,15 +25,23 @@ module Export::Tabular::People
     end
 
     def relevant_change?(roles)
-      first, last = roles.values_at(0, -1)
-      first.beitragskategorie != last.beitragskategorie
+      return false if roles.size < 2
+
+      first, second, last = roles.values_at(0, 1, -1)
+      (first.end_on >= @range.begin ||
+        first.end_on == day_before_range && second.start_on == @range.begin) &&
+        first.beitragskategorie != last.beitragskategorie
     end
 
     def roles_scope
       super
         .where(start_on: @range)
-        .or(super.where(end_on: @range.begin - 1.day..@range.end))
+        .or(super.where(end_on: day_before_range..@range.end))
         .order(:start_on)
+    end
+
+    def day_before_range
+      @day_before_range ||= @range.begin - 1.day
     end
   end
 end
