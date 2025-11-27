@@ -1287,7 +1287,7 @@ fr:
     eintritte: Entrées
     jubilare: Jubilare
     mitglieder_statistics: Statistiques des membres
-    beitragskategorie_wechsel: Wechsel Beitragskategorie
+    beitragskategorie_wechsel: Changement de catégorie de cotisation
 
   dropdown/people_export:
     recipients: Pour l’envoi électronique (par e-mail)
@@ -1542,12 +1542,12 @@ fr:
       sac_is_section_new_entry: Section réelle Première entrée
       sac_is_section_change: Est Changement de section
       start_on: Date d'entrée
-      changed_on: Mutationsdatum
-      changed_youth_adult: Ist Wechsel Jugend-Einzel
-      changed_youth_family: Ist Wechsel Jugend-Familie
-      changed_adult_family: Ist Wechsel Einzel-Familie
-      changed_family_adult: Ist Wechsel Familie-Einzel
-      changed_family_youth: Ist Wechsel Familie-Jugend
+      changed_on: Date de mutation
+      changed_youth_adult: Est Jeunesse-Individuelle
+      changed_youth_family: Est Jeunesse-Famille
+      changed_adult_family: Est Individuelle-Famille
+      changed_family_adult: Est Famille-Individuelle
+      changed_family_youth: Est Famille-Jeunesse
       terminate_on: Départ prévu
       self_registration_reason: Motif d’entrée
       type: Type
@@ -1569,7 +1569,7 @@ fr:
       street: Rue
       housenumber: Numéro de maison
       address_care_of: Complément d'adresse
-      zip_code: CODE POSTAL
+      zip_code: Code Postal
       town: Lieu
       country: Pays
 
@@ -1993,7 +1993,7 @@ fr:
         submit_confirmation: >-
           Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
   people/export/beitragskategorie_wechsel:
-    filename: Wechsel_Beitragskategorie
+    filename: Changement_catégorie_de_cotisations
 
   people/export/eintritte:
     filename: Entrées

@@ -1286,7 +1286,7 @@ it:
     eintritte: Ingressi
     jubilare: Jubilare
     mitglieder_statistics: Statistiche dei membri
-    beitragskategorie_wechsel: Wechsel Beitragskategorie
+    beitragskategorie_wechsel: Modifica della categoria di contribuzione
 
   dropdown/people_export:
     recipients: Per l’invio elettronico (via e-mail)
@@ -1541,12 +1541,12 @@ it:
       sac_is_section_new_entry: È la sezione Prima voce
       sac_is_section_change: È la modifica della sezione
       start_on: Data di adesione
-      changed_on: Mutationsdatum
-      changed_youth_adult: Ist Wechsel Jugend-Einzel
-      changed_youth_family: Ist Wechsel Jugend-Familie
-      changed_adult_family: Ist Wechsel Einzel-Familie
-      changed_family_adult: Ist Wechsel Familie-Einzel
-      changed_family_youth: Ist Wechsel Familie-Jugend
+      changed_on: Data della mutazione
+      changed_youth_adult: è Jeunesse-Individuale
+      changed_youth_family: è Jeunesse-Famiglia
+      changed_adult_family: è Individuale-Famiglia
+      changed_family_adult: è Famiglia-Individuale
+      changed_family_youth: è Famiglia-Jeunesse
       terminate_on: Uscita prevista
       self_registration_reason: Motivo dell'ingresso
       type: Tipo
@@ -1566,7 +1566,7 @@ it:
       phone_number_landline: Linea fissa
       postbox: Casella postale
       street: Via
-      housenumber: Hausnummer
+      housenumber: Numero civico
       address_care_of: Suffisso dell'indirizzo
       zip_code: CAP
       town: Posizione
@@ -1833,10 +1833,10 @@ it:
           text: Gemäss Ausschreibung SAC Kurse / Touren
         participant_program_course:
           label: Programma dettagliato partecipanti corsi
-          text: Wird von der Geschäftsstelle 8 Wochen vor Beginn per Mail bei der Leitung eingefordert.
+          text: Viene richiesto dall'ufficio 8 settimane prima dell'inizio dell'attività tramite e-mail alla direzione.
         participant_program_tour:
           label: Programma dettagliato partecipanti escursioni
-          text: Wird von Geschäftsstelle erstellt und spätestens 6 Wochen vor Beginn hinterlegt.
+          text: Sarà creato dall'ufficio e depositato almeno 6 settimane prima dell'inizio.
         application_closing_at: Chiusura registrazioni
         minimum_participants: Numero minimo di partecipanti
         maximum_participants: Numero massimo di partecipanti
@@ -1871,7 +1871,7 @@ it:
       phone: Telefonnummer
       language: Lingua
       gender: Sesso
-      section: Sektion
+      section: Sezione
       emergency_contact: Notfallkontakt
       remarks: Bemerkungen
 
@@ -1992,7 +1992,7 @@ it:
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
   people/export/beitragskategorie_wechsel:
-    filename: Wechsel_Beitragskategorie
+    filename: Cambia_categoria_di_contributo
 
   people/export/eintritte:
     filename: Ingressi
