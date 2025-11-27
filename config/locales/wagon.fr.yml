@@ -832,7 +832,8 @@ fr:
         other: Nouvelles inscriptions (pour validation)
       group/sektions_ressorts:
         one: Ressorts
-        other: Ressorts
+        many: Ressorts
+        other: Départements
       group/sektions_ressort:
         one: Ressort
         other: Ressorts
@@ -1286,6 +1287,7 @@ fr:
     eintritte: Entrées
     jubilare: Jubilare
     mitglieder_statistics: Statistiques des membres
+    beitragskategorie_wechsel: Wechsel Beitragskategorie
 
   dropdown/people_export:
     recipients: Pour l’envoi électronique (par e-mail)
@@ -1539,9 +1541,15 @@ fr:
       sac_is_re_entry: Est la rentrée du CAS
       sac_is_section_new_entry: Section réelle Première entrée
       sac_is_section_change: Est Changement de section
-      start_on: Eintrittsdatum
+      start_on: Date d'entrée
+      changed_on: Mutationsdatum
+      changed_youth_adult: Ist Wechsel Jugend-Einzel
+      changed_youth_family: Ist Wechsel Jugend-Familie
+      changed_adult_family: Ist Wechsel Einzel-Familie
+      changed_family_adult: Ist Wechsel Familie-Einzel
+      changed_family_youth: Ist Wechsel Familie-Jugend
       terminate_on: Départ prévu
-      self_registration_reason: Eintrittsgrund
+      self_registration_reason: Motif d’entrée
       type: Type
       types:
         mitglied: Section de base
@@ -1812,7 +1820,7 @@ fr:
         accommodation_budget:
           label: Budget pour l’hébergement
           text: >-
-            Par personne / nuit avec demi-pension
+            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
         accommodations:
           sac: Réservation par le CAS
           event_specific: Réservation par le ou la responsable du cours
@@ -1984,6 +1992,9 @@ fr:
         create_invoice: "Démarrer"
         submit_confirmation: >-
           Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
+  people/export/beitragskategorie_wechsel:
+    filename: Wechsel_Beitragskategorie
+
   people/export/eintritte:
     filename: Entrées
 

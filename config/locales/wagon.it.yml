@@ -829,8 +829,9 @@ it:
         many: Nuove registrazioni (per il rilascio)
         other: Nuove registrazioni (per l’approvazione)
       group/sektions_ressorts:
-        one: Ressorts
-        other: Ressorts
+        one: Dipartimenti
+        many: Dipartimenti
+        other: Dipartimenti
       group/sektions_ressort:
         one: Dipartimento
         many: Dipartimenti
@@ -1285,6 +1286,7 @@ it:
     eintritte: Ingressi
     jubilare: Jubilare
     mitglieder_statistics: Statistiche dei membri
+    beitragskategorie_wechsel: Wechsel Beitragskategorie
 
   dropdown/people_export:
     recipients: Per l’invio elettronico (via e-mail)
@@ -1538,9 +1540,15 @@ it:
       sac_is_re_entry: Il rientro del SAC è
       sac_is_section_new_entry: È la sezione Prima voce
       sac_is_section_change: È la modifica della sezione
-      start_on: Eintrittsdatum
+      start_on: Data di adesione
+      changed_on: Mutationsdatum
+      changed_youth_adult: Ist Wechsel Jugend-Einzel
+      changed_youth_family: Ist Wechsel Jugend-Familie
+      changed_adult_family: Ist Wechsel Einzel-Familie
+      changed_family_adult: Ist Wechsel Familie-Einzel
+      changed_family_youth: Ist Wechsel Familie-Jugend
       terminate_on: Uscita prevista
-      self_registration_reason: Eintrittsgrund
+      self_registration_reason: Motivo dell'ingresso
       type: Tipo
       types:
         mitglied: Sezione centrale
@@ -1811,7 +1819,7 @@ it:
         accommodation_budget:
           label: Budget alloggio
           text: >-
-            per persona / notte con mezza pensione
+            Hütten 85.-\n Pension, Berggasthaus 125.-\n Pro Person / Nacht mit Halbpension
         accommodations:
           sac: viene riservato tramite il CAS
           event_specific: viene riservato tramite la direzione del corso
@@ -1983,6 +1991,9 @@ it:
         create_invoice: "Iniziare"
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
+  people/export/beitragskategorie_wechsel:
+    filename: Wechsel_Beitragskategorie
+
   people/export/eintritte:
     filename: Ingressi
 

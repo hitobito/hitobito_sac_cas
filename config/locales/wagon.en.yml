@@ -1227,6 +1227,7 @@ en:
     eintritte: Eintritte
     jubilare: Jubilare
     mitglieder_statistics: Mitgliederstatistik
+    beitragskategorie_wechsel: Wechsel Beitragskategorie
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1480,6 +1481,12 @@ en:
       sac_is_section_new_entry: Ist Sektion Ersteintritt
       sac_is_section_change: Ist Sektionswechsel
       start_on: Eintrittsdatum
+      changed_on: Mutationsdatum
+      changed_youth_adult: Ist Wechsel Jugend-Einzel
+      changed_youth_family: Ist Wechsel Jugend-Familie
+      changed_adult_family: Ist Wechsel Einzel-Familie
+      changed_family_adult: Ist Wechsel Familie-Einzel
+      changed_family_youth: Ist Wechsel Familie-Jugend
       terminate_on: Austritt geplant
       self_registration_reason: Eintrittsgrund
       type: Typ
@@ -1920,6 +1927,9 @@ en:
         create_invoice: "Start"
         submit_confirmation: >-
           Do you really want to start the annual collection run for all members? This run cannot be canceled.
+  people/export/beitragskategorie_wechsel:
+    filename: Wechsel_Beitragskategorie
+
   people/export/eintritte:
     filename: Eintritte
 
