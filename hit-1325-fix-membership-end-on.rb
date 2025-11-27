@@ -68,13 +68,12 @@ whodunnit_type: "script"}
 
       start_on_adjustment_needed = row.corrected_end_on < role.start_on
 
-      role.end_on = row.corrected_end_on
-
       if start_on_adjustment_needed
         membership_period = role.end_on - role.start_on
         role.start_on = row.corrected_end_on - membership_period
       end
 
+      role.end_on = row.corrected_end_on
       role.save!
       correct_other_roles_start_on(role, row) if start_on_adjustment_needed
     rescue ActiveRecord::RecordInvalid => e
