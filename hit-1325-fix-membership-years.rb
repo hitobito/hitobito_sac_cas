@@ -1,14 +1,14 @@
 require 'csv'
 
 class FixMembershipYears
-  FILE = Wagons.find("sac_cas").root.join("tmp", "NAV_AnzahlVereinsjahre_per20250415.csv")
-  CORRECT_MEMBERSHIP_END_ON_FILE = Wagons.find("sac_cas").root.join("tmp", "Bereinigung_Austrittsdatum.csv")
+  FILE = Rails.root.join("tmp", "NAV_AnzahlVereinsjahre_per20250415.csv")
+  CORRECT_MEMBERSHIP_END_ON_FILE = Rails.root.join("tmp", "Bereinigung_Austrittsdatum.csv")
 
   attr_reader :logger, :data
 
   def initialize
     @logger = ActiveSupport::TaggedLogging.new(Logger.new(
-      Wagons.find("sac_cas").root.join("tmp",
+      Rails.root.join("tmp",
         "hit-1325-fix-membership-years-#{Time.zone.now.strftime("%Y%m%d%H%M")}.log"),
       level: :info
     ))

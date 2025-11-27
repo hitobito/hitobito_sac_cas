@@ -1,13 +1,13 @@
 require "csv"
 
 class FixMembershipEndOn
-  FILE = Wagons.find("sac_cas").root.join("tmp", "Bereinigung_Austrittsdatum.csv")
+  FILE = Rails.root.join("tmp", "Bereinigung_Austrittsdatum.csv")
 
   attr_reader :logger, :data
 
   def initialize
     @logger = ActiveSupport::TaggedLogging.new(Logger.new(
-      Wagons.find("sac_cas").root.join("tmp",
+      Rails.root.join("tmp",
         "hit-1325-fix-membership-end-on-#{Time.zone.now.strftime("%Y%m%d%H%M")}.log"),
       level: :info
     ))
