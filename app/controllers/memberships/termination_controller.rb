@@ -62,12 +62,7 @@ module Memberships
     end
 
     def send_confirmation_mail
-      Memberships::TerminateMembershipMailer.terminate_membership(
-        person,
-        role.layer_group,
-        form_object.terminate_on_date_value,
-        form_object.inform_mitglied_via_email
-      ).deliver_later
+      fail "implement in subclass"
     end
 
     def render_abort_views # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity

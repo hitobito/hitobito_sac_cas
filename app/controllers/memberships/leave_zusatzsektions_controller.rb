@@ -9,6 +9,15 @@ module Memberships
   class LeaveZusatzsektionsController < TerminationController
     private
 
+    def send_confirmation_mail
+      Memberships::TerminateMembershipMailer.leave_zusatzsektion(
+        person,
+        role.layer_group,
+        form_object.terminate_on_date_value,
+        form_object.inform_mitglied_via_email
+      ).deliver_later
+    end
+
     def role
       @role ||= person.roles.find(params[:role_id])
     end

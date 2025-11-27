@@ -195,7 +195,7 @@ describe Memberships::LeaveZusatzsektionsController do
         end.to not_change(Role.with_inactive, :count)
           .and change { role.terminated }.to(true)
           .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
-          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :terminate_membership).with(
+          .and have_enqueued_mail(Memberships::TerminateMembershipMailer, :leave_zusatzsektion).with(
             person,
             matterhorn,
             Date.current.end_of_year,
