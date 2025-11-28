@@ -2,6 +2,7 @@ require "csv"
 
 class FixMembershipEndOn
   FILE = Rails.root.join("tmp", "Bereinigung_Austrittsdatum.csv")
+  # FILE = Wagons.find("sac_cas").root.join("tmp", "Bereinigung_Austrittsdatum.csv")
 
   attr_reader :logger, :data
 
@@ -14,29 +15,29 @@ class FixMembershipEndOn
     @data = CSV.read(FILE, col_sep: ",", headers: true)
   end
 
-  class Row
+  class FixMembershipEndOnRow
     attr_reader :role_id, :person_id, :previous_end_on, :corrected_end_on
 
     def initialize(csv_data)
       @role_id = csv_data[0]
       @person_id = csv_data[1]
-      @previous_end_on = Date.strptime(csv_data[4], "%m/%d/%Y")
-      @corrected_end_on = Date.strptime(csv_data[7], "%m/%d/%Y")
+      @previous_end_on = ::Date.strptime(csv_data[4], "%m/%d/%Y")
+      @corrected_end_on = ::Date.strptime(csv_data[7], "%m/%d/%Y")
     end
 
     def to_s
-      "<Row role_id: #{role_id}, person_id: #{person_id}, previous_end_on: #{previous_end_on}, corrected_end_on: #{corrected_end_on}>"
+      "<FixMembershipEndOnRow role_id: #{role_id}, person_id: #{person_id}, previous_end_on: #{previous_end_on}, corrected_end_on: #{corrected_end_on}>"
     end
 
     def person
-      @person ||= Person.find(@person_id)
+      @person ||= ::Person.find(@person_id)
     end
   end
 
   def run
-    PaperTrail.request.enabled = true
-    PaperTrail.request.whodunnit = "HIT-1325 fix membership end_on"
-    PaperTrail.request.controller_info = {mutation_id: SecureRandom.uuid,
+    ::PaperTrail.request.enabled = true
+    ::PaperTrail.request.whodunnit = "HIT-1325 fix membership end_on"
+    ::PaperTrail.request.controller_info = {mutation_id: ::SecureRandom.uuid,
 whodunnit_type: "script"}
 
     process_end_on_correction
@@ -46,7 +47,7 @@ whodunnit_type: "script"}
 
   def process_end_on_correction
     data.each do |csv_row|
-      row = Row.new(csv_row)
+      row = FixMembershipEndOnRow.new(csv_row)
 
       if active_membership_exists?(row)
         log(row, "has an active membership")
@@ -76,7 +77,7 @@ whodunnit_type: "script"}
       role.end_on = row.corrected_end_on
       role.save!
       correct_other_roles_start_on(role, row) if start_on_adjustment_needed
-    rescue ActiveRecord::RecordInvalid => e
+    rescue ::ActiveRecord::RecordInvalid => e
       if e.record.errors.one? && e.record.errors.first.type == :assert_old_enough
         log(row, "person birthday invalid. Role was still updated: #{e}")
         role.save!(validate: false)
@@ -84,7 +85,7 @@ whodunnit_type: "script"}
       else
         log(row, "role invalid on update: #{e}")
       end
-    rescue ActiveRecord::RecordNotFound => e
+    rescue ::ActiveRecord::RecordNotFound => e
       log(row, "role not found: #{e}")
     end
   end
@@ -93,7 +94,7 @@ whodunnit_type: "script"}
     row.person.roles.with_inactive.select { |r| SacCas::MITGLIED_ROLES.include?(r.type) && r != role }.each do |other_role|
       next if other_role.valid?
 
-      if other_role.is_a?(Group::SektionsMitglieder::MitgliedZusatzsektion) &&
+      if other_role.is_a?(::Group::SektionsMitglieder::MitgliedZusatzsektion) &&
           other_role.active?(role.start_on) && other_role.start_on < role.start_on
         other_role.start_on = role.start_on
         other_role.save! && next if other_role.valid?
@@ -105,7 +106,7 @@ whodunnit_type: "script"}
 
   def active_membership_exists?(row)
     row.person.sac_membership.active?
-  rescue ActiveRecord::RecordNotFound => e
+  rescue ::ActiveRecord::RecordNotFound => e
     log(row, "person not found: #{e}")
   end
 
