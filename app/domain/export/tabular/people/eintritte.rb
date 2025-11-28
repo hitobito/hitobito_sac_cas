@@ -11,20 +11,22 @@ module Export::Tabular::People
       :id,
       :url,
       :sektion,
+
       :sac_is_new_entry,
       :sac_is_re_entry,
       :sac_is_section_new_entry,
       :sac_is_section_change,
       :start_on,
       :self_registration_reason,
+
+      :type,
+      :beitragskategorie,
       :membership_years,
       :sac_entry_on,
       :sektion_entry_on,
-      :terminate_on,
-      :type,
-      :beitragskategorie,
       :ehrenmitglied,
       :beguenstigt,
+
       :last_name,
       :first_name,
       :gender,
@@ -41,6 +43,10 @@ module Export::Tabular::People
       :town,
       :country
     ]
+
+    self.styled_attrs = {
+      date: [:start_on, :sac_entry_on, :sektion_entry_on, :birthday]
+    }
 
     def initialize(group, user_id, range)
       @group = group

@@ -32,12 +32,11 @@ describe Export::Tabular::People::Eintritte do
       :sac_is_section_change,
       :start_on,
       :self_registration_reason,
+      :type,
+      :beitragskategorie,
       :membership_years,
       :sac_entry_on,
       :sektion_entry_on,
-      :terminate_on,
-      :type,
-      :beitragskategorie,
       :ehrenmitglied,
       :beguenstigt,
       :last_name,
@@ -69,12 +68,11 @@ describe Export::Tabular::People::Eintritte do
       "Ist Sektionswechsel",
       "Eintrittsdatum",
       "Eintrittsgrund",
+      "Typ",
+      "Beitragskategorie",
       "Anzahl Mitgliedsjahre",
       "Frühestes Beitrittsdatum beim SAC",
       "Frühestes Beitrittsdatum in der Sektion",
-      "Austritt geplant",
-      "Typ",
-      "Beitragskategorie",
       "Ist Ehrenmitglied",
       "Ist Begünstigt",
       "Nachname",
@@ -288,7 +286,6 @@ describe Export::Tabular::People::Eintritte do
           membership_years: 10,
           sac_entry_on: "01.01.2015",
           sektion_entry_on: "01.01.2015",
-          terminate_on: nil,
           type: "Stammsektion",
           beitragskategorie: "Einzel",
           ehrenmitglied: "nein",
@@ -313,13 +310,6 @@ describe Export::Tabular::People::Eintritte do
 
       it "orders by name" do
         expect(rows.map(&:to_s)).to eq ["Edmund Hillary", "Frieda Norgay", "Nima Norgay", "Tenzing Norgay"]
-      end
-
-      it "correctly popluates terminate_on" do
-        travel_to(Time.zone.local(2025, 11, 3)) do
-          Roles::Termination.new(role: roles(:mitglied), terminate_on: 1.day.from_now).call
-          expect(row_for(mitglied).terminate_on).to eq "04.11.2025"
-        end
       end
     end
 

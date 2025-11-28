@@ -15,10 +15,12 @@ module Export::Tabular::People
       :sac_entry_on,
       :sektion_entry_on,
       :terminate_on,
+
       :type,
       :beitragskategorie,
       :ehrenmitglied,
       :beguenstigt,
+
       :last_name,
       :first_name,
       :gender,
@@ -35,6 +37,10 @@ module Export::Tabular::People
       :town,
       :country
     ]
+
+    self.styled_attrs = {
+      date: [:sac_entry_on, :sektion_entry_on, :terminate_on, :birthday]
+    }
 
     def initialize(group, user_id, reference_date, membership_years)
       @group = group
