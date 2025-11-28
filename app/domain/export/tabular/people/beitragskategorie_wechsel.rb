@@ -44,6 +44,10 @@ module Export::Tabular::People
       :country
     ]
 
+    self.styled_attrs = {
+      date: [:changed_on, :sac_entry_on, :sektion_entry_on, :birthday]
+    }
+
     def initialize(group, user_id, range)
       @group = group
       @user_id = user_id
