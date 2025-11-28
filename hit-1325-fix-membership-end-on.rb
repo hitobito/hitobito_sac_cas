@@ -64,8 +64,8 @@ whodunnit_type: "script"}
   end
 
   def correct_end_on(row)
-    Role.transaction do
-      role = Role.with_inactive.find_by(type: SacCas::MITGLIED_ROLES, id: row.role_id)
+    ::Role.transaction do
+      role = ::Role.with_inactive.find_by(type: ::SacCas::MITGLIED_ROLES.map(&:sti_name), id: row.role_id)
 
       start_on_adjustment_needed = row.corrected_end_on < role.start_on
 
