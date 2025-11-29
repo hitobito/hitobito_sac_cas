@@ -45,6 +45,8 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def create_new_membership_roles
+    restore_household if restore_household?
+
     relevant_roles_for(expired_stammsektion_role).each do |previous_role|
       create_new_role(previous_role.person, previous_role.type.constantize, previous_role.group)
     end
@@ -176,6 +178,41 @@ class Invoices::SacMemberships::MembershipManager
       .order(:end_on)
       .reject(&:terminated?)
       .last
+  end
+
+  # Find the matching family members Stammsektion roles with the same
+  # family_id and end_on
+  def expired_family_member_roles
+    Group::SektionsMitglieder::Mitglied.with_inactive
+      .where(
+        family_id: expired_stammsektion_role.family_id,
+        end_on: expired_stammsektion_role.end_on
+      )
+      .where.not(person_id: person.id)
+  end
+
+  # For family memberhips, if the membership role is expired, the household has been
+  # disbanded. It must be restored before creating new family membership roles.
+  # This is the case if the stammsektion role is of family type but the person has no household_key.
+  def restore_household?
+    person.household_key.blank? &&
+      expired_stammsektion_role.beitragskategorie.family? &&
+      expired_stammsektion_role.family_id?
+  end
+
+  # Restores the household of the person based on the expired family member roles.
+  # Notes:
+  # * `maintain_sac_family: false` must be used to disable role handling in the Household model
+  #   as we handle the roles ourselves in this class.
+  # * Save with `context: :create` to skip validations on the Household model. We need to restore
+  #   the household even if validations would fail.
+  # * As `maintain_sac_family` is false, the Household will not manage PeopleManagers. By calling
+  #  `set_family_main_person!` manually afterwards, the PeopleManagers will be created.
+  def restore_household
+    restored_household = Household.new(person, maintain_sac_family: false, validate_members: false)
+    family_members = expired_family_member_roles.map(&:person).uniq.presence or return
+    family_members.reduce(restored_household, :add).save!(context: :create)
+    restored_household.set_family_main_person!
   end
 
   def log_missing_membership
