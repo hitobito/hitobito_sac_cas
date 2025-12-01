@@ -105,6 +105,8 @@ describe Events::AnnualCourseDuplicateBuilder do
           duplicate_translations = duplicate_question.translations.find { _1.locale == locale }
 
           expect(duplicate_translations.question).to eq(source_translations.question)
+          expect(duplicate_translations.id).not_to eq(source_translations.id)
+          expect(duplicate_translations.event_question_id).to eq(duplicate_question.id)
         end
       end
 
