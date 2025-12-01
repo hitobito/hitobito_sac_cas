@@ -22,12 +22,14 @@ describe Export::Pdf::Participations::ParticipantList do
   before do
     event.update!(location: "Berghotel Schwarenbach\n3752 Kandersteg")
 
-    @leaders = [
+    # The sorting has to happen like this because rails and postgres treat "Umlaute"
+    # differently
+    @leaders = Person.where(id: [
       Fabricate(Event::Course::Role::Leader.name.to_sym,
         participation: Fabricate(:event_participation, event: event)),
       Fabricate(Event::Course::Role::Leader.name.to_sym,
         participation: Fabricate(:event_participation, event: event))
-    ].map { |role| role.participation.person }.sort_by(&:last_name)
+    ].map { |role| role.participation.person.id }).order(:last_name).to_a
 
     @aspirant = Fabricate(Event::Course::Role::AssistantLeaderAspirant.name.to_sym,
       participation: Fabricate(:event_participation, event: event)).participation.person
