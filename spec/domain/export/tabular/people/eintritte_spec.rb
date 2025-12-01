@@ -275,7 +275,7 @@ describe Export::Tabular::People::Eintritte do
 
         expect(row_for(mitglied).to_h).to eq({
           id: 600001,
-          url: "http://test.host/groups/380959420/people/600001/history",
+          url: "http://test.host/de/groups/380959420/people/600001/history",
           sektion: "SAC Blüemlisalp",
           sac_is_new_entry: "ja",
           sac_is_re_entry: "nein",

@@ -41,7 +41,7 @@ describe Export::Tabular::People::Jubilare do
       rows = tabular.data_rows.to_a
       expect(rows.first).to eq([
         600001,
-        "http://test.host/groups/#{group.id}/people/600001/history",
+        "http://test.host/de/groups/#{group.id}/people/600001/history",
         "SAC Blüemlisalp",
         10,
         "01.01.2015",
@@ -70,7 +70,7 @@ describe Export::Tabular::People::Jubilare do
 
       expect(rows.second).to eq([
         600_005,
-        "http://test.host/groups/#{group.id}/people/600005/history",
+        "http://test.host/de/groups/#{group.id}/people/600005/history",
         "SAC Blüemlisalp",
         9,
         "02.10.2015",

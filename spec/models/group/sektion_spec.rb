@@ -36,13 +36,13 @@ describe Group::Sektion do
     let(:url) { sektion.sac_cas_self_registration_url("db.sac-cas.ch") }
 
     it "gets url from neuanmeldungen sektion group" do
-      expect(url).to eq("http://db.sac-cas.ch/groups/#{neuanmeldungen_sektion.id}/self_registration")
+      expect(url).to eq("http://db.sac-cas.ch/de/groups/#{neuanmeldungen_sektion.id}/self_registration")
     end
 
     it "gets url from neuanmeldungen nv group" do
       neuanmeldungen_sektion.really_destroy!
 
-      expect(url).to eq("http://db.sac-cas.ch/groups/#{neuanmeldungen_nv.id}/self_registration")
+      expect(url).to eq("http://db.sac-cas.ch/de/groups/#{neuanmeldungen_nv.id}/self_registration")
     end
 
     it "no url if no neuanmeldungen group" do

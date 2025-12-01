@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe People::AccountCompletionList do
+describe People::AccountCompletionList, :outside_language_scope do
   let(:host) { "http://localhost:3000" }
   let(:scope) { Person.where(id: [admin.id, mitglied.id]) }
   let(:admin) { people(:admin) }

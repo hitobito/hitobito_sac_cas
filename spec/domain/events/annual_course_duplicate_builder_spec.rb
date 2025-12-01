@@ -77,19 +77,14 @@ describe Events::AnnualCourseDuplicateBuilder do
       expect(duplicate.participant_count).to eq(0)
       expect(duplicate.teamer_count).to eq(0)
 
-      # rubocop:todo Layout/LineLength
-      expect(duplicate.application_opening_at).to eq(Date.new(2026, 5, 25)) # Monday of calendar week 22
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      expect(duplicate.application_closing_at).to eq(Date.new(2026, 6, 5)) # Friday of calendar week 23
-      # rubocop:enable Layout/LineLength
-
-      # rubocop:todo Layout/LineLength
-      expect(duplicate.dates.first.start_at).to eq(DateTime.new(2026, 7, 22, 10, 23)) # Wednesday of calendar week 30, 10:23
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      expect(duplicate.dates.first.finish_at).to eq(DateTime.new(2026, 7, 31, 23, 59)) # Friday of calendar week 31, 23:59
-      # rubocop:enable Layout/LineLength
+      # Monday of calendar week 22
+      expect(duplicate.application_opening_at).to eq(Date.new(2026, 5, 25))
+      # Friday of calendar week 23
+      expect(duplicate.application_closing_at).to eq(Date.new(2026, 6, 5))
+      # Wednesday of calendar week 30, 10:23
+      expect(duplicate.dates.first.start_at).to eq(DateTime.new(2026, 7, 22, 10, 23))
+      # Friday of calendar week 31, 23:59
+      expect(duplicate.dates.first.finish_at).to eq(DateTime.new(2026, 7, 31, 23, 59))
 
       expect(duplicate.translations.size).to eq(3)
       [:de, :fr, :it].each do |locale|
@@ -110,6 +105,8 @@ describe Events::AnnualCourseDuplicateBuilder do
           duplicate_translations = duplicate_question.translations.find { _1.locale == locale }
 
           expect(duplicate_translations.question).to eq(source_translations.question)
+          expect(duplicate_translations.id).not_to eq(source_translations.id)
+          expect(duplicate_translations.event_question_id).to eq(duplicate_question.id)
         end
       end
 

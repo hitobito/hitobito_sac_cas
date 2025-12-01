@@ -182,7 +182,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
 
         expect(row_for(mitglied).to_h).to eq({
           id: 600001,
-          url: "http://test.host/groups/380959420/people/600001/history",
+          url: "http://test.host/de/groups/380959420/people/600001/history",
           sektion: "SAC Blüemlisalp",
           changed_adult_family: "nein",
           changed_family_adult: "nein",

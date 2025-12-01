@@ -23,8 +23,8 @@ describe Invoices::SacMembershipsMailer do
   end
 
   it "considers person's language when sending" do
-    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update(locale: :fr,
-      label: "label", subject: "Acceptee", body: "Bonjour")
+    CustomContent.get(Invoices::SacMembershipsMailer::MEMBERSHIP_ACTIVATED).update!(locale: :fr,
+      label: "label", subject: "Acceptee", body: "Bonjour {first-name}")
     person.update!(language: :fr)
     expect(mail.subject).to eq("Acceptee")
     expect(mail.body.to_s).to include("Bonjour")
