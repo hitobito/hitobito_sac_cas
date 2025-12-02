@@ -62,15 +62,13 @@ class Memberships::TerminateAboMagazinAbonnent
   end
 
   def handle_basic_login
-    if data_retention_consent && person.roles.where(basic_login_conditions).none?
-      create_basic_login
-    elsif !data_retention_consent && person.roles.count == 1
-      delete_basic_login_if_any
-    end
-  end
+    basic_login_role = person.roles.find_by(basic_login_conditions)
 
-  def delete_basic_login_if_any
-    person.roles.where(basic_login_conditions).update_all(end_on: terminate_on)
+    if data_retention_consent
+      create_basic_login unless basic_login_role
+    elsif basic_login_role && (person.roles - [role, basic_login_role]).empty?
+      basic_login_role.update!(end_on: terminate_on)
+    end
   end
 
   def create_basic_login

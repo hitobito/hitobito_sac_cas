@@ -78,6 +78,14 @@ describe Memberships::TerminateAboMagazinAbonnent do
   end
 
   describe "#save" do
+    def create_basic_login_role
+      person.roles.create!(
+        type: Group::AboBasicLogin::BasicLogin.sti_name,
+        group: Group::AboBasicLogin.first,
+        start_on: 1.year.ago
+      )
+    end
+
     it "validates before persisting" do
       model.terminate_on = ""
       expect(model.save).to eq false
@@ -123,11 +131,7 @@ describe Memberships::TerminateAboMagazinAbonnent do
         end
 
         it "does not modify existing basic login role" do
-          basic_login_role = person.roles.create!(
-            type: Group::AboBasicLogin::BasicLogin.sti_name,
-            group: Group::AboBasicLogin.first,
-            start_on: 1.year.ago
-          )
+          basic_login_role = create_basic_login_role
           expect do
             expect(model.save).to eq true
           end.not_to change { basic_login_role.reload.attributes }
@@ -144,6 +148,21 @@ describe Memberships::TerminateAboMagazinAbonnent do
           expect(model.save).to eq true
           expect(role.reload.end_on).to eq today - 1.day
           expect(person.roles).to be_empty
+        end
+
+        it "terminating now deletes existing basic login role" do
+          create_basic_login_role
+
+          expect(model.save).to eq true
+          expect(person.reload.roles).to be_empty
+        end
+
+        it "terminating later sets end_on of existing basic login role" do
+          basic_login_role = create_basic_login_role
+          expect do
+            model.terminate_on = role.end_on
+            expect(model.save).to eq true
+          end.to change { basic_login_role.reload.end_on }.from(nil).to(role.end_on)
         end
       end
     end
