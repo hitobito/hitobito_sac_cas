@@ -2,9 +2,12 @@
 -#  Affero General Public License version 3 or later. See the COPYING file at the top-level directory
 -#  or at https://github.com/hitobito/hitobito_sac_cas.
 
-= form.label(key, class: 'row mb-2') do
+= form.label(key, nil, class: "row mb-2 #{'required' if local_assigns[:required]}") do
   .col-md-3.col-xl-2.pb-1
   .col-md-9
     - data = { action: "#{stimulus_ctrl}#toggleDependent", "#{stimulus_ctrl}-target" => "dependent" } if local_assigns[:stimulus_ctrl]
     = form.check_box key, {class: 'align-middle', data: }
-    = label
+    - if local_assigns[:required]
+      = form.label(key, label, class: "required")
+    - else
+      = label

@@ -17,6 +17,14 @@ describe Memberships::TerminateSacMembershipsController do
 
   subject(:page) { Capybara::Node::Simple.new(response.body) }
 
+  let(:terminate_sac_membership_path) do
+    group_person_role_terminate_sac_membership_path(
+      group_id: bluemlisalp.id,
+      person_id: person.id,
+      role_id: role.id
+    )
+  end
+
   def build_params(**attrs)
     {memberships_terminate_sac_membership_form: attrs}
   end
@@ -30,9 +38,7 @@ describe Memberships::TerminateSacMembershipsController do
   end
 
   describe "#GET" do
-    let(:request) do
-      get group_person_terminate_sac_membership_path(group_id: bluemlisalp.id, person_id: person.id)
-    end
+    let(:request) { get(terminate_sac_membership_path) }
     let(:person) { people(:mitglied) }
 
     def expect_form(dates: %w[now end_of_year]) # rubocop:disable Metrics/AbcSize
@@ -173,11 +179,9 @@ describe Memberships::TerminateSacMembershipsController do
 
     def request(params = {})
       defaults = {termination_reason_id:, terminate_on: :end_of_year}
-      post(
-        group_person_terminate_sac_membership_path(group_id: bluemlisalp.id, person_id: person.id),
-        params: build_params(**defaults.merge(params))
-      )
+      post(terminate_sac_membership_path, params: build_params(**defaults.merge(params)))
     end
+
     let(:person) { people(:mitglied) }
 
     context "as normal user" do

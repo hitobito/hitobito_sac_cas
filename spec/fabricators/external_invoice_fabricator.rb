@@ -25,3 +25,7 @@ end
 Fabricator(:sac_membership_invoice, from: :external_invoice) do
   type "ExternalInvoice::SacMembership"
 end
+
+Fabricator(:abo_magazin_invoice, from: :external_invoice) do
+  type "ExternalInvoice::AboMagazin"
+end

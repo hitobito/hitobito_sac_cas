@@ -1,0 +1,20 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= standard_form(model, url: group_person_role_terminate_abo_magazin_abonnent_path(group_id: group.id, person_id: person.id)) do |f|
+  = f.error_messages
+  = f.labeled(:terminate_on, nil, nil, mark_as_required: true) do
+    - model.terminate_on_options.each do |label, value|
+      = f.inline_radio_button :terminate_on, value, label
+
+  - content_for(:additional_checkbox) do
+    = render 'wizards/shared/inline_checkbox', label: t("#{i18n_scope}.online_articles_consent"), key: :online_articles_consent, form: f, data: { action: "disable-toggle#toggle" }, required: true
+
+  = render "data_protection_fields", f: f, scope: i18n_scope do
+
+    -# nested as we control buttons from data_protection_fields
+    .btn-toolbar.align-with-form
+      = submit_button(f, t("submit_button", scope: i18n_scope), {disabled: !model.submit_enabled?, data: { "disable-toggle-target" => "toggled"}})
+      = link_to(ti(:"button.cancel"), group_person_path(group, person), class: "link cancel mt-2 pt-1")

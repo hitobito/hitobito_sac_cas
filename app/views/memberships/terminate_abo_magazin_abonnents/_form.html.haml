@@ -3,13 +3,13 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-= standard_form(form_object, url: group_person_terminate_sac_membership_path(group_id: group.id, person_id: person.id), data: { controller: 'forwarder'}) do |f|
-  = render "common_fields", f: f
-  - stimulus_ctrl = 'form-field-check-dependent'
+= standard_form(form_object, url: group_person_role_terminate_abonnent_path(group_id: group.id, person_id: person.id)) do |f|
+  = f.error_messages
+  = f.labeled(:terminate_on, nil, nil, mark_as_required: true) do
+    - f.object.terminate_on_options.each do |key, label|
+      = f.inline_radio_button :terminate_on, key, label
 
-  %div{data: { controller: "#{stimulus_ctrl} disable-toggle", "#{stimulus_ctrl}-select-dependent-checkboxes-value": true }}
-    = render "data_protection_fields", f: f, stimulus_ctrl:
-
+  = render "data_protection_fields", f: f do
     .btn-toolbar.align-with-form
       = submit_button(f, t("wizards.steps.termination.summary.next_button"), {disabled: !f.object.entry_fee_consent, data: { "disable-toggle-target" => "toggled"}})
       = link_to(ti(:"button.cancel"), group_person_path(group, person), class: "link cancel mt-2 pt-1")

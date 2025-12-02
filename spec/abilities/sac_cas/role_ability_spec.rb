@@ -23,17 +23,21 @@ describe RoleAbility do
       [
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym,
           group: groups(:bluemlisalp_neuanmeldungen_nv)),
+
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name.to_sym,
-          # rubocop:todo Layout/LineLength
-          group: groups(:bluemlisalp_neuanmeldungen_nv), person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:matterhorn_mitglieder)).person),
-        # rubocop:enable Layout/LineLength
+          group: groups(:bluemlisalp_neuanmeldungen_nv),
+          person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+            group: groups(:matterhorn_mitglieder)).person),
         Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
           group: groups(:bluemlisalp_neuanmeldungen_sektion)),
+
         Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.name.to_sym,
-          # rubocop:todo Layout/LineLength
-          group: groups(:bluemlisalp_neuanmeldungen_sektion), person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym, group: groups(:matterhorn_mitglieder)).person),
-        # rubocop:enable Layout/LineLength
+          group: groups(:bluemlisalp_neuanmeldungen_sektion),
+          person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+            group: groups(:matterhorn_mitglieder)).person),
+
         Fabricate(Group::AboMagazin::Neuanmeldung.name.to_sym, group: groups(:abo_die_alpen)),
+
         Fabricate(Group::AboTourenPortal::Neuanmeldung.name.to_sym,
           group: Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos)))
       ]
@@ -91,9 +95,7 @@ describe RoleAbility do
         expect(ability).not_to be_able_to(:terminate, role_zusatzsektion)
       end
 
-      # rubocop:todo Layout/LineLength
       it "is permitted when having Stammsektion with Sektion#mitglied_termination_by_section_only" do
-        # rubocop:enable Layout/LineLength
         set_termination_by_section_only(role_stammsektion, true)
         set_termination_by_section_only(role_zusatzsektion, false)
         expect(ability).to be_able_to(:terminate, role_zusatzsektion)
@@ -104,8 +106,8 @@ describe RoleAbility do
       let(:person) { people(:abonnent) }
       let(:role_abonnent) { roles(:abonnent_alpen) }
 
-      it "is denied when Sektion#mitglied_termination_by_section_only" do
-        expect(ability).not_to be_able_to(:terminate, role_abonnent)
+      it "is allowed" do
+        expect(ability).to be_able_to(:terminate, role_abonnent)
       end
     end
   end
