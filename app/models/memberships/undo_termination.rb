@@ -101,6 +101,7 @@ module Memberships
         restored_people.each { _1.save(validate: false) if _1.changed? }
         restored_roles.each { _1.save(validate: false) }
         roles_to_destroy.each(&:destroy)
+        role.person.reload.household.create_missing_people_managers
       end
       true
     end

@@ -512,6 +512,16 @@ describe Memberships::UndoTermination, versioning: true do
         expect(role.person.household_key).to eq original_household_key
         expect(role.person.household.people).to match_array original_household_people
       end
+
+      it "creates missing people managers" do
+        expect(role.person.manageds).to be_present
+        terminate(role)
+        expect(role.person.manageds).to be_empty
+
+        subject.save!
+
+        expect(role.reload.person.manageds).to be_present
+      end
     end
   end
 end

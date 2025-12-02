@@ -68,11 +68,12 @@ module SacCas::Household
     @maintain_sac_family
   end
 
-  def create_missing_people_managers(manager)
+  def create_missing_people_managers(manager = main_person)
     return if manager.nil?
 
     change_manageds = people - [manager] - manager.manageds
     clear_people_managers(change_manageds)
+
     change_manageds.each do |managed|
       PeopleManager.create!(manager:, managed:)
     end
