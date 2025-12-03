@@ -108,6 +108,11 @@ de_CH:
         myself: für mich selbst
       wizards/steps/switch_stammsektion:
         now: sofort
+      memberships/terminate_abo_magazin_abonnent:
+        terminate_on: Beenden ab
+        now: Sofort
+        end_of_role: "Auf %{date}"
+
       memberships/termination_form:
         terminate_on: Austrittsdatum
         termination_reason_id: Austrittsgrund
@@ -132,6 +137,7 @@ de_CH:
         terminate_on: "Austrittsdatum"
         now: Sofort
         end_of_year: "Auf 31.12.%{year}"
+        end_of_role: "Auf %{date}"
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: "Austrittsgrund"
       wizards/steps/termination/summary:
@@ -1714,6 +1720,9 @@ de_CH:
         success:
           one: "Deine SAC-Mitgliedschaft wurde gekündet."
           other: "Eure %{count} SAC-Mitgliedschaften wurden gekündet."
+    terminate_abo_magazin_abonnents:
+      create:
+        success: "Dein Abonnement wurde gekündet."
     undo_terminations:
       create:
         success: "Rollen wurden erfolgreich reaktiviert."
@@ -2084,6 +2093,8 @@ de_CH:
     title: Zusatzsektion verlassen
   sheet/memberships/switch_stammsektion:
     title: Stammsektion wechseln
+  sheet/memberships/terminate_abo_magazin_abonnent:
+    title: Die Alpen-Abonnent beenden
   sheet/memberships/terminate_sac_membership:
     title: SAC-Mitgliedschaft beenden
   sheet/memberships/undo_termination:
@@ -2262,3 +2273,20 @@ de_CH:
           subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
           inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
           next_button: "Austritt beantragen"
+
+      terminate_abo_magazin_abonnents:
+        data_retention_info_title: "Aufbewahrung deiner Daten"
+        data_retention_info_text: >-
+          Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich folgende Konsequenzen: Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest, dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+        data_retention_consent: >-
+          Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
+        online_articles_consent: >-
+          Ich habe verstanden, dass bei einer Kündigung des Die Alpen-Abonnement auch die Zugriffsrechte auf die Online-Artikel verfallen.
+        entry_fee_info_text: >-
+          Die Eintrittsgebühr ist bei jedem Wiedereintritt neu fällig. Unabhängig davon, ob deine Daten aufbewahrt oder gelöscht wurden.
+        entry_fee_consent: >-
+          Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
+        subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
+        subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
+        inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
+        submit_button: Die Alpen-Abonnent beenden
