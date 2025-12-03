@@ -19,7 +19,7 @@ module Export::Tabular::People
     end
 
     def roles_scope
-      super.where(end_on: @range)
+      super.where(end_on: @range, terminated: true)
     end
   end
 end
