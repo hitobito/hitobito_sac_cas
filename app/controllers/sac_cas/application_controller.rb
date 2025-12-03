@@ -8,6 +8,10 @@
 module SacCas::ApplicationController
   extend ActiveSupport::Concern
 
+  prepended do
+    layout "with_google_tag_manager"
+  end
+
   private
 
   def fetch_person
