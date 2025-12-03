@@ -45,38 +45,41 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def create_new_membership_roles
+    restore_household if restore_household?
+
     relevant_roles_for(expired_stammsektion_role).each do |previous_role|
       create_new_role(previous_role.person, previous_role.type.constantize, previous_role.group)
     end
   end
 
-  # rubocop:todo Metrics/MethodLength
-  # rubocop:todo Metrics/AbcSize
   def relevant_roles_for(stammsektion_role) # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
-    membership = People::SacMembership.new(person,
-      date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
+    date = stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on
 
-    relevant_roles = []
-    relevant_roles << membership.stammsektion_role
-    relevant_roles.concat(membership.zusatzsektion_roles.reject(&:terminated?))
-    relevant_roles.concat(membership.membership_prolongable_roles.reject(&:terminated?))
-
-    if family_main_person?
-      person.household_people.each do |family_member|
-        family_member_membership = People::SacMembership.new(family_member,
-          date: stammsektion_role.active? ? Time.zone.today : stammsektion_role.end_on)
-
-        relevant_roles << family_member_membership.stammsektion_role
-        relevant_roles.concat(family_member_membership.zusatzsektion_roles.reject(&:terminated?)
-          .select { |zusatzsektion| zusatzsektion.beitragskategorie&.family? })
-        relevant_roles.concat(family_member_membership.membership_prolongable_roles)
-      end
-    end
-
-    relevant_roles
+    collect_roles_for_person(person, date) +
+      collect_roles_for_housemates(person, date)
   end
-  # rubocop:enable Metrics/AbcSize
-  # rubocop:enable Metrics/MethodLength
+
+  def collect_roles_for_person(person, date, only_family: false)
+    membership = People::SacMembership.new(person, date:)
+
+    applicable_zusatzsektion_roles = membership.zusatzsektion_roles
+      .reject(&:terminated?)
+      .select { |role| only_family ? role.beitragskategorie.family? : true }
+
+    [
+      membership.stammsektion_role,
+      *applicable_zusatzsektion_roles,
+      *membership.membership_prolongable_roles.reject(&:terminated?)
+    ].compact
+  end
+
+  def collect_roles_for_housemates(person, date)
+    return [] unless person.sac_family_main_person?
+
+    person.household_people.flat_map { |family_member|
+      collect_roles_for_person(family_member, date, only_family: true)
+    }
+  end
 
   def create_stammsektion_membership_from_neuanmeldung
     update_role_to_stammsektion_mitglied(person)
@@ -176,6 +179,41 @@ class Invoices::SacMemberships::MembershipManager
       .order(:end_on)
       .reject(&:terminated?)
       .last
+  end
+
+  # Find the matching family members Stammsektion roles with the same
+  # family_id and end_on
+  def expired_family_member_roles
+    Group::SektionsMitglieder::Mitglied.with_inactive
+      .where(
+        family_id: expired_stammsektion_role.family_id,
+        end_on: expired_stammsektion_role.end_on
+      )
+      .where.not(person_id: person.id)
+  end
+
+  # For family memberhips, if the membership role is expired, the household has been
+  # disbanded. It must be restored before creating new family membership roles.
+  # This is the case if the stammsektion role is of family type but the person has no household_key.
+  def restore_household?
+    person.household_key.blank? &&
+      expired_stammsektion_role.beitragskategorie.family? &&
+      expired_stammsektion_role.family_id?
+  end
+
+  # Restores the household of the person based on the expired family member roles.
+  # Notes:
+  # * `maintain_sac_family: false` must be used to disable role handling in the Household model
+  #   as we handle the roles ourselves in this class.
+  # * Save with `context: :create` to skip validations on the Household model. We need to restore
+  #   the household even if validations would fail.
+  # * As `maintain_sac_family` is false, the Household will not manage PeopleManagers. By calling
+  #  `set_family_main_person!` manually afterwards, the PeopleManagers will be created.
+  def restore_household
+    restored_household = Household.new(person, maintain_sac_family: false, validate_members: false)
+    family_members = expired_family_member_roles.map(&:person).uniq.presence or return
+    family_members.reduce(restored_household, :add).save!(context: :create)
+    restored_household.set_family_main_person!
   end
 
   def log_missing_membership

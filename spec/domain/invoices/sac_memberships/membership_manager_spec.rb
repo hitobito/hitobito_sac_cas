@@ -262,6 +262,26 @@ describe Invoices::SacMemberships::MembershipManager do
         end.to change { Role.count }.by(14)
           .and change { familienmitglied2_person.sac_membership.zusatzsektion_roles.count }.by(0)
       end
+
+      it "restores the household" do
+        familienmitglied_person.household.destroy
+        familienmitglied_person.update_column(:sac_family_main_person, false)
+
+        expect(familienmitglied_person.sac_family_main_person?).to be false
+        expect(familienmitglied_person.household_key).to be_nil
+
+        subject.update_membership_status
+
+        familienmitglied_person.reload
+        expect(familienmitglied_person.sac_family_main_person?).to be true
+        expect(familienmitglied_person.household_key).not_to be_nil
+
+        # Check that all family members are in the same household
+        familienmitglied2_person.reload
+        familienmitglied_kind_person.reload
+        expect(familienmitglied2_person.household_key).to eq(familienmitglied_person.household_key)
+        expect(familienmitglied_kind_person.household_key).to eq(familienmitglied_person.household_key)
+      end
     end
   end
 
