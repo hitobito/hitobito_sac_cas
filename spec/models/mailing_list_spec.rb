@@ -42,6 +42,15 @@ describe MailingList do
       expect(newsletter.filter_chain.to_hash).to be_blank
     end
 
+    it "has customized subscribable_for translations" do
+      label_nobody = subject.subscribable_for_label(:nobody)
+      label_anyone = subject.subscribable_for_label(:anyone)
+      label_configured = subject.subscribable_for_label(:configured)
+      expect(label_nobody).to eq "Niemand"
+      expect(label_anyone).to eq "Alle Personen des Schweizer Alpen-Clubs (u. A. alle Sektionen)"
+      expect(label_configured).to eq "Nur konfigurierte Abonnenten (z.B. Sektionsmitglieder)"
+    end
+
     it "newsletter mailing list subscription is empty" do
       MailingListSeeder.seed!
       expect(newsletter.subscriptions).to be_empty
