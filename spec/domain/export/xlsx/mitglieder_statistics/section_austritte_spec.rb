@@ -17,11 +17,19 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
     TerminationReason.all.sort_by(&:text)
   end
 
-  def create_role(type = "Mitglied", **attrs)
+  def create_role_plain(type = "Mitglied", **attrs)
     Fabricate(
       "Group::SektionsMitglieder::#{type}",
       attrs.reverse_merge(group:, beitragskategorie: :adult, start_on: "2015-01-01")
     )
+  end
+
+  def create_role(type = "Mitglied", **attrs)
+    create_role_plain(type, **attrs.merge(end_on: Date.current.end_of_year)).tap do |role|
+      if attrs[:end_on]
+        Roles::Termination.new(role:, terminate_on: attrs[:end_on], validate_terminate_on: false).call
+      end
+    end
   end
 
   describe "calculations" do
@@ -32,6 +40,9 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       create_role(end_on: "2024-03-01", termination_reason: reasons.first)
       create_role(end_on: "2024-12-31", termination_reason: reasons.first)
       create_role(end_on: "2024-04-01")
+
+      # non-terminated roles are ignored
+      create_role_plain(end_on: "2024-12-31")
 
       # non-member roles are ignored
       Fabricate("Group::SektionsMitglieder::Leserecht",
@@ -105,6 +116,10 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       too_old = create_role(end_on: "31.12.2025")
       # outside of group
       create_role("MitgliedZusatzsektion", group: matterhorn, end_on: "30.6.2025", person: too_old.person)
+
+      # non-terminated role with end on
+      create_role_plain(end_on: "2024-12-31")
+      create_role_plain(end_on: "2025-12-31")
 
       expect(scope).to match_array [
         stammsektion,
