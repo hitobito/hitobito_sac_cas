@@ -1,5 +1,8 @@
 ## Version unreleased
 
+
+## Version 2.7.12
+
 * Excel Export Wechsel Beitragskategorie (HIT-1321 / hitobito_sac_cas#2107)
 * Excel Export Eingetretene Mitglieder (HIT-984 / hitobito_sac_cas#1665)
 * Excel Export Mitgliederstatistik (HIT-1335 / hitobito_sac_cas#2061)
