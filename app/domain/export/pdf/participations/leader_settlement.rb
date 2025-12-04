@@ -20,16 +20,16 @@ module Export::Pdf::Participations
     attr_reader :participation, :iban, :options
     delegate :event, :person, to: :participation
 
-    def invoice # rubocop:todo Metrics/MethodLength
-      @invoice ||= Invoice.new(
+    def invoice # rubocop:todo Metrics/MethodLength, Metrics/AbcSize
+      @invoice ||= Invoice.new(Person::Address.new(person).invoice_payee_address_attributes.merge(
+        SacAddressPresenter.new.format(:leader_settlement_invoice_attributes)
+      ).merge(
         iban: iban,
         currency: "CHF",
         payment_purpose: "Kurs #{event.number}",
         payment_slip: "qr",
         title: title,
-        payee: sender_address,
         address: sender_address,
-        recipient_address: SacAddressPresenter.new.format(:leader_settlement),
         sequence_number: sequence_number,
         issued_at: invoice_date,
         reference: nil,
@@ -37,12 +37,12 @@ module Export::Pdf::Participations
         invoice_config: InvoiceConfig.new,
         creator: person,
         invoice_items: build_invoice_items
-      ).tap do |invoice|
+      )).tap do |invoice|
         invoice.total = invoice.invoice_items.sum(&:cost)
       end
     end
 
-    def sender_address = Person::Address.new(person).for_invoice
+    def sender_address = Person::Address.new(person).for_letter_with_invoice
 
     def title = "#{event.number} — #{event.name}"
 
