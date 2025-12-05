@@ -21,7 +21,7 @@ describe ChangelogController do
   it "excludes tags if key is missing" do
     get :index
     expect(dom).not_to have_css "meta[name=description] + script", visible: false
-    expect(dom).not_to have_css "footer + script", visible: false
+    expect(dom).not_to have_css "footer > noscript", visible: false
   end
 
   it "includes tags if key is present" do
@@ -29,7 +29,7 @@ describe ChangelogController do
     get :index
 
     header = dom.find("meta[name=description] + script", visible: false)
-    footer = dom.find("footer + script", visible: false)
+    footer = dom.find("footer > noscript", visible: false)
 
     expect(header.native.to_s).to eq <<~HTML.strip
       <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -39,15 +39,9 @@ describe ChangelogController do
       })(window,document,'script','dataLayer','123abc');</script>
     HTML
 
-    expect(footer.native.to_s).to eq <<~HTML.strip
-      <script>
-      //<![CDATA[
-
+    expect(footer.native.to_s).to eq <<~HTML.strip.tr("\n", " ")
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=123abc"
       height="-1" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
-      //]]>
-      </script>
     HTML
   end
 end

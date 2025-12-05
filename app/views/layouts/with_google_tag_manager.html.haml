@@ -12,7 +12,7 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','#{Settings.google_tag_manager.key}');</script>
 
-  - content_for :javascripts do
+  - content_for :footer do
     :plain
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=#{Settings.google_tag_manager.key}"
     height="-1" width="0" style="display:none;visibility:hidden"></iframe></noscript>
