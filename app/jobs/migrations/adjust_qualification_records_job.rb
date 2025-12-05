@@ -10,7 +10,7 @@ module Migrations
   # of hitobito. Specifically, create a record for the last qualification
   # during the kind's validity period if the imported qualification
   # has a longer validity.
-  # Implements https://saccas.atlassian.net/browse/HIT-1176
+  # Implements https://saccas.atlassian.net/browse/HIT-1176 (Variante 2)
   class AdjustQualificationRecordsJob < BaseJob
     def perform
       init_stats
