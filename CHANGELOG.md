@@ -1,5 +1,7 @@
 ## Version unreleased
 
+* Google Tag Manager Support (HIT-1373, hitobito_sac_cas#2131)
+
 
 ## Version 2.7.12
 

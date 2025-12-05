@@ -1,0 +1,20 @@
+- #  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+- if Settings.google_tag_manager&.key
+  - content_for :head do
+    :plain
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','#{Settings.google_tag_manager.key}');</script>
+
+  - content_for :footer do
+    :plain
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=#{Settings.google_tag_manager.key}"
+    height="-1" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+= render template: 'layouts/application'

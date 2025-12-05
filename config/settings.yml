@@ -37,6 +37,9 @@ groups:
 # to this address to set a password.
 root_email: hitobito-sac-cas@puzzle.ch
 
+google_tag_manager:
+  key: <%= ENV['GOOGLE_TAG_MANAGER_KEY'].presence %>
+
 sftp:
   config:
     <% if ENV['RAILS_SFTP_CONFIG'].present? %>
