@@ -508,6 +508,13 @@ it:
         number: Telefono cellulare
       group/phone_number_landline:
         number: Telefono fisso
+
+      mailing_list:
+        subscribable_fors:
+          anyone: Alle Personen des Schweizer Alpen-Clubs (u. A. alle Sektionen)
+          configured: Nur konfigurierte Abonnenten (z.B. Sektionsmitglieder)
+          nobody: Niemand
+
       role:
         membership_years: Anni di affiliazione
         class:

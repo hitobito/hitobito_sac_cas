@@ -506,6 +506,13 @@ en:
         number: Mobiltelefon
       group/phone_number_landline:
         number: Festnetztelefon
+
+      mailing_list:
+        subscribable_fors:
+          anyone: Alle Personen des Schweizer Alpen-Clubs (u. A. alle Sektionen)
+          configured: Nur konfigurierte Abonnenten (z.B. Sektionsmitglieder)
+          nobody: Niemand
+
       role:
         membership_years: Member years
         class:
