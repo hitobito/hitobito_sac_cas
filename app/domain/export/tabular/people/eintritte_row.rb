@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class EintritteRow < SektionPersonRow
+  class EintritteRow < MitgliedschaftRow
     def initialize(entry, group, range, format = nil)
       @range = range
       super(entry, group, format)
@@ -21,11 +21,11 @@ module Export::Tabular::People
     end
 
     def sac_is_new_entry
-      membership_role == roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES).first
+      membership_role.start_on == roles(*SacCas::MITGLIED_STAMMSEKTION_ROLES).first.start_on
     end
 
     def sac_is_section_new_entry
-      membership_role == roles_in_group(*SacCas::MITGLIED_ROLES).first
+      membership_role == group_membership_roles.first
     end
 
     def sac_is_section_change
@@ -40,6 +40,14 @@ module Export::Tabular::People
           .select { |r| r.start_on < @range.begin }
 
       prior_roles.any? && prior_roles.none? { |r| r.active?(membership_role.start_on - 1.day) }
+    end
+
+    private
+
+    def membership_role
+      @membership_role ||= group_membership_roles.find do |r|
+        @range.cover?(r.start_on)
+      end
     end
   end
 end

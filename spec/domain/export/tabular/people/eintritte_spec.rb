@@ -94,7 +94,7 @@ describe Export::Tabular::People::Eintritte do
   end
 
   it "has range in sheet name" do
-    expect(build.sheet_name).to eq "von_20240701_bis_20250630"
+    expect(build.sheet_name).to eq "20240701_20250630"
   end
 
   describe "#people_scope" do
@@ -233,8 +233,11 @@ describe Export::Tabular::People::Eintritte do
 
   describe "data_rows" do
     let(:mitglied) { people(:mitglied) }
-
-    let(:row_class) { Data.define(*described_class::ATTRIBUTES) { def to_s = [first_name, last_name].join(" ") } }
+    let(:row_class) do
+      Data.define(*described_class.attributes) do
+        def to_s = [first_name, last_name].join(" ")
+      end
+    end
     let(:rows) { build.data_rows.map { |r| row_class.new(*r) } }
 
     def row_for(person, group = nil, range_string = nil)
@@ -344,6 +347,18 @@ describe Export::Tabular::People::Eintritte do
 
         expect(row_for(person, bluemlisalp, "1.1.2024-31.12.2024")).to be_nil
         expect(row_for(person, matterhorn, "1.1.2025-31.12.2025")).to be_nil
+      end
+
+      it "marks Zusatzmitgliedschaft starting together with Stammmitgliedschaft" do
+        person = create_role("Mitglied", matterhorn, start_on: "10.10.2025").person
+        create_role("MitgliedZusatzsektion", bluemlisalp, start_on: "10.10.2025", person:)
+
+        bluemlisalp_zusatz = row_for(person, bluemlisalp, "1.1.2025-31.12.2025")
+        expect(bluemlisalp_zusatz.type).to eq "Zusatzsektion"
+        expect(bluemlisalp_zusatz.sac_is_new_entry).to eq "ja"
+        expect(bluemlisalp_zusatz.sac_is_re_entry).to eq "nein"
+        expect(bluemlisalp_zusatz.sac_is_section_new_entry).to eq "ja"
+        expect(bluemlisalp_zusatz.sac_is_section_change).to eq "nein"
       end
 
       it "marks reactivated Zusatzmitgliedschaft" do

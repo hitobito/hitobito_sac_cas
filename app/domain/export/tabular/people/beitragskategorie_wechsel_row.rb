@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class BeitragskategorieWechselRow < SektionPersonRow
+  class BeitragskategorieWechselRow < MitgliedschaftRow
     def initialize(entry, group, range, format = nil)
       @range = range
       super(entry, group, format)
@@ -17,23 +17,23 @@ module Export::Tabular::People
     end
 
     def changed_youth_adult
-      yes_or_no(previous_membership_role.youth? && membership_role.adult?)
+      previous_membership_role.youth? && membership_role.adult?
     end
 
     def changed_youth_family
-      yes_or_no(previous_membership_role.youth? && membership_role.family?)
+      previous_membership_role.youth? && membership_role.family?
     end
 
     def changed_adult_family
-      yes_or_no(previous_membership_role.adult? && membership_role.family?)
+      previous_membership_role.adult? && membership_role.family?
     end
 
     def changed_family_adult
-      yes_or_no(previous_membership_role.family? && membership_role.adult?)
+      previous_membership_role.family? && membership_role.adult?
     end
 
     def changed_family_youth
-      yes_or_no(previous_membership_role.family? && membership_role.youth?)
+      previous_membership_role.family? && membership_role.youth?
     end
 
     private
@@ -51,7 +51,7 @@ module Export::Tabular::People
     end
 
     def descending_membership_roles
-      @descending_membership_roles ||= roles_in_group(*SacCas::MITGLIED_ROLES).reverse
+      @descending_membership_roles ||= group_membership_roles.reverse
     end
   end
 end
