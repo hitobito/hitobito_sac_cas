@@ -84,6 +84,7 @@ Rails.application.routes.draw do
           resource :rejects, only: [:new, :create]
         end
         namespace :export do
+          post :austritte, to: "austritte#create"
           post :eintritte, to: "eintritte#create"
           post :jubilare, to: "jubilare#create"
           post :beitragskategorie_wechsel, to: "beitragskategorie_wechsel#create"

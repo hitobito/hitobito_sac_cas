@@ -32,10 +32,10 @@ describe Dropdown::People::SacExports do
   end
 
   it "has eintritte popover link" do
-    jubilare = dom.find_link "Eintritte"
+    jubilare = dom.find_link "Eingetretene Mitglieder"
     expect(jubilare["data-anchor"]).to eq "#dropdown_people_sac_exports"
     expect(jubilare["data-bs-toggle"]).to eq "popover"
-    expect(jubilare["data-bs-title"]).to eq "Eintritte"
+    expect(jubilare["data-bs-title"]).to eq "Eingetretene Mitglieder"
     form = Capybara::Node::Simple.new(jubilare["data-bs-content"])
     expect(form).to have_field "Von"
     expect(form).to have_field "Bis"

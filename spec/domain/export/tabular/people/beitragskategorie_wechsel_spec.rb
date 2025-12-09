@@ -61,7 +61,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
   end
 
   it "has range in sheet name" do
-    expect(build.sheet_name).to eq "von_20240701_bis_20250630"
+    expect(build.sheet_name).to eq "20240701_20250630"
   end
 
   describe "#people_scope" do
@@ -134,8 +134,11 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
 
   describe "data_rows" do
     let(:mitglied) { people(:mitglied) }
-
-    let(:row_class) { Data.define(*described_class::ATTRIBUTES) { def to_s = [first_name, last_name].join(" ") } }
+    let(:row_class) do
+      Data.define(*described_class.attributes) do
+        def to_s = [first_name, last_name].join(" ")
+      end
+    end
     let(:rows) { build.data_rows.map { |r| row_class.new(*r) } }
 
     def row_for(person, group = nil, range_string = nil)
@@ -158,7 +161,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
 
       expect_query_count do
         expect(tabular.data_rows).to have(3).items
-      end.to eq 3
+      end.to eq(5)
     end
 
     describe "common" do

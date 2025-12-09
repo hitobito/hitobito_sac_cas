@@ -21,21 +21,7 @@ module Export::Tabular::People
       :ehrenmitglied,
       :beguenstigt,
 
-      :last_name,
-      :first_name,
-      :gender,
-      :birthday,
-      :correspondence,
-      :email,
-      :phone_number_mobile,
-      :phone_number_landline,
-      :postbox,
-      :street,
-      :housenumber,
-      :address_care_of,
-      :zip_code,
-      :town,
-      :country
+      *Mitgliedschaft::PERSON_ATTRIBUTES
     ]
 
     self.styled_attrs = {

@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class SektionPersonRow < Export::Tabular::Row
+  class MitgliedschaftRow < Export::Tabular::Row
     def initialize(entry, group, format = nil)
       @group = group
       super(entry, format)
@@ -31,24 +31,28 @@ module Export::Tabular::People
     end
 
     def terminate_on
-      membership_role.terminated_on
+      membership_role&.terminated_on
     end
 
     def type
+      return unless membership_role
+
       role_type = membership_role.class.name.demodulize.underscore
       I18n.t("export/tabular/people.attributes.types.#{role_type}")
     end
 
     def beitragskategorie
+      return unless membership_role
+
       I18n.t("roles.beitragskategorie.#{membership_role.beitragskategorie}")
     end
 
     def ehrenmitglied
-      yes_or_no(active_role_in_group?(Group::SektionsMitglieder::Ehrenmitglied))
+      active_role_in_group?(Group::SektionsMitglieder::Ehrenmitglied)
     end
 
     def beguenstigt
-      yes_or_no(active_role_in_group?(Group::SektionsMitglieder::Beguenstigt))
+      active_role_in_group?(Group::SektionsMitglieder::Beguenstigt)
     end
 
     def gender
@@ -85,14 +89,12 @@ module Export::Tabular::People
       active_role_in_group(*role_classes).present?
     end
 
-    def membership_role
-      @membership_role ||= roles_in_group(*SacCas::MITGLIED_ROLES).find do |r|
-        @range.cover?(r.start_on)
-      end
+    def group_membership_roles
+      roles_in_group(*SacCas::MITGLIED_ROLES)
     end
 
-    def yes_or_no(boolean)
-      I18n.t("global.#{boolean ? "yes" : "no"}")
+    def membership_role
+      raise NotImplementedError
     end
   end
 end
