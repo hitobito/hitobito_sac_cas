@@ -515,7 +515,7 @@ de_CH:
       mailing_list:
         subscribable_fors:
           anyone: Alle Personen des Schweizer Alpen-Clubs (u. A. alle Sektionen)
-          configured: Nur konfigurierte Abonnenten (z.B. Sektionsmitglieder)
+          configured: Nur konfigurierte Abonnenten der Gruppe (z.B. eine Sektion)
           nobody: Niemand
 
       role:
@@ -1242,10 +1242,11 @@ de_CH:
   dropdown/people/sac_exports:
     button: SAC Exporte
     csv_mitglieder: CSV Mitglieder
-    eintritte: Eintritte
+    eintritte: Eingetretene Mitglieder
+    austritte: Ausgetretene Mitglieder
+    beitragskategorie_wechsel: Wechsel Beitragskategorie
     jubilare: Jubilare
     mitglieder_statistics: Mitgliederstatistik
-    beitragskategorie_wechsel: Wechsel Beitragskategorie
 
   dropdown/people_export:
     recipients: Für den elektronischen Versand (E-Mail)
@@ -1498,6 +1499,9 @@ de_CH:
       sac_is_re_entry: Ist SAC Wiedereintritt
       sac_is_section_new_entry: Ist Sektion Ersteintritt
       sac_is_section_change: Ist Sektionswechsel
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      data_retention_consent: Datenaufbewahrungszustimmung
       start_on: Eintrittsdatum
       changed_on: Mutationsdatum
       changed_youth_adult: Ist Wechsel Jugend-Einzel
@@ -1947,6 +1951,9 @@ de_CH:
         create_invoice: "Starten"
         submit_confirmation: >-
           Wollen Sie den Jahresinkassolauf für alle Mitglieder wirklich starten? Dieser Lauf kann nicht abgebrochen werden.
+  people/export/austritte:
+    filename: Austritte
+
   people/export/beitragskategorie_wechsel:
     filename: Wechsel_Beitragskategorie
 

@@ -516,8 +516,8 @@ it:
 
       mailing_list:
         subscribable_fors:
-          anyone: Alle Personen des Schweizer Alpen-Clubs (u. A. alle Sektionen)
-          configured: Nur konfigurierte Abonnenten (z.B. Sektionsmitglieder)
+          anyone: Tutte le persone del Club Alpino Svizzero (tra cui tutte le sezioni)
+          configured: Solo abbonati configurati del gruppo (ad es. una sezione)
           nobody: Niemand
 
       role:
@@ -1301,10 +1301,11 @@ it:
   dropdown/people/sac_exports:
     button: CAS Esportazioni
     csv_mitglieder: CSV Membri
-    eintritte: Ingressi
+    eintritte: Eingetretene Mitglieder
+    austritte: Ausgetretene Mitglieder
+    beitragskategorie_wechsel: Modifica della categoria di contribuzione
     jubilare: Jubilare
     mitglieder_statistics: Statistiche dei membri
-    beitragskategorie_wechsel: Modifica della categoria di contribuzione
 
   dropdown/people_export:
     recipients: Per l’invio elettronico (via e-mail)
@@ -1558,6 +1559,9 @@ it:
       sac_is_re_entry: Il rientro del SAC è
       sac_is_section_new_entry: È la sezione Prima voce
       sac_is_section_change: È la modifica della sezione
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      data_retention_consent: Datenaufbewahrungszustimmung
       start_on: Data di adesione
       changed_on: Data della mutazione
       changed_youth_adult: è Jeunesse-Individuale
@@ -2011,6 +2015,9 @@ it:
         create_invoice: "Iniziare"
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
+  people/export/austritte:
+    filename: Austritte
+
   people/export/beitragskategorie_wechsel:
     filename: Cambia_categoria_di_contributo
 

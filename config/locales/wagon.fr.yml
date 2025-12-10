@@ -518,8 +518,8 @@ fr:
 
       mailing_list:
         subscribable_fors:
-          anyone: Alle Personen des Schweizer Alpen-Clubs (u. A. alle Sektionen)
-          configured: Nur konfigurierte Abonnenten (z.B. Sektionsmitglieder)
+          anyone: Toutes les personnes du Club alpin suisse (entre autres toutes les sections)
+          configured: Seuls les abonnés configurés du groupe (p. ex. une section)
           nobody: Niemand
 
       role:
@@ -1302,10 +1302,11 @@ fr:
   dropdown/people/sac_exports:
     button: CAS Exportations
     csv_mitglieder: CSV Membres
-    eintritte: Entrées
+    eintritte: Eingetretene Mitglieder
+    austritte: Ausgetretene Mitglieder
+    beitragskategorie_wechsel: Changement de catégorie de cotisation
     jubilare: Jubilare
     mitglieder_statistics: Statistiques des membres
-    beitragskategorie_wechsel: Changement de catégorie de cotisation
 
   dropdown/people_export:
     recipients: Pour l’envoi électronique (par e-mail)
@@ -1559,6 +1560,9 @@ fr:
       sac_is_re_entry: Est la rentrée du CAS
       sac_is_section_new_entry: Section réelle Première entrée
       sac_is_section_change: Est Changement de section
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      data_retention_consent: Datenaufbewahrungszustimmung
       start_on: Date d'entrée
       changed_on: Date de mutation
       changed_youth_adult: Est Jeunesse-Individuelle
@@ -2012,6 +2016,9 @@ fr:
         create_invoice: "Démarrer"
         submit_confirmation: >-
           Voulez-vous vraiment lancer la procédure d'encaissement annuel pour tous·tes les membres? Cette procédure ne peut pas être annulée.
+  people/export/austritte:
+    filename: Austritte
+
   people/export/beitragskategorie_wechsel:
     filename: Changement_catégorie_de_cotisations
 

@@ -1242,10 +1242,11 @@ en:
   dropdown/people/sac_exports:
     button: SAC Exporte
     csv_mitglieder: CSV Mitglieder
-    eintritte: Eintritte
+    eintritte: Eingetretene Mitglieder
+    austritte: Ausgetretene Mitglieder
+    beitragskategorie_wechsel: Wechsel Beitragskategorie
     jubilare: Jubilare
     mitglieder_statistics: Mitgliederstatistik
-    beitragskategorie_wechsel: Wechsel Beitragskategorie
 
   dropdown/people_export:
     recipients: Empfänger Einzelpersonen
@@ -1498,6 +1499,9 @@ en:
       sac_is_re_entry: Ist SAC Wiedereintritt
       sac_is_section_new_entry: Ist Sektion Ersteintritt
       sac_is_section_change: Ist Sektionswechsel
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      data_retention_consent: Datenaufbewahrungszustimmung
       start_on: Eintrittsdatum
       changed_on: Mutationsdatum
       changed_youth_adult: Ist Wechsel Jugend-Einzel
@@ -1948,6 +1952,9 @@ en:
         create_invoice: "Start"
         submit_confirmation: >-
           Do you really want to start the annual collection run for all members? This run cannot be canceled.
+  people/export/austritte:
+    filename: Austritte
+
   people/export/beitragskategorie_wechsel:
     filename: Wechsel_Beitragskategorie
 
