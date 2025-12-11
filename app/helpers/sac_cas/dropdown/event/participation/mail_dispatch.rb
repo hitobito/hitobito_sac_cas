@@ -6,15 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::Dropdown::Event::Participation::MailDispatch
-  def init_items
+  private
+
+  def custom_content_keys
     if (participation.roles.map(&:type) & Event::Course::LEADER_ROLES).any?
-      Event::Participation::MANUALLY_SENDABLE_LEADERSHIP_MAILS.each do |type|
-        add_mail_item(type)
-      end
+      Event::Participation::MANUALLY_SENDABLE_LEADERSHIP_MAILS
     else
-      Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS.each do |type|
-        add_mail_item(type)
-      end
+      Event::Participation::MANUALLY_SENDABLE_PARTICIPANT_MAILS
     end
   end
 end
