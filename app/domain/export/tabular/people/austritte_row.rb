@@ -24,8 +24,13 @@ module Export::Tabular::People
         .last(2).map(&:group_id).uniq.one?
     end
 
+    def end_on
+      membership_role.end_on
+    end
+
     def termination_reason
-      membership_role.termination_reason_text
+      membership_role.termination_reason_text.presence ||
+        I18n.t("export/tabular/people/mitgliedschaft.attributes.no_termination_reason")
     end
 
     def data_retention_consent

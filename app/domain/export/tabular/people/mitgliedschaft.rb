@@ -76,7 +76,7 @@ module Export::Tabular::People
     end
 
     def attribute_label(attr)
-      I18n.t("export/tabular/people.attributes.#{attr}")
+      I18n.t("export/tabular/people/mitgliedschaft.attributes.#{attr}")
     end
 
     def row_for(entry, format = nil)

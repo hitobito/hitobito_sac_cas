@@ -19,7 +19,9 @@ module Export::Tabular::People
     end
 
     def roles_scope
-      super.where(end_on: @range, terminated: true)
+      super
+        .where(end_on: @range)
+        .where("roles.end_on < :today OR roles.terminated", today: Date.current)
     end
   end
 end

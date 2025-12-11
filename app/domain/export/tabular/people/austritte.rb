@@ -14,7 +14,7 @@ module Export::Tabular::People
 
       :sac_is_terminated,
       :sac_is_section_change,
-      :terminate_on,
+      :end_on,
       :termination_reason,
       :data_retention_consent,
 
@@ -23,7 +23,7 @@ module Export::Tabular::People
     ]
 
     self.styled_attrs = {
-      date: [:sac_entry_on, :sektion_entry_on, :terminate_on, :birthday]
+      date: [:sac_entry_on, :sektion_entry_on, :end_on, :birthday]
     }
 
     private

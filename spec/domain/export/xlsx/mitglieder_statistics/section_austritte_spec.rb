@@ -39,10 +39,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       create_role(end_on: "2023-12-31", termination_reason: reasons.first)
       create_role(end_on: "2024-03-01", termination_reason: reasons.first)
       create_role(end_on: "2024-12-31", termination_reason: reasons.first)
-      create_role(end_on: "2024-04-01")
-
-      # non-terminated roles are ignored
-      create_role_plain(end_on: "2024-12-31")
+      create_role_plain(end_on: "2024-04-01") # non-terminated roles in the past are counted as well
 
       # non-member roles are ignored
       Fabricate("Group::SektionsMitglieder::Leserecht",
@@ -118,7 +115,8 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       create_role("MitgliedZusatzsektion", group: matterhorn, end_on: "30.6.2025", person: too_old.person)
 
       # non-terminated role with end on
-      create_role_plain(end_on: "2024-12-31")
+      non_terminated = create_role_plain(end_on: "2024-12-31")
+      non_terminated.person.update!(language: :fr, birthday: 55.years.ago)
       create_role_plain(end_on: "2025-12-31")
 
       expect(scope).to match_array [
@@ -127,21 +125,22 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
         stammsektions_wechsel,
         sac_re_entry,
         section_re_entry,
-        multi
+        multi,
+        non_terminated
       ]
 
-      expect(section.total).to eq(6)
+      expect(section.total).to eq(7)
 
       expect(section.counts(:language)).to eq(
-        {"de" => 6, "fr" => 0, "it" => 0, "en" => 0}
+        {"de" => 6, "fr" => 1, "it" => 0, "en" => 0}
       )
 
       expect(section.counts(:age)).to eq(
-        {"6-17" => 0, "18-22" => 0, "23-35" => 6, "36-50" => 0, "51-60" => 0, "61+" => 0}
+        {"6-17" => 0, "18-22" => 0, "23-35" => 6, "36-50" => 0, "51-60" => 1, "61+" => 0}
       )
 
       expect(section.counts(:beitragskategorie)).to eq(
-        {"adult" => 6, "family_main" => 0, "family_adult" => 0, "family_child" => 0, "youth" => 0}
+        {"adult" => 7, "family_main" => 0, "family_adult" => 0, "family_child" => 0, "youth" => 0}
       )
 
       expect(scope_for("1.8.2025-30.12.2025")).to eq [bk_change]
