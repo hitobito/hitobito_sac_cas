@@ -7,6 +7,10 @@
 
 module Export::Tabular::People
   class JubilareRow < MitgliedschaftRow
+    def terminate_on
+      membership_role&.terminated_on
+    end
+
     private
 
     def membership_role

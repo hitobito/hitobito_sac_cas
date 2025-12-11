@@ -30,15 +30,11 @@ module Export::Tabular::People
       roles_in_group(*SacCas::MITGLIED_ROLES).map(&:start_on).min
     end
 
-    def terminate_on
-      membership_role&.terminated_on
-    end
-
     def type
       return unless membership_role
 
       role_type = membership_role.class.name.demodulize.underscore
-      I18n.t("export/tabular/people.attributes.types.#{role_type}")
+      I18n.t("export/tabular/people/mitgliedschaft.attributes.types.#{role_type}")
     end
 
     def beitragskategorie

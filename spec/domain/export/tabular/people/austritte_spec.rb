@@ -39,7 +39,7 @@ describe Export::Tabular::People::Austritte do
       :sektion,
       :sac_is_terminated,
       :sac_is_section_change,
-      :terminate_on,
+      :end_on,
       :termination_reason,
       :data_retention_consent,
       :type,
@@ -77,33 +77,39 @@ describe Export::Tabular::People::Austritte do
     it "testing most common cases" do
       stammsektions_austritt = create_role("Mitglied", start_on: "10.7.2024", end_on: "31.12.2024").person
 
-      zusatzsektions_austritt = create_role("Mitglied", group: matterhorn,
-        end_on: "31.12.2025", start_on: "10.7.2024").person
-      create_role("MitgliedZusatzsektion", start_on: "10.7.2024", end_on: "31.12.2025", person: zusatzsektions_austritt)
-      zusatzsektions_austritt.roles.update!(end_on: "31.12.2024")
+      zusatzsektions_austritt = create_role("Mitglied", group: matterhorn, start_on: "10.7.2024").person
+      create_role("MitgliedZusatzsektion", start_on: "10.7.2024", end_on: "30.06.2025", person: zusatzsektions_austritt)
 
       stammsektions_wechsel = create_role("Mitglied", start_on: "3.2.2000", end_on: "31.12.2024").person
       create_role("Mitglied", group: matterhorn, start_on: "1.1.2025", person: stammsektions_wechsel)
 
+      stammsektions_swap = create_role("Mitglied", start_on: "3.2.2000", end_on: "31.12.2024").person
+      create_role("Mitglied", group: matterhorn, start_on: "1.1.2025", person: stammsektions_swap)
+      create_role("MitgliedZusatzsektion", start_on: "1.1.2025", person: stammsektions_swap)
+
+      # terminated=false (e.g. invoice not paid)
+      past_not_terminated = create_role_plain("Mitglied", start_on: "10.7.2024", end_on: "31.03.2025").person
+      # terminated=false because role was not prolonged yet
+      _future_not_terminated = create_role_plain("Mitglied", start_on: "10.7.2024", end_on: "30.06.2025").person
+
       # not part of scope
       too_old = create_role("Mitglied", start_on: "1.1.2024", end_on: "30.6.2024").person # too old
-
       too_new = create_role("Mitglied", start_on: "30.6.2024", end_on: "12.12.2025").person # too new
 
       with_membership_later_on = create_role("Mitglied", start_on: "1.1.2024", end_on: "10.12.2024").person
       create_role("Mitglied", person: with_membership_later_on, start_on: "1.1.2026", end_on: "31.12.2026")
 
       travel_to(Time.zone.local(2025, 6, 30)) do
-        expect(people_scope).to have(4).entries
-        expect(people_scope).to match_array [
+        expect(people_scope.map(&:to_s)).to match_array [
           stammsektions_austritt,
           zusatzsektions_austritt,
           stammsektions_wechsel,
-          with_membership_later_on
-        ]
+          with_membership_later_on,
+          past_not_terminated
+        ].map(&:to_s)
 
         expect(build("1.1.2024-30.6.2024").people_scope).to match_array [too_old]
-        expect(build("30.6.2025-12.12.2025").people_scope).to match_array [too_new]
+        expect(build("1.7.2025-12.12.2025").people_scope).to match_array [too_new]
       end
     end
 
@@ -121,14 +127,14 @@ describe Export::Tabular::People::Austritte do
 
     describe "range border" do
       it "includes if role ends on begin of range" do
-        person = create_role("Mitglied", start_on: "30.6.2024", end_on: "1.7.2024").person
+        person = create_role("Mitglied", start_on: "1.1.2024", end_on: "1.7.2024").person
         travel_to(Time.zone.local(2025, 6, 30)) do
           expect(people_scope).to eq [person]
         end
       end
 
       it "includes if role ends on end of range" do
-        person = create_role("Mitglied", start_on: "1.6.2024", end_on: "30.6.2025").person
+        person = create_role("Mitglied", start_on: "1.1.2025", end_on: "30.6.2025").person
         travel_to(Time.zone.local(2025, 6, 30)) do
           expect(people_scope).to eq [person]
         end
@@ -202,8 +208,8 @@ describe Export::Tabular::People::Austritte do
           sektion: "SAC Blüemlisalp",
           sac_is_terminated: "nein",
           sac_is_section_change: "nein",
-          terminate_on: "31.10.2014",
-          termination_reason: nil,
+          end_on: "31.10.2014",
+          termination_reason: "ADM",
           data_retention_consent: "nein",
           type: "Stammsektion",
           beitragskategorie: "Jugend",
@@ -239,7 +245,7 @@ describe Export::Tabular::People::Austritte do
       it "correctly popluates terminate_on" do
         travel_to(Time.zone.local(2025, 11, 3)) do
           Roles::Termination.new(role: roles(:mitglied), terminate_on: 1.day.from_now).call
-          expect(row_for(mitglied, bluemlisalp, "1.1.2015-31.12.2025").terminate_on).to eq "04.11.2025"
+          expect(row_for(mitglied, bluemlisalp, "1.1.2015-31.12.2025").end_on).to eq "04.11.2025"
         end
       end
     end
@@ -254,7 +260,7 @@ describe Export::Tabular::People::Austritte do
         travel_to(Time.zone.local(2025, 6, 30)) do
           row = row_for(role.person)
           expect(row.sac_is_terminated).to eq "ja"
-          expect(row.terminate_on).to eq "12.11.2025"
+          expect(row.end_on).to eq "12.11.2025"
           expect(row.termination_reason).to eq "Umgezogen"
         end
       end
@@ -267,7 +273,7 @@ describe Export::Tabular::People::Austritte do
         travel_to(Time.zone.local(2025, 6, 30)) do
           row = row_for(role.person)
           expect(row.sac_is_terminated).to eq "ja"
-          expect(row.terminate_on).to eq "31.12.2025"
+          expect(row.end_on).to eq "31.12.2025"
           expect(row.termination_reason).to eq "Umgezogen"
         end
       end
@@ -290,7 +296,7 @@ describe Export::Tabular::People::Austritte do
 
         travel_to(Time.zone.local(2025, 6, 30)) do
           row = row_for(person)
-          expect(row.terminate_on).to eq "31.07.2025"
+          expect(row.end_on).to eq "31.07.2025"
           expect(row.sac_is_section_change).to eq "nein"
           expect(row.sac_is_terminated).to eq "nein"
         end
@@ -302,7 +308,7 @@ describe Export::Tabular::People::Austritte do
           create_role("MitgliedZusatzsektion", start_on: "1.1.2020", end_on: "31.12.2025", person: person)
 
           row = row_for(person)
-          expect(row.terminate_on).to eq "31.12.2025"
+          expect(row.end_on).to eq "31.12.2025"
           expect(row.sac_is_section_change).to eq "nein"
           expect(row.sac_is_terminated).to eq "ja"
         end
