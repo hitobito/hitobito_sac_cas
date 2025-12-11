@@ -1549,52 +1549,54 @@ it:
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
 
-  export/tabular/people:
+  export/tabular/people/mitgliedschaft:
     attributes:
-      id: Numero di membro
-      url: Affiliazioni
-      sektion: Sezione
-      membership_years: Numero di anni di appartenenza
-      sac_entry_on: Data massima di adesione al CAS
-      sektion_entry_on: Data di inizio dell'iscrizione alla sezione
-      sac_is_new_entry: Il CAS è una nuova voce
-      sac_is_re_entry: Il rientro del SAC è
-      sac_is_section_new_entry: È la sezione Prima voce
-      sac_is_section_change: È la modifica della sezione
-      sac_is_terminated: È l'uscita del SAC
-      termination_reason: Motivo della partenza
-      data_retention_consent: Consenso alla conservazione dei dati
-      start_on: Data di adesione
-      changed_on: Data della mutazione
-      changed_youth_adult: è Jeunesse-Individuale
-      changed_youth_family: è Jeunesse-Famiglia
-      changed_adult_family: è Individuale-Famiglia
-      changed_family_adult: è Famiglia-Individuale
-      changed_family_youth: è Famiglia-Jeunesse
-      terminate_on: Data di uscita
-      self_registration_reason: Motivo dell'ingresso
-      type: Tipo
+      id: Mitgliedernummer
+      url: Mitgliedschaften
+      sektion: Sektion
+      membership_years: Anzahl Mitgliedsjahre
+      sac_entry_on: Frühestes Beitrittsdatum beim SAC
+      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      start_on: Eintrittsdatum
+      end_on: Austrittsdatum
+      terminate_on: Austritt geplant
+      changed_on: Mutationsdatum
+      sac_is_new_entry: Ist SAC Neueintritt
+      sac_is_re_entry: Ist SAC Wiedereintritt
+      sac_is_section_new_entry: Ist Sektion Ersteintritt
+      sac_is_section_change: Ist Sektionswechsel
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      no_termination_reason: ADM
+      self_registration_reason: Eintrittsgrund
+      data_retention_consent: Datenaufbewahrungszustimmung
+      changed_youth_adult: Ist Wechsel Jugend-Einzel
+      changed_youth_family: Ist Wechsel Jugend-Familie
+      changed_adult_family: Ist Wechsel Einzel-Familie
+      changed_family_adult: Ist Wechsel Familie-Einzel
+      changed_family_youth: Ist Wechsel Familie-Jugend
+      type: Typ
       types:
-        mitglied: Sezione centrale
-        mitglied_zusatzsektion: Sezione aggiuntiva
-      beitragskategorie: "Categorie di contributo "
-      ehrenmitglied: È un membro onorario
-      beguenstigt: È beneficiario
-      last_name: Cognome
-      first_name: Nome
-      gender: Sesso
-      birthday: Data di nascita
-      correspondence: Corrispondenza
-      email: e-mail
-      phone_number_mobile: Mobile
-      phone_number_landline: Linea fissa
-      postbox: Casella postale
-      street: Via
-      housenumber: Numero civico
-      address_care_of: Suffisso dell'indirizzo
-      zip_code: CAP
-      town: Posizione
-      country: Paese
+        mitglied: Stammsektion
+        mitglied_zusatzsektion: Zusatzsektion
+      beitragskategorie: Beitragskategorie
+      ehrenmitglied: Ist Ehrenmitglied
+      beguenstigt: Ist Begünstigt
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      correspondence: Korrespondenz
+      email: E-Mail
+      phone_number_mobile: Mobil
+      phone_number_landline: Festnetz
+      postbox: Postfach
+      street: Strasse
+      housenumber: Hausnummer
+      address_care_of: Adresszusatz
+      zip_code: PLZ
+      town: Ort
+      country: Land
 
   export/tabular/people/jubilare:
     sheet_name: "Membri per %{reference_date}"
@@ -1624,7 +1626,7 @@ it:
       nil: Non specificato
     termination_reason:
       label: Motivo della disdetta
-      nil: Non specificato
+      nil: ADM
     section_active: "Membri attivi su %{to}"
     section_eintritte: "Ingressi %{from} - %{to}"
     section_austritte: "Dimissioni %{from} - %{to}"

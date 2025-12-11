@@ -1551,52 +1551,54 @@ fr:
   event/participations:
     pending: "Une notification préalable a été établie. Celle-ci n'est pas encore définitive et doit être confirmée par l'administration du cours."
 
-  export/tabular/people:
+  export/tabular/people/mitgliedschaft:
     attributes:
-      id: Numéro de membre
-      url: Adhésions
-      sektion: Section
-      membership_years: Nombre d'années d'adhésion
-      sac_entry_on: Date d'adhésion au plus tôt au CAS
-      sektion_entry_on: Date d'adhésion au plus tôt à la section
-      sac_is_new_entry: Est CAS nouvelle adhésion
-      sac_is_re_entry: Est la rentrée du CAS
-      sac_is_section_new_entry: Section réelle Première entrée
-      sac_is_section_change: Est Changement de section
-      sac_is_terminated: Est sortie du CAS
-      termination_reason: Motif de sortie
-      data_retention_consent: Consentement à la conservation des données
-      start_on: Date d'entrée
-      changed_on: Date de mutation
-      changed_youth_adult: Est Jeunesse-Individuelle
-      changed_youth_family: Est Jeunesse-Famille
-      changed_adult_family: Est Individuelle-Famille
-      changed_family_adult: Est Famille-Individuelle
-      changed_family_youth: Est Famille-Jeunesse
-      terminate_on: Date de sortie
-      self_registration_reason: Motif d’entrée
-      type: Type
+      id: Mitgliedernummer
+      url: Mitgliedschaften
+      sektion: Sektion
+      membership_years: Anzahl Mitgliedsjahre
+      sac_entry_on: Frühestes Beitrittsdatum beim SAC
+      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      start_on: Eintrittsdatum
+      end_on: Austrittsdatum
+      terminate_on: Austritt geplant
+      changed_on: Mutationsdatum
+      sac_is_new_entry: Ist SAC Neueintritt
+      sac_is_re_entry: Ist SAC Wiedereintritt
+      sac_is_section_new_entry: Ist Sektion Ersteintritt
+      sac_is_section_change: Ist Sektionswechsel
+      sac_is_terminated: Ist SAC Austritt
+      termination_reason: Austrittsgrund
+      no_termination_reason: ADM
+      self_registration_reason: Eintrittsgrund
+      data_retention_consent: Datenaufbewahrungszustimmung
+      changed_youth_adult: Ist Wechsel Jugend-Einzel
+      changed_youth_family: Ist Wechsel Jugend-Familie
+      changed_adult_family: Ist Wechsel Einzel-Familie
+      changed_family_adult: Ist Wechsel Familie-Einzel
+      changed_family_youth: Ist Wechsel Familie-Jugend
+      type: Typ
       types:
-        mitglied: Section de base
-        mitglied_zusatzsektion: Section supplémentaire
-      beitragskategorie: "Catégories de cotisation "
-      ehrenmitglied: Est membre honoraire
-      beguenstigt: Est bénéficiaire
-      last_name: Nom de famille
-      first_name: Prénom
-      gender: Sexe
-      birthday: Date de naissance
-      correspondence: Correspondance
-      email: Courrier électronique
-      phone_number_mobile: Mobile
-      phone_number_landline: Ligne fixe
-      postbox: Boîte postale
-      street: Rue
-      housenumber: Numéro de maison
-      address_care_of: Complément d'adresse
-      zip_code: Code Postal
-      town: Lieu
-      country: Pays
+        mitglied: Stammsektion
+        mitglied_zusatzsektion: Zusatzsektion
+      beitragskategorie: Beitragskategorie
+      ehrenmitglied: Ist Ehrenmitglied
+      beguenstigt: Ist Begünstigt
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      correspondence: Korrespondenz
+      email: E-Mail
+      phone_number_mobile: Mobil
+      phone_number_landline: Festnetz
+      postbox: Postfach
+      street: Strasse
+      housenumber: Hausnummer
+      address_care_of: Adresszusatz
+      zip_code: PLZ
+      town: Ort
+      country: Land
 
   export/tabular/people/jubilare:
     sheet_name: "Membres par %{reference_date}"
@@ -1626,7 +1628,7 @@ fr:
       nil: Aucune indication
     termination_reason:
       label: Motif de sortie
-      nil: Aucune indication
+      nil: ADM
     section_active: "Membres actifs le %{to}"
     section_eintritte: "Entrées %{from} - %{to}"
     section_austritte: "Départs %{from} - %{to}"

@@ -1487,7 +1487,7 @@ en:
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
 
-  export/tabular/people:
+  export/tabular/people/mitgliedschaft:
     attributes:
       id: Mitgliedernummer
       url: Mitgliedschaften
@@ -1495,22 +1495,24 @@ en:
       membership_years: Anzahl Mitgliedsjahre
       sac_entry_on: Frühestes Beitrittsdatum beim SAC
       sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
+      start_on: Eintrittsdatum
+      end_on: Austrittsdatum
+      terminate_on: Austritt geplant
+      changed_on: Mutationsdatum
       sac_is_new_entry: Ist SAC Neueintritt
       sac_is_re_entry: Ist SAC Wiedereintritt
       sac_is_section_new_entry: Ist Sektion Ersteintritt
       sac_is_section_change: Ist Sektionswechsel
       sac_is_terminated: Ist SAC Austritt
       termination_reason: Austrittsgrund
+      no_termination_reason: ADM
+      self_registration_reason: Eintrittsgrund
       data_retention_consent: Datenaufbewahrungszustimmung
-      start_on: Eintrittsdatum
-      changed_on: Mutationsdatum
       changed_youth_adult: Ist Wechsel Jugend-Einzel
       changed_youth_family: Ist Wechsel Jugend-Familie
       changed_adult_family: Ist Wechsel Einzel-Familie
       changed_family_adult: Ist Wechsel Familie-Einzel
       changed_family_youth: Ist Wechsel Familie-Jugend
-      terminate_on: Austritt geplant
-      self_registration_reason: Eintrittsgrund
       type: Typ
       types:
         mitglied: Stammsektion
@@ -1562,7 +1564,7 @@ en:
       nil: Keine Angabe
     termination_reason:
       label: Austrittsgrund
-      nil: Keine Angabe
+      nil: ADM
     section_active: "Aktive Mitglieder am %{to}"
     section_eintritte: "Eintritte %{from} - %{to}"
     section_austritte: "Austritte %{from} - %{to}"
