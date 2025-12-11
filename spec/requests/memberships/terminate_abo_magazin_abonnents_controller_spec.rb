@@ -82,7 +82,8 @@ describe Memberships::TerminateAboMagazinAbonnentsController do
           .and change { person.roles.future.count }.by(1)
           .and change { role.terminated }.to(true)
           .and change { person.external_invoices.cancelled.count }.by(1)
-          .and not_have_enqueued_mail
+          .and have_enqueued_mail(Memberships::TerminateAboMagazinAbonnentMailer, :terminate_abonnent)
+          .with(person, role.end_on)
         expect(response).to redirect_to person_path(person, format: :html)
         expect(flash[:notice]).to eq "Dein Abonnement wurde gekündet."
       end
