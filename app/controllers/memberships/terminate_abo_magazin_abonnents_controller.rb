@@ -15,6 +15,8 @@ module Memberships
       model.attributes = model_params
 
       if model.save
+        send_confirmation_mail
+
         redirect_to redirect_target, notice: t(".success")
       else
         render :show, status: :unprocessable_content
@@ -22,6 +24,13 @@ module Memberships
     end
 
     private
+
+    def send_confirmation_mail
+      Memberships::TerminateAboMagazinAbonnentMailer.terminate_abonnent(
+        person,
+        model.terminate_on
+      ).deliver_later
+    end
 
     def model
       @model ||= Memberships::TerminateAboMagazinAbonnent.new(role)
