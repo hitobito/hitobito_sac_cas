@@ -18,11 +18,11 @@ it:
       name: "Club Alpino Svizzero CAS"
       zentralverband: "Associazione centrale"
       address: "Monbijoustrasse 61"
-      street: "Monbijoustrasse"
+      street: "Strada Monbijou"
       housenumber: "61"
-      zip_code_and_town: "3000 Bern 14"
+      zip_code_and_town: "3000 Berna 14"
       zip_code: "3000"
-      town: "Bern 14"
+      town: "Berna 14"
       postbox: "Casella postale"
       country: "CH"
       phone: "+41 31 370 18 18"
@@ -31,7 +31,7 @@ it:
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
-    token_invalid: Das verwendete Token ist nicht gültig.
+    token_invalid: Il token utilizzato non è valido.
 
   layouts:
     unauthorized:
@@ -50,7 +50,7 @@ it:
       conflicting_family_membership: >-
         %{name} è già parte di un’affiliazione famigliare e quindi non può essere aggiunto a un nucleo famigliare.
       total_event_days_exceeded: non deve superare i giorni totali del corso
-      must_be_no_more_than_12_months: Der Zeitraum darf maximimal 12 Monate betragen.
+      must_be_no_more_than_12_months: Il periodo massimo è di 12 mesi.
 
   activemodel:
     attributes:
@@ -64,7 +64,7 @@ it:
         price_category: "Categoria di prezzo"
         price: "Prezzo"
       people/export/jubilare_form:
-        reference_date: "Stichtag"
+        reference_date: "Scadenza"
         membership_years: "Numero di anni di appartenenza"
       people/export/period_form:
         from: "Da"
@@ -75,7 +75,7 @@ it:
         send_date: "Data di spedizione e fatturazione"
         discount: "Sconto"
         new_entry: "Quota di adesione"
-        dont_send: Rechnung versenden
+        dont_send: Inviare la fattura
         section_id: "Affiliazione"
       people/yearly_membership/invoice_form:
         invoice_year: "Esercizio finanziario"
@@ -114,12 +114,12 @@ it:
       wizards/steps/switch_stammsektion:
         now: subito
       memberships/terminate_abo_magazin_abonnent:
-        terminate_on: Beenden ab
-        now: Sofort
-        end_of_role: "Auf %{date}"
+        terminate_on: Uscita da
+        now: Immediatamente
+        end_of_role: "Su %{date}"
 
       memberships/termination_form:
-        terminate_on: Austrittsdatum
+        terminate_on: Data di partenza
         termination_reason_id: Motivo della disdetta
       people/neuanmeldungen/reject:
         note: Osservazione
@@ -142,7 +142,7 @@ it:
         terminate_on: "Data di disdetta"
         now: Subito
         end_of_year: "Il 31.12.%{year}"
-        end_of_role: "Auf %{date}"
+        end_of_role: "Su %{date}"
       wizards/steps/leave_zusatzsektion/summary:
         termination_reason_id: "Motivo della disdetta"
       wizards/steps/termination/summary:
@@ -222,9 +222,9 @@ it:
   activerecord:
     attributes:
       account_completion:
-        email: E-Mail
+        email: e-mail
         password: password
-        email_confirmation: E-Mail Bestätigung
+        email_confirmation: Conferma via e-mail
         password_confirmation: Conferma della password
       contact_account:
         predefined_labels:
@@ -252,11 +252,11 @@ it:
           flat: Tariffa forfettaria
           budget: Budget
         description: Descrizione
-        leader_settlement: Kurskaderabrechnung
+        leader_settlement: Corso quadri contabilità
         name_leader: Denominazione Direzione del corso
         name_assistant_leader: Denominazione Direzione della classe
-        name_leader_aspirant: Bezeichnung Kursleitung (Aspirant)
-        name_assistant_leader_aspirant: Bezeichnung Klassenleitung (Aspirant)
+        name_leader_aspirant: Nome del responsabile del corso (aspirante)
+        name_assistant_leader_aspirant: Nome del capoclasse (aspirante)
         course_compensation_rates: Tassi di retribuzione # uses include CapitalizedDependentErrors
         updated_at: Modificato
         created_at: Creato
@@ -265,8 +265,8 @@ it:
         valid_to: Valido fino al
         rate_leader: Aliquota di costo Direzione del corso
         rate_assistant_leader: Aliquota di costo Direzione della classe
-        rate_leader_aspirant: Ansatz Kursleitung (Aspirant)
-        rate_assistant_leader_aspirant: Ansatz Klassenleitung (Aspirant)
+        rate_leader_aspirant: Gestione del corso di avvicinamento (Aspirante)
+        rate_assistant_leader_aspirant: Approccio alla gestione della classe (aspirante)
         course_compensation_category_id: Categoria di retribuzione
         updated_at: Modificato
         created_at: Creato
@@ -443,7 +443,7 @@ it:
         correspondence: Fatturazione
         confirmed_at: E-mail verificata
         family_id: ID famiglia
-        unconfirmed_email: E-Mail
+        unconfirmed_email: e-mail
         sac_family_main_person: Fatture a (famiglia)
         sac_remark_national_office: Osservazioni Segretariato centrale
         sac_remark_section_1: Osservazioni Sezione 1
@@ -518,7 +518,7 @@ it:
         subscribable_fors:
           anyone: Tutte le persone del Club Alpino Svizzero (tra cui tutte le sezioni)
           configured: Solo abbonati configurati del gruppo (ad es. una sezione)
-          nobody: Niemand
+          nobody: Nessuno
 
       role:
         membership_years: Anni di affiliazione
@@ -683,11 +683,13 @@ it:
         many: Direzione della classe
         other: Direzione della classe
       event/course/role/leader_aspirant:
-        one: Kursleitung (Aspirant)
-        other: Kursleitung (Aspirant)
+        one: Gestione del corso (aspirante)
+        many: Gestione del corso (aspirante)
+        other: Gestione del corso (aspirante)
       event/course/role/assistant_leader_aspirant:
-        one: Klassenleitung (Aspirant)
-        other: Klassenleitung (Aspirant)
+        one: Capoclasse (aspirante)
+        many: Capoclasse (aspirante)
+        other: Capoclasse (aspirante)
       event/tour:
         one: Tour
         many: Tour
@@ -995,11 +997,11 @@ it:
         one: Docente
         description: Docente
       group/sac_cas_kurskader/kursleiter_aspirant:
-        one: Kursleiter*in (Aspirant)
-        description: Kursleiter*in (Aspirant)
+        one: Istruttore del corso (aspirante)
+        description: Istruttore del corso (aspirante)
       group/sac_cas_kurskader/klassenlehrer_aspirant:
-        one: Klassenlehrer*in (Aspirant)
-        description: Klassenlehrer*in (Aspirant)
+        one: Insegnante di classe (aspirante)
+        description: Insegnante di classe (aspirante)
       group/sac_cas_privathuetten/schreibrecht:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
@@ -1260,7 +1262,7 @@ it:
 
   course_compensation_categories:
     form:
-      leader_settlement_caption: In Kurskaderabrechnung berücksichtigen
+      leader_settlement_caption: Includere nel corso la contabilità dei quadri
 
   devise:
     failure:
@@ -1295,25 +1297,25 @@ it:
     join_zusatzsektion_link: Richiedere una sezione aggiuntiva
     switch_stammsektion_link: Richiedere il cambio di sezione
     swap_stamm_zusatzsektion_link: Scambiare la sezione principale e quella aggiuntiva
-    terminate_sac_membership_link: SAC-Mitgliedschaft beenden
+    terminate_sac_membership_link: Cessazione dell'appartenenza al SAC
     undo_termination_link: Riattivare l’affiliazione al CAS
 
   dropdown/people/sac_exports:
     button: CAS Esportazioni
     csv_mitglieder: CSV Membri
-    eintritte: Eingetretene Mitglieder
-    austritte: Ausgetretene Mitglieder
+    eintritte: Membri che hanno aderito
+    austritte: Membri dimissionari
     beitragskategorie_wechsel: Modifica della categoria di contribuzione
-    jubilare: Jubilare
+    jubilare: Anniversari
     mitglieder_statistics: Statistiche dei membri
 
   dropdown/people_export:
     recipients: Per l’invio elettronico (via e-mail)
     recipient_households: Per l’invio postale
     course_data: Elenco indirizzi e dati del corso
-    adress_list: Adressliste
-    list_for_participants: Liste für Teilnehmende
-    list_for_leaders: Liste für Kurskader
+    adress_list: Elenco degli indirizzi
+    list_for_participants: Elenco dei partecipanti
+    list_for_leaders: Elenco dei quadri dei corsi
 
   dropdown/group_edit:
     sac_membership_configs: Parametri per le fatture di affiliazione
@@ -1375,7 +1377,7 @@ it:
         explanation: I tour organizzati dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
     participations:
       fields:
-        explain_required_checkmark: "* = Antwort obligatorisch"
+        explain_required_checkmark: "* = risposta obbligatoria"
       missing_information: >-
         Per la partecipazione a questo corso sono necessari i seguenti attestati. Se non li hai ancora consegnati, ti invitiamo a farlo.
       answers_step:
@@ -1559,9 +1561,9 @@ it:
       sac_is_re_entry: Il rientro del SAC è
       sac_is_section_new_entry: È la sezione Prima voce
       sac_is_section_change: È la modifica della sezione
-      sac_is_terminated: Ist SAC Austritt
-      termination_reason: Austrittsgrund
-      data_retention_consent: Datenaufbewahrungszustimmung
+      sac_is_terminated: È l'uscita del SAC
+      termination_reason: Motivo della partenza
+      data_retention_consent: Consenso alla conservazione dei dati
       start_on: Data di adesione
       changed_on: Data della mutazione
       changed_youth_adult: è Jeunesse-Individuale
@@ -1569,7 +1571,7 @@ it:
       changed_adult_family: è Individuale-Famiglia
       changed_family_adult: è Famiglia-Individuale
       changed_family_youth: è Famiglia-Jeunesse
-      terminate_on: Uscita prevista
+      terminate_on: Data di uscita
       self_registration_reason: Motivo dell'ingresso
       type: Tipo
       types:
@@ -1583,7 +1585,7 @@ it:
       gender: Sesso
       birthday: Data di nascita
       correspondence: Corrispondenza
-      email: E-Mail
+      email: e-mail
       phone_number_mobile: Mobile
       phone_number_landline: Linea fissa
       postbox: Casella postale
@@ -1625,7 +1627,7 @@ it:
       nil: Non specificato
     section_active: "Membri attivi su %{to}"
     section_eintritte: "Ingressi %{from} - %{to}"
-    section_austritte: "Austritte %{from} - %{to}"
+    section_austritte: "Dimissioni %{from} - %{to}"
 
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
@@ -1802,7 +1804,7 @@ it:
           other: " Le vostre %{count} affiliazioni CAS sono state condivise."
     terminate_abo_magazin_abonnents:
       create:
-        success: "Dein Abonnement wurde gekündet."
+        success: "L'abbonamento è stato annullato."
     undo_terminations:
       create:
         success: "I ruoli sono stati riattivati con successo."
@@ -1825,16 +1827,16 @@ it:
   participations:
     key_data_sheet:
       file_name_prefix: Scheda dei dati di riferimento
-      leader_file_prefix: Kursleitung
-      assistant_leader_file_prefix: Klassenleitung
-      leader_aspirant_file_prefix: Kursleitung_Aspirant
-      assistant_leader_aspirant_file_prefix: Klassenleitung_Aspirant
+      leader_file_prefix: Gestione del corso
+      assistant_leader_file_prefix: Gestione della classe
+      leader_aspirant_file_prefix: Corso_Aspirante
+      assistant_leader_aspirant_file_prefix: Capoclasse_Aspirante
       year_title: "Corsi / Escursioni CAS %{year}"
-      title: Eckdatenblatt
+      title: Scheda tecnica chiave
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
       table:
         number: Evento n.
-        name: Bezeichnung / Titel
+        name: Designazione / Titolo
         level: Offerta / Livello
         leaders: Direzione
         compensation: Onorario giornaliero
@@ -1854,7 +1856,7 @@ it:
           text: In base al programma degli argomenti del corso (se disponibile) o dell’escursione
         participant_requirements:
           label: Requisiti di partecipazione
-          text: Gemäss Ausschreibung SAC Kurse / Touren
+          text: Secondo i corsi / tour SAC
         participant_program_course:
           label: Programma dettagliato partecipanti corsi
           text: Viene richiesto dall'ufficio 8 settimane prima dell'inizio dell'attività tramite e-mail alla direzione.
@@ -1866,7 +1868,7 @@ it:
         maximum_participants: Numero massimo di partecipanti
         participation_yes_no:
           label: "Svolgimento - sì/no?"
-          text: Entscheid wird gestützt auf Anzahl Anmeldungen beim Anmeldeschluss gemeinsam gefällt.
+          text: La decisione sarà presa congiuntamente in base al numero di iscrizioni alla data di scadenza delle iscrizioni.
         participation_cancellation:
           label: Svolgimento – Cancellazione
           text: Si prega di informare il docente e l’alloggio
@@ -1877,27 +1879,27 @@ it:
           text: >-
             In base al numero massimo di partecipanti, è responsabilità della Direzione indicare in anticipo i docenti nel programma dettagliato per i corsi e le escursioni e inviarlo per e-mail al Segretariato centrale.
     participant_list:
-      title: Teilnehmerliste
+      title: Elenco dei partecipanti
       link: www.sac-cas.ch
       url: "https://www.sac-cas.ch"
-      number: Kursnummer
-      name: Bezeichnung
-      location: Kursort
-      dates: Datum
-      participant_count: Anzahl Teilnehmende
-      teamer_count: Anzahl Kurskader
+      number: Numero del corso
+      name: Designazione
+      location: Sede del corso
+      dates: data
+      participant_count: Numero di partecipanti
+      teamer_count: Numero di quadri dei corsi
       member_no: Membro n.
       firstname: Nome
       lastname: Cognome
       street: Via
-      town: Wohnort
-      email: E-Mail
-      phone: Telefonnummer
+      town: Luogo di residenza
+      email: e-mail
+      phone: Numero di telefono
       language: Lingua
       gender: Sesso
       section: Sezione
-      emergency_contact: Notfallkontakt
-      remarks: Bemerkungen
+      emergency_contact: Contatto di emergenza
+      remarks: Osservazioni
 
   passes:
     membership:
@@ -1931,9 +1933,9 @@ it:
           Non appena avrai confermato il tuo indirizzo e-mail, potrai accedere qui.
     export:
       popover_jubilare:
-        title: "Jubliare exportieren"
+        title: "Esportazione Jubliare"
         download: Scarica
-        membership_years_help: "leer = beliebige Anzahl"
+        membership_years_help: "vuoto = qualsiasi numero"
 
       popover_period:
         download: Scarica
@@ -2016,7 +2018,7 @@ it:
         submit_confirmation: >-
           Desidera davvero iniziare l’iter di incasso annuale per tutti i soci? Questa azione non può essere interrotta.
   people/export/austritte:
-    filename: Austritte
+    filename: Dimissioni
 
   people/export/beitragskategorie_wechsel:
     filename: Cambia_categoria_di_contributo
@@ -2025,7 +2027,7 @@ it:
     filename: Ingressi
 
   people/export/jubilare:
-    filename: Jubilare_per
+    filename: Anniversari_per
 
   people/export/mitglieder_statistics:
     filename: Statistiche dei membri
@@ -2064,7 +2066,7 @@ it:
       invoice_receiver:
         stammsektion: Destinatario fatture affiliazione CAS
         zusatzsektion: Destinatario fatture sezione aggiuntiva
-        deep: darunterliegende Ebenen miteinbeziehen
+        deep: Includere i livelli sottostanti
 
   person:
     history:
@@ -2180,7 +2182,7 @@ it:
   sheet/memberships/switch_stammsektion:
     title: Cambiare sezione base
   sheet/memberships/terminate_abo_magazin_abonnent:
-    title: Die Alpen-Abonnent beenden
+    title: Fine dell'abbonato alpino
   sheet/memberships/terminate_sac_membership:
     title: Disdire l’affiliazione al CAS
   sheet/memberships/undo_termination:
@@ -2225,8 +2227,8 @@ it:
         main_email_field_title: E-mail
         person_fields_title: Dati personali
         person_fields:
-          next_button: Weiter
-          submit_button: Registrieren
+          next_button: Ulteriori
+          submit_button: Registro
         agreement_fields:
           adult_consent_caption: Confermo di avere almeno 18 anni o di avere il consenso del mio tutore legale.
           newsletter_caption: Desidero iscrivermi alla newsletter del CAS.
@@ -2338,7 +2340,7 @@ it:
           family_warning: >-
             Attenzione: la disdetta dalla sezione aggiuntiva è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}.
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
-          inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
+          inform_mitglied_via_email: "Informare i membri via e-mail?"
           next_button: "Richiedere disdetta"
       termination:
         summary:
@@ -2357,22 +2359,22 @@ it:
             Dichiaro di aver compreso che, in caso di futura riaffiliazione, la quota d’adesione sarà addebitata in ogni caso. (campo obbligatorio)
           subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
           subscribe_fundraising_list: "Vorrei continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
-          inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
+          inform_mitglied_via_email: "Informare i membri via e-mail?"
           next_button: "Richiedere disdetta"
 
       terminate_abo_magazin_abonnents:
-        data_retention_info_title: "Aufbewahrung deiner Daten"
+        data_retention_info_title: "Archiviazione dei dati"
         data_retention_info_text: >-
-          Nach deinem Austritt bewahren wir deine Daten noch 12 Monate lang auf, bevor wir diese endgültig löschen. Die Löschung hat für dich folgende Konsequenzen: Sofern vorhanden werden erlangte Qualifikationen und absolvierte Aus- und Weiterbildungen (inklusive Fortbildungsstunden) gelöscht. Dein SAC-Login wird gelöscht und du kannst es nicht mehr für andere Zwecke (wie z. B. SAC-CAS App sowie HutReservation) verwenden. Falls du möchtest, dass deine allfällig erlangten Qualifikationen sowie absolvierte Aus- und Weiterbildungen gespeichert werden, musst du uns hier erlauben, deine Daten nach dem Austritt aufzubewahren.
+          Dopo la sua partenza, conserveremo i suoi dati per 12 mesi prima di cancellarli definitivamente. La cancellazione ha le seguenti conseguenze per l'utente: tutte le qualifiche ottenute e i corsi di formazione completati (comprese le ore di formazione) saranno cancellati. Il vostro login SAC sarà cancellato e non potrete più utilizzarlo per altri scopi (ad es. app SAC-CAS e prenotazione di cappelli). Se desiderate che vengano conservate le qualifiche ottenute e i corsi di formazione e aggiornamento completati, dovete autorizzarci a conservare i vostri dati anche dopo la vostra partenza.
         data_retention_consent: >-
-          Ich möchte, dass meine Daten nach meinem Austritt aus dem SAC erhalten bleiben. (Optional)
+          Desidero che i miei dati vengano conservati anche dopo aver lasciato il CAS. (Opzionale)
         online_articles_consent: >-
-          Ich habe verstanden, dass bei einer Kündigung des Die Alpen-Abonnement auch die Zugriffsrechte auf die Online-Artikel verfallen.
+          Sono consapevole che se cancello il mio abbonamento a Die Alpen, scadranno anche i miei diritti di accesso agli articoli online.
         entry_fee_info_text: >-
-          Die Eintrittsgebühr ist bei jedem Wiedereintritt neu fällig. Unabhängig davon, ob deine Daten aufbewahrt oder gelöscht wurden.
+          La tassa di iscrizione è dovuta ogni volta che ci si iscrive nuovamente. Indipendentemente dal fatto che i dati siano stati conservati o cancellati.
         entry_fee_consent: >-
-          Ich habe verstanden, dass bei einem allfälligen Wiedereintritt die Eintrittsgebühr in jedem Fall verrechnet werden. (Pflichtfeld)
-        subscribe_newsletter: "Ich möchte über Neuigkeiten vom SAC informiert bleiben und den SAC-Newsletter weiterhin erhalten."
-        subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
-        inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
-        submit_button: Die Alpen-Abonnent beenden
+          Sono consapevole che in caso di reiscrizione, la quota di iscrizione sarà comunque addebitata. (campo obbligatorio)
+        subscribe_newsletter: "Desidero essere informato sulle novità del SAC e continuare a ricevere la newsletter del SAC."
+        subscribe_fundraising_list: "Desidero continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
+        inform_mitglied_via_email: "Informare i membri via e-mail?"
+        submit_button: Fine dell'abbonato alpino

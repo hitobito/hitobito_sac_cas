@@ -1509,7 +1509,7 @@ de_CH:
       changed_adult_family: Ist Wechsel Einzel-Familie
       changed_family_adult: Ist Wechsel Familie-Einzel
       changed_family_youth: Ist Wechsel Familie-Jugend
-      terminate_on: Austritt geplant
+      terminate_on: Austrittsdatum
       self_registration_reason: Eintrittsgrund
       type: Typ
       types:
