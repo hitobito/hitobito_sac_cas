@@ -68,10 +68,10 @@ describe Memberships::TerminateSacMembershipsController do
         end
       end
 
-      context "with open invoice" do
+      context "with open invoice in current year" do
         it "renders form but without terminate_on options in january" do
           travel_to(Time.zone.local(2025, 1, 31)) do
-            create_invoice(state: :open)
+            create_invoice(state: :open, year: 2025)
             request
             expect_form(dates: [])
           end
@@ -79,10 +79,20 @@ describe Memberships::TerminateSacMembershipsController do
 
         it "renders open invoice info abort screen" do
           travel_to(Time.zone.local(2025, 2, 1)) do
-            create_invoice(state: :open)
+            create_invoice(state: :open, year: 2025)
             request
             expect_alert "Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde."
             expect(page).not_to have_css "form"
+          end
+        end
+      end
+
+      context "with open invoice in previous year" do
+        it "renders the form" do
+          travel_to(Time.zone.local(2025, 1, 1)) do
+            create_invoice(state: :open, year: 2024)
+            request
+            expect_form
           end
         end
       end
@@ -235,12 +245,12 @@ describe Memberships::TerminateSacMembershipsController do
         end
       end
 
-      context "with open invoice" do
+      context "with open invoice in current year" do
         context "in january" do
           around { |example| travel_to(Time.zone.local(2025, 1, 31)) { example.run } }
 
           it "marks role as terminated and cancels invoice" do
-            invoice = create_invoice(state: :open)
+            invoice = create_invoice(state: :open, year: 2025)
             expect do
               request(terminate_on: :now)
             end.to change { role.reload.terminated }.to(true)
@@ -248,7 +258,7 @@ describe Memberships::TerminateSacMembershipsController do
           end
 
           it "does not accept end_of_year as terminate_on" do
-            create_invoice(state: :open)
+            create_invoice(state: :open, year: 2025)
             request(terminate_on: :end_of_year)
             expect(response).to be_unprocessable
           end
@@ -256,12 +266,26 @@ describe Memberships::TerminateSacMembershipsController do
 
         it "renders abort info" do
           travel_to(Time.zone.local(2025, 2, 1)) do
-            invoice = create_invoice(state: :open)
+            invoice = create_invoice(state: :open, year: 2025)
             expect do
               request(terminate_on: :now)
             end.not_to change { role.terminated }
             expect(invoice.reload).to be_open
             expect_alert "Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde."
+          end
+        end
+      end
+
+      context "with open invoice in previous year" do
+        it "marks single role as terminated and redirects" do
+          travel_to(Time.zone.local(2025, 2, 1)) do
+            invoice = create_invoice(state: :open, year: 2024)
+            expect do
+              request
+            end.to change { role.reload.terminated }.to(true)
+              .and not_change { invoice.reload }
+            expect(response).to redirect_to person_path(person, format: :html)
+            expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
           end
         end
       end

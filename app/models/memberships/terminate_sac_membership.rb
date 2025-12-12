@@ -126,7 +126,8 @@ module Memberships
 
     def cancel_open_membership_invoices(person)
       person
-        .external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name)
+        .external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name,
+          year: Date.current.year)
         .find_each do |invoice|
           invoice.update!(state: "cancelled")
           Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!

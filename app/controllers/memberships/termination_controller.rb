@@ -81,7 +81,8 @@ module Memberships
 
     def open_invoice?
       @open_invoice ||= person.external_invoices
-        .where(type: ExternalInvoice::SacMembership.sti_name)
+        .where(type: ExternalInvoice::SacMembership.sti_name,
+          year: Date.current.year)
         .open.exists?
     end
 
