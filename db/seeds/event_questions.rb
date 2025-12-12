@@ -5,7 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-# recreate default event questions
+# set different default disclosure for global ahv number question from youth wagon
+global_ahv = Event::Question::AhvNumber.where(event_id: nil).first
+global_ahv&.update!(disclosure: "hidden")
 
 Event::Question.seed_global({
   disclosure: :required,
