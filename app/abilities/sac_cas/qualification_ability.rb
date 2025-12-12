@@ -11,6 +11,7 @@ module SacCas::QualificationAbility
   TOURENCHEF_ROLE_TYPES = [
     Group::SektionsTourenUndKurseSommer::Tourenchef,
     Group::SektionsTourenUndKurseWinter::Tourenchef,
+    Group::SektionsTourenUndKurseAllgemein::Tourenchef,
     Group::SektionsFunktionaere::Administration
   ].map(&:sti_name)
 
@@ -29,8 +30,7 @@ module SacCas::QualificationAbility
   def as_tourenchef_in_layer
     return unless can_show_person?
 
-    contains_any?(tourenchef_layer_group_ids,
-      subject.person.layer_group_ids)
+    contains_any?(tourenchef_layer_group_ids, subject.person.layer_group_ids)
   end
 
   def tourenchef_layer_group_ids
