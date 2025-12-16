@@ -60,9 +60,9 @@ module HitobitoSacCas
       ]
 
       # only schedule BackupMitgliederScheduleJob if sftp config is present
-      # rubocop:todo Layout/LineLength
-      JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob] if Settings.sftp.config.present?
-      # rubocop:enable Layout/LineLength
+      if Settings.sftp.config.present?
+        JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob]
+      end
 
       Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController
 
@@ -113,8 +113,11 @@ module HitobitoSacCas
       HouseholdAsideMemberComponent.prepend SacCas::HouseholdAsideMemberComponent
 
       ## Abilities
-      Role::Types::Permissions << :read_all_people << :layer_events_full <<
-        :layer_mitglieder_full << :layer_touren_und_kurse_full
+      Role::Types::Permissions <<
+        :read_all_people <<
+        :layer_events_full <<
+        :layer_mitglieder_full <<
+        :layer_touren_und_kurse_full
       Role::Types::PermissionImplicationsForGroups[:layer_mitglieder_full] =
         {group_and_below_full: Group::SektionsMitglieder}
       Role::Types::PermissionImplicationsForGroups[:layer_touren_und_kurse_full] =
@@ -193,9 +196,9 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
-      # rubocop:todo Layout/LineLength
-      Dropdown::Event::Participation::MailDispatch.prepend SacCas::Dropdown::Event::Participation::MailDispatch
-      # rubocop:enable Layout/LineLength
+      Dropdown::Event::Participation::MailDispatch.prepend(
+        SacCas::Dropdown::Event::Participation::MailDispatch
+      )
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person
@@ -238,20 +241,17 @@ module HitobitoSacCas
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ListsController.prepend SacCas::Event::ListsController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
-      # rubocop:todo Layout/LineLength
-      Event::Participations::MailDispatchesController.prepend SacCas::Event::Participations::MailDispatchesController
-      # rubocop:enable Layout/LineLength
+      Event::Participations::MailDispatchesController.prepend(
+        SacCas::Event::Participations::MailDispatchesController
+      )
       Event::RegisterController.prepend SacCas::Event::RegisterController
       Event::RolesController.prepend SacCas::Event::RolesController
-      GroupsController.permitted_attrs << :mitglied_termination_by_section_only
-      GroupsController.permitted_attrs << {section_offering_ids: []}
       GroupsController.prepend SacCas::GroupsController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController
       JsonApi::EventsController.prepend SacCas::JsonApi::EventsController
       JsonApi::PeopleController.prepend SacCas::JsonApi::PeopleController
 
-      PeopleController.permitted_attrs << :correspondence << :advertising
       PeopleController.prepend SacCas::PeopleController
       Person::HistoryController.prepend SacCas::Person::HistoryController
       Person::SubscriptionsController.prepend SacCas::Person::SubscriptionsController
@@ -351,9 +351,9 @@ module HitobitoSacCas
         TableDisplays::PolymorphicShowFullColumn,
         [:invoice_state])
 
-      # rubocop:todo Layout/LineLength
-      TableDisplays::People::LoginStatusColumn.prepend SacCas::TableDisplays::People::LoginStatusColumn
-      # rubocop:enable Layout/LineLength
+      TableDisplays::People::LoginStatusColumn.prepend(
+        SacCas::TableDisplays::People::LoginStatusColumn
+      )
       TableDisplays::ShowDetailsColumn.prepend(TableDisplays::People::SektionMemberAdminVisible)
       TableDisplays::PublicColumn.prepend(TableDisplays::People::SektionMemberAdminVisible)
 
