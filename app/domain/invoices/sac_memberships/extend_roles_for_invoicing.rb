@@ -7,11 +7,8 @@
 
 module Invoices::SacMemberships
   class ExtendRolesForInvoicing
-    ROLES_TO_EXTEND = (SacCas::MITGLIED_ROLES + [
-      Group::Ehrenmitglieder::Ehrenmitglied,
-      Group::SektionsMitglieder::Beguenstigt,
-      Group::SektionsMitglieder::Ehrenmitglied
-    ]).map(&:sti_name)
+    ROLES_TO_EXTEND =
+      (SacCas::MITGLIED_ROLES + SacCas::MEMBERSHIP_PROLONGABLE_ROLES).map(&:sti_name)
 
     BATCH_SIZE = 500
 
@@ -33,15 +30,15 @@ module Invoices::SacMemberships
     private
 
     def convert_roles_to_youth
-      amount_turned_youth_per_household = Hash.new(0)
+      amount_turned_youth_per_family = Hash.new(0)
 
       roles_to_turn_youth.includes(:group, :person).find_each do |role|
         person = role.person
-        amount_turned_youth_per_household[person.household_key] += 1
-        if dissolve_household?(person, amount_turned_youth_per_household)
-          person.household.people.each { leave_household(_1) }
+        amount_turned_youth_per_family[person.household_key] += 1
+        if dissolve_family?(person, amount_turned_youth_per_family)
+          person.household.people.each { leave_family(_1) }
         else
-          leave_household(person)
+          leave_family(person)
         end
       end
     end
@@ -68,13 +65,13 @@ module Invoices::SacMemberships
       )
     end
 
-    def dissolve_household?(person, amount_turned_youth_per_household)
-      remaining_household_people = person.household.members.count -
-        amount_turned_youth_per_household[person.household_key]
-      remaining_household_people <= 1
+    def dissolve_family?(person, amount_turned_youth_per_family)
+      remaining_family_people = person.household.members.count -
+        amount_turned_youth_per_family[person.household_key]
+      remaining_family_people <= 1
     end
 
-    def leave_household(person)
+    def leave_family(person)
       Memberships::FamilyMutation.new(
         person,
         new_role_end_on: @prolongation_date,

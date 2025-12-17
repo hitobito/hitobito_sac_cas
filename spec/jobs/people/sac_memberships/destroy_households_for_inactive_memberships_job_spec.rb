@@ -14,21 +14,22 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
   it "reschedules to tomorrow at 00:08" do
     subject.perform
 
-    expect(subject.delayed_jobs.last.run_at).to eq(Time.zone.tomorrow
-      .at_beginning_of_day
-      .change(min: 8)
-      .in_time_zone)
+    expect(subject.delayed_jobs.last.run_at).to eq(
+      Time.zone.tomorrow.at_beginning_of_day.change(min: 8).in_time_zone
+    )
   end
 
-  describe "#affected_family_people" do
+  describe "#inactive_family_people" do
+    let(:inactive_family_people) { subject.inactive_family_people(sac_family_main_person: true) }
+
     it "makes only 1 query" do
-      expect_query_count { subject.affected_family_people.to_a }.to eq 1
+      expect_query_count { inactive_family_people.to_a }.to eq 1
     end
 
     context "with ended stammsektion roles" do
       it "includes the family" do
         family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
-        expect(subject.affected_family_people).to eq [family_member]
+        expect(inactive_family_people).to eq [family_member]
       end
 
       it "does not include the family person when having active roles as well" do
@@ -38,7 +39,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
         active_membership.assign_attributes(start_on: 9.days.ago, end_on: 30.days.from_now)
         active_membership.save!
 
-        expect(subject.affected_family_people).not_to include(family_member)
+        expect(inactive_family_people).not_to include(family_member)
       end
     end
 
@@ -55,7 +56,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "includes the family" do
-        expect(subject.affected_family_people).to eq [family_member]
+        expect(inactive_family_people).to eq [family_member]
       end
     end
 
@@ -72,7 +73,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "includes the family" do
-        expect(subject.affected_family_people).to eq [family_member]
+        expect(inactive_family_people).to eq [family_member]
       end
     end
 
@@ -80,7 +81,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       before { family_member.sac_membership.zusatzsektion_roles.first.update!(end_on: 10.days.ago) }
 
       it "does not include the family" do
-        expect(subject.affected_family_people).to be_empty
+        expect(inactive_family_people).to be_empty
       end
     end
 
@@ -91,7 +92,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "does not include the family" do
-        expect(subject.affected_family_people).to be_empty
+        expect(inactive_family_people).to be_empty
       end
     end
 
@@ -102,37 +103,66 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       end
 
       it "does not include the family" do
-        expect(subject.affected_family_people).to be_empty
+        expect(inactive_family_people).to be_empty
       end
     end
 
     context "with multiple family members" do
       let(:family_member2) { people(:familienmitglied2) }
+      let(:family_child) { people(:familienmitglied_kind) }
 
       before do
         family_member.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
         family_member2.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
+        family_child.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
       end
 
       it "returns distinct families based on household key" do
-        expect(subject.affected_family_people.size).to eq 1
+        expect(inactive_family_people.size).to eq 1
+      end
+
+      it "returns non-main family people" do
+        expect(subject.inactive_family_people(sac_family_main_person: false).size).to eq(2)
       end
     end
   end
 
   context "when performing job" do
-    before do
-      family_member.household.people.each do |person|
-        person.sac_membership.stammsektion_role.update!(end_on: 10.days.ago)
-        person.sac_membership.zusatzsektion_roles.each { |r| r.update!(end_on: 10.days.ago) }
-      end
-    end
-
     it "calls household destroy for each family" do
-      expect { job.perform }
-        .to change { PeopleManager.count }.by(-2)
+      family_member.household.people.each do |person|
+        end_all_memberships(person, 10.days.ago)
+      end
+
+      expect do
+        expect { job.perform }.to change { PeopleManager.count }.by(-2)
+      end.not_to change { Group::SektionsMitglieder::Mitglied.unscoped.pluck(:end_on).sort }
 
       expect(family_member.reload.household_key).to be_nil
+    end
+
+    it "removes youth from household" do
+      child = people(:familienmitglied_kind)
+      end_all_memberships(child, 10.days.ago)
+      Group::SektionsMitglieder::Mitglied.create!(
+        person: child,
+        group: groups(:bluemlisalp_mitglieder),
+        start_on: 9.days.ago,
+        end_on: Time.zone.today.end_of_year,
+        beitragskategorie: :youth
+      )
+
+      expect do
+        expect { job.perform }.to change { PeopleManager.count }.by(-1)
+      end.not_to change { Group::SektionsMitglieder::Mitglied.unscoped.pluck(:end_on).sort }
+
+      expect(child.reload.household_key).to be_nil
+      expect(family_member.reload.household_key).to be_present
+      expect(family_member.household.people.count).to eq(2)
+    end
+
+    def end_all_memberships(person, date)
+      person.sac_membership.stammsektion_role.update!(end_on: date)
+      person.sac_membership.zusatzsektion_roles.each { |r| r.update!(end_on: date) }
     end
   end
 end
