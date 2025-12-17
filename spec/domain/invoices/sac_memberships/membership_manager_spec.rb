@@ -10,9 +10,11 @@ require "spec_helper"
 describe Invoices::SacMemberships::MembershipManager do
   include ActiveJob::TestHelper
 
-  before { travel_to(Time.current.change(day: 15, month: 4)) }
-
-  let(:end_of_next_year) { Time.zone.today.next_year.end_of_year }
+  let!(:today) { Time.zone.today }
+  let!(:end_of_next_year) { today.next_year.end_of_year }
+  let!(:prolongation_date) { Date.new(next_year, 3, 31) }
+  let!(:run_on) { Time.current.change(year: next_year, month: 2, day: 15) }
+  let(:next_year) { end_of_next_year.year }
   let(:mitglied) { roles(:mitglied) }
   let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }
   let(:familienmitglied) { roles(:familienmitglied) }
@@ -59,21 +61,30 @@ describe Invoices::SacMemberships::MembershipManager do
       group: groups(:bluemlisalp_mitglieder), person: familienmitglied_kind_person)
     Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
       group: ehrenmitglieder_group, person: familienmitglied_kind_person)
-    Role.update_all(end_on: Time.zone.today.end_of_year)
+    Role.update_all(end_on: prolongation_date)
+
+    travel_to(run_on)
+
+    [
+      mitglied_person,
+      familienmitglied_person,
+      familienmitglied2_person,
+      familienmitglied_kind_person
+    ].each(&:reload)
   end
 
   it "creates log entry if running without any actual work todo" do
-    manager = described_class.new(Fabricate(:person), bluemlisalp, end_of_next_year.year)
+    manager = described_class.new(Fabricate(:person), bluemlisalp, next_year)
     expect { manager.update_membership_status }.to change { HitobitoLogEntry.count }.by(1)
   end
 
   context "person has stammsektions role" do
     def updated_roles_count
-      role_dates_before = Role.all.map(&:end_on)
+      role_dates_before = Role.order(:id).map(&:end_on)
 
       subject.update_membership_status
 
-      role_dates_after = Role.all.map(&:end_on)
+      role_dates_after = Role.order(:id).map(&:end_on)
 
       # check how many dates have changed
       role_dates_after.zip(role_dates_before).count { |a, b|
@@ -82,7 +93,7 @@ describe Invoices::SacMemberships::MembershipManager do
     end
 
     context "adult" do
-      subject { described_class.new(mitglied_person, bluemlisalp, end_of_next_year.year) }
+      subject { described_class.new(mitglied_person, bluemlisalp, next_year) }
 
       it "updates end_on" do
         expect(updated_roles_count).to eq(5)
@@ -110,10 +121,20 @@ describe Invoices::SacMemberships::MembershipManager do
         expect { subject.update_membership_status }.not_to raise_error
         expect(mitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
       end
+
+      context "running in the previous role period" do
+        let!(:run_on) { Time.current.change(year: today.year, month: 12, day: 15) }
+
+        it "updates end_on if running in the previous role period" do
+          expect(updated_roles_count).to eq(5)
+
+          expect(mitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+        end
+      end
     end
 
     context "family" do
-      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
+      subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
 
       it "updates end_on for all family member roles" do
         expect(updated_roles_count).to eq(15)
@@ -125,8 +146,9 @@ describe Invoices::SacMemberships::MembershipManager do
 
       it "only updates zusatzsektions role of family member when beitragskategorie is family" do
         # add role with adult beitragskategorie to family mitglied
-        familienmitglied.person.sac_membership.zusatzsektion_roles.destroy_all
-        mitglied_zweitsektion.update!(person: familienmitglied.person)
+        familienmitglied_person.sac_membership.zusatzsektion_roles.delete_all
+        familienmitglied_person.reload
+        mitglied_zweitsektion.update!(person: familienmitglied_person)
 
         expect(updated_roles_count).to eq(14)
       end
@@ -135,36 +157,133 @@ describe Invoices::SacMemberships::MembershipManager do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
         expect(updated_roles_count).to eq(5)
       end
+
+      context "running in the previous role period (household still exists)" do
+        let!(:run_on) { Time.current.change(year: today.year, month: 12, day: 15) }
+
+        it "updates end_on for all family member roles" do
+          expect(updated_roles_count).to eq(15)
+
+          expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+          expect(familienmitglied2_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+          expect(familienmitglied_kind_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+        end
+      end
+
+      context "with child turned youth" do
+        let(:end_of_year) { Date.new(today.year, 12, 31) }
+
+        before do
+          familienmitglied_kind_person.update!(birthday: today - 18.years)
+          [familienmitglied_kind, familienmitglied_kind_zweitsektion].each do |role|
+            role.update!(end_on: end_of_year)
+          end
+          Group::SektionsMitglieder::Mitglied.create!(
+            person: familienmitglied_kind_person,
+            group: groups(:bluemlisalp_mitglieder),
+            beitragskategorie: "youth",
+            start_on: Date.new(next_year, 1, 1),
+            end_on: prolongation_date
+          )
+          Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
+            person: familienmitglied_kind_person,
+            group: groups(:matterhorn_mitglieder),
+            beitragskategorie: "youth",
+            start_on: Date.new(next_year, 1, 1),
+            end_on: prolongation_date
+          )
+        end
+
+        context "running in the new role period (child was removed from household)" do
+          before do
+            Household.new(familienmitglied_kind_person, maintain_sac_family: false)
+              .remove(familienmitglied_kind_person).save!
+          end
+
+          it "only updates remaining family roles after child turned to youth" do
+            expect(updated_roles_count).to eq(10)
+            expect(familienmitglied_kind_person.roles.reload.map(&:end_on)).to all(eq(prolongation_date))
+            expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+          end
+
+          context "for youth" do
+            subject { described_class.new(familienmitglied_kind_person, bluemlisalp, next_year) }
+
+            it "only updates youth roles" do
+              expect(updated_roles_count).to eq(5)
+              expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(prolongation_date))
+              expect(familienmitglied2_person.roles.reload.map(&:end_on)).to all(eq(prolongation_date))
+              expect(familienmitglied_kind_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+            end
+          end
+        end
+
+        context "running in the previous role period (household still exists)" do
+          let!(:run_on) { Time.current.change(year: today.year, month: 12, day: 15) }
+
+          it "only updates remaining family roles" do
+            expect(updated_roles_count).to eq(10) # active at run date
+            expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+            expect(familienmitglied2_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+
+            prev_membership = People::SacMembership.new(familienmitglied_kind_person, date: end_of_year)
+            expect(prev_membership.stammsektion_role.end_on).to eq(end_of_year)
+            expect(prev_membership.zusatzsektion_roles.first.end_on).to eq(end_of_year)
+
+            next_membership = People::SacMembership.new(familienmitglied_kind_person, date: prolongation_date)
+            expect(next_membership.stammsektion_role.end_on).to eq(prolongation_date)
+            expect(next_membership.membership_prolongable_roles.count).to eq(3)
+            (next_membership.zusatzsektion_roles +
+              next_membership.membership_prolongable_roles).each do |role|
+              expect(role.end_on).to eq(prolongation_date)
+            end
+          end
+
+          context "for youth" do
+            subject { described_class.new(familienmitglied_kind_person, bluemlisalp, next_year) }
+
+            it "only updates youth roles" do
+              expect(updated_roles_count).to eq(3) # active at run date
+              expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(prolongation_date))
+              expect(familienmitglied2_person.roles.reload.map(&:end_on)).to all(eq(prolongation_date))
+
+              prev_membership = People::SacMembership.new(familienmitglied_kind_person, date: end_of_year)
+              expect(prev_membership.stammsektion_role.end_on).to eq(end_of_year)
+              expect(prev_membership.zusatzsektion_roles.first.end_on).to eq(end_of_year)
+
+              next_membership = People::SacMembership.new(familienmitglied_kind_person, date: prolongation_date)
+              expect(next_membership.stammsektion_role.end_on).to eq(end_of_next_year)
+              expect(next_membership.membership_prolongable_roles.count).to eq(3)
+              (next_membership.zusatzsektion_roles +
+               next_membership.membership_prolongable_roles).each do |role|
+                expect(role.end_on).to eq(end_of_next_year)
+              end
+            end
+          end
+        end
+      end
     end
   end
 
   context "person has expired stammsektions role" do
-    let(:end_of_year) { Date.current.end_of_year }
+    let!(:run_on) { Time.current.change(year: next_year, month: 5, day: 10) }
 
     def check_new_membership_role_dates_and_groups(person) # rubocop:todo Metrics/AbcSize
       expect(sac_membership.active?).to be_truthy
-      expect(sac_membership.stammsektion_role.start_on).to eq Time.zone.today
-      expect(sac_membership.stammsektion_role.end_on).to eq end_of_year
-      expect(sac_membership.zusatzsektion_roles.first.start_on).to eq Time.zone.today
-      expect(sac_membership.zusatzsektion_roles.first.end_on).to eq end_of_year
-      expect(sac_membership.membership_prolongable_roles.first.start_on).to eq Time.zone.today
-      expect(sac_membership.membership_prolongable_roles.first.end_on).to eq end_of_year
-      expect(sac_membership.membership_prolongable_roles.second.start_on).to eq Time.zone.today
-      expect(sac_membership.membership_prolongable_roles.second.end_on).to eq end_of_year
-      expect(sac_membership.membership_prolongable_roles.third.start_on).to eq Time.zone.today
-      expect(sac_membership.membership_prolongable_roles.third.end_on).to eq end_of_year
+      expect(sac_membership.stammsektion_role.start_on).to eq run_on.to_date
+      expect(sac_membership.stammsektion_role.end_on).to eq end_of_next_year
+      expect(sac_membership.zusatzsektion_roles.first.start_on).to eq run_on.to_date
+      expect(sac_membership.zusatzsektion_roles.first.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.first.start_on).to eq run_on.to_date
+      expect(sac_membership.membership_prolongable_roles.first.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.second.start_on).to eq run_on.to_date
+      expect(sac_membership.membership_prolongable_roles.second.end_on).to eq end_of_next_year
+      expect(sac_membership.membership_prolongable_roles.third.start_on).to eq run_on.to_date
+      expect(sac_membership.membership_prolongable_roles.third.end_on).to eq end_of_next_year
     end
 
     context "adult" do
-      subject { described_class.new(mitglied_person, bluemlisalp, end_of_year.year) }
-
-      before do
-        mitglied.update_column(:end_on, Time.zone.today.yesterday)
-        mitglied_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
-        # rubocop:todo Layout/LineLength
-        mitglied_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
-        # rubocop:enable Layout/LineLength
-      end
+      subject { described_class.new(mitglied_person, bluemlisalp, next_year) }
 
       it "creates new stammsektion role for person starting today" do
         expect do
@@ -206,25 +325,7 @@ describe Invoices::SacMemberships::MembershipManager do
     end
 
     context "family" do
-      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_year.year) }
-
-      before do
-        familienmitglied.update_column(:end_on, Time.zone.today.yesterday)
-        familienmitglied_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
-        # rubocop:todo Layout/LineLength
-        familienmitglied_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
-        # rubocop:enable Layout/LineLength
-        familienmitglied2.update_column(:end_on, Time.zone.today.yesterday)
-        familienmitglied2_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
-        # rubocop:todo Layout/LineLength
-        familienmitglied2_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
-        # rubocop:enable Layout/LineLength
-        familienmitglied_kind.update_column(:end_on, Time.zone.today.yesterday)
-        familienmitglied_kind_zweitsektion.update_column(:end_on, Time.zone.today.yesterday)
-        # rubocop:todo Layout/LineLength
-        familienmitglied_kind_person.sac_membership.membership_prolongable_roles.update_all(end_on: Time.zone.today.yesterday)
-        # rubocop:enable Layout/LineLength
-      end
+      subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
 
       it "creates new stammsektion role for person starting today" do
         expect do
@@ -236,26 +337,28 @@ describe Invoices::SacMemberships::MembershipManager do
         check_new_membership_role_dates_and_groups(familienmitglied_kind_person)
       end
 
-      # rubocop:todo Layout/LineLength
-      it "does not create zusatzsektion roles for family members when only main person is in zusatzsektionen" do
-        # rubocop:enable Layout/LineLength
-        familienmitglied2_zweitsektion.destroy!
-        familienmitglied_kind_zweitsektion.destroy!
+      it "does not create zusatzsektion roles for family members when only main person is in zusatzsektionen" do  # rubocop:disable Layout/LineLength
+        familienmitglied2_zweitsektion.delete
+        familienmitglied_kind_zweitsektion.delete
+        familienmitglied2_person.reload
+        familienmitglied_kind_person.reload
         expect do
           subject.update_membership_status
         end.to change { Role.count }.by(13)
-          .and change { familienmitglied2_person.sac_membership.zusatzsektion_roles.count }.by(0)
-          .and change {
-                 familienmitglied_kind_person.sac_membership.zusatzsektion_roles.count
-               }.by(0)
+          .and change { familienmitglied2_person.reload.sac_membership.zusatzsektion_roles.count }.by(0)
+          .and change { familienmitglied_kind_person.reload.sac_membership.zusatzsektion_roles.count }.by(0)
       end
 
       it "only creates zusatzsektions role of family member when beitragskategorie is family" do
-        # add role with adult beitragskategorie to family mitglied
-        People::SacMembership.new(familienmitglied2_person,
-          date: Time.zone.today.yesterday).zusatzsektion_roles.destroy_all
-        mitglied_zweitsektion.update!(person: familienmitglied2.person,
-          end_on: Time.zone.today.yesterday)
+        # add role with adult beitragskategorie to family mitglied2
+        People::SacMembership.new(familienmitglied2_person, date: Date.new(next_year, 1, 1))
+          .zusatzsektion_roles
+          .delete_all
+        familienmitglied2_person.reload
+        mitglied_zweitsektion.update!(
+          person: familienmitglied2_person,
+          end_on: prolongation_date
+        )
 
         expect do
           subject.update_membership_status
@@ -296,16 +399,14 @@ describe Invoices::SacMemberships::MembershipManager do
         person
       end
 
-      subject {
-        described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv),
-          end_of_next_year.year)
-      }
+      subject do
+        described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv), next_year)
+      end
 
       it "creates stammsektion role and enqueues SacMembershipsMailer" do
-        expect {
+        expect do
           subject.update_membership_status
-        }.to have_enqueued_mail(Invoices::SacMembershipsMailer,
-          :confirmation).once
+        end.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
         expect(new_member.confirmed_at).to be_nil
         expect(new_member.sac_membership.active?).to eq(true)
         expect(new_member.roles.count).to eq(1)
@@ -314,34 +415,31 @@ describe Invoices::SacMemberships::MembershipManager do
 
       it "does not enqueue SacMembershipsMailer if person has no email" do
         new_member.update(email: nil)
-        expect {
+        expect do
           subject.update_membership_status
-        }.not_to have_enqueued_mail(Invoices::SacMembershipsMailer,
-          :confirmation)
+        end.not_to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation)
         expect(new_member.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
       end
 
       describe "member in past year with neuanmeldung" do
-        let(:now) { Time.zone.now }
-
-        subject {
-          described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv), now.year)
-        }
+        subject do
+          described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv), next_year)
+        end
 
         it "creates stammsektion role and enqueues SacMembershipsMailer with membership role from last year" do
           Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
             person: new_member,
             beitragskategorie: :adult,
             group: groups(:bluemlisalp_mitglieder),
-            start_on: Time.zone.now.change(month: 1, day: 1),
-            end_on: Time.zone.now.change(month: 3, day: 31))
-          expect {
+            start_on: Date.new(today.year, 1, 1),
+            end_on: Date.new(today.year, 3, 31))
+          expect do
             subject.update_membership_status
-          }.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
+          end.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
           expect(new_member.confirmed_at).to be_nil
           expect(new_member.sac_membership.active?).to eq(true)
           expect(new_member.roles.count).to eq(1)
-          expect(new_member.sac_membership.stammsektion_role.end_on).to eq(now.end_of_year.to_date)
+          expect(new_member.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
         end
       end
     end
@@ -364,27 +462,19 @@ describe Invoices::SacMemberships::MembershipManager do
           group: groups(:bluemlisalp_neuanmeldungen_nv))
       end
 
-      subject { described_class.new(familienmitglied_person, bluemlisalp, end_of_next_year.year) }
+      subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
 
       it "creates stammsektion role" do
         subject.update_membership_status
 
         expect(familienmitglied_person.sac_membership.active?).to eq(true)
         expect(familienmitglied2_person.sac_membership.active?).to eq(true)
-        # rubocop:todo Layout/LineLength
         expect(familienmitglied_person.sac_membership.stammsektion_role.beitragskategorie).to eq "family"
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
         expect(familienmitglied2_person.sac_membership.stammsektion_role.beitragskategorie).to eq "family"
-        # rubocop:enable Layout/LineLength
         expect(familienmitglied_person.roles.count).to eq(1)
         expect(familienmitglied2_person.roles.count).to eq(1)
-        # rubocop:todo Layout/LineLength
         expect(familienmitglied_person.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
         expect(familienmitglied2_person.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
-        # rubocop:enable Layout/LineLength
       end
 
       it "doesn't create role for family members when person is not family main person" do
@@ -411,29 +501,23 @@ describe Invoices::SacMemberships::MembershipManager do
           group: groups(:matterhorn_neuanmeldungen_nv))
       end
 
-      subject { described_class.new(mitglied_person, matterhorn, end_of_next_year.year) }
+      subject { described_class.new(mitglied_person, matterhorn, next_year) }
 
       it "creates zusatzsektions role and enqueues SacMembershipsMailer" do
-        expect {
+        expect do
           subject.update_membership_status
-        }.to have_enqueued_mail(Invoices::SacMembershipsMailer,
-          :confirmation).once
+        end.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
 
         expect(mitglied_person.roles.count).to eq(2)
-        # rubocop:todo Layout/LineLength
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
-        # rubocop:enable Layout/LineLength
       end
 
       it "does not enqueue SacMembershipsMailer if person has no email" do
         mitglied_person.update(email: nil)
-        expect {
+        expect do
           subject.update_membership_status
-        }.not_to have_enqueued_mail(Invoices::SacMembershipsMailer,
-          :confirmation)
-        # rubocop:todo Layout/LineLength
+        end.not_to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation)
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
-        # rubocop:enable Layout/LineLength
       end
 
       it "only creates zusatzsektion for layer in question if two roles exist" do
@@ -442,19 +526,17 @@ describe Invoices::SacMemberships::MembershipManager do
           beitragskategorie: :adult,
           group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv))
 
-        expect {
+        expect do
           subject.update_membership_status
-        }.to have_enqueued_mail(Invoices::SacMembershipsMailer,
-          :confirmation).once
+        end.to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
 
         expect(mitglied_person.roles.count).to eq(3)
         expect(mitglied_person.sac_membership.zusatzsektion_roles.count).to eq 1
-        # rubocop:todo Layout/LineLength
         expect(mitglied_person.sac_membership.zusatzsektion_roles.first.group.layer_group).to eq matterhorn
-        # rubocop:enable Layout/LineLength
       end
 
       context "with stammsektions only partially covering year" do
+        let!(:run_on) { Date.new(2025, 2, 1) }
         let(:stammsektion_end_on) { Date.new(2025, 5, 1) }
 
         before do
@@ -466,26 +548,16 @@ describe Invoices::SacMemberships::MembershipManager do
           travel_to(Date.new(2025, 3, 1)) do
             subject.update_membership_status
 
-            # rubocop:todo Layout/LineLength
-            expect(mitglied_person.sac_membership.zusatzsektion_roles.first.start_on).to eq Date.new(
-              # rubocop:enable Layout/LineLength
-              2025, 3, 1
-            )
-            # rubocop:todo Layout/LineLength
+            expect(mitglied_person.sac_membership.zusatzsektion_roles.first.start_on).to eq Date.new(2025, 3, 1)
             expect(mitglied_person.sac_membership.zusatzsektion_roles.first.end_on).to eq stammsektion_end_on
-            # rubocop:enable Layout/LineLength
           end
         end
 
-        # rubocop:todo Layout/LineLength
         it "creates role starting and ending on stammsektion end_on if run on after stammsektion expires" do
-          # rubocop:enable Layout/LineLength
           travel_to(Date.new(2025, 5, 2)) do
             subject.update_membership_status
 
-            # rubocop:todo Layout/LineLength
             role = mitglied_person.roles.with_inactive.find_by(type: "Group::SektionsMitglieder::MitgliedZusatzsektion")
-            # rubocop:enable Layout/LineLength
             expect(role.start_on).to eq stammsektion_end_on
             expect(role.end_on).to eq stammsektion_end_on
           end
@@ -497,14 +569,10 @@ describe Invoices::SacMemberships::MembershipManager do
       before do
         familienmitglied_kind_person.destroy
 
-        # rubocop:todo Layout/LineLength
         familienmitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
-        # rubocop:enable Layout/LineLength
         familienmitglied_person.sac_membership.zusatzsektion_roles.destroy_all
         familienmitglied_person.sac_membership.membership_prolongable_roles.destroy_all
-        # rubocop:todo Layout/LineLength
         familienmitglied2_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
-        # rubocop:enable Layout/LineLength
         familienmitglied2_person.sac_membership.zusatzsektion_roles.destroy_all
         familienmitglied2_person.sac_membership.membership_prolongable_roles.destroy_all
 
@@ -521,19 +589,15 @@ describe Invoices::SacMemberships::MembershipManager do
 
       subject {
         described_class.new(familienmitglied_person, groups(:matterhorn_neuanmeldungen_nv),
-          end_of_next_year.year)
+          next_year)
       }
 
       it "creates zusatzsektions roles for family members" do
         subject.update_membership_status
 
         expect(familienmitglied2_person.roles.count).to eq(2)
-        # rubocop:todo Layout/LineLength
         expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.end_on).to eq(end_of_next_year)
-        # rubocop:enable Layout/LineLength
-        # rubocop:todo Layout/LineLength
         expect(familienmitglied2_person.sac_membership.zusatzsektion_roles.first.beitragskategorie).to eq "adult"
-        # rubocop:enable Layout/LineLength
       end
 
       it "doesn't create role for family members when person is not family main person" do

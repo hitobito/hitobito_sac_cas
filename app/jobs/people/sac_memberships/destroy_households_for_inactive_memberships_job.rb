@@ -13,15 +13,36 @@ module People
       end
 
       def perform_internal
-        affected_family_people.find_each(batch_size: 100) do
-          _1.household.destroy
+        destroy_inactive_households
+        remove_outgrown_family_members
+      end
+
+      def destroy_inactive_households
+        iterate_people(sac_family_main_person: true) do |person|
+          person.household.destroy
         end
       end
 
-      def affected_family_people
+      def remove_outgrown_family_members
+        iterate_people(sac_family_main_person: false) do |person|
+          Household.new(person, maintain_sac_family: false).remove(person).save!
+        end
+      end
+
+      def iterate_people(sac_family_main_person:, &block)
+        inactive_family_people(sac_family_main_person:).find_each(batch_size: 100) do |person|
+          yield person
+        rescue => e
+          # we obviously have a data inconsistency if this happens. please investigate!
+          # notify sentry but continue processing other people
+          Sentry.capture_exception(e, extra: {person_id: person.id})
+        end
+      end
+
+      def inactive_family_people(sac_family_main_person:, &block)
         Person.where.not(household_key: ["", nil])
           .where("id NOT IN (?)", people_with_active_family_roles_ids) # rubocop:disable Rails/WhereNot
-          .where(sac_family_main_person: true)
+          .where(sac_family_main_person:)
       end
 
       def people_with_active_family_roles_ids

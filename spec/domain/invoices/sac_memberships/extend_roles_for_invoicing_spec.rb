@@ -190,10 +190,13 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
         expect(previous_membership_role.reload.end_on).to eq(old_role_end_on)
 
-        new_role = person_turned_youth.roles.active.reload.last
+        new_role = person_turned_youth.roles.reload.last
         expect(new_role.beitragskategorie).to eq("youth")
         expect(new_role.start_on).to eq(new_role_start_on)
         expect(new_role.end_on).to eq(prolongation_date)
+
+        expect(adult.roles.first.end_on).to eq(prolongation_date)
+        expect(child.roles.first.end_on).to eq(prolongation_date)
 
         # household keys should still be present since the household should only be completely
         # dissolved on the reference_date. At that point the
@@ -202,17 +205,37 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         expect(person_turned_youth.managers).to eq([adult])
       end
 
-      it "creates youth role for family with reference age above 18" do
+      it "creates youth role for family with reference age above 18 and ehrenmitglied roles" do
+        adult_ehrenmitglied_role = adult.roles.create!(
+          group: groups(:bluemlisalp_mitglieder),
+          end_on: 1.month.from_now,
+          start_on: new_role_start_on - 1.year,
+          type: Group::SektionsMitglieder::Ehrenmitglied.sti_name
+        )
+        youth_ehrenmitglied_role = person_turned_youth.roles.create!(
+          group: groups(:bluemlisalp_mitglieder),
+          end_on: 1.month.from_now,
+          start_on: new_role_start_on - 1.year,
+          type: Group::SektionsMitglieder::Ehrenmitglied.sti_name
+        )
+
         person_turned_youth.update!(birthday: reference_date - 18.years - 1.day)
 
         expect { extend_roles }.to change { person_turned_youth.roles.with_inactive.count }.by(1)
 
         expect(previous_membership_role.reload.end_on).to eq(old_role_end_on)
 
-        new_role = person_turned_youth.roles.active.reload.last
+        new_role = person_turned_youth.roles
+          .where(type: Group::SektionsMitglieder::Mitglied.sti_name).reload.last
         expect(new_role.beitragskategorie).to eq("youth")
         expect(new_role.start_on).to eq(new_role_start_on)
         expect(new_role.end_on).to eq(prolongation_date)
+
+        expect(youth_ehrenmitglied_role.reload.end_on).to eq(prolongation_date)
+        expect(adult_ehrenmitglied_role.reload.end_on).to eq(prolongation_date)
+
+        expect(adult.roles.first.end_on).to eq(prolongation_date)
+        expect(child.roles.first.end_on).to eq(prolongation_date)
       end
 
       it "does not create youth role for family with reference age below 18" do
@@ -248,8 +271,10 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
           Fabricate(
             Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
             group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
-            person: person, start_on: new_role_start_on - 3.months,
-            end_on: 1.month.from_now, beitragskategorie: :family
+            person: person,
+            start_on: new_role_start_on - 3.months,
+            end_on: 1.month.from_now,
+            beitragskategorie: :family
           )
         end
 
@@ -260,6 +285,11 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         }.by(1)
 
         expect(previous_zusatzsektion_role.reload.end_on).to eq(old_role_end_on)
+
+        stammsektion_role = person_turned_youth.sac_membership.stammsektion_role
+        expect(stammsektion_role.beitragskategorie).to eq("youth")
+        expect(stammsektion_role.start_on).to eq(new_role_start_on)
+        expect(stammsektion_role.end_on).to eq(prolongation_date)
 
         zusatzsektion_role = person_turned_youth.sac_membership.zusatzsektion_roles.active.last
         expect(zusatzsektion_role).to be_present
