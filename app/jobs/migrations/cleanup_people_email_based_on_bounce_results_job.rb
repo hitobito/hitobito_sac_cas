@@ -38,7 +38,7 @@ module Migrations
             person.confirmed_at = nil
           end
 
-          if !person.changed? # So wird eine unchanged Person nicht an abacus gesendet.. Ist das overengineered?
+          if !person.changed?
             info "Person has not changed: #{person.id}: #{row["E-Mail"]}"
             next
           end
