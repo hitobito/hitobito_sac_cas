@@ -93,8 +93,8 @@ describe Migrations::CleanupPeopleEmailBasedOnBounceResultsJob do
     end
 
     unchanged = [
+      @soft_print,
       @soft_confirmed,
-      @soft_digital,
       @soft_unconfirmed
     ]
 
