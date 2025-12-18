@@ -31,6 +31,11 @@ module Migrations
         csv_data.map do |row|
           person = Person.find_by(email: row["E-Mail"])
 
+          if person.nil?
+            info "Person was not found: #{row["E-Mail"]}"
+            next
+          end
+
           person.correspondence = :print
 
           if row["Bounce-Typ"] == "hard"
