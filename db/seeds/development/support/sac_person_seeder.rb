@@ -123,16 +123,18 @@ class SacPersonSeeder < PersonSeeder
   def seed_some_ehrenmitglieder_beguenstigt_roles
     return unless Group::SektionsMitglieder::Ehrenmitglied.count.zero?
 
-    mitglied_role_types = [Group::SektionsMitglieder::Mitglied,
-      Group::SektionsMitglieder::MitgliedZusatzsektion].map(&:sti_name)
-    mitglied_role_ids = Role.where(type: mitglied_role_types).pluck(:person_id,
-      :group_id).sample(21)
-    mitglied_role_ids.each do |person_id, group_id|
-      if rand(2) == 1
-        Group::SektionsMitglieder::Ehrenmitglied.create!(person_id:, group_id:)
-      else
-        Group::SektionsMitglieder::Beguenstigt.create!(person_id:, group_id:)
-      end
+    mitglied_role_types = [
+      Group::SektionsMitglieder::Mitglied,
+      Group::SektionsMitglieder::MitgliedZusatzsektion
+    ].map(&:sti_name)
+    mitglied_roles = Role.where(type: mitglied_role_types)
+      .pluck(:person_id, :group_id, :start_on, :end_on)
+      .sample(21)
+    mitglied_roles.each do |person_id, group_id, start_on, end_on|
+      klass = (rand(2) == 1) ?
+        Group::SektionsMitglieder::Ehrenmitglied :
+        Group::SektionsMitglieder::Beguenstigt
+      klass.create!(person_id:, group_id:, start_on:, end_on:)
     end
   end
 
