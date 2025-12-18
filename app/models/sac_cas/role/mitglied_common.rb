@@ -13,9 +13,11 @@ module SacCas::Role::MitgliedCommon
   include SacCas::Role::MitgliedNoOverlapValidation
   include SacCas::RoleBeitragskategorie
 
-  ROLES_TO_DESTROY_ON_MEMBERSHIP_TERMINATION = ["Group::SektionsMitglieder::Ehrenmitglied",
+  ROLES_TO_DESTROY_ON_MEMBERSHIP_TERMINATION = [
+    "Group::SektionsMitglieder::Ehrenmitglied",
     "Group::SektionsMitglieder::Beguenstigt",
-    "Group::SektionsTourenUndKurse::Tourenleiter"].freeze
+    "Group::SektionsTourenUndKurse::Tourenleiter"
+  ].freeze
 
   included do
     self.permissions = []
@@ -42,9 +44,8 @@ module SacCas::Role::MitgliedCommon
   def dependant_roles
     person
       .roles.joins(:group)
-      # rubocop:todo Layout/LineLength
-      .where(type: ROLES_TO_DESTROY_ON_MEMBERSHIP_TERMINATION, groups: {layer_group_id: group.layer_group_id})
-    # rubocop:enable Layout/LineLength
+      .where(type: ROLES_TO_DESTROY_ON_MEMBERSHIP_TERMINATION,
+        groups: {layer_group_id: group.layer_group_id})
   end
 
   private

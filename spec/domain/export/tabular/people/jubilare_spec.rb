@@ -34,9 +34,15 @@ describe Export::Tabular::People::Jubilare do
       Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,
         group: groups(:bluemlisalp_mitglieder), person: people(:abonnent), start_on: "15.3.2021")
       Fabricate(Group::SektionsMitglieder::Ehrenmitglied.sti_name,
-        group: groups(:bluemlisalp_mitglieder), person: people(:abonnent), start_on: "15.3.2021")
+        group: groups(:bluemlisalp_mitglieder),
+        person: people(:abonnent),
+        start_on: "15.3.2021",
+        end_on: Date.current.end_of_year)
       Fabricate(Group::SektionsMitglieder::Beguenstigt.sti_name,
-        group: groups(:bluemlisalp_mitglieder), person: people(:abonnent), start_on: "15.3.2021", end_on: "31.12.2023")
+        group: groups(:bluemlisalp_mitglieder),
+        person: people(:abonnent),
+        start_on: "15.3.2021",
+        end_on: "31.12.2023")
 
       rows = tabular.data_rows.to_a
       expect(rows.first).to eq([

@@ -29,9 +29,12 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
   context "with multiple people and roles" do
     let!(:person_ehrenmitglied_role) do
-      person.roles.create!(group: groups(:bluemlisalp_mitglieder), created_at: 2.days.ago,
-        end_on: 1.month.from_now, start_on: nil,
-        type: Group::SektionsMitglieder::Ehrenmitglied.sti_name)
+      person.roles.create!(
+        group: groups(:bluemlisalp_mitglieder),
+        end_on: 1.month.from_now,
+        start_on: 1.year.ago,
+        type: Group::SektionsMitglieder::Ehrenmitglied.sti_name
+      )
     end
     let(:other_person) { people(:familienmitglied) }
 
@@ -41,16 +44,13 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
       expect { extend_roles }
         .to change { person_mitglied_role.reload.end_on }.to(prolongation_date)
         .and change { person_ehrenmitglied_role.reload.end_on }.to(prolongation_date)
-        .and change {
-               other_person.roles.reload.map(&:end_on)
-             }.to([prolongation_date, prolongation_date])
+        .and change { other_person.roles.reload.map(&:end_on) }
+        .to([prolongation_date, prolongation_date])
     end
 
     it "only makes 5 database queries" do
-      expect_query_count {
-        extend_roles
-        # SELECT in batches (2x) and SELECT for beitragskategorie change (2x) and UPDATE all (1x)
-      }.to eq(5)
+      # SELECT in batches (2x) and SELECT for beitragskategorie change (2x) and UPDATE all (1x)
+      expect_query_count { extend_roles }.to eq(5)
     end
 
     context "with multiple batches and various roles" do
@@ -65,12 +65,10 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
         roles(:familienmitglied_zweitsektion).update_column(:id, 23)
 
         expect { extend_roles }
-          .to change {
-                person.roles.reload.map(&:end_on)
-              }.to([prolongation_date, prolongation_date, prolongation_date])
-          .and change {
-                 other_person.roles.reload.map(&:end_on)
-               }.to([prolongation_date, prolongation_date])
+          .to change { person.roles.reload.map(&:end_on) }
+          .to([prolongation_date, prolongation_date, prolongation_date])
+          .and change { other_person.roles.reload.map(&:end_on) }
+          .to([prolongation_date, prolongation_date])
       end
     end
   end

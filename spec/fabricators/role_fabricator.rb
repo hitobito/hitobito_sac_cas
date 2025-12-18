@@ -10,7 +10,9 @@
 # We set these attributes here in the factory to a default value, so we don't have to do it all the time
 # rubocop:enable Layout/LineLength
 # in the specs.
-Role.all_types.select { |role| role < SacCas::Role::MitgliedCommon }.each do |role|
+Role.all_types
+  .select { |role| role < SacCas::Role::MitgliedCommon || role < SacCas::Role::ActiveMembershipValidations }
+  .each do |role|
   name = role.name.to_sym
 
   Fabrication.manager[name].append_or_update_attribute(:start_on, nil) { Date.current }
