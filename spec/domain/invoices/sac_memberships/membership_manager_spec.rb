@@ -31,46 +31,44 @@ describe Invoices::SacMemberships::MembershipManager do
 
   let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:matterhorn) { groups(:matterhorn) }
+  let(:ehrenmitglieder_group) do
+    Group::Ehrenmitglieder.create!(
+      name: "Ehrenmitglieder",
+      parent: groups(:root)
+    )
+  end
 
   def sac_membership = subject.person.sac_membership
 
+  def create_additional_roles(person)
+    Fabricate(Group::SektionsMitglieder::Ehrenmitglied.sti_name,
+      group: groups(:bluemlisalp_mitglieder),
+      person: person,
+      start_on: today.beginning_of_year)
+    Fabricate(Group::SektionsMitglieder::Beguenstigt.sti_name,
+      group: groups(:bluemlisalp_mitglieder),
+      person: person,
+      start_on: today.beginning_of_year)
+    Fabricate(Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
+      group: ehrenmitglieder_group,
+      person: person,
+      start_on: today.beginning_of_year)
+  end
+
   before do
-    ehrenmitglieder_group = Group::Ehrenmitglieder.create!(name: "Ehrenmitglieder",
-      parent: groups(:root))
-    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: mitglied_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: mitglied_person)
-    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
-      group: ehrenmitglieder_group, person: mitglied_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: familienmitglied_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: familienmitglied_person)
-    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
-      group: ehrenmitglieder_group, person: familienmitglied_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: familienmitglied2_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: familienmitglied2_person)
-    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
-      group: ehrenmitglieder_group, person: familienmitglied2_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Ehrenmitglied.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: familienmitglied_kind_person)
-    Fabricate(:role, type: Group::SektionsMitglieder::Beguenstigt.sti_name,
-      group: groups(:bluemlisalp_mitglieder), person: familienmitglied_kind_person)
-    Fabricate(:role, type: Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
-      group: ehrenmitglieder_group, person: familienmitglied_kind_person)
-    Role.update_all(end_on: prolongation_date)
-
-    travel_to(run_on)
-
-    [
+    people = [
       mitglied_person,
       familienmitglied_person,
       familienmitglied2_person,
       familienmitglied_kind_person
-    ].each(&:reload)
+    ]
+
+    people.each { |person| create_additional_roles(person) }
+    Role.update_all(end_on: prolongation_date)
+
+    travel_to(run_on)
+
+    people.each(&:reload)
   end
 
   it "creates log entry if running without any actual work todo" do
@@ -87,9 +85,8 @@ describe Invoices::SacMemberships::MembershipManager do
       role_dates_after = Role.order(:id).map(&:end_on)
 
       # check how many dates have changed
-      role_dates_after.zip(role_dates_before).count { |a, b|
-        a != b
-      } + (role_dates_after.size - role_dates_before.size).abs
+      role_dates_after.zip(role_dates_before).count { |a, b| a != b } +
+        (role_dates_after.size - role_dates_before.size).abs
     end
 
     context "adult" do

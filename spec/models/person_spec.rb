@@ -322,18 +322,20 @@ describe Person do
       expected_years = Role.with_membership_years.find(roles(:mitglied).id).membership_years.to_i
 
       # the person has only one role, so the membership_years should be the same
-      # rubocop:todo Layout/LineLength
-      expect(Person.with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
-      # rubocop:enable Layout/LineLength
+      years = Person.with_membership_years.find(people(:mitglied).id).membership_years
+      expect(years).to eq(expected_years)
 
       # add a non-membership role that does not count towards the membership_years
-      Group::SektionsMitglieder::Ehrenmitglied.create!(person: people(:mitglied),
-        group: groups(:bluemlisalp_mitglieder))
+      Group::SektionsMitglieder::Ehrenmitglied.create!(
+        person: people(:mitglied),
+        group: groups(:bluemlisalp_mitglieder),
+        start_on: "2020-01-01",
+        end_on: Date.current.end_of_year
+      )
       # the person has now two roles, so the membership_years should be the same.
       # this expectation makes sure we don't double the membership_years when joining the roles
-      # rubocop:todo Layout/LineLength
-      expect(Person.joins(:roles).with_membership_years.find(people(:mitglied).id).membership_years).to eq(expected_years)
-      # rubocop:enable Layout/LineLength
+      years = Person.joins(:roles).with_membership_years.find(people(:mitglied).id).membership_years
+      expect(years).to eq(expected_years)
     end
   end
 

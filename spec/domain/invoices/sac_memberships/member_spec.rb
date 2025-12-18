@@ -26,7 +26,8 @@ describe Invoices::SacMemberships::Member do
       Group::SektionsMitglieder::Ehrenmitglied.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        start_on: "2022-08-01"
+        start_on: "2022-08-01",
+        end_on: date.end_of_year
       )
     end
 

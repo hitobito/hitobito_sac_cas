@@ -125,7 +125,7 @@ describe Export::Tabular::People::Eintritte do
 
       # not part of scope
       create_role("Mitglied", start_on: "1.7.2025").person # too new
-      create_role("Ehrenmitglied", start_on: "1.1.2025").person # outside of roles scope
+      create_role("Schreibrecht", start_on: "1.1.2025").person # outside of roles scope
 
       too_new = create_role("Mitglied", matterhorn, start_on: "1.1.2025").person
       create_role("MitgliedZusatzsektion", start_on: "1.7.2025", person: too_new) # too new

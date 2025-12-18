@@ -440,7 +440,8 @@ describe Invoices::SacMemberships::PositionGenerator do
         Group::SektionsMitglieder::Ehrenmitglied.create!(
           person: person,
           group: groups(:bluemlisalp_mitglieder),
-          start_on: "2022-08-01"
+          start_on: "2022-08-01",
+          end_on: date + 3.months
         )
       end
 
@@ -481,7 +482,8 @@ describe Invoices::SacMemberships::PositionGenerator do
       Group::SektionsMitglieder::Ehrenmitglied.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        start_on: "2022-08-01"
+        start_on: "2022-08-01",
+        end_on: date + 3.months
       )
     end
 
@@ -530,7 +532,8 @@ describe Invoices::SacMemberships::PositionGenerator do
       Group::SektionsMitglieder::Beguenstigt.create!(
         person: person,
         group: groups(:bluemlisalp_mitglieder),
-        start_on: "2022-08-01"
+        start_on: "2022-08-01",
+        end_on: date + 3.months
       )
     end
 
