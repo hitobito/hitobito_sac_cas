@@ -14,6 +14,8 @@ module SacCas::PeopleController
   prepended do
     before_action :set_lookup_prefixes
     before_update :check_birthday, :check_email
+
+    permitted_attrs << :correspondence << :advertising
   end
 
   def list_filter_args

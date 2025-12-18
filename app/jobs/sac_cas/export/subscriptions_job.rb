@@ -17,7 +17,7 @@ module SacCas::Export::SubscriptionsJob
   end
 
   def entries
-    super.select("household_key")
+    super.select(:advertising, :household_key)
   end
 
   def recipient_table_display

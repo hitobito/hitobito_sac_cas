@@ -8,4 +8,8 @@
 module SacCas::GroupsController
   extend ActiveSupport::Concern
   prepend AssignsSacPhoneNumbers
+
+  prepended do
+    permitted_attrs << :mitglied_termination_by_section_only << {section_offering_ids: []}
+  end
 end

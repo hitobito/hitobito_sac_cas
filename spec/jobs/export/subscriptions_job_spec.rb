@@ -11,13 +11,28 @@ describe Export::SubscriptionsJob do
   let(:user) { people(:admin) }
   let(:mailing_list) { mailing_lists(:newsletter) }
 
+  before do
+    Subscription.create!(mailing_list: mailing_list, subscriber: people(:familienmitglied))
+  end
+
+  context "plain addresses" do
+    subject(:job) do
+      described_class.new(:csv, user.id, mailing_list.id, filename: "dummy")
+    end
+
+    it "uses PeopleAddress tabular export" do
+      expect(Export::Tabular::People::PeopleAddress).to receive(:export).and_call_original
+      job.perform
+    end
+  end
+
   context "with recipients param" do
     subject(:job) do
       described_class.new(:csv, user.id, mailing_list.id, recipients: true, filename: "dummy")
     end
 
     it "uses SacRecipients tabular export" do
-      expect(Export::Tabular::People::SacRecipients).to receive(:export)
+      expect(Export::Tabular::People::SacRecipients).to receive(:export).and_call_original
       job.perform
     end
   end
@@ -29,7 +44,7 @@ describe Export::SubscriptionsJob do
     end
 
     it "uses SacRecipients tabular export" do
-      expect(Export::Tabular::People::SacRecipientHouseholds).to receive(:export)
+      expect(Export::Tabular::People::SacRecipientHouseholds).to receive(:export).and_call_original
       job.perform
     end
   end
@@ -41,7 +56,6 @@ describe Export::SubscriptionsJob do
 
     def export_table_display_as_csv
       Tempfile.create do |file|
-        Subscription.create!(mailing_list: mailing_list, subscriber: people(:familienmitglied))
         expect(Export::Tabular::People::TableDisplays).to receive(:export).and_call_original
         expect(AsyncDownloadFile).to receive(:maybe_from_filename).and_return(file)
         job.perform
