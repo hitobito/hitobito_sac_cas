@@ -163,14 +163,25 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
   describe "convert roles to youth" do
     let(:adult) do
-      Fabricate(:person_with_role, group: bluemlisalp_mitglieder, role: "Mitglied",
-        beitragskategorie: :family, email: "parent@hitobito.example.com",
-        birthday: reference_date - 40.years, confirmed_at: Time.current,
-        sac_family_main_person: true, end_on: 1.month.from_now)
+      Fabricate(:person_with_role,
+        group: bluemlisalp_mitglieder,
+        role: "Mitglied",
+        beitragskategorie: :family,
+        email: "parent@hitobito.example.com",
+        birthday: reference_date - 40.years,
+        confirmed_at: Time.current,
+        sac_family_main_person: true,
+        end_on: 1.month.from_now)
     end
     let(:child) { Fabricate(:person, birthday: reference_date - 10.years) }
     let(:person_turned_youth) { Fabricate(:person, birthday: reference_date - 17.years) }
-    let(:previous_membership_role) { person_turned_youth.roles.first }
+    let(:previous_membership_role) do
+      person_turned_youth
+        .roles_unscoped
+        .where(type: Group::SektionsMitglieder::Mitglied.sti_name)
+        .order(:start_on)
+        .first
+    end
 
     before do
       create_household(adult, person_turned_youth, child)
