@@ -1,3 +1,5 @@
+- if can?(:index, Event::Discipline)
+  = nav Event::Discipline.model_name.human(count: 2), event_disciplines_path, %w(event_disciplines)
 - if can?(:index, Event::Level)
   = nav Event::Level.model_name.human(count: 2), event_levels_path, %w(event_levels)
 - if can?(:index, CourseCompensationRate)

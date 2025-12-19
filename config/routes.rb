@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
     resource :email_check, only: [:create]
 
+    resources :event_disciplines, module: "event", controller: "disciplines"
     resources :event_levels, module: "event", controller: "levels", except: [:show]
 
     resources :external_invoices, only: [:show], module: :people, param: :invoice_id
