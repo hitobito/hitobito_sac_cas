@@ -50,3 +50,5 @@ section_tour:
   type: Event::Tour
   state: published
   external_applications: true
+  disciplines:
+    - wanderweg
