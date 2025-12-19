@@ -16,7 +16,5 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile"]
   s.add_dependency "hitobito_youth"
-  s.add_dependency "net-ssh", "~> 7.0.0.beta1" # TODO: remove once net-sftp 3 updates ssh 7
-  s.add_dependency "net-sftp"
   # rubocop:enable Style/SingleSpaceBeforeFirstArg
 end
