@@ -1,0 +1,109 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_disciplines
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  parent_id         :bigint
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+wandern:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:wandern) %>
+  locale: de
+  label: Wandern
+  description: Das Wandern ist des Müllers Lust
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+wanderweg:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:wanderweg) %>
+  locale: de
+  label: Wanderweg
+  description: Gemütlich dem Weg entlang.
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+bergtour:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:bergtour) %>
+  locale: de
+  label: Bergtour
+  description: Über Stock und Stein
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+schneeschuh:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:schneeschuh) %>
+  locale: de
+  label: Schneeschuhwandern
+  description: Im Schnee läuft es sich besser mit grösserer Fläche
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+hochtour:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:hochtour) %>
+  locale: de
+  label: Hochtouren
+  description: Obeuse
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+skihochtour:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:skihochtour) %>
+  locale: de
+  label: Skihochtouren
+  description: Zwei Latten
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+snowboardhochtour:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:snowboardhochtour) %>
+  locale: de
+  label: Snowboardhochtouren
+  description: Ein Brett
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+klettern:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:klettern) %>
+  locale: de
+  label: Klettern
+  description: Chräsmä u Stägärä
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+felsklettern:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:felsklettern) %>
+  locale: de
+  label: Fels
+  description: Im harten Stein
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+eisklettern:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:eisklettern) %>
+  locale: de
+  label: Eis
+  description: Schattig und kalt
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+indoorklettern:
+  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:indoorklettern) %>
+  locale: de
+  label: Indoor
+  description: Immer trocken, immer warm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
