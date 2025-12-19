@@ -5,17 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class CostUnitsController < SimpleCrudController
-  self.permitted_attrs = [:code, :label]
+class Event::DisciplineAbility < AbilityDsl::Base
+  on(Event::Discipline) do
+    class_side(:index).if_admin
 
-  self.sort_mappings = {
-    label: "cost_unit_translations.label"
-  }
-
-  private
-
-  def assign_attributes
-    super
-    entry.deleted_at = nil # restore on edit
+    permission(:admin).may(:manage).all
   end
 end
