@@ -10,6 +10,12 @@ require "spec_helper"
 describe Events::AnnualCoursesDuplicator do
   let(:duplicator) { described_class.new(2025, 2026) }
 
+  around do |example|
+    travel_to(Time.zone.local(2025, 10, 10)) do
+      example.run
+    end
+  end
+
   let!(:annual_courses_in_source_year) do
     (1..10).map do |i|
       Fabricate(:sac_open_course, number: "2025-#{i}", annual: true)
