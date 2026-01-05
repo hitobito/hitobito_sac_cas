@@ -383,6 +383,7 @@ describe Export::Tabular::People::Eintritte do
 
       describe "Sektionswechsel" do
         it "marks Sektionswechsel for Stammsektion only" do
+          travel_to(Time.zone.local(2025, 10, 15))
           person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.12.2024").person
           create_role("Mitglied", bluemlisalp, start_on: "1.1.2025", end_on: "31.12.2025", person:)
 
