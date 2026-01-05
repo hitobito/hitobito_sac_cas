@@ -168,6 +168,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
       let(:rows) { build_rows("1.1.2015-31.12.2015") }
 
       before do
+        travel_to(Time.zone.local(2025, 10, 15))
         create_role("youth", person: people(:mitglied), start_on: "1.1.2000", end_on: "31.12.2014")
         create_role("adult", person: people(:familienmitglied), start_on: "1.1.2000", end_on: "31.12.2014")
         create_role("adult", person: people(:familienmitglied2), start_on: "1.1.2000", end_on: "31.12.2014")

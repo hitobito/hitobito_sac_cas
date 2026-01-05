@@ -15,7 +15,12 @@ describe Memberships::TerminateAboMagazinAbonnent do
 
   subject(:model) { described_class.new(role, valid_attrs) }
 
-  around { |ex| travel_to(today) { ex.run } }
+  around { |ex|
+    travel_to(today) {
+      role.update(end_on: Time.zone.now.end_of_year)
+      ex.run
+    }
+  }
 
   describe "::validations" do
     it "is valid with valid attrs" do

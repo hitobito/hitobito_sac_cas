@@ -286,7 +286,7 @@ describe Export::Tabular::People::Eintritte do
           sac_is_section_change: "nein",
           start_on: "01.01.2015",
           self_registration_reason: "Wegen dem Tourenangebot in den Sektionen.",
-          membership_years: 10,
+          membership_years: Time.zone.now.year - 2015,
           sac_entry_on: "01.01.2015",
           sektion_entry_on: "01.01.2015",
           type: "Stammsektion",

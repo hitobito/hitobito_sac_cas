@@ -72,6 +72,7 @@ describe Memberships::TerminateAboMagazinAbonnentsController do
 
     context "as normal user" do
       it "marks single role as terminated and redirects" do
+        travel_to(Time.zone.local(2025, 10, 15))
         create_invoice(year: 2025)
         create_invoice(year: 2026)
         expect do
