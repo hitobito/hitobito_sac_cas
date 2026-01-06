@@ -140,7 +140,7 @@ class Invoices::SacMemberships::MembershipManager
   end
 
   def send_confirmation_mail(person, role)
-    if person.email.present?
+    if person.email.present? && !role.ended?
       Invoices::SacMembershipsMailer
         .confirmation(person, role.group.parent, role.beitragskategorie)
         .deliver_later
@@ -161,6 +161,8 @@ class Invoices::SacMemberships::MembershipManager
 
   def create_new_role(person, role_type, group = mitglieder_sektion, start_on: today,
     end_on: end_of_year, beitragskategorie: nil)
+    start_on = end_of_year if end_of_year < start_on
+
     role_type.create!(
       group: group,
       person: person,
