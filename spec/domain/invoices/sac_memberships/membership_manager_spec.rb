@@ -410,6 +410,21 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(new_member.sac_membership.stammsektion_role.end_on).to eq(end_of_next_year)
       end
 
+      it "creates ended stammsektion role for year without enqueuing SacMembershipsMailer if year is in the past" do
+        subject = described_class.new(new_member, groups(:bluemlisalp_neuanmeldungen_nv), today.year)
+        expect do
+          subject.update_membership_status
+        end.not_to have_enqueued_mail(Invoices::SacMembershipsMailer, :confirmation).once
+        expect(new_member.confirmed_at).to be_nil
+        expect(new_member.sac_membership).to be_present
+        expect(new_member.sac_membership.active?).to eq(false)
+        expect(new_member.sac_membership.stammsektion_role).to be_nil
+        expect(new_member.roles.count).to eq(0)
+        expect(new_member.roles.ended.count).to eq(1)
+        expect(new_member.roles.ended.first.start_on).to eq today.end_of_year
+        expect(new_member.roles.ended.first.end_on).to eq today.end_of_year
+      end
+
       it "does not enqueue SacMembershipsMailer if person has no email" do
         new_member.update(email: nil)
         expect do
