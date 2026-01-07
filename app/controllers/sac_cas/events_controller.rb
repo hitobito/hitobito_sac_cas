@@ -9,7 +9,10 @@ module SacCas::EventsController
   extend ActiveSupport::Concern
 
   prepended do
+    self.permitted_attrs += [discipline_ids: []]
+
     before_render_form :preload_translated_associations
+    before_render_form :preload_disciplines
   end
 
   private
@@ -19,5 +22,11 @@ module SacCas::EventsController
 
     @cost_centers = CostCenter.includes(:translations).list
     @cost_units = CostUnit.includes(:translations).list
+  end
+
+  def preload_disciplines
+    return unless entry.respond_to?(:disciplines)
+
+    @main_disciplines = Event::Discipline.main.list.includes(:translations, children: :translations)
   end
 end
