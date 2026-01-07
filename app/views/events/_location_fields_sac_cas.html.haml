@@ -9,3 +9,13 @@
   = f.labeled_i18n_enum_field(:accommodation, Event::Course.accommodation_labels)
 - entry.used?(:meals) do
   = f.labeled_i18n_enum_field(:meals, Event::Course.meals_labels)
+- if entry.respond_to?(:disciplines)
+  = f.labeled(:disciplines) do
+    = f.select(:discipline_ids, [], {},
+      multiple: true,
+      data: { controller: 'tom-select',
+      tom_select_options_value: disciplines_select_options(@main_disciplines),
+      tom_select_selected_value: entry.discipline_ids.to_json,
+      tom_select_optgroups_value: disciplines_select_optgroups(@main_disciplines),
+      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+

@@ -282,6 +282,7 @@ de:
         maximum_age: Maximalalter
         ideal_class_size: Ideale Klassengrösse
         maximum_class_size: Maximale Klassengrösse
+        disciplines: Disziplin(en)
       event/kind:
         accommodation: Unterkunft
         accommodations:
