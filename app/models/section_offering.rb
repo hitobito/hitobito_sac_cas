@@ -15,13 +15,16 @@
 #  updated_at :datetime         not null
 
 class SectionOffering < ApplicationRecord
+  include Globalized
+
   has_and_belongs_to_many :sections,
     class_name: Group::Sektion.sti_name,
     association_foreign_key: :group_id
 
-  translates :title, fallbacks_for_empty_translations: true
+  translates :title
 
   validates :title, presence: true
+
   before_destroy :check_associated_sections
 
   default_scope { includes(:translations) }

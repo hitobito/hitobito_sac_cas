@@ -15,11 +15,14 @@
 #  updated_at :datetime         not null
 #
 class TerminationReason < ApplicationRecord
+  include Globalized
+
   validates_by_schema
 
   has_many :roles
 
-  translates :text, fallbacks_for_empty_translations: true
+  translates :text
+
   validates :text, presence: true
 
   def to_s
