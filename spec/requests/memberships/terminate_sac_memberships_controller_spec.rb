@@ -44,12 +44,17 @@ describe Memberships::TerminateSacMembershipsController do
     def expect_form(dates: %w[now end_of_year]) # rubocop:disable Metrics/AbcSize
       expect(page).to have_css "h1", text: "SAC-Mitgliedschaft beenden"
       expect(page).to have_css "label.required", text: "Austrittsgrund"
-      if dates.any?
+      if dates.many?
         expect(page).to have_css "label.required", text: "Austrittsdatum"
         expect(page).to have_field "Sofort" if dates.include?("now")
         expect(page).to have_field "Auf 31.12.#{Date.current.year}" if dates.include?("end_of_year")
       else
         expect(page).not_to have_css "label", text: "Austrittsdatum"
+
+        id = "memberships_terminate_sac_membership_form_terminate_on"
+        field = page.find("input[type=hidden]", visible: false, id:)
+        expect(field[:name]).to eq "memberships_terminate_sac_membership_form[terminate_on]"
+        expect(field[:value]).to eq "now"
       end
       expect(page).to have_button "Austritt beantragen", disabled: true
     end
@@ -69,11 +74,11 @@ describe Memberships::TerminateSacMembershipsController do
       end
 
       context "with open invoice in current year" do
-        it "renders form but without terminate_on options in january" do
+        it "renders form but with single hidden terminate_on field in january" do
           travel_to(Time.zone.local(2025, 1, 31)) do
             create_invoice(state: :open, year: 2025)
             request
-            expect_form(dates: [])
+            expect_form(dates: %w[now])
           end
         end
 
