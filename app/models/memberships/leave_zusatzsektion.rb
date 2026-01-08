@@ -35,6 +35,10 @@ module Memberships
       raise "not main family person" if bad_family?
     end
 
+    def affected_people
+      role.family? ? person.household.people : [person]
+    end
+
     private
 
     def roles
