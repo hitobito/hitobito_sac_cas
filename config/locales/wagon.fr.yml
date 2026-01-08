@@ -817,7 +817,7 @@ fr:
       group/sektions_funktionaere:
         one: Fonctionnaires de section
         many: Fonctionnaires de section
-        other: Fonctionnaires de section
+        other: Responsabilités au sein de la section
       group/sektions_kommissionen:
         one: Commissions
         many: Commissions
