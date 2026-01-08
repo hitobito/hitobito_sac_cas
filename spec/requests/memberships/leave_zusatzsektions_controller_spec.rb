@@ -165,6 +165,13 @@ describe Memberships::LeaveZusatzsektionsController do
           expect_alert "Bitte wende dich an #{people(:familienmitglied)}"
           expect(page).not_to have_css "form"
         end
+
+        it "supports leaving of non family role" do
+          Role.where(id: role.id).update_all(beitragskategorie: :adult)
+          request
+          expect(page).not_to have_text("Bitte wende dich an #{people(:familienmitglied)}")
+          expect(page).to have_css "form"
+        end
       end
 
       context "as a different user" do

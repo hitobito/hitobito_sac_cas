@@ -9,7 +9,7 @@
 
 = f.error_messages
 
-- if person.sac_membership.family?
+- if family_leaving?
   .alert.alert-warning
     %p= t('wizards.steps.termination.summary.family_warning', family_member_names: household.members.map { |m| m.person.full_name }.to_sentence)
 
