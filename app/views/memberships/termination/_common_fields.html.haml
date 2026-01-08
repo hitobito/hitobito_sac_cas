@@ -20,6 +20,8 @@
   = f.labeled(:terminate_on, nil, nil, mark_as_required: true) do
     - f.object.terminate_on_options.each do |key, label|
       = f.inline_radio_button :terminate_on, key, label
+- else
+  = f.hidden_field :terminate_on, value: :now
 
 = f.labeled(:termination_reason_id) do
   = f.select :termination_reason_id, f.object.termination_reason_options, {prompt: true}, class: "form-select form-select-sm"
