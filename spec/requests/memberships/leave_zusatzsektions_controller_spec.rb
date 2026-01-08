@@ -378,6 +378,34 @@ describe Memberships::LeaveZusatzsektionsController do
         expect(flash[:notice]).to eq "Eure 3 Zusatzmitgliedschaften in <i>SAC " \
                                      "Matterhorn</i> wurden gelöscht."
       end
+
+      context "with a family regular person" do
+        let(:person) { people(:familienmitglied2) }
+
+        it "noops and shows info about the main family person" do
+          expect do
+            request
+            role.reload
+          end.to not_change(Role.with_inactive, :count)
+            .and not_change { role.terminated }
+          expect_alert "Bitte wende dich an #{people(:familienmitglied)}"
+        end
+
+        it "supports leaving of for non family role" do
+          Role.where(id: role.id).update_all(beitragskategorie: :adult)
+          main_person_role = roles(:familienmitglied_zweitsektion)
+          expect do
+            request
+            role.reload
+          end
+            .to not_change(Role.with_inactive, :count)
+            .and change { role.terminated }.to(true)
+            .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+            .and not_change { main_person_role.reload.terminated }
+          expect(flash[:notice]).to eq "Deine Zusatzmitgliedschaft in <i>SAC " \
+                                       "Matterhorn</i> wurde gelöscht."
+        end
+      end
     end
   end
 end
