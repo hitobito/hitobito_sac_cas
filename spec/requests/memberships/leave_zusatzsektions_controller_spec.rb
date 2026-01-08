@@ -82,6 +82,18 @@ describe Memberships::LeaveZusatzsektionsController do
             expect(page).not_to have_css "form"
           end
         end
+
+        context "as an admin" do
+          let(:operator) { people(:admin) }
+
+          it "renders form with terminate_on options in january" do
+            travel_to(Time.zone.local(2025, 2, 1)) do
+              create_invoice(state: :open, year: 2025)
+              request
+              expect_form
+            end
+          end
+        end
       end
 
       context "with open invoice in previous year" do

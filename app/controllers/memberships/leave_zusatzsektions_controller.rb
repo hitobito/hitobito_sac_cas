@@ -29,7 +29,7 @@ module Memberships
     end
 
     def render_abort_views
-      return render :open_invoice_exists if open_invoice?
+      return render :open_invoice_exists if !for_someone_else? && open_invoice?
       super
     end
   end
