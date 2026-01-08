@@ -14,7 +14,8 @@ module Memberships
     helper_method :household, :sac_membership, :form_object
 
     helper_method :group, :person, :for_someone_else?,
-      :mitglied_termination_by_section_only?, :choose_date?, :form_object
+      :mitglied_termination_by_section_only?, :choose_date?, :form_object,
+      :family_leaving?
 
     def create
       form_object.attributes = model_params
@@ -68,7 +69,7 @@ module Memberships
     def render_abort_views # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
       if sac_membership.stammsektion_role.terminated?
         render :terminated_already
-      elsif sac_membership.family? && !(household.main_person == person)
+      elsif family_leaving? && !(household.main_person == person)
         render :ask_family_main_person
       elsif !for_someone_else?
         if mitglied_termination_by_section_only?
@@ -106,6 +107,10 @@ module Memberships
       else
         group_people_path(group, format: :html)
       end
+    end
+
+    def family_leaving?
+      role.try(:family?)
     end
 
     def person
