@@ -1,0 +1,51 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_target_groups
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  parent_id         :bigint
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+kinder:
+  order: 1
+
+jugend:
+  order: 2
+
+jung_erwachsene:
+  order: 3
+
+erwachsene:
+  order: 4
+
+senioren:
+  order: 5
+
+familien:
+  order: 6
+
+senioren_a:
+  parent: senioren
+  order: 1
+
+senioren_b:
+  parent: senioren
+  order: 2
+
+senioren_c:
+  parent: senioren
+  order: 3
