@@ -15,4 +15,11 @@ class Event::LevelsController < SimpleCrudController
   def self.model_class
     Event::Level
   end
+
+  private
+
+  def assign_attributes
+    super
+    entry.deleted_at = nil # restore on edit
+  end
 end
