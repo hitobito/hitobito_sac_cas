@@ -1,0 +1,93 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_target_groups
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  parent_id         :bigint
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+kinder:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:kinder) %>
+  locale: de
+  label: Kinder (KiBe)
+  description: Kinderprogramm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+jugend:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:jugend) %>
+  locale: de
+  label: Jugend (JO)
+  description: Jugendprogramm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+jung_erwachsene:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:jung_erwachsene) %>
+  locale: de
+  label: Jung-Erwachsene
+  description: Jung-Erwachsenenprogramm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+erwachsene:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:erwachsene) %>
+  locale: de
+  label: Erwachsene
+  description: Erwachsenenprogramm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+senioren:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:senioren) %>
+  locale: de
+  label: Senioren
+  description: Seniorenprogramm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+senioren_a:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:senioren_a) %>
+  locale: de
+  label: Senioren A
+  description: Senioren A-Programm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+senioren_b:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:senioren_b) %>
+  locale: de
+  label: Senioren B
+  description: Senioren B-Programm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+senioren_c:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:senioren_c) %>
+  locale: de
+  label: Senioren C
+  description: Senioren C-Programm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+familien:
+  event_target_group_id: <%= ActiveRecord::FixtureSet.identify(:familien) %>
+  locale: de
+  label: Familien (FaBe)
+  description: Familienprogramm
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

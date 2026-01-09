@@ -48,6 +48,11 @@ class Event::Tour < Event
     class_name: "Event::Discipline",
     foreign_key: :event_id
 
+  has_and_belongs_to_many :target_groups,
+    join_table: :events_target_groups,
+    class_name: "Event::TargetGroup",
+    foreign_key: :event_id
+
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states

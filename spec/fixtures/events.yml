@@ -52,3 +52,6 @@ section_tour:
   external_applications: true
   disciplines:
     - wanderweg
+  target_groups:
+    - kinder
+    - familien
