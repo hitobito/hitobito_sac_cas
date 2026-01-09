@@ -25,4 +25,20 @@ module SacCas::EventsHelper
       I18n.t("activerecord.attributes.event/course.#{attr}")
     end
   end
+
+  def format_event_disciplines(event)
+    simple_list(disciplines_with_children(event)) do |main, children|
+      child_list = safe_join(children, ", ") { |c| with_tooltip(c.label, c.description) }
+      safe_join([with_tooltip(main.label, main.description), " (", child_list, ")"])
+    end
+  end
+
+  private
+
+  def disciplines_with_children(event)
+    entries = event.disciplines.with_deleted.list.includes(:parent).group_by(&:parent)
+    entries.keys.sort_by(&:order).map do |parent|
+      [parent, entries[parent]]
+    end
+  end
 end

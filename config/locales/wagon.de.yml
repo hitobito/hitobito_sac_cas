@@ -1508,10 +1508,6 @@ de:
 
     maximum_age_with_years: "%{maximum_age} Jahre (Jahrgang)"
 
-    roles:
-      self_employed: selbständig erwerbend
-      not_self_employed: unselbständig erwerbend
-
     popover_emails_optional:
       prompt_email_choice: Sollen E-Mails verschickt werden?
       submit_with_emails: E-Mails verschicken
@@ -1528,6 +1524,12 @@ de:
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
 
+    roles:
+      self_employed: selbständig erwerbend
+      not_self_employed: unselbständig erwerbend
+
+    sections:
+      essentials: Wesentliche Fakten
   external_trainings:
     form:
       help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
