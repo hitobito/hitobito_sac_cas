@@ -283,6 +283,7 @@ de:
         ideal_class_size: Ideale Klassengrösse
         maximum_class_size: Maximale Klassengrösse
         disciplines: Disziplin(en)
+        target_groups: Zielgruppe(n)
       event/kind:
         accommodation: Unterkunft
         accommodations:
@@ -421,6 +422,15 @@ de:
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
       event/role:
         self_employed: Selbständig erwerbend
+      event/target_group:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Gruppe
+        children: Untergruppen
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/tour:
         state_translated: Status
         states:
@@ -702,6 +712,9 @@ de:
       event/course/role/assistant_leader_aspirant:
         one: Klassenleitung (Aspirant)
         other: Klassenleitung (Aspirant)
+      event/target_group:
+        one: Zielgruppe
+        other: Zielgruppen
       event/tour:
         one: Tour
         other: Touren
