@@ -52,8 +52,7 @@ describe "signup/sektion", :js do
     click_button "Weiter", match: :first
   end
 
-  # rubocop:todo Metrics/MethodLength
-  def complete_main_person_form # rubocop:todo Metrics/AbcSize # rubocop:todo Metrics/MethodLength
+  def complete_main_person_form # rubocop:todo Metrics/AbcSize, Metrics/MethodLength
     assert_step "E-Mail"
     assert_aside
     fill_in "E-Mail", with: "max.muster@hitobito.example.com"
@@ -75,7 +74,6 @@ describe "signup/sektion", :js do
     yield if block_given?
     click_button "Weiter"
   end
-  # rubocop:enable Metrics/MethodLength
 
   def complete_household_form
     assert_step "Familienmitglieder"
@@ -127,6 +125,7 @@ describe "signup/sektion", :js do
 
     it "redirects to login page" do
       person.update!(password: password, password_confirmation: password)
+      group.update!(custom_self_registration_title: "Registrierung zu SAC Blüemlisalp")
 
       visit group_self_registration_path(group_id: group)
       fill_in "Mail", with: person.email
@@ -137,13 +136,8 @@ describe "signup/sektion", :js do
       expect(page).to have_field "Haupt‑E‑Mail / Mitglied‑Nr", with: person.email
       fill_in "Passwort", with: password
       click_button "Anmelden"
-      # In https://github.com/hitobito/hitobito_sac_cas/pull/860 we removed the
-      # customized SAC self-inscription. There was some logic in
-      # app/models/self_inscription.rb to find the correct group to get the
-      # title from.
-      pending("The title currently doesn't get set correctly")
       expect(page).to have_css "h1", text: "Registrierung zu SAC Blüemlisalp"
-      expect(page).to have_button "Beitreten"
+      expect(page).to have_button "Weiter"
     end
   end
 
@@ -160,9 +154,8 @@ describe "signup/sektion", :js do
       end.to change { Person.count }.by(1)
         .and change { Role.count }.by(1)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
-      # rubocop:todo Layout/LineLength
-      expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-      # rubocop:enable Layout/LineLength
+      expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze " \
+        "eine E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
 
       expect(person).to be_present
       expect(person.first_name).to eq "Max"

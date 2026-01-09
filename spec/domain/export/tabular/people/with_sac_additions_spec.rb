@@ -15,12 +15,12 @@ describe Export::Tabular::People::WithSacAdditions do
     Person.with_membership_years.find(person.id)
   end
 
-  shared_examples "has sac additions" do
+  shared_examples "has sac additions" do |subclass: false|
     it "prepends WithSacAdditions" do
+      offset = subclass ? 2 : 0
       expect(tabular_class.ancestors).to include Export::Tabular::People::WithSacAdditions
-
       expect(tabular_class.ancestors.index(Export::Tabular::People::WithSacAdditions))
-        .to be < tabular_class.ancestors.index(tabular_class)
+        .to be < tabular_class.ancestors.index(tabular_class) + offset
     end
 
     subject { tabular_class.new(tabular_entry) }
@@ -93,9 +93,7 @@ describe Export::Tabular::People::WithSacAdditions do
         Event::Participation.where(id: participation.id)
       end
 
-      skip "cannot load membership_years scope with participations"
-
-      # it_behaves_like "has sac additions"
+      it_behaves_like "has sac additions", subclass: true
     end
   end
 end
