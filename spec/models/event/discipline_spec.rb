@@ -34,7 +34,7 @@ describe Event::Discipline do
     it "prevent children as parents" do
       entry = Fabricate.build(:event_discipline, parent: child_discipline)
       expect(entry).not_to be_valid
-      expect(entry.errors.details[:parent_id]).to eq [error: :parent_is_child]
+      expect(entry.errors.details[:parent_id]).to eq [error: :parent_is_not_main]
     end
   end
 
@@ -50,12 +50,21 @@ describe Event::Discipline do
         .to change { described_class.unscoped.count }.by(0)
         .and change { Event::Discipline::Translation.count }.by(0)
       expect(child_discipline.deleted_at).to be_present
+      expect(child_discipline.translations).to be_present
     end
 
-    it "soft deletes if children exist" do
+    it "prevents delete if children exist" do
       expect { main_discipline.destroy }.not_to change { described_class.unscoped.count }
-      expect(main_discipline.deleted_at).to be_present
-      expect(child_discipline.deleted_at).to be_present
+      expect(main_discipline.errors.details[:base]).to eq [error: :has_children]
+      expect(main_discipline.deleted_at).to be_nil
+    end
+
+    it "soft deletes if children are all deleted" do
+      event_disciplines(:skihochtour).update!(deleted_at: Time.zone.now)
+      event_disciplines(:snowboardhochtour).update!(deleted_at: Time.zone.now)
+      expect { event_disciplines(:hochtour).destroy }
+        .not_to change { described_class.unscoped.count }
+      expect(event_disciplines(:hochtour).deleted_at).to be_present
     end
   end
 end

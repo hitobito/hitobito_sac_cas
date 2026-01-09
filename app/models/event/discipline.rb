@@ -37,9 +37,9 @@ class Event::Discipline < ActiveRecord::Base
 
   validates_by_schema
   validates :label, :description, presence: true
-  validate :assert_parent_is_not_child
+  validate :assert_parent_is_main
 
-  scope :list, -> { order(:order) }
+  scope :list, -> { includes(:translations).order(:order) }
   scope :main, -> { where(parent_id: nil) }
 
   def to_s
@@ -48,9 +48,11 @@ class Event::Discipline < ActiveRecord::Base
 
   # Soft destroy if events exist, otherwise hard destroy
   def destroy
-    if events.exists? || children.with_deleted.exists?
+    if children.without_deleted.exists?
+      errors.add(:base, :has_children)
+      false
+    elsif events.exists? || children.with_deleted.exists?
       delete
-      children.each(&:delete)
     else
       really_destroy!
     end
@@ -58,7 +60,7 @@ class Event::Discipline < ActiveRecord::Base
 
   private
 
-  def assert_parent_is_not_child
-    errors.add(:parent_id, :parent_is_child) if parent&.parent_id
+  def assert_parent_is_main
+    errors.add(:parent_id, :parent_is_not_main) if parent&.parent_id
   end
 end

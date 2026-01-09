@@ -7,8 +7,10 @@
 
 module CostCommon
   extend ActiveSupport::Concern
+
+  include Paranoia::Globalized
+
   included do
-    include Globalized
     include CapitalizedDependentErrors
 
     translates :label
@@ -16,10 +18,7 @@ module CostCommon
     validates :label, presence: true
     validates :code, uniqueness: true
 
-    default_scope { where(deleted_at: nil) }
-
     scope :list, -> { includes(:translations).order(:code) }
-    scope :with_deleted, -> { unscope(where: :deleted_at) }
 
     has_many :event_kind_categories, class_name: "Event::KindCategory",
       dependent: :restrict_with_error
@@ -35,18 +34,16 @@ module CostCommon
   end
 
   def destroy
-    return super if dependent_assocations_exist?
-
-    soft_destroy
+    if dependent_associations_exist?
+      delete
+    else
+      really_destroy!
+    end
   end
 
   private
 
-  def dependent_assocations_exist?
+  def dependent_associations_exist?
     [event_kind_categories, event_kinds].any?(&:exists?)
-  end
-
-  def soft_destroy
-    update(deleted_at: Time.zone.now)
   end
 end

@@ -126,21 +126,23 @@ module HitobitoSacCas
       AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full
 
-      Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
+      Ability.store.register CourseCompensationCategoryAbility
+      Ability.store.register CourseCompensationRateAbility
+      Ability.store.register Event::DisciplineAbility
+      Ability.store.register Event::LevelAbility
       Ability.store.register ExternalInvoiceAbility
       Ability.store.register ExternalTrainingAbility
-      Ability.store.register SacMembershipConfigAbility
-      Ability.store.register SacSectionMembershipConfigAbility
-      Ability.store.register CourseCompensationRateAbility
-      Ability.store.register CourseCompensationCategoryAbility
-      Ability.store.register TerminationReasonAbility
-      Ability.store.register SectionOfferingAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
       Ability.store.register Memberships::UndoTerminationAbility
       Ability.store.register Memberships::ChangeZusatzsektionToFamilyAbility
+      Ability.store.register SacMembershipConfigAbility
+      Ability.store.register SacSectionMembershipConfigAbility
+      Ability.store.register SectionOfferingAbility
+      Ability.store.register TerminationReasonAbility
+
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       EventAbility.prepend SacCas::EventAbility
@@ -222,6 +224,7 @@ module HitobitoSacCas
       admin_item[:active_for] += %w[
         cost_centers
         cost_units
+        event_disciplines
         event_levels
         termination_reasons
         section_offerings

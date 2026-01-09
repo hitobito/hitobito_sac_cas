@@ -7,4 +7,15 @@
 
 class CostCentersController < SimpleCrudController
   self.permitted_attrs = [:code, :label]
+
+  self.sort_mappings = {
+    label: "cost_center_translations.label"
+  }
+
+  private
+
+  def assign_attributes
+    super
+    entry.deleted_at = nil # restore on edit
+  end
 end

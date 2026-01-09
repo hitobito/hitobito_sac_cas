@@ -18,7 +18,7 @@ describe Event::LevelsController do
 
     render_views
 
-    it "GET#index lists cost_center and cost_unit" do
+    it "GET#index lists entries" do
       get :index
       expect(response).to be_ok
       expect(dom).to have_css "th", text: "Bezeichnung"

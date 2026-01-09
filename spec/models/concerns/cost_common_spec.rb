@@ -61,29 +61,18 @@ describe CostCommon do
   end
 
   shared_examples "soft destroy" do |dependent_model_fabricator:|
-    let(:other) { (described_class == CostCenter) ? CostUnit : CostCenter }
-    let!(:other_model) { Fabricate(other.model_name.singular) }
     let!(:model) { Fabricate(fabricator) }
 
-    let!(:dependent_model) do
-      Fabricate(dependent_model_fabricator, {
-        "#{described_class.model_name.singular}_id" => model.id,
-        "#{other.model_name.singular}_id" => other_model.id
-      })
-    end
-
     it "is prevented if associated #{dependent_model_fabricator} exists" do
-      expect { model.destroy }.not_to change { described_class.count }
-      expect { other_model.destroy }.not_to change { other.count }
-      expect(model.errors.full_messages[0]).to eq "Datensatz kann nicht gelöscht werden, " \
-        "da abhängige #{dependent_model.model_name.human(count: 2)} existieren."
+      Fabricate(dependent_model_fabricator, {
+        "#{described_class.model_name.singular}_id" => model.id
+      })
+      expect { model.destroy }.not_to change { described_class.with_deleted.count }
+      expect(model.deleted_at).to be_present
     end
 
     it "succeeds if no associated #{dependent_model_fabricator} exists" do
-      dependent_model.destroy!
-      expect { model.destroy }.to change { described_class.count }.by(-1)
-      expect { other_model.destroy }.to change { other.count }.by(-1)
-      expect(model.translations).to be_present
+      expect { model.destroy }.to change { described_class.with_deleted.count }.by(-1)
     end
   end
 
