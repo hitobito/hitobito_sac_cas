@@ -373,6 +373,12 @@ de:
         j_s_price_regular: J&S P-Normalpreis
         j_s_price_subsidized: J&S A-Mitgliederpreis
         j_s_price_special: J&S A-Normalpreis
+      event/discipline:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Disziplin
       event/kind_category:
         cost_center_id: Kostenstelle
         cost_unit_id: Kostenträger
@@ -622,6 +628,7 @@ de:
         must_have_mitglied_role: "muss Mitglied sein während der ganzen Gültigkeitsdauer der Zusatzsektion."
         must_have_mitglied_role_in_group: "muss Mitglied in der ausgewählten Gruppe sein."
         must_have_one_family_main_person_in_family: "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein."
+        parent_is_not_main: muss ein Haupteintrag sein.
 
       models:
         course_compensation_rate:
@@ -667,6 +674,9 @@ de:
       course_compensation_rate:
         one: Vergütungsansatz
         other: Vergütungsansätze
+      event/discipline:
+        one: Disziplin
+        other: Disziplinen
       event/level:
         one: Kursstufe
         other: Kursstufen

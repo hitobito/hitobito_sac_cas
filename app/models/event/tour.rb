@@ -28,9 +28,9 @@ class Event::Tour < Event
     draft: [:approved, :canceled],
     approved: [:draft, :published, :canceled],
     published: [:approved, :canceled, :closed],
-    # rubocop:todo Layout/LineLength
-    canceled: [:draft, :approved, :published], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
-    # rubocop:enable Layout/LineLength
+    # BEWARE: canceled means "annulliert" here and matches `annulled` on participation,
+    # where `canceled` means "abgemeldet"
+    canceled: [:draft, :approved, :published],
     closed: [:published]
   }.freeze
 
@@ -42,6 +42,11 @@ class Event::Tour < Event
 
   # Used for Event::TourResource
   attr_accessor :leaders
+
+  has_and_belongs_to_many :disciplines,
+    join_table: :events_disciplines,
+    class_name: "Event::Discipline",
+    foreign_key: :event_id
 
   ### VALIDATIONS
 
