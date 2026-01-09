@@ -36,6 +36,7 @@ class SacEventSeeder < EventSeeder
     seed_questions(event)
     seed_leaders(event)
     seed_participants(event)
+    seed_essentials(event)
 
     event
   end
@@ -88,7 +89,20 @@ class SacEventSeeder < EventSeeder
     end
   end
 
+  def seed_essentials(event)
+    event.disciplines = disciplines.sample(rand(1..3))
+    event.target_groups = target_groups.sample(rand(1..2))
+  end
+
   def current_year
     @current_year ||= Time.zone.today.year
+  end
+
+  def disciplines
+    @disciplines ||= Event::Discipline.where.not(parent_id: nil).to_a
+  end
+
+  def target_groups
+    @target_groups ||= Event::TargetGroup.all.to_a
   end
 end
