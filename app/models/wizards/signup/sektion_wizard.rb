@@ -150,7 +150,7 @@ module Wizards::Signup
         :birthday) || current_user&.birthday
       if birthday
         years = ::Person.new(birthday: birthday).years
-        years && years <= MIN_ADULT_YEARS
+        years && years < MIN_ADULT_YEARS
       end
     end
   end
