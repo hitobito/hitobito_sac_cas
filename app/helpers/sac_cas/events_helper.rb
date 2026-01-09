@@ -18,6 +18,31 @@ module SacCas::EventsHelper
     end
   end
 
+  def disciplines_select_options(main_disciplines)
+    main_disciplines.flat_map do |main|
+      main.children.sort_by(&:order).map do |child|
+        {id: child.id, label: child.to_s, description: child.short_description, group: main.id}
+      end
+    end.to_json
+  end
+
+  def disciplines_select_optgroups(main_disciplines)
+    main_disciplines.flat_map do |main|
+      {value: main.id, label: main.to_s}
+    end.to_json
+  end
+
+  def target_groups_select_options(main_groups)
+    main_groups.flat_map do |main|
+      [{id: main.id, label: main.to_s, description: main.short_description}] +
+        main.children.sort_by(&:order).map do |child|
+          {id: child.id,
+           label: "    #{child}",
+           description: child.short_description.present? ? "     #{child.short_description}" : nil}
+        end
+    end.to_json
+  end
+
   def price_category_label(entry, attr)
     if entry&.kind&.kind_category&.j_s_course
       I18n.t("activerecord.attributes.event/course.j_s_#{attr}")

@@ -95,3 +95,7 @@
   /* Firefox adds a lower opacity to the placeholder, so we use opacity: 1 to fix this */
   opacity: 1;
 }
+
+.ts-dropdown .option {
+  white-space-collapse: preserve;
+}
