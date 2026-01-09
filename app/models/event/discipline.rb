@@ -1,0 +1,64 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_disciplines
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  parent_id         :bigint
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+class Event::Discipline < ActiveRecord::Base
+  include Paranoia::Globalized
+
+  translates :label, :description, :short_description
+
+  attr_readonly :parent_id
+
+  belongs_to :parent, optional: true, class_name: "Event::Discipline"
+  has_many :children,
+    class_name: "Event::Discipline",
+    foreign_key: :parent_id,
+    inverse_of: :parent,
+    dependent: :restrict_with_error
+  has_and_belongs_to_many :events, join_table: "events_disciplines"
+
+  validates_by_schema
+  validates :label, :description, presence: true
+  validate :assert_parent_is_not_child
+
+  scope :list, -> { order(:order) }
+  scope :main, -> { where(parent_id: nil) }
+
+  def to_s
+    label
+  end
+
+  # Soft destroy if events exist, otherwise hard destroy
+  def destroy
+    if events.exists? || children.with_deleted.exists?
+      delete
+      children.each(&:delete)
+    else
+      really_destroy!
+    end
+  end
+
+  private
+
+  def assert_parent_is_not_child
+    errors.add(:parent_id, :parent_is_child) if parent&.parent_id
+  end
+end

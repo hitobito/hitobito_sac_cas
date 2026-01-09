@@ -24,10 +24,21 @@ class Event::Level < ActiveRecord::Base
 
   translates :label, :description
 
+  has_many :kinds, class_name: "Event::Kind", dependent: :restrict_with_error
+
   validates_by_schema
   validates :label, presence: true
 
   def to_s
     label
+  end
+
+  # Soft destroy if kinds exist, otherwise hard destroy
+  def destroy
+    if kinds.with_deleted.exists?
+      delete
+    else
+      really_destroy!
+    end
   end
 end
