@@ -297,23 +297,25 @@ describe Wizards::Signup::SektionWizard do
       end
 
       describe "family fields" do
-        it "shows fields if person is old enough" do
-          person.birthday = 30.years.ago.to_date
-          expect(wizard.step_at(1)).to be_instance_of(
-            Wizards::Steps::Signup::Sektion::FamilyFields
-          )
-        end
+        before { travel_to(Time.zone.local(2026, 1, 9, 14)) }
 
-        it "skips fields if person is too young" do
-          person.birthday = 20.years.ago.to_date
+        it "hides fields if person is not yet 23" do
+          person.birthday = Date.new(2005, 1, 10)
           expect(wizard.step_at(1)).to be_instance_of(
             Wizards::Steps::Signup::Sektion::VariousFields
           )
         end
 
-        it "shows fields if person is too young but birthday has been corrected to old enough" do
+        it "shows fields if person is 23" do
+          person.birthday = Date.new(2003, 1, 1)
+          expect(wizard.step_at(1)).to be_instance_of(
+            Wizards::Steps::Signup::Sektion::FamilyFields
+          )
+        end
+
+        it "shows fields if persisted person is too young but birthday changed to old enough" do
           person.birthday = 20.years.ago.to_date
-          required_attrs[:person_fields][:birthday] = 30.years.ago.to_date
+          required_attrs[:person_fields][:birthday] = Date.new(2003, 1, 3)
           expect(wizard.step_at(1)).to be_instance_of(
             Wizards::Steps::Signup::Sektion::FamilyFields
           )
