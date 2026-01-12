@@ -19,7 +19,7 @@
 - else
   .alert.alert-info= t(".alert_info")
 
-  = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
+  = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post, data: { controller: 'form-field-toggle' }) do |f|
     = f.error_messages
     = f.labeled(:reference_date) do
       = f.date_field(:reference_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
@@ -29,25 +29,46 @@
       = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_send_date)
 
     = f.labeled(:section_id) do
-      = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true
+      = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true, data: { action: "form-field-toggle#untoggle" }
 
       .nested-radio-group
-        = f.labeled(:new_entry, class: "ms-3") do
+        = f.labeled(:new_entry, nil, nil, label_class: "col-md-5 col-xl-4", class: "col-md-7 col-lg-8 col-xl-6 mw-63ch") do
           = f.inline_radio_button :new_entry, true, t("global.yes"), true
           = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
 
       - @invoice_form.zusatzsektionen.each do |section|
         %div
-          = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false
+          = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false, data: { action: "form-field-toggle#untoggle" }
+
+      = f.inline_radio_button :section_id, 0, t(".manual_positions"), false, checked: false, data: { action: "form-field-toggle#toggle" }
 
     = f.labeled(:dont_send) do
       = f.inline_radio_button :dont_send, false, t("global.yes"), true, checked: true
       = f.inline_radio_button :dont_send, true, t("global.no"), true
 
-    = f.labeled(:discount) do
-      = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
-      = f.inline_radio_button :discount, 50, "50%", true
-      = f.inline_radio_button :discount, 100, "100%", true
+    %div{data: { 'form-field-toggle-target': "toggleOpposite" }}
+      = f.labeled(:discount) do
+        = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
+        = f.inline_radio_button :discount, 50, "50%", true
+        = f.inline_radio_button :discount, 100, "100%", true
+
+    .hidden{data: { 'form-field-toggle-target': "toggle" }}
+      = field_set_tag t('.manual_positions_subtitle') do
+        = f.labeled_input_field(:sac_fee, addon: t('global.currency'), type: 'number', step: 0.01)
+        = f.labeled_input_field(:sac_entry_fee, addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
+        = f.labeled_input_fields(:hut_solidarity_fee, :sac_magazine, addon: t('global.currency'), type: 'number', step: 0.01)
+        - if Invoices::SacMemberships::Positions::SacMagazinePostageAbroad.new(member, member.active_memberships).active?
+          = f.labeled_input_field(:sac_magazine_postage_abroad, addon: t('global.currency'), type: 'number', step: 0.01)
+        = f.labeled(:section_fee) do
+          = f.fields_for :section_fees, f.object.section_fees do |section_fee_fields|
+            = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
+            = section_fee_fields.labeled_input_field(:fee, label: section_fee_fields.object.section.to_s, label_class: "col-3 col-xl-4", addon: t('global.currency'), type: 'number', step: 0.01)
+        = f.labeled_input_field(:section_entry_fee, addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
+        - if Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(member, member.active_memberships).active?
+          = f.labeled(:section_bulletin_postage_abroad) do
+            = f.fields_for :section_bulletin_postage_abroad, f.object.section_bulletin_postage_abroad do |section_fee_fields|
+              = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
+              = section_fee_fields.labeled_input_field(:fee, label: section_fee_fields.object.section.to_s, addon: t('global.currency'), type: 'number', step: 0.01)
 
     = f.indented do
       = submit_button(f, t(".create_invoice"))

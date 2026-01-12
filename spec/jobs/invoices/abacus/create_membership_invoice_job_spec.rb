@@ -31,6 +31,7 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
   let(:new_entry) { false }
   let(:dont_send) { false }
   let(:dispatch_type) { nil }
+  let(:manual_positions) { {} }
 
   subject(:job) do
     described_class.new(
@@ -39,7 +40,8 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
       discount: discount,
       new_entry: new_entry,
       dont_send: dont_send,
-      dispatch_type: dispatch_type
+      dispatch_type: dispatch_type,
+      manual_positions: manual_positions
     )
   end
 
@@ -69,6 +71,37 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
       allow_any_instance_of(Invoices::Abacus::SalesOrderInterface)
         .to receive(:create).with(order)
       job.perform
+    end
+  end
+
+  context "with manual_positions" do
+    let(:manual_positions) do
+      {
+        sac_fee: 100,
+        sac_entry_fee: 20,
+        hut_solidarity_fee: 30,
+        sac_magazine: 25,
+        sac_magazine_postage_abroad: 35,
+        section_entry_fee: 50
+      }
+    end
+
+    it "uses ManualPositionGenerator, transmits subject, updates invoice total and transmit_sales_order" do
+      order = satisfy do |o|
+        o.full_attrs[:process_flow_number] == 3 &&
+          o.full_attrs[:user_fields][:user_field3] == "Mail"
+      end
+
+      expect(Invoices::SacMemberships::ManualPositionGenerator)
+        .to receive(:new).with(anything, manual_positions)
+        .and_call_original
+      allow_any_instance_of(Invoices::Abacus::SubjectInterface)
+        .to receive(:transmit).and_return(true)
+      allow_any_instance_of(Invoices::Abacus::SalesOrderInterface)
+        .to receive(:create).with(order)
+      expect do
+        job.perform
+      end.to change { external_invoice.reload.total }
     end
   end
 
