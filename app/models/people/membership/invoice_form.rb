@@ -19,7 +19,17 @@ class People::Membership::InvoiceForm
   attribute :new_entry, :boolean
   attribute :section_id, :integer
 
-  validates :section_id, :reference_date, :invoice_date, :send_date, :discount, presence: true
+  attribute :sac_fee, :integer
+  attribute :sac_entry_fee, :integer
+  attribute :hut_solidarity_fee, :integer
+  attribute :magazine_fee, :integer
+  attribute :magazine_postage_abroad, :integer
+  attribute :section_entry_fee, :integer
+  attribute :section_fees, array: true # array of People::Membership::InvoiceSectionFeeForm
+  attribute :section_bulletin_postage_abroad, array: true # array of People::Membership::InvoiceSectionFeeForm
+
+  validates :section_id, :reference_date, :invoice_date, :send_date, presence: true
+  validates :discount, presence: true, unless: :manual_positions
 
   validates_date :reference_date, :invoice_date, between: [:min_date, :max_date], allow_blank: true
   validates_date :send_date, between: [:min_date, :max_send_date], allow_blank: true
@@ -49,6 +59,39 @@ class People::Membership::InvoiceForm
   def max_date = @max_date ||= today.next_year.end_of_year
 
   def max_send_date = already_member_next_year? ? today.next_year.end_of_year : today.end_of_year
+
+  def manual_positions
+    [
+      :sac_fee,
+      :sac_entry_fee,
+      :hut_solidarity_fee,
+      :magazine_fee,
+      :magazine_postage_abroad,
+      :section_entry_fee
+    ].index_with { send(_1) }.tap do |positions|
+      positions[:section_fees] = section_fees_hash
+      positions[:section_bulletin_postage_abroad] = section_bulletin_postage_abroad_hash
+    end
+  end
+
+  def section_fees_hash = section_fees&.map(&:attributes)
+
+  def section_bulletin_postage_abroad_hash = section_bulletin_postage_abroad&.map(&:attributes)
+
+  def section_fees_attributes=(attributes)
+    self.section_fees = attributes.values.map { |attrs| People::Membership::InvoiceSectionFeeForm.new(Group.find(attrs[:section_id]), attrs) }
+  end
+
+  def section_bulletin_postage_abroad_attributes=(attributes)
+    self.section_bulletin_postage_abroad_attributes = attributes.values.map { |attrs| People::Membership::InvoiceSectionFeeForm.new(Group.find(attrs[:section_id]), attrs) }
+  end
+
+  def sac_fee_type = :number
+  def sac_entry_fee_type = :number
+  def hut_solidarity_fee_type = :number
+  def magazine_fee_type = :number
+  def magazine_postage_abroad_type = :number
+  def section_entry_fee_type = :number
 
   private
 

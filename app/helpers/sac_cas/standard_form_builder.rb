@@ -31,6 +31,10 @@ module SacCas::StandardFormBuilder
     end
   end
 
+  def labeled_number_field(attr, options)
+    labeled(attr, number_field(attr, options))
+  end
+
   private
 
   def build_adult_label(attr, optional: false) # rubocop:todo Metrics/CyclomaticComplexity

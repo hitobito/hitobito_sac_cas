@@ -6,11 +6,15 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
+  helper_method :member, :context
+
   def new
     authorize!(:update, external_invoice)
 
     invoice_form.invoice_date = today
     invoice_form.send_date = today
+    invoice_form.section_fees = member.active_memberships.map { People::Membership::InvoiceSectionFeeForm.new(_1.section) }
+    invoice_form.section_bulletin_postage_abroad = active_postage_abroad_memberships.map { People::Membership::InvoiceSectionFeeForm.new(_1.section) }
     @group = group
   end
 
@@ -36,7 +40,7 @@ class People::MembershipInvoicesController < ApplicationController
     invoice_form.attributes = invoice_form_params
     external_invoice.attributes = {
       state: :draft,
-      link: Group.find(invoice_form.section_id),
+      link: link_group,
       year: invoice_form.reference_date&.year,
       issued_at: invoice_form.invoice_date,
       sent_at: invoice_form.send_date
@@ -49,7 +53,8 @@ class People::MembershipInvoicesController < ApplicationController
       invoice_form.reference_date,
       discount: invoice_form.discount,
       new_entry: invoice_form.new_entry,
-      dont_send: invoice_form.dont_send
+      dont_send: invoice_form.dont_send,
+      manual_positions: invoice_form.manual_positions
     ).enqueue!
 
     redirect_to external_invoices_group_person_path(group, person),
@@ -71,8 +76,14 @@ class People::MembershipInvoicesController < ApplicationController
     params
       .require(:people_membership_invoice_form)
       .permit(:reference_date, :invoice_date, :send_date,
-        :section_id, :new_entry, :discount, :dont_send)
+        :section_id, :new_entry, :discount, :dont_send,
+        :sac_fee, :sac_entry_fee, :hut_solidarity_fee,
+        :magazine_fee, :magazine_postage_abroad, :section_entry_fee,
+        section_fees_attributes: [:section_id, :fee],
+        section_bulletin_postage_abroad_attributes: [:section_id, :fee])
   end
+
+  def active_postage_abroad_memberships = member.active_memberships.select { Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(member, _1).active? }
 
   def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)
 
@@ -82,7 +93,13 @@ class People::MembershipInvoicesController < ApplicationController
 
   def group = @group ||= Group.find(params[:group_id])
 
+  def link_group = invoice_form.manual_positions.any? ? group : Group.find(invoice_form.section_id)
+
   def date = @date ||= params[:date].present? ? Date.parse(params[:date]) : today
 
   def today = @today ||= Time.zone.today
+
+  def member = @member ||= Invoices::SacMemberships::Member.new(@person, context)
+
+  def context = @context ||= Invoices::SacMemberships::Context.new(Date.current)
 end
