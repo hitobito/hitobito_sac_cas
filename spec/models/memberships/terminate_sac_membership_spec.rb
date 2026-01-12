@@ -11,6 +11,9 @@ describe Memberships::TerminateSacMembership do
   let(:reason) { termination_reasons(:moved) }
   let(:person) { role.person }
   let(:role) { roles(:mitglied) }
+  let(:end_of_year) { Time.zone.now.end_of_year.to_date }
+  let(:today) { Time.zone.today }
+  let(:yesterday) { Time.zone.yesterday }
 
   let(:params) { {terminate_on: Time.zone.yesterday, termination_reason_id: reason.id} }
 
@@ -57,11 +60,11 @@ describe Memberships::TerminateSacMembership do
 
     describe "terminate_on" do
       it "accepts end of year" do
-        params[:terminate_on] = Time.zone.now.end_of_year.to_date
+        params[:terminate_on] = end_of_year
         expect(termination).to be_valid
       end
 
-      it "rejects tomorrow or today" do
+      it "rejects tomorrow" do
         params[:terminate_on] = Time.zone.tomorrow
         expect(termination).not_to be_valid
         expect(termination).to have(1).error_on(:terminate_on)
@@ -126,7 +129,7 @@ describe Memberships::TerminateSacMembership do
     end
 
     it "destroys role only existing since today" do
-      person.roles.update_all(start_on: Time.zone.today)
+      person.roles.update_all(start_on: today)
 
       expect do
         expect(termination.save!).to eq true
@@ -134,8 +137,8 @@ describe Memberships::TerminateSacMembership do
     end
 
     it "does not destroy role only existing since today when termination at end of year" do
-      person.roles.update_all(start_on: Time.zone.today)
-      params[:terminate_on] = Time.zone.now.end_of_year.to_date
+      person.roles.update_all(start_on: today)
+      params[:terminate_on] = end_of_year
 
       expect do
         expect(termination.save!).to eq true
@@ -143,7 +146,6 @@ describe Memberships::TerminateSacMembership do
     end
 
     context "termination at the end of the year" do
-      let(:end_of_year) { Time.zone.now.end_of_year.to_date }
       let(:mitglied_zweitsektion) { roles(:mitglied_zweitsektion) }
 
       before { params[:terminate_on] = end_of_year }
