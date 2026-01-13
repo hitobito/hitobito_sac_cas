@@ -9,6 +9,12 @@ module Memberships
   class TerminateSacMembershipsController < TerminationController
     private
 
+    def form_object
+      @form_object ||= self.class.name
+        .gsub("sController", "Form")
+        .classify.constantize.new(terminate_on_values, person)
+    end
+
     def send_confirmation_mail
       Memberships::TerminateMembershipMailer.terminate_membership(
         person,

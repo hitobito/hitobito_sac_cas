@@ -4,6 +4,8 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = standard_form(form_object, url: group_person_role_leave_zusatzsektion_path(group_id: group.id, person_id: person.id)) do |f|
+  = f.error_messages
+
   = render "common_fields", f: f
 
   .btn-toolbar.align-with-form

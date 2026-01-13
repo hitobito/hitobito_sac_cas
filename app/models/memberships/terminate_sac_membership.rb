@@ -39,7 +39,8 @@ module Memberships
     validates :terminate_on, inclusion: {in: ->(_) { acceptable_termination_dates }}
     validates :termination_reason_id, presence: true
 
-    delegate :person, to: "@role"
+    delegate :person, :family?, to: "@role"
+    delegate :household, :sac_family_main_person, to: :person
 
     def self.acceptable_termination_dates
       [Time.zone.yesterday, Time.zone.now.end_of_year.to_date]
@@ -50,7 +51,6 @@ module Memberships
       super(params)
 
       assert_sektions_mitglied
-      assert_main_person_if_family
       assert_not_already_terminated
       assert_not_already_ended
     end
@@ -60,11 +60,27 @@ module Memberships
         destroy_future_roles
         save_roles
         save_people
-        destroy_household unless terminate_on.future?
+        adjust_household if family? && !terminate_on.future?
       end
     end
 
+    def affected_people
+      @affected_people ||= sac_family_main_person ? person.household.people : [person]
+    end
+
     private
+
+    def adjust_household
+      if affects_entire_household?
+        household.destroy
+      else
+        household.remove(person).save!
+      end
+    end
+
+    def affects_entire_household?
+      sac_family_main_person || household.members.size == 2 || household.adults == [person]
+    end
 
     def prepare_roles(person)
       relevant_roles(person).each do |role|
@@ -134,8 +150,6 @@ module Memberships
         end
     end
 
-    def destroy_household = person.household.destroy
-
     def basic_login_group
       @basic_login_group ||= Group::AboBasicLogin.find_by(layer_group_id: Group.root_id)
     end
@@ -148,6 +162,8 @@ module Memberships
       @fundraising ||= MailingList.find_by(id: Group.root.sac_fundraising_mailing_list_id)
     end
 
+    def terminate_for_family? = person.sac_family_main_person?
+
     def assert_sektions_mitglied
       raise "not a member" unless @role.is_a?(Group::SektionsMitglieder::Mitglied)
     end
@@ -158,12 +174,6 @@ module Memberships
 
     def assert_not_already_ended
       raise "already deleted" if @role.end_on&.past?
-    end
-
-    def assert_main_person_if_family
-      if @role.family? && !@role.person.sac_family_main_person
-        raise "not family main person"
-      end
     end
   end
 end

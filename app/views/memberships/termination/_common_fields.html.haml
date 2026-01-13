@@ -3,13 +3,11 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- if mitglied_termination_by_section_only?
+- if mitglied_termination_by_section_only? # info only show to admin, members should not reach here (abilities)
   .alert.alert-warning
     = t('wizards.steps.termination_choose_date.warning_termination_by_section_only')
 
-= f.error_messages
-
-- if family_leaving?
+- if family_leaving? && sac_family_main_person?
   .alert.alert-warning
     %p= t('wizards.steps.termination.summary.family_warning', family_member_names: household.members.map { |m| m.person.full_name }.to_sentence)
 
