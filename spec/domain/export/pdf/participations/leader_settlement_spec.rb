@@ -98,9 +98,9 @@ describe Export::Pdf::Participations::LeaderSettlement do
 
     it "renders full invoice" do
       invoice_text = [
-        [57, 806, "Edmund Hillary"],
-        [57, 793, "Ophovenerstrasse 79a"],
-        [57, 781, "2843 Neu Carlscheid"],
+        [57, 796, "Edmund Hillary"],
+        [57, 783, "Ophovenerstrasse 79a"],
+        [57, 771, "2843 Neu Carlscheid"],
         [57, 685, "Rechnungsnummer:"],
         [163, 685, "600001-#{today.strftime("%Y-%m-%d")}"],
         [57, 672, "Rechnungsdatum:"],
