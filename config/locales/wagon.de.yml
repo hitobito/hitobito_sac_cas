@@ -118,7 +118,6 @@ de:
         terminate_on: Beenden ab
         now: Sofort
         end_of_role: "Auf %{date}"
-
       memberships/termination_form:
         terminate_on: Austrittsdatum
         termination_reason_id: Austrittsgrund
@@ -1787,6 +1786,9 @@ de:
       open_invoice_exists:
         info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
+      show:
+        family_but_not_main_person: Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person}
+          durchgeführt werden.
       create:
         success:
           one: "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -2380,14 +2382,6 @@ de:
           Der Austritt aus der Zusatzsektion kann nur für die gesamte Familienmitgliedschaft
           beantragt werden und muss von der Hauptperson in deiner Familienmitgliedschaft angefragt
           werden. Bitte wende dich an %{family_main_person}.
-      leave_zusatzsektion:
-        summary:
-          family_warning: >-
-            Achtung: Der Austritt aus der Zusatzsektion wird für die gesamte
-            Familienmitgliedschaft beantragt. Davon betroffen sind: %{family_member_names}.
-          info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"
-          inform_mitglied_via_email: Mitglied via E-Mail informieren?
-          next_button: "Austritt beantragen"
       termination:
         summary:
           info_text: "Bist du sicher, dass Du per %{terminate_on} aus der Sektion %{sektion} austreten möchtest?"

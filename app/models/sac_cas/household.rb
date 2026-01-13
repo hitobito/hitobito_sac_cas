@@ -13,7 +13,6 @@ module SacCas::Household
   prepended do
     validate :assert_adult_member, on: :update
     validate :assert_minimum_member_size, on: :update
-    validate :assert_removed_member_email, on: :update
     validate :assert_adult_member_with_email, on: :update
     validate :assert_someone_is_a_member, on: :update
   end
@@ -79,6 +78,8 @@ module SacCas::Household
     end
   end
 
+  def adults = people_by_agegroup(:adult)
+
   private
 
   def clear_people_managers(people)
@@ -133,12 +134,6 @@ module SacCas::Household
     end
   end
 
-  def assert_removed_member_email
-    return if removed_people.all?(&:email?)
-
-    errors.add(:base, :removed_member_has_no_email)
-  end
-
   def assert_adult_member_with_email
     return if adults.any? { _1.email? }
 
@@ -159,8 +154,6 @@ module SacCas::Household
   end
 
   def candidates = adults.select(&:email?)
-
-  def adults = people_by_agegroup(:adult)
 
   def people_by_agegroup(age_category)
     people.select do |person|

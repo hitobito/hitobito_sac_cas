@@ -496,21 +496,28 @@ describe Memberships::UndoTermination, versioning: true do
     end
 
     context "for family membership" do
-      let(:role) { roles(:familienmitglied) }
+      let(:role) { familienmitglied }
+      let(:person) { role.person }
+      let(:familienmitglied) { roles(:familienmitglied) }
+      let(:familienmitglied2) { roles(:familienmitglied2) }
+      let(:familienmitglied_kind) { roles(:familienmitglied_kind) }
 
-      it "saves restored family" do
-        original_household_key = role.person.household_key
-        original_household_people = role.person.household.people
-
+      it "saves restores role" do
         terminate(role)
         expect(role).to be_terminated
+        subject.save!
+        expect(role.reload).not_to be_terminated
+      end
+
+      it "saves restores family" do
+        terminate(role)
         expect(role.person.household_key).to eq(nil)
 
         subject.save!
-
         expect(role.reload).not_to be_terminated
-        expect(role.person.household_key).to eq original_household_key
-        expect(role.person.household.people).to match_array original_household_people
+        expect(role.person.household_key).to eq "4242"
+        expect(role.person.household.people).to match_array people(:familienmitglied, :familienmitglied2,
+          :familienmitglied_kind)
       end
 
       it "creates missing people managers" do
@@ -519,8 +526,38 @@ describe Memberships::UndoTermination, versioning: true do
         expect(role.person.manageds).to be_empty
 
         subject.save!
-
         expect(role.reload.person.manageds).to be_present
+      end
+
+      context "non main family person" do
+        let(:role) { familienmitglied2 }
+
+        it "saves restore role, family and people managers" do
+          terminate(role)
+          subject.save!
+          expect(role.reload).not_to be_terminated
+          expect(role.person.household_key).to eq "4242"
+          expect(role.person.household.people).to match_array people(:familienmitglied, :familienmitglied2,
+            :familienmitglied_kind)
+          expect(role.person.managers).to eq [familienmitglied.person]
+        end
+
+        describe "when dissolving household" do
+          before { familienmitglied_kind.person.destroy }
+
+          it "cannot restore" do
+            terminate(role)
+            expect(subject).not_to be_valid
+            expect(subject.errors.full_messages).to match_array(
+              [
+                "SAC Matterhorn → Mitglieder: Mitglied (Zusatzsektion) (Familie) von Frieda Norgay: " \
+                "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein.",
+                "SAC Blüemlisalp → Mitglieder: Mitglied (Stammsektion) (Familie) von Frieda Norgay: " \
+                "In einer Familienmitgliedschaft muss ein Rechnungsempfänger definiert sein."
+              ]
+            )
+          end
+        end
       end
     end
   end
