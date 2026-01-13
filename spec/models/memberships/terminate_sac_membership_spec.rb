@@ -39,12 +39,6 @@ describe Memberships::TerminateSacMembership do
         described_class.new(role)
       end.to raise_error("already deleted")
     end
-
-    it "raises if not main family person" do
-      expect do
-        described_class.new(roles(:familienmitglied2))
-      end.to raise_error("not family main person")
-    end
   end
 
   describe "validations" do
@@ -357,38 +351,72 @@ describe Memberships::TerminateSacMembership do
     end
 
     context "family" do
-      let(:role) { roles(:familienmitglied) }
+      let(:familienmitglied) { roles(:familienmitglied) }
+      let(:familienmitglied2) { roles(:familienmitglied2) }
+      let(:familienmitglied_kind) { roles(:familienmitglied_kind) }
 
-      it "terminates all family roles" do
+      let(:role) { familienmitglied }
+
+      def household_key_count = Person.where(household_key: "4242").count
+
+      it "ends all roles and dissolves household" do
         expect do
           expect(termination).to be_valid
           expect(termination.save!).to eq true
         end.to change { person.roles.count }.by(-2)
           .and change { Role.count }.by(-6)
+          .and change { household_key_count }.from(3).to(0)
       end
 
-      it "with terminate_on=yesterday it destroys the household" do
-        termination.terminate_on = Date.current.yesterday
+      context "end of year" do
+        before { termination.terminate_on = Time.zone.now.end_of_year }
 
-        household_people = person.household.people
-        expect(household_people).to have(3).items
-
-        expect do
-          expect(termination).to be_valid
-          expect(termination.save!).to eq true
-        end.to change { household_people.map(&:reload).map(&:household_key) }.to([nil, nil, nil])
+        it "terminates but keeps person in household" do
+          expect do
+            expect(termination).to be_valid
+            expect(termination.save!).to eq true
+          end.to change { role.reload.terminated }.from(false).to(true)
+            .and not_change { household_key_count }
+        end
       end
 
-      it "does not destroy the household with terminate_on=end_of_year" do
-        termination.terminate_on = Time.zone.now.end_of_year.to_date
+      context "not main person" do
+        let(:role) { roles(:familienmitglied2) }
 
-        household_people = person.household.people
-        expect(household_people).to have(3).items
+        it "ends role and removes person from household" do
+          expect do
+            expect(termination).to be_valid
+            expect(termination.save!).to eq true
+          end.to change { person.roles.count }.by(-2)
+            .and change { Role.count }.by(-2)
+            .and change { household_key_count }.from(3).to(2)
+            .and not_change { familienmitglied.reload.beitragskategorie }
+            .and not_change { familienmitglied_kind.reload.beitragskategorie }
+        end
 
-        expect do
-          expect(termination).to be_valid
-          expect(termination.save!).to eq true
-        end.not_to change { household_people.map(&:reload).map(&:household_key) }
+        it "ends role and dissolves two person household with bk change for other role" do
+          people(:familienmitglied_kind).destroy
+          expect do
+            expect(termination).to be_valid
+            expect(termination.save!).to eq true
+          end.to change { person.roles.count }.by(-2)
+            .and change { Role.count }.by(-2)
+            .and change { household_key_count }.from(2).to(0)
+            .and change { familienmitglied.reload.end_on }.to(Time.zone.yesterday)
+          expect(familienmitglied.person.roles.pluck(:beitragskategorie).uniq).to eq %w[adult]
+        end
+
+        context "end of year" do
+          before { termination.terminate_on = Time.zone.now.end_of_year }
+
+          it "terminates but keeps person in household" do
+            expect do
+              expect(termination).to be_valid
+              expect(termination.save!).to eq true
+            end.to change { role.reload.terminated }.from(false).to(true)
+              .and not_change { household_key_count }
+          end
+        end
       end
     end
   end

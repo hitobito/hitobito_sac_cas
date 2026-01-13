@@ -13,7 +13,7 @@ describe Memberships::TerminateSacMembershipsController do
   let(:operator) { person }
   let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:matterhorn) { groups(:matterhorn) }
-  let(:role) { person.roles.find_by!(type: "Group::SektionsMitglieder::Mitglied") }
+  let(:person) { role.person }
 
   subject(:page) { Capybara::Node::Simple.new(response.body) }
 
@@ -39,9 +39,11 @@ describe Memberships::TerminateSacMembershipsController do
 
   describe "#GET" do
     let(:request) { get(terminate_sac_membership_path) }
-    let(:person) { people(:mitglied) }
+    let(:role) { roles(:mitglied) }
 
-    def expect_form(dates: %w[now end_of_year]) # rubocop:disable Metrics/AbcSize
+    def field_id(key) = "memberships_terminate_sac_membership_form_#{key}"
+
+    def expect_form(dates: %w[now end_of_year], family: false) # rubocop:disable Metrics/AbcSize
       expect(page).to have_css "h1", text: "SAC-Mitgliedschaft beenden"
       expect(page).to have_css "label.required", text: "Austrittsgrund"
       if dates.many?
@@ -50,9 +52,7 @@ describe Memberships::TerminateSacMembershipsController do
         expect(page).to have_field "Auf 31.12.#{Date.current.year}" if dates.include?("end_of_year")
       else
         expect(page).not_to have_css "label", text: "Austrittsdatum"
-
-        id = "memberships_terminate_sac_membership_form_terminate_on"
-        field = page.find("input[type=hidden]", visible: false, id:)
+        field = page.find("input[type=hidden]", visible: false, id: field_id(:terminate_on))
         expect(field[:name]).to eq "memberships_terminate_sac_membership_form[terminate_on]"
         expect(field[:value]).to eq "now"
       end
@@ -139,10 +139,8 @@ describe Memberships::TerminateSacMembershipsController do
       context "as and admin" do
         let(:operator) { people(:admin) }
 
-        it "shows the date select step with a warning" do
+        it "shows form" do
           request
-          expect_alert "Achtung: der Austritt findet bei einer Sektion statt, " \
-            "bei der die Austrittsfunktion für das Mitglied deaktiviert ist.", css: ".alert-warning"
           expect_form
         end
       end
@@ -150,23 +148,22 @@ describe Memberships::TerminateSacMembershipsController do
 
     describe "family" do
       context "with family main person" do
-        let(:person) { people(:familienmitglied) }
+        let(:role) { roles(:familienmitglied) }
 
         it "shows info about affecting the whole family" do
           request
-          expect_alert "Achtung: der Austritt wird für die gesamte Familienmitgliedschaft beantragt.",
-            css: ".alert-warning"
-          expect_form
+          expect_form(family: true)
         end
       end
 
       context "with family regular person" do
-        let(:person) { people(:familienmitglied2) }
+        let(:role) { roles(:familienmitglied2) }
 
         it "shows info about the main family person" do
           request
-          expect_alert "Bitte wende dich an #{people(:familienmitglied)}"
-          expect(page).not_to have_css "form"
+          expect_alert "Austritt wird nur für dich durchgeführt. Ein Familienaustritt " \
+            "kann nur von Tenzing Norgay durchgeführt werden.", css: ".alert-info"
+          expect_form
         end
       end
 
@@ -197,7 +194,7 @@ describe Memberships::TerminateSacMembershipsController do
       post(terminate_sac_membership_path, params: build_params(**defaults.merge(params)))
     end
 
-    let(:person) { people(:mitglied) }
+    let(:role) { roles(:mitglied) }
 
     context "as normal user" do
       it "marks single role as terminated and redirects" do
@@ -383,18 +380,80 @@ describe Memberships::TerminateSacMembershipsController do
     end
 
     context "as family" do
-      let(:person) { people(:familienmitglied) }
+      let(:role) { roles(:familienmitglied) }
 
-      it "creates multiple roles and redirects" do
-        expect do
-          request
-          role.reload
+      def household_key_count = Person.where(household_key: "4242").count
+
+      context "now" do
+        it "ends multiple roles, dissolves household and redirects" do
+          expect do
+            request(terminate_on: :now)
+            role.reload
+          end
+            .to change(Role, :count).by(-6)
+            .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+            .and change { household_key_count }.by(-3)
+          expect(response).to redirect_to person_path(person, format: :html)
+          expect(flash[:notice]).to eq "Eure 3 SAC-Mitgliedschaften wurden gekündet."
         end
-          .to not_change(Role, :count)
-          .and change { role.terminated }.to(true)
-          .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
-        expect(response).to redirect_to person_path(person, format: :html)
-        expect(flash[:notice]).to eq "Eure 3 SAC-Mitgliedschaften wurden gekündet."
+
+        context "as non main person" do
+          let(:role) { roles(:familienmitglied2) }
+
+          it "ends roles, removes from household and redirects" do
+            expect do
+              request(terminate_on: :now)
+              role.reload
+            end
+              .to change(Role, :count).by(-2)
+              .and change { roles(:familienmitglied2).reload.termination_reason_id }.from(nil).to(termination_reason_id)
+              .and change { household_key_count }.by(-1)
+            expect(response).to redirect_to person_path(person, format: :html)
+            expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+          end
+
+          it "abouts if household has any errors" do
+            role = roles(:familienmitglied_kind)
+            Roles::Termination.new(role:, terminate_on: Time.zone.today.end_of_year).call
+            expect do
+              request(terminate_on: :now)
+            end.to not_change(Role, :count)
+              .and not_change { household_key_count }
+            expect_alert("Nima Norgay hat einen Austritt geplant", css: ".alert-danger ul li")
+          end
+        end
+      end
+
+      context "end of year" do
+        it "terminates multiple roles, keeps household and redirects" do
+          expect do
+            request
+            role.reload
+          end
+            .to not_change(Role, :count)
+            .and change { role.terminated }.to(true)
+            .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+            .and not_change { household_key_count }
+          expect(response).to redirect_to person_path(person, format: :html)
+          expect(flash[:notice]).to eq "Eure 3 SAC-Mitgliedschaften wurden gekündet."
+        end
+
+        context "as non main person" do
+          let(:role) { roles(:familienmitglied2) }
+
+          it "terminates single role, keeps from household and redirects" do
+            expect do
+              request
+              role.reload
+            end
+              .to not_change(Role, :count)
+              .and change { role.terminated }.to(true)
+              .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+              .and not_change { household_key_count }
+            expect(response).to redirect_to person_path(person, format: :html)
+            expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+          end
+        end
       end
     end
   end

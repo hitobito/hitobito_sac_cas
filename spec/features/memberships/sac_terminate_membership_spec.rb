@@ -256,7 +256,8 @@ describe "terminate sac membership", js: true do
         click_link "Austritt"
       end
       expect(page).to have_title "SAC-Mitgliedschaft beenden"
-      expect(page).to have_content("Bitte wende dich an #{people(:familienmitglied)}")
+      expect(page).to have_content("Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von " \
+        "Tenzing Norgay durchgeführt werden.")
     end
   end
 end

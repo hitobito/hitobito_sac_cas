@@ -10,12 +10,10 @@ module Memberships
     before_action :authorize, :person, :group # for sheet
     before_action :render_abort_views
 
-    delegate :sac_membership, :household, to: :person
+    delegate :sac_membership, :household, :sac_family_main_person?, to: :person
     helper_method :household, :sac_membership, :form_object
-
-    helper_method :group, :person, :for_someone_else?,
-      :mitglied_termination_by_section_only?, :choose_date?, :form_object,
-      :family_leaving?
+    helper_method :group, :person, :for_someone_else?, :choose_date?, :form_object,
+      :family_leaving?, :sac_family_main_person?, :mitglied_termination_by_section_only?
 
     def create
       form_object.attributes = model_params
@@ -69,8 +67,6 @@ module Memberships
     def render_abort_views # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity
       if sac_membership.stammsektion_role.terminated?
         render :terminated_already
-      elsif family_leaving? && !(household.main_person == person)
-        render :ask_family_main_person
       elsif !for_someone_else?
         if mitglied_termination_by_section_only?
           render :no_self_service

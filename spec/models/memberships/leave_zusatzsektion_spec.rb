@@ -158,7 +158,7 @@ describe Memberships::LeaveZusatzsektion do
         context "with terminate_on at the end of year" do
           let(:terminate_on) { now.end_of_year.to_date }
 
-          it "schedules role for deletion" do
+          it "marks role as terminated but does not change end_on" do
             expect do
               expect(leave.save).to eq true
             end.not_to(change { person.roles.count })

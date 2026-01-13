@@ -30,6 +30,7 @@ module Memberships
 
     def render_abort_views
       return render :open_invoice_exists if !for_someone_else? && open_invoice?
+      return render :ask_family_main_person if family_leaving? && !(household.main_person == person)
       super
     end
   end

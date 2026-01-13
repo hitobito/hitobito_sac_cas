@@ -4,6 +4,13 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = standard_form(form_object, url: group_person_role_terminate_sac_membership_path(group_id: group.id, person_id: person.id)) do |f|
+  = f.error_messages
+
+  - if family_leaving? && !sac_family_main_person?
+    .alert.alert-info
+      %p= t('.family_but_not_main_person', main_person: household.main_person)
+
+
   = render "common_fields", f: f
 
   = if for_someone_else?
