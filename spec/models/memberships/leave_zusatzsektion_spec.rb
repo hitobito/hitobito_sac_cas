@@ -135,59 +135,60 @@ describe Memberships::LeaveZusatzsektion do
     end
 
     context "family person" do
-      let(:other) { Fabricate(:person) }
-      let(:matterhorn_mitglieder) { groups(:matterhorn_mitglieder) }
-
       subject(:leave) {
-        described_class.new(@matterhorn_zusatz, terminate_on:,
-          termination_reason_id: termination_reason.id)
+        described_class.new(role, terminate_on:, termination_reason_id: termination_reason.id)
       }
 
-      def create_sac_family(person, *others)
-        person.update!(sac_family_main_person: true)
-        household = Household.new(person)
-        others.each { |member| household.add(member) }
-        household.save!
-        person.reload
-        others.each(&:reload)
-      end
+      let!(:familienmitglied_zweitsektion) { roles(:familienmitglied_zweitsektion) }
+      let!(:familienmitglied2_zweitsektion) { roles(:familienmitglied2_zweitsektion) }
+      let!(:familienmitglied_kind_zweitsektion) { roles(:familienmitglied_kind_zweitsektion) }
 
-      before do
-        person.update!(sac_family_main_person: true)
-        @bluemlisalp_mitglied = create_role(:bluemlisalp_mitglieder, "Mitglied")
-        @bluemlisalp_mitglied_other = create_role(:bluemlisalp_mitglieder, "Mitglied",
-          owner: other.reload)
-        create_sac_family(person, other)
-        Role.where(id: [@bluemlisalp_mitglied.id,
-          @bluemlisalp_mitglied_other.id]).update_all(beitragskategorie: :family)
+      context "main family person" do
+        let(:role) { familienmitglied_zweitsektion }
 
-        @matterhorn_zusatz = create_role(
-          :matterhorn_mitglieder, "MitgliedZusatzsektion",
-          owner: person
-        )
-        @matterhorn_zusatz_other = create_role(
-          :matterhorn_mitglieder, "MitgliedZusatzsektion",
-          owner: other
-        )
-      end
-
-      it "ends role per yesterday" do
-        expect do
-          expect(leave.save).to eq true
-        end.to change { Role.count }.by(-2)
-          .and change { @matterhorn_zusatz.reload.end_on }.to(now.to_date.yesterday)
-          .and change { @matterhorn_zusatz_other.reload.end_on }.to(now.to_date.yesterday)
-      end
-
-      context "with terminate_on at the end of year" do
-        let(:terminate_on) { now.end_of_year.to_date }
-
-        it "schedules role for deletion" do
+        it "ends role per yesterday" do
           expect do
             expect(leave.save).to eq true
-          end.not_to(change { person.roles.count })
-          expect(@matterhorn_zusatz.reload).to be_terminated
-          expect(@matterhorn_zusatz_other.end_on).to eq Date.new(2024, 12, 31)
+          end.to change { Role.count }.by(-3)
+            .and change { role.reload.end_on }.to(now.to_date.yesterday)
+            .and change { familienmitglied2_zweitsektion.reload.end_on }.to(now.to_date.yesterday)
+            .and change { familienmitglied_kind_zweitsektion.reload.end_on }.to(now.to_date.yesterday)
+        end
+
+        context "with terminate_on at the end of year" do
+          let(:terminate_on) { now.end_of_year.to_date }
+
+          it "schedules role for deletion" do
+            expect do
+              expect(leave.save).to eq true
+            end.not_to(change { person.roles.count })
+            [
+              familienmitglied_zweitsektion,
+              familienmitglied2_zweitsektion,
+              familienmitglied_kind_zweitsektion
+            ].each do |role|
+              expect(role.reload).to be_terminated
+              expect(role.reload.end_on).to eq Date.new(2024, 12, 31)
+            end
+          end
+        end
+      end
+
+      context "non main family person" do
+        let(:role) { familienmitglied2_zweitsektion }
+
+        it "raises error" do
+          expect { leave.save }.to raise_error(RuntimeError, "not main family person")
+        end
+
+        it "might leave if beitragskategorie is not family" do
+          Role.where(id: familienmitglied2_zweitsektion.id).update_all(beitragskategorie: :adult)
+          expect do
+            expect(leave.save).to eq true
+          end.to change { Role.count }.by(-1)
+            .and change { role.reload.end_on }.to(now.to_date.yesterday)
+            .and not_change { familienmitglied_zweitsektion.reload.end_on }
+            .and not_change { familienmitglied_kind_zweitsektion.reload.end_on }
         end
       end
     end
