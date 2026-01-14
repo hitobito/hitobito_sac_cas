@@ -55,3 +55,6 @@ section_tour:
   target_groups:
     - kinder
     - familien
+  technical_requirements:
+    - wandern_t3
+    - wandern_t4
