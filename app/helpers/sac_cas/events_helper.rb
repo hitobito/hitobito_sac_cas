@@ -27,17 +27,32 @@ module SacCas::EventsHelper
   end
 
   def format_event_disciplines(event)
-    simple_list(disciplines_with_children(event)) do |main, children|
-      child_list = safe_join(children, ", ") { |c| with_tooltip(c.label, c.description) }
-      safe_join([with_tooltip(main.label, main.description), " (", child_list, ")"])
+    event_essentials_list(event.disciplines)
+  end
+
+  def format_event_target_groups(event)
+    event_essentials_list(event.target_groups)
+  end
+
+  def event_essentials_list(association, wrap_children: true, separator: " ")
+    simple_list(event_essentials_with_children(association), class: "mb-0") do |main, children|
+      parent = with_tooltip(main.label, main.description)
+      if children.present?
+        child_list = safe_join(children, ", ") { |c| with_tooltip(c.label, c.description) }
+        child_list = wrap_children ? safe_join(["(", child_list, ")"]) : child_list
+        safe_join([parent, child_list], separator)
+      else
+        parent
+      end
     end
   end
 
   private
 
-  def disciplines_with_children(event)
-    entries = event.disciplines.with_deleted.list.includes(:parent).group_by(&:parent)
-    entries.keys.sort_by(&:order).map do |parent|
+  def event_essentials_with_children(association)
+    entries = association.with_deleted.list.includes(:parent).group_by(&:parent)
+    main = entries.keys.compact + entries.fetch(nil, [])
+    main.uniq.sort_by(&:order).map do |parent|
       [parent, entries[parent]]
     end
   end

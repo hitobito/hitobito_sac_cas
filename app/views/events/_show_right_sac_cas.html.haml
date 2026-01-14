@@ -8,3 +8,5 @@
     %dl.dl-horizontal
       - if entry.respond_to?(:disciplines)
         = labeled_attr(entry, :disciplines)
+      - if entry.respond_to?(:target_groups)
+        = labeled_attr(entry, :target_groups)
