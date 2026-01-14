@@ -127,3 +127,71 @@ Event::TargetGroup::Translation.seed_once(:event_target_group_id, :locale,
    locale: "de",
    label: "Senioren C",
    description: "Senioren C-Programm"})
+
+Event::TechnicalRequirement.seed_once(:id,
+  {id: 1, order: 1},
+  {id: 2, order: 2},
+  {id: 3, order: 3},
+  {id: 4, order: 4},
+  *(5 * 6 + 1).times.map do |i|
+    {id: 10 + i, order: i, parent_id: 1}
+  end,
+  *6.times.map do |i|
+    {id: 50 + i, order: i, parent_id: 2}
+  end,
+  *7.times.map do |i|
+    {id: 60 + i, order: i, parent_id: 3}
+  end,
+  *6.times.map do |i|
+    {id: 70 + i, order: i, parent_id: 4}
+  end)
+
+Event::TechnicalRequirement::Translation.seed_once(:event_technical_requirement_id, :locale,
+  {event_technical_requirement_id: 1,
+   locale: "de",
+   label: "Französische Kletterskala",
+   description: "Klettern"},
+  {event_technical_requirement_id: 2,
+   locale: "de",
+   label: "Wanderskala",
+   description: "Wandern"},
+  {event_technical_requirement_id: 3,
+   locale: "de",
+   label: "Skitourenskala",
+   description: "Skitouren"},
+  {event_technical_requirement_id: 4,
+   locale: "de",
+   label: "Singletrailskala",
+   description: "Mountain Bike"},
+  *2.times.flat_map do |i|
+    %w[a b c].each_with_index.map do |grade, j|
+      {event_technical_requirement_id: 10 + i * 3 + j,
+       locale: "de",
+       label: "#{i + 3}#{grade}"}
+    end
+  end,
+  *4.times.flat_map do |i|
+    %w[a a+ b b+ c c+].each_with_index.map do |grade, j|
+      {event_technical_requirement_id: 16 + i * 6 + j,
+       locale: "de",
+       label: "#{i + 5}#{grade}"}
+    end
+  end,
+  {event_technical_requirement_id: 10 + 5 * 6,
+   locale: "de",
+   label: "9a"},
+  *6.times.map do |i|
+    {event_technical_requirement_id: 50 + i,
+     locale: "de",
+     label: "T#{i + 1}"}
+  end,
+  *%w[L WS ZS S SS AS EX].each_with_index.map do |grade, i|
+    {event_technical_requirement_id: 60 + i,
+     locale: "de",
+     label: grade}
+  end,
+  *6.times.map do |i|
+    {event_technical_requirement_id: 70 + i,
+     locale: "de",
+     label: "S#{i}"}
+  end)
