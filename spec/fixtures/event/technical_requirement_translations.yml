@@ -1,0 +1,109 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_technical_requirements
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  parent_id         :bigint
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+klettern:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:klettern) %>
+  locale: de
+  label: Französische Kletterskala
+  description: Klettern
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+wandern:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:wandern) %>
+  locale: de
+  label: Wanderskala
+  description: Wandern
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+skitouren:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:skitouren) %>
+  locale: de
+  label: Skitourenskala
+  description: Skitouren
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+singletrail:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:singletrail) %>
+  locale: de
+  label: Singletrailskala
+  description: Mountain Bike
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+<% 2.times.each do |i| %>
+<%   %w[a b c].each_with_index do |grade, j| %>
+klettern_<%= "#{i+3}#{grade}" %>:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:"klettern_#{i+3}#{grade}") %>
+  locale: de
+  label: <%= "#{i+3}#{grade}" %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+<%   end %>
+<% end %>
+
+<% 4.times.each do |i| %>
+<%   %w[a a_plus b b_plus c c_plus].each_with_index do |grade, j| %>
+klettern_<%= "#{i+5}#{grade}" %>:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:"klettern_#{i+5}#{grade}") %>
+  locale: de
+  label: <%= "#{i+5}#{grade.first}#{grade.ends_with?('_plus') ? "+": ""}" %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+<%   end %>
+<% end %>
+
+klettern_9a:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:"klettern_9a") %>
+  locale: de
+  label: 9a
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+<% 6.times.each do |i| %>
+wandern_<%= "t#{i+1}" %>:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:"wandern_t#{i+1}") %>
+  locale: de
+  label: <%= "T#{i+1}" %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+<% end %>
+
+<% %w[L WS ZS S SS AS EX].each do |grade, i| %>
+skitouren_<%= grade.downcase %>:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:"skitouren_#{grade.downcase}") %>
+  locale: de
+  label: <%= grade %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+<% end %>
+
+<% 6.times.each do |i| %>
+singletrail_<%= "s#{i}" %>:
+  event_technical_requirement_id: <%= ActiveRecord::FixtureSet.identify(:"singletrail_s#{i}") %>
+  locale: de
+  label: <%= "S#{i}" %>
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+<% end %>

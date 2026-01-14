@@ -53,6 +53,11 @@ class Event::Tour < Event
     class_name: "Event::TargetGroup",
     foreign_key: :event_id
 
+  has_and_belongs_to_many :technical_requirements,
+    join_table: :events_technical_requirements,
+    class_name: "Event::TechnicalRequirement",
+    foreign_key: :event_id
+
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
