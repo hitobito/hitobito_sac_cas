@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resources :event_disciplines, module: "event", controller: "disciplines"
     resources :event_levels, module: "event", controller: "levels", except: [:show]
     resources :event_target_groups, module: "event", controller: "target_groups"
+    resources :event_technical_requirements, module: "event", controller: "technical_requirements"
 
     resources :external_invoices, only: [:show], module: :people, param: :invoice_id
 
