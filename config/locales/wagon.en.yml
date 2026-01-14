@@ -117,7 +117,6 @@ en:
         terminate_on: Beenden ab
         now: Sofort
         end_of_role: "Auf %{date}"
-
       memberships/termination_form:
         terminate_on: Austrittsdatum
         termination_reason_id: Austrittsgrund
@@ -235,6 +234,7 @@ en:
         courses: Courses
         updated_at: Changed
         created_at: Created
+        deleted_at: Gelöscht
       cost_unit:
         label: Designation
         event_kind_categories: Course categories
@@ -242,6 +242,7 @@ en:
         courses: Courses
         updated_at: Changed
         created_at: Created
+        deleted_at: Gelöscht
       course_compensation_category:
         short_name: Short name
         kind: Type
@@ -273,6 +274,8 @@ en:
         maximum_age: Maximum age
         ideal_class_size: Ideal class size
         maximum_class_size: Maximum class size
+        disciplines: Disziplin(en)
+        target_groups: Zielgruppe(n)
       event/kind:
         accommodation: Accommodation
         accommodations:
@@ -366,6 +369,15 @@ en:
         j_s_price_regular: J&S P-Normalpreis
         j_s_price_subsidized: J&S A-Mitgliederpreis
         j_s_price_special: J&S A-Normalpreis
+      event/discipline:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Disziplin
+        children: Unterdisziplinen
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/kind_category:
         cost_center_id: Cost center
         cost_unit_id: Cost unit
@@ -402,6 +414,15 @@ en:
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
       event/role:
         self_employed: Selbständig erwerbend
+      event/target_group:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Gruppe
+        children: Untergruppen
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/tour:
         state_translated: Status
         states:
@@ -615,6 +636,8 @@ en:
         must_have_mitglied_role: "must be a member for the entire period of validity of the supplementary section."
         must_have_mitglied_role_in_group: "must be a member of the selected group."
         must_have_one_family_main_person_in_family: "An invoice recipient must be defined in a family membership."
+        parent_is_not_main: muss ein Haupteintrag sein.
+        has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
         course_compensation_rate:
@@ -659,6 +682,9 @@ en:
       course_compensation_rate:
         one: Remuneration approach
         other: Remuneration approaches
+      event/discipline:
+        one: Disziplin
+        other: Disziplinen
       event/level:
         one: Course level
         other: Course levels
@@ -677,6 +703,9 @@ en:
       event/course/role/assistant_leader_aspirant:
         one: Klassenleitung (Aspirant)
         other: Klassenleitung (Aspirant)
+      event/target_group:
+        one: Zielgruppe
+        other: Zielgruppen
       event/tour:
         one: Tour
         other: Touren
@@ -1449,10 +1478,6 @@ en:
 
     maximum_age_with_years: "%{maximum_age} Years (vintage)"
 
-    roles:
-      self_employed: selbständig erwerbend
-      not_self_employed: unselbständig erwerbend
-
     popover_emails_optional:
       prompt_email_choice: "Sollen E-Mails verschickt werden?"
       submit_with_emails: E-Mails verschicken
@@ -1466,6 +1491,12 @@ en:
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
 
+    roles:
+      self_employed: selbständig erwerbend
+      not_self_employed: unselbständig erwerbend
+
+    sections:
+      essentials: Wesentliche Fakten
   external_trainings:
     form:
       help_other_people: Additional persons for whom the external training is to be recorded.
@@ -1734,6 +1765,8 @@ en:
       open_invoice_exists:
         info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
+      show:
+        family_but_not_main_person: "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
       create:
         success:
           one: "Deine SAC-Mitgliedschaft wurde gekündet."
@@ -2268,13 +2301,6 @@ en:
       ask_family_main_person:
         info_text: >-
           Withdrawal from the additional section can only be requested for the entire family membership and must be requested by the main person in your family membership. Please contact %{family_main_person}.
-      leave_zusatzsektion:
-        summary:
-          family_warning: >-
-            Please note: Withdrawal from the additional section is requested for the entire family membership. This affects: %{family_member_names}.
-          info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"
-          inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
-          next_button: "Request resignation"
       termination:
         summary:
           info_text: "Are you sure you want to leave the %{sektion} section via %{terminate_on}?"

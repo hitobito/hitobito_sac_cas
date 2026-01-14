@@ -117,7 +117,6 @@ it:
         terminate_on: Uscita da
         now: Immediatamente
         end_of_role: "Su %{date}"
-
       memberships/termination_form:
         terminate_on: Data di partenza
         termination_reason_id: Motivo della disdetta
@@ -237,6 +236,7 @@ it:
         courses: Corsi
         updated_at: Modificato
         created_at: Creato
+        deleted_at: Gelöscht
       cost_unit:
         label: Denominazione
         event_kind_categories: Categorie di corsi
@@ -244,6 +244,7 @@ it:
         courses: Corsi
         updated_at: Modificato
         created_at: Creato
+        deleted_at: Gelöscht
       course_compensation_category:
         short_name: Abbreviazione
         kind: Tipo
@@ -275,6 +276,8 @@ it:
         maximum_age: Età massima
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
+        disciplines: Disziplin(en)
+        target_groups: Zielgruppe(n)
       event/kind:
         accommodation: Alloggio
         accommodations:
@@ -368,6 +371,15 @@ it:
         j_s_price_regular: Prezzo normale G+S - P
         j_s_price_subsidized: Prezzo per i soci G+S - A
         j_s_price_special: Prezzo normale G+S - A
+      event/discipline:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Disziplin
+        children: Unterdisziplinen
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
@@ -404,6 +416,15 @@ it:
         external_invoices: Fatture # uses include CapitalizedDependentErrors
       event/role:
         self_employed: Lavoratore autonomo
+      event/target_group:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Gruppe
+        children: Untergruppen
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/tour:
         state_translated: Stato
         states:
@@ -618,6 +639,8 @@ it:
         must_have_mitglied_role: "deve essere socio per l’intero periodo di validità della sezione aggiuntiva."
         must_have_mitglied_role_in_group: "deve essere socio del gruppo selezionato."
         must_have_one_family_main_person_in_family: "Per ogni affiliazione famigliare deve essere indicato un desinatario per le fatture."
+        parent_is_not_main: muss ein Haupteintrag sein.
+        has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
         course_compensation_rate:
@@ -666,6 +689,9 @@ it:
         one: Approccio retributivo
         many: Approcci retributivi
         other: Tassi di retribuzione
+      event/discipline:
+        one: Disziplin
+        other: Disziplinen
       event/level:
         one: Livello del corso
         many: Livelli del corso
@@ -690,6 +716,9 @@ it:
         one: Capoclasse (aspirante)
         many: Capoclasse (aspirante)
         other: Capoclasse (aspirante)
+      event/target_group:
+        one: Zielgruppe
+        other: Zielgruppen
       event/tour:
         one: Tour
         many: Tour
@@ -1511,10 +1540,6 @@ it:
 
     maximum_age_with_years: "%{maximum_age} anni (anno)"
 
-    roles:
-      self_employed: lavoratore autonomo
-      not_self_employed: lavoratore dipendente
-
     popover_emails_optional:
       prompt_email_choice: "È opportuno inviare e-mail?"
       submit_with_emails: Invio di e-mail
@@ -1528,6 +1553,12 @@ it:
       inform_participants_caption: Informare tutti i partecipanti della cancellazione tramite e-mail
       canceled_reason_label: Motivazione
 
+    roles:
+      self_employed: lavoratore autonomo
+      not_self_employed: lavoratore dipendente
+
+    sections:
+      essentials: Wesentliche Fakten
   external_trainings:
     form:
       help_other_people: Altre persone per le quali deve essere inclusa la formazione esterna.
@@ -1799,6 +1830,8 @@ it:
       open_invoice_exists:
         info: Il recesso può essere effettuato solo dopo il pagamento della fattura in sospeso.
     terminate_sac_memberships:
+      show:
+        family_but_not_main_person: "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
       create:
         success:
           one: "Le vos"
@@ -2337,13 +2370,6 @@ it:
       ask_family_main_person:
         info_text: >-
           La disdetta dalla sezione aggiuntiva può essere richiesta solo per l’intera affiliazione famigliare dalla sua persona di riferimento. Ti invitiamo a rivolgerti a %{family_main_person}.
-      leave_zusatzsektion:
-        summary:
-          family_warning: >-
-            Attenzione: la disdetta dalla sezione aggiuntiva è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}.
-          info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
-          inform_mitglied_via_email: "Informare i membri via e-mail?"
-          next_button: "Richiedere disdetta"
       termination:
         summary:
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
