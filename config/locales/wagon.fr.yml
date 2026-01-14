@@ -117,7 +117,6 @@ fr:
         terminate_on: Quitter à partir de
         now: Immédiatement
         end_of_role: "Sur %{date}"
-
       memberships/termination_form:
         terminate_on: Date de sortie
         termination_reason_id: Motif de sortie
@@ -1801,6 +1800,8 @@ fr:
       open_invoice_exists:
         info: La résiliation ne peut être effectuée qu'après paiement de la facture en suspens.
     terminate_sac_memberships:
+      show:
+        family_but_not_main_person: "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
       create:
         success:
           one: "Ton adhésion au CAS a été résiliée."
@@ -2339,13 +2340,6 @@ fr:
       ask_family_main_person:
         info_text: >-
           La sortie de la section supplémentaire ne peut être demandée que pour l’ensemble de l’adhésion familiale et doit être demandée par la personne principale de ton adhésion familiale. Merci de t’adresser à %{family_main_person}.
-      leave_zusatzsektion:
-        summary:
-          family_warning: >-
-            Attention: la sortie de la section supplémentaire est demandée pour l’ensemble de l’adhésion familiale. Sont concerné·e·s: %{family_member_names}.
-          info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"
-          inform_mitglied_via_email: "Informer un membre par e-mail ?"
-          next_button: "Demander une résiliation"
       termination:
         summary:
           info_text: "Es-tu sûr·e de vouloir quitter la section %{sektion} au %{terminate_on}?"

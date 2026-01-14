@@ -117,7 +117,6 @@ it:
         terminate_on: Uscita da
         now: Immediatamente
         end_of_role: "Su %{date}"
-
       memberships/termination_form:
         terminate_on: Data di partenza
         termination_reason_id: Motivo della disdetta
@@ -1799,6 +1798,8 @@ it:
       open_invoice_exists:
         info: Il recesso può essere effettuato solo dopo il pagamento della fattura in sospeso.
     terminate_sac_memberships:
+      show:
+        family_but_not_main_person: "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
       create:
         success:
           one: "Le vos"
@@ -2337,13 +2338,6 @@ it:
       ask_family_main_person:
         info_text: >-
           La disdetta dalla sezione aggiuntiva può essere richiesta solo per l’intera affiliazione famigliare dalla sua persona di riferimento. Ti invitiamo a rivolgerti a %{family_main_person}.
-      leave_zusatzsektion:
-        summary:
-          family_warning: >-
-            Attenzione: la disdetta dalla sezione aggiuntiva è richiesta per l’intera affiliazione famigliare. Pertanto riguarda: %{family_member_names}.
-          info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
-          inform_mitglied_via_email: "Informare i membri via e-mail?"
-          next_button: "Richiedere disdetta"
       termination:
         summary:
           info_text: "Sei sicuro di volerti ritirare dalla sezione %{sektion} a partire dal %{terminate_on}?"
