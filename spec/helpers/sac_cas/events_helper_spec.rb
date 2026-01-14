@@ -1,6 +1,7 @@
 require "spec_helper"
 
 describe EventsHelper do
+  include UtilityHelper
   include FormatHelper
 
   let(:kind_category) { Fabricate.build(:event_kind_category) }
@@ -38,6 +39,26 @@ describe EventsHelper do
       expect(price_category_label(event, :price_regular)).to eq "J&S P-Normalpreis"
       expect(price_category_label(event, :price_subsidized)).to eq "J&S A-Mitgliederpreis"
       expect(price_category_label(event, :price_special)).to eq "J&S A-Normalpreis"
+    end
+  end
+
+  describe "#event_essentials_list" do
+    let(:event) { events(:section_tour) }
+
+    it "returns list of children with parent" do
+      event.disciplines = event_disciplines(:bergtour, :wanderweg, :felsklettern)
+
+      html = format_event_disciplines(event)
+      expect(html).to match(/<li><a .+?>Wandern<\/a> \(<a .+?>Wanderweg<\/a>, <a .+?>Bergtour<\/a>\)<\/li>/)
+      expect(html).to match(/<li><a .+?>Klettern<\/a> \(<a .+?>Fels<\/a>\)<\/li>/)
+    end
+
+    it "returns list of parents without children" do
+      event.target_groups = event_target_groups(:erwachsene, :senioren_b)
+
+      html = format_event_target_groups(event)
+      expect(html).to match(/<li><a .+?>Erwachsene<\/a><\/li>/)
+      expect(html).to match(/<li><a .+?>Senioren<\/a> \(<a .+?>Senioren B<\/a>\)<\/li>/)
     end
   end
 end
