@@ -60,6 +60,11 @@ class Event::Tour < Event
     class_name: "Event::TechnicalRequirement",
     foreign_key: :event_id
 
+  has_and_belongs_to_many :traits,
+    join_table: :events_traits,
+    class_name: "Event::Trait",
+    foreign_key: :event_id
+
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
