@@ -135,6 +135,7 @@ module HitobitoSacCas
       Ability.store.register Event::LevelAbility
       Ability.store.register Event::TargetGroupAbility
       Ability.store.register Event::TechnicalRequirementAbility
+      Ability.store.register Event::TraitAbility
       Ability.store.register ExternalInvoiceAbility
       Ability.store.register ExternalTrainingAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
@@ -232,6 +233,7 @@ module HitobitoSacCas
         event_target_groups
         event_technical_requirements
         event_fitness_requirements
+        event_traits
         termination_reasons
         section_offerings
         course_compensation_categories
