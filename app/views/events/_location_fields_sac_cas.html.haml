@@ -15,9 +15,9 @@
     = f.select(:discipline_ids, [], {},
       multiple: true,
       data: { controller: 'tom-select',
-      tom_select_options_value: disciplines_select_options(@main_disciplines),
+      tom_select_options_value: tour_essentials_grouped_select_options(@main_disciplines),
       tom_select_selected_value: entry.discipline_ids.to_json,
-      tom_select_optgroups_value: disciplines_select_optgroups(@main_disciplines),
+      tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@main_disciplines),
       tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
 - if entry.respond_to?(:target_groups)
@@ -25,7 +25,17 @@
     = f.select(:target_group_ids, [], {},
       multiple: true,
       data: { controller: 'tom-select',
-      tom_select_options_value: target_groups_select_options(@main_target_groups),
+      tom_select_options_value: tour_essentials_nested_select_options(@main_target_groups),
       tom_select_selected_value: entry.target_group_ids.to_json,
+      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+
+- if entry.respond_to?(:technical_requirements)
+  = f.labeled(:technical_requirements) do
+    = f.select(:technical_requirement_ids, [], {},
+      multiple: true,
+      data: { controller: 'tom-select',
+      tom_select_options_value: tour_essentials_grouped_select_options(@main_technical_requirements),
+      tom_select_selected_value: entry.technical_requirement_ids.to_json,
+      tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@main_technical_requirements),
       tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
