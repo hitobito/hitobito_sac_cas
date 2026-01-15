@@ -92,6 +92,7 @@ class SacEventSeeder < EventSeeder
   def seed_essentials(event)
     event.disciplines = disciplines.sample(rand(1..3))
     event.target_groups = target_groups.sample(rand(1..2))
+    event.fitness_requirement = fitness_requirements.sample
     event.technical_requirements = technical_requirements.sample(rand(1..2))
   end
 
@@ -109,5 +110,9 @@ class SacEventSeeder < EventSeeder
 
   def technical_requirements
     @technical_requirements ||= Event::TechnicalRequirement.where.not(parent_id: nil).to_a
+  end
+
+  def fitness_requirements
+    @fitness_requirements ||= Event::FitnessRequirement.all.to_a
   end
 end
