@@ -1,0 +1,77 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_traits
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  parent_id         :bigint
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+organisation:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:organisation) %>
+  locale: de
+  label: Organisation & Durchführung
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+travel:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:travel) %>
+  locale: de
+  label: Anreise
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+theme:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:theme) %>
+  locale: de
+  label: Organisation & Durchführung
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+guided:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:guided) %>
+  locale: de
+  label: Mit Bergführer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+public_transport:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:public_transport) %>
+  locale: de
+  label: Anreise mit ÖV
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+training:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:training) %>
+  locale: de
+  label: Training
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+excursion:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:excursion) %>
+  locale: de
+  label: Exkursion
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+work:
+  event_trait_id: <%= ActiveRecord::FixtureSet.identify(:work) %>
+  locale: de
+  label: Arbeitseinsatz
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

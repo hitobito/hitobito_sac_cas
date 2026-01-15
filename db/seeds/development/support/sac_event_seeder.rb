@@ -94,6 +94,7 @@ class SacEventSeeder < EventSeeder
     event.target_groups = target_groups.sample(rand(1..2))
     event.fitness_requirement = fitness_requirements.sample
     event.technical_requirements = technical_requirements.sample(rand(1..2))
+    event.traits = traits.sample(rand(0..2))
   end
 
   def current_year
@@ -114,5 +115,9 @@ class SacEventSeeder < EventSeeder
 
   def fitness_requirements
     @fitness_requirements ||= Event::FitnessRequirement.all.to_a
+  end
+
+  def traits
+    @traits ||= Event::Trait.where.not(parent_id: nil).to_a
   end
 end

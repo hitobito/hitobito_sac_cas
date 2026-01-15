@@ -286,6 +286,7 @@ de:
         fitness_requirement: Konditionelle Anforderung
         fitness_requirement_id: Konditionelle Anforderung
         technical_requirements: Technische Anforderung(en)
+        traits: Merkmal(e)
       event/kind:
         accommodation: Unterkunft
         accommodations:
@@ -447,6 +448,15 @@ de:
         order: Sortierschlüssel
         parent_id: Anforderungskategorie
         children: Anforderungen
+        updated_at: Geändert
+        deleted_at: Gelöscht
+      event/trait:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Kategorie
+        children: Merkmale
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
@@ -742,6 +752,9 @@ de:
       event/tour:
         one: Tour
         other: Touren
+      event/trait:
+        one: Merkmal
+        other: Merkmale
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen
