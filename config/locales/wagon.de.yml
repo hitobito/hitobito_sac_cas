@@ -283,6 +283,7 @@ de:
         maximum_class_size: Maximale Klassengrösse
         disciplines: Disziplin(en)
         target_groups: Zielgruppe(n)
+        traits: Merkmal(e)
       event/kind:
         accommodation: Unterkunft
         accommodations:
@@ -428,6 +429,15 @@ de:
         order: Sortierschlüssel
         parent_id: Übergeordnete Gruppe
         children: Untergruppen
+        updated_at: Geändert
+        deleted_at: Gelöscht
+      event/trait:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Kategorie
+        children: Merkmale
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
@@ -717,6 +727,9 @@ de:
       event/tour:
         one: Tour
         other: Touren
+      event/trait:
+        one: Merkmal
+        other: Merkmale
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen
@@ -1819,7 +1832,8 @@ de:
         info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       show:
-        family_but_not_main_person: Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person}
+        family_but_not_main_person:
+          Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person}
           durchgeführt werden.
       create:
         success:

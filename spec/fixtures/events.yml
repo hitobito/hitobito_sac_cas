@@ -55,3 +55,6 @@ section_tour:
   target_groups:
     - kinder
     - familien
+  traits:
+    - public_transport
+    - excursion
