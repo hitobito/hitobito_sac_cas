@@ -284,6 +284,7 @@ de:
         disciplines: Disziplin(en)
         target_groups: Zielgruppe(n)
         fitness_requirement: Konditionelle Anforderung
+        fitness_requirement_id: Konditionelle Anforderung
         technical_requirements: Technische Anforderung(en)
       event/kind:
         accommodation: Unterkunft

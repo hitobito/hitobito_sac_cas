@@ -10,5 +10,7 @@
         = labeled_attr(entry, :disciplines)
       - if entry.respond_to?(:target_groups)
         = labeled_attr(entry, :target_groups)
+      - if entry.respond_to?(:fitness_requirement)
+        = labeled_attr(entry, :fitness_requirement)
       - if entry.respond_to?(:technical_requirements)
         = labeled_attr(entry, :technical_requirements)

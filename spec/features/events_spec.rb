@@ -307,6 +307,19 @@ describe :events, js: true do
           expect(page).to have_no_selector(".ts-dropdown")
         end
 
+        within("#event_fitness_requirement_id + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 1)
+          expect(page).to have_selector(".ts-control .item", text: "B - wenig anstrengend")
+
+          find(".ts-control").click
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::FitnessRequirement.count)
+
+          find(".ts-dropdown .option", text: "A - nicht anstrengend").click
+          expect(page).to have_selector(".ts-control .item", text: "A - nicht anstrengend")
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
         within("#event_technical_requirement_ids + .ts-wrapper") do
           expect(page).to have_selector(".ts-control .item", count: 2)
           expect(page).to have_selector(".ts-control .item", text: "T3")
@@ -336,6 +349,8 @@ describe :events, js: true do
         expect(page).to have_content("Kinder (KiBe)")
         expect(page).to have_content("Senioren (Senioren B)")
 
+        expect(page).to have_content("A - nicht anstrengend")
+
         expect(page).to have_content("Wanderskala: T3, T4")
         expect(page).to have_content("Skitourenskala: WS")
 
@@ -344,6 +359,7 @@ describe :events, js: true do
         expect(event.target_groups).to match_array(event_target_groups(:kinder, :senioren_b))
         expect(event.technical_requirements)
           .to match_array(event_technical_requirements(:wandern_t3, :wandern_t4, :skitouren_ws))
+        expect(event.fitness_requirement).to eq(event_fitness_requirements(:a))
       end
     end
   end
