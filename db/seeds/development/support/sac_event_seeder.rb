@@ -92,6 +92,7 @@ class SacEventSeeder < EventSeeder
   def seed_essentials(event)
     event.disciplines = disciplines.sample(rand(1..3))
     event.target_groups = target_groups.sample(rand(1..2))
+    event.fitness_requirement = fitness_requirements.sample
   end
 
   def current_year
@@ -104,5 +105,9 @@ class SacEventSeeder < EventSeeder
 
   def target_groups
     @target_groups ||= Event::TargetGroup.all.to_a
+  end
+
+  def fitness_requirements
+    @fitness_requirements ||= Event::FitnessRequirement.all.to_a
   end
 end

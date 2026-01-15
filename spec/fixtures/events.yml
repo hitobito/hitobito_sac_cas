@@ -55,3 +55,4 @@ section_tour:
   target_groups:
     - kinder
     - familien
+  fitness_requirement: b
