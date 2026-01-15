@@ -39,3 +39,11 @@
       tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@main_technical_requirements),
       tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
+- if entry.respond_to?(:fitness_requirement)
+  = f.labeled(:fitness_requirement) do
+    = f.select(:fitness_requirement_id, [], {},
+      data: { controller: 'tom-select',
+      tom_select_options_value: fitness_requirements_select_options(@fitness_requirements),
+      tom_select_selected_value: [entry.fitness_requirement_id].to_json,
+      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+

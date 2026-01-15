@@ -10,6 +10,7 @@ module SacCas::EventsController
 
   prepended do
     self.permitted_attrs += [
+      :fitness_requirement_id,
       discipline_ids: [],
       target_group_ids: [],
       technical_requirement_ids: []
@@ -19,6 +20,7 @@ module SacCas::EventsController
     before_render_form :preload_disciplines
     before_render_form :preload_target_groups
     before_render_form :preload_technical_requirements
+    before_render_form :preload_fitness_requirements
   end
 
   private
@@ -48,5 +50,11 @@ module SacCas::EventsController
 
     @main_technical_requirements =
       Event::TechnicalRequirement.main.list.includes(:translations, children: :translations)
+  end
+
+  def preload_fitness_requirements
+    return unless entry.respond_to?(:fitness_requirement)
+
+    @fitness_requirements = Event::FitnessRequirement.list.includes(:translations)
   end
 end
