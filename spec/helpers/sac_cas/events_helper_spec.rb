@@ -60,5 +60,14 @@ describe EventsHelper do
       expect(html).to match(/<li><a .+?>Erwachsene<\/a><\/li>/)
       expect(html).to match(/<li><a .+?>Senioren<\/a> \(<a .+?>Senioren B<\/a>\)<\/li>/)
     end
+
+    it "returns list with unwrapped children and custom separator" do
+      event.technical_requirements = event_technical_requirements(:klettern_5a, :klettern_5b_plus, :skitouren_ws)
+      event_technical_requirements(:skitouren_ws).update!(label: "<b>WS</b>")
+
+      html = format_event_technical_requirements(event)
+      expect(html).to match(/<li><a .+?>Französische Kletterskala<\/a>: 5a, 5b\+<\/li>/)
+      expect(html).to match(/<li><a .+?>Skitourenskala<\/a>: &lt;b&gt;WS&lt;\/b&gt;<\/li>/)
+    end
   end
 end
