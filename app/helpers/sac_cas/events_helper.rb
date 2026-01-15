@@ -18,21 +18,23 @@ module SacCas::EventsHelper
     end
   end
 
-  def disciplines_select_options(main_disciplines)
-    main_disciplines.flat_map do |main|
+  # main entries are optgroups and not selectable
+  def tour_essentials_grouped_select_options(main_entries)
+    main_entries.flat_map do |main|
       main.children.sort_by(&:order).map do |child|
         {id: child.id, label: child.to_s, description: child.short_description, group: main.id}
       end
     end.to_json
   end
 
-  def disciplines_select_optgroups(main_disciplines)
-    main_disciplines.flat_map do |main|
+  def tour_essentials_grouped_select_optgroups(main_entries)
+    main_entries.flat_map do |main|
       {value: main.id, label: main.to_s}
     end.to_json
   end
 
-  def target_groups_select_options(main_groups)
+  # main entries are regular selectable options
+  def tour_essentials_nested_select_options(main_groups)
     main_groups.flat_map do |main|
       [{id: main.id, label: main.to_s, description: main.short_description}] +
         main.children.sort_by(&:order).map do |child|
@@ -59,11 +61,15 @@ module SacCas::EventsHelper
     event_essentials_list(event.target_groups)
   end
 
+  def format_event_technical_requirements(event)
+    event_essentials_list(event.technical_requirements, wrap_children: false, separator: ": ")
+  end
+
   def event_essentials_list(association, wrap_children: true, separator: " ")
     simple_list(event_essentials_with_children(association), class: "mb-0") do |main, children|
-      parent = with_tooltip(main.label, main.description)
+      parent = render_event_essential(main)
       if children.present?
-        child_list = safe_join(children, ", ") { |c| with_tooltip(c.label, c.description) }
+        child_list = safe_join(children, ", ") { |c| render_event_essential(c) }
         child_list = wrap_children ? safe_join(["(", child_list, ")"]) : child_list
         safe_join([parent, child_list], separator)
       else
@@ -79,6 +85,14 @@ module SacCas::EventsHelper
     main = entries.keys.compact + entries.fetch(nil, [])
     main.uniq.sort_by(&:order).map do |parent|
       [parent, entries[parent]]
+    end
+  end
+
+  def render_event_essential(entry)
+    if entry.description.present?
+      with_tooltip(entry.label, entry.description)
+    else
+      entry.label
     end
   end
 end

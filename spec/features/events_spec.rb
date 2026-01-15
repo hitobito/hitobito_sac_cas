@@ -307,6 +307,24 @@ describe :events, js: true do
           expect(page).to have_no_selector(".ts-dropdown")
         end
 
+        within("#event_technical_requirement_ids + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 2)
+          expect(page).to have_selector(".ts-control .item", text: "T3")
+          expect(page).to have_selector(".ts-control .item", text: "T4")
+
+          find(".ts-control input").click
+          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::TechnicalRequirement.main.count)
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::TechnicalRequirement.where.not(parent: nil).count - 2) # 2 already selected
+
+          find(".ts-dropdown .option", text: "WS").click
+          expect(page).to have_selector(".ts-control .item", text: "WS")
+
+          # close dropdown again
+          find(".ts-control input").click
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
         click_on "Speichern", match: :first
 
         expect(page).to have_selector("section h2", text: "Anmeldung")
@@ -318,9 +336,14 @@ describe :events, js: true do
         expect(page).to have_content("Kinder (KiBe)")
         expect(page).to have_content("Senioren (Senioren B)")
 
+        expect(page).to have_content("Wanderskala: T3, T4")
+        expect(page).to have_content("Skitourenskala: WS")
+
         event.reload
-        expect(event.disciplines).to eq(event_disciplines(:wanderweg, :felsklettern))
-        expect(event.target_groups).to eq(event_target_groups(:kinder, :senioren_b))
+        expect(event.disciplines).to match_array(event_disciplines(:wanderweg, :felsklettern))
+        expect(event.target_groups).to match_array(event_target_groups(:kinder, :senioren_b))
+        expect(event.technical_requirements)
+          .to match_array(event_technical_requirements(:wandern_t3, :wandern_t4, :skitouren_ws))
       end
     end
   end

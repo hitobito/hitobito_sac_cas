@@ -9,11 +9,16 @@ module SacCas::EventsController
   extend ActiveSupport::Concern
 
   prepended do
-    self.permitted_attrs += [discipline_ids: [], target_group_ids: []]
+    self.permitted_attrs += [
+      discipline_ids: [],
+      target_group_ids: [],
+      technical_requirement_ids: []
+    ]
 
     before_render_form :preload_translated_associations
     before_render_form :preload_disciplines
     before_render_form :preload_target_groups
+    before_render_form :preload_technical_requirements
   end
 
   private
@@ -36,5 +41,12 @@ module SacCas::EventsController
 
     @main_target_groups =
       Event::TargetGroup.main.list.includes(:translations, children: :translations)
+  end
+
+  def preload_technical_requirements
+    return unless entry.respond_to?(:technical_requirements)
+
+    @main_technical_requirements =
+      Event::TechnicalRequirement.main.list.includes(:translations, children: :translations)
   end
 end
