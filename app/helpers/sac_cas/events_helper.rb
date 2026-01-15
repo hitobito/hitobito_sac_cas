@@ -43,6 +43,12 @@ module SacCas::EventsHelper
     end.to_json
   end
 
+  def fitness_requirements_select_options(requirements)
+    requirements.map do |entry|
+      {id: entry.id, label: entry.to_s, description: entry.short_description}
+    end.to_json
+  end
+
   def price_category_label(entry, attr)
     if entry&.kind&.kind_category&.j_s_course
       I18n.t("activerecord.attributes.event/course.j_s_#{attr}")
@@ -57,6 +63,10 @@ module SacCas::EventsHelper
 
   def format_event_target_groups(event)
     event_essentials_list(event.target_groups)
+  end
+
+  def format_event_fitness_requirement(event)
+    render_event_essential(event.fitness_requirement) if event.fitness_requirement
   end
 
   def event_essentials_list(association, wrap_children: true, separator: " ")
@@ -79,6 +89,14 @@ module SacCas::EventsHelper
     main = entries.keys.compact + entries.fetch(nil, [])
     main.uniq.sort_by(&:order).map do |parent|
       [parent, entries[parent]]
+    end
+  end
+
+  def render_event_essential(entry)
+    if entry.description.present?
+      with_tooltip(entry.label, entry.description)
+    else
+      entry.label
     end
   end
 end

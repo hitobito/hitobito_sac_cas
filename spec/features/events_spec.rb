@@ -307,6 +307,19 @@ describe :events, js: true do
           expect(page).to have_no_selector(".ts-dropdown")
         end
 
+        within("#event_fitness_requirement_id + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 1)
+          expect(page).to have_selector(".ts-control .item", text: "B - wenig anstrengend")
+
+          find(".ts-control").click
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::FitnessRequirement.count)
+
+          find(".ts-dropdown .option", text: "A - nicht anstrengend").click
+          expect(page).to have_selector(".ts-control .item", text: "A - nicht anstrengend")
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
         click_on "Speichern", match: :first
 
         expect(page).to have_selector("section h2", text: "Anmeldung")
@@ -318,9 +331,12 @@ describe :events, js: true do
         expect(page).to have_content("Kinder (KiBe)")
         expect(page).to have_content("Senioren (Senioren B)")
 
+        expect(page).to have_content("A - nicht anstrengend")
+
         event.reload
         expect(event.disciplines).to eq(event_disciplines(:wanderweg, :felsklettern))
         expect(event.target_groups).to eq(event_target_groups(:kinder, :senioren_b))
+        expect(event.fitness_requirement).to eq(event_fitness_requirements(:a))
       end
     end
   end

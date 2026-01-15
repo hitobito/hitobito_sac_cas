@@ -9,11 +9,12 @@ module SacCas::EventsController
   extend ActiveSupport::Concern
 
   prepended do
-    self.permitted_attrs += [discipline_ids: [], target_group_ids: []]
+    self.permitted_attrs += [:fitness_requirement_id, discipline_ids: [], target_group_ids: []]
 
     before_render_form :preload_translated_associations
     before_render_form :preload_disciplines
     before_render_form :preload_target_groups
+    before_render_form :preload_fitness_requirements
   end
 
   private
@@ -36,5 +37,11 @@ module SacCas::EventsController
 
     @main_target_groups =
       Event::TargetGroup.main.list.includes(:translations, children: :translations)
+  end
+
+  def preload_fitness_requirements
+    return unless entry.respond_to?(:fitness_requirement)
+
+    @fitness_requirements = Event::FitnessRequirement.list.includes(:translations)
   end
 end
