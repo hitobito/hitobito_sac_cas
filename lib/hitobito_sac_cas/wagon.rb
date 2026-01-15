@@ -131,6 +131,7 @@ module HitobitoSacCas
       Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register CourseCompensationRateAbility
       Ability.store.register Event::DisciplineAbility
+      Ability.store.register Event::FitnessRequirementAbility
       Ability.store.register Event::LevelAbility
       Ability.store.register Event::TargetGroupAbility
       Ability.store.register ExternalInvoiceAbility
@@ -228,6 +229,7 @@ module HitobitoSacCas
         event_disciplines
         event_levels
         event_target_groups
+        event_fitness_requirements
         termination_reasons
         section_offerings
         course_compensation_categories
