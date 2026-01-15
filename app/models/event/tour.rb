@@ -43,6 +43,8 @@ class Event::Tour < Event
   # Used for Event::TourResource
   attr_accessor :leaders
 
+  belongs_to :fitness_requirement, optional: true
+
   has_and_belongs_to_many :disciplines,
     join_table: :events_disciplines,
     class_name: "Event::Discipline",

@@ -195,3 +195,37 @@ Event::TechnicalRequirement::Translation.seed_once(:event_technical_requirement_
      locale: "de",
      label: "S#{i}"}
   end)
+
+Event::FitnessRequirement.seed_once(:id,
+  {id: 1, order: 1},
+  {id: 2, order: 2},
+  {id: 3, order: 3},
+  {id: 4, order: 4},
+  {id: 5, order: 5})
+
+Event::FitnessRequirement::Translation.seed_once(:event_fitness_requirement_id, :locale,
+  {event_fitness_requirement_id: 1,
+   locale: "de",
+   label: "A - nicht anstrengend",
+   short_description: "0-3h Totalzeit",
+   description: "0-3h Totalzeit"},
+  {event_fitness_requirement_id: 2,
+   locale: "de",
+   label: "B - wenig anstrengend",
+   short_description: "3-5h Totalzeit; bis ca. 800HM Aufstieg",
+   description: "3-5h Totalzeit; bis ca. 800HM Aufstieg"},
+  {event_fitness_requirement_id: 3,
+   locale: "de",
+   label: "C - ziemlich anstrengend",
+   short_description: "4-7h Totalzeit; ca. 800-1300HM Aufstieg",
+   description: "5-7h Totalzeit; ca. 800-1300HM Aufstieg"},
+  {event_fitness_requirement_id: 4,
+   locale: "de",
+   label: "D - anstrengend",
+   short_description: "6-10h Totalzeit; ca. 1300-1600HM Aufstieg",
+   description: "6-10h Totalzeit; ca. 1300-1600HM Aufstieg"},
+  {event_fitness_requirement_id: 5,
+   locale: "de",
+   label: "E - sehr anstrengend",
+   short_description: "über 10h Totalzeit; Aufstieg mehr als 1600HM",
+   description: "über 10h Totalzeit; Aufstieg mehr als 1600HM"})

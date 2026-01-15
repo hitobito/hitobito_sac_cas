@@ -283,6 +283,7 @@ de:
         maximum_class_size: Maximale Klassengrösse
         disciplines: Disziplin(en)
         target_groups: Zielgruppe(n)
+        fitness_requirement: Konditionelle Anforderung
         technical_requirements: Technische Anforderung(en)
       event/kind:
         accommodation: Unterkunft
@@ -384,6 +385,13 @@ de:
         order: Sortierschlüssel
         parent_id: Übergeordnete Disziplin
         children: Unterdisziplinen
+        updated_at: Geändert
+        deleted_at: Gelöscht
+      event/fitness_requirement:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
         updated_at: Geändert
         deleted_at: Gelöscht
       event/kind_category:
@@ -703,6 +711,9 @@ de:
       event/discipline:
         one: Disziplin
         other: Disziplinen
+      event/fitness_requirement:
+        one: Konditionelle Anforderung
+        other: Konditionelle Anforderungen
       event/level:
         one: Kursstufe
         other: Kursstufen
@@ -1832,7 +1843,8 @@ de:
         info: Der Austritt kann erst durchgeführt werden nachdem die offene Rechnung bezahlt wurde.
     terminate_sac_memberships:
       show:
-        family_but_not_main_person: Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person}
+        family_but_not_main_person:
+          Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person}
           durchgeführt werden.
       create:
         success:
