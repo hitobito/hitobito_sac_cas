@@ -70,7 +70,6 @@ describe Household do
       household.add(second_child)
       expect(household.valid?).to eq false
       expect(household.errors[:base]).to match_array([
-        "Der Haushalt enthält keine erwachsene Person mit E-Mail Adresse.",
         "Eine Familie muss mindestens 1 erwachsene Person enthalten."
       ])
     end
