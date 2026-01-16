@@ -24,9 +24,8 @@ class People::SacFamilyMainPersonController < ApplicationController
   end
 
   def assert_person_household_member
-    if !person.household.exists? || !person.adult? || person.email.blank?
-      render plain: "Person is not associated with any household, " \
-        "is not an adult or has no email address",
+    if !person.household.exists? || !person.adult?
+      render plain: "Person is not associated with any household or is not an adult",
         status: :unprocessable_content
     end
   end

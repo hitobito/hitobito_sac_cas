@@ -47,19 +47,7 @@ describe People::SacFamilyMainPersonController, type: :controller do
       it "returns a 422 status with an error message" do
         put :update, params: {id: adult.id}
         expect(response).to have_http_status(422)
-        expect(response.body).to eq("Person is not associated with any household, " \
-          "is not an adult or has no email address")
-      end
-    end
-
-    context "when the person doesn't have an email" do
-      before { adult.update!(email: nil) }
-
-      it "raises access denied error" do
-        put :update, params: {id: adult.id}
-        expect(response).to have_http_status(422)
-        expect(response.body).to eq("Person is not associated with any household, " \
-          "is not an adult or has no email address")
+        expect(response.body).to eq("Person is not associated with any household or is not an adult")
       end
     end
 
@@ -104,8 +92,7 @@ describe People::SacFamilyMainPersonController, type: :controller do
       it "only allows adults to become main persons" do
         put :update, params: {id: child.id}
         expect(response).to have_http_status(422)
-        expect(response.body).to eq("Person is not associated with any household, " \
-          "is not an adult or has no email address")
+        expect(response.body).to eq("Person is not associated with any household or is not an adult")
       end
     end
 
