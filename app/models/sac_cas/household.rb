@@ -13,7 +13,6 @@ module SacCas::Household
   prepended do
     validate :assert_adult_member, on: :update
     validate :assert_minimum_member_size, on: :update
-    validate :assert_adult_member_with_email, on: :update
     validate :assert_someone_is_a_member, on: :update
   end
 
@@ -132,12 +131,6 @@ module SacCas::Household
     if members.count < 2
       errors.add(:base, :at_least_two_members)
     end
-  end
-
-  def assert_adult_member_with_email
-    return if adults.any? { _1.email? }
-
-    errors.add(:base, :no_adult_member_with_email)
   end
 
   def assert_someone_is_a_member
