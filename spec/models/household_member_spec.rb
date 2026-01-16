@@ -46,24 +46,6 @@ describe HouseholdMember do
       # rubocop:enable Layout/LineLength
     end
 
-    it "is invalid if birthday is below 6 years old" do
-      create_mitglied_role(person)
-      person.update_attribute(:birthday, Date.new(2019, 7, 20))
-      expect(household_member.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
-      # rubocop:enable Layout/LineLength
-    end
-
-    it "is invalid if birthday is between 17 and 22 years old" do
-      create_mitglied_role(person)
-      person.update_attribute(:birthday, Date.new(2005, 7, 20))
-      expect(household_member.valid?).to eq false
-      # rubocop:todo Layout/LineLength
-      expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
-      # rubocop:enable Layout/LineLength
-    end
-
     # rubocop:todo Layout/LineLength
     it "is invalid if member has different household key than reference person and has family sac membership" do
       # rubocop:enable Layout/LineLength
@@ -101,6 +83,44 @@ describe HouseholdMember do
       # rubocop:todo Layout/LineLength
       expect(household_member.errors[:base]).to match_array(["#{other_household_person.full_name} hat einen Austritt geplant."])
       # rubocop:enable Layout/LineLength
+    end
+
+    describe "age based validation" do
+      let(:familienmitglied) { people(:familienmitglied) }
+      let(:familienmitglied2) { people(:familienmitglied2) }
+      let(:familienmitglied_kind) { people(:familienmitglied_kind) }
+
+      it "is invalid if birthday is below 6 years old" do
+        create_mitglied_role(person)
+        person.update_attribute(:birthday, Date.new(2019, 7, 20))
+        expect(household_member.valid?).to eq false
+        # rubocop:todo Layout/LineLength
+        expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
+        # rubocop:enable Layout/LineLength
+      end
+
+      it "is invalid if birthday is between 17 and 22 years old" do
+        create_mitglied_role(person)
+        person.update_attribute(:birthday, Date.new(2005, 7, 20))
+        expect(household_member.valid?).to eq false
+        # rubocop:todo Layout/LineLength
+        expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
+        # rubocop:enable Layout/LineLength
+      end
+
+      it "validates age when adding person" do
+        create_mitglied_role(person)
+        familienmitglied.household.add(person)
+        person.update_attribute(:birthday, Date.new(2019, 7, 20))
+        expect(familienmitglied.household).not_to be_valid
+        expect(familienmitglied.household.errors.full_messages[0]).to match(/nur Personen erlaubt im Alter von/)
+      end
+
+      it "ignores age of unrelated person when removing" do
+        familienmitglied2.update!(birthday: 2.years.ago) # invalid age
+        familienmitglied.household.remove(familienmitglied_kind)
+        expect(familienmitglied.household).to(be_valid)
+      end
     end
 
     context "with additional membership" do
