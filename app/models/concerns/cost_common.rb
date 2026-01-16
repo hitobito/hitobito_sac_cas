@@ -19,11 +19,19 @@ module CostCommon
     validates :code, uniqueness: true
 
     scope :list, -> { includes(:translations).order(:code) }
+    # Returns all entries that are assignable to events.
+    # Optionally pass the ids of the entries currently assigned to
+    # a specific event, so that they always appear in the dropdown,
+    # even if they are soft deleted.
+    scope :assignable, ->(ids = []) { without_deleted.or(where(id: ids)) }
 
     has_many :event_kind_categories, class_name: "Event::KindCategory",
       dependent: :restrict_with_error
 
     has_many :event_kinds, class_name: "Event::Kind",
+      dependent: :restrict_with_error
+
+    has_many :events, class_name: "Event",
       dependent: :restrict_with_error
 
     validates_by_schema
@@ -44,6 +52,6 @@ module CostCommon
   private
 
   def dependent_associations_exist?
-    [event_kind_categories, event_kinds].any?(&:exists?)
+    [event_kind_categories, event_kinds, events].any?(&:exists?)
   end
 end

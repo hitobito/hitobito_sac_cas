@@ -263,6 +263,8 @@ describe :events, js: true do
 
     context "edit essentials" do
       it "shows options in tom select and sets them correctly" do
+        # assigned but soft deleted entries should still be available in dropdown
+        event.disciplines.first.update!(deleted_at: 1.month.ago)
         event_disciplines(:bergtour).update!(short_description: "Über Stock und Stein")
         visit edit_group_event_path(group_id: event.group_ids.first, id: event.id)
 
@@ -319,8 +321,8 @@ describe :events, js: true do
         expect(page).to have_content("Senioren (Senioren B)")
 
         event.reload
-        expect(event.disciplines).to eq(event_disciplines(:wanderweg, :felsklettern))
-        expect(event.target_groups).to eq(event_target_groups(:kinder, :senioren_b))
+        expect(event.disciplines).to match_array(event_disciplines(:wanderweg, :felsklettern))
+        expect(event.target_groups).to match_array(event_target_groups(:kinder, :senioren_b))
       end
     end
   end

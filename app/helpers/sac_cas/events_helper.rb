@@ -18,16 +18,16 @@ module SacCas::EventsHelper
     end
   end
 
-  def disciplines_select_options(main_disciplines)
-    main_disciplines.flat_map do |main|
-      main.children.sort_by(&:order).map do |child|
+  def disciplines_select_options(disciplines)
+    disciplines.select(&:main?).flat_map do |main|
+      disciplines.select { |d| d.parent_id == main.id }.map do |child|
         {id: child.id, label: child.to_s, description: child.short_description, group: main.id}
       end
     end.to_json
   end
 
-  def disciplines_select_optgroups(main_disciplines)
-    main_disciplines.flat_map do |main|
+  def disciplines_select_optgroups(disciplines)
+    disciplines.select(&:main?).flat_map do |main|
       {value: main.id, label: main.to_s}
     end.to_json
   end

@@ -41,9 +41,22 @@ class Event::Discipline < ActiveRecord::Base
 
   scope :list, -> { includes(:translations).order(:order) }
   scope :main, -> { where(parent_id: nil) }
+  # Returns all entries that are assignable to events.
+  # Optionally pass the ids of the entries currently assigned to
+  # a specific event, so that they always appear in the dropdown,
+  # even if they are soft deleted.
+  scope :assignable, (lambda do |ids = []|
+    without_deleted
+      .or(where(id: ids))
+      .or(where(id: where(id: ids).select(:parent_id)))
+  end)
 
   def to_s
     label
+  end
+
+  def main?
+    parent_id.nil?
   end
 
   # Soft destroy if events exist, otherwise hard destroy
