@@ -3507,6 +3507,12 @@
           "writable": "guarded",
           "description": null
         },
+        "language": {
+          "type": "string",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "picture": {
           "type": "string",
           "readable": true,
@@ -3520,12 +3526,6 @@
           "description": null
         },
         "additional_information": {
-          "type": "string",
-          "readable": true,
-          "writable": true,
-          "description": null
-        },
-        "language": {
           "type": "string",
           "readable": true,
           "writable": true,
@@ -3606,10 +3606,10 @@
         "primary_group_id": {},
         "gender": {},
         "birthday": {},
+        "language": {},
         "picture": {},
         "updated_at": {},
-        "additional_information": {},
-        "language": {}
+        "additional_information": {}
       },
       "filters": {
         "id": {
@@ -3862,6 +3862,21 @@
             "lte"
           ]
         },
+        "language": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
         "picture": {
           "type": "string",
           "operators": [
@@ -3889,21 +3904,6 @@
           ]
         },
         "additional_information": {
-          "type": "string",
-          "operators": [
-            "eq",
-            "not_eq",
-            "eql",
-            "not_eql",
-            "prefix",
-            "not_prefix",
-            "suffix",
-            "not_suffix",
-            "match",
-            "not_match"
-          ]
-        },
-        "language": {
           "type": "string",
           "operators": [
             "eq",
