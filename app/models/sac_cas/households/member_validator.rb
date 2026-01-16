@@ -12,7 +12,7 @@ module SacCas::Households::MemberValidator
     super
 
     assert_birthday
-    assert_family_age_range
+    assert_family_age_range if added?
     assert_no_membership_in_other_section
   end
 
@@ -48,4 +48,6 @@ module SacCas::Households::MemberValidator
   def add_error(key, name_key = :person_name)
     @member.errors.add(:base, key, **{name_key => person.full_name})
   end
+
+  def added? = household.new_people.include?(person)
 end
