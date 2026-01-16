@@ -15,9 +15,9 @@
     = f.select(:discipline_ids, [], {},
       multiple: true,
       data: { controller: 'tom-select',
-      tom_select_options_value: disciplines_select_options(@main_disciplines),
+      tom_select_options_value: disciplines_select_options(@disciplines),
       tom_select_selected_value: entry.discipline_ids.to_json,
-      tom_select_optgroups_value: disciplines_select_optgroups(@main_disciplines),
+      tom_select_optgroups_value: disciplines_select_optgroups(@disciplines),
       tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
 - if entry.respond_to?(:target_groups)

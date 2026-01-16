@@ -21,20 +21,20 @@ module SacCas::EventsController
   def preload_translated_associations
     return unless entry.type == "Event::Course"
 
-    @cost_centers = CostCenter.includes(:translations).list
-    @cost_units = CostUnit.includes(:translations).list
+    @cost_centers = CostCenter.assignable(entry.cost_center_id).list
+    @cost_units = CostUnit.assignable(entry.cost_unit_id).list
   end
 
   def preload_disciplines
     return unless entry.respond_to?(:disciplines)
 
-    @main_disciplines = Event::Discipline.main.list.includes(:translations, children: :translations)
+    @disciplines = Event::Discipline.assignable(entry.discipline_ids).list
   end
 
   def preload_target_groups
     return unless entry.respond_to?(:target_groups)
 
     @main_target_groups =
-      Event::TargetGroup.main.list.includes(:translations, children: :translations)
+      Event::TargetGroup.main.list.includes(children: :translations)
   end
 end

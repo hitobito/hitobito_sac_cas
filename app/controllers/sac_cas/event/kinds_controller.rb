@@ -48,8 +48,9 @@ module SacCas::Event::KindsController
 
   def load_assocations
     super
-    @cost_centers = CostCenter.list
-    @cost_units = CostUnit.list
+    @cost_centers = CostCenter.assignable(entry.cost_center_id).list
+    @cost_units = CostUnit.assignable(entry.cost_unit_id).list
+    @levels = Event::Level.assignable(entry.level_id).list
     @kind_categories = Event::KindCategory.list
     @course_compensation_categories = CourseCompensationCategory.list
   end
