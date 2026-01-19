@@ -276,6 +276,7 @@ de_CH:
         maximum_class_size: Maximale Klassengrösse
         disciplines: Disziplin(en)
         target_groups: Zielgruppe(n)
+        technical_requirements: Technische Anforderung(en)
       event/kind:
         accommodation: Unterkunft
         accommodations:
@@ -421,6 +422,15 @@ de_CH:
         order: Sortierschlüssel
         parent_id: Übergeordnete Gruppe
         children: Untergruppen
+        updated_at: Geändert
+        deleted_at: Gelöscht
+      event/technical_requirement:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Anforderungskategorie
+        children: Anforderungen
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
@@ -706,6 +716,9 @@ de_CH:
       event/target_group:
         one: Zielgruppe
         other: Zielgruppen
+      event/technical_requirement:
+        one: Technische Anforderung
+        other: Technische Anforderungen
       event/tour:
         one: Tour
         other: Touren
