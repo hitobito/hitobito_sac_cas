@@ -278,7 +278,10 @@ it:
         maximum_class_size: Dimensione massima della classe
         disciplines: Disziplin(en)
         target_groups: Zielgruppe(n)
+        fitness_requirement: Konditionelle Anforderung
+        fitness_requirement_id: Konditionelle Anforderung
         technical_requirements: Technische Anforderung(en)
+        traits: Merkmal(e)
       event/kind:
         accommodation: Alloggio
         accommodations:
@@ -381,6 +384,13 @@ it:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/fitness_requirement:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
@@ -433,6 +443,15 @@ it:
         order: Sortierschlüssel
         parent_id: Anforderungskategorie
         children: Anforderungen
+        updated_at: Geändert
+        deleted_at: Gelöscht
+      event/trait:
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Kategorie
+        children: Merkmale
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
@@ -702,6 +721,9 @@ it:
       event/discipline:
         one: Disziplin
         other: Disziplinen
+      event/fitness_requirement:
+        one: Konditionelle Anforderung
+        other: Konditionelle Anforderungen
       event/level:
         one: Livello del corso
         many: Livelli del corso
@@ -736,6 +758,9 @@ it:
         one: Tour
         many: Tour
         other: Tour
+      event/trait:
+        one: Merkmal
+        other: Merkmale
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -1844,7 +1869,8 @@ it:
         info: Il recesso può essere effettuato solo dopo il pagamento della fattura in sospeso.
     terminate_sac_memberships:
       show:
-        family_but_not_main_person: "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
+        family_but_not_main_person:
+          "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
       create:
         success:
           one: "Le vos"
