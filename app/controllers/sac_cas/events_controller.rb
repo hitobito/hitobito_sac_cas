@@ -13,7 +13,8 @@ module SacCas::EventsController
       :fitness_requirement_id,
       discipline_ids: [],
       target_group_ids: [],
-      technical_requirement_ids: []
+      technical_requirement_ids: [],
+      trait_ids: []
     ]
 
     before_render_form :preload_translated_associations
@@ -29,7 +30,7 @@ module SacCas::EventsController
     @cost_units = CostUnit.assignable(entry.cost_unit_id).list
   end
 
-  def preload_tour_essentials
+  def preload_tour_essentials # rubocop:disable Metrics/AbcSize
     return unless entry.type == "Event::Tour"
 
     @disciplines = Event::Discipline.assignable(entry.discipline_ids).list
@@ -37,5 +38,6 @@ module SacCas::EventsController
     @technical_requirements =
       Event::TechnicalRequirement.assignable(entry.technical_requirement_ids).list
     @fitness_requirements = Event::FitnessRequirement.assignable(entry.fitness_requirement_id).list
+    @traits = Event::Trait.assignable(entry.trait_ids).list
   end
 end
