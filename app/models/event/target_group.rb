@@ -10,7 +10,7 @@
 # Table name: event_target_groups
 #
 #  id                :bigint           not null, primary key
-#  order             :integer
+#  order             :integer          not null, default 0
 #  parent_id         :bigint
 #  label             :string(255)
 #  short_description :string(255)
@@ -21,46 +21,9 @@
 #
 
 class Event::TargetGroup < ActiveRecord::Base
-  include Paranoia::Globalized
+  include NestableTourEssential
 
-  translates :label, :description, :short_description
-
-  attr_readonly :parent_id
-
-  belongs_to :parent, optional: true, class_name: "Event::TargetGroup"
-  has_many :children,
-    class_name: "Event::TargetGroup",
-    foreign_key: :parent_id,
-    inverse_of: :parent,
-    dependent: :restrict_with_error
   has_and_belongs_to_many :events, join_table: "events_target_groups"
 
-  validates_by_schema
-  validates :label, :description, presence: true
-  validate :assert_parent_is_main
-
-  scope :list, -> { includes(:translations).order(:order) }
-  scope :main, -> { where(parent_id: nil) }
-
-  def to_s
-    label
-  end
-
-  # Soft destroy if events exist, otherwise hard destroy
-  def destroy
-    if children.without_deleted.exists?
-      errors.add(:base, :has_children)
-      false
-    elsif events.exists? || children.with_deleted.exists?
-      delete
-    else
-      really_destroy!
-    end
-  end
-
-  private
-
-  def assert_parent_is_main
-    errors.add(:parent_id, :parent_is_not_main) if parent&.parent_id
-  end
+  validates :description, presence: true
 end

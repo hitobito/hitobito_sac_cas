@@ -10,7 +10,7 @@
 # Table name: event_fitness_requirement
 #
 #  id                :bigint           not null, primary key
-#  order             :integer
+#  order             :integer          not null, default 0
 #  label             :string(255)
 #  short_description :string(255)
 #  description       :text(65535)
@@ -28,8 +28,10 @@ class Event::FitnessRequirement < ActiveRecord::Base
 
   validates_by_schema
   validates :label, :description, presence: true
+  validates :label, uniqueness: true
 
   scope :list, -> { includes(:translations).order(:order) }
+  scope :assignable, ->(ids = []) { without_deleted.or(where(id: ids)) }
 
   def to_s
     label
