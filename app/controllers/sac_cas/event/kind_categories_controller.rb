@@ -23,8 +23,8 @@ module SacCas::Event::KindCategoriesController
 
   def load_assocations
     super
-    @cost_centers = CostCenter.includes(:translations).list
-    @cost_units = CostUnit.includes(:translations).list
+    @cost_centers = CostCenter.assignable(entry.cost_center_id).list
+    @cost_units = CostUnit.assignable(entry.cost_unit_id).list
   end
 
   def list_entries

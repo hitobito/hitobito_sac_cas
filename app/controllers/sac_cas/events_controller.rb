@@ -17,10 +17,7 @@ module SacCas::EventsController
     ]
 
     before_render_form :preload_translated_associations
-    before_render_form :preload_disciplines
-    before_render_form :preload_target_groups
-    before_render_form :preload_technical_requirements
-    before_render_form :preload_fitness_requirements
+    before_render_form :preload_tour_essentials
   end
 
   private
@@ -28,33 +25,17 @@ module SacCas::EventsController
   def preload_translated_associations
     return unless entry.type == "Event::Course"
 
-    @cost_centers = CostCenter.includes(:translations).list
-    @cost_units = CostUnit.includes(:translations).list
+    @cost_centers = CostCenter.assignable(entry.cost_center_id).list
+    @cost_units = CostUnit.assignable(entry.cost_unit_id).list
   end
 
-  def preload_disciplines
-    return unless entry.respond_to?(:disciplines)
+  def preload_tour_essentials
+    return unless entry.type == "Event::Tour"
 
-    @main_disciplines = Event::Discipline.main.list.includes(:translations, children: :translations)
-  end
-
-  def preload_target_groups
-    return unless entry.respond_to?(:target_groups)
-
-    @main_target_groups =
-      Event::TargetGroup.main.list.includes(:translations, children: :translations)
-  end
-
-  def preload_technical_requirements
-    return unless entry.respond_to?(:technical_requirements)
-
-    @main_technical_requirements =
-      Event::TechnicalRequirement.main.list.includes(:translations, children: :translations)
-  end
-
-  def preload_fitness_requirements
-    return unless entry.respond_to?(:fitness_requirement)
-
-    @fitness_requirements = Event::FitnessRequirement.list.includes(:translations)
+    @disciplines = Event::Discipline.assignable(entry.discipline_ids).list
+    @target_groups = Event::TargetGroup.assignable(entry.target_group_ids).list
+    @technical_requirements =
+      Event::TechnicalRequirement.assignable(entry.technical_requirement_ids).list
+    @fitness_requirements = Event::FitnessRequirement.assignable(entry.fitness_requirement_id).list
   end
 end

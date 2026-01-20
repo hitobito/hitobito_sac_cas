@@ -19,25 +19,25 @@ module SacCas::EventsHelper
   end
 
   # main entries are optgroups and not selectable
-  def tour_essentials_grouped_select_options(main_entries)
-    main_entries.flat_map do |main|
-      main.children.sort_by(&:order).map do |child|
+  def tour_essentials_grouped_select_options(entries)
+    entries.select(&:main?).flat_map do |main|
+      entries.select { |d| d.parent_id == main.id }.map do |child|
         {id: child.id, label: child.to_s, description: child.short_description, group: main.id}
       end
     end.to_json
   end
 
-  def tour_essentials_grouped_select_optgroups(main_entries)
-    main_entries.flat_map do |main|
+  def tour_essentials_grouped_select_optgroups(entries)
+    entries.select(&:main?).flat_map do |main|
       {value: main.id, label: main.to_s}
     end.to_json
   end
 
   # main entries are regular selectable options
-  def tour_essentials_nested_select_options(main_groups)
-    main_groups.flat_map do |main|
+  def tour_essentials_nested_select_options(entries)
+    entries.select(&:main?).flat_map do |main|
       [{id: main.id, label: main.to_s, description: main.short_description}] +
-        main.children.sort_by(&:order).map do |child|
+        entries.select { |d| d.parent_id == main.id }.map do |child|
           {id: child.id,
            label: "    #{child}",
            description: child.short_description.present? ? "     #{child.short_description}" : nil}
@@ -91,7 +91,7 @@ module SacCas::EventsHelper
   private
 
   def event_essentials_with_children(association)
-    entries = association.with_deleted.list.includes(:parent).group_by(&:parent)
+    entries = association.list.includes(:parent).group_by(&:parent)
     main = entries.keys.compact + entries.fetch(nil, [])
     main.uniq.sort_by(&:order).map do |parent|
       [parent, entries[parent]]

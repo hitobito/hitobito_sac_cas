@@ -38,6 +38,34 @@ describe Event::Discipline do
     end
   end
 
+  context ".assignable" do
+    before do
+      main_discipline.children.update_all(deleted_at: Time.zone.now)
+      main_discipline.update(deleted_at: Time.zone.now)
+    end
+
+    it "contains no soft deleted entries" do
+      expect(described_class.assignable.count).to eq(described_class.without_deleted.count)
+      expect(described_class.assignable).not_to include(child_discipline)
+    end
+
+    it "contains entries for passed ids even if they are not soft deleted" do
+      discipline = event_disciplines(:felsklettern)
+      expect(described_class.assignable(discipline.id)).to include(discipline)
+      expect(described_class.assignable.count).to eq(described_class.without_deleted.count)
+    end
+
+    it "contains entries for passed ids even if they are soft deleted" do
+      expect(described_class.assignable(child_discipline.id)).to include(child_discipline)
+      expect(described_class.assignable(main_discipline.children.pluck(:id)).count).to eq(described_class.count)
+      expect(described_class.assignable(main_discipline.id)).to include(main_discipline)
+    end
+
+    it "contains parents for passed ids even if they are soft deleted" do
+      expect(described_class.assignable(child_discipline.id)).to include(main_discipline)
+    end
+  end
+
   context "paranoia" do
     it "hard deletes if no associations exist" do
       expect { event_disciplines(:indoorklettern).destroy }

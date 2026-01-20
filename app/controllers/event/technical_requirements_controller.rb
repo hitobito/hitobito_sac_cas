@@ -5,14 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Event::TechnicalRequirementsController < SimpleCrudController
-  self.permitted_attrs = [:label, :short_description, :description, :order, :parent_id]
-
+class Event::TechnicalRequirementsController < Event::NestableTourEssentialsController
   self.sort_mappings = {
     label: "event_technical_requirement_translations.label"
   }
-
-  before_render_form :load_parents
 
   def show
     redirect_to edit_event_technical_requirement_path(entry)
@@ -20,31 +16,5 @@ class Event::TechnicalRequirementsController < SimpleCrudController
 
   def self.model_class
     Event::TechnicalRequirement
-  end
-
-  private
-
-  def list_entries
-    super.main.list.tap do |list|
-      ActiveRecord::Associations::Preloader.new(
-        records: list,
-        associations: [:children],
-        scope: model_class.list
-      ).call
-    end
-  end
-
-  def load_parents
-    @parents = model_class.main.list.without_deleted
-  end
-
-  # overwrite to avoid clash with @parents list for form
-  def parents
-    @nestable_parents ||= load_fixed_parents + load_optional_parents
-  end
-
-  def assign_attributes
-    super
-    entry.deleted_at = nil # restore on edit
   end
 end
