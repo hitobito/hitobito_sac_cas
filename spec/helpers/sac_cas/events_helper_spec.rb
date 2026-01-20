@@ -45,7 +45,7 @@ describe EventsHelper do
   describe "#event_essentials_list" do
     let(:event) { events(:section_tour) }
 
-    it "returns list of children with parent" do
+    it "returns list of children with parent for disciplines" do
       event.disciplines = event_disciplines(:bergtour, :wanderweg, :felsklettern)
 
       html = format_event_disciplines(event)
@@ -53,7 +53,7 @@ describe EventsHelper do
       expect(html).to match(/<li><a .+?>Klettern<\/a> \(<a .+?>Fels<\/a>\)<\/li>/)
     end
 
-    it "returns list of parents without children" do
+    it "returns list of parents without children for target groups" do
       event.target_groups = event_target_groups(:erwachsene, :senioren_b)
 
       html = format_event_target_groups(event)
@@ -61,13 +61,21 @@ describe EventsHelper do
       expect(html).to match(/<li><a .+?>Senioren<\/a> \(<a .+?>Senioren B<\/a>\)<\/li>/)
     end
 
-    it "returns list with unwrapped children and custom separator" do
+    it "returns list with unwrapped children and custom separator for technical requirements" do
       event.technical_requirements = event_technical_requirements(:klettern_5a, :klettern_5b_plus, :skitouren_ws)
       event_technical_requirements(:skitouren_ws).update!(label: "<b>WS</b>")
 
       html = format_event_technical_requirements(event)
       expect(html).to match(/<li><a .+?>Französische Kletterskala<\/a>: 5a, 5b\+<\/li>/)
       expect(html).to match(/<li><a .+?>Skitourenskala<\/a>: &lt;b&gt;WS&lt;\/b&gt;<\/li>/)
+    end
+
+    it "returns comma separated list for traits" do
+      event.traits = event_traits(:public_transport, :excursion, :work)
+      event_traits(:public_transport).update!(description: "Oder mit dem Velo")
+
+      html = format_event_traits(event)
+      expect(html).to match(/<a .+?>Anreise mit ÖV<\/a>, Arbeitseinsatz, Exkursion/)
     end
   end
 end

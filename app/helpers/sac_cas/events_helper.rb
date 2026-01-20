@@ -75,6 +75,10 @@ module SacCas::EventsHelper
     event_essentials_list(event.technical_requirements, wrap_children: false, separator: ": ")
   end
 
+  def format_event_traits(event)
+    safe_join(event.traits.sort_by(&:label), ", ") { |t| render_event_essential(t) }
+  end
+
   def event_essentials_list(association, wrap_children: true, separator: " ")
     simple_list(event_essentials_with_children(association), class: "mb-0") do |main, children|
       parent = render_event_essential(main)
