@@ -8,6 +8,7 @@ it:
     date_field_placeholder: GG.MM.AAAA
     phone_placeholder: +41 77 123 45 67
     currency: CHF
+    deleted_at: "gelöscht am %{date}"
     years: anni
     link:
       push_down: Valore di trasferimento ai corsi

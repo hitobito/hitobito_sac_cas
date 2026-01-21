@@ -8,6 +8,7 @@ fr:
     date_field_placeholder: JJ.MM.AAAA
     phone_placeholder: +41 77 123 45 67
     currency: CHF
+    deleted_at: "gelöscht am %{date}"
     years: Années
     link:
       push_down: Transférer la valeur aux cours

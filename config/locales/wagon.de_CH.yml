@@ -8,6 +8,7 @@ de_CH:
     date_field_placeholder: DD.MM.YYYY
     phone_placeholder: +41 77 123 45 67
     currency: CHF
+    deleted_at: "gelöscht am %{date}"
     years: Jahre
     link:
       push_down: Wert auf Kurse übertragen
