@@ -50,6 +50,8 @@ module Invoices
       end
 
       def active_memberships
+        return [] unless stammsektion_role
+
         [membership_from_role(stammsektion_role)] +
           zusatzsektion_roles.map { |r| membership_from_role(r) }.sort_by { |m| m.section.to_s }
       end

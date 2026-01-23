@@ -6,11 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::MembershipInvoicesController < ApplicationController
+  helper_method :member, :context
+
   def new
     authorize!(:update, external_invoice)
 
-    invoice_form.invoice_date = today
-    invoice_form.send_date = today
+    invoice_form.set_initial_values
     @group = group
   end
 
@@ -36,7 +37,7 @@ class People::MembershipInvoicesController < ApplicationController
     invoice_form.attributes = invoice_form_params
     external_invoice.attributes = {
       state: :draft,
-      link: Group.find(invoice_form.section_id),
+      link: link_group,
       year: invoice_form.reference_date&.year,
       issued_at: invoice_form.invoice_date,
       sent_at: invoice_form.send_date
@@ -49,7 +50,8 @@ class People::MembershipInvoicesController < ApplicationController
       invoice_form.reference_date,
       discount: invoice_form.discount,
       new_entry: invoice_form.new_entry,
-      dont_send: invoice_form.dont_send
+      dont_send: invoice_form.dont_send,
+      manual_positions: invoice_form.manual_positions
     ).enqueue!
 
     redirect_to external_invoices_group_person_path(group, person),
@@ -71,7 +73,11 @@ class People::MembershipInvoicesController < ApplicationController
     params
       .require(:people_membership_invoice_form)
       .permit(:reference_date, :invoice_date, :send_date,
-        :section_id, :new_entry, :discount, :dont_send)
+        :section_id, :new_entry, :discount, :dont_send,
+        :sac_fee, :sac_entry_fee, :hut_solidarity_fee,
+        :sac_magazine, :sac_magazine_postage_abroad, :section_entry_fee,
+        section_fees_attributes: [:section_id, :fee],
+        section_bulletin_postage_abroad_attributes: [:section_id, :fee])
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)
@@ -81,6 +87,14 @@ class People::MembershipInvoicesController < ApplicationController
   def person = @person ||= Person.find(params[:person_id])
 
   def group = @group ||= Group.find(params[:group_id])
+
+  def link_group
+    if invoice_form.manual_positions?
+      invoice_form.member.stammsektion
+    else
+      Group.find(invoice_form.section_id)
+    end
+  end
 
   def date = @date ||= params[:date].present? ? Date.parse(params[:date]) : today
 
