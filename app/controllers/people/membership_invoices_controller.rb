@@ -80,22 +80,11 @@ class People::MembershipInvoicesController < ApplicationController
         section_bulletin_postage_abroad_attributes: [:section_id, :fee])
   end
 
-  def active_postage_abroad_memberships
-    member.active_memberships.select do |membership|
-      Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(member,
-        membership).active?
-    end
-  end
-
   def set_initial_form_values
     invoice_form.invoice_date = today
     invoice_form.send_date = today
-    invoice_form.section_fees = member.active_memberships.map do
-      People::Membership::InvoiceSectionFeeForm.new(_1.section)
-    end
-    invoice_form.section_bulletin_postage_abroad = active_postage_abroad_memberships.map do
-      People::Membership::InvoiceSectionFeeForm.new(_1.section)
-    end
+    invoice_form.section_fees = invoice_form.initial_section_fees
+    invoice_form.section_bulletin_postage_abroad = invoice_form.initial_bulletin_postage_abroad
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)
@@ -106,13 +95,15 @@ class People::MembershipInvoicesController < ApplicationController
 
   def group = @group ||= Group.find(params[:group_id])
 
-  def link_group = invoice_form.manual_positions? ? group : Group.find(invoice_form.section_id)
+  def link_group
+    if invoice_form.manual_positions?
+      invoice_form.member.stammsektion
+    else
+      Group.find(invoice_form.section_id)
+    end
+  end
 
   def date = @date ||= params[:date].present? ? Date.parse(params[:date]) : today
-
-  def member = @member ||= Invoices::SacMemberships::Member.new(@person, context)
-
-  def context = @context ||= Invoices::SacMemberships::Context.new(today)
 
   def today = @today ||= Time.zone.today
 end

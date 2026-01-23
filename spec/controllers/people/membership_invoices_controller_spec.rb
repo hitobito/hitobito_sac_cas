@@ -61,7 +61,8 @@ describe People::MembershipInvoicesController do
           sac_magazine: 30,
           sac_magazine_postage_abroad: 10,
           section_entry_fee: 70,
-          section_fees_attributes: {"0" => {section_id: bluemlisalp.id, fee: 140}}
+          section_fees_attributes: {"0" => {section_id: bluemlisalp.id, fee: 140},
+                                    "1" => {section_id: groups(:matterhorn).id, fee: 130}}
         }
       }
       expect do
@@ -70,20 +71,20 @@ describe People::MembershipInvoicesController do
       end.to change { ExternalInvoice.count }.by(1)
         .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
-      # todo validate job
       expect(response).to redirect_to(external_invoices_group_person_path(
         groups(:bluemlisalp_mitglieder).id, person.id
       ))
       expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
 
       job = Delayed::Job.last.payload_object
-      expect(job.manual_positions).to eq({sac_fee: 100,
-                                          sac_entry_fee: 120,
-                                          hut_solidarity_fee: 50,
-                                          sac_magazine: 30,
-                                          sac_magazine_postage_abroad: 10,
-                                          section_entry_fee: 70,
-                                          section_fees: [{"section_id" => 578575972, "fee" => 140}],
+      expect(job.manual_positions).to eq({sac_fee: 100.to_d,
+                                          sac_entry_fee: 120.to_d,
+                                          hut_solidarity_fee: 50.to_d,
+                                          sac_magazine: 30.to_d,
+                                          sac_magazine_postage_abroad: 10.to_d,
+                                          section_entry_fee: 70.to_d,
+                                          section_fees: [{"section_id" => bluemlisalp.id, "fee" => 140.to_d},
+                                            {"section_id" => groups(:matterhorn).id, "fee" => 130.to_d}],
                                           section_bulletin_postage_abroads: nil})
     end
 

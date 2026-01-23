@@ -39,9 +39,9 @@ module Invoices
       end
 
       def manual_section_position_amount(position)
-        manual_positions[position_name(position).pluralize.to_sym].then do |position_amount|
-          position_amount&.find { _1[:section_id] == position.section.id }&.dig(:fee).to_f
-        end
+        manual_positions[position_name(position).pluralize.to_sym]&.find do |manual_position|
+          manual_position[:section_id] == position.section.id
+        end&.dig(:fee).to_f
       end
 
       def new_entry_positions_to_transmit

@@ -57,18 +57,20 @@
         = f.labeled_input_field(:sac_fee, addon: t('global.currency'), type: 'number', step: 0.01)
         = f.labeled_input_field(:sac_entry_fee, addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
         = f.labeled_input_fields(:hut_solidarity_fee, :sac_magazine, addon: t('global.currency'), type: 'number', step: 0.01)
-        - if Invoices::SacMemberships::Positions::SacMagazinePostageAbroad.new(member, member.active_memberships).active?
+        - if f.object.magazine_postage_abroad_active?
           = f.labeled_input_field(:sac_magazine_postage_abroad, addon: t('global.currency'), type: 'number', step: 0.01)
-        = f.labeled(:section_fee) do
-          = f.fields_for :section_fees, f.object.section_fees do |section_fee_fields|
+        = f.labeled_input_field(:section_entry_fee, label: t(".section_entry_fee", section: f.object.member.stammsektion), addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
+        - f.object.member.active_memberships.each do |membership|
+          - section_fee = f.object.section_fees.find { _1.section.id == membership.section.id }
+          = f.fields_for :section_fees, section_fee do |section_fee_fields|
             = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
-            = section_fee_fields.labeled_input_field(:fee, label: section_fee_fields.object.section.to_s, label_class: "col-3 col-xl-4", addon: t('global.currency'), type: 'number', step: 0.01)
-        = f.labeled_input_field(:section_entry_fee, addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
-        - if Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(member, member.active_memberships).active?
-          = f.labeled(:section_bulletin_postage_abroad) do
-            = f.fields_for :section_bulletin_postage_abroad, f.object.section_bulletin_postage_abroad do |section_fee_fields|
+            = section_fee_fields.labeled_input_field(:fee, label: t(".section_fee", section: membership.section), addon: t('global.currency'), type: 'number', step: 0.01)
+          - if f.object.section_bulletin_postage_abroad_active?
+            - section_bulletin_postage_abroad = f.object.section_bulletin_postage_abroad.find { _1.section.id == membership.section.id }
+
+            = f.fields_for :section_bulletin_postage_abroad, section_bulletin_postage_abroad do |section_fee_fields|
               = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
-              = section_fee_fields.labeled_input_field(:fee, label: section_fee_fields.object.section.to_s, addon: t('global.currency'), type: 'number', step: 0.01)
+              = section_fee_fields.labeled_input_field(:fee, label: t(".section_bulletin_postage_abroad", section: membership.section), addon: t('global.currency'), type: 'number', step: 0.01)
 
     = f.indented do
       = submit_button(f, t(".create_invoice"))

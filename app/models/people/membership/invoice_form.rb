@@ -19,20 +19,22 @@ class People::Membership::InvoiceForm
   attribute :new_entry, :boolean
   attribute :section_id, :integer
 
-  attribute :sac_fee, :integer, default: 0
-  attribute :sac_entry_fee, :integer
-  attribute :hut_solidarity_fee, :integer, default: 0
-  attribute :sac_magazine, :integer, default: 0
-  attribute :sac_magazine_postage_abroad, :integer, default: 0
-  attribute :section_entry_fee, :integer
+  attribute :sac_fee, :decimal
+  attribute :sac_entry_fee, :decimal
+  attribute :hut_solidarity_fee, :decimal
+  attribute :sac_magazine, :decimal
+  attribute :sac_magazine_postage_abroad, :decimal
+  attribute :section_entry_fee, :decimal
 
   # Arrays of People::Membership::InvoiceSectionFeeForm
   attribute :section_fees, array: true
   attribute :section_bulletin_postage_abroad, array: true
-
   validates :section_id, :reference_date, :invoice_date, :send_date, presence: true
   validates :discount, presence: true, unless: :manual_positions?
 
+  validates :sac_fee, :hut_solidarity_fee, :sac_magazine, presence: true, if: :manual_positions?
+  validates :sac_magazine_postage_abroad, presence: true,
+    if: -> { manual_positions? && magazine_postage_abroad_active? }
   validates_date :reference_date, :invoice_date, between: [:min_date, :max_date], allow_blank: true
   validates_date :send_date, between: [:min_date, :max_send_date], allow_blank: true
 
@@ -78,15 +80,31 @@ class People::Membership::InvoiceForm
     end
   end
 
+  def initial_section_fees
+    member.active_memberships.map do
+      People::Membership::InvoiceSectionFeeForm.new(_1.section)
+    end
+  end
+
+  def initial_bulletin_postage_abroad
+    active_postage_abroad_memberships.map do
+      People::Membership::InvoiceSectionFeeForm.new(_1.section)
+    end
+  end
+
   def section_fees_attributes=(attributes)
-    self.section_fees = attributes.values.map do |attrs|
-      People::Membership::InvoiceSectionFeeForm.new(Group.find(attrs[:section_id]), attrs)
+    self.section_fees = initial_section_fees.map do |section_fee|
+      section_fee.fee = attributes.values.find do
+        _1[:section_id].to_i == section_fee.section.id
+      end&.dig(:fee)
+      section_fee
     end
   end
 
   def section_bulletin_postage_abroad_attributes=(attributes)
-    self.section_bulletin_postage_abroad_attributes = attributes.values.map do |attrs|
-      People::Membership::InvoiceSectionFeeForm.new(Group.find(attrs[:section_id]), attrs)
+    self.initial_bulletin_postage_abroad = initial_bulletin_postage_abroad.map do |section_fee|
+      section_fee.fee = attributes.values.find { _1[:section_id].to_i == section_fee.section.id }
+      section_fee
     end
   end
 
@@ -96,17 +114,30 @@ class People::Membership::InvoiceForm
 
   def section_fees_hash = section_fees&.map(&:attributes)
 
-  def sac_fee_type = :number
+  def magazine_postage_abroad_active?
+    Invoices::SacMemberships::Positions::SacMagazinePostageAbroad.new(
+      member,
+      member.active_memberships
+    ).active?
+  end
 
-  def sac_entry_fee_type = :number
+  def section_bulletin_postage_abroad_active?
+    Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(
+      member,
+      member.active_memberships
+    ).active?
+  end
 
-  def hut_solidarity_fee_type = :number
+  def active_postage_abroad_memberships
+    member.active_memberships.select do |membership|
+      Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(
+        member,
+        membership
+      ).active?
+    end
+  end
 
-  def sac_magazine_type = :number
-
-  def sac_magazine_postage_abroad_type = :number
-
-  def section_entry_fee_type = :number
+  def member = @member ||= Invoices::SacMemberships::Member.new(@person, context)
 
   private
 
@@ -137,4 +168,6 @@ class People::Membership::InvoiceForm
     select_paying([ref_date_sac_membership.stammsektion_role,
       ref_date_sac_membership.neuanmeldung_stammsektion_role]).first&.layer_group
   end
+
+  def context = @context ||= Invoices::SacMemberships::Context.new(today)
 end
