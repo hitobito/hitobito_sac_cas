@@ -11,7 +11,7 @@ class People::MembershipInvoicesController < ApplicationController
   def new
     authorize!(:update, external_invoice)
 
-    set_initial_form_values
+    invoice_form.set_initial_values
     @group = group
   end
 
@@ -78,13 +78,6 @@ class People::MembershipInvoicesController < ApplicationController
         :sac_magazine, :sac_magazine_postage_abroad, :section_entry_fee,
         section_fees_attributes: [:section_id, :fee],
         section_bulletin_postage_abroad_attributes: [:section_id, :fee])
-  end
-
-  def set_initial_form_values
-    invoice_form.invoice_date = today
-    invoice_form.send_date = today
-    invoice_form.section_fees = invoice_form.initial_section_fees
-    invoice_form.section_bulletin_postage_abroad = invoice_form.initial_bulletin_postage_abroad
   end
 
   def external_invoice = @external_invoice ||= ExternalInvoice::SacMembership.new(person: person)

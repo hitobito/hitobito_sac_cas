@@ -65,7 +65,7 @@
           = f.fields_for :section_fees, section_fee do |section_fee_fields|
             = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
             = section_fee_fields.labeled_input_field(:fee, label: t(".section_fee", section: membership.section), addon: t('global.currency'), type: 'number', step: 0.01)
-          - if f.object.section_bulletin_postage_abroad_active?
+          - if f.object.section_bulletin_postage_abroad_active?(membership)
             - section_bulletin_postage_abroad = f.object.section_bulletin_postage_abroad.find { _1.section.id == membership.section.id }
 
             = f.fields_for :section_bulletin_postage_abroad, section_bulletin_postage_abroad do |section_fee_fields|

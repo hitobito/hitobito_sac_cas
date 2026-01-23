@@ -50,6 +50,13 @@ class People::Membership::InvoiceForm
     @person = person
   end
 
+  def set_initial_values
+    self.invoice_date = today
+    self.send_date = today
+    self.section_fees = initial_section_fees
+    self.section_bulletin_postage_abroad = initial_bulletin_postage_abroad
+  end
+
   def stammsektion
     select_paying([stammsektion_role, neuanmeldung_stammsektion_role]).first&.layer_group
   end
@@ -117,11 +124,11 @@ class People::Membership::InvoiceForm
   def magazine_postage_abroad_active?
     Invoices::SacMemberships::Positions::SacMagazinePostageAbroad.new(
       member,
-      member.active_memberships
+      member.membership_from_role(member.stammsektion_role)
     ).active?
   end
 
-  def section_bulletin_postage_abroad_active?
+  def section_bulletin_postage_abroad_active?(membership)
     Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(
       member,
       member.active_memberships
