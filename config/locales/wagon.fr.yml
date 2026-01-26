@@ -78,6 +78,14 @@ fr:
         new_entry: "Frais d’entrée"
         dont_send: Envoyer une facture
         section_id: "Adhésion"
+        sac_fee: Zentralverbandsbeitrag
+        sac_entry_fee: Zentralverbandseintrittsgebühren
+        hut_solidarity_fee: Hüttensolidaritätsbeitrag
+        sac_magazine: Abogebühr SAC Magazin
+        sac_magazine_postage_abroad: Porto Ausland SAC Magazin
+        section_entry_fee: Sektionseintrittsgebühren
+        section_fee: Sektionsbeitrag
+        section_bulletin_postage_abroad: Porto Ausland Sektionsbulletin
       people/yearly_membership/invoice_form:
         invoice_year: "Exercice comptable"
         invoice_date: "Date de réservation"
@@ -2039,7 +2047,13 @@ fr:
           Cette personne ne dispose pas de sa propre facture d’adhésion. Le cas échéant, les frais seront déduits de la facture d’une autre personne.
         alert_error: "Les contrôles de qualité des données suivants empêchent la création d’une facture d’adhésion:"
         create_invoice: "Créer une facture"
+        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
+        manual_positions: "Manuelle Differenzrechnung"
+        manual_positions_subtitle: "Manuelle Rechnungsposten"
         mv_yearly_invoice: "Comptes annuels du service des membres"
+        section_entry_fee: "Sektionseintrittsgebühren %{section}"
+        section_fee: "Sektionsbeitrag %{section}"
+        section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
         zusatzsektion_eintrittsrechnung: "Facture d’entrée dans la section supplémentaire"
 
     neuanmeldungen:

@@ -78,6 +78,14 @@ en:
         new_entry: "Entrance fee"
         dont_send: Rechnung versenden
         section_id: "Membership"
+        sac_fee: Zentralverbandsbeitrag
+        sac_entry_fee: Zentralverbandseintrittsgebühren
+        hut_solidarity_fee: Hüttensolidaritätsbeitrag
+        sac_magazine: Abogebühr SAC Magazin
+        sac_magazine_postage_abroad: Porto Ausland SAC Magazin
+        section_entry_fee: Sektionseintrittsgebühren
+        section_fee: Sektionsbeitrag
+        section_bulletin_postage_abroad: Porto Ausland Sektionsbulletin
       people/yearly_membership/invoice_form:
         invoice_year: "Financial year"
         invoice_date: "Buchungsdatum"
@@ -1972,7 +1980,13 @@ en:
           This person does not have their own membership invoice. If necessary, the fees will be offset against another person's invoice.
         alert_error: "The following data quality checks prevent the creation of a membership invoice:"
         create_invoice: "Create invoice"
+        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
+        manual_positions: "Manuelle Differenzrechnung"
+        manual_positions_subtitle: "Manuelle Rechnungsposten"
         mv_yearly_invoice: "MV annual financial statements"
+        section_entry_fee: "Sektionseintrittsgebühren %{section}"
+        section_fee: "Sektionsbeitrag %{section}"
+        section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
         zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
 
     neuanmeldungen:
