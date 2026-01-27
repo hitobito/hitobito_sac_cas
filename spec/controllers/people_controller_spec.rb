@@ -142,6 +142,28 @@ describe PeopleController do
         end.to change { admin.reload.birthday }
       end
 
+      it "can update birthday on people with neuanmeldung role" do
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
+          group: groups(:bluemlisalp_neuanmeldungen_nv),
+          person: admin)
+
+        expect do
+          put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                                person: {birthday: "01.01.2001"}}
+        end.to change { admin.reload.birthday }
+      end
+
+      it "cannot remove birthday on people with neuanmeldung role" do
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.to_s,
+          group: groups(:bluemlisalp_neuanmeldungen_nv),
+          person: admin)
+
+        expect do
+          put :update, params: {id: admin.id, group_id: admin.groups.first.id,
+                                person: {birthday: ""}}
+        end.to_not change { admin.reload.birthday }
+      end
+
       it "can update birthday as backoffice user" do
         expect do
           put :update, params: {id: member.id, group_id: member.groups.first.id,
