@@ -1416,6 +1416,8 @@ de:
         total_duration_days_help: "Geplante Kursdauer: %{total_days} Tage"
       edit:
         title: Zusatzdaten
+      cancel_application:
+        caption: Abmelden
       course_signup_aside:
         summary_title: Kostenübersicht
         summary_course_price: Kurskosten
@@ -1482,6 +1484,7 @@ de:
       summoned_notice: "%{participant} wurde aufgeboten."
       reactivated_notice: "%{participant} wurde reaktiviert."
       actions_show_youth:
+        cancel_button: Abmelden
         summon_button: Aufbieten
         assign_confirm: Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt.
       actions_show_sac_cas:
