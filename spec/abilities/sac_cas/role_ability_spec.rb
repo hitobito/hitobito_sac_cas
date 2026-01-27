@@ -82,6 +82,24 @@ describe RoleAbility do
         set_termination_by_section_only(role_zusatzsektion, true)
         expect(ability).not_to be_able_to(:terminate, role_stammsektion)
       end
+
+      context "when leaving household" do
+        let(:person) { people(:familienmitglied2) }
+        let(:role_stammsektion) { person.sac_membership.stammsektion_role }
+
+        it "cannot terminate on same day" do
+          person.household.remove(person).save!
+          expect(ability).not_to be_able_to(:terminate, role_stammsektion)
+        end
+
+        it "can terminate on next day" do
+          person.household.remove(person).save!
+          role_stammsektion = person.sac_membership.stammsektion_role
+          travel_to(1.day.from_now) do
+            expect(ability).to be_able_to(:terminate, role_stammsektion)
+          end
+        end
+      end
     end
 
     context "Zusatzsektion" do
@@ -130,6 +148,26 @@ describe RoleAbility do
 
       it "is able to destroy role with admin permission" do
         expect(ability).to be_able_to(:destroy, admin_role)
+      end
+
+      context "when leaving household" do
+        let(:person) { people(:familienmitglied2) }
+        subject(:ability) { Ability.new(people(:admin)) }
+
+        let(:role_stammsektion) { person.sac_membership.stammsektion_role }
+
+        it "cannot terminate on same day" do
+          person.household.remove(person).save!
+          expect(ability).not_to be_able_to(:terminate, role_stammsektion)
+        end
+
+        it "can terminate on next day" do
+          person.household.remove(person).save!
+          role_stammsektion = person.sac_membership.stammsektion_role
+          travel_to(1.day.from_now) do
+            expect(ability).to be_able_to(:terminate, role_stammsektion)
+          end
+        end
       end
     end
 

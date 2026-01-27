@@ -10,8 +10,9 @@ module SacCas::RoleAbility
 
   prepended do
     on(Role) do
-      permission(:any).may(:terminate).self_terminatable_own_role
+      permission(:any).may(:terminate).her_own_if_self_terminatable
       general(:create, :update).modify_admin_permission_only_of_admin_themself
+      general(:terminate).stammsektion_only_if_no_other_ended_yesterday
     end
 
     SacCas::BACKOFFICE_DESTROYABLE_ROLES.each do |role_class|
@@ -25,12 +26,22 @@ module SacCas::RoleAbility
     role_type?(*SacCas::SAC_BACKOFFICE_ROLES)
   end
 
-  def self_terminatable_own_role
+  def her_own_if_self_terminatable
     return false unless her_own
     return false if abonnent_magazin_neuanmeldung?
     return true unless mitglied_role?
 
     !has_termination_by_section_only_role
+  end
+
+  # if a similar role ended yesterday, due to leaving a household and corresponding
+  # beitragskategorie change, we prevent termination on that very same day for consistency
+  def stammsektion_only_if_no_other_ended_yesterday
+    return true if !subject.is_a?(Group::SektionsMitglieder::Mitglied)
+    ident_attrs = subject
+      .attributes.slice(*%w[person_id type])
+      .merge(end_on: Time.zone.yesterday)
+    Role.ended.where(ident_attrs).none?
   end
 
   # core: general(:destroy).not_permission_giving
