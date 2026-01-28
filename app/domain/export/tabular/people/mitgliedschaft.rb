@@ -52,7 +52,7 @@ module Export::Tabular::People
     end
 
     def people_scope
-      readable_people
+      Person
         .includes(:phone_number_landline, :phone_number_mobile, :roles_unscoped)
         .where("people.id IN (?)", relevant_person_ids) # rubocop:disable Rails/WhereEquals
         .order_by_name
@@ -68,11 +68,6 @@ module Export::Tabular::People
 
     def user
       @user ||= Person.find(@user_id)
-    end
-
-    def readable_people
-      ability = PersonReadables.new(user, group, include_ended_roles: true)
-      Person.accessible_by(ability)
     end
 
     def attribute_label(attr)
