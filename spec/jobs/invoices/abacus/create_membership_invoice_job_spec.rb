@@ -82,7 +82,11 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
         hut_solidarity_fee: 30,
         sac_magazine: 25,
         sac_magazine_postage_abroad: 35,
-        section_entry_fee: 50
+        section_entry_fee: 50,
+        section_fees: [
+          {section_id: 30, fee: 40},
+          {section_id: 31, fee: 50}
+        ]
       }
     end
 
@@ -91,6 +95,9 @@ describe Invoices::Abacus::CreateMembershipInvoiceJob do
         o.full_attrs[:process_flow_number] == 3 &&
           o.full_attrs[:user_fields][:user_field3] == "Mail"
       end
+
+      expect(job.manual_positions.keys.map(&:class).uniq).to eq([String])
+      expect(job.manual_positions["section_fees"].flat_map(&:keys).map(&:class).uniq).to eq([String])
 
       expect(Invoices::SacMemberships::ManualPositionGenerator)
         .to receive(:new).with(anything, manual_positions)

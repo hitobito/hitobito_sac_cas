@@ -19,7 +19,7 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
     @new_entry = new_entry
     @dont_send = dont_send
     @dispatch_type = dispatch_type
-    @manual_positions = manual_positions
+    @manual_positions = manual_positions.deep_stringify_keys # simplify serialisation
   end
 
   private
@@ -30,7 +30,7 @@ class Invoices::Abacus::CreateMembershipInvoiceJob < Invoices::Abacus::CreateInv
         external_invoice.link,
         reference_date,
         custom_discount: discount)
-      .build(new_entry:, dispatch_type:, manual_positions:)
+      .build(new_entry:, dispatch_type:, manual_positions: manual_positions.deep_symbolize_keys)
   end
 
   def transmit_sales_order
