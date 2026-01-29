@@ -313,3 +313,19 @@ Event::Trait::Translation.seed_once(:event_trait_id, :locale,
   {event_trait_id: 55,
    locale: "de",
    label: "Geeignet für Spontane"})
+
+Event::ApprovalKind.seed_once(:id,
+  {id: 1, order: 1},
+  {id: 2, order: 2},
+  {id: 3, order: 3})
+
+Event::ApprovalKind::Translation.seed_once(:event_approval_kind_id, :locale,
+  {event_approval_kind_id: 1,
+   locale: "de",
+   name: "Fachlich"},
+  {event_approval_kind_id: 2,
+   locale: "de",
+   name: "Sicherheit"},
+  {event_approval_kind_id: 3,
+   locale: "de",
+   name: "Redaktionell"})
