@@ -36,7 +36,6 @@ describe People::MembershipInvoicesController do
       end.to change { ExternalInvoice.count }.by(1)
         .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
-      # todo validate job
       expect(response).to redirect_to(external_invoices_group_person_path(
         groups(:bluemlisalp_mitglieder).id, person.id
       ))
@@ -61,8 +60,10 @@ describe People::MembershipInvoicesController do
           sac_magazine: 30,
           sac_magazine_postage_abroad: 10,
           section_entry_fee: 70,
-          section_fees_attributes: {"0" => {section_id: bluemlisalp.id, fee: 140},
-                                    "1" => {section_id: groups(:matterhorn).id, fee: 130}}
+          section_fees_attributes: {
+            "0" => {section_id: bluemlisalp.id, fee: 140},
+            "1" => {section_id: groups(:matterhorn).id, fee: 130}
+          }
         }
       }
       expect do
@@ -77,15 +78,19 @@ describe People::MembershipInvoicesController do
       expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
 
       job = Delayed::Job.last.payload_object
-      expect(job.manual_positions).to eq({sac_fee: 100.to_d,
-                                          sac_entry_fee: 120.to_d,
-                                          hut_solidarity_fee: 50.to_d,
-                                          sac_magazine: 30.to_d,
-                                          sac_magazine_postage_abroad: 10.to_d,
-                                          section_entry_fee: 70.to_d,
-                                          section_fees: [{"section_id" => bluemlisalp.id, "fee" => 140.to_d},
-                                            {"section_id" => groups(:matterhorn).id, "fee" => 130.to_d}],
-                                          section_bulletin_postage_abroads: nil})
+      expect(job.manual_positions).to eq(
+        {"sac_fee" => 100.to_d,
+         "sac_entry_fee" => 120.to_d,
+         "hut_solidarity_fee" => 50.to_d,
+         "sac_magazine" => 30.to_d,
+         "sac_magazine_postage_abroad" => 10.to_d,
+         "section_entry_fee" => 70.to_d,
+         "section_fees" => [
+           {"section_id" => bluemlisalp.id, "fee" => 140.to_d},
+           {"section_id" => groups(:matterhorn).id, "fee" => 130.to_d}
+         ],
+         "section_bulletin_postage_abroads" => nil}
+      )
     end
 
     it "does not create external when invoice form is invalid" do
@@ -107,9 +112,8 @@ describe People::MembershipInvoicesController do
         expect(response).to redirect_to(external_invoices_group_person_path(
           groups(:bluemlisalp_mitglieder).id, person.id
         ))
-        # rubocop:todo Layout/LineLength
-        expect(flash[:alert]).to eq "Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt."
-        # rubocop:enable Layout/LineLength
+        expect(flash[:alert])
+          .to eq("Die Person hat Datenqualitätsprobleme, daher wurde keine Rechnung erstellt.")
       end
     end
 
@@ -126,19 +130,19 @@ describe People::MembershipInvoicesController do
       it "creates external invoice and enqueues job" do
         expect do
           post :create,
-            # rubocop:todo Layout/LineLength
-            params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true,
-                                                                       # rubocop:enable Layout/LineLength
-                                                                       dont_send: true})
+            params: params.deep_merge(
+              people_membership_invoice_form: {
+                discount: 50, new_entry: true, dont_send: true
+              }
+            )
         end.to change { ExternalInvoice.count }.by(1)
           .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
         expect(response).to redirect_to(external_invoices_group_person_path(
           groups(:bluemlisalp_mitglieder).id, person.id
         ))
-        # rubocop:todo Layout/LineLength
-        expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
-        # rubocop:enable Layout/LineLength
+        expect(flash[:notice])
+          .to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
 
         job = Delayed::Job.last.payload_object
         expect(job.new_entry).to eq true
