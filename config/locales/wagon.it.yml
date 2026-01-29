@@ -1460,6 +1460,8 @@ it:
         total_duration_days_help: "Durata prevista del corso: %{total_days} giorni"
       edit:
         title: Dati aggiuntivi
+      cancel_application:
+        caption: Abmelden
       course_signup_aside:
         summary_title: Panoramica dei costi
         summary_course_price: Costi del corso
@@ -1519,6 +1521,7 @@ it:
       summoned_notice: "%{participant} è stato convocato."
       reactivated_notice: "%{participant} è stato riattivato."
       actions_show_youth:
+        cancel_button: Abmelden
         summon_button: Convocare
         assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
       actions_show_sac_cas:
