@@ -1356,7 +1356,7 @@ fr:
       send_instructions: "Si nous connaissons l’adresse e-mail que tu as indiquée, tu devrais recevoir dans les prochaines minutes un e-mail te permettant de réinitialiser ton mot de passe (vérifie aussi dans ton dossier spam)."
     sessions:
       form:
-        login_identity: E-mail principal / N° de membre
+        login_identity: E-mail ou N° de membre
       create:
         confirm_email_before_logging_in: >
           Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation. Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à mv@sac-cas.ch en indiquant ton adresse e-mail stp.

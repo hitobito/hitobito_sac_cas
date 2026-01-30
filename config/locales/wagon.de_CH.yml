@@ -1293,7 +1293,7 @@ de_CH:
       send_instructions: "Wenn uns die angegebene E-Mail-Adresse bekannt ist, solltest du in den nächsten Minuten eine E-Mail erhalten, mit der du dein Passwort zurücksetzen kannst (bitte schaue auch in deinem Spam-Ordner nach)"
     sessions:
       form:
-        login_identity: Haupt‑E‑Mail / Mitglied‑Nr
+        login_identity: E-Mail oder Mitgliedernummer
       create:
         confirm_email_before_logging_in: >
           Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
@@ -1399,7 +1399,7 @@ de_CH:
       edit:
         title: Zusatzdaten
       cancel_application:
-        caption: Abmelden
+        caption: Anmeldung annullieren
       course_signup_aside:
         summary_title: Kostenübersicht
         summary_course_price: Kurskosten
@@ -1459,7 +1459,7 @@ de_CH:
       summoned_notice: "%{participant} wurde aufgeboten."
       reactivated_notice: "%{participant} wurde reaktiviert."
       actions_show_youth:
-        cancel_button: Abmelden
+        cancel_button: Anmeldung annullieren
         summon_button: Aufbieten
         assign_confirm: "Wollen Sie diese Anmeldung wirklich bestätigen? Es wird eine E-Mail an die teilnehmende Person verschickt."
       actions_show_sac_cas:
