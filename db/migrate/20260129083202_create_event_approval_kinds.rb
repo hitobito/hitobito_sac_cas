@@ -26,7 +26,6 @@ class CreateEventApprovalKinds < ActiveRecord::Migration[8.0]
           name: {type: :string, null: false},
           short_description: {type: :string, null: true}
         )
-        add_index :event_approval_kind_translations, :name, unique: true
       end
 
       dir.down do
