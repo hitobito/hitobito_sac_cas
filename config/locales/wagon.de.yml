@@ -234,6 +234,8 @@ de:
 
   activerecord:
     attributes:
+      group/freigabe_komitee/pruefer:
+        approval_kinds: Freigabestufen
       account_completion:
         email: E-Mail
         password: Passwort
@@ -793,6 +795,9 @@ de:
       group/externe_kontakte:
         one: Externe Kontakte
         other: Externe Kontakte
+      group/freigabe_komitee:
+        one: Freigabekomitee
+        other: Freigabekomitee
       group/geschaeftsleitung:
         one: SAC Geschäftsleitung
         other: SAC Geschäftsleitung
@@ -912,6 +917,9 @@ de:
       group/ehrenmitglieder/ehrenmitglied:
         one: Ehrenmitglied
         description: Ehrenmitglied
+      group/freigabe_komitee/pruefer:
+        one: Prüfer*in
+        description: Prüfer*in
       group/geschaeftsstelle/mitarbeiter:
         one: Mitarbeiter*in (schreibend)
         description: Mitarbeiter*in (schreibend)
