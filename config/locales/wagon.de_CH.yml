@@ -1321,7 +1321,7 @@ de_CH:
     eintritte: Eingetretene Mitglieder
     austritte: Ausgetretene Mitglieder
     beitragskategorie_wechsel: Wechsel Beitragskategorie
-    jubilare: Jubilare
+    jubilare: Jubilare & Aktive Mitglieder
     mitglieder_statistics: Mitgliederstatistik
 
   dropdown/people_export:
@@ -1686,7 +1686,7 @@ de_CH:
         redirect_existing_email: Es existiert bereits ein Login für diese E-Mail. Melde dich hier an.
         existing_membership_notice: >-
           Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.
-        can_login_already_notice: Du hast bereits ein Login. Daher kannst du kein neues SAC/CAS Login erstellen.
+        can_login_already_notice: Du hast bereits ein Login. Daher kannst du kein neues SAC-Konto erstellen.
         already_subscribed_to_abo: Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.
         already_member_of_tourenportal: Du bist bereits Mitglied im SAC-Tourenportal. Daher kannst du keine weitere Mitgliedschaft erstellen.
 
@@ -1835,7 +1835,7 @@ de_CH:
   mounted_attributes:
     form_tabs:
       group/sac_cas:
-        default: SAC/CAS Attribute
+        default: SAC-CAS Attribute
       group/sektion:
         default: Sektions Attribute
       group/ortsgruppe:
@@ -2053,7 +2053,7 @@ de_CH:
     filename: Eintritte
 
   people/export/jubilare:
-    filename: Jubilare_per
+    filename: Mitglieder_per
 
   people/export/mitglieder_statistics:
     filename: Mitgliederstatistik

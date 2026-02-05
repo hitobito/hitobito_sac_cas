@@ -1382,7 +1382,7 @@ it:
     eintritte: Membri che hanno aderito
     austritte: Membri dimissionari
     beitragskategorie_wechsel: Modifica della categoria di contribuzione
-    jubilare: Anniversari
+    jubilare: Anniversari & membri attivi
     mitglieder_statistics: Statistiche dei membri
 
   dropdown/people_export:
@@ -1748,7 +1748,7 @@ it:
         redirect_existing_email: Esiste già un login con questa e-mail. Registrati qui.
         existing_membership_notice: >-
           Sei già titolare di un’affiliazione al CAS. Se la desideri modificare contatta il Segretariato centrale del CAS.
-        can_login_already_notice: Si dispone già di un login. Non è quindi possibile creare un nuovo login SAC/CAS.
+        can_login_already_notice: Si dispone già di un login. Non è quindi possibile creare un nuovo account CAS.
         already_subscribed_to_abo: "Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta."
         already_member_of_tourenportal: "Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
 
@@ -2119,7 +2119,7 @@ it:
     filename: Ingressi
 
   people/export/jubilare:
-    filename: Anniversari_per
+    filename: Membri_per
 
   people/export/mitglieder_statistics:
     filename: Statistiche dei membri

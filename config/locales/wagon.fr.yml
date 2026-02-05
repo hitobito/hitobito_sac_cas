@@ -847,9 +847,9 @@ fr:
         many: Login SAC/CAS
         other: Login SAC/CAS
       group/sac_cas_clubhuetten:
-        one: Cabanes de club
-        many: Cabanes de club
-        other: Cabanes de club
+        one: Cabanes du club
+        many: Cabanes du club
+        other: Cabanes du club
       group/sac_cas_clubhuette:
         one: Cabanes de club
         many: Cabanes de club
@@ -1384,7 +1384,7 @@ fr:
     eintritte: Membres entrants
     austritte: Membres démissionnaires
     beitragskategorie_wechsel: Changement de catégorie de cotisation
-    jubilare: Jubilaires
+    jubilare: Jubilaires & membres actifs
     mitglieder_statistics: Statistiques des membres
 
   dropdown/people_export:
@@ -1750,7 +1750,7 @@ fr:
         redirect_existing_email: Il existe déjà un login pour cet e-mail. Connecte-toi ici.
         existing_membership_notice: >-
           Tu es déjà membre du CAS. Si tu souhaites adapter ton adhésion, contacte le secrétariat du CAS.
-        can_login_already_notice: Tu as déjà un login. Tu ne peux donc pas créer un nouveau login SAC/CAS.
+        can_login_already_notice: Tu as déjà un login. Tu ne peux donc pas créer un nouveau compte CAS.
         already_subscribed_to_abo: Tu es déjà destinataire de ce magazine. Tu ne peux donc pas commander le magazine une deuxième fois.
         already_member_of_tourenportal: Tu es déjà membre du Portail des courses du CAS. Tu ne peux donc pas créer une autre adhésion.
 
@@ -2121,7 +2121,7 @@ fr:
     filename: Entrées
 
   people/export/jubilare:
-    filename: Jubilaires_per
+    filename: Membres_per
 
   people/export/mitglieder_statistics:
     filename: Statistiques des membres
