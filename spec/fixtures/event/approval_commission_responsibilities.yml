@@ -1,0 +1,258 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+bluemlisalp_wandern_kinder_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: kinder
+  discipline: wandern
+  subito: true
+
+bluemlisalp_wandern_kinder:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: kinder
+  discipline: wandern
+  subito: false
+
+bluemlisalp_wandern_jugend_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jugend
+  discipline: wandern
+  subito: true
+
+bluemlisalp_wandern_jugend:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jugend
+  discipline: wandern
+  subito: false
+
+bluemlisalp_wandern_jung_erwachsene_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jung_erwachsene
+  discipline: wandern
+  subito: true
+
+bluemlisalp_wandern_jung_erwachsene:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jung_erwachsene
+  discipline: wandern
+  subito: false
+
+bluemlisalp_wandern_erwachsene_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: erwachsene
+  discipline: wandern
+  subito: true
+
+bluemlisalp_wandern_erwachsene:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: erwachsene
+  discipline: wandern
+  subito: false
+
+bluemlisalp_wandern_senioren_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: senioren
+  discipline: wandern
+  subito: true
+
+bluemlisalp_wandern_senioren:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: senioren
+  discipline: wandern
+  subito: false
+
+bluemlisalp_wandern_familien_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: familien
+  discipline: wandern
+  subito: true
+
+bluemlisalp_wandern_familien:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: familien
+  discipline: wandern
+  subito: false
+
+bluemlisalp_hochtour_kinder_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: kinder
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_hochtour_kinder:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: kinder
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_hochtour_jugend_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jugend
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_hochtour_jugend:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jugend
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_hochtour_jung_erwachsene_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jung_erwachsene
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_hochtour_jung_erwachsene:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jung_erwachsene
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_hochtour_erwachsene_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: erwachsene
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_hochtour_erwachsene:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: erwachsene
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_hochtour_senioren_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: senioren
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_hochtour_senioren:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: senioren
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_hochtour_familien_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: familien
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_hochtour_familien:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: familien
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_klettern_kinder_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: kinder
+  discipline: klettern
+  subito: true
+
+bluemlisalp_klettern_kinder:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: kinder
+  discipline: klettern
+  subito: false
+
+bluemlisalp_klettern_jugend_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jugend
+  discipline: klettern
+  subito: true
+
+bluemlisalp_klettern_jugend:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jugend
+  discipline: klettern
+  subito: false
+
+bluemlisalp_klettern_jung_erwachsene_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jung_erwachsene
+  discipline: klettern
+  subito: true
+
+bluemlisalp_klettern_jung_erwachsene:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: jung_erwachsene
+  discipline: klettern
+  subito: false
+
+bluemlisalp_klettern_erwachsene_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: erwachsene
+  discipline: klettern
+  subito: true
+
+bluemlisalp_klettern_erwachsene:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: erwachsene
+  discipline: klettern
+  subito: false
+
+bluemlisalp_klettern_senioren_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: senioren
+  discipline: klettern
+  subito: true
+
+bluemlisalp_klettern_senioren:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: senioren
+  discipline: klettern
+  subito: false
+
+bluemlisalp_klettern_familien_subito:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: familien
+  discipline: klettern
+  subito: true
+
+bluemlisalp_klettern_familien:
+  sektion: bluemlisalp
+  freigabe_komitee: bluemlisalp_freigabekomitee
+  target_group: familien
+  discipline: klettern
+  subito: false

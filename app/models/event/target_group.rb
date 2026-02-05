@@ -24,6 +24,17 @@ class Event::TargetGroup < ActiveRecord::Base
   include NestableTourEssential
 
   has_and_belongs_to_many :events, join_table: "events_target_groups"
+  has_many :event_approval_commission_responsibilities,
+    dependent: nil,
+    class_name: "Event::ApprovalCommissionResponsibility"
 
   validates :description, presence: true
+
+  after_real_destroy :destroy_approval_commission_responsibilities
+
+  private
+
+  def destroy_approval_commission_responsibilities
+    event_approval_commission_responsibilities.destroy_all
+  end
 end

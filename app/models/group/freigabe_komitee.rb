@@ -6,6 +6,17 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::FreigabeKomitee < Group
+  has_many :event_approval_commission_responsiblities, dependent: :destroy,
+    class_name: "Event::ApprovalCommissionResponsibility"
+
+  def destroy
+    if event_approval_commission_responsiblities.present?
+      errors.add(:base, :has_event_approval_commission_responsiblities)
+    else
+      super
+    end
+  end
+
   class Pruefer < ::Role
     has_and_belongs_to_many :approval_kinds,
       class_name: "Event::ApprovalKind",
