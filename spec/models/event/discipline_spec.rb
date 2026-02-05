@@ -94,5 +94,14 @@ describe Event::Discipline do
         .not_to change { described_class.unscoped.count }
       expect(event_disciplines(:hochtour).deleted_at).to be_present
     end
+
+    it "deletes event_approval_commission_responsiblities on destroy" do
+      event_disciplines(:klettern).children.destroy_all
+      expect { event_disciplines(:klettern).destroy }.to change { Event::ApprovalCommissionResponsibility.count }
+    end
+
+    it "does not delete event_approval_commission_responsiblities on soft destroy" do
+      expect { event_disciplines(:klettern).destroy }.not_to change { Event::ApprovalCommissionResponsibility.count }
+    end
   end
 end
