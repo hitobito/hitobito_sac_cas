@@ -95,4 +95,10 @@ module SacCas::Role
   def beitragskategorie
     ActiveSupport::StringInquirer.new(super) if super
   end
+
+  # Only FreigabeKomitee Pruefer has the actual association.
+  # This method is used to be able to render the new role form.
+  def approval_kind_ids
+    []
+  end
 end

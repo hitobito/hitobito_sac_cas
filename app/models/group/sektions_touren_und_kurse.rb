@@ -10,7 +10,8 @@ class Group::SektionsTourenUndKurse < Group
 
   children Group::SektionsTourenUndKurseSommer,
     Group::SektionsTourenUndKurseWinter,
-    Group::SektionsTourenUndKurseAllgemein
+    Group::SektionsTourenUndKurseAllgemein,
+    Group::FreigabeKomitee
 
   ### ROLES
 
