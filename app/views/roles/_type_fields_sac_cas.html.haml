@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-- if entry.group.type == Group::FreigabeKomitee.sti_name
+- if entry.group&.is_a?(Group::FreigabeKomitee)
     = f.labeled_collection_select(:approval_kind_ids,
                                 Event::ApprovalKind.all,
                                 :id,

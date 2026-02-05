@@ -235,7 +235,7 @@ de:
   activerecord:
     attributes:
       group/freigabe_komitee/pruefer:
-        approval_kinds: Freigabestufen
+        approval_kinds: Zugewiesene Freigabestufen
       account_completion:
         email: E-Mail
         password: Passwort
@@ -587,6 +587,7 @@ de:
           nobody: Niemand
 
       role:
+        approval_kinds: Zugewiesene Freigabestufen
         membership_years: Mitglieder-Jahre
         class:
           kind:

@@ -10,6 +10,30 @@ describe RolesController do
 
   let(:person) { Fabricate(:person) }
 
+  describe "POST create" do
+    context "FreigabeKomitee::Pruefer" do
+      it "correctly assigns approval_kinds" do
+        assigned_approval_kinds = [event_approval_kinds(:professional), event_approval_kinds(:security)]
+
+        expect do
+          post :create, params: {
+            group_id: groups(:bluemlisalp_freigabekomitee).id,
+            role: {group_id: groups(:bluemlisalp_freigabekomitee).id,
+                   person_id: nil,
+                   type: Group::FreigabeKomitee::Pruefer.sti_name,
+                   approval_kind_ids: assigned_approval_kinds.map(&:id),
+                   new_person: {first_name: "Paul",
+                                last_name: "Pruefer"}}
+          }
+        end.to change { Person.count }.by(1)
+          .and change { Role.count }.by(1)
+
+        role = Group::FreigabeKomitee::Pruefer.last
+        expect(role.approval_kinds).to match_array(assigned_approval_kinds)
+      end
+    end
+  end
+
   describe "DELETE destroy" do
     let!(:household) do
       household = Household.new(person, maintain_sac_family: false, validate_members: false)
