@@ -32,6 +32,8 @@ de:
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
+    elevation_unit: Hm
+    elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
 
   layouts:
@@ -480,6 +482,17 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        ascent: Aufstieg
+        descent: Abstieg
+        internal_comment: Interne Bemerkungen
+        minimum_age: Mindestalter
+        season: Saison
+        seasons:
+          winter: Winter
+          summer: Sommer
+        subito: Subito
+        summit: Gipfel
+        tourenportal_link: Link zum Tourenportal
         state_translated: Status
         states:
           draft: Entwurf
