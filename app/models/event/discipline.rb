@@ -22,6 +22,7 @@
 
 class Event::Discipline < ActiveRecord::Base
   include NestableTourEssential
+  include Events::ApprovalCommissionResponsibilityComponents
 
   has_and_belongs_to_many :events, join_table: "events_disciplines"
 
