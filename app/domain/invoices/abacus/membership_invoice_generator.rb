@@ -13,12 +13,13 @@ class Invoices::Abacus::MembershipInvoiceGenerator
     @custom_discount = custom_discount
   end
 
-  def build(new_entry: false, dispatch_type: nil)
+  def build(new_entry: false, dispatch_type: nil, manual_positions: nil)
     Invoices::Abacus::MembershipInvoice.new(
       member,
       memberships,
       new_entry:,
-      dispatch_type:
+      dispatch_type:,
+      manual_positions:
     )
   end
 

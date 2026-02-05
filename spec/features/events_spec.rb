@@ -33,6 +33,24 @@ describe :events, js: true do
     expect(page).to have_css(".nav-tabs .nav-link.active", text: name)
   end
 
+  context "event_questions" do
+    let(:event) do
+      event = Fabricate(:course, kind: event_kinds(:ski_course), groups: [groups(:root)])
+      event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
+      event
+    end
+
+    it "orders event questions alphabetically on edit page" do
+      Event::Question.where(event_id: nil).second.update!(question: "Aaa question?")
+
+      visit edit_group_event_path(group_id: group.id, id: event.id)
+      click_on "Anmeldeangaben"
+      expect(find("#event_application_questions_attributes_0_question+p").text)
+        .to eq "Aaa question?"
+      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "AHV-Nummer?"
+    end
+  end
+
   context "prices" do
     let(:event) { events(:top_course) }
 
@@ -237,6 +255,135 @@ describe :events, js: true do
       expect(page).to have_field "Minimale Teilnehmerzahl", with: "3"
       expect(page).to have_field "Mindestalter", with: "18"
       fill_in "Aufnahmebedingungen", with: "Vorraussetzungen sind .."
+    end
+  end
+
+  context "tour" do
+    let(:event) { events(:section_tour) }
+
+    context "edit essentials" do
+      it "shows options in tom select and sets them correctly" do
+        # assigned but soft deleted entries should still be available in dropdown
+        event.disciplines.first.update!(deleted_at: 1.month.ago)
+        event_disciplines(:bergtour).update!(short_description: "Über Stock und Stein")
+        visit edit_group_event_path(group_id: event.group_ids.first, id: event.id)
+
+        within("#event_discipline_ids + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 1)
+          expect(page).to have_selector(".ts-control .item", text: "Wanderweg")
+
+          find(".ts-control input").click
+          expect(page).to have_selector(".ts-dropdown .optgroup:first-child .optgroup-header", text: "Wandern")
+          expect(page).to have_selector(".ts-dropdown .option:nth-child(2)", text: "Bergtour")
+          expect(page).to have_selector(".ts-dropdown .option:nth-child(2) .muted", text: "Über Stock und Stein")
+          expect(page).to have_selector(".ts-dropdown .option:nth-child(3)", text: "Schneeschuhwandern")
+          expect(page).to have_no_selector(".ts-dropdown .option:nth-child(3) .muted")
+          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::Discipline.main.count)
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::Discipline.where.not(parent: nil).count - 1) # 1 already selected
+
+          find(".ts-dropdown .option", text: "Fels").click
+          expect(page).to have_selector(".ts-control .item", text: "Fels")
+
+          # close dropdown again
+          find(".ts-control input").click
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
+        within("#event_target_group_ids + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 2)
+          expect(page).to have_selector(".ts-control .item", text: "Kinder (KiBe)")
+          expect(page).to have_selector(".ts-control .item", text: "Familien (FaBe)")
+          find(".ts-control .item:nth-child(2) .remove").click
+          expect(page).to have_selector(".ts-control .item", count: 1)
+
+          find(".ts-control input").click
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::TargetGroup.count - 1) # 1 already selected
+
+          find(".ts-dropdown .option", text: "Senioren B").click
+          expect(page).to have_selector(".ts-control .item", text: "Senioren B")
+
+          # close dropdown again
+          find(".ts-control input").click
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
+        within("#event_fitness_requirement_id + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 1)
+          expect(page).to have_selector(".ts-control .item", text: "B - wenig anstrengend")
+
+          find(".ts-control").click
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::FitnessRequirement.count)
+
+          find(".ts-dropdown .option", text: "A - nicht anstrengend").click
+          expect(page).to have_selector(".ts-control .item", text: "A - nicht anstrengend")
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
+        within("#event_technical_requirement_ids + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 2)
+          expect(page).to have_selector(".ts-control .item", text: "T3")
+          expect(page).to have_selector(".ts-control .item", text: "T4")
+
+          find(".ts-control input").click
+          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::TechnicalRequirement.main.count)
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::TechnicalRequirement.where.not(parent: nil).count - 2) # 2 already selected
+
+          find(".ts-dropdown .option", text: "WS").click
+          expect(page).to have_selector(".ts-control .item", text: "WS")
+
+          # close dropdown again
+          find(".ts-control input").click
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
+        within("#event_trait_ids + .ts-wrapper") do
+          expect(page).to have_selector(".ts-control .item", count: 2)
+          expect(page).to have_selector(".ts-control .item", text: "Anreise mit ÖV")
+          expect(page).to have_selector(".ts-control .item", text: "Exkursion")
+
+          find(".ts-control input").click
+          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::Trait.main.count - 1) # 1 selected
+          expect(page).to have_selector(".ts-dropdown .option",
+            count: Event::Trait.where.not(parent: nil).count - 2) # 2 already selected
+
+          find(".ts-dropdown .option", text: "Arbeitseinsatz").click
+          expect(page).to have_selector(".ts-control .item", text: "Arbeitseinsatz")
+
+          # close dropdown again
+          find(".ts-control input").click
+          expect(page).to have_no_selector(".ts-dropdown")
+        end
+
+        click_on "Speichern", match: :first
+
+        expect(page).to have_selector("section h2", text: "Anmeldung")
+
+        expect(page).to have_selector("section h2", text: "Wesentliche Fakten")
+        expect(page).to have_content("Wandern (Wanderweg)")
+        expect(page).to have_content("Klettern (Fels)")
+
+        expect(page).to have_content("Kinder (KiBe)")
+        expect(page).to have_content("Senioren (Senioren B)")
+
+        expect(page).to have_content("A - nicht anstrengend")
+
+        expect(page).to have_content("Wanderskala: T3, T4")
+        expect(page).to have_content("Skitourenskala: WS")
+
+        expect(page).to have_content("Anreise mit ÖV, Arbeitseinsatz, Exkursion")
+
+        event.reload
+        expect(event.disciplines).to match_array(event_disciplines(:wanderweg, :felsklettern))
+        expect(event.target_groups).to match_array(event_target_groups(:kinder, :senioren_b))
+        expect(event.technical_requirements)
+          .to match_array(event_technical_requirements(:wandern_t3, :wandern_t4, :skitouren_ws))
+        expect(event.fitness_requirement).to eq(event_fitness_requirements(:a))
+        expect(event.traits).to match_array(event_traits(:public_transport, :excursion, :work))
+      end
     end
   end
 end

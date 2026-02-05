@@ -3,6 +3,4 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-= table(entries, class: 'table table-striped table-hover') do |t|
-  - t.sortable_attrs(:label, :code, :difficulty, :updated_at)
-  - add_table_actions(t)
+= crud_table(:label, :code, :difficulty, :updated_at, :deleted_at)

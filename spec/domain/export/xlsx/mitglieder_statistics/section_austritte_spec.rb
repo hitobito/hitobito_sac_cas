@@ -66,6 +66,8 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
 
     subject(:scope) { section.send(:scope) }
 
+    before { travel_to(Time.zone.local(2025, 10, 15)) }
+
     def scope_for(range_string)
       from, to = range_string.split("-").map { |s| Date.parse(s) }
       described_class.new(group, from..to).send(:scope)

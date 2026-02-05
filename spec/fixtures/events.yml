@@ -50,3 +50,15 @@ section_tour:
   type: Event::Tour
   state: published
   external_applications: true
+  disciplines:
+    - wanderweg
+  target_groups:
+    - kinder
+    - familien
+  technical_requirements:
+    - wandern_t3
+    - wandern_t4
+  fitness_requirement: b
+  traits:
+    - public_transport
+    - excursion

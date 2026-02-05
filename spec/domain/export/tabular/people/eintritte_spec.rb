@@ -195,7 +195,7 @@ describe Export::Tabular::People::Eintritte do
       expect(build("1.1.2000-1.1.2001").people_scope).to eq [person]
     end
 
-    it "excludes ended membership older than a year" do
+    it "includes ended membership older than a year" do
       ended_but_started_outside = create_role("Mitglied", start_on: "1.7.2023", end_on: "30.6.2024").person
       create_role("Mitglied", start_on: "1.7.2024", end_on: "1.8.2024", person: ended_but_started_outside)
 
@@ -206,7 +206,7 @@ describe Export::Tabular::People::Eintritte do
       end
 
       travel_to(Time.zone.local(2026, 10, 10)) do
-        expect(build.people_scope).to be_empty # missing as ended role no longer readable
+        expect(build.people_scope).to match_array [started_and_ended_inside_range]
       end
     end
 
@@ -286,7 +286,7 @@ describe Export::Tabular::People::Eintritte do
           sac_is_section_change: "nein",
           start_on: "01.01.2015",
           self_registration_reason: "Wegen dem Tourenangebot in den Sektionen.",
-          membership_years: 10,
+          membership_years: Time.zone.now.year - 2015,
           sac_entry_on: "01.01.2015",
           sektion_entry_on: "01.01.2015",
           type: "Stammsektion",
@@ -383,6 +383,7 @@ describe Export::Tabular::People::Eintritte do
 
       describe "Sektionswechsel" do
         it "marks Sektionswechsel for Stammsektion only" do
+          travel_to(Time.zone.local(2025, 10, 15))
           person = create_role("Mitglied", matterhorn, start_on: "1.1.2000", end_on: "31.12.2024").person
           create_role("Mitglied", bluemlisalp, start_on: "1.1.2025", end_on: "31.12.2025", person:)
 

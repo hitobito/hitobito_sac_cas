@@ -96,11 +96,11 @@ module Invoices
           }
         end
 
-        private
-
         def section
           @section ||= context.fetch_section(membership.section)
         end
+
+        private
 
         def fee_attr_prefix
           name

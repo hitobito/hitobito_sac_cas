@@ -7,8 +7,10 @@
 
 module CostCommon
   extend ActiveSupport::Concern
+
+  include Paranoia::Globalized
+
   included do
-    include Globalized
     include CapitalizedDependentErrors
 
     translates :label
@@ -16,15 +18,20 @@ module CostCommon
     validates :label, presence: true
     validates :code, uniqueness: true
 
-    default_scope { where(deleted_at: nil) }
-
     scope :list, -> { includes(:translations).order(:code) }
-    scope :with_deleted, -> { unscope(where: :deleted_at) }
+    # Returns all entries that are assignable to events.
+    # Optionally pass the ids of the entries currently assigned to
+    # a specific event, so that they always appear in the dropdown,
+    # even if they are soft deleted.
+    scope :assignable, ->(ids = []) { without_deleted.or(where(id: ids)) }
 
     has_many :event_kind_categories, class_name: "Event::KindCategory",
       dependent: :restrict_with_error
 
     has_many :event_kinds, class_name: "Event::Kind",
+      dependent: :restrict_with_error
+
+    has_many :events, class_name: "Event",
       dependent: :restrict_with_error
 
     validates_by_schema
@@ -35,18 +42,16 @@ module CostCommon
   end
 
   def destroy
-    return super if dependent_assocations_exist?
-
-    soft_destroy
+    if dependent_associations_exist?
+      delete
+    else
+      really_destroy!
+    end
   end
 
   private
 
-  def dependent_assocations_exist?
-    [event_kind_categories, event_kinds].any?(&:exists?)
-  end
-
-  def soft_destroy
-    update(deleted_at: Time.zone.now)
+  def dependent_associations_exist?
+    [event_kind_categories, event_kinds, events].any?(&:exists?)
   end
 end

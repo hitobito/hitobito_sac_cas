@@ -40,7 +40,7 @@ class CourseCompensationCategory < ApplicationRecord
   has_and_belongs_to_many :event_kinds, association_foreign_key: :event_kind_id,
     class_name: "Event::Kind"
 
-  scope :list, -> { includes([:translations]).order(:short_name) }
+  scope :list, -> { includes(:translations).order(:short_name) }
 
   def to_s
     "#{short_name} (#{kind_label})"

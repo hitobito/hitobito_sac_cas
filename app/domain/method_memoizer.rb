@@ -8,23 +8,23 @@
 module MethodMemoizer
   extend ActiveSupport::Concern
 
-  NIL_VALUE = Object.new
-  private_constant :NIL_VALUE
-
   class_methods do
-    # Memoize the result of a method. The method is called once and the result is cached.
-    # Subsequent calls will return the cached value.
-    # It memoizes nil values as well and will not call the method again if the result was nil.
+    # Memoize the result of a method. The method is called once per unique set of arguments
+    # and the result is cached. Subsequent calls with the same arguments will return the cached
+    # value.
+    # It memoizes nil and false values as well and will not call the method again if the result
+    # was nil or false.
+    # Note: Blocks are supported but not memoized by their content - only by their source location.
     def memoize_method(method_name)
       alias_method :"#{method_name}_without_memoization", method_name
 
       define_method method_name do |*args, &block|
         @memoized_values ||= {}
-        value = @memoized_values[method_name] ||=
-          send(:"#{method_name}_without_memoization", *args, &block) ||
-          NIL_VALUE
+        cache_key = [method_name, args, block&.source_location].freeze
 
-        value unless value == NIL_VALUE
+        return @memoized_values[cache_key] if @memoized_values.key?(cache_key)
+
+        @memoized_values[cache_key] = send(:"#{method_name}_without_memoization", *args, &block)
       end
     end
   end

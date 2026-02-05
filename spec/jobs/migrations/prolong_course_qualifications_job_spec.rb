@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Migrations::ProlongCourseQualificationsJob do
+  before { travel_to(Time.zone.local(2025, 5, 23)) }
+
   let(:job) { described_class.new }
 
   let(:course) do

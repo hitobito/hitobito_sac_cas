@@ -1,6 +1,30 @@
+- if can?(:index, Event::Discipline)
+  = nav Event::Discipline.model_name.human(count: 2),
+        event_disciplines_path,
+        %w(event_disciplines)
+- if can?(:index, Event::TargetGroup)
+  = nav Event::TargetGroup.model_name.human(count: 2),
+        event_target_groups_path,
+        %w(event_target_groups)
+- if can?(:index, Event::FitnessRequirement)
+  = nav Event::FitnessRequirement.model_name.human(count: 2),
+        event_fitness_requirements_path,
+        %w(event_fitness_requirement)
+- if can?(:index, Event::TechnicalRequirement)
+  = nav Event::TechnicalRequirement.model_name.human(count: 2), event_technical_requirements_path, %w(event_technical_requirements)
+- if can?(:index, Event::Trait)
+  = nav Event::Trait.model_name.human(count: 2),
+        event_traits_path,
+        %w(event_traits)
 - if can?(:index, Event::Level)
-  = nav Event::Level.model_name.human(count: 2), event_levels_path, %w(event_levels)
+  = nav Event::Level.model_name.human(count: 2),
+        event_levels_path,
+        %w(event_levels)
 - if can?(:index, CourseCompensationRate)
-  = nav CourseCompensationRate.model_name.human(count: 2), course_compensation_rates_path, %w(course_compensation_rates)
+  = nav CourseCompensationRate.model_name.human(count: 2),
+        course_compensation_rates_path,
+        %w(course_compensation_rates)
 - if can?(:index, CourseCompensationCategory)
-  = nav CourseCompensationCategory.model_name.human(count: 2), course_compensation_categories_path, %w(course_compensation_categories)
+  = nav CourseCompensationCategory.model_name.human(count: 2),
+        course_compensation_categories_path,
+        %w(course_compensation_categories)

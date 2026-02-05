@@ -10,7 +10,7 @@ module Invoices
     class Subject < Entity
       # rubocop:todo Layout/LineLength
       RELEVANT_ATTRIBUTES = %w[first_name last_name company_name company email language gender street
-        housenumber postbox address_care_of zip_code town country].freeze
+        housenumber postbox address_care_of zip_code town country correspondence].freeze
       # rubocop:enable Layout/LineLength
 
       SALUTATION_IDS = {

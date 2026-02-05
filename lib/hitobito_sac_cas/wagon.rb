@@ -74,6 +74,7 @@ module HitobitoSacCas
         ChangelogEntry.markdown_link(label: '\1', url: 'https://saccas.atlassian.net/browse/\1')
 
       # extend application classes here
+      Contactable::Address.prepend SacCas::Contactable::Address
       CustomContent.prepend SacCas::CustomContent
       Event.prepend SacCas::Event
       Event::Kind.prepend SacCas::Event::Kind
@@ -93,7 +94,6 @@ module HitobitoSacCas
       MailingList.include SacCas::MailingList
       Person.prepend SacCas::Person
       Person.prepend SacPhoneNumbers
-      Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
       PhoneNumber.include SacCas::PhoneNumber
@@ -126,21 +126,27 @@ module HitobitoSacCas
       AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full
 
-      Ability.store.register Event::LevelAbility
       Ability.store.register CostCenterAbility
       Ability.store.register CostUnitAbility
+      Ability.store.register CourseCompensationCategoryAbility
+      Ability.store.register CourseCompensationRateAbility
+      Ability.store.register Event::DisciplineAbility
+      Ability.store.register Event::FitnessRequirementAbility
+      Ability.store.register Event::LevelAbility
+      Ability.store.register Event::TargetGroupAbility
+      Ability.store.register Event::TechnicalRequirementAbility
+      Ability.store.register Event::TraitAbility
       Ability.store.register ExternalInvoiceAbility
       Ability.store.register ExternalTrainingAbility
-      Ability.store.register SacMembershipConfigAbility
-      Ability.store.register SacSectionMembershipConfigAbility
-      Ability.store.register CourseCompensationRateAbility
-      Ability.store.register CourseCompensationCategoryAbility
-      Ability.store.register TerminationReasonAbility
-      Ability.store.register SectionOfferingAbility
       Ability.store.register Memberships::JoinZusatzsektionAbility
       Ability.store.register Memberships::SwitchStammsektionAbility
       Ability.store.register Memberships::UndoTerminationAbility
       Ability.store.register Memberships::ChangeZusatzsektionToFamilyAbility
+      Ability.store.register SacMembershipConfigAbility
+      Ability.store.register SacSectionMembershipConfigAbility
+      Ability.store.register SectionOfferingAbility
+      Ability.store.register TerminationReasonAbility
+
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       EventAbility.prepend SacCas::EventAbility
@@ -222,7 +228,12 @@ module HitobitoSacCas
       admin_item[:active_for] += %w[
         cost_centers
         cost_units
+        event_disciplines
         event_levels
+        event_target_groups
+        event_technical_requirements
+        event_fitness_requirements
+        event_traits
         termination_reasons
         section_offerings
         course_compensation_categories

@@ -1,0 +1,65 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+# == Schema Information
+#
+# Table name: event_fitness_requirements
+#
+#  id                :bigint           not null, primary key
+#  order             :integer
+#  label             :string(255)
+#  short_description :string(255)
+#  description       :text(65535)
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  deleted_at        :datetime
+#
+
+a:
+  event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:a) %>
+  locale: de
+  label: A - nicht anstrengend
+  description: 0-3h Totalzeit
+  short_description: 0-3h Totalzeit
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+b:
+  event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:b) %>
+  locale: de
+  label: B - wenig anstrengend
+  description: 3-5h Totalzeit; bis ca. 800HM Aufstieg
+  short_description: 3-5h Totalzeit; bis ca. 800HM Aufstieg
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+c:
+  event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:c) %>
+  locale: de
+  label: C - ziemlich anstrengend
+  description: 4-7h Totalzeit; ca. 800-1300HM Aufstieg
+  short_description: 4-7h Totalzeit; ca. 800-1300HM Aufstieg
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+d:
+  event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:d) %>
+  locale: de
+  label: D - anstrengend
+  description: 6-10h Totalzeit; ca. 1300-1600HM Aufstieg
+  short_description: 6-10h Totalzeit; ca. 1300-1600HM Aufstieg
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+e:
+  event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:e) %>
+  locale: de
+  label: E - sehr anstrengend
+  description: über 10h Totalzeit; Aufstieg mehr als 1600HM
+  short_description: über 10h Totalzeit; Aufstieg mehr als 1600HM
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

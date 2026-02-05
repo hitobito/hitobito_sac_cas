@@ -25,6 +25,33 @@ describe MethodMemoizer do
         work_method_b
       end
       memoize_method :memoized_method_b
+
+      def work_method_with_args(arg1, arg2)
+        "#{arg1} + #{arg2}"
+      end
+
+      def memoized_method_with_args(arg1, arg2)
+        work_method_with_args(arg1, arg2)
+      end
+      memoize_method :memoized_method_with_args
+
+      def work_method_with_block(&block)
+        block.call if block
+      end
+
+      def memoized_method_with_block(&block)
+        work_method_with_block(&block)
+      end
+      memoize_method :memoized_method_with_block
+
+      def work_method_false
+        false
+      end
+
+      def memoized_method_false
+        work_method_false
+      end
+      memoize_method :memoized_method_false
     end)
   end
 
@@ -61,5 +88,67 @@ describe MethodMemoizer do
     expect(instance).to receive(:work_method_a).once
     instance.memoized_method_a
     instance.memoized_method_a
+  end
+
+  it "returns false if method returns false" do
+    allow(instance).to receive(:work_method_false).and_return(false)
+    expect(instance.memoized_method_false).to be false
+  end
+
+  it "returns memoized false value without calling the method again" do
+    allow(instance).to receive(:work_method_false).and_return(false)
+    expect(instance).to receive(:work_method_false).once
+    instance.memoized_method_false
+    instance.memoized_method_false
+  end
+
+  context "with arguments" do
+    it "memoizes different values for different arguments" do
+      allow(instance).to receive(:work_method_with_args).and_call_original
+      expect(instance).to receive(:work_method_with_args).twice
+
+      result1 = instance.memoized_method_with_args(1, 2)
+      result2 = instance.memoized_method_with_args(3, 4)
+
+      expect(result1).to eq("1 + 2")
+      expect(result2).to eq("3 + 4")
+    end
+
+    it "returns cached value for same arguments" do
+      allow(instance).to receive(:work_method_with_args).and_call_original
+      expect(instance).to receive(:work_method_with_args).once
+
+      result1 = instance.memoized_method_with_args(1, 2)
+      result2 = instance.memoized_method_with_args(1, 2)
+
+      expect(result1).to eq("1 + 2")
+      expect(result2).to eq("1 + 2")
+    end
+  end
+
+  context "with blocks" do
+    it "memoizes block results by source location" do
+      allow(instance).to receive(:work_method_with_block).and_call_original
+
+      block = proc { "block result" }
+
+      expect(instance).to receive(:work_method_with_block).once
+      result1 = instance.memoized_method_with_block(&block)
+      result2 = instance.memoized_method_with_block(&block)
+
+      expect(result1).to eq("block result")
+      expect(result2).to eq("block result")
+    end
+
+    it "treats different blocks as different cache keys" do
+      allow(instance).to receive(:work_method_with_block).and_call_original
+
+      expect(instance).to receive(:work_method_with_block).twice
+      result1 = instance.memoized_method_with_block { "block 1" }
+      result2 = instance.memoized_method_with_block { "block 2" }
+
+      expect(result1).to eq("block 1")
+      expect(result2).to eq("block 2")
+    end
   end
 end

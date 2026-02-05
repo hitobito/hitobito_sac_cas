@@ -11,24 +11,25 @@ module Invoices
       MEMBERSHIP_CARD_FIELD_INDEX = 11
 
       # member is an Invoices::SacMembership::Member object
-      attr_reader :member, :memberships, :new_entry, :dispatch_type
+      attr_reader :member, :memberships, :new_entry, :dispatch_type, :manual_positions
 
       delegate :context, to: :member
       delegate :date, :sac, :config, to: :context
 
-      def initialize(member, memberships, new_entry: false, dispatch_type: nil)
+      def initialize(member, memberships, new_entry: false, dispatch_type: nil,
+        manual_positions: nil)
         @member = member
         @memberships = memberships
         @new_entry = new_entry
         @dispatch_type = dispatch_type
+        @manual_positions = manual_positions
       end
 
       def positions
         @positions ||=
           I18n.with_locale(member.language) do
-            Invoices::SacMemberships::PositionGenerator
-              .new(member)
-              .generate(memberships, new_entry: new_entry)
+            position_generator
+              .generate(memberships, new_entry:)
               .map(&:to_abacus_invoice_position)
           end
       end
@@ -84,6 +85,14 @@ module Invoices
           person.first_name.to_s.delete(";")[0, 30],
           person.membership_verify_token
         ].join(";")
+      end
+
+      def position_generator
+        if manual_positions.present?
+          Invoices::SacMemberships::ManualPositionGenerator.new(member, manual_positions)
+        else
+          Invoices::SacMemberships::PositionGenerator.new(member)
+        end
       end
     end
   end
