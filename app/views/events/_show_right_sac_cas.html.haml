@@ -6,4 +6,6 @@
 - if entry.is_a?(Event::Tour)
   = section t('events.sections.essentials') do
     %dl.dl-horizontal
+      - if entry.subito?
+        = labeled_attr(entry, :subito)
       = labeled_attrs(entry, :disciplines, :target_groups, :fitness_requirement, :technical_requirements, :traits)

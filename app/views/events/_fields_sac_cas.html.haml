@@ -11,7 +11,8 @@
   = f.labeled_input_field(:cost_unit_id)
 - entry.used?(:annual) do
   = f.labeled_input_field(:annual)
-
+- entry.used?(:internal_comment) do
+  = f.labeled_input_field(:internal_comment)
 
 - if entry.kind_class == Event::Kind
   = field_inheritance_values(@kinds, SacCas::Event::Kind::INHERITABLE_ATTRIBUTES + [:application_conditions, :brief_description, :specialities, :similar_tours, :program])

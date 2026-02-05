@@ -4,6 +4,17 @@
 - #  https://github.com/hitobito/hitobito_sac_cas
 
 %dl.dl-horizontal
+  - if entry.summit.present?
+    = labeled_attr(entry, :summit)
+
+  - if entry.ascent.present? || entry.descent.present?
+    = labeled t("global.elevation_label") do
+      = format_elevation(entry)
+
+  - if entry.tourenportal_link.present?
+    = labeled t("activerecord.attributes.event/tour.tourenportal_link") do
+      = link_to(entry.tourenportal_link, entry.tourenportal_link, target: "_blank")
+
   - entry.used?(:language) do
     = labeled_attr(entry, :language)
 

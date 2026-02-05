@@ -1566,6 +1566,54 @@
           "readable": true,
           "writable": false,
           "description": null
+        },
+        "summit": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "ascent": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "descent": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "season": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_age": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "maximum_age": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "tourenportal_link": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "subito": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
         }
       },
       "extra_attributes": {},
