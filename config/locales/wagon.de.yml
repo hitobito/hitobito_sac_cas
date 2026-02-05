@@ -764,6 +764,9 @@ de:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval_kind:
+        one: Freigabestufe
+        other: Freigabestufen
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen

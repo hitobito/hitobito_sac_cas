@@ -234,6 +234,7 @@ module HitobitoSacCas
         event_technical_requirements
         event_fitness_requirements
         event_traits
+        event_approval_kinds
         termination_reasons
         section_offerings
         course_compensation_categories
