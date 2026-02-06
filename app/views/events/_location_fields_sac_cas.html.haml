@@ -11,6 +11,9 @@
   = f.labeled_i18n_enum_field(:meals, Event::Course.meals_labels)
 
 - if entry.is_a?(Event::Tour)
+  = f.labeled_input_field(:summit)
+  = f.labeled_input_fields(:ascent, :descent, addon: I18n.t('global.elevation_unit'))
+  = f.labeled_input_field(:tourenportal_link)
   = f.labeled(:disciplines) do
     = f.select(:discipline_ids, [], {},
       multiple: true,

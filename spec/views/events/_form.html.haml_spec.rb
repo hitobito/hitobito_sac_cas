@@ -58,4 +58,28 @@ describe "events/_form.html.haml" do
       expect(dom).to have_field "Mindestalter"
     end
   end
+
+  context "Event::Tour" do
+    let(:event) { events(:section_tour) }
+
+    before do
+      assign(:disciplines, [])
+      assign(:target_groups, [])
+      assign(:fitness_requirements, [])
+      assign(:technical_requirements, [])
+      assign(:traits, [])
+    end
+
+    it "renders additional fields" do
+      expect(dom).to have_field "Gipfel"
+      expect(dom).to have_field "Aufstieg"
+      expect(dom).to have_field "Abstieg"
+      expect(dom).to have_field "Saison"
+      expect(dom).to have_field "Interne Bemerkungen"
+      expect(dom).to have_field "Mindestalter"
+      expect(dom).to have_field "Maximalalter"
+      expect(dom).to have_field "Link zum Tourenportal"
+      expect(dom).to have_field "Subito"
+    end
+  end
 end

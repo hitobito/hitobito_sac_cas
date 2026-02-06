@@ -62,3 +62,8 @@ section_tour:
   traits:
     - public_transport
     - excursion
+  summit: Bettmerhorn
+  ascent: 2872
+  descent: 911
+  tourenportal_link: https://tourenportal.test/bettmerhorn
+  subito: true

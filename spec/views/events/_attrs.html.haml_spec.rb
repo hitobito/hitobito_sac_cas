@@ -46,4 +46,19 @@ describe "events/_attrs.html.haml" do
       expect(dom).to have_css "aside dt", text: "Absagegrund"
     end
   end
+
+  context "Event::Tour" do
+    let(:event) { events(:section_tour) }
+
+    before do
+      assign(:group, groups(:bluemlisalp))
+    end
+
+    it "renders additional attrs" do
+      expect(dom).to have_css ".well dt", text: "Gipfel"
+      expect(dom).to have_css ".well dt", text: "Auf-/Abstieg (Hm)"
+      expect(dom).to have_css ".well dt", text: "Link zum Tourenportal"
+      expect(dom).to have_css "aside dt", text: "Subito"
+    end
+  end
 end
