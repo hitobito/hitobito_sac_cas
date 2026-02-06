@@ -229,6 +229,8 @@ it:
 
   activerecord:
     attributes:
+      group/freigabe_komitee/pruefer:
+        approval_kinds: Zugewiesene Freigabestufen
       account_completion:
         email: e-mail
         password: password
@@ -580,6 +582,7 @@ it:
           nobody: Nessuno
 
       role:
+        approval_kinds: Zugewiesene Freigabestufen
         membership_years: Anni di affiliazione
         class:
           kind:
@@ -808,6 +811,9 @@ it:
         one: Contatti esterni
         many: Contatti esterni
         other: Contatti esterni
+      group/freigabe_komitee:
+        one: Freigabekomitee
+        other: Freigabekomitee
       group/geschaeftsleitung:
         one: Gestione SAC
         many: Gestione SAC
@@ -965,6 +971,9 @@ it:
       group/ehrenmitglieder/ehrenmitglied:
         one: Socio onorario
         description: Socio onorario
+      group/freigabe_komitee/pruefer:
+        one: Prüfer*in
+        description: Prüfer*in
       group/geschaeftsstelle/mitarbeiter:
         one: Collaboratore/Collaboratrice (scrittura)
         description: Collaboratore/Collaboratrice (scrittura)
@@ -1382,7 +1391,7 @@ it:
     eintritte: Membri che hanno aderito
     austritte: Membri dimissionari
     beitragskategorie_wechsel: Modifica della categoria di contribuzione
-    jubilare: Anniversari
+    jubilare: Anniversari & membri attivi
     mitglieder_statistics: Statistiche dei membri
 
   dropdown/people_export:
@@ -2119,7 +2128,7 @@ it:
     filename: Ingressi
 
   people/export/jubilare:
-    filename: Anniversari_per
+    filename: Membri_per
 
   people/export/mitglieder_statistics:
     filename: Statistiche dei membri

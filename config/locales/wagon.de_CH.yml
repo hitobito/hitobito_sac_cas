@@ -227,6 +227,8 @@ de_CH:
 
   activerecord:
     attributes:
+      group/freigabe_komitee/pruefer:
+        approval_kinds: Zugewiesene Freigabestufen
       account_completion:
         email: E-Mail
         password: Passwort
@@ -578,6 +580,7 @@ de_CH:
           nobody: Niemand
 
       role:
+        approval_kinds: Zugewiesene Freigabestufen
         membership_years: Mitglieder-Jahre
         class:
           kind:
@@ -785,6 +788,9 @@ de_CH:
       group/externe_kontakte:
         one: Externe Kontakte
         other: Externe Kontakte
+      group/freigabe_komitee:
+        one: Freigabekomitee
+        other: Freigabekomitee
       group/geschaeftsleitung:
         one: SAC Geschäftsleitung
         other: SAC Geschäftsleitung
@@ -904,6 +910,9 @@ de_CH:
       group/ehrenmitglieder/ehrenmitglied:
         one: Ehrenmitglied
         description: Ehrenmitglied
+      group/freigabe_komitee/pruefer:
+        one: Prüfer*in
+        description: Prüfer*in
       group/geschaeftsstelle/mitarbeiter:
         one: Mitarbeiter*in (schreibend)
         description: Mitarbeiter*in (schreibend)
@@ -1321,7 +1330,7 @@ de_CH:
     eintritte: Eingetretene Mitglieder
     austritte: Ausgetretene Mitglieder
     beitragskategorie_wechsel: Wechsel Beitragskategorie
-    jubilare: Jubilare
+    jubilare: Jubilare & Aktive Mitglieder
     mitglieder_statistics: Mitgliederstatistik
 
   dropdown/people_export:
@@ -2053,7 +2062,7 @@ de_CH:
     filename: Eintritte
 
   people/export/jubilare:
-    filename: Jubilare_per
+    filename: Mitglieder_per
 
   people/export/mitglieder_statistics:
     filename: Mitgliederstatistik
