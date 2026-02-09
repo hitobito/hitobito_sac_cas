@@ -15,12 +15,26 @@ describe Event::ApprovalKind do
       .to eq(event_approval_kinds(:professional, :security, :editorial))
   end
 
+  context "#to_s" do
+    it "returns name" do
+      expect(approval_kind.to_s).to eq "Fachlich"
+    end
+  end
+
   context "validations" do
     it "require presence of name" do
-      entry = described_class.new
+      entry = described_class.new(order: 1)
       expect(entry).not_to be_valid
       expect(entry.errors[:name]).to eq ["muss ausgefüllt werden"]
       entry.name = "Praktisch"
+      expect(entry).to be_valid
+    end
+
+    it "require presence of order" do
+      entry = described_class.new(name: "Praktisch")
+      expect(entry).not_to be_valid
+      expect(entry.errors[:order]).to eq ["muss ausgefüllt werden"]
+      entry.order = 1
       expect(entry).to be_valid
     end
 
