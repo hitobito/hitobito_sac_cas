@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Event::Tour < Event
-  include ::Events::State
+  include ::Events::Tours::State
 
   self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
@@ -22,17 +22,17 @@ class Event::Tour < Event
   self.supports_applications = true
   self.supports_invitations = false
 
-  # key: current state
-  # value: array of possible next states
-  self.state_transitions = {
-    draft: [:approved, :canceled],
-    approved: [:draft, :published, :canceled],
-    published: [:approved, :canceled, :closed],
-    # BEWARE: canceled means "annulliert" here and matches `annulled` on participation,
-    # where `canceled` means "abgemeldet"
-    canceled: [:draft, :approved, :published],
-    closed: [:published]
-  }.freeze
+  # # key: current state
+  # # value: array of possible next states
+  # self.state_transitions = {
+  #   draft: [:approved, :canceled],
+  #   approved: [:draft, :published, :canceled],
+  #   published: [:approved, :canceled, :closed],
+  #   # BEWARE: canceled means "annulliert" here and matches `annulled` on participation,
+  #   # where `canceled` means "abgemeldet"
+  #   canceled: [:draft, :approved, :published],
+  #   closed: [:published]
+  # }.freeze
 
   self.possible_participation_states = %w[unconfirmed applied rejected assigned
     attended absent canceled annulled]

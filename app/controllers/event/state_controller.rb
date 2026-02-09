@@ -18,7 +18,6 @@ class Event::StateController < ApplicationController
 
   def save_next_state
     entry.state = next_state
-    entry.skip_emails = params[:skip_emails]
 
     set_course_attrs if entry.course?
 
@@ -30,6 +29,7 @@ class Event::StateController < ApplicationController
   end
 
   def set_course_attrs
+    entry.skip_emails = params[:skip_emails]
     if next_state&.to_sym == :canceled
       entry.canceled_reason = params.dig(:event, :canceled_reason)
       entry.inform_participants = params.dig(:event, :inform_participants)

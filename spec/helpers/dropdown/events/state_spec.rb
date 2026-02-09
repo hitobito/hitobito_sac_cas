@@ -69,4 +69,17 @@ describe Dropdown::Events::State do
       expect(content).to have_button "Keine E-Mails verschicken", name: "skip_emails", value: "true"
     end
   end
+
+  describe "dropdown false state" do
+    let(:event) { events(:section_tour) }
+
+    before do
+      event.state = :review
+    end
+
+    it "does not render state with option dropdown false" do
+      expect(dom).to have_link "In Freigabe", class: "dropdown-toggle", href: "#"
+      expect(dom).not_to have_css "a.dropdown-item", text: "Selbst freigeben"
+    end
+  end
 end

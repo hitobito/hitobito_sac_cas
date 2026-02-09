@@ -40,7 +40,7 @@ module Dropdown::Events
     end
 
     def init_items # rubocop:todo Metrics/AbcSize
-      event.available_states.each do |state|
+      event.manually_configurable_states.each do |state|
         link = template.state_group_event_path(template.params[:group_id], event, {state:})
         label = label_for(state)
         custom_method = :"state_item_#{event.klass.name.demodulize.downcase}_#{state}"
@@ -58,7 +58,8 @@ module Dropdown::Events
     def label_for(state)
       label_translation_default = t("#{i18n_base_key}.#{state}")
       if event.state_comes_before?(state, event.state)
-        t(state, scope: "events.state_back_buttons", default: label_translation_default)
+        t(state, scope: "events.state_back_buttons.#{event.klass.model_name.i18n_key}",
+          default: label_translation_default)
       else
         label_translation_default
       end
