@@ -231,6 +231,8 @@ fr:
 
   activerecord:
     attributes:
+      group/freigabe_komitee/pruefer:
+        approval_kinds: Zugewiesene Freigabestufen
       account_completion:
         email: E-mail
         password: Mot de passe
@@ -582,6 +584,7 @@ fr:
           nobody: Personne
 
       role:
+        approval_kinds: Zugewiesene Freigabestufen
         membership_years: Années-membres
         class:
           kind:
@@ -810,6 +813,9 @@ fr:
         one: Contacts externes
         many: Contacts externes
         other: Contacts externes
+      group/freigabe_komitee:
+        one: Freigabekomitee
+        other: Freigabekomitee
       group/geschaeftsleitung:
         one: Direction du CAS
         many: Direction du CAS
@@ -967,6 +973,9 @@ fr:
       group/ehrenmitglieder/ehrenmitglied:
         one: Membre d’honneur
         description: Membre d’honneur
+      group/freigabe_komitee/pruefer:
+        one: Examinateur
+        description: Prüfer*in
       group/geschaeftsstelle/mitarbeiter:
         one: Collaborateur·rice (écriture)
         description: Collaborateur·rice (écriture)
