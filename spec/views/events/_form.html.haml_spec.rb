@@ -79,7 +79,7 @@ describe "events/_form.html.haml" do
       expect(dom).to have_field "Mindestalter"
       expect(dom).to have_field "Maximalalter"
       expect(dom).to have_field "Link zum Tourenportal"
-      expect(dom).to have_field "Subito"
+      expect(dom).to have_field "Ist Subito-Tour"
     end
   end
 end

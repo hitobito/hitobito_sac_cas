@@ -58,7 +58,7 @@ describe "events/_attrs.html.haml" do
       expect(dom).to have_css ".well dt", text: "Gipfel"
       expect(dom).to have_css ".well dt", text: "Auf-/Abstieg (Hm)"
       expect(dom).to have_css ".well dt", text: "Link zum Tourenportal"
-      expect(dom).to have_css "aside dt", text: "Subito"
+      expect(dom).to have_css "aside dt", text: "Ist Subito-Tour"
     end
   end
 end
