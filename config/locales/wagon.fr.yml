@@ -974,7 +974,7 @@ fr:
         one: Membre d’honneur
         description: Membre d’honneur
       group/freigabe_komitee/pruefer:
-        one: Prüfer*in
+        one: Examinateur
         description: Prüfer*in
       group/geschaeftsstelle/mitarbeiter:
         one: Collaborateur·rice (écriture)

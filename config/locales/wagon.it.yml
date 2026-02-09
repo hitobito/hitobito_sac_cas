@@ -972,7 +972,7 @@ it:
         one: Socio onorario
         description: Socio onorario
       group/freigabe_komitee/pruefer:
-        one: Prüfer*in
+        one: Esaminatore
         description: Prüfer*in
       group/geschaeftsstelle/mitarbeiter:
         one: Collaboratore/Collaboratrice (scrittura)
