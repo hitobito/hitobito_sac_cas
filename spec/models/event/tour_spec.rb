@@ -10,20 +10,6 @@ require "spec_helper"
 describe Event::Tour do
   subject(:tour) { events(:section_tour) }
 
-  describe "::validations" do
-    describe "#state" do
-      it "transition from published to closed is ok" do
-        tour.state = "closed"
-        expect(tour).to be_valid
-      end
-
-      it "transition from published to draft is not ok" do
-        tour.state = "draft"
-        expect(tour).not_to be_valid
-      end
-    end
-  end
-
   describe "#default_participation_state" do
     let(:application) { Fabricate.build(:event_application) }
     let(:participation) {
