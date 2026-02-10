@@ -34,6 +34,12 @@ class Group::FreigabeKomitee < Group
     self.used_attributes += [approval_kind_ids: []]
 
     self.permissions = [:group_read]
+
+    def to_s(format = :default)
+      super.then do
+        approval_kinds.present? ? "#{_1} (#{approval_kinds.join(", ")})" : _1
+      end
+    end
   end
 
   roles Pruefer
