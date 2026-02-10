@@ -6,6 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::FreigabeKomitee < Group
+  # This is necessary since FreigabeKomitee is indirectly referenced and loaded by
+  # the SacCas module by being a child of SektionsTourenUndKurse.
+  # That reference makes it so the FreigabeKomitee class gets loaded before the SacPhoneNumbers
+  # has been prepended on the parent class Group and thus the associations provided by
+  # SacPhoneNumbers end up missing.
+  prepend SacPhoneNumbers
+
   has_many :event_approval_commission_responsiblities, dependent: :destroy,
     class_name: "Event::ApprovalCommissionResponsibility"
 

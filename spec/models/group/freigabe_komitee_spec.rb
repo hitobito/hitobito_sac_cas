@@ -18,4 +18,11 @@ describe Group::FreigabeKomitee do
       expect(group.deleted_at).to be_nil
     end
   end
+
+  it "has the phone_number_landline association provided by SacPhoneNumbers" do
+    PhoneNumber.predefined_labels.each do |label|
+      assoc = :"phone_number_#{label}"
+      expect(Group::FreigabeKomitee.reflect_on_all_associations.map(&:name)).to include(assoc)
+    end
+  end
 end
