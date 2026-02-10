@@ -229,6 +229,7 @@ module HitobitoSacCas
       admin_item[:active_for] += %w[
         cost_centers
         cost_units
+        event_approval_kinds
         event_disciplines
         event_levels
         event_target_groups

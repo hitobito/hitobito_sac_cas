@@ -53,7 +53,7 @@ describe Event::ApprovalKindsController do
     expect do
       post :create, params: {
         event_approval_kind: {
-          name: "Sehr kompliziert Freigabestufe",
+          name: "Sehr komplizierte Freigabestufe",
           short_description: "Nicht ganz so lange Beschreibung",
           order: 6
         }
@@ -61,7 +61,7 @@ describe Event::ApprovalKindsController do
     end.to change { Event::ApprovalKind.count }.by(1)
 
     entry = Event::ApprovalKind.last
-    expect(entry.name).to eq("Sehr kompliziert Freigabestufe")
+    expect(entry.name).to eq("Sehr komplizierte Freigabestufe")
     expect(entry.short_description).to eq("Nicht ganz so lange Beschreibung")
     expect(entry.order).to eq(6)
   end
