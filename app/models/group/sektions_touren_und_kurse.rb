@@ -12,7 +12,7 @@ class Group::SektionsTourenUndKurse < Group
   ### ROLES
 
   class TourenleiterOhneQualifikation < ::Role
-    self.permissions = [:layer_events_full]
+    self.permissions = [:tourenleiter_layer_events_manage]
   end
 
   class Tourenleiter < TourenleiterOhneQualifikation
