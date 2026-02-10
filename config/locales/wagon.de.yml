@@ -924,15 +924,6 @@ de:
       group/sektions_touren_und_kurse:
         one: Touren und Kurse
         other: Touren und Kurse
-      group/sektions_touren_und_kurse_allgemein:
-        one: Touren und Kurse Allgemein
-        other: Touren und Kurse Allgemein
-      group/sektions_touren_und_kurse_sommer:
-        one: Touren und Kurse Sommer
-        other: Touren und Kurse Sommer
-      group/sektions_touren_und_kurse_winter:
-        one: Touren und Kurse Winter
-        other: Touren und Kurse Winter
       group/sektions_vorstand:
         one: Vorstand
         other: Vorstand
@@ -1218,15 +1209,15 @@ de:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
+      group/sektions_touren_und_kurse/tourenchef:
         one: Tourenchef*in
         description: Tourenchef*in
-      group/sektions_touren_und_kurse_sommer/tourenchef:
-        one: Tourenchef*in
-        description: Tourenchef*in
-      group/sektions_touren_und_kurse_winter/tourenchef:
-        one: Tourenchef*in
-        description: Tourenchef*in
+      group/sektions_touren_und_kurse/tourenchef_sommer:
+        one: Tourenchef*in Sommer
+        description: Tourenchef*in Sommer
+      group/sektions_touren_und_kurse/tourenchef_winter:
+        one: Tourenchef*in Winter
+        description: Tourenchef*in Winter
       group/sektions_clubhuetten/leserecht:
         one: Leserecht
         description: Leserecht

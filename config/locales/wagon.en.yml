@@ -916,15 +916,6 @@ en:
       group/sektions_touren_und_kurse:
         one: Tours and courses
         other: Tours and courses
-      group/sektions_touren_und_kurse_allgemein:
-        one: Touren und Kurse Allgemein
-        other: Touren und Kurse Allgemein
-      group/sektions_touren_und_kurse_sommer:
-        one: Summer tours and courses
-        other: Summer tours and courses
-      group/sektions_touren_und_kurse_winter:
-        one: Winter tours and courses
-        other: Winter tours and courses
       group/sektions_vorstand:
         one: Management Board
         other: Management Board

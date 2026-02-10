@@ -971,18 +971,6 @@ it:
         one: Visite e corsi
         many: Visite e corsi
         other: Escursioni e corsi
-      group/sektions_touren_und_kurse_allgemein:
-        one: Escursioni e corsi Generale
-        many: Escursioni e corsi Generale
-        other: Escursioni e corsi Generale
-      group/sektions_touren_und_kurse_sommer:
-        one: Tour e corsi estivi
-        many: Tour e corsi estivi
-        other: Escursioni e corsi estivi
-      group/sektions_touren_und_kurse_winter:
-        one: Tour e corsi invernali
-        many: Tour e corsi invernali
-        other: Escursioni e corsi invernali
       group/sektions_vorstand:
         one: Consiglio di amministrazione
         many: Consiglio di amministrazione

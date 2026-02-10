@@ -238,7 +238,7 @@ describe OidcClaimSetup, :outside_language_scope do
     end
 
     it "includes section_tour_functionary key when tourenleiter role exists" do
-      create_role(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_sommer, "Tourenchef")
+      create_role(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse, "Tourenchef")
       expect(user_groups).to include "section_tour_functionary"
     end
   end

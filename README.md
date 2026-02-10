@@ -38,6 +38,7 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Andere: []  --  (Group::Kommission::Andere)
       * Externe Kontakte
         * Kontakt: []  --  (Group::ExterneKontakte::Kontakt)
+      * SAC Abos (ohne Newsletter)
       * SAC-Tourenportal
         * Abonnent: []  --  (Group::AboTourenPortal::Abonnent)
         * Neuanmeldung: []  --  (Group::AboTourenPortal::Neuanmeldung)
@@ -76,12 +77,15 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Klassenlehrer*in: []  --  (Group::SacCasKurskader::Klassenlehrer)
         * Kursleiter*in (Aspirant): []  --  (Group::SacCasKurskader::KursleiterAspirant)
         * Klassenlehrer*in (Aspirant): []  --  (Group::SacCasKurskader::KlassenlehrerAspirant)
+      * Verbände & Organisationen
       * Verband & Organisation
         * Präsidium: []  --  (Group::SacCasVerband::Praesidium)
         * Mitglied: []  --  (Group::SacCasVerband::Mitglied)
         * Andere: []  --  (Group::SacCasVerband::Andere)
     * Sektion < Schweizer Alpen-Club SAC
+      * Sektion
     * Ortsgruppe < Sektion
+      * Ortsgruppe
     * Global
       * Sektionsfunktionäre
         * Präsidium: []  --  (Group::SektionsFunktionaere::Praesidium)
@@ -105,18 +109,17 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
       * Touren und Kurse
         * Tourenleiter*in (mit Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::Tourenleiter)
         * Tourenleiter*in (ohne Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation)
+        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::Tourenchef)
+        * Tourenchef*in Sommer: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::TourenchefSommer)
+        * Tourenchef*in Winter: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::TourenchefWinter)
         * KiBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::KibeChef)
         * FaBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::FabeChef)
         * JO-Chef*in: []  --  (Group::SektionsTourenUndKurse::JoChef)
         * J+S Coach: []  --  (Group::SektionsTourenUndKurse::JsCoach)
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsTourenUndKurse::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsTourenUndKurse::Schreibrecht)
-      * Touren und Kurse Sommer
-        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurseSommer::Tourenchef)
-      * Touren und Kurse Winter
-        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurseWinter::Tourenchef)
-      * Touren und Kurse Allgemein
-        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurseAllgemein::Tourenchef)
+      * Freigabekomitee
+        * Prüfer*in: [:group_read]  --  (Group::FreigabeKomitee::Pruefer)
       * Clubhütten
         * Leserecht: 2FA [:group_and_below_read]  --  (Group::SektionsClubhuetten::Leserecht)
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsClubhuetten::Schreibrecht)

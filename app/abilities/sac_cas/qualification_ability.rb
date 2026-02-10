@@ -9,9 +9,9 @@ module SacCas::QualificationAbility
   extend ActiveSupport::Concern
 
   TOURENCHEF_ROLE_TYPES = [
-    Group::SektionsTourenUndKurseSommer::Tourenchef,
-    Group::SektionsTourenUndKurseWinter::Tourenchef,
-    Group::SektionsTourenUndKurseAllgemein::Tourenchef,
+    Group::SektionsTourenUndKurse::TourenchefSommer,
+    Group::SektionsTourenUndKurse::TourenchefWinter,
+    Group::SektionsTourenUndKurse::Tourenchef,
     Group::SektionsFunktionaere::Administration
   ].map(&:sti_name)
 
