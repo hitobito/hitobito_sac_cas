@@ -5,6 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
+# This module referencing a lot of constants leads to those classes being loaded before
+# they normally would be loaded by being referenced in the wagon.rb for example.
+# This has specifically already lead to an issue where the Group::FreigabeKomitee class has been
+# loaded earlier than the Group superclass has had the module SacPhoneNumbers prepended on it.
+# Thus the associations defined by SacPhoneNumbers were missing on Group::FreigabeKomitee.
 module SacCas
   ### Membership roles
 
