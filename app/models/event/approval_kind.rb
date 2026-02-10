@@ -14,8 +14,10 @@ class Event::ApprovalKind < ActiveRecord::Base
 
   scope :list, -> { includes(:translations).order(:order) }
 
-  validates :name, presence: true
+  validates :name, :order, presence: true
   validates :name, uniqueness: true
+
+  def to_s = name
 
   # Soft destroy if roles exist, otherwise hard destroy
   def destroy

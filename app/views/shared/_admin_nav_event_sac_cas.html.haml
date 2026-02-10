@@ -16,6 +16,10 @@
   = nav Event::Trait.model_name.human(count: 2),
         event_traits_path,
         %w(event_traits)
+- if can?(:index, Event::ApprovalKind)
+  = nav Event::ApprovalKind.model_name.human(count: 2),
+        event_approval_kinds_path,
+        %w(event_approval_kinds)
 - if can?(:index, Event::Level)
   = nav Event::Level.model_name.human(count: 2),
         event_levels_path,
