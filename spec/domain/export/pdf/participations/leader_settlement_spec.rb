@@ -167,6 +167,15 @@ describe Export::Pdf::Participations::LeaderSettlement do
       end
     end
 
+    def find_text_at(x, y) = text_with_position.find { _1.first == x && _1.second == y }&.last
+
+    it "renders half days" do
+      participation.update(actual_days: 4.5)
+      expect(find_text_at(426, 506)).to eq "4.5"
+      expect(find_text_at(467, 506)).to eq "20.00"
+      expect(find_text_at(517, 506)).to eq "90.00"
+    end
+
     it "excludes compensation rates for non-leader-settlement categories" do
       course_compensation_categories(:budget).update!(leader_settlement: false)
 

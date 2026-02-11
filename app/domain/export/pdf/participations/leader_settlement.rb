@@ -5,6 +5,12 @@
 
 module Export::Pdf::Participations
   class LeaderSettlement
+    class DecimalCountInvoiceItem < InvoiceItem
+      attr_writer :count
+
+      def count = (@count.to_i == @count) ? @count.to_i : @count
+    end
+
     def initialize(participation, iban, options = {})
       @participation = participation
       @iban = iban
@@ -78,7 +84,8 @@ module Export::Pdf::Participations
         category = compensation.course_compensation_category
         name = category.send(:"name_#{role_type}").presence || category.short_name
         unit_cost = compensation.send(:"rate_#{role_type}")
-        InvoiceItem.new(name: name, count: count, unit_cost: unit_cost, cost: unit_cost * count)
+        attrs = {name: name, count: count, unit_cost: unit_cost, cost: unit_cost * count}
+        (kind == :day) ? DecimalCountInvoiceItem.new(attrs) : InvoiceItem.new(attrs)
       end
     end
 
