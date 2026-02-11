@@ -28,8 +28,14 @@ module Events::State
     end
   end
 
+  def manually_configurable_states
+    transitions_for_current_state(state).reject {
+      _1.is_a?(Hash) && _1.values.any? { |v| v[:dropdown] == false }
+    }.flat_map { extract_state_name(_1) }
+  end
+
   def available_states(state = self.state)
-    state_transitions[state.to_sym] || []
+    transitions_for_current_state(state).flat_map { extract_state_name(_1) }
   end
 
   def state_comes_before?(state1, state2)
@@ -42,6 +48,14 @@ module Events::State
   end
 
   private
+
+  def transitions_for_current_state(state)
+    state_transitions[state.to_sym] || []
+  end
+
+  def extract_state_name(entry)
+    entry.is_a?(Hash) ? entry.keys : entry
+  end
 
   def assert_valid_state_change
     unless available_states(state_was).include?(state.to_sym)
