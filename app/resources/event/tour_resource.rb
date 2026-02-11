@@ -12,6 +12,14 @@ class Event::TourResource < EventResource
     attribute :participant_count, :integer
     attribute :minimum_participants, :integer
     attribute :teamer_count, :integer
+    attribute :summit, :string
+    attribute :ascent, :integer
+    attribute :descent, :integer
+    attribute :season, :string
+    attribute :minimum_age, :integer
+    attribute :maximum_age, :integer
+    attribute :tourenportal_link, :string
+    attribute :subito, :boolean
   end
 
   has_many :leaders, resource: Person::NameResource, writable: false,

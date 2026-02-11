@@ -8,7 +8,9 @@
 class Event::Tour < Event
   include ::Events::Tours::State
 
-  self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants]
+  self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants,
+    :summit, :ascent, :descent, :season, :internal_comment, :minimum_age, :maximum_age,
+    :tourenportal_link, :subito]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
     :signature, :signature_confirmation, :signature_confirmation_text, :guest_limit]
 
