@@ -384,6 +384,11 @@ de_CH:
         j_s_price_regular: J&S P-Normalpreis
         j_s_price_subsidized: J&S A-Mitgliederpreis
         j_s_price_special: J&S A-Normalpreis
+      event/approval_commission_responsibility:
+        freigabe_komitee: Freigabekomitee
+        target_group: Zielgruppe
+        discipline: Disziplin
+        subito: Subito
       event/discipline:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -393,6 +398,10 @@ de_CH:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval_kind:
+        name: Name
+        short_description: Kurzbeschrieb
+        order: Reihenfolge
       event/fitness_requirement:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -685,11 +694,23 @@ de_CH:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren.
+        group/freigabe_komitee:
+          attributes:
+            base:
+              has_event_approval_commission_responsiblities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: darf nicht länger als geplante Kursdauer sein.
+
+        event/approval_commission_responsibility:
+          not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
+          no_base_target_group: ist keine Hauptzielgruppe.
+          no_base_discipline: ist keine Hauptdisziplin.
+
+        event_approval_commission_responsibility:
+            combination_exists: Diese Zuständigkeit wurde in dieser Sektion bereits verteilt.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
@@ -723,6 +744,9 @@ de_CH:
       course_compensation_rate:
         one: Vergütungsansatz
         other: Vergütungsansätze
+      event/approval_commission_responsibility:
+        one: Zuständigkeit Freigabe-Kommission
+        other: Zuständigkeiten Freigabe-Kommission
       event/discipline:
         one: Disziplin
         other: Disziplinen
@@ -759,6 +783,9 @@ de_CH:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval_kind:
+        one: Freigabestufe
+        other: Freigabestufen
       external_training:
         one: Externe Ausbildung
         other: Externe Ausbildungen

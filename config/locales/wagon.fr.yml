@@ -388,6 +388,11 @@ fr:
         j_s_price_regular: Prix normal P J+S
         j_s_price_subsidized: Prix pour les membres A J+S
         j_s_price_special: Prix normal A J+S
+      event/approval_commission_responsibility:
+        freigabe_komitee: Freigabekomitee
+        target_group: Zielgruppe
+        discipline: Disziplin
+        subito: Subito
       event/discipline:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -397,6 +402,10 @@ fr:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval_kind:
+        name: Name
+        short_description: Kurzbeschrieb
+        order: Reihenfolge
       event/fitness_requirement:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -690,11 +699,23 @@ fr:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: ne peut référencer qu’un seul taux de rémunération par période de validité.
+        group/freigabe_komitee:
+          attributes:
+            base:
+              has_event_approval_commission_responsiblities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: ne doit pas être plus long que la durée prévue du cours
+
+        event/approval_commission_responsibility:
+          not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
+          no_base_target_group: ist keine Hauptzielgruppe.
+          no_base_discipline: ist keine Hauptdisziplin.
+
+        event_approval_commission_responsibility:
+            combination_exists: Diese Zuständigkeit wurde in dieser Sektion bereits verteilt.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La personne doit posséder au moins une qualification active.
@@ -732,6 +753,9 @@ fr:
         one: Approche de la rémunération
         many: Taux de rémunération
         other: Taux de rémunération
+      event/approval_commission_responsibility:
+        one: Zuständigkeit Freigabe-Kommission
+        other: Zuständigkeiten Freigabe-Kommission
       event/discipline:
         one: Disziplin
         other: Disziplinen
@@ -775,6 +799,9 @@ fr:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval_kind:
+        one: Freigabestufe
+        other: Freigabestufen
       external_training:
         one: Formation externe
         many: Formations externes

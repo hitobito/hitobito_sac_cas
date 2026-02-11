@@ -386,6 +386,11 @@ it:
         j_s_price_regular: Prezzo normale G+S - P
         j_s_price_subsidized: Prezzo per i soci G+S - A
         j_s_price_special: Prezzo normale G+S - A
+      event/approval_commission_responsibility:
+        freigabe_komitee: Freigabekomitee
+        target_group: Zielgruppe
+        discipline: Disziplin
+        subito: Subito
       event/discipline:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -395,6 +400,10 @@ it:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval_kind:
+        name: Name
+        short_description: Kurzbeschrieb
+        order: Reihenfolge
       event/fitness_requirement:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -688,11 +697,23 @@ it:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: può referenziare solo un tasso di retribuzione per periodo di validità.
+        group/freigabe_komitee:
+          attributes:
+            base:
+              has_event_approval_commission_responsiblities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: non deve essere superiore alla durata del corso prevista.
+
+        event/approval_commission_responsibility:
+          not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
+          no_base_target_group: ist keine Hauptzielgruppe.
+          no_base_discipline: ist keine Hauptdisziplin.
+
+        event_approval_commission_responsibility:
+            combination_exists: Diese Zuständigkeit wurde in dieser Sektion bereits verteilt.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La persona deve avere almeno una qualifica attiva.
@@ -730,6 +751,9 @@ it:
         one: Approccio retributivo
         many: Approcci retributivi
         other: Tassi di retribuzione
+      event/approval_commission_responsibility:
+        one: Zuständigkeit Freigabe-Kommission
+        other: Zuständigkeiten Freigabe-Kommission
       event/discipline:
         one: Disziplin
         other: Disziplinen
@@ -773,6 +797,9 @@ it:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval_kind:
+        one: Freigabestufe
+        other: Freigabestufen
       external_training:
         one: Formazione esterna
         many: Formazione esterna
