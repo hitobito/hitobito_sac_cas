@@ -10,6 +10,8 @@ class Event::DisciplinesController < Event::NestableTourEssentialsController
     label: "event_discipline_translations.label"
   }
 
+  self.permitted_attrs += [:color]
+
   def show
     redirect_to edit_event_discipline_path(entry)
   end
