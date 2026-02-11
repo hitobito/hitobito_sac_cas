@@ -476,10 +476,12 @@ en:
         state_translated: Status
         states:
           draft: Entwurf
+          review: In Freigabe
           approved: Freigegeben
           published: Publiziert
+          ready: Vorbereitung abgeschlossen
           closed: Abgeschlossen
-          canceled: Abgesagt
+          canceled: Abgesagt / Annulliert
         participation_states:
           tentative: Provisorisch
           unconfirmed: Unbestätigt
@@ -1541,15 +1543,22 @@ en:
           Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: Absagen
       event/tour:
-        draft: Zurück als Entwurf
-        approved: Freigeben
+        ready: Vorbereitung abgeschlossen
+        review: Zur Freigabe weiterleiten
+        approved: Selbst freigeben
         published: Publizieren
         closed: Abschliessen
         canceled: Absagen
     state_back_buttons:
-      assignment_closed: Zurück zur Zuteilung
-      application_closed: Zurück zur abgeschlossenen Anmeldung
-      approved: Zurück zur Freigabe
+      event/course:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+        approved: Zurück zur Freigabe
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Zurück zu Vorbereitung abgeschlossen
+        approved: Zurück zu Freigegeben
+        published: Zurück zu Publiziert
 
     form_tabs:
       communication: Communication
