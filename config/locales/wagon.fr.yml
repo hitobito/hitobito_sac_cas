@@ -480,12 +480,10 @@ fr:
         state_translated: Statut
         states:
           draft: projet
-          review: In Freigabe
           approved: Libéré
           published: publié
-          ready: Vorbereitung abgeschlossen
           closed: terminé
-          canceled: Abgesagt / Annulliert
+          canceled: annulé
         participation_states:
           tentative: provisoire
           unconfirmed: pas confirmé
@@ -1595,22 +1593,15 @@ fr:
           La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: annuler
       event/tour:
-        ready: Vorbereitung abgeschlossen
-        review: Zur Freigabe weiterleiten
-        approved: Selbst freigeben
+        draft: Retour en tant que projet
+        approved: Partager
         published: Publier
         closed: Fermer
         canceled: annuler
     state_back_buttons:
-      event/course:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
-        approved: Zurück zur Freigabe
-      event/tour:
-        draft: Zurück zu Entwurf
-        ready: Zurück zu Vorbereitung abgeschlossen
-        approved: Zurück zu Freigegeben
-        published: Zurück zu Publiziert
+      assignment_closed: Retour à l'allocation
+      application_closed: Retour vers l'inscription terminée
+      approved: Retour à la validation
 
     form_tabs:
       communication: Communication

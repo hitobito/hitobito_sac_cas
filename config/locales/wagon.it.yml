@@ -478,12 +478,10 @@ it:
         state_translated: Stato
         states:
           draft: Bozza
-          review: In Freigabe
           approved: Rilasciato
           published: Pubblicato
-          ready: Vorbereitung abgeschlossen
           closed: Completato
-          canceled: Abgesagt / Annulliert
+          canceled: Annullato
         participation_states:
           tentative: Provvisorio
           unconfirmed: Non confermato
@@ -1593,22 +1591,15 @@ it:
           Il completamento imposta tutte le registrazioni con lo stato Offerto allo stato Partecipato. Per tutte le registrazioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
         canceled: Cancellazioni
       event/tour:
-        ready: Vorbereitung abgeschlossen
-        review: Zur Freigabe weiterleiten
-        approved: Selbst freigeben
+        draft: Indietro come bozza
+        approved: Rilascio
         published: Pubblicare
         closed: Finalizzare
         canceled: Cancellazioni
     state_back_buttons:
-      event/course:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
-        approved: Zurück zur Freigabe
-      event/tour:
-        draft: Zurück zu Entwurf
-        ready: Zurück zu Vorbereitung abgeschlossen
-        approved: Zurück zu Freigegeben
-        published: Zurück zu Publiziert
+      assignment_closed: Torna all'assegnazione
+      application_closed: Torna alla registrazione completata
+      approved: Torna alla pubblicazione
 
     form_tabs:
       communication: Comunicazione
