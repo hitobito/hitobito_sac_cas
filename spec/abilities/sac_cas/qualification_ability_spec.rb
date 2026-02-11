@@ -77,15 +77,9 @@ describe QualificationAbility do
             Group::SektionsTourenUndKurse
               .find_or_create_by(parent: bluemlisalp_sektionsfunktionaere)
           end
-          let(:bluemlisalp_touren_und_kurse_sommer) do
-            Group::SektionsTourenUndKurseSommer.find_or_create_by(
-              parent: bluemlisalp_touren_und_kurse,
-              name: Group::SektionsTourenUndKurseSommer.label
-            )
-          end
           let(:bluemlisalp_tourenchef) do
-            Fabricate(Group::SektionsTourenUndKurseSommer::Tourenchef.sti_name.to_sym,
-              group: bluemlisalp_touren_und_kurse_sommer).person
+            Fabricate(Group::SektionsTourenUndKurse::TourenchefSommer.sti_name.to_sym,
+              group: bluemlisalp_touren_und_kurse).person
           end
           let(:person) { bluemlisalp_tourenchef }
 

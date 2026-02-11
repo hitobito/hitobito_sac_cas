@@ -971,18 +971,6 @@ fr:
         one: Randonnées et cours
         many: Randonnées et cours
         other: Courses et cours
-      group/sektions_touren_und_kurse_allgemein:
-        one: Randonnée et cours - général
-        many: Randonnées et cours - général
-        other: Courses et cours - général
-      group/sektions_touren_und_kurse_sommer:
-        one: Randonnées  et cours été
-        many: Randonnées et cours été
-        other: Courses et cours été
-      group/sektions_touren_und_kurse_winter:
-        one: Randonnées et cours hiver
-        many: Randonnées et cours hiver
-        other: Courses et cours hiver
       group/sektions_vorstand:
         one: Comité
         many: Comité

@@ -6,12 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::SektionsTourenUndKurse < Group
-  self.static_name = true
-
-  children Group::SektionsTourenUndKurseSommer,
-    Group::SektionsTourenUndKurseWinter,
-    Group::SektionsTourenUndKurseAllgemein,
-    Group::FreigabeKomitee
+  children Group::FreigabeKomitee,
+    Group::SektionsTourenUndKurse
 
   ### ROLES
 
@@ -30,6 +26,36 @@ class Group::SektionsTourenUndKurse < Group
         errors.add(:base, :requires_active_qualification)
       end
     end
+  end
+
+  class TourenchefSommer < ::Role
+    self.two_factor_authentication_enforced = true
+    self.permissions = [
+      :layer_and_below_read,
+      :layer_events_full,
+      :layer_mitglieder_full,
+      :layer_touren_und_kurse_full
+    ]
+  end
+
+  class TourenchefWinter < ::Role
+    self.two_factor_authentication_enforced = true
+    self.permissions = [
+      :layer_and_below_read,
+      :layer_events_full,
+      :layer_mitglieder_full,
+      :layer_touren_und_kurse_full
+    ]
+  end
+
+  class Tourenchef < ::Role
+    self.two_factor_authentication_enforced = true
+    self.permissions = [
+      :layer_and_below_read,
+      :layer_events_full,
+      :layer_mitglieder_full,
+      :layer_touren_und_kurse_full
+    ]
   end
 
   class KibeChef < ::Role
@@ -64,6 +90,9 @@ class Group::SektionsTourenUndKurse < Group
 
   roles Tourenleiter,
     TourenleiterOhneQualifikation,
+    Tourenchef,
+    TourenchefSommer,
+    TourenchefWinter,
     KibeChef,
     FabeChef,
     JoChef,

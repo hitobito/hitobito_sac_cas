@@ -52,9 +52,9 @@ shared_examples "Tourenchef" do
 end
 
 [
-  Group::SektionsTourenUndKurseSommer::Tourenchef,
-  Group::SektionsTourenUndKurseWinter::Tourenchef,
-  Group::SektionsTourenUndKurseAllgemein::Tourenchef
+  Group::SektionsTourenUndKurse::TourenchefSommer,
+  Group::SektionsTourenUndKurse::TourenchefWinter,
+  Group::SektionsTourenUndKurse::Tourenchef
 ].each do |role_class|
   describe role_class.to_s do
     it_behaves_like "Tourenchef" do

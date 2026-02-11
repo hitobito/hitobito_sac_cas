@@ -87,7 +87,7 @@ abonnent_alpen:
 
 tourenchef_bluemlisalp_ortsgruppe_ausserberg:
   person_id: 600_006
-  group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse_sommer
-  type: Group::SektionsTourenUndKurseSommer::Tourenchef
+  group: bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse
+  type: Group::SektionsTourenUndKurse::TourenchefSommer
   start_on: 2015-01-01
   end_on: <%= Time.zone.today.year %>-12-31

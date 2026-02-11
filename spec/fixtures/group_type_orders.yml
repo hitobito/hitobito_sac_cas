@@ -61,11 +61,3 @@ ortsgruppe_ausserberg_funktionaere:
 ortsgruppe_ausserberg_touren_und_kurse:
   name: Group::SektionsTourenUndKurse
   order_weight: 16
-
-ortsgruppe_ausserberg_touren_und_kurse_sommer:
-  name: Group::SektionsTourenUndKurseSommer
-  order_weight: 17
-
-ortsgruppe_ausserberg_touren_und_kurse_winter:
-  name: Group::SektionsTourenUndKurseWinter
-  order_weight: 18
