@@ -32,6 +32,8 @@ fr:
       email_mv: "info@sac-cas.ch"
       website: "https://www.sac-cas.ch"
     title_event/tour: course
+    elevation_unit: Hm
+    elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Le jeton utilisé n'est pas valide.
 
   layouts:
@@ -477,13 +479,26 @@ fr:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        ascent: Aufstieg
+        descent: Abstieg
+        internal_comment: Interne Bemerkungen
+        minimum_age: Mindestalter
+        season: Saison
+        seasons:
+          winter: Winter
+          summer: Sommer
+        subito: Ist Subito-Tour
+        summit: Gipfel
+        tourenportal_link: Link zum Tourenportal
         state_translated: Statut
         states:
           draft: projet
+          review: In Freigabe
           approved: Libéré
           published: publié
+          ready: Vorbereitung abgeschlossen
           closed: terminé
-          canceled: annulé
+          canceled: Abgesagt / Annulliert
         participation_states:
           tentative: provisoire
           unconfirmed: pas confirmé
@@ -1259,15 +1274,15 @@ fr:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Droit d’écriture
         description: Droit d’écriture
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
-        one: Préposé·e aux courses
-        description: Préposé·e aux courses
-      group/sektions_touren_und_kurse_sommer/tourenchef:
-        one: Préposé·e aux courses
-        description: Préposé·e aux courses
-      group/sektions_touren_und_kurse_winter/tourenchef:
-        one: Préposé·e aux courses
-        description: Préposé·e aux courses
+      group/sektions_touren_und_kurse/tourenchef:
+        one: Tourenchef*in
+        description: Tourenchef*in
+      group/sektions_touren_und_kurse/tourenchef_sommer:
+        one: Tourenchef*in Sommer
+        description: Tourenchef*in Sommer
+      group/sektions_touren_und_kurse/tourenchef_winter:
+        one: Tourenchef*in Winter
+        description: Tourenchef*in Winter
       group/sektions_clubhuetten/leserecht:
         one: Droit de lecture
         description: Droit de lecture
@@ -1593,15 +1608,22 @@ fr:
           La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: annuler
       event/tour:
-        draft: Retour en tant que projet
-        approved: Partager
+        ready: Vorbereitung abgeschlossen
+        review: Zur Freigabe weiterleiten
+        approved: Selbst freigeben
         published: Publier
         closed: Fermer
         canceled: annuler
     state_back_buttons:
-      assignment_closed: Retour à l'allocation
-      application_closed: Retour vers l'inscription terminée
-      approved: Retour à la validation
+      event/course:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+        approved: Zurück zur Freigabe
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Zurück zu Vorbereitung abgeschlossen
+        approved: Zurück zu Freigegeben
+        published: Zurück zu Publiziert
 
     form_tabs:
       communication: Communication
