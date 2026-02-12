@@ -35,6 +35,12 @@ Rails.application.routes.draw do
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]
       resources :yearly_membership_invoices, only: [:create, :new], module: :people
+      resources :event_approval_commission_responsibilities, only: [] do
+        collection do
+          get :edit, controller: "event/approval_commission_responsibilities"
+          put :update, controller: "event/approval_commission_responsibilities"
+        end
+      end
 
       resources :events, only: [] do
         collection do

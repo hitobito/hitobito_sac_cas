@@ -166,6 +166,10 @@ de:
           in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
       models:
+        event/approval_commission_responsibility_form:
+          attributes:
+            base:
+              invalid_event_comission_responsibilities: Es wurden nicht alle Zuständigkeiten ausgefüllt.
         household:
           attributes:
             members:
@@ -1401,6 +1405,11 @@ de:
       event_canceled: Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden.
       participant:
         remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
+    approval_commission_responsibilities:
+      form:
+        title: Zuständigkeiten Freigabe-Kommission bearbeiten
+        normal_tours: Normal-Touren
+        subito_tours: Subito-Touren
     courses:
       invoices:
         new:
@@ -1578,6 +1587,8 @@ de:
         enter_email: "" # to not display in sac wagon
 
   events:
+    actions_index_sac_cas:
+      edit_event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
     state_buttons:

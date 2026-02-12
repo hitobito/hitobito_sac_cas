@@ -13,13 +13,14 @@ class Event::ApprovalCommissionResponsibility < ActiveRecord::Base
   belongs_to :target_group
   belongs_to :discipline
 
+  validates :freigabe_komitee, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
   validates :sektion_id, uniqueness: {
     scope: [:target_group_id, :discipline_id, :subito],
     message: I18n.t(
       "activerecord.errors.models.event_approval_commission_responsibility.combination_exists"
     )
   }
-  validate :validate_freigabe_komitee_inside_layer
+  validate :validate_freigabe_komitee_inside_layer, if: :freigabe_komitee
   validate :validate_only_base_target_group, on: :create
   validate :validate_only_base_discipline, on: :create
 

@@ -33,7 +33,7 @@ class Group::Sektion < Group
   mounted_attr :tours_enabled, :boolean, default: false, null: false
 
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
-  has_many :event_approval_commission_responsiblities, dependent: :destroy,
+  has_many :event_approval_commission_responsibilities, dependent: :destroy,
     class_name: "Event::ApprovalCommissionResponsibility"
   has_and_belongs_to_many :section_offerings, foreign_key: :group_id
 

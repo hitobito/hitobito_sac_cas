@@ -48,6 +48,11 @@ describe Event::ApprovalCommissionResponsibility do
       expect(subject).not_to be_valid
     end
 
+    it "validates presence of freigabe_komitee" do
+      subject.freigabe_komitee = nil
+      expect(subject).not_to be_valid
+    end
+
     it "validates that freigabe_komitee must be in layer" do
       subject.freigabe_komitee = Group::FreigabeKomitee.create!(name: "FreigabeKomitee Matterhorn",
         parent: groups(:matterhorn_touren_und_kurse))

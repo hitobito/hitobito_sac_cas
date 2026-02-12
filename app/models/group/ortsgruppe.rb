@@ -33,7 +33,7 @@ class Group::Ortsgruppe < Group
   mounted_attr :tours_enabled, :boolean, default: false, null: false
 
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
-  has_many :event_approval_commission_responsiblities, dependent: :destroy,
+  has_many :event_approval_commission_responsibilities, dependent: :destroy,
     foreign_key: :sektion_id,
     class_name: "Event::ApprovalCommissionResponsibility"
 
