@@ -53,6 +53,18 @@ describe Event::ApprovalCommissionResponsibilityForm do
     end
   end
 
+  describe "#valid?" do
+    it "checks approvals and copies errors to form" do
+      subject.event_approval_commission_responsibilities.first.freigabe_komitee_id = nil
+      subject.event_approval_commission_responsibilities.second.freigabe_komitee_id = nil
+      expect(subject).not_to be_valid
+      expect(subject.errors.full_messages).to eq [
+        "Kinder (KiBe) - Wandern: Freigabekomitee muss ausgefüllt werden",
+        "Kinder (KiBe) - Wandern: Freigabekomitee muss ausgefüllt werden"
+      ]
+    end
+  end
+
   describe "#save!" do
     it "updates the records" do
       new_freigabe_komitee = Group::FreigabeKomitee.create!(name: "Freigabekomitee",
@@ -76,12 +88,9 @@ describe Event::ApprovalCommissionResponsibilityForm do
       }.to change { Event::ApprovalCommissionResponsibility.count }.by(1)
     end
 
-    it "does not save any records when one is invalid" do
+    it "fails if invalid" do
       subject.event_approval_commission_responsibilities.first.freigabe_komitee_id = nil
-      expect { subject.save! }.not_to change {
-        group.event_approval_commission_responsibilities.maximum(:updated_at)
-      }
-      expect(subject.errors.full_messages).to eq ["Es wurden nicht alle Zuständigkeiten ausgefüllt."]
+      expect { subject.save! }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

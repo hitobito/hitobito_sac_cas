@@ -10,14 +10,16 @@ class Event::ApprovalCommissionResponsibilityForm
   attr_accessor :group
   attr_writer :event_approval_commission_responsibilities
 
+  def valid?
+    event_approval_commission_responsibilities.reject(&:valid?).tap do |invalid|
+      copy_errors(invalid)
+    end.none?
+  end
+
   def save!
     ActiveRecord::Base.transaction do
       event_approval_commission_responsibilities.each(&:save!)
     end
-    true
-  rescue ActiveRecord::RecordInvalid
-    errors.add(:base, :invalid_event_comission_responsibilities)
-    false
   end
 
   def event_approval_commission_responsibilities_attributes=(params)
@@ -45,6 +47,14 @@ class Event::ApprovalCommissionResponsibilityForm
 
   private
 
+  def copy_errors(models)
+    models.each do |model|
+      model.errors.full_messages.each do |error|
+        errors.add(:base, "#{model.target_group} - #{model.discipline}: #{error}")
+      end
+    end
+  end
+
   def persisted_event_approval_commission_responsibilities
     @persisted_event_approval_commission_responsibilities ||=
       event_approval_commission_responsibilities.select(&:persisted?)
@@ -53,7 +63,7 @@ class Event::ApprovalCommissionResponsibilityForm
 
   def find_or_build_responsibilties
     existing_entries = group.event_approval_commission_responsibilities
-      .includes(target_group: :translations, discipline: :translations)
+      .includes(:sektion, :freigabe_komitee, target_group: :translations, discipline: :translations)
       .index_by { [_1.target_group_id, _1.discipline_id, _1.subito] }
 
     Event::TargetGroup.main.list.flat_map do |target_group|

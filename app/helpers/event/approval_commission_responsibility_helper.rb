@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Event::ApprovalCommissionResponsibilityHelper
-  def render_commission_select(f, entries, subito:, freigabe_komitees:)
+  def render_commission_select(f, entries, subito:, freigabe_komitees:) # rubocop:disable Metrics/AbcSize
     entry = entries.find { _1.subito == subito }
 
     f.fields_for :event_approval_commission_responsibilities, entry do |ff|
@@ -18,7 +18,7 @@ module Event::ApprovalCommissionResponsibilityHelper
         concat ff.select :freigabe_komitee_id,
           freigabe_komitees.map { [_1.to_s, _1.id] },
           {prompt: true},
-          {class: "form-select form-select-sm"}
+          {class: "form-select form-select-sm #{"is-invalid" if ff.object.errors.any?}"}
       end
     end
   end

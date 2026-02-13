@@ -25,7 +25,9 @@ class Event::ApprovalCommissionResponsibility < ActiveRecord::Base
   private
 
   def validate_freigabe_komitee_inside_layer
-    errors.add(:freigabe_komitee, :not_in_layer) unless freigabe_komitee&.layer_group == sektion
+    unless freigabe_komitee&.layer_group_id == sektion.id
+      errors.add(:freigabe_komitee, :not_in_layer)
+    end
   end
 
   def validate_only_base_target_group
