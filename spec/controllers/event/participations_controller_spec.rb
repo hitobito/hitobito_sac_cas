@@ -493,9 +493,9 @@ describe Event::ParticipationsController do
     end
 
     context "as layer_events_full" do
-      let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
+      let(:kommission_touren) { groups(:bluemlisalp_kommission_touren) }
       let(:user) {
-        Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group,
+        Group::SektionsKommissionTouren::Mitglied.create!(group: kommission_touren,
           person: Fabricate(:person)).person
       }
       let(:event) { events(:section_tour) }

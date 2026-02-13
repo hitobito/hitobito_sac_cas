@@ -116,7 +116,9 @@ module HitobitoSacCas
       Role::Types::Permissions <<
         :read_all_people <<
         :layer_events_full <<
+        :layer_created_events_full <<
         :layer_mitglieder_full
+
       Role::Types::PermissionImplicationsForGroups[:layer_mitglieder_full] =
         {group_and_below_full: Group::SektionsMitglieder}
 

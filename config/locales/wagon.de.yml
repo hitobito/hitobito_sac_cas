@@ -623,6 +623,7 @@ de:
               read_all_people: Lesen von allen Personen.
               layer_events_full: Verwalten von Events auf der Sektion.
               layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
+              layer_created_events_full: Erstellen und Editieren eigener Anlässe, Kurse und Touren in der Sektion
       qualification_kind:
         tourenchef_may_edit: Von Tourenchef bearbeitbar
       qualification:

@@ -13,11 +13,11 @@ describe Person::AddRequestAbility do
   subject(:ability) { Ability.new(user) }
 
   describe "layer_events_full" do
-    let(:touren_group) { groups(:bluemlisalp_touren_und_kurse) }
+    let(:kommission_touren) { groups(:bluemlisalp_kommission_touren) }
     let(:event) { events(:section_tour) }
 
     before do
-      Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.create!(group: touren_group,
+      Group::SektionsKommissionTouren::Mitglied.create!(group: kommission_touren,
         person: user)
     end
 
