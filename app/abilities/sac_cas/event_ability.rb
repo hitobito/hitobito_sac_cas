@@ -30,11 +30,11 @@ module SacCas::EventAbility
           :create_tags, :assign_tags, :manage_attachments)
         .in_same_layer_group_if_active
 
-      permission(:tourenleiter_layer_events_manage)
+      permission(:layer_created_events_full)
         .may(:create)
         .in_tourenleiter_sektion
 
-      permission(:tourenleiter_layer_events_manage)
+      permission(:layer_created_events_full)
         .may(:update, :assign_tags, :manage_attachments)
         .in_tourenleiter_sektion_for_own
     end
