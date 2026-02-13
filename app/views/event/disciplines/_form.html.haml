@@ -5,5 +5,5 @@
 
 = entry_form(buttons_bottom: false) do |f|
   = f.labeled_input_fields :label, :short_description, :description, :order
-  = f.labeled_short_field :color unless entry.parent
+  = f.labeled_short_field :color, help_inline: t('.help_inline_color') unless entry.parent
   = f.labeled_input_field :parent_id if entry.new_record?

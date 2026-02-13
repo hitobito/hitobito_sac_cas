@@ -43,7 +43,9 @@ describe Event::Discipline do
       entry.description = "Beschreibung"
       entry.color = "invalid"
       expect(entry).not_to be_valid
-      expect(entry.errors.full_messages).to eq ["Farbe ist nicht gültig"]
+      expect(entry.errors.full_messages).to eq(
+        ["Farbe muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein"]
+      )
       entry.color = "#AACCFF"
       expect(entry).to be_valid
       entry.color = "#aaccff"

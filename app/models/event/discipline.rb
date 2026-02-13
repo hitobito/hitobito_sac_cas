@@ -27,5 +27,6 @@ class Event::Discipline < ActiveRecord::Base
   has_and_belongs_to_many :events, join_table: "events_disciplines"
 
   validates :description, presence: true
-  validates :color, format: {with: /\A#[A-Fa-f0-9]{6}\Z/}, allow_blank: true
+  validates :color, format: {with: /\A#[A-Fa-f0-9]{6}\Z/, message: :invalid_hex_color},
+    allow_blank: true
 end
