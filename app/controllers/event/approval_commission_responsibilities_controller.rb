@@ -52,7 +52,7 @@ class Event::ApprovalCommissionResponsibilitiesController < ApplicationControlle
   end
 
   def freigabe_komitees
-    @freigabe_komitees = Group::FreigabeKomitee.where(layer_group_id: group.id).order(:name)
+    @freigabe_komitees ||= Group::FreigabeKomitee.where(layer_group_id: group.id).order(:name)
   end
 
   def form = @form ||= Event::ApprovalCommissionResponsibilityForm.new(group:)
