@@ -109,9 +109,9 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
       * Touren und Kurse
         * Tourenleiter*in (mit Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::Tourenleiter)
         * Tourenleiter*in (ohne Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation)
-        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::Tourenchef)
-        * Tourenchef*in Sommer: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::TourenchefSommer)
-        * Tourenchef*in Winter: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::TourenchefWinter)
+        * Tourenchef*in: 2FA [:group_and_below_full, :layer_and_below_read, :layer_events_full, :layer_mitglieder_full]  --  (Group::SektionsTourenUndKurse::Tourenchef)
+        * Tourenchef*in Sommer: 2FA [:group_and_below_full, :layer_and_below_read, :layer_events_full, :layer_mitglieder_full]  --  (Group::SektionsTourenUndKurse::TourenchefSommer)
+        * Tourenchef*in Winter: 2FA [:group_and_below_full, :layer_and_below_read, :layer_events_full, :layer_mitglieder_full]  --  (Group::SektionsTourenUndKurse::TourenchefWinter)
         * KiBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::KibeChef)
         * FaBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::FabeChef)
         * JO-Chef*in: []  --  (Group::SektionsTourenUndKurse::JoChef)

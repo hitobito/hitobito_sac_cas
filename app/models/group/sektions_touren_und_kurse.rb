@@ -31,30 +31,30 @@ class Group::SektionsTourenUndKurse < Group
   class TourenchefSommer < ::Role
     self.two_factor_authentication_enforced = true
     self.permissions = [
+      :group_and_below_full,
       :layer_and_below_read,
       :layer_events_full,
-      :layer_mitglieder_full,
-      :layer_touren_und_kurse_full
+      :layer_mitglieder_full
     ]
   end
 
   class TourenchefWinter < ::Role
     self.two_factor_authentication_enforced = true
     self.permissions = [
+      :group_and_below_full,
       :layer_and_below_read,
       :layer_events_full,
-      :layer_mitglieder_full,
-      :layer_touren_und_kurse_full
+      :layer_mitglieder_full
     ]
   end
 
   class Tourenchef < ::Role
     self.two_factor_authentication_enforced = true
     self.permissions = [
+      :group_and_below_full,
       :layer_and_below_read,
       :layer_events_full,
-      :layer_mitglieder_full,
-      :layer_touren_und_kurse_full
+      :layer_mitglieder_full
     ]
   end
 
