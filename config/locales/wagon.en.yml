@@ -1547,6 +1547,7 @@ en:
           Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: Absagen
       event/tour:
+        draft: Zurück zu Entwurf
         ready: Vorbereitung abgeschlossen
         review: Zur Freigabe weiterleiten
         approved: Selbst freigeben

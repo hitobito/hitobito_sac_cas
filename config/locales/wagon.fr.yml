@@ -1608,6 +1608,7 @@ fr:
           La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: annuler
       event/tour:
+        draft: Zurück zu Entwurf
         ready: Vorbereitung abgeschlossen
         review: Zur Freigabe weiterleiten
         approved: Selbst freigeben

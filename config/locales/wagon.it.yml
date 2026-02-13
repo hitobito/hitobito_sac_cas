@@ -1606,6 +1606,7 @@ it:
           Il completamento imposta tutte le registrazioni con lo stato Offerto allo stato Partecipato. Per tutte le registrazioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
         canceled: Cancellazioni
       event/tour:
+        draft: Zurück zu Entwurf
         ready: Vorbereitung abgeschlossen
         review: Zur Freigabe weiterleiten
         approved: Selbst freigeben
