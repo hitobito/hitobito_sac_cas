@@ -116,12 +116,9 @@ module HitobitoSacCas
       Role::Types::Permissions <<
         :read_all_people <<
         :layer_events_full <<
-        :layer_mitglieder_full <<
-        :layer_touren_und_kurse_full
+        :layer_mitglieder_full
       Role::Types::PermissionImplicationsForGroups[:layer_mitglieder_full] =
         {group_and_below_full: Group::SektionsMitglieder}
-      Role::Types::PermissionImplicationsForGroups[:layer_touren_und_kurse_full] =
-        {group_and_below_full: Group::SektionsTourenUndKurse}
 
       AbilityDsl::UserContext::GROUP_PERMISSIONS << :layer_events_full
       AbilityDsl::UserContext::LAYER_PERMISSIONS << :layer_events_full

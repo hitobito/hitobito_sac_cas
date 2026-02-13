@@ -12,9 +12,7 @@ shared_examples "Tourenchef" do
   let(:touren_und_kurse_group) { groups(:bluemlisalp_touren_und_kurse) }
 
   before do
-    group_class = role_class.module_parent
-    group = Fabricate(group_class.sti_name.to_sym, parent: touren_und_kurse_group)
-    Fabricate(role_class.sti_name.to_sym, person: person, group:)
+    Fabricate(role_class.sti_name.to_sym, person: person, group: touren_und_kurse_group)
   end
 
   def group_and_below_full_groups
@@ -24,7 +22,8 @@ shared_examples "Tourenchef" do
   it "declares permissions" do
     expect(role_class.permissions).to include(
       :layer_and_below_read,
-      :layer_events_full
+      :layer_events_full,
+      :group_and_below_full
     )
   end
 
