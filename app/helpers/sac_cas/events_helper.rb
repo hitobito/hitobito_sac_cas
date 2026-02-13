@@ -27,9 +27,10 @@ module SacCas::EventsHelper
     end.to_json
   end
 
-  def tour_essentials_grouped_select_optgroups(entries)
+  def tour_essentials_grouped_select_optgroups(entries, color: false)
     entries.select(&:main?).flat_map do |main|
-      {value: main.id, label: main.to_s}
+      color = main.color if color
+      {value: main.id, label: main.to_s, color:}.compact_blank
     end.to_json
   end
 
@@ -43,6 +44,20 @@ module SacCas::EventsHelper
            description: child.short_description.present? ? "     #{child.short_description}" : nil}
         end
     end.to_json
+  end
+
+  def tour_essentials_opt_group_header_with_color
+    <<~JS
+      return function(data) {
+        if (!data.color) {
+          return `<div class="optgroup-header">${data.label}</div>`;
+        }
+        return `<div class="optgroup-header">
+                  <i style="color: ${data.color}" class="fas fa-circle"></i>
+                  <span class="ms-1">${data.label}</span>
+                </div>`;
+      }
+    JS
   end
 
   def fitness_requirements_select_options(requirements)

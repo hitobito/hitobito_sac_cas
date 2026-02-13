@@ -20,8 +20,10 @@
       data: { controller: 'tom-select',
       tom_select_options_value: tour_essentials_grouped_select_options(@disciplines),
       tom_select_selected_value: entry.discipline_ids.to_json,
-      tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@disciplines),
-      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+      tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@disciplines, color: true),
+      tom_select_optgroups_header_value: tour_essentials_opt_group_header_with_color,
+      tom_select_no_results_value: I18n.t('global.no_list_entries'),
+      })
 
   = f.labeled(:target_groups) do
     = f.select(:target_group_ids, [], {},
