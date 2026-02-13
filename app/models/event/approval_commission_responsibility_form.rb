@@ -23,7 +23,7 @@ class Event::ApprovalCommissionResponsibilityForm
   def event_approval_commission_responsibilities_attributes=(params)
     @event_approval_commission_responsibilities = params.values.map do |attributes|
       record = if attributes[:id].present?
-        Event::ApprovalCommissionResponsibility.find(attributes[:id])
+        persisted_event_approval_commission_responsibilities.fetch(attributes[:id])
       else
         group.event_approval_commission_responsibilities.build
       end
@@ -44,6 +44,12 @@ class Event::ApprovalCommissionResponsibilityForm
   end
 
   private
+
+  def persisted_event_approval_commission_responsibilities
+    @persisted_event_approval_commission_responsibilities ||=
+      event_approval_commission_responsibilities.select(&:persisted?)
+        .index_by(&:id).transform_keys(&:to_s)
+  end
 
   def find_or_build_responsibilties
     existing_entries = group.event_approval_commission_responsibilities
