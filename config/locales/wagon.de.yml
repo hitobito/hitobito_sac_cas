@@ -739,9 +739,7 @@ de:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
           no_base_target_group: ist keine Hauptzielgruppe.
           no_base_discipline: ist keine Hauptdisziplin.
-
-        event_approval_commission_responsibility:
-            combination_exists: Diese Zuständigkeit wurde in dieser Sektion bereits verteilt.
+          combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: Person muss mindestens eine aktive Qualifikation besitzen.
