@@ -1406,7 +1406,7 @@ de:
       participant:
         remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
     approval_commission_responsibilities:
-      form:
+      edit:
         title: Zuständigkeiten Freigabe-Kommission bearbeiten
         normal_tours: Normal-Touren
         subito_tours: Subito-Touren

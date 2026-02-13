@@ -12,7 +12,6 @@ class Event::ApprovalCommissionResponsibilitiesController < ApplicationControlle
   def edit
     @form = form
     @group = group
-    render :form
   end
 
   def update
@@ -21,7 +20,7 @@ class Event::ApprovalCommissionResponsibilitiesController < ApplicationControlle
     if form.valid? && form.save!
       redirect_to tour_group_events_path(group), notice: success_message
     else
-      render :form, status: :unprocessable_entity, locals: {form: @form}
+      render :edit, status: :unprocessable_entity, locals: {form: @form}
     end
   end
 

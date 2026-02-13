@@ -10,7 +10,7 @@ module Sheet
     self.parent_sheet = Sheet::Group
 
     def title
-      I18n.t("event.approval_commission_responsibilities.form.title")
+      I18n.t("event.approval_commission_responsibilities.edit.title")
     end
   end
 end
