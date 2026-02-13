@@ -36,6 +36,23 @@ describe Event::Discipline do
       expect(entry).not_to be_valid
       expect(entry.errors.details[:parent_id]).to eq [error: :parent_is_not_main]
     end
+
+    it "validates format of color" do
+      entry = described_class.new
+      entry.label = "Wintersport"
+      entry.description = "Beschreibung"
+      entry.color = "invalid"
+      expect(entry).not_to be_valid
+      expect(entry.errors.full_messages).to eq(
+        ["Farbe muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein"]
+      )
+      entry.color = "#AACCFF"
+      expect(entry).to be_valid
+      entry.color = "#aaccff"
+      expect(entry).to be_valid
+      entry.color = "#abc"
+      expect(entry).not_to be_valid
+    end
   end
 
   context ".assignable" do

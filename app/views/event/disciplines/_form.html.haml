@@ -1,0 +1,9 @@
+- #  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+= entry_form(buttons_bottom: false) do |f|
+  = f.labeled_input_fields :label, :short_description, :description, :order
+  = f.labeled_short_field :color, help_inline: t('.help_inline_color') unless entry.parent
+  = f.labeled_input_field :parent_id if entry.new_record?

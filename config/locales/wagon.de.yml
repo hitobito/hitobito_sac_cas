@@ -165,7 +165,6 @@ de:
           Jugendliche im Alter von %{from_age} bis %{to_age} Jahren können nicht
           in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
-
       models:
         household:
           attributes:
@@ -399,6 +398,7 @@ de:
         discipline: Disziplin
         subito: Subito
       event/discipline:
+        color: Farbe
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
@@ -721,6 +721,11 @@ de:
             base:
               has_event_approval_commission_responsiblities: Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten
 
+        event/discipline:
+          attributes:
+            color:
+              invalid_hex_color: >-
+                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
         event/participation:
           attributes:
             actual_days:
@@ -1410,6 +1415,9 @@ de:
             one: Es wurde eine E-Mail verschickt.
             other: Es wurden %{count} E-Mails verschickt.
           warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
+    disciplines:
+      form:
+        help_inline_color: 'Gültiger hexadezimaler Farbwert (zb. #fcba03)'
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen

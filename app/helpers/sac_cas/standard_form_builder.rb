@@ -6,6 +6,12 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::StandardFormBuilder
+  extend ActiveSupport::Concern
+
+  prepended do
+    alias_method :short_field, :number_field
+  end
+
   # rubocop:todo Layout/LineLength
   # Add address dynamically to required attrs to render label as required, but not trigger the validation for required attrs
   # rubocop:enable Layout/LineLength
