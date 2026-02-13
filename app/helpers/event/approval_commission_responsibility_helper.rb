@@ -17,7 +17,7 @@ module Event::ApprovalCommissionResponsibilityHelper
         concat ff.hidden_field :subito
         concat ff.select :freigabe_komitee_id,
           freigabe_komitees.map { [_1.to_s, _1.id] },
-          {},
+          {prompt: true},
           {class: "form-select form-select-sm"}
       end
     end
