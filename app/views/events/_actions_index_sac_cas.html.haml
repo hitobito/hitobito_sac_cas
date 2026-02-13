@@ -1,0 +1,4 @@
+- if can?(:update, @group) && params[:type] == Event::Tour.sti_name
+        = action_button(t(".edit_event_approval_commission_responsibility"),
+                edit_group_event_approval_commission_responsibilities_path(@group),
+                :edit)

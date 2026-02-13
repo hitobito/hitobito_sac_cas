@@ -1,0 +1,28 @@
+- #  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+= standard_form(form, url: group_event_approval_commission_responsibilities_path(group), method: :put) do |f|
+    = f.error_messages
+    - form.grouped_event_approval_commission_responsibilities.each do |target_group, disciplines|
+        = field_set_tag do
+            %h2= target_group.label
+            .table-responsive
+                %table.mt-2.mb-5.table.w-auto
+                    %thead
+                        %tr
+                        %th.col-2
+                        %th= t(".normal_tours")
+                        %th= t(".subito_tours")
+                    %tbody
+                        - disciplines.each do |discipline, entries|
+                            %tr
+                                %td
+                                    %strong= discipline.label
+                                %td
+                                    = render_commission_select(f, entries, subito: false, freigabe_komitees:)
+                                %td
+                                    = render_commission_select(f, entries, subito: true, freigabe_komitees:)
+    = submit_button(f, t("global.button.save"))
+    = cancel_link(tour_group_events_path(group))

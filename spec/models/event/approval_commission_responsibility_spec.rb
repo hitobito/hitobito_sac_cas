@@ -44,7 +44,14 @@ describe Event::ApprovalCommissionResponsibility do
     end
 
     it "validates uniqness of sektion_id in scope" do
-      subject.target_group = event_target_groups(:jugend)
+      clone = described_class.new(subject.attributes.slice(*%w[sektion_id target_group_id discipline_id
+        freigabe_komitee_id subito]))
+      expect(clone).not_to be_valid
+      expect(clone.errors.full_messages).to eq ["Sektion hat bereits eine entsprechende Zuständigkeit definiert."]
+    end
+
+    it "validates presence of freigabe_komitee" do
+      subject.freigabe_komitee = nil
       expect(subject).not_to be_valid
     end
 
