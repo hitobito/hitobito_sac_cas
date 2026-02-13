@@ -163,8 +163,11 @@ it:
         youth_not_allowed_in_family: >-
           I giovani di età compresa tra %{from_age} e %{to_age} anni non possono essere inseriti in un’affiliazione famigliare.
         invalid_date_range: "deve essere compreso tra il %{start_on} e il  %{end_on} "
-
       models:
+        event/approval_commission_responsibility_form:
+          attributes:
+            base:
+              invalid_event_comission_responsibilities: Es wurden nicht alle Zuständigkeiten ausgefüllt.
         household:
           attributes:
             members:
@@ -394,6 +397,7 @@ it:
         discipline: Disziplin
         subito: Subito
       event/discipline:
+        color: Farbe
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
@@ -619,7 +623,7 @@ it:
               read_all_people: Letto da tutte le persone.
               layer_events_full: Gestire gli eventi nella sezione.
               layer_mitglieder_full: Gestire le persone del gruppo di appartenenza della sezione/gruppo locale.
-              layer_touren_und_kurse_full: Gestire le persone del gruppo gite e corsi della sezione/gruppo locale.
+              layer_created_events_full: "Erstellen und Editieren eigener Anlässe, Kurse und Touren in der Sektion"
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
@@ -717,6 +721,11 @@ it:
             base:
               has_event_approval_commission_responsiblities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
+        event/discipline:
+          attributes:
+            color:
+              invalid_hex_color: >-
+                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
         event/participation:
           attributes:
             actual_days:
@@ -726,9 +735,7 @@ it:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
           no_base_target_group: ist keine Hauptzielgruppe.
           no_base_discipline: ist keine Hauptdisziplin.
-
-        event_approval_commission_responsibility:
-            combination_exists: Diese Zuständigkeit wurde in dieser Sektion bereits verteilt.
+          combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La persona deve avere almeno una qualifica attiva.
@@ -1443,6 +1450,11 @@ it:
       event_canceled: "Questo evento è stato cancellato, le iscrizioni non possono più essere elaborate."
       participant:
         remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
+    approval_commission_responsibilities:
+      edit:
+        title: Zuständigkeiten Freigabe-Kommission bearbeiten
+        normal_tours: Normal-Touren
+        subito_tours: Subito-Touren
     courses:
       invoices:
         new:
@@ -1458,6 +1470,9 @@ it:
             many: Sono state inviate %{count} e-mail.
             other: Sono state inviate %{count} e-mail.
           warning: Nessuna e-mail è stata inviata poiché non è stato acquisito alcun link al sondaggio.
+    disciplines:
+      form:
+        help_inline_color: 'Gültiger hexadezimaler Farbwert (zb. #fcba03)'
     kinds:
       actions_edit:
         push_down_button: Valori di trasferimento ai corsi
@@ -1591,6 +1606,8 @@ it:
         enter_email: "" # to not display in sac wagon
 
   events:
+    actions_index_sac_cas:
+      edit_event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
     actions_show_sac_cas:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
     state_buttons:
