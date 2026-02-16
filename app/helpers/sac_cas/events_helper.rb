@@ -48,13 +48,13 @@ module SacCas::EventsHelper
 
   def tour_essentials_opt_group_header_with_color
     <<~JS
-      return function(data) {
+      return function(data, escape) {
         if (!data.color) {
-          return `<div class="optgroup-header">${data.label}</div>`;
+          return `<div class="optgroup-header">${escape(data.label)}</div>`;
         }
         return `<div class="optgroup-header">
-                  <i style="color: ${data.color}" class="fas fa-circle"></i>
-                  <span class="ms-1">${data.label}</span>
+                  <i style="color: ${escape(data.color)}" class="fas fa-circle"></i>
+                  <span class="ms-1">${escape(data.label)}</span>
                 </div>`;
       }
     JS
