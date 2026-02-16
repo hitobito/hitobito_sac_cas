@@ -10,6 +10,24 @@ require "spec_helper"
 describe Event::Tour do
   subject(:tour) { events(:section_tour) }
 
+  describe "validations" do
+    [:disciplines, :target_groups, :technical_requirements,
+      :fitness_requirement, :season].each do |attribute|
+      it "validates presence of #{attribute} in state ready" do
+        allow(tour).to receive(:state).and_return(:ready)
+        value = tour.class.reflect_on_association(attribute)&.collection? ? [] : nil
+        tour.send(:"#{attribute}=", value)
+        expect(tour).not_to be_valid
+        expect(tour.errors[attribute]).to eq ["muss ausgefüllt werden"]
+      end
+
+      it "does not validate presence of #{attribute} in state draft" do
+        tour.state = :draft
+        expect(tour).to be_valid
+      end
+    end
+  end
+
   describe "#default_participation_state" do
     let(:application) { Fabricate.build(:event_application) }
     let(:participation) {

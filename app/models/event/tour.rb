@@ -8,6 +8,8 @@
 class Event::Tour < Event
   include ::Events::Tours::State
 
+  WEAK_VALIDATION_STATES = %w[draft].freeze
+
   self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants,
     :summit, :ascent, :descent, :season, :internal_comment, :minimum_age, :maximum_age,
     :tourenportal_link, :subito]
@@ -70,6 +72,8 @@ class Event::Tour < Event
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
+  validates :disciplines, :target_groups, :technical_requirements,
+    :fitness_requirement, :season, presence: {unless: :weak_validation_state?}
 
   ### INSTANCE METHODS
 
@@ -97,5 +101,11 @@ class Event::Tour < Event
     else
       "applied"
     end
+  end
+
+  private
+
+  def weak_validation_state?
+    state.blank? || WEAK_VALIDATION_STATES.include?(state)
   end
 end
