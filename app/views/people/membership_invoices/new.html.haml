@@ -40,7 +40,8 @@
         %div
           = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false, data: { action: "form-field-toggle#untoggle" }
 
-      = f.inline_radio_button :section_id, 0, t(".manual_positions"), false, checked: false, data: { action: "form-field-toggle#toggle" }
+      - if @person.sac_membership.active?
+        = f.inline_radio_button :section_id, 0, t(".manual_positions"), false, checked: false, data: { action: "form-field-toggle#toggle" }
 
     = f.labeled(:dont_send) do
       = f.inline_radio_button :dont_send, false, t("global.yes"), true, checked: true
@@ -52,25 +53,9 @@
         = f.inline_radio_button :discount, 50, "50%", true
         = f.inline_radio_button :discount, 100, "100%", true
 
-    .hidden{data: { 'form-field-toggle-target': "toggle" }}
-      = field_set_tag t('.manual_positions_subtitle') do
-        = f.labeled_input_field(:sac_fee, addon: t('global.currency'), type: 'number', step: 0.01)
-        = f.labeled_input_field(:sac_entry_fee, addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
-        = f.labeled_input_fields(:hut_solidarity_fee, :sac_magazine, addon: t('global.currency'), type: 'number', step: 0.01)
-        - if f.object.magazine_postage_abroad_active?
-          = f.labeled_input_field(:sac_magazine_postage_abroad, addon: t('global.currency'), type: 'number', step: 0.01)
-        = f.labeled_input_field(:section_entry_fee, label: t(".section_entry_fee", section: f.object.member.stammsektion), addon: t('global.currency'), type: 'number', step: 0.01, help: t(".do_not_transmit_nil_values_help"))
-        - f.object.member.active_memberships.each do |membership|
-          - section_fee = f.object.section_fees.find { _1.section.id == membership.section.id }
-          = f.fields_for :section_fees, section_fee do |section_fee_fields|
-            = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
-            = section_fee_fields.labeled_input_field(:fee, label: t(".section_fee", section: membership.section), addon: t('global.currency'), type: 'number', step: 0.01)
-          - if f.object.section_bulletin_postage_abroad_active?(membership)
-            - section_bulletin_postage_abroad = f.object.section_bulletin_postage_abroad.find { _1.section.id == membership.section.id }
-
-            = f.fields_for :section_bulletin_postage_abroad, section_bulletin_postage_abroad do |section_fee_fields|
-              = section_fee_fields.hidden_field(:section_id, value: section_fee_fields.object.section.id)
-              = section_fee_fields.labeled_input_field(:fee, label: t(".section_bulletin_postage_abroad", section: membership.section), addon: t('global.currency'), type: 'number', step: 0.01)
+    - if @person.sac_membership.active?
+      .hidden{data: { 'form-field-toggle-target': "toggle" }}
+        = render "manual_fee_fields", f: f
 
     = f.indented do
       = submit_button(f, t(".create_invoice"))

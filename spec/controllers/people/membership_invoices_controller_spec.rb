@@ -28,6 +28,42 @@ describe People::MembershipInvoicesController do
     }
   end
 
+  describe "GET new" do
+    render_views
+    let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    it "has checkbox to toggle and hidden fields" do
+      get :new, params: params.except(:people_membership_invoice_form)
+
+      expect(dom).to have_unchecked_field("Manuelle Differenzrechnung")
+      expect(dom).to have_field "Zentralverbandsbeitrag", visible: false
+    end
+
+    it "toggles via stimulus" do
+      get :new, params: params.except(:people_membership_invoice_form)
+      expect(dom.find_field("Manuelle Differenzrechnung")["data-action"]).to eq "form-field-toggle#toggle"
+      expect(dom).to have_css(".hidden[data-form-field-toggle-target=toggle]")
+    end
+
+    context "only neuanmeldung for stammsektion" do
+      let(:person) do
+        person = Fabricate(:person, birthday: 42.years.ago)
+        Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+          person: person,
+          beitragskategorie: :adult,
+          group: groups(:bluemlisalp_neuanmeldungen_nv))
+        person
+      end
+
+      it "creates external invoice and enqueues job" do
+        get :new, params: params.except(:people_membership_invoice_form)
+        expect(dom).not_to have_unchecked_field("Manuelle Differenzrechnung")
+        expect(dom).not_to have_field "Zentralverbandsbeitrag", visible: false
+        expect(dom).not_to have_css(".hidden[data-form-field-toggle-target=toggle]")
+      end
+    end
+  end
+
   describe "POST create" do
     it "creates external invoice and enqueues job" do
       expect do
