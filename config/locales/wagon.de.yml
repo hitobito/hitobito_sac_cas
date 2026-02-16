@@ -2120,14 +2120,15 @@ de:
           Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.
         alert_error: "Die folgenden Datenqualitäts-Prüfungen verhindern das Erstellen einer Mitgliedschaftsrechnung:"
         create_invoice: "Rechnung erstellen"
-        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
         manual_positions: "Manuelle Differenzrechnung"
-        manual_positions_subtitle: "Manuelle Rechnungsposten"
         mv_yearly_invoice: "MV-Jahresrechnung"
+        zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
+      manual_fee_fields:
+        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
+        manual_positions_subtitle: "Manuelle Rechnungsposten"
         section_entry_fee: "Sektionseintrittsgebühren %{section}"
         section_fee: "Sektionsbeitrag %{section}"
         section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
-        zusatzsektion_eintrittsrechnung: "Zusatzsektions-Eintrittsrechnung Sektion"
 
     neuanmeldungen:
       multiselect_actions:
