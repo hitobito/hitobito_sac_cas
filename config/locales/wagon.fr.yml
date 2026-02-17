@@ -2114,8 +2114,8 @@ fr:
           Cette personne ne dispose pas de sa propre facture d’adhésion. Le cas échéant, les frais seront déduits de la facture d’une autre personne.
         alert_error: "Les contrôles de qualité des données suivants empêchent la création d’une facture d’adhésion:"
         create_invoice: "Créer une facture"
-        mv_yearly_invoice: "Comptes annuels du service des membres"
         manual_positions: "Manuelle Differenzrechnung"
+        mv_yearly_invoice: "Comptes annuels du service des membres"
         zusatzsektion_eintrittsrechnung: "Facture d’entrée dans la section supplémentaire"
       manual_fee_fields:
         do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"

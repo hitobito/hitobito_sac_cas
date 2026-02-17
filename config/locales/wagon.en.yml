@@ -2050,14 +2050,15 @@ en:
           This person does not have their own membership invoice. If necessary, the fees will be offset against another person's invoice.
         alert_error: "The following data quality checks prevent the creation of a membership invoice:"
         create_invoice: "Create invoice"
-        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
         manual_positions: "Manuelle Differenzrechnung"
-        manual_positions_subtitle: "Manuelle Rechnungsposten"
         mv_yearly_invoice: "MV annual financial statements"
+        zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
+      manual_fee_fields:
+        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
+        manual_positions_subtitle: "Manuelle Rechnungsposten"
         section_entry_fee: "Sektionseintrittsgebühren %{section}"
         section_fee: "Sektionsbeitrag %{section}"
         section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
-        zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
 
     neuanmeldungen:
       multiselect_actions:

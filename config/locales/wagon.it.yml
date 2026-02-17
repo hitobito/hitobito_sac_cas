@@ -2112,7 +2112,6 @@ it:
           Questa persona non dispone di una propria fattura di affiliazione. Le quote sono comunque calcolate nella fattura di un’altra persona.
         alert_error: "I seguenti controlli di qualità dei dati impediscono la creazione di una fattura di affiliazione:"
         create_invoice: "Creare la fattura"
-        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
         manual_positions: "Manuelle Differenzrechnung"
         mv_yearly_invoice: "Bilancio annuale AS"
         zusatzsektion_eintrittsrechnung: "Fattura di adesione alla sezione aggiuntiva"
