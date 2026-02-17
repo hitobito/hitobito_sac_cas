@@ -10,8 +10,31 @@ require "spec_helper"
 describe Group::FreigabeKomitee do
   let(:group) { groups(:bluemlisalp_freigabekomitee) }
 
+  context "create" do
+    it "enqueues CreateApprovalCommissionResponsibilitiesJob if its the first freigabekomitee in layer" do
+      matterhorn_touren_und_kurse = Fabricate(Group::SektionsTourenUndKurse.sti_name.to_sym,
+        name: "Touren und Kurse Matterhorn", parent: groups(:matterhorn_funktionaere), layer_group: groups(:matterhorn))
+
+      expect do
+        Fabricate(Group::FreigabeKomitee.sti_name.to_sym, name: "FreigabeKomitee Matterhorn",
+          parent: matterhorn_touren_und_kurse, layer_group: groups(:matterhorn))
+      end.to change {
+        Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
+      }
+    end
+
+    it "does not enqueue CreateApprovalCommissionResponsibilitiesJob if its the second freigabekomitee in layer" do
+      expect do
+        Fabricate(Group::FreigabeKomitee.sti_name.to_sym, name: "Zweites FreigabeKomitee",
+          parent: groups(:bluemlisalp_touren_und_kurse), layer_group: groups(:bluemlisalp))
+      end.to_not change {
+        Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
+      }
+    end
+  end
+
   context "destroy" do
-    it "does not allow destroy when event_approval_commission_responsiblities exist" do
+    it "does not allow destroy when event_approval_commission_responsibilities exist" do
       expect { group.destroy }.not_to change { described_class.unscoped.count }
       expect(group.errors.full_messages).to match_array ["Freigabekomitee kann nicht gelöscht werden, es " \
       "bestehen noch Zuständigkeiten"]

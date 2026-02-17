@@ -27,4 +27,10 @@ class Event::TargetGroup < ActiveRecord::Base
   has_and_belongs_to_many :events, join_table: "events_target_groups"
 
   validates :description, presence: true
+
+  after_commit :create_approval_commission_responsibilities, if: :main?, on: :create
+
+  def create_approval_commission_responsibilities
+    Event::CreateApprovalCommissionResponsibilitiesJob.new(target_group: self).enqueue!
+  end
 end

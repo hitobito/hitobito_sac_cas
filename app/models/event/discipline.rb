@@ -29,4 +29,10 @@ class Event::Discipline < ActiveRecord::Base
   validates :description, presence: true
   validates :color, format: {with: /\A#[A-Fa-f0-9]{6}\Z/, message: :invalid_hex_color},
     allow_blank: true
+
+  after_commit :create_approval_commission_responsibilities, if: :main?, on: :create
+
+  def create_approval_commission_responsibilities
+    Event::CreateApprovalCommissionResponsibilitiesJob.new(discipline: self).enqueue!
+  end
 end

@@ -21,6 +21,24 @@ describe Event::TargetGroup do
       .to eq(event_target_groups(:kinder, :jugend, :jung_erwachsene, :erwachsene, :senioren, :familien))
   end
 
+  context "create" do
+    it "enqueues CreateApprovalCommissionResponsibilitiesJob" do
+      expect do
+        Fabricate(:event_target_group)
+      end.to change {
+        Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
+      }
+    end
+
+    it "does not enqueue CreateApprovalCommissionResponsibilitiesJob for sub" do
+      expect do
+        Fabricate(:event_target_group, parent: event_target_groups(:kinder))
+      end.to_not change {
+        Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
+      }
+    end
+  end
+
   context "validations" do
     it "require presence of label" do
       entry = described_class.new
@@ -69,12 +87,12 @@ describe Event::TargetGroup do
       expect(main_group.deleted_at).to be_present
     end
 
-    it "deletes event_approval_commission_responsiblities on destroy" do
+    it "deletes event_approval_commission_responsibilities on destroy" do
       event_target_groups(:jugend).children.destroy_all
       expect { event_target_groups(:jugend).destroy }.to change { Event::ApprovalCommissionResponsibility.count }
     end
 
-    it "does not delete event_approval_commission_responsiblities on soft destroy" do
+    it "does not delete event_approval_commission_responsibilities on soft destroy" do
       expect { event_target_groups(:senioren).destroy }.not_to change { Event::ApprovalCommissionResponsibility.count }
     end
   end
