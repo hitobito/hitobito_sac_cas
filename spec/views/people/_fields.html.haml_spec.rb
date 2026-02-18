@@ -11,12 +11,15 @@ describe "people/_fields.html.haml" do
     Capybara::Node::Simple.new(@rendered)
   }
   let(:person) { people(:mitglied) }
-  let(:form_builder) { StandardFormBuilder.new(:person, person, view, {}) }
+  let(:form_builder) {
+    StandardFormBuilder.new(:person, person, view, {
+      builder: StandardFormBuilder
+    })
+  }
 
   before do
     allow(view).to receive(:entry).and_return(person)
     allow(controller).to receive(:current_user).and_return(person)
-    allow(view).to receive(:fields).and_return(form_builder)
     allow(view).to receive(:f).and_return(form_builder)
   end
 
