@@ -69,12 +69,16 @@ module Export::Tabular::People
     end
 
     def group_people
-      readable_people
-        .joins(:roles)
-        .where(roles: {
+      end_on = [@reference_date, Time.zone.today].min
+      roles = Role
+        .unscoped
+        .where(
           group_id: group.id,
-          type: SacCas::MITGLIED_ROLES.map(&:sti_name)
-        })
+          type: SacCas::MITGLIED_ROLES.map(&:sti_name),
+          start_on: ..@reference_date,
+          end_on: end_on..
+        )
+      Person.where(id: roles.select(:person_id))
     end
 
     def membership_years_offset
@@ -88,11 +92,6 @@ module Export::Tabular::People
 
     def user
       @user ||= Person.find(@user_id)
-    end
-
-    def readable_people
-      ability = PersonReadables.new(user, group)
-      Person.accessible_by(ability)
     end
 
     def values(entry, format = nil)
