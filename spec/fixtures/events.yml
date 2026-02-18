@@ -48,7 +48,7 @@ application_closed:
 section_tour:
   groups: bluemlisalp
   type: Event::Tour
-  state: published
+  state: review
   external_applications: true
   disciplines:
     - wanderweg

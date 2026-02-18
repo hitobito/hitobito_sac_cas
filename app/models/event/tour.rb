@@ -26,18 +26,6 @@ class Event::Tour < Event
   self.supports_applications = true
   self.supports_invitations = false
 
-  # # key: current state
-  # # value: array of possible next states
-  # self.state_transitions = {
-  #   draft: [:approved, :canceled],
-  #   approved: [:draft, :published, :canceled],
-  #   published: [:approved, :canceled, :closed],
-  #   # BEWARE: canceled means "annulliert" here and matches `annulled` on participation,
-  #   # where `canceled` means "abgemeldet"
-  #   canceled: [:draft, :approved, :published],
-  #   closed: [:published]
-  # }.freeze
-
   self.possible_participation_states = %w[unconfirmed applied rejected assigned
     attended absent canceled annulled]
   self.active_participation_states = %w[assigned attended]
@@ -52,17 +40,23 @@ class Event::Tour < Event
   has_and_belongs_to_many :disciplines,
     join_table: :events_disciplines,
     class_name: "Event::Discipline",
-    foreign_key: :event_id
+    foreign_key: :event_id,
+    before_add: :prevent_association_changes_in_weak_validation_state,
+    before_remove: :prevent_association_changes_in_weak_validation_state
 
   has_and_belongs_to_many :target_groups,
     join_table: :events_target_groups,
     class_name: "Event::TargetGroup",
-    foreign_key: :event_id
+    foreign_key: :event_id,
+    before_add: :prevent_association_changes_in_weak_validation_state,
+    before_remove: :prevent_association_changes_in_weak_validation_state
 
   has_and_belongs_to_many :technical_requirements,
     join_table: :events_technical_requirements,
     class_name: "Event::TechnicalRequirement",
-    foreign_key: :event_id
+    foreign_key: :event_id,
+    before_add: :prevent_association_changes_in_weak_validation_state,
+    before_remove: :prevent_association_changes_in_weak_validation_state
 
   has_and_belongs_to_many :traits,
     join_table: :events_traits,
@@ -71,6 +65,7 @@ class Event::Tour < Event
 
   ### VALIDATIONS
 
+  before_save :prevent_changes_in_weak_validation_state, unless: :weak_validation_state?
   validates :state, inclusion: possible_states
   validates :disciplines, :target_groups, :technical_requirements,
     :fitness_requirement, :season, presence: {unless: :weak_validation_state?}
@@ -103,9 +98,28 @@ class Event::Tour < Event
     end
   end
 
-  private
-
   def weak_validation_state?
     state.blank? || WEAK_VALIDATION_STATES.include?(state)
+  end
+
+  def dates_changed?
+    dates.any? {
+      _1.saved_change_to_start_at? ||
+        _1.saved_change_to_finish_at ||
+        _1.new_record? ||
+        _1.marked_for_destruction?
+    }
+  end
+
+  private
+
+  def prevent_changes_in_weak_validation_state
+    [:subito, :fitness_requirement_id, :season].each do |attribute|
+      send(:"restore_#{attribute}!")
+    end
+  end
+
+  def prevent_association_changes_in_weak_validation_state(record)
+    throw :abort unless weak_validation_state?
   end
 end

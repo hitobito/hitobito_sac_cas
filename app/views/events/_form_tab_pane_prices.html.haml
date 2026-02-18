@@ -3,7 +3,7 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_pbs.
 
-- if entry.is_a?(Event::Course)
+- if course?
   #prices.tab-pane
     = field_set_tag do
       - entry.used_attributes(*Event::Course::PRICE_ATTRIBUTES).each do |price_attribute|
