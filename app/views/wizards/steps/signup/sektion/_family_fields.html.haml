@@ -20,7 +20,7 @@
     = form.labeled_adult_required_field :phone_number, placeholder: t('global.phone_placeholder')
 
   .col-xl-2.col-md-3.align-with-form.pe-3.mb-3
-    = form.link_to_remove(t('global.associations.remove'), { href: '#', data: { action: "click->autosubmit#save", mode: :remove }})
+    = link_to(t("global.associations.remove"), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove autosubmit#save", mode: :remove })
 
 %br
   .btn-toolbar.bottom.housemates.align-with-form
