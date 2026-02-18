@@ -159,7 +159,7 @@ module SacCas::Person
       .where("object_changes LIKE '%correspondence:\n- digital\n- print\n%'")
       .exists?
 
-    update_column(:correspondence, :digital)
+    update(correspondence: :digital)
   end
 
   private
