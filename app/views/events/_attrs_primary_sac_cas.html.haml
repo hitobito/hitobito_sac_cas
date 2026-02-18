@@ -26,7 +26,7 @@
 
   - entry.used?(:start_point_of_time) do
     = labeled_attr(entry, :start_point_of_time)
-  - if entry.is_a?(Event::Course)
+  - if course?
     = labeled t("events.form_tabs.prices") do
       - Event::Course::PRICE_ATTRIBUTES.each do |price_attr|
         - if entry.send(price_attr).present?

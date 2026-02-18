@@ -16,7 +16,7 @@ describe Event::TourResource, type: :resource do
     render
     data = jsonapi_data[0]
     expect(data["name"]).to eq("Bundstock")
-    expect(data["state"]).to eq("published")
+    expect(data["state"]).to eq("review")
   end
 
   it "includes leaders" do

@@ -10,13 +10,17 @@ require "spec_helper"
 describe Events::Tours::State do
   shared_examples "state validations" do |current_state, possible_states, invalid_states|
     subject(:model) {
-      Fabricate(:sac_tour, state: current_state,
+      Fabricate(:sac_tour, state: :draft,
         disciplines: [event_disciplines(:wandern)],
         target_groups: [event_target_groups(:kinder)],
         technical_requirements: [event_technical_requirements(:klettern)],
         fitness_requirement: event_fitness_requirements(:a),
         season: "Sommer")
     }
+
+    before do
+      model.update_column(:state, current_state)
+    end
 
     possible_states.each do |state|
       it "#{state} is valid next state for #{current_state}" do

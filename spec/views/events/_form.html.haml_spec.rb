@@ -24,6 +24,11 @@ describe "events/_form.html.haml" do
   context "event" do
     let(:event) { Fabricate.build(:event) }
 
+    before do
+      allow(view).to receive(:course?).and_return(false)
+      allow(view).to receive(:tour?).and_return(false)
+    end
+
     it "hides additional fields" do
       expect(dom).not_to have_field "Unterkunft reservieren durch SAC"
       expect(dom).not_to have_select "Unterkunft"
@@ -42,6 +47,11 @@ describe "events/_form.html.haml" do
 
   context "Event::Course" do
     let(:event) { Fabricate.build(:course) }
+
+    before do
+      allow(view).to receive(:course?).and_return(true)
+      allow(view).to receive(:tour?).and_return(false)
+    end
 
     it "renders additional fields" do
       expect(dom).to have_field "Unterkunft reservieren durch SAC"
@@ -63,11 +73,15 @@ describe "events/_form.html.haml" do
     let(:event) { events(:section_tour) }
 
     before do
+      event.update!(state: :draft)
       assign(:disciplines, [])
       assign(:target_groups, [])
       assign(:fitness_requirements, [])
       assign(:technical_requirements, [])
       assign(:traits, [])
+
+      allow(view).to receive(:course?).and_return(false)
+      allow(view).to receive(:tour?).and_return(true)
     end
 
     it "renders additional fields" do

@@ -3,6 +3,6 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
 
-- if entry.is_a?(Event::Course)
+- if course?
   %li.nav-item= link_to(t('events.form_tabs.prices'), '#prices', data: { bs_toggle: 'tab' }, class: 'nav-link')
   %li.nav-item= link_to(t('events.form_tabs.communication'), '#communication', data: { bs_toggle: 'tab' }, class: 'nav-link')

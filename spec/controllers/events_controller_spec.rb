@@ -114,6 +114,78 @@ describe EventsController do
         expect(dom.all("li.nav-item a").map(&:text))
           .to eq(["Allgemein", "Daten", "Anmeldung", "Anmeldeangaben", "Administrationsangaben"])
       end
+
+      it "does not display certain fields in state review" do
+        get :edit, params: params
+
+        expect(dom).not_to have_text "Ist Subito-Tour"
+        expect(dom).not_to have_text "Disziplin(en)"
+        expect(dom).not_to have_text "Zielgruppe(n)"
+        expect(dom).not_to have_text "Konditionelle Anforderung"
+        expect(dom).not_to have_text "Technische Anforderung(en)"
+        expect(dom).not_to have_text "Saison"
+      end
+
+      it "does display all fields in state draft" do
+        event.update!(state: :draft)
+
+        get :edit, params: params
+
+        expect(dom).to have_text "Ist Subito-Tour"
+        expect(dom).to have_text "Disziplin(en)"
+        expect(dom).to have_text "Zielgruppe(n)"
+        expect(dom).to have_text "Konditionelle Anforderung"
+        expect(dom).to have_text "Technische Anforderung(en)"
+        expect(dom).to have_text "Saison"
+      end
+    end
+
+    describe "PUT#update" do
+      it "renders warning flash when date is changed in state review" do
+        post :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            dates_attributes: {
+              "1" => {id: event.dates.first.id,
+                      start_at_date: "24.05.2021",
+                      finish_at_date: "17.02.2026"}
+            }
+          }
+        }
+        expect(flash[:notice]).to be_nil
+        expect(flash[:warning]).to eq "Tour Bundstock wurde erfolgreich aktualisiert. Stelle bitte sicher, " \
+          "dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
+      end
+
+      it "does not render warning flash when date is not changed" do
+        post :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            name: "anothername"
+          }
+        }
+        expect(flash[:warning]).to be_nil
+      end
+
+      it "does not render warning flash when state is draft" do
+        event.update!(state: :draft)
+
+        post :update, params: {
+          group_id: group.id,
+          id: event.id,
+          event: {
+            dates_attributes: {
+              "1" => {id: event.dates.first.id,
+                      start_at_date: "24.05.2021",
+                      finish_at_date: "17.02.2026"}
+            }
+          }
+        }
+
+        expect(flash[:warning]).to be_nil
+      end
     end
   end
 end

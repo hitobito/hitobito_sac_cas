@@ -23,6 +23,11 @@ describe "events/_attrs.html.haml" do
   context "event" do
     let(:event) { Fabricate.build(:event) }
 
+    before do
+      allow(view).to receive(:course?).and_return(false)
+      allow(view).to receive(:tour?).and_return(false)
+    end
+
     it "hides additional attrs" do
       expect(dom).not_to have_css "dl dt", text: "Kursstufe"
       expect(dom).not_to have_css "dl dt", text: "Saison"
@@ -35,6 +40,11 @@ describe "events/_attrs.html.haml" do
 
   context "Event::Course" do
     let(:event) { Fabricate.build(:course, minimum_age: 10, canceled_reason: :weather) }
+
+    before do
+      allow(view).to receive(:course?).and_return(true)
+      allow(view).to receive(:tour?).and_return(false)
+    end
 
     it "renders additional attrs" do
       expect(dom).to have_css ".well dl:nth-of-type(2) dt", text: "Kursstufe"
@@ -52,6 +62,8 @@ describe "events/_attrs.html.haml" do
 
     before do
       assign(:group, groups(:bluemlisalp))
+      allow(view).to receive(:course?).and_return(false)
+      allow(view).to receive(:tour?).and_return(true)
     end
 
     it "renders additional attrs" do

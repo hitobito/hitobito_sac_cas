@@ -45,6 +45,10 @@ describe EventsHelper do
   describe "#event_essentials_list" do
     let(:event) { events(:section_tour) }
 
+    before do
+      event.update!(state: :draft)
+    end
+
     it "returns list of children with parent for disciplines" do
       event.disciplines = event_disciplines(:bergtour, :wanderweg, :felsklettern)
 

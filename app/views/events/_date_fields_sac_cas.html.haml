@@ -5,6 +5,10 @@
 
 .mt-4
   - entry.used?(:season) do
-    = f.labeled_i18n_enum_field(:season, Event::Course.season_labels)
+    - if tour?
+      - if entry.weak_validation_state?
+        = f.labeled_i18n_enum_field(:season, Event::Course.season_labels)
+    - else
+      = f.labeled_i18n_enum_field(:season, Event::Course.season_labels)
   - entry.used?(:start_point_of_time) do
     = f.labeled_i18n_enum_field(:start_point_of_time, Event::Course.start_point_of_time_labels)

@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas
 
-- if entry.is_a?(Event::Course)
+- if course?
   %dl.dl-horizontal
     - if entry.brief_description?
       = labeled(Event::Course.human_attribute_name(:brief_description)) do

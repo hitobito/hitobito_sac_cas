@@ -3,7 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas
 
-- if entry.is_a?(Event::Tour)
+- if tour?
   = section t('events.sections.essentials') do
     %dl.dl-horizontal
       - if entry.subito?

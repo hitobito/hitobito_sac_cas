@@ -10,44 +10,45 @@
 - entry.used?(:meals) do
   = f.labeled_i18n_enum_field(:meals, Event::Course.meals_labels)
 
-- if entry.is_a?(Event::Tour)
+- if tour?
   = f.labeled_input_field(:summit)
   = f.labeled_input_fields(:ascent, :descent, addon: I18n.t('global.elevation_unit'))
   = f.labeled_input_field(:tourenportal_link)
-  = f.labeled(:disciplines) do
-    = f.select(:discipline_ids, [], {},
-      multiple: true,
-      data: { controller: 'tom-select',
-      tom_select_options_value: tour_essentials_grouped_select_options(@disciplines),
-      tom_select_selected_value: entry.discipline_ids.to_json,
-      tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@disciplines, color: true),
-      tom_select_optgroups_header_value: tour_essentials_opt_group_header_with_color,
-      tom_select_no_results_value: I18n.t('global.no_list_entries'),
-      })
+  - if entry.weak_validation_state?
+    = f.labeled(:disciplines) do
+      = f.select(:discipline_ids, [], {},
+        multiple: true,
+        data: { controller: 'tom-select',
+        tom_select_options_value: tour_essentials_grouped_select_options(@disciplines),
+        tom_select_selected_value: entry.discipline_ids.to_json,
+        tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@disciplines, color: true),
+        tom_select_optgroups_header_value: tour_essentials_opt_group_header_with_color,
+        tom_select_no_results_value: I18n.t('global.no_list_entries'),
+        })
 
-  = f.labeled(:target_groups) do
-    = f.select(:target_group_ids, [], {},
-      multiple: true,
-      data: { controller: 'tom-select',
-      tom_select_options_value: tour_essentials_nested_select_options(@target_groups),
-      tom_select_selected_value: entry.target_group_ids.to_json,
-      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+    = f.labeled(:target_groups) do
+      = f.select(:target_group_ids, [], {},
+        multiple: true,
+        data: { controller: 'tom-select',
+        tom_select_options_value: tour_essentials_nested_select_options(@target_groups),
+        tom_select_selected_value: entry.target_group_ids.to_json,
+        tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
-  = f.labeled(:fitness_requirement) do
-    = f.select(:fitness_requirement_id, [], {},
-      data: { controller: 'tom-select',
-      tom_select_options_value: fitness_requirements_select_options(@fitness_requirements),
-      tom_select_selected_value: [entry.fitness_requirement_id].to_json,
-      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+    = f.labeled(:fitness_requirement) do
+      = f.select(:fitness_requirement_id, [], {},
+        data: { controller: 'tom-select',
+        tom_select_options_value: fitness_requirements_select_options(@fitness_requirements),
+        tom_select_selected_value: [entry.fitness_requirement_id].to_json,
+        tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
-  = f.labeled(:technical_requirements) do
-    = f.select(:technical_requirement_ids, [], {},
-      multiple: true,
-      data: { controller: 'tom-select',
-      tom_select_options_value: tour_essentials_grouped_select_options(@technical_requirements),
-      tom_select_selected_value: entry.technical_requirement_ids.to_json,
-      tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@technical_requirements),
-      tom_select_no_results_value: I18n.t('global.no_list_entries') })
+    = f.labeled(:technical_requirements) do
+      = f.select(:technical_requirement_ids, [], {},
+        multiple: true,
+        data: { controller: 'tom-select',
+        tom_select_options_value: tour_essentials_grouped_select_options(@technical_requirements),
+        tom_select_selected_value: entry.technical_requirement_ids.to_json,
+        tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@technical_requirements),
+        tom_select_no_results_value: I18n.t('global.no_list_entries') })
 
   = f.labeled(:traits) do
     = f.select(:trait_ids, [], {},
