@@ -17,7 +17,7 @@ describe Export::Tabular::People::Jubilare do
 
   describe "#data_rows" do
     it "does not do N+1 queries" do
-      expect_query_count { tabular.data_rows.to_a }.to eq 11
+      expect_query_count { tabular.data_rows.to_a }.to eq 7
     end
 
     it "contains all attributes" do
@@ -119,15 +119,6 @@ describe Export::Tabular::People::Jubilare do
       expect(list.map(&:membership_years)).to eq([10, 10, 10, 10])
     end
 
-    it "former mitglieder are not included" do
-      roles(:mitglied).update!(end_on: 1.day.ago)
-      expect(list).to contain_exactly(
-        roles(:familienmitglied).person,
-        roles(:familienmitglied2).person,
-        roles(:familienmitglied_kind).person
-      )
-    end
-
     it "zusatzsektion mitglieder are included" do
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
         group: groups(:matterhorn_mitglieder), person: people(:abonnent), start_on: "2.10.2016")
@@ -137,6 +128,25 @@ describe Export::Tabular::People::Jubilare do
       person = list.second
       expect(person).to eq(people(:abonnent))
       expect(person.membership_years).to eq(8)
+    end
+
+    it "former mitglieder are included if active on reference date" do
+      roles(:mitglied).update!(end_on: 1.day.ago)
+      expect(list).to contain_exactly(
+        roles(:mitglied).person,
+        roles(:familienmitglied).person,
+        roles(:familienmitglied2).person,
+        roles(:familienmitglied_kind).person
+      )
+    end
+
+    it "former mitglieder are excluded if ended before reference_date" do
+      roles(:mitglied).update!(end_on: reference_date - 1.day)
+      expect(list).to contain_exactly(
+        roles(:familienmitglied).person,
+        roles(:familienmitglied2).person,
+        roles(:familienmitglied_kind).person
+      )
     end
 
     it "mitglieder of descendent layer are not included" do
@@ -172,7 +182,7 @@ describe Export::Tabular::People::Jubilare do
         terminated_role
       end
 
-      it "counts membership years correctly for terminated roles " do
+      it "counts membership years correctly for terminated roles" do
         expect(list).to include(terminated_role.person)
         # list query contains years without offset
         expect(list.map(&:membership_years)).to eq([years, years - 2, years, years, years])
