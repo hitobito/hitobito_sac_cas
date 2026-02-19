@@ -26,6 +26,7 @@ describe Event::RolesController do
     end
 
     context "With course and leader" do
+      let(:group) { groups(:root) }
       let(:event) { Fabricate(:course, groups: [group]) }
       let(:event_role) { Event::Course::Role::Leader }
 
@@ -39,6 +40,7 @@ describe Event::RolesController do
     end
 
     context "With course and member" do
+      let(:group) { groups(:root) }
       let(:event) { Fabricate(:course, groups: [group]) }
       let(:event_role) { Event::Course::Role::Participant }
 

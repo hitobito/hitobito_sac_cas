@@ -212,16 +212,6 @@ describe Event::ParticipationsController do
       expect(newsletter.subscribed?(user)).to be_falsey
     end
 
-    it "does not check conditions for non root courses" do
-      event.groups = [groups(:bluemlisalp)]
-      event.update!(globally_visible: true)
-      expect do
-        post :create,
-          params: {group_id: groups(:bluemlisalp).id, event_id: event.id, step: "summary"}
-        expect(response).to redirect_to(participation_path)
-      end.to change { Event::Participation.count }.by(1)
-    end
-
     context "newsletter" do
       it "is defined and user is subscribed by default" do
         expect(Group.root.sac_newsletter_mailing_list_id).to be_present

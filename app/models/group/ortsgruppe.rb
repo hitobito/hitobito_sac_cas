@@ -9,7 +9,7 @@ class Group::Ortsgruppe < Group
   include Groups::WithNeuanmeldung
 
   self.layer = true
-  self.event_types = [Event, Event::Tour, Event::Course]
+  self.event_types = [Event, Event::Tour]
 
   children Group::SektionsFunktionaere,
     Group::SektionsMitglieder,

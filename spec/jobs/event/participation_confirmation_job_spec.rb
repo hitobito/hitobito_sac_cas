@@ -45,6 +45,8 @@ describe Event::ParticipationConfirmationJob do
   end
 
   describe "Event::Course uses Event::ApplicationConfirmationMailer" do
+    let(:group) { groups(:root) }
+
     let(:event) {
       Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group],
         applications_cancelable: true)
