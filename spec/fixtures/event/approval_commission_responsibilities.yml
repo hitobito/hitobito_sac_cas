@@ -256,3 +256,255 @@ bluemlisalp_klettern_familien:
   target_group: familien
   discipline: klettern
   subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_kinder_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: kinder
+  discipline: wandern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_kinder:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: kinder
+  discipline: wandern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_jugend_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jugend
+  discipline: wandern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_jugend:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jugend
+  discipline: wandern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_jung_erwachsene_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jung_erwachsene
+  discipline: wandern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_jung_erwachsene:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jung_erwachsene
+  discipline: wandern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_erwachsene_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: erwachsene
+  discipline: wandern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_erwachsene:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: erwachsene
+  discipline: wandern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_senioren_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: senioren
+  discipline: wandern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_senioren:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: senioren
+  discipline: wandern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_familien_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: familien
+  discipline: wandern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_wandern_familien:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: familien
+  discipline: wandern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_kinder_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: kinder
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_kinder:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: kinder
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_jugend_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jugend
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_jugend:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jugend
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_jung_erwachsene_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jung_erwachsene
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_jung_erwachsene:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jung_erwachsene
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_erwachsene_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: erwachsene
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_erwachsene:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: erwachsene
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_senioren_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: senioren
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_senioren:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: senioren
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_familien_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: familien
+  discipline: hochtour
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_hochtour_familien:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: familien
+  discipline: hochtour
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_kinder_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: kinder
+  discipline: klettern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_kinder:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: kinder
+  discipline: klettern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_jugend_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jugend
+  discipline: klettern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_jugend:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jugend
+  discipline: klettern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_jung_erwachsene_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jung_erwachsene
+  discipline: klettern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_jung_erwachsene:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: jung_erwachsene
+  discipline: klettern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_erwachsene_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: erwachsene
+  discipline: klettern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_erwachsene:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: erwachsene
+  discipline: klettern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_senioren_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: senioren
+  discipline: klettern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_senioren:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: senioren
+  discipline: klettern
+  subito: false
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_familien_subito:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: familien
+  discipline: klettern
+  subito: true
+
+bluemlisalp_ortsgruppe_ausserberg_klettern_familien:
+  sektion: bluemlisalp_ortsgruppe_ausserberg
+  freigabe_komitee: bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee
+  target_group: familien
+  discipline: klettern
+  subito: false

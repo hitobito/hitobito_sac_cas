@@ -95,4 +95,80 @@ describe EventAbility do
       end
     end
   end
+
+  describe "for_assigned_freigabe_komitee" do
+    let(:tour) { events(:section_tour) }
+    let!(:pruefer_role) { Group::FreigabeKomitee::Pruefer.create!(group: freigabe_komitee, person: person) }
+
+    context "sektion level freigabe komitee" do
+      let(:freigabe_komitee) { groups(:bluemlisalp_freigabekomitee) }
+
+      it "is able to update tour with pruefer role in assigned freigabe komitee" do
+        expect(ability).to be_able_to(:update, tour)
+      end
+
+      it "is able to update tour from ortsgruppe in the same sektion" do
+        tour.update!(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)])
+
+        expect(ability).to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour without pruefer role in assigned freigabe komitee" do
+        pruefer_role.destroy!
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour when freigabe komitee is not assigned to tour" do
+        event_approval_commission_responsibilities(:bluemlisalp_wandern_kinder_subito).destroy!
+        event_approval_commission_responsibilities(:bluemlisalp_wandern_familien_subito).destroy!
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour from another sektion" do
+        tour.update!(groups: [groups(:matterhorn)])
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+    end
+
+    context "ortsgruppe level freigabe komitee" do
+      let(:freigabe_komitee) { groups(:bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee) }
+
+      before do
+        tour.update!(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)])
+      end
+
+      it "is able to update tour with pruefer role in assigned freigabe komitee" do
+        expect(ability).to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour from sektion when part of ortsgruppe freigabekomitee" do
+        tour.update!(groups: [groups(:bluemlisalp)])
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour without pruefer role in assigned freigabe komitee" do
+        pruefer_role.destroy!
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour when freigabe komitee is not assigned to tour" do
+        event_approval_commission_responsibilities(:bluemlisalp_ortsgruppe_ausserberg_wandern_kinder_subito).destroy!
+        event_approval_commission_responsibilities(:bluemlisalp_ortsgruppe_ausserberg_wandern_familien_subito).destroy!
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "is not able to update tour from another ortsgruppe" do
+        another_ortsgruppe = Fabricate(Group::Ortsgruppe.sti_name, parent: groups(:matterhorn), foundation_year: 2000)
+        tour.update!(groups: [another_ortsgruppe])
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+    end
+  end
 end
