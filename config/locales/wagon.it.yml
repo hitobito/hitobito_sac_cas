@@ -1606,6 +1606,8 @@ it:
         enter_email: "" # to not display in sac wagon
 
   events:
+    flash:
+      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
     actions_index_sac_cas:
       edit_event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
     actions_show_sac_cas:
