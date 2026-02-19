@@ -399,6 +399,16 @@ describe Person do
         person.confirm
       end.to change { person.reload.confirmed? }.from(false).to(true)
         .and change { person.correspondence }.from("print").to("digital")
+        .and not_change { Delayed::Job.where("handler like '%TransmitPersonJob%'").count }
+    end
+
+    it "transmits to abacus if transmittable" do
+      Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:matterhorn_mitglieder), person:)
+      expect do
+        person.confirm
+      end.to change { person.reload.confirmed? }.from(false).to(true)
+        .and change { person.correspondence }.from("print").to("digital")
+        .and change { Delayed::Job.where("handler like '%TransmitPersonJob%'").count }.by(1)
     end
 
     it "reconfirming does not reset changed correspondence value" do
