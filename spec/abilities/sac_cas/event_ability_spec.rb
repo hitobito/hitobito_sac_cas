@@ -17,12 +17,12 @@ describe EventAbility do
     [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].each do |role|
       before { Fabricate(role.sti_name, participation:) }
 
-      it "is able to manage_attachments as #{role}" do
+      it "may manage_attachments as #{role}" do
         expect(ability).to be_able_to(:manage_attachments, events(:top_course))
       end
     end
 
-    it "is not able to manage_attachments without leader role" do
+    it "may not manage_attachments without leader role" do
       participation.roles.destroy_all
       expect(ability).not_to be_able_to(:manage_attachments, events(:top_course))
     end
@@ -36,20 +36,20 @@ describe EventAbility do
         person: person)
     end
 
-    it "is able to create tours in section" do
+    it "may create tours in section" do
       expect(ability).to be_able_to(:create, Event::Tour.new(groups: [groups(:bluemlisalp)]))
     end
 
-    it "is not able to create events in group" do
+    it "may not create events in group" do
       expect(ability).not_to be_able_to(:create, Event.new(groups: [touren_group]))
     end
 
-    it "is not able to create tours in ortsgruppe" do
+    it "may not create tours in ortsgruppe" do
       expect(ability).not_to be_able_to(:create,
         Event::Tour.new(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)]))
     end
 
-    it "is not able to create tours in other section" do
+    it "may not create tours in other section" do
       expect(ability).not_to be_able_to(:create, Event::Tour.new(groups: [groups(:matterhorn)]))
     end
   end
@@ -64,30 +64,30 @@ describe EventAbility do
 
     [Event, Event::Course, Event::Tour].each do |event_class|
       describe event_class.sti_name do
-        it "is able to create in section" do
+        it "may create in section" do
           expect(ability).to be_able_to(:create, event_class.new(groups: [groups(:bluemlisalp)]))
         end
 
-        it "is not able to create in group" do
+        it "may not create in group" do
           expect(ability).not_to be_able_to(:create, event_class.new(groups: [touren_group]))
         end
 
-        it "is not able to create in ortsgruppe" do
+        it "may not create in ortsgruppe" do
           expect(ability).not_to be_able_to(:create,
             event_class.new(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)]))
         end
 
-        it "is not able to create in other section" do
+        it "may not create in other section" do
           expect(ability).not_to be_able_to(:create, event_class.new(groups: [groups(:matterhorn)]))
         end
 
         [:update, :assign_tags, :manage_attachments].each do |action|
-          it "is able to #{action} if created by themselves" do
+          it "may #{action} if created by themselves" do
             expect(ability).to be_able_to(action, event_class.new(groups: [groups(:bluemlisalp)],
               creator: person))
           end
 
-          it "is not able to #{action} if created by someone else" do
+          it "may not #{action} if created by someone else" do
             expect(ability).not_to be_able_to(action, event_class.new(groups: [groups(:bluemlisalp)],
               creator: Fabricate(:person)))
           end
@@ -96,76 +96,86 @@ describe EventAbility do
     end
   end
 
-  describe "for_assigned_freigabe_komitee" do
+  describe Group::FreigabeKomitee::Pruefer do
     let(:tour) { events(:section_tour) }
     let!(:pruefer_role) { Group::FreigabeKomitee::Pruefer.create!(group: freigabe_komitee, person: person) }
 
-    context "sektion level freigabe komitee" do
+    context "in sektion freigabe komitee" do
       let(:freigabe_komitee) { groups(:bluemlisalp_freigabekomitee) }
 
-      it "is able to update tour with pruefer role in assigned freigabe komitee" do
+      it "may update matching tour" do
         expect(ability).to be_able_to(:update, tour)
       end
 
-      it "is able to update tour from ortsgruppe in the same sektion" do
+      it "may update tour if komitee covers only one of the responsibilities" do
+        freigabe_komitee.event_approval_commission_responsiblities.destroy_all
+        freigabe_komitee.event_approval_commission_responsiblities.create!(
+          sektion: groups(:bluemlisalp),
+          discipline: event_disciplines(:wandern),
+          target_group: event_target_groups(:kinder),
+          subito: true
+        )
+
+        expect(ability).to be_able_to(:update, tour)
+      end
+
+      it "may update matching tour from ortsgruppe in same sektion" do
         tour.update!(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)])
 
         expect(ability).to be_able_to(:update, tour)
       end
 
-      it "is not able to update tour without pruefer role in assigned freigabe komitee" do
-        pruefer_role.destroy!
-
-        expect(ability).not_to be_able_to(:update, tour)
-      end
-
-      it "is not able to update tour when freigabe komitee is not assigned to tour" do
-        event_approval_commission_responsibilities(:bluemlisalp_wandern_kinder_subito).destroy!
-        event_approval_commission_responsibilities(:bluemlisalp_wandern_familien_subito).destroy!
-
-        expect(ability).not_to be_able_to(:update, tour)
-      end
-
-      it "is not able to update tour from another sektion" do
+      it "may not update tour from another sektion" do
         tour.update!(groups: [groups(:matterhorn)])
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "may not update tour if komitee of pruefer role does not covers any of the responsibilities" do
+        freigabe_komitee.event_approval_commission_responsiblities.destroy_all
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "may not update tour without pruefer role" do
+        pruefer_role.destroy!
 
         expect(ability).not_to be_able_to(:update, tour)
       end
     end
 
-    context "ortsgruppe level freigabe komitee" do
+    context "in ortsgruppe freigabe komitee" do
       let(:freigabe_komitee) { groups(:bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee) }
 
       before do
         tour.update!(groups: [groups(:bluemlisalp_ortsgruppe_ausserberg)])
       end
 
-      it "is able to update tour with pruefer role in assigned freigabe komitee" do
+      it "may update matching tour" do
         expect(ability).to be_able_to(:update, tour)
       end
 
-      it "is not able to update tour from sektion when part of ortsgruppe freigabekomitee" do
+      it "may not update matching tour from upper sektion" do
         tour.update!(groups: [groups(:bluemlisalp)])
 
         expect(ability).not_to be_able_to(:update, tour)
       end
 
-      it "is not able to update tour without pruefer role in assigned freigabe komitee" do
-        pruefer_role.destroy!
-
-        expect(ability).not_to be_able_to(:update, tour)
-      end
-
-      it "is not able to update tour when freigabe komitee is not assigned to tour" do
-        event_approval_commission_responsibilities(:bluemlisalp_ortsgruppe_ausserberg_wandern_kinder_subito).destroy!
-        event_approval_commission_responsibilities(:bluemlisalp_ortsgruppe_ausserberg_wandern_familien_subito).destroy!
-
-        expect(ability).not_to be_able_to(:update, tour)
-      end
-
-      it "is not able to update tour from another ortsgruppe" do
+      it "may not update tour from an ortsgruppe in another sektion" do
         another_ortsgruppe = Fabricate(Group::Ortsgruppe.sti_name, parent: groups(:matterhorn), foundation_year: 2000)
         tour.update!(groups: [another_ortsgruppe])
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "may not update tour if komitee of pruefer role does not covers any of the responsibilities" do
+        freigabe_komitee.event_approval_commission_responsiblities.destroy_all
+
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+
+      it "may not update tour without pruefer role" do
+        pruefer_role.destroy!
 
         expect(ability).not_to be_able_to(:update, tour)
       end

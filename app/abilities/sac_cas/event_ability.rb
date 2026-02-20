@@ -88,6 +88,11 @@ module SacCas::EventAbility
   # Includes groups directly associated with the event (Sektion and Ortsgruppe)
   # and inherits responsibilities from the parent Sektion if the event is at the Ortsgruppe level.
   def relevant_group_ids
-    subject.groups.pluck(:id, :parent_id).flatten
+    subject.groups.map do |group|
+      case group
+      when Group::Sektion then [group.id]
+      when Group::Ortsgruppe then [group.id, group.parent_id]
+      end.flatten
+    end
   end
 end
