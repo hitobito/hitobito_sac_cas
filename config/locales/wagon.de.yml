@@ -723,7 +723,7 @@ de:
         group/freigabe_komitee:
           attributes:
             base:
-              has_event_approval_commission_responsiblities: Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten
+              has_event_approval_commission_responsibilities: Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten
 
         event/discipline:
           attributes:
