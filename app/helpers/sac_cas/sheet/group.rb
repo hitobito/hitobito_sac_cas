@@ -17,4 +17,13 @@ module SacCas::Sheet::Group
             view.can?(:"index_event/tours", group)
         end))
   end
+
+  def render(&block)
+    if view.current_person&.basic_permissions_only? &&
+        view.controller.is_a?(Event::ParticipationsController)
+      return child.render(&block)
+    end
+
+    super
+  end
 end

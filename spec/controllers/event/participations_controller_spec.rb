@@ -126,6 +126,23 @@ describe Event::ParticipationsController do
       expect(dom).to have_css "dt", text: "Begründung"
       expect(dom).to have_css "dl", text: "maybe next time"
     end
+
+    context "with basic_permissions_only" do
+      let(:user) { people(:mitglied) }
+      let(:participation) { Fabricate(:event_participation, event: event, participant: user) }
+
+      it "shows event sheet" do
+        get :show, params: params
+
+        expect(dom).to have_css ".sheet.parent a.level.active", text: event.name
+      end
+
+      it "does not show group sheet" do
+        get :show, params: params
+
+        expect(dom).to have_no_css ".sheet.parent a.level.active", text: group.name
+      end
+    end
   end
 
   context "POST#create" do
