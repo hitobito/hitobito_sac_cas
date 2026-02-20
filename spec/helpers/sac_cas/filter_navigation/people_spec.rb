@@ -30,7 +30,7 @@ describe "FilterNavigation::People" do
 
   shared_examples "having Tourenleiter filters" do
     let(:tourenleiter_ids) {
-      SacCas::FilterNavigation::People::TOURENLEITER_ROLES.map(&:id).join("-")
+      SacCas::FilterNavigation::People::TOURENLEITER_ROLES.map(&:type_id).join("-")
     }
     let(:kind_ids) { QualificationKind.pluck(:id).map(&:to_s) }
 

@@ -67,7 +67,7 @@ module SacCas::FilterNavigation::People
   def role_filter(role_kind)
     if role_kind
       {
-        role_type_ids: TOURENLEITER_ROLES.map(&:id).join("-"),
+        role_type_ids: TOURENLEITER_ROLES.map(&:type_id).join("-"),
         kind: role_kind
       }.compact
     end
