@@ -7,4 +7,6 @@
 - if entry.sektion_or_ortsgruppe?
   = render_attrs entry, :sac_cas_self_registration_url
 - if entry.type == Group::Sektion.sti_name
-  = render_attrs entry, :section_offerings, display_link: false
+  = render_attrs_group do
+    = labeled(Group::Sektion.human_attribute_name(:section_offerings)) do
+      = simple_list(entry.section_offerings)
