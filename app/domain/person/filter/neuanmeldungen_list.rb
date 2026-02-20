@@ -25,7 +25,7 @@ class Person::Filter::NeuanmeldungenList
     types = [
       Group::SektionsNeuanmeldungenNv::Neuanmeldung
     ]
-    ids = types.collect(&:id).join(Person::Filter::Base::ID_URL_SEPARATOR)
+    ids = types.collect(&:type_id).join(Person::Filter::Base::ID_URL_SEPARATOR)
     {
       name: name,
       range: "deep",
