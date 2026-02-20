@@ -14,6 +14,9 @@ module SacCas::Event::Participation
     Event::LeaderReminderMailer::REMINDER_8_WEEKS
   ]
 
+  delegate :sac_membership_active?, :membership_years, :membership_number, :correspondence,
+    to: :person
+
   prepended do # rubocop:todo Metrics/BlockLength
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.clear
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.concat([
@@ -54,7 +57,7 @@ module SacCas::Event::Participation
   end
 
   def subsidizable?
-    event.course? && event.price_subsidized.present? && person.sac_membership_active?
+    event.course? && event.price_subsidized.present? && sac_membership_active?
   end
 
   def participant_cancelable?

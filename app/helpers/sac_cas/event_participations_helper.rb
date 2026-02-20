@@ -4,6 +4,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module SacCas::EventParticipationsHelper
+  def format_event_participation_created_at(participation)
+    "#{f(participation.created_at.to_date)} #{f(participation.created_at.to_time)}"
+  end
+
   def event_participation_table_options(t, event:, group:)
     if parent.possible_participation_states.any?
       t.sortable_attr(:state)
