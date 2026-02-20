@@ -17,4 +17,10 @@ module SacCas::Sheet::Group
             view.can?(:"index_event/tours", group)
         end))
   end
+
+  def show?
+    return false if current_person&.basic_permissions_only? && controller.is_a?(Event::ParticipationsController)
+
+    super
+  end
 end

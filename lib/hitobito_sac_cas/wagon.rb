@@ -196,6 +196,7 @@ module HitobitoSacCas
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
+      LayoutHelper.prepend SacCas::LayoutHelper
       PeopleHelper.prepend SacCas::PeopleHelper
       RolesHelper.prepend SacCas::RolesHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
