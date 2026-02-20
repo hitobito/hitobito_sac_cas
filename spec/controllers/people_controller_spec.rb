@@ -30,7 +30,7 @@ describe PeopleController do
       Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.to_s,
         group: groups(:bluemlisalp_neuanmeldungen_sektion),
         person: person2)
-      roles = {role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.id}
+      roles = {role_type_ids: Group::SektionsNeuanmeldungenNv::Neuanmeldung.type_id}
       get :index, params: {group_id: groups(:root).id, filters: {role: roles}, range: "deep"}
 
       expect(members_filter.text).to eq "Neuanmeldungen (1)"
