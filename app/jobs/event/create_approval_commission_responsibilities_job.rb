@@ -20,17 +20,15 @@ class Event::CreateApprovalCommissionResponsibilitiesJob < BaseJob
   end
 
   def perform
-    Event::ApprovalCommissionResponsibility.transaction do
-      relevant_sektionen_and_ortsgruppen.find_each do |group|
-        freigabe_komitee_id = freigabe_komitee_group_id || find_target_freigabe_komitee(group).id
-        relevant_disciplines.find_each do |discipline|
-          relevant_target_groups.find_each do |target_group|
-            [true, false].each do |subito|
-              group.event_approval_commission_responsibilities.create!(discipline:,
-                target_group:,
-                subito:,
-                freigabe_komitee_id:)
-            end
+    relevant_sektionen_and_ortsgruppen.find_each do |group|
+      freigabe_komitee_id = freigabe_komitee_group_id || find_target_freigabe_komitee(group).id
+      relevant_disciplines.find_each do |discipline|
+        relevant_target_groups.find_each do |target_group|
+          [true, false].each do |subito|
+            group.event_approval_commission_responsibilities.find_or_create_by!(discipline:,
+              target_group:,
+              subito:,
+              freigabe_komitee_id:)
           end
         end
       end
@@ -50,13 +48,13 @@ class Event::CreateApprovalCommissionResponsibilitiesJob < BaseJob
   def relevant_disciplines
     return Event::Discipline.where(id: discipline_id) if discipline_id.present?
 
-    Event::Discipline.main.list
+    Event::Discipline.main.list.without_deleted
   end
 
   def relevant_target_groups
     return Event::TargetGroup.where(id: target_group_id) if target_group_id.present?
 
-    Event::TargetGroup.main.list
+    Event::TargetGroup.main.list.without_deleted
   end
 
   def relevant_sektionen_and_ortsgruppen

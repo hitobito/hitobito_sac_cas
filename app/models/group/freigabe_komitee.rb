@@ -17,7 +17,7 @@ class Group::FreigabeKomitee < Group
     class_name: "Event::ApprovalCommissionResponsibility"
 
   def destroy
-    if event_approval_commission_responsibilities.present?
+    if event_approval_commission_responsibilities.exists?
       errors.add(:base, :has_event_approval_commission_responsibilities)
     else
       super
@@ -32,7 +32,7 @@ class Group::FreigabeKomitee < Group
   end
 
   def first_freigabe_komitee_in_layer?
-    groups_in_same_layer.select { _1.is_a?(Group::FreigabeKomitee) }.size == 1
+    groups_in_same_layer.where(type: Group::FreigabeKomitee.sti_name).count == 1
   end
 
   class Pruefer < ::Role
