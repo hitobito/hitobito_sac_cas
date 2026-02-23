@@ -3,6 +3,30 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-= render_attrs(entry, *entry_membership_attrs(entry))
+= render_attrs_group do
+  = labeled(Event::Participation.human_attribute_name(:membership_number)) do
+    = format_attr(entry, :membership_number)
+  = labeled(Event::Participation.human_attribute_name(:sac_membership_active?)) do
+    = format_attr(entry, :sac_membership_active?)
+  - if entry.sac_membership_active?
+    = labeled(Person.human_attribute_name(:membership_years)) do
+      = format_attr(entry, :membership_years)
 
-= render_attrs(entry, *entry_event_attrs(entry, @event))
+= render_attrs_group do
+  = labeled(Event::Participation.human_attribute_name(:created_at)) do
+    = format_attr(entry, :created_at)
+  - if entry.states?
+    = labeled(Event::Participation.human_attribute_name(:state)) do
+      = format_attr(entry, :state)
+  - if @event.course?
+    = labeled(Event::Participation.human_attribute_name(:actual_days)) do
+      = format_attr(entry, :actual_days)
+    = labeled(Event::Participation.human_attribute_name(:price)) do
+      = format_attr(entry, :price)
+    = labeled(Event::Participation.human_attribute_name(:invoice_state)) do
+      = format_attr(entry, :invoice_state)
+    = labeled(Event::Participation.human_attribute_name(:correspondence)) do
+      = format_attr(entry, :correspondence)
+
+- if @event.course? && entry.state == 'canceled'
+  = render_attrs(entry, :canceled_at, :cancel_statement)
