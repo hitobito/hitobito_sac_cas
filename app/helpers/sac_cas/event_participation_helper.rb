@@ -9,16 +9,18 @@ module SacCas::EventParticipationHelper
   include EventsHelper
 
   def format_event_participation_price(entry)
-    format_event_price(entry.price_category, entry.price, entry.event) if entry.price.present?
+    if entry.price.present?
+      [I18n.t("global.currency"), sprintf("%.2f", entry.price),
+        "(#{price_category_label(entry.event, entry.price_category)})"].join(" ")
+    end
+  end
+
+  def format_event_price(attr, price, event)
+    [price_category_label(event, attr), I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
   end
 
   def format_event_participation_correspondence(entry)
     Person.human_attribute_name("correspondence.#{entry.correspondence}")
-  end
-
-  def format_event_price(attr, price, event)
-    [I18n.t("global.currency"), sprintf("%.2f", price),
-      "(#{price_category_label(event, attr)})"].join(" ")
   end
 
   def event_participation_cancellation_cost(entry)
