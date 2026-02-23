@@ -17,6 +17,7 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
   let(:freigabe_komitee_group) { nil }
 
   let(:bluemlisalp_freigabekomitee) { groups(:bluemlisalp_freigabekomitee) }
+  let(:ausserberg_freigabekomitee) { groups(:bluemlisalp_ortsgruppe_ausserberg_freigabe_komitee) }
   let(:matterhorn_touren_und_kurse) {
     Fabricate(Group::SektionsTourenUndKurse.sti_name.to_sym, name: "Touren und Kurse Matterhorn",
       parent: groups(:matterhorn_funktionaere))
@@ -61,7 +62,7 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
 
     context "discipline given" do
       let(:discipline) { Fabricate(:event_discipline) }
-      let(:expected_count) { 24 } # 1 main discipline * 6 main target_groups * 2 subito options * 2 freigabe_komitees
+      let(:expected_count) { 36 } # 1 main discipline * 6 main target_groups * 2 subito options * 3 freigabe_komitees
 
       it "creates commission responsibilities for each combination" do
         expect do
@@ -80,10 +81,13 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
         end.to change { Event::ApprovalCommissionResponsibility.count }.by(expected_count)
           .and change {
                  bluemlisalp_freigabekomitee.reload.event_approval_commission_responsibilities.count
-               }.by(expected_count / 2)
+               }.by(expected_count / 3)
           .and change {
                  first_matterhorn_freigabekomitee.reload.event_approval_commission_responsibilities.count
-               }.by(expected_count / 2)
+               }.by(expected_count / 3)
+          .and change {
+                 ausserberg_freigabekomitee.reload.event_approval_commission_responsibilities.count
+               }.by(expected_count / 3)
 
         expect(second_freigabe_komitee.reload.event_approval_commission_responsibilities.count).to eq(0)
       end
@@ -91,7 +95,7 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
 
     context "target_group given" do
       let(:target_group) { Fabricate(:event_target_group) }
-      let(:expected_count) { 12 } # 3 main disciplines * 1 main target_group * 2 subito options * 2 freigabe_komitees
+      let(:expected_count) { 18 } # 3 main disciplines * 1 main target_group * 2 subito options * 3 freigabe_komitees
 
       it "creates commission responsibilities for each combination" do
         expect do
@@ -110,10 +114,13 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
         end.to change { Event::ApprovalCommissionResponsibility.count }.by(expected_count)
           .and change {
                  bluemlisalp_freigabekomitee.reload.event_approval_commission_responsibilities.count
-               }.by(expected_count / 2)
+               }.by(expected_count / 3)
           .and change {
                  first_matterhorn_freigabekomitee.reload.event_approval_commission_responsibilities.count
-               }.by(expected_count / 2)
+               }.by(expected_count / 3)
+          .and change {
+                 ausserberg_freigabekomitee.reload.event_approval_commission_responsibilities.count
+               }.by(expected_count / 3)
 
         expect(second_freigabe_komitee.reload.event_approval_commission_responsibilities.count).to eq(0)
       end
