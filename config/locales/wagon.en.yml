@@ -430,9 +430,11 @@ en:
       event/participation:
         additional_information: Comment
         cancel_statement: Reason
+        correspondence: Rechnungsstellung
         adult_consent: Age confirmation
         terms_and_conditions: GTC
         actual_days: Effective days
+        membership_number: Personennummer
         price: "Preis"
         price_category: "Preiskategorie"
         price_categories:
@@ -449,6 +451,7 @@ en:
           cancelled: Storniert
           error: Fehler
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
+        sac_membership_active?: SAC-Mitglied
       event/role:
         self_employed: Selbständig erwerbend
       event/target_group:

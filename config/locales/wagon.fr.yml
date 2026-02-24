@@ -434,9 +434,11 @@ fr:
       event/participation:
         additional_information: Commentaire
         cancel_statement: Justification
+        correspondence: Rechnungsstellung
         adult_consent: Confirmation de l’âge
         terms_and_conditions: CGV
         actual_days: Jours effectifs
+        membership_number: Personennummer
         price: "Prix"
         price_category: "Catégorie de prix"
         price_categories:
@@ -453,6 +455,7 @@ fr:
           cancelled: Annulé
           error: Erreur
         external_invoices: Factures # uses include CapitalizedDependentErrors
+        sac_membership_active?: SAC-Mitglied
       event/role:
         self_employed: Activité indépendante
       event/target_group:

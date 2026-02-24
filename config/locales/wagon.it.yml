@@ -432,9 +432,11 @@ it:
       event/participation:
         additional_information: Commento
         cancel_statement: Motivazione
+        correspondence: Rechnungsstellung
         adult_consent: Conferma dell’età
         terms_and_conditions: CGC
         actual_days: Giorni effettivi
+        membership_number: Personennummer
         price: "Prezzo"
         price_category: "Categoria di prezzo"
         price_categories:
@@ -451,6 +453,7 @@ it:
           cancelled: Stornata
           error: Errore
         external_invoices: Fatture # uses include CapitalizedDependentErrors
+        sac_membership_active?: SAC-Mitglied
       event/role:
         self_employed: Lavoratore autonomo
       event/target_group:
