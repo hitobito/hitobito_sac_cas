@@ -196,6 +196,7 @@ module HitobitoSacCas
       EventKindsHelper.prepend SacCas::EventKindsHelper
       EventsHelper.prepend SacCas::EventsHelper
       EventParticipationsHelper.prepend SacCas::EventParticipationsHelper
+      LayoutHelper.prepend SacCas::LayoutHelper
       PeopleHelper.prepend SacCas::PeopleHelper
       RolesHelper.prepend SacCas::RolesHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
@@ -208,6 +209,7 @@ module HitobitoSacCas
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person
+      Sheet::Event.prepend SacCas::Sheet::Event
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       # Navigation
