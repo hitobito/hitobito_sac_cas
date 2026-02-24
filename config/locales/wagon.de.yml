@@ -1573,6 +1573,8 @@ de:
           <p>Rechnungen per Mail senden an: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>-
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
+      tabs:
+        history: Verlauf
 
       popover_participant_cancels:
         cancel_info: >-
