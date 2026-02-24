@@ -126,6 +126,34 @@ describe Event::ParticipationsController do
       expect(dom).to have_css "dt", text: "Begründung"
       expect(dom).to have_css "dl", text: "maybe next time"
     end
+
+    describe "participation histories" do
+      before do
+        Fabricate(:event_participation, participant: participation.person,
+          event: Fabricate(:sac_course, dates: [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 2.days.ago)]))
+        Fabricate(:external_training, person: participation.person, start_at: 10.days.ago, finish_at: 5.days.ago)
+        Fabricate(:event_participation, participant: participation.person,
+          event: Fabricate(:sac_tour, dates: [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 5.days.ago)]))
+      end
+
+      context "with show_details permission" do
+        it "shows histories" do
+          get :show, params: params
+          expect(dom).to have_css "section h2", text: "Ausbildungshistorie"
+          expect(dom).to have_css "section h2", text: "Tourenhistorie"
+        end
+      end
+
+      context "with only show permission" do
+        let(:user) { Fabricate(:event_participation, event: event).person }
+
+        it "does not show histories" do
+          get :show, params: params
+          expect(dom).to_not have_css "section h2", text: "Ausbildungshistorie"
+          expect(dom).to_not have_css "section h2", text: "Tourenhistorie"
+        end
+      end
+    end
   end
 
   context "POST#create" do
