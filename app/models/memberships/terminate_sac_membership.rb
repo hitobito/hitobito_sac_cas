@@ -136,7 +136,7 @@ module Memberships
         fundraising&.subscribe_if(person, subscribe_fundraising_list)
 
         person.update(data_retention_consent: data_retention_consent)
-        cancel_open_membership_invoices(person)
+        cancel_open_membership_invoices(person) if terminate_on.past?
       end
     end
 

@@ -266,7 +266,7 @@ describe Memberships::TerminateSacMembership do
           person.external_invoices.create!({type: ExternalInvoice::SacMembership.sti_name}.merge(attrs))
         end
 
-        it "cancels open membership invoices in current year" do
+        it "cancels open membership invoices in current year when terminating now" do
           invoice = create_invoice(state: "open", year: 2022) # matching
           other_status = create_invoice(state: "payed", year: 2020) # other status
           other_type = create_invoice(type: ExternalInvoice.sti_name, state: "open", year: 2020) # other type
@@ -280,6 +280,19 @@ describe Memberships::TerminateSacMembership do
           expect(invoice.reload).to be_cancelled
           expect(other_status.reload).to be_payed
           expect(other_type.reload).to be_open
+        end
+
+        it "does not cancel open membership invoices in current year when terminating on end of year" do
+          invoice = create_invoice(state: "open", year: 2022)
+          termination.terminate_on = Time.zone.local(2022, 12, 31)
+
+          travel_to(Time.zone.local(2022, 1, 1)) do
+            expect do
+              expect(termination.save!).to eq true
+            end.not_to change { Delayed::Job.count }
+          end
+
+          expect(invoice.reload).not_to be_cancelled
         end
       end
 
