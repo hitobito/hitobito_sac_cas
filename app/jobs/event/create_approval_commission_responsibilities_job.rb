@@ -25,10 +25,9 @@ class Event::CreateApprovalCommissionResponsibilitiesJob < BaseJob
       relevant_disciplines.find_each do |discipline|
         relevant_target_groups.find_each do |target_group|
           [true, false].each do |subito|
-            group.event_approval_commission_responsibilities.find_or_create_by!(discipline:,
-              target_group:,
-              subito:,
-              freigabe_komitee_id:)
+            group.event_approval_commission_responsibilities
+              .create_with(freigabe_komitee_id:)
+              .find_or_create_by!(discipline:, target_group:, subito:)
           end
         end
       end
