@@ -8,7 +8,8 @@ module SacCas::Sheet::Event
 
   class_methods do
     def parent_sheet_for(view_context)
-      if view_context.current_person&.basic_permissions_only? &&
+      if !view_context.current_person&.root? &&
+          view_context.current_person&.basic_permissions_only? &&
           view_context.controller.is_a?(::Event::ParticipationsController)
         nil
       else
