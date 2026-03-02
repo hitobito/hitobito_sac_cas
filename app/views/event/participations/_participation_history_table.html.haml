@@ -6,5 +6,5 @@
 = section_table(title, entries) do |participation_history_row|
   %td
     %strong= participation_history_row.name
-  %td= "#{f(participation_history_row.start_at)}-#{f(participation_history_row.finish_at)}"
+  %td= participation_history_row.daterange
   %td= participation_history_row.provider
