@@ -51,6 +51,16 @@ describe Invoices::Abacus::CourseParticipationInvoice do
       course.kind.kind_category.update_column(:j_s_course, true)
       expect(position.name).to eq "J&S P-Normalpreis - Einstiegskurs"
     end
+
+    it "reads cost center from course if set" do
+      course.cost_center = cost_centers(:tour)
+      expect(position.cost_center).to eq("tour-2")
+    end
+
+    it "reads cost unit from course if set" do
+      course.cost_unit = cost_units(:board)
+      expect(position.cost_unit).to eq("board-2")
+    end
   end
 
   context "#additional_user_fields" do
