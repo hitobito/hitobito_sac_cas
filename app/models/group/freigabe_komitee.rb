@@ -13,16 +13,10 @@ class Group::FreigabeKomitee < Group
   # SacPhoneNumbers end up missing.
   prepend SacPhoneNumbers
 
-  has_many :event_approval_commission_responsiblities, dependent: :destroy,
+  has_many :event_approval_commission_responsibilities, dependent: :destroy,
     class_name: "Event::ApprovalCommissionResponsibility"
 
-  def destroy
-    if event_approval_commission_responsiblities.present?
-      errors.add(:base, :has_event_approval_commission_responsiblities)
-    else
-      super
-    end
-  end
+  after_commit :create_approval_commission_responsibilities, if: :first_in_layer?, on: :create
 
   class Pruefer < ::Role
     has_and_belongs_to_many :approval_kinds,
@@ -43,4 +37,20 @@ class Group::FreigabeKomitee < Group
   end
 
   roles Pruefer
+
+  def destroy
+    if event_approval_commission_responsibilities.exists?
+      errors.add(:base, :has_event_approval_commission_responsibilities)
+    else
+      super
+    end
+  end
+
+  def create_approval_commission_responsibilities
+    Event::CreateApprovalCommissionResponsibilitiesJob.new(freigabe_komitee_group: self).enqueue!
+  end
+
+  def first_in_layer?
+    groups_in_same_layer.where(type: Group::FreigabeKomitee.sti_name).count == 1
+  end
 end

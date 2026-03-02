@@ -108,8 +108,8 @@ describe EventAbility do
       end
 
       it "may update tour if komitee covers only one of the responsibilities" do
-        freigabe_komitee.event_approval_commission_responsiblities.destroy_all
-        freigabe_komitee.event_approval_commission_responsiblities.create!(
+        freigabe_komitee.event_approval_commission_responsibilities.destroy_all
+        freigabe_komitee.event_approval_commission_responsibilities.create!(
           sektion: groups(:bluemlisalp),
           discipline: event_disciplines(:wandern),
           target_group: event_target_groups(:kinder),
@@ -132,7 +132,7 @@ describe EventAbility do
       end
 
       it "may not update tour if komitee of pruefer role does not covers any of the responsibilities" do
-        freigabe_komitee.event_approval_commission_responsiblities.destroy_all
+        freigabe_komitee.event_approval_commission_responsibilities.destroy_all
 
         expect(ability).not_to be_able_to(:update, tour)
       end
@@ -169,7 +169,7 @@ describe EventAbility do
       end
 
       it "may not update tour if komitee of pruefer role does not covers any of the responsibilities" do
-        freigabe_komitee.event_approval_commission_responsiblities.destroy_all
+        freigabe_komitee.event_approval_commission_responsibilities.destroy_all
 
         expect(ability).not_to be_able_to(:update, tour)
       end
