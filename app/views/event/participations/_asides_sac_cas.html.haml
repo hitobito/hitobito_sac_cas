@@ -4,5 +4,5 @@
 -#  https://github.com/hitobito/hitobito_sac_cas
 
 - if can?(:show_details, entry)
-  = render("participation_history_table", title: t(".recent_trainings"), entries: Participations::History.new(entry.person).recent_trainings(limit: 5))
-  = render("participation_history_table", title: t(".recent_tours"), entries: Participations::History.new(entry.person).recent_tours(limit: 5))
+  = render("participation_history_table", title: t(".recent_trainings"), entries: @recent_trainings)
+  = render("participation_history_table", title: t(".recent_tours"), entries: @recent_tours)

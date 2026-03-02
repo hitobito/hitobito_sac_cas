@@ -22,6 +22,8 @@ module SacCas::Event::ParticipationsController
     after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
     # rubocop:enable Layout/LineLength
     before_cancel :assert_participant_cancelable?
+
+    before_render_show :load_recent_trainings_and_participations
   end
 
   def cancel # rubocop:todo Metrics/AbcSize
@@ -73,6 +75,12 @@ module SacCas::Event::ParticipationsController
     super.tap do |permitted|
       calculate_price(permitted) if @event.course?
     end
+  end
+
+  def load_recent_trainings_and_participations
+    history = Participations::History.new(entry.person)
+    @recent_trainings = history.recent_trainings(limit: 5)
+    @recent_tours = history.recent_tours(limit: 5)
   end
 
   def calculate_price(permitted)

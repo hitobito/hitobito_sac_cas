@@ -115,7 +115,7 @@ describe Participations::History do
           Fabricate(:event_date, start_at: 20.days.ago, finish_at: 3.days.ago)]
         event = Fabricate(:sac_course, dates:)
 
-        expect(Participations::History::Row.from_event(event).start_at).to eq(25.days.ago.to_date)
+        expect(to_history_row(event).start_at).to eq(25.days.ago.to_date)
       end
 
       it "uses finish_at from most recent event date" do
@@ -125,24 +125,20 @@ describe Participations::History do
           Fabricate(:event_date, start_at: 20.days.ago, finish_at: 15.days.ago)]
         event = Fabricate(:sac_course, dates:)
 
-        expect(Participations::History::Row.from_event(event).finish_at).to eq(3.days.ago.to_date)
+        expect(to_history_row(event).finish_at).to eq(3.days.ago.to_date)
       end
 
       it "uses group with lowest id as provider if there are multiple" do
         event = Fabricate(:sac_tour, dates: [Fabricate(:event_date, start_at: 20.days.ago, finish_at: 15.days.ago)],
           groups: [groups(:matterhorn), groups(:bluemlisalp)])
 
-        expect(Participations::History::Row.from_event(event).provider).to eq(groups(:bluemlisalp).name)
+        expect(to_history_row(event).provider).to eq(groups(:bluemlisalp).name)
       end
     end
   end
 
   def to_history_row(entry)
-    if entry.is_a?(Event::Participation)
-      Participations::History::Row.from_event(entry.event)
-    elsif entry.is_a?(ExternalTraining)
-      Participations::History::Row.from_external_training(entry)
-    end
+    Participations::History::Row.from(entry)
   end
 
   def create_external_training(start_at:, finish_at:, person: admin)

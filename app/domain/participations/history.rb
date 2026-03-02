@@ -7,15 +7,22 @@
 
 class Participations::History
   Row = Data.define(:name, :start_at, :finish_at, :provider) do
-    def daterange
-      [start_at,
-        finish_at].join("-")
-    end
+    def daterange = [start_at, finish_at].join("-")
 
     def <=>(other)
       return unless other.is_a?(self.class)
 
       finish_at <=> other.finish_at
+    end
+
+    def self.from(entry)
+      if entry.is_a?(Event)
+        from_event(entry)
+      elsif entry.is_a?(Event::Participation)
+        from_event(entry.event)
+      elsif entry.is_a?(ExternalTraining)
+        from_external_training(entry)
+      end
     end
 
     def self.from_external_training(training)
@@ -60,9 +67,8 @@ class Participations::History
   def recent_external_trainings(limit: nil)
     person.external_trainings # external_trainings can only be in the past
       .order(finish_at: :desc)
-      .limit(limit).map do |training|
-        Row.from_external_training(training)
-      end
+      .limit(limit)
+      .map { |training| Row.from(training) }
   end
 
   def recent_participations(event_type: Event, limit: nil)
@@ -74,8 +80,6 @@ class Participations::History
       .order("MAX(event_dates.finish_at) DESC")
       .includes(event: [:translations, :dates, :groups])
       .limit(limit)
-      .map do |participation|
-        Row.from_event(participation.event)
-      end
+      .map { |participation| Row.from(participation) }
   end
 end
