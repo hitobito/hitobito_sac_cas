@@ -25,6 +25,13 @@ describe Event do
       expect(event).not_to be_valid
       expect(event.errors.full_messages).to eq ["Ausbildungstage muss kleiner oder gleich 1 sein"]
     end
+
+    it "validates dates before training_days" do
+      event.training_days = 2
+      event.dates.first.start_at = nil
+      expect(event).not_to be_valid
+      expect(event.errors.full_messages).to eq ["Von Datum muss ausgefüllt werden"]
+    end
   end
 
   describe "admin_questions" do
