@@ -32,8 +32,8 @@ module Invoices
           Invoices::Abacus::InvoicePosition.new(
             name: name, grouping: name, amount: amount, count: 1,
             article_number: article_number,
-            cost_center: event.kind.cost_center.code,
-            cost_unit: event.kind.cost_unit.code
+            cost_center: code_for(:cost_center),
+            cost_unit: code_for(:cost_unit)
           )
         end
       end
@@ -82,6 +82,8 @@ module Invoices
           participation.price_category) : nil
         [description, participation.price]
       end
+
+      def code_for(model) = event.send(model)&.code || event.kind.send(model).code
     end
   end
 end
