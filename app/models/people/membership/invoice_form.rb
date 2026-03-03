@@ -131,7 +131,7 @@ class People::Membership::InvoiceForm
   def section_bulletin_postage_abroad_active?(membership)
     Invoices::SacMemberships::Positions::SectionBulletinPostageAbroad.new(
       member,
-      member.active_memberships
+      membership
     ).active?
   end
 

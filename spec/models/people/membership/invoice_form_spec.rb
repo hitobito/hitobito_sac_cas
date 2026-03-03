@@ -59,6 +59,23 @@ describe People::Membership::InvoiceForm do
       end
     end
 
+    describe "query methods" do
+      it "knows if postage abroad is active" do
+        expect(form).not_to be_magazine_postage_abroad_active
+        person.update(country: "DE")
+        expect(form).to be_magazine_postage_abroad_active
+      end
+
+      it "knows if section postage abroad is active" do
+        bluemisalp, matterhorn = *form.member.active_memberships
+        expect(form.section_bulletin_postage_abroad_active?(bluemisalp)).to eq false
+        expect(form.section_bulletin_postage_abroad_active?(matterhorn)).to eq false
+        person.update(country: "DE")
+        expect(form.section_bulletin_postage_abroad_active?(bluemisalp)).to eq true
+        expect(form.section_bulletin_postage_abroad_active?(matterhorn)).to be_nil
+      end
+    end
+
     describe "send_date" do
       it "is invalid when blank" do
         form.send_date = nil
