@@ -1511,6 +1511,9 @@ fr:
         title: Courses ayant lieu prochainement
         explanation: Ici sont affichées les randonnées des sections dont tu es membre. Tu trouveras d'autres tours auprès de la section organisatrice.
     participations:
+      asides_sac_cas:
+        recent_trainings: Ausbildungshistorie
+        recent_tours: Tourenhistorie
       fields:
         explain_required_checkmark: "* = réponse obligatoire"
       missing_information: >-

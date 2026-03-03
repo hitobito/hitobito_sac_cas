@@ -1509,6 +1509,9 @@ it:
         title: Prossimi tour
         explanation: I tour organizzati dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
     participations:
+      asides_sac_cas:
+        recent_trainings: Ausbildungshistorie
+        recent_tours: Tourenhistorie
       fields:
         explain_required_checkmark: "* = risposta obbligatoria"
       missing_information: >-

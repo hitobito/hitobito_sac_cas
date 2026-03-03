@@ -1450,6 +1450,9 @@ de_CH:
         title: Demnächst stattfindende Touren
         explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
     participations:
+      asides_sac_cas:
+        recent_trainings: Ausbildungshistorie
+        recent_tours: Tourenhistorie
       fields:
         explain_required_checkmark: "* = Antwort obligatorisch"
       missing_information: >-
