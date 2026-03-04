@@ -20,7 +20,8 @@ module TTY
     #   Values are hashes with :description (String) and :action (Proc).
     # @param prompt [String] The prompt message shown before input.
     # @param invalid_choice_message [String] Message for invalid input.
-    def initialize(menu_actions:, prompt: "\nPlease choose an option", invalid_choice_message: "Invalid choice '%s'. Please try again.")
+    def initialize(menu_actions:, prompt: "\nPlease choose an option",
+      invalid_choice_message: "Invalid choice '%s'. Please try again.")
       @menu_actions = add_default_options(menu_actions)
       @prompt = prompt
       @invalid_choice_message = invalid_choice_message
@@ -58,7 +59,10 @@ module TTY
     end
 
     def pry_action
-      {description: "Open pry shell", action: -> { Pry.start }, style: :dim}
+      {description: "Open pry shell", action: -> do
+        puts "def reload! = Rails.application.reloader.reload!"
+        Pry.start
+      end, style: :dim}
     end
 
     # Determines if single-char or multi-char input should be used
@@ -143,11 +147,13 @@ module TTY
 
       @menu_actions.each do |key, config|
         unless key.to_s.present?
-          raise ArgumentError, "Menu action keys must be non-empty Strings (got #{key.class.name} #{key.inspect})"
+          raise ArgumentError,
+            "Menu action keys must be non-empty Strings (got #{key.class.name} #{key.inspect})"
         end
         config_hash = config.deconstruct_keys(nil)
         unless config_hash.key?(:description) && config_hash.key?(:action)
-          raise ArgumentError, "Menu action for key '#{key}' must be a Hash with :description and :action keys"
+          raise ArgumentError,
+            "Menu action for key '#{key}' must be a Hash with :description and :action keys"
         end
         unless config_hash[:description].is_a?(String)
           raise ArgumentError, "Description for key '#{key}' must be a String"

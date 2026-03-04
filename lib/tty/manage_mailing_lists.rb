@@ -21,6 +21,7 @@ module TTY
       "4" => TTY::MailingLists::DigitalBulletinSubscribersWithoutEmail,
       "5" => TTY::MailingLists::CleanupPaperBulletinSubscribersKirchberg,
       "6" => MailingLists::CleanupPilatusBulletins,
+      "7" => MailingLists::SwapBulletinSubscriptionModes
     }.freeze
 
     def run
