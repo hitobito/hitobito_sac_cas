@@ -100,19 +100,14 @@ class People::Membership::InvoiceForm
   end
 
   def section_fees_attributes=(attributes)
-    self.section_fees = initial_section_fees.map do |section_fee|
-      section_fee.fee = attributes.values.find do
-        _1[:section_id].to_i == section_fee.section.id
-      end&.dig(:fee)
-      section_fee
-    end
+    self.section_fees = with_assigned_fee_values(initial_section_fees, attributes)
   end
 
   def section_bulletin_postage_abroad_attributes=(attributes)
-    self.initial_bulletin_postage_abroad = initial_bulletin_postage_abroad.map do |section_fee|
-      section_fee.fee = attributes.values.find { _1[:section_id].to_i == section_fee.section.id }
-      section_fee
-    end
+    self.section_bulletin_postage_abroad = with_assigned_fee_values(
+      initial_bulletin_postage_abroad,
+      attributes
+    )
   end
 
   def manual_positions? = section_id.zero?
@@ -177,4 +172,12 @@ class People::Membership::InvoiceForm
   end
 
   def context = @context ||= Invoices::SacMemberships::Context.new(today)
+
+  def with_assigned_fee_values(section_fees, attributes)
+    section_fees.each do |section_fee|
+      section_fee.fee = attributes.values.find do
+        _1[:section_id].to_i == section_fee.section.id
+      end&.dig(:fee)
+    end
+  end
 end

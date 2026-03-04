@@ -86,6 +86,7 @@ describe People::MembershipInvoicesController do
     end
 
     it "creates external invoice with manual positions and enqueues job" do
+      person.update(zip_code: 90210, country: "US")
       manual_positions_params = {
         people_membership_invoice_form: {
           discount: nil,
@@ -99,6 +100,10 @@ describe People::MembershipInvoicesController do
           section_fees_attributes: {
             "0" => {section_id: bluemlisalp.id, fee: 140},
             "1" => {section_id: groups(:matterhorn).id, fee: 130}
+          },
+          section_bulletin_postage_abroad_attributes: {
+            "0" => {section_id: bluemlisalp.id, fee: 14},
+            "1" => {section_id: groups(:matterhorn).id, fee: 13} # no assignent in job as not active
           }
         }
       }
@@ -125,7 +130,9 @@ describe People::MembershipInvoicesController do
            {"section_id" => bluemlisalp.id, "fee" => 140.to_d},
            {"section_id" => groups(:matterhorn).id, "fee" => 130.to_d}
          ],
-         "section_bulletin_postage_abroads" => nil}
+         "section_bulletin_postage_abroads" => [
+           {"section_id" => bluemlisalp.id, "fee" => 14.to_d}
+         ]}
       )
     end
 
