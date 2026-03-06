@@ -42,26 +42,34 @@ class Event::Tour < Event
     class_name: "Event::Discipline",
     foreign_key: :event_id,
     before_add: :prevent_association_changes_in_weak_validation_state,
-    before_remove: :prevent_association_changes_in_weak_validation_state
+    before_remove: :prevent_association_changes_in_weak_validation_state,
+    after_add: :track_association_addition,
+    after_remove: :track_association_removal
 
   has_and_belongs_to_many :target_groups,
     join_table: :events_target_groups,
     class_name: "Event::TargetGroup",
     foreign_key: :event_id,
     before_add: :prevent_association_changes_in_weak_validation_state,
-    before_remove: :prevent_association_changes_in_weak_validation_state
+    before_remove: :prevent_association_changes_in_weak_validation_state,
+    after_add: :track_association_addition,
+    after_remove: :track_association_removal
 
   has_and_belongs_to_many :technical_requirements,
     join_table: :events_technical_requirements,
     class_name: "Event::TechnicalRequirement",
     foreign_key: :event_id,
     before_add: :prevent_association_changes_in_weak_validation_state,
-    before_remove: :prevent_association_changes_in_weak_validation_state
+    before_remove: :prevent_association_changes_in_weak_validation_state,
+    after_add: :track_association_addition,
+    after_remove: :track_association_removal
 
   has_and_belongs_to_many :traits,
     join_table: :events_traits,
     class_name: "Event::Trait",
-    foreign_key: :event_id
+    foreign_key: :event_id,
+    after_add: :track_association_addition,
+    after_remove: :track_association_removal
 
   ### VALIDATIONS
 
@@ -121,5 +129,23 @@ class Event::Tour < Event
 
   def prevent_association_changes_in_weak_validation_state(record)
     throw :abort unless weak_validation_state?
+  end
+
+  def track_association_addition(record)
+    track_association_change(record, :create)
+  end
+
+  # We use removed as a custom event for paper trail versions, since destroy would be wrong
+  # The associated records are not destroyed, only the association to them is destroyed
+  # all the records still exist, we don't have to reify them or anything to display in log
+  def track_association_removal(record)
+    track_association_change(record, :removed)
+  end
+
+  def track_association_change(record, event)
+    ids_method_name = "#{record.model_name.element}_ids"
+    object_changes = {ids_method_name => [[], send(ids_method_name)]}
+    PaperTrail::Version.create!(main: self, item: record, event: event, object: record.to_yaml,
+      object_changes: object_changes.to_yaml)
   end
 end
