@@ -39,7 +39,7 @@ module NestableTourEssential
     end)
   end
 
-  def to_s
+  def to_s(format = :default)
     label
   end
 
