@@ -4,40 +4,33 @@ module MigrateList
   class List
     attr_reader :section, :kind, :list
 
-    delegate :id, :subscriptions, :update!, :destroy!, to: :list
+    delegate :id, :destroyed?, :update!, :destroy!, :people, to: :list
 
     def initialize(section, kind)
       @section = section
       @kind = kind
       @list = find_list(section, kind)
-      @orig_people_ids = people_ids
-      @orig_people_subscription_counts = people_subscription_counts
     end
 
-    def people_ids = @list.people.pluck(:id)
+    def subscriptions = list.subscriptions.people
 
-    def people_subscription_counts
-      list.subscriptions.people
-        .group(:excluded).count.transform_keys { |key| key ? :excluding : :including }
+    def read_people_ids = list.people.map(&:id)
+
+    def people_ids = @people_ids ||= read_people_ids
+
+    def subscriptions_counts
+      @subscriptions_counts ||=
+        subscriptions.group(:excluded).count
+          .transform_keys { |key| key ? :excluding : :including }
     end
 
-    def exists? = MailingList.where(id: list.id).exists?
+    def to_s(refresh = false)
+      @people_ids = nil if refresh
+      @subscriptions_counts = nil if refresh
 
-    def to_s
-      "#{list_info}: #{people_ids_count} #{people_subscription_infos}"
+      list_info = "#{list.group}(#{list.id}, #{kind}, #{list.subscribable_mode}"
+      "#{list_info}): #{people_ids.count} #{subscriptions_counts}"
     end
-
-    def people_ids_count
-      [@orig_people_ids.count, people_ids.count].uniq.compact.join(" -> ")
-    end
-
-    def people_subscription_infos
-      [@orig_people_subscription_counts, people_subscription_counts].uniq.compact.join(" -> ")
-    end
-
-    def list_info = "#{list.group}(#{list.id}, #{kind})"
-
-    def deleted? = MailingList.where(id: list.id).none?
 
     private
 
@@ -49,53 +42,48 @@ module MigrateList
   end
 
   def run
-    # run_kirchberg
-    run_common_case("SAC Weissenstein")
-    run_common_case("SAC Pfannenstiel")
-  end
-
-  # Digital neu opt-out
-  # -> kopiert bestehende Abmeldungen aufs digital (falls nicht auf digital subscribed)
-  def run_kirchberg # rubocop:disable Metrics/AbcSize
-    change_digital_to_opt_out("SAC Kirchberg") do |paper, digital, configured_ids|
-      paper.subscriptions
-        .people.excluding.where.not(subscriber_id: configured_ids)
-        .update_all(mailing_list_id: digital.id)
+    migrate_bulletins("SAC Weissenstein")
+    migrate_bulletins("SAC Pfannenstiel")
+    migrate_bulletins("SAC Kirchberg") do |paper, digital|
+      digital.subscriptions.excluded.where(subscriber_id: paper.people_ids).destroy_all
       paper.destroy!
     end
   end
 
-  def run_common_case(section)
-    change_digital_to_opt_out(section) do |paper, digital, configured_ids|
-      exclusion_attrs = {mailing_list_id: digital.id, subscriber_type: "Person", excluded: true}
-      rows = people_as_configured(paper.list).pluck(:id).map do |subscriber_id|
-        exclusion_attrs.merge(subscriber_id:)
-      end
-      Subscription.upsert_all(rows)
-    end
-  end
-
-  # Digital neu opt-out
-  # NOTE -> bestehende paper subscriber bekommen das bulletin 2x (ja/nein?)
-  # NOTE -> globale Bedingung Rechnungsempfänger übernehmen?
-  def change_digital_to_opt_out(section, dry_run: true) # rubocop:disable Metrics/AbcSize
+  def migrate_bulletins(section, dry_run: true) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     paper = List.new(section, :paper)
     digital = List.new(section, :digital)
+
+    print_details_about(digital, paper)
     MailingList.transaction do
-      puts paper
-      puts digital
-      configured_ids = people_as_configured(digital.list).pluck(:id)
-      yield paper, digital, configured_ids if block_given?
-      digital.subscriptions.people.included.where(subscriber_id: configured_ids).destroy_all
+      digital.subscriptions.destroy_all
+      paper.subscriptions.destroy_all
+
       digital.update!(subscribable_mode: :opt_out)
-      puts digital if digital
-      puts paper if paper.exists?
+      paper.update!(subscribable_mode: :opt_in)
+
+      digital_exclusions = digital.read_people_ids - digital.people_ids
+
+      insert_subscription(digital, people_ids: digital_exclusions, excluded: true)
+      insert_subscription(paper, people_ids: paper.people_ids, excluded: false)
+
+      yield paper, digital if block_given?
+      print_details_about(digital, paper, refresh: true)
+      puts
       raise ActiveRecord::Rollback if dry_run
     end
   end
 
-  def people_as_configured(list)
-    MailingLists::Subscribers.new(list).people_as_configured(use_people_subscriptions: false)
+  def insert_subscription(list, people_ids:, excluded:)
+    attrs = {subscriber_type: "Person", mailing_list_id: list.id, excluded:}
+    rows = people_ids.map { |subscriber_id| attrs.merge(subscriber_id:) }
+    Subscription.insert_all(rows)
+  end
+
+  def print_details_about(*lists, refresh: false)
+    lists.reject(&:destroyed?).each { |list|
+      puts list.to_s(refresh)
+    }
   end
   # rubocop:enable Rails/Output
 end
