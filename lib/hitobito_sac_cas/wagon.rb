@@ -208,6 +208,7 @@ module HitobitoSacCas
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person
+      Sheet::Event::Participation.prepend SacCas::Sheet::Event::Participation
       StandardFormBuilder.prepend SacCas::StandardFormBuilder
 
       # Navigation

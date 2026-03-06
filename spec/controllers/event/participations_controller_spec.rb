@@ -142,6 +142,11 @@ describe Event::ParticipationsController do
           expect(dom).to have_css "section h2", text: "Ausbildungshistorie"
           expect(dom).to have_css "section h2", text: "Tourenhistorie"
         end
+
+        it "shows history tab" do
+          get :show, params: params
+          expect(dom).to have_css "#main-content .nav-sub a", text: "Verlauf"
+        end
       end
 
       context "with only show permission" do
@@ -151,6 +156,11 @@ describe Event::ParticipationsController do
           get :show, params: params
           expect(dom).to_not have_css "section h2", text: "Ausbildungshistorie"
           expect(dom).to_not have_css "section h2", text: "Tourenhistorie"
+        end
+
+        it "does not show history tab" do
+          get :show, params: params
+          expect(dom).to_not have_css "#main-content .nav-sub a", text: "Verlauf"
         end
       end
     end
