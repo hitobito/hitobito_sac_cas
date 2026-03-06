@@ -11,7 +11,7 @@ describe Event::Tour do
   subject(:tour) { events(:section_tour) }
 
   describe "validations" do
-    shared_examples "presence validation for draft  attributes" do |attribute:, association: false|
+    shared_examples "presence validation for draft attributes" do |attribute:, association: false|
       it "validates presence of #{attribute} in state ready" do
         tour.state = :draft
         tour.send(:"#{attribute}=", (association ? [] : nil))
@@ -26,7 +26,7 @@ describe Event::Tour do
       end
     end
 
-    shared_examples "readonly for draft  attributes" do |attribute:|
+    shared_examples "readonly for draft attributes" do |attribute:|
       it "#{attribute} is readonly in state review" do
         tour.update!(state: :review)
         tour.send(:"#{attribute}=", new_valid_value)
@@ -45,42 +45,42 @@ describe Event::Tour do
     describe "subito" do
       let(:new_valid_value) { false }
 
-      it_behaves_like "readonly for draft  attributes", attribute: :subito
+      it_behaves_like "readonly for draft attributes", attribute: :subito
     end
 
     describe "season" do
       let(:new_valid_value) { "Winter" }
 
-      it_behaves_like "presence validation for draft  attributes", attribute: :season
-      it_behaves_like "readonly for draft  attributes", attribute: :season
+      it_behaves_like "presence validation for draft attributes", attribute: :season
+      it_behaves_like "readonly for draft attributes", attribute: :season
     end
 
     describe "fitness requirement" do
       let(:new_valid_value) { event_fitness_requirements(:e) }
 
-      it_behaves_like "presence validation for draft  attributes", attribute: :fitness_requirement
-      it_behaves_like "readonly for draft  attributes", attribute: :fitness_requirement
+      it_behaves_like "presence validation for draft attributes", attribute: :fitness_requirement
+      it_behaves_like "readonly for draft attributes", attribute: :fitness_requirement
     end
 
     describe "disciplines" do
       let(:new_valid_value) { [event_disciplines(:indoorklettern)] }
 
-      it_behaves_like "presence validation for draft  attributes", attribute: :disciplines, association: true
-      it_behaves_like "readonly for draft  attributes", attribute: :disciplines
+      it_behaves_like "presence validation for draft attributes", attribute: :disciplines, association: true
+      it_behaves_like "readonly for draft attributes", attribute: :disciplines
     end
 
     describe "target_groups" do
       let(:new_valid_value) { [event_target_groups(:familien)] }
 
-      it_behaves_like "presence validation for draft  attributes", attribute: :target_groups, association: true
-      it_behaves_like "readonly for draft  attributes", attribute: :target_groups
+      it_behaves_like "presence validation for draft attributes", attribute: :target_groups, association: true
+      it_behaves_like "readonly for draft attributes", attribute: :target_groups
     end
 
     describe "technical_requirements" do
       let(:new_valid_value) { [event_technical_requirements(:klettern_9a)] }
 
-      it_behaves_like "presence validation for draft  attributes", attribute: :technical_requirements, association: true
-      it_behaves_like "readonly for draft  attributes", attribute: :technical_requirements
+      it_behaves_like "presence validation for draft attributes", attribute: :technical_requirements, association: true
+      it_behaves_like "readonly for draft attributes", attribute: :technical_requirements
     end
 
     [:duration_h, :duration_m].each do |attr|
@@ -163,6 +163,92 @@ describe Event::Tour do
         tour.participant_count = 2
         expect(state).to eq "applied"
       end
+    end
+  end
+
+  context "paper trails", versioning: true do
+    before do
+      tour.update_column(:state, :draft)
+    end
+
+    it "sets main to event on discipline create" do
+      expect do
+        tour.disciplines << event_disciplines(:wandern)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on discipline remove" do
+      expect do
+        tour.disciplines.destroy_all
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("destroy")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on target_group create" do
+      expect do
+        tour.target_groups << event_target_groups(:senioren)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on target_group remove" do
+      expect do
+        tour.target_groups.destroy_all
+      end.to change { PaperTrail::Version.count }.by(2) # tour fixture had two target_groups
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("destroy")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on technical_requirement create" do
+      expect do
+        tour.technical_requirements << event_technical_requirements(:singletrail)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on technical_requirement remove" do
+      expect do
+        tour.technical_requirements.destroy_all
+      end.to change { PaperTrail::Version.count }.by(2) # tour fixture had two technical_requirements
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("destroy")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on trait create" do
+      expect do
+        tour.traits << event_traits(:training)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on trait remove" do
+      expect do
+        tour.traits.destroy_all
+      end.to change { PaperTrail::Version.count }.by(2) # tour fixture had two traits
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.event).to eq("destroy")
+      expect(version.main).to eq(tour)
     end
   end
 end
