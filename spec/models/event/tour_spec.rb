@@ -187,7 +187,7 @@ describe Event::Tour do
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      expect(version.event).to eq("destroy")
+      expect(version.event).to eq("removed")
       expect(version.main).to eq(tour)
     end
 
@@ -207,7 +207,7 @@ describe Event::Tour do
       end.to change { PaperTrail::Version.count }.by(2) # tour fixture had two target_groups
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      expect(version.event).to eq("destroy")
+      expect(version.event).to eq("removed")
       expect(version.main).to eq(tour)
     end
 
@@ -227,7 +227,7 @@ describe Event::Tour do
       end.to change { PaperTrail::Version.count }.by(2) # tour fixture had two technical_requirements
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      expect(version.event).to eq("destroy")
+      expect(version.event).to eq("removed")
       expect(version.main).to eq(tour)
     end
 
@@ -247,7 +247,7 @@ describe Event::Tour do
       end.to change { PaperTrail::Version.count }.by(2) # tour fixture had two traits
 
       version = PaperTrail::Version.order(:created_at, :id).last
-      expect(version.event).to eq("destroy")
+      expect(version.event).to eq("removed")
       expect(version.main).to eq(tour)
     end
   end
