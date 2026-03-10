@@ -19,6 +19,7 @@ module SacCas::EventsController
 
     before_render_form :preload_translated_associations
     before_render_form :preload_tour_essentials
+    before_render_show :preload_leader_participations
 
     after_update :display_warning_for_date_changes, if: :tour?
 
@@ -50,6 +51,14 @@ module SacCas::EventsController
       Event::TechnicalRequirement.assignable(entry.technical_requirement_ids).list
     @fitness_requirements = Event::FitnessRequirement.assignable(entry.fitness_requirement_id).list
     @traits = Event::Trait.assignable(entry.trait_ids).list
+  end
+
+  def preload_leader_participations
+    @leader_participations = Event::ParticipationFilter::List.new(entry, current_user,
+      {filters: {participant_type: "teamers"}})
+      .list_entries
+      .includes(:roles)
+      .preload(:participant) # cannot include participant since it is polymorphic
   end
 
   def course? = entry.is_a?(Event::Course)

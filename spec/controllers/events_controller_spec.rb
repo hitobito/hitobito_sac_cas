@@ -63,6 +63,21 @@ describe EventsController do
 
         expect(dom).to have_css("h1", text: top_course.name)
       end
+
+      it "displays all leaders with their roles" do
+        leader1 = Fabricate(:event_participation, event: top_course)
+        leader2 = Fabricate(:event_participation, event: top_course)
+        Fabricate(Event::Course::Role::Leader.sti_name.to_sym, participation: leader1)
+        Fabricate(Event::Course::Role::AssistantLeader.sti_name.to_sym, participation: leader2)
+        Fabricate(Event::Course::Role::LeaderAspirant.sti_name.to_sym, participation: leader2)
+
+        get :show, params: params
+
+        expect(dom).to have_css "aside section td", text: leader1.person.full_name
+        expect(dom).to have_css "aside section td", text: leader2.person.full_name
+        expect(dom).to have_css "aside section td", text: leader1.roles.first.to_s
+        expect(dom).to have_css "aside section td", text: leader2.roles.map(&:to_s).join(", ")
+      end
     end
 
     describe "GET#edit" do

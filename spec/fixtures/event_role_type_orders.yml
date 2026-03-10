@@ -37,7 +37,23 @@ event_role_participant:
   name: Event::Role::Participant
   order_weight: 7
 
+event_course_role_leader:
+  name: Event::Role::Leader
+  order_weight: 8
+
+event_course_role_assistant_leader:
+  name: Event::Role::AssistantLeader
+  order_weight: 9
+
+event_course_role_leader_aspirant:
+  name: Event::Role::Leader
+  order_weight: 10
+
+event_course_role_assistant_leader_aspirant:
+  name: Event::Role::AssistantLeader
+  order_weight: 11
+
 event_course_role_participant:
   name: Event::Course::Role::Participant
-  order_weight: 8
+  order_weight: 12
 
