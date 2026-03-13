@@ -24,6 +24,7 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
       terminate_on: Date.new(2025, 3, 10),
       validate_terminate_on: false
     ).call
+    travel_to(Date.new(2025, 3, 10))
   end
 
   [
