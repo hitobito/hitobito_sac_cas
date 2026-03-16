@@ -52,6 +52,7 @@ Rails.application.routes.draw do
           resource :leader_settlement_pdfs, only: [:create], module: :courses
           resources :participations, only: [] do
             member do
+              get "history" => "participations/history#index"
               put :summon
               put :reactivate
             end
