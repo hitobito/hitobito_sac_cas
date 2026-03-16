@@ -3,9 +3,15 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito.
 
-.row.flex-md-row.flex-column-reverse
-  .col-md-6
-    - form_url = params[:oauth] == 'true' ? person_session_path(oauth: true) : person_session_path
+- oauth = params[:oauth] == 'true'
+
+-# the layout should always be stacked for oauth since the container size is much smaller
+- flex_direction_class = oauth ? "flex-column-reverse" : "flex-md-row flex-column-reverse"
+.row{class: flex_direction_class}
+
+  - col_class = oauth ? "col-md-12" : "col-md-6"
+  %div{class: col_class}
+    - form_url = oauth ? person_session_path(oauth: true) : person_session_path
     - autofocus_login = true if autofocus_login.nil?
 
     = standard_form(resource, {url: form_url, stacked: true, data: { turbo: false }}) do |f|
@@ -16,5 +22,5 @@
       = f.indented(submit_button(f, t('.sign_in')))
       = f.indented do
         = render "devise/sessions/helpful_links"
-  .col-md-6
+  %div{class: col_class}
     = render 'groups/contact_data', group: Group.root.decorate, only_public: true
