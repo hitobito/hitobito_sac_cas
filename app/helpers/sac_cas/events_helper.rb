@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -118,10 +118,18 @@ module SacCas::EventsHelper
   end
 
   def render_event_essential(entry)
+    label_content = tag.div(class: "d-inline-flex align-items-center") do
+      if entry.try(:color).present?
+        concat tag.i(class: "fas fa-circle",
+          style: "color: #{entry.color};")
+      end
+      concat tag.span(entry.label, class: ("ms-1" if entry.try(:color).present?))
+    end
+
     if entry.description.present?
-      with_tooltip(entry.label, entry.description)
+      with_tooltip(label_content, entry.description)
     else
-      entry.label
+      label_content
     end
   end
 end
