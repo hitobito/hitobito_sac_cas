@@ -1629,6 +1629,9 @@ de:
         approved: Zurück zu Freigegeben
         published: Zurück zu Publiziert
 
+    show_contacts_sac_cas:
+      title: Leitung
+
     form_tabs:
       communication: Kommunikation
       prices: Preise
