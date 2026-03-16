@@ -25,7 +25,6 @@ class Event::Participations::HistoryController < ApplicationController
   end
 
   def load_recent_trainings_and_participations
-    history = Participations::History.new(participation.person)
     @recent_trainings = history.recent_trainings
     @recent_tours = history.recent_tours
   end
@@ -33,4 +32,8 @@ class Event::Participations::HistoryController < ApplicationController
   def authorize_action
     authorize!(:show_detail, participation)
   end
+
+  private
+
+  def history = @history ||= Participations::History.new(participation.person)
 end

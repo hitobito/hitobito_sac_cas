@@ -7,7 +7,7 @@
 
 class Participations::History
   Row = Data.define(:name, :start_at, :finish_at, :provider) do
-    def daterange = [start_at, finish_at].join("-")
+    def daterange = [I18n.l(start_at), I18n.l(finish_at)].join("-")
 
     def <=>(other)
       return unless other.is_a?(self.class)
