@@ -1599,6 +1599,8 @@ it:
           Se chi riveste il ruolo di direzione del corso o della classe non è la persona titolare dell’IBAN indicato, la fattura deve essere emessa a parte e non è possibile utilizzare il generatore di fatture QR qui predisposto. <p>– <p>Se la persona o l’istituzione che emette la fattura è soggetta all’IVA è necessario generare a parte una fattura conforme all’IVA e non è possibile utilizzare il generatore di fatture QR qui predisposto.</p> – <p>Se il CAS non ha ancora ricevuto alcuna conferma AVS valida per l’anno in corso, questa deve essere consegnata al più tardi insieme all’emissione della fattura.</p> – <p>Inviare le fatture per mail all’indirizzo: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>– 
       invoice_created_notice: La fattura è stata creata con successo.
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
+      tabs:
+        history: Verlauf
 
       popover_participant_cancels:
         cancel_info: >-
@@ -1648,6 +1650,9 @@ it:
         ready: Zurück zu Vorbereitung abgeschlossen
         approved: Zurück zu Freigegeben
         published: Zurück zu Publiziert
+
+    show_contacts_sac_cas:
+      title: Leitung
 
     form_tabs:
       communication: Comunicazione

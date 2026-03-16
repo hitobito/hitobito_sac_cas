@@ -1601,6 +1601,8 @@ fr:
           <p>Si la personne responsable de cours ou de classe n'est pas titulaire de l'IBAN indiqué, la facture doit être établie de manière autonome et le générateur de factures QR mis à disposition ici ne doit pas être utilisé.</p>- <p>Si la personne ou l'institution qui établit la facture est assujettie à la TVA, une facture conforme à la TVA doit être établie de manière autonome et le générateur de factures QR mis à disposition ici ne doit pas être utilisé.</p>- <p>Si le CAS n'a pas encore reçu d'attestation AVS valable pour l'année en cours, celle-ci doit être envoyée au plus tard avec la facturation.</p>- <p>Envoyer les factures par e-mail à: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>
       invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
+      tabs:
+        history: Verlauf
 
       popover_participant_cancels:
         cancel_info: >-
@@ -1650,6 +1652,9 @@ fr:
         ready: Zurück zu Vorbereitung abgeschlossen
         approved: Zurück zu Freigegeben
         published: Zurück zu Publiziert
+
+    show_contacts_sac_cas:
+      title: Leitung
 
     form_tabs:
       communication: Communication

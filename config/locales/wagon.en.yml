@@ -1540,6 +1540,8 @@ en:
           <p>Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>- <p>Falls die rechnungsstellende Person bzw. Institution MWST-pflichtig ist, muss eine MWST-konforme Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>- <p>Wurde dem SAC noch keine fürs aktuelle Jahr gültige AHV-Bestätigung zugestellt, so muss diese spätestens mit der Rechnungsstellung zugestellt werden.</p>- <p>Rechnungen per Mail senden an: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>-
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
+      tabs:
+        history: Verlauf
 
       popover_participant_cancels:
         cancel_info: >-
@@ -1589,6 +1591,9 @@ en:
         ready: Zurück zu Vorbereitung abgeschlossen
         approved: Zurück zu Freigegeben
         published: Zurück zu Publiziert
+
+    show_contacts_sac_cas:
+      title: Leitung
 
     form_tabs:
       communication: Communication
