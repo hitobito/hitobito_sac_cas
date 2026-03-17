@@ -31,8 +31,13 @@
 class ExternalInvoice::SacMembership < ExternalInvoice
   # link is a Group::Section or Group::Ortsgruppe object
 
+  i18n_enum :beitragskategorie,
+    ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
+    i18n_prefix: "roles.beitragskategorie"
+
   attr_writer :invoice_kind
 
+  before_validation :set_beitragskategorie
   after_update :handle_state_change_to_payed
 
   def title
@@ -41,6 +46,14 @@ class ExternalInvoice::SacMembership < ExternalInvoice
 
   def invoice_kind
     @invoice_kind || :sac_membership
+  end
+
+  def set_beitragskategorie
+    return if year.blank?
+
+    date = Date.new(year, 1, 1)
+    self.beitragskategorie = People::SacMembership.new(person,
+      date:).stammsektion_role&.beitragskategorie
   end
 
   private

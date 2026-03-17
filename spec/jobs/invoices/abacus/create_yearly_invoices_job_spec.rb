@@ -94,6 +94,30 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
       it "returns the correct people" do
         expect(subject.active_members).to match_array(expected_people)
       end
+
+      context "with family invoice present" do
+        let(:main_family_person) { people(:familienmitglied) }
+        let!(:family_invoice) do
+          Fabricate(:sac_membership_invoice, person: people(:familienmitglied2),
+            year: invoice_year)
+        end
+
+        it "does not return sac_main_family_person" do
+          expect(subject.active_members).to_not include(main_family_person)
+        end
+
+        it "still returns sac_main_family_person if invoice not in this year" do
+          family_invoice.update!(year: invoice_year + 1)
+
+          expect(subject.active_members).to include(main_family_person)
+        end
+
+        it "still returns sac_main_family_person if not a family invoice" do
+          ExternalInvoice.where(id: family_invoice.id).update_all(beitragskategorie: :adult)
+
+          expect(subject.active_members).to include(main_family_person)
+        end
+      end
     end
   end
 

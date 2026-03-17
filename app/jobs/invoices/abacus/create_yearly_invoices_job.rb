@@ -59,6 +59,7 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       .merge(Role.active(reference_date))
       .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name})
       .where.not(id: ExternalInvoice::SacMembership.where(year: @invoice_year).select(:person_id))
+      .where.not(id: family_main_people_with_family_invoice.select(:id))
       .distinct
   end
 
@@ -210,6 +211,13 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       message: "Mitgliedschaftsrechnung konnte nicht in Abacus erstellt werden",
       payload: part.error_payload
     )
+  end
+
+  def family_main_people_with_family_invoice
+    Person.where(sac_family_main_person: true,
+      household_key: ExternalInvoice::SacMembership.where(year: @invoice_year,
+        beitragskategorie: :family)
+      .joins(:person).select(:household_key))
   end
 
   def reference_date
