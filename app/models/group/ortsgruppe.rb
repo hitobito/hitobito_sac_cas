@@ -28,7 +28,6 @@ class Group::Ortsgruppe < Group
 
   mounted_attr :foundation_year, :integer
   mounted_attr :section_canton, :string, enum: Cantons.short_name_strings.map(&:upcase)
-  mounted_attr :language, :string, enum: %w[DE FR IT], default: "DE", null: false
   mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
   mounted_attr :tours_enabled, :boolean, default: false, null: false
 
