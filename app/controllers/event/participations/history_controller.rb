@@ -30,7 +30,7 @@ class Event::Participations::HistoryController < ApplicationController
   end
 
   def authorize_action
-    authorize!(:show_detail, participation)
+    authorize!(:show_details, participation)
   end
 
   private
