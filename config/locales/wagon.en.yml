@@ -32,6 +32,8 @@ en:
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
+    elevation_unit: Hm
+    elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
 
   layouts:
@@ -161,8 +163,11 @@ en:
         youth_not_allowed_in_family: >-
           Jugendliche im Alter von %{from_age} bis %{to_age} Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "must be between %{start_on} and %{end_on} "
-
       models:
+        event/approval_commission_responsibility_form:
+          attributes:
+            base:
+              invalid_event_comission_responsibilities: Es wurden nicht alle Zuständigkeiten ausgefüllt.
         household:
           attributes:
             members:
@@ -384,7 +389,13 @@ en:
         j_s_price_regular: J&S P-Normalpreis
         j_s_price_subsidized: J&S A-Mitgliederpreis
         j_s_price_special: J&S A-Normalpreis
+      event/approval_commission_responsibility:
+        freigabe_komitee: Freigabekomitee
+        target_group: Zielgruppe
+        discipline: Disziplin
+        subito: Subito
       event/discipline:
+        color: Farbe
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
@@ -393,6 +404,10 @@ en:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval_kind:
+        name: Name
+        short_description: Kurzbeschrieb
+        order: Reihenfolge
       event/fitness_requirement:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -415,9 +430,11 @@ en:
       event/participation:
         additional_information: Comment
         cancel_statement: Reason
+        correspondence: Rechnungsstellung
         adult_consent: Age confirmation
         terms_and_conditions: GTC
         actual_days: Effective days
+        membership_number: Personennummer
         price: "Preis"
         price_category: "Preiskategorie"
         price_categories:
@@ -434,6 +451,7 @@ en:
           cancelled: Storniert
           error: Fehler
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
+        sac_membership_active?: SAC-Mitglied
       event/role:
         self_employed: Selbständig erwerbend
       event/target_group:
@@ -464,13 +482,26 @@ en:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        ascent: Aufstieg
+        descent: Abstieg
+        internal_comment: Interne Bemerkungen
+        minimum_age: Mindestalter
+        season: Saison
+        seasons:
+          winter: Winter
+          summer: Sommer
+        subito: Ist Subito-Tour
+        summit: Gipfel
+        tourenportal_link: Link zum Tourenportal
         state_translated: Status
         states:
           draft: Entwurf
+          review: In Freigabe
           approved: Freigegeben
           published: Publiziert
+          ready: Vorbereitung abgeschlossen
           closed: Abgeschlossen
-          canceled: Abgesagt
+          canceled: Abgesagt / Annulliert
         participation_states:
           tentative: Provisorisch
           unconfirmed: Unbestätigt
@@ -592,7 +623,7 @@ en:
               read_all_people: Read all people.
               layer_events_full: Verwalten von Events auf der Sektion.
               layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
-              layer_touren_und_kurse_full: Verwalten von Personen in der Touren und Kurse Gruppe der Sektion/Ortsgruppe.
+              layer_created_events_full: "Erstellen und Editieren eigener Anlässe, Kurse und Touren in der Sektion"
       qualification_kind:
         tourenchef_may_edit: Editable by tour manager
       qualification:
@@ -685,11 +716,26 @@ en:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: may only reference one remuneration approach per validity period.
+        group/freigabe_komitee:
+          attributes:
+            base:
+              has_event_approval_commission_responsibilities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
+        event/discipline:
+          attributes:
+            color:
+              invalid_hex_color: >-
+                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: must not be longer than the planned course duration.
+
+        event/approval_commission_responsibility:
+          not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
+          no_base_target_group: ist keine Hauptzielgruppe.
+          no_base_discipline: ist keine Hauptdisziplin.
+          combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: person must have at least one active qualification.
@@ -723,6 +769,9 @@ en:
       course_compensation_rate:
         one: Remuneration approach
         other: Remuneration approaches
+      event/approval_commission_responsibility:
+        one: Zuständigkeit Freigabe-Kommission
+        other: Zuständigkeiten Freigabe-Kommission
       event/discipline:
         one: Disziplin
         other: Disziplinen
@@ -759,6 +808,9 @@ en:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval_kind:
+        one: Freigabestufe
+        other: Freigabestufen
       external_training:
         one: External training
         other: External training
@@ -887,15 +939,6 @@ en:
       group/sektions_touren_und_kurse:
         one: Tours and courses
         other: Tours and courses
-      group/sektions_touren_und_kurse_allgemein:
-        one: Touren und Kurse Allgemein
-        other: Touren und Kurse Allgemein
-      group/sektions_touren_und_kurse_sommer:
-        one: Summer tours and courses
-        other: Summer tours and courses
-      group/sektions_touren_und_kurse_winter:
-        one: Winter tours and courses
-        other: Winter tours and courses
       group/sektions_vorstand:
         one: Management Board
         other: Management Board
@@ -1181,15 +1224,15 @@ en:
       group/sektions_touren_und_kurse/schreibrecht:
         one: Writing right
         description: Writing right
-      group/sektions_touren_und_kurse_allgemein/tourenchef:
+      group/sektions_touren_und_kurse/tourenchef:
         one: Tourenchef*in
         description: Tourenchef*in
-      group/sektions_touren_und_kurse_sommer/tourenchef:
-        one: Tour manager
-        description: Tour manager
-      group/sektions_touren_und_kurse_winter/tourenchef:
-        one: Tour manager
-        description: Tour manager
+      group/sektions_touren_und_kurse/tourenchef_sommer:
+        one: Tourenchef*in Sommer
+        description: Tourenchef*in Sommer
+      group/sektions_touren_und_kurse/tourenchef_winter:
+        one: Tourenchef*in Winter
+        description: Tourenchef*in Winter
       group/sektions_clubhuetten/leserecht:
         one: Right to read
         description: Right to read
@@ -1352,6 +1395,11 @@ en:
       event_canceled: "Dieser Anlass ist abgesagt, Anmeldungen können nicht mehr bearbeitet werden."
       participant:
         remove_participant_confirm: "Wollen Sie diese Anmeldung wirklich entfernen? Es wird eine E-Mail an die teilnehmende Person verschickt."
+    approval_commission_responsibilities:
+      edit:
+        title: Zuständigkeiten Freigabe-Kommission bearbeiten
+        normal_tours: Normal-Touren
+        subito_tours: Subito-Touren
     courses:
       invoices:
         new:
@@ -1366,6 +1414,9 @@ en:
             one: Es wurde eine E-Mail verschickt.
             other: Es wurden %{count} E-Mails verschickt.
           warning: "Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde."
+    disciplines:
+      form:
+        help_inline_color: 'Gültiger hexadezimaler Farbwert (zb. #fcba03)'
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen
@@ -1399,6 +1450,9 @@ en:
         title: Demnächst stattfindende Touren
         explanation: "Hier werden Touren von Sektionen angezeigt, bei denen du Mitglied bist. Andere Touren findest du bei der organisierenden Sektion."
     participations:
+      asides_sac_cas:
+        recent_trainings: Ausbildungshistorie
+        recent_tours: Tourenhistorie
       fields:
         explain_required_checkmark: "* = Antwort obligatorisch"
       missing_information: >-
@@ -1486,6 +1540,8 @@ en:
           <p>Falls die Person in der Rolle der Kurs- oder Klassenleitung nicht Inhabende der angegebenen IBAN ist, muss die Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>- <p>Falls die rechnungsstellende Person bzw. Institution MWST-pflichtig ist, muss eine MWST-konforme Rechnung eigenständig erstellt werden und der hier bereitgestellte QR-Rechnungsgenerator darf nicht verwendet werden.</p>- <p>Wurde dem SAC noch keine fürs aktuelle Jahr gültige AHV-Bestätigung zugestellt, so muss diese spätestens mit der Rechnungsstellung zugestellt werden.</p>- <p>Rechnungen per Mail senden an: <a href="mailto:kreditoren@sac-cas.ch">kreditoren@sac-cas.ch</a>.</p>-
       invoice_created_notice: Rechnung wurde erfolgreich erstellt.
       invoice_not_created_alert: Rechnung konnte nicht erstellt werden wegen fehlendem Teilnahmepreis.
+      tabs:
+        history: Verlauf
 
       popover_participant_cancels:
         cancel_info: >-
@@ -1499,6 +1555,10 @@ en:
         enter_email: "" # to not display in sac wagon
 
   events:
+    flash:
+      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
+    actions_index_sac_cas:
+      edit_event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
     state_buttons:
@@ -1514,15 +1574,26 @@ en:
           Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
         canceled: Absagen
       event/tour:
-        draft: Zurück als Entwurf
-        approved: Freigeben
+        draft: Zurück zu Entwurf
+        ready: Vorbereitung abgeschlossen
+        review: Zur Freigabe weiterleiten
+        approved: Selbst freigeben
         published: Publizieren
         closed: Abschliessen
         canceled: Absagen
     state_back_buttons:
-      assignment_closed: Zurück zur Zuteilung
-      application_closed: Zurück zur abgeschlossenen Anmeldung
-      approved: Zurück zur Freigabe
+      event/course:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+        approved: Zurück zur Freigabe
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Zurück zu Vorbereitung abgeschlossen
+        approved: Zurück zu Freigegeben
+        published: Zurück zu Publiziert
+
+    show_contacts_sac_cas:
+      title: Leitung
 
     form_tabs:
       communication: Communication
@@ -1992,14 +2063,15 @@ en:
           This person does not have their own membership invoice. If necessary, the fees will be offset against another person's invoice.
         alert_error: "The following data quality checks prevent the creation of a membership invoice:"
         create_invoice: "Create invoice"
-        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
         manual_positions: "Manuelle Differenzrechnung"
-        manual_positions_subtitle: "Manuelle Rechnungsposten"
         mv_yearly_invoice: "MV annual financial statements"
+        zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
+      manual_fee_fields:
+        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
+        manual_positions_subtitle: "Manuelle Rechnungsposten"
         section_entry_fee: "Sektionseintrittsgebühren %{section}"
         section_fee: "Sektionsbeitrag %{section}"
         section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
-        zusatzsektion_eintrittsrechnung: "Additional section entry invoice Section"
 
     neuanmeldungen:
       multiselect_actions:
