@@ -82,6 +82,39 @@ describe Event::Tour do
       it_behaves_like "presence validation for draft  attributes", attribute: :technical_requirements, association: true
       it_behaves_like "readonly for draft  attributes", attribute: :technical_requirements
     end
+
+    [:duration_h, :duration_m].each do |attr|
+      describe attr do
+        it "is valid" do
+          is_expected.to be_valid
+        end
+
+        it "does not allow more than two digits" do
+          tour.send(:"#{attr}=", 123)
+
+          is_expected.not_to be_valid
+        end
+
+        it "allows nil" do
+          tour.send(:"#{attr}=", nil)
+
+          is_expected.to be_valid
+        end
+      end
+    end
+
+    [:alternative_route, :additional_info, :price_description].each do |attr|
+      it "translates #{attr}" do
+        tour.send(:"#{attr}_de=", "ja ja")
+        tour.send(:"#{attr}_fr=", "Qui qui")
+
+        I18n.locale = :de
+        expect(tour.send(attr)).to eq "ja ja"
+
+        I18n.locale = :fr
+        expect(tour.send(attr)).to eq "Qui qui"
+      end
+    end
   end
 
   describe "#default_participation_state" do

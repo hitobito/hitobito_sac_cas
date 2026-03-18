@@ -10,11 +10,14 @@ class Event::Tour < Event
 
   WEAK_VALIDATION_STATES = %w[draft].freeze
 
+  PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
+
   self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants,
-    :summit, :ascent, :descent, :season, :internal_comment, :minimum_age, :maximum_age,
-    :tourenportal_link, :subito]
+    :summit, :ascent, :descent, :duration_h, :duration_m, :maps, :season, :alternative_route,
+    :additional_info, :price_description, :internal_comment, :minimum_age, :maximum_age,
+    :tourenportal_link, :subito, *PRICE_ATTRIBUTES]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
-    :signature, :signature_confirmation, :signature_confirmation_text, :guest_limit]
+    :signature, :signature_confirmation, :signature_confirmation_text, :guest_limit, :cost]
 
   self.role_types = [
     Event::Role::Leader,
@@ -63,12 +66,19 @@ class Event::Tour < Event
     class_name: "Event::Trait",
     foreign_key: :event_id
 
+  translates :alternative_route, :additional_info, :price_description
+
   ### VALIDATIONS
 
   before_save :prevent_changes_in_weak_validation_state, unless: :weak_validation_state?
   validates :state, inclusion: possible_states
   validates :disciplines, :target_groups, :technical_requirements,
     :fitness_requirement, :season, presence: {unless: :weak_validation_state?}
+
+  validates :duration_h, :duration_m, numericality: {
+    greater_than_or_equal_to: 0,
+    less_than: 100
+  }, allow_nil: true
 
   ### INSTANCE METHODS
 

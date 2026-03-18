@@ -293,6 +293,7 @@ de:
         updated_at: Geändert
         created_at: Erstellt
       event:
+        id: Event-ID
         internal_comment: Interne Bemerkungen
         unconfirmed_count: Unbestätigte
         maximum_age: Maximalalter
@@ -490,9 +491,19 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        additional_info: Zusatzinfo
+        alternative_route: Alternativroute
         ascent: Aufstieg
         descent: Abstieg
+        duration_h: Zeitaufwand (h)
+        duration_m: Zeitaufwand (m)
+        internal_comment: Interne Bemerkungen
+        maps: Karten
         minimum_age: Mindestalter
+        price_description: Beschreibung
+        price_member: Kosten SAC-Mitglied (extern)
+        price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        price_special: Kosten SAC Sektionsmitglied
         season: Saison
         seasons:
           winter: Winter
