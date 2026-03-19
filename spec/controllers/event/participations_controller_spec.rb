@@ -322,7 +322,6 @@ describe Event::ParticipationsController do
     context "answers" do
       before do
         event.init_questions
-        event.application_questions.find { |q| q.question == "AHV-Nummer?" }.disclosure = "required"
         event.save!
       end
 

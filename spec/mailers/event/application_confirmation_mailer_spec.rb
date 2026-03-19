@@ -65,7 +65,7 @@ describe Event::ApplicationConfirmationMailer do
   end
 
   context "missing information" do
-    before { event.questions.create!(admin: true, question: "AHV-Nummer", disclosure: :optional) }
+    before { event.questions.create!(admin: true, question: "AHV-Nummer", required: false) }
 
     it "shows a list of missing answers" do
       expect(mail.body.to_s).to include(

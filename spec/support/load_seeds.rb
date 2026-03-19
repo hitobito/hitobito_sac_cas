@@ -11,4 +11,4 @@ SeedFu.seed([
   Rails.root.join("db", "seeds"),
   HitobitoYouth::Wagon.root.join("db", "seeds"),
   HitobitoSacCas::Wagon.root.join("db", "seeds")
-], /custom_contents|event_questions|self_registration_reasons/)
+], /custom_contents|self_registration_reasons/)

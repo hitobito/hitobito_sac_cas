@@ -13,7 +13,7 @@ describe Event::ParticipantReminderJob do
   let(:event) { Fabricate(:sac_open_course, dates: [Event::Date.new(start_at: 6.weeks.from_now)]) }
   let!(:participation_1) { Fabricate(:event_participation, event:, participant: people(:admin)) }
   let!(:participation_2) { Fabricate(:event_participation, event:, participant: people(:mitglied)) }
-  let!(:question) { event.questions.create!(admin: true, question: "test", disclosure: :optional) }
+  let!(:question) { event.questions.create!(admin: true, question: "test", required: false) }
 
   subject(:job) { described_class.new }
 
@@ -55,7 +55,7 @@ describe Event::ParticipantReminderJob do
     before do
       participation_1.answers.update_all(answer: "filled out")
       participation_2.answers.update_all(answer: "filled out")
-      event.questions.create!(admin: true, question: "not filled out yet", disclosure: :optional)
+      event.questions.create!(admin: true, question: "not filled out yet", required: false)
     end
 
     it "sends email to the participants" do

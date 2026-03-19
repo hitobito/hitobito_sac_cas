@@ -36,27 +36,24 @@ describe :events, js: true do
   context "event_questions" do
     let(:event) do
       event = Fabricate(:course, kind: event_kinds(:ski_course), groups: [groups(:root)])
+      event.init_questions
       event.dates.create!(start_at: 10.days.ago, finish_at: 5.days.ago)
       event
     end
 
     it "orders event questions alphabetically on edit page" do
-      Event::Question.where(event_id: nil).second.update!(question: "Aaa question?")
+      event_questions(:vegi).update!(question: "Aaa question?")
 
       visit edit_group_event_path(group_id: group.id, id: event.id)
       click_on "Anmeldeangaben"
       expect(find("#event_application_questions_attributes_0_question+p").text)
         .to eq "Aaa question?"
-      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "AHV-Nummer?"
+      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "Ich habe folgendes ÖV Abo"
     end
   end
 
   context "prices" do
     let(:event) { events(:top_course) }
-
-    # TODO: Workaround for hitobito_youth changes. See
-    # https://github.com/hitobito/hitobito_youth/issues/58 for context
-    before { event.init_questions(disclosure: :hidden) }
 
     it "allows to fill in prices" do
       expect(event).to be_valid
