@@ -142,8 +142,8 @@ describe Export::Tabular::People::SacMitgliedRow do
   end
 
   it "#birthday returns person#birthday in dd.mm.yyyy format" do
-    person.update(birthday: Date.new(1234, 5, 6))
-    expect(row.birthday).to eq("06.05.1234")
+    person.update(birthday: Date.new(1934, 5, 6))
+    expect(row.birthday).to eq("06.05.1934")
   end
 
   describe "#country" do
