@@ -88,7 +88,8 @@ module SacCas::Event::Participation
       main: event,
       event: "update",
       object: attributes.to_yaml,
-      object_changes: {"state" => saved_changes[:state]}.to_yaml
+      object_changes: {"state" => saved_changes[:state]}.to_yaml,
+      whodunnit: PaperTrail.request.whodunnit
     )
   end
 
