@@ -81,6 +81,9 @@ module SacCas::Event
     self.mandatory_contact_attrs = [:email, :first_name, :last_name, :birthday, :street,
       :housenumber, :zip_code, :town, :country]
 
+    self.used_attributes += [
+      :internal_comment
+    ]
     self.used_attributes -= [
       :required_contact_attrs,
       :hidden_contact_attrs

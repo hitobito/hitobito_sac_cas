@@ -290,6 +290,7 @@ fr:
         updated_at: Modifié
         created_at: Créé
       event:
+        internal_comment: Interne Bemerkungen
         unconfirmed_count: Non confirmé
         maximum_age: Age maximal
         ideal_class_size: Taille de classe idéale

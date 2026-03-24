@@ -3,6 +3,6 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas
 
-- if tour? && entry.internal_comment.present? && can?(:update, entry)
+- if entry.internal_comment.present? && can?(:update, entry)
   .alert.alert-info
     = entry.internal_comment

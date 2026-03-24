@@ -286,6 +286,7 @@ de_CH:
         updated_at: Geändert
         created_at: Erstellt
       event:
+        internal_comment: Interne Bemerkungen
         unconfirmed_count: Unbestätigte
         maximum_age: Maximalalter
         ideal_class_size: Ideale Klassengrösse
@@ -484,7 +485,6 @@ de_CH:
       event/tour:
         ascent: Aufstieg
         descent: Abstieg
-        internal_comment: Interne Bemerkungen
         minimum_age: Mindestalter
         season: Saison
         seasons:
