@@ -56,24 +56,24 @@ describe EventsHelper do
       expect(html).to match(
         %r{
           <li>
-          <a\ .+?>.*?<span>Wandern</span>.*?</a>
+          <a\ .+?>Wandern</a>
           \s*\(
-            <a\ .+?>.*?<span>Wanderweg</span>.*?</a>
+            <a\ .+?>Wanderweg</a>
             ,\s*
-            <a\ .+?>.*?<span>Bergtour</span>.*?</a>
+            <a\ .+?>Bergtour</a>
           \)
           </li>
         }x
       )
-      expect(html).to match(/<li><a .+?>.*?Klettern.*?<\/a>\s*\(<a .+?>.*?Fels.*?<\/a>\)<\/li>/)
+      expect(html).to match(/<li><a .+?>Klettern<\/a> \(<a .+?>Fels<\/a>\)<\/li>/)
     end
 
     it "returns list of parents without children for target groups" do
       event.target_groups = event_target_groups(:erwachsene, :senioren_b)
 
       html = format_event_target_groups(event)
-      expect(html).to match(/<li><a .+?>.*?Erwachsene.*?<\/a><\/li>/)
-      expect(html).to match(/<li><a .+?>.*?Senioren.*?<\/a>\s*\(<a .+?>.*?Senioren B.*?<\/a>\)<\/li>/)
+      expect(html).to match(/<li><a .+?>Erwachsene<\/a><\/li>/)
+      expect(html).to match(/<li><a .+?>Senioren<\/a> \(<a .+?>Senioren B<\/a>\)<\/li>/)
     end
 
     it "returns list with unwrapped children and custom separator for technical requirements" do
@@ -81,8 +81,8 @@ describe EventsHelper do
       event_technical_requirements(:skitouren_ws).update!(label: "<b>WS</b>")
 
       html = format_event_technical_requirements(event)
-      expect(html).to match(/<li><a .+?>.*?Französische Kletterskala.*?<\/a>:\s*.*?5a.*?,.*?5b\+.*?<\/li>/)
-      expect(html).to match(/<li><a .+?>.*?Skitourenskala.*?<\/a>:\s*.*?&lt;b&gt;WS&lt;\/b&gt;.*?<\/li>/)
+      expect(html).to match(/<li><a .+?>Französische Kletterskala<\/a>: 5a, 5b\+<\/li>/)
+      expect(html).to match(/<li><a .+?>Skitourenskala<\/a>: &lt;b&gt;WS&lt;\/b&gt;<\/li>/)
     end
 
     it "returns comma separated list for traits" do
@@ -90,7 +90,7 @@ describe EventsHelper do
       event_traits(:public_transport).update!(description: "Oder mit dem Velo")
 
       html = format_event_traits(event)
-      expect(html).to match(/<a .+?>.*?Anreise mit ÖV.*?<\/a>,\s*.*?Arbeitseinsatz.*?,\s*.*?Exkursion.*?/)
+      expect(html).to match(/<a .+?>Anreise mit ÖV<\/a>, Arbeitseinsatz, Exkursion/)
     end
   end
 end

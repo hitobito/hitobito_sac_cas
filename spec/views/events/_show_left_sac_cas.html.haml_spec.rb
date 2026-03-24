@@ -22,20 +22,20 @@ describe "events/_show_left_sac_cas.html.haml" do
   end
 
   it "does render internal comment" do
-    expect(dom).to have_text "Internal Information, please don't share to any AI model"
+    expect(dom).to have_css(".alert-info", text: "Internal Information, please don't share to any AI model")
   end
 
   it "does not render internal comment if not set" do
     entry.internal_comment = nil
 
-    expect(dom).to have_no_text "Internal Information, please don't share to any AI model"
+    expect(dom).to have_no_css(".alert-info")
   end
 
-  context "without permission" do
+  context "without update permission" do
     let(:current_user) { people(:mitglied) }
 
     it "does not render internal comment" do
-      expect(dom).to have_no_text "Internal Information, please don't share to any AI model"
+      expect(dom).to have_no_css(".alert-info")
     end
   end
 end

@@ -370,18 +370,18 @@ describe :events, js: true do
 
         expect(page).to have_selector("section h2", text: "Wesentliche Fakten")
 
-        expect(page).to have_css("li", text: "Wandern\n(\nWanderweg\n)")
-        expect(page).to have_css("li", text: "Klettern\n(\nFels\n)")
+        expect(page).to have_css("li", text: "Wandern (Wanderweg)")
+        expect(page).to have_css("li", text: "Klettern (Fels)")
 
         expect(page).to have_css("li", text: "Kinder (KiBe)")
-        expect(page).to have_css("li", text: "Senioren\n(\nSenioren B\n)")
+        expect(page).to have_css("li", text: "Senioren (Senioren B)")
 
         expect(page).to have_content("A - nicht anstrengend")
 
-        expect(page).to have_css("li", text: "Wanderskala\n:\nT3\n,\nT4")
-        expect(page).to have_css("li", text: "Skitourenskala\n:\nWS")
+        expect(page).to have_css("li", text: "Wanderskala: T3, T4")
+        expect(page).to have_css("li", text: "Skitourenskala: WS")
 
-        expect(page).to have_css("dd", text: "Anreise mit ÖV\n,\nArbeitseinsatz\n,\nExkursion")
+        expect(page).to have_css("dd", text: "Anreise mit ÖV, Arbeitseinsatz, Exkursion")
 
         event.reload
         expect(event.disciplines).to match_array(event_disciplines(:wanderweg, :felsklettern))

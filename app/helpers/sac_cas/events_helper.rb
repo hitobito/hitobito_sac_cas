@@ -118,12 +118,13 @@ module SacCas::EventsHelper
   end
 
   def render_event_essential(entry)
-    label_content = tag.div(class: "d-inline-flex align-items-center") do
-      if entry.try(:color).present?
-        concat tag.i(class: "fas fa-circle",
-          style: "color: #{entry.color};")
-      end
-      concat tag.span(entry.label, class: ("ms-1" if entry.try(:color).present?))
+    label_content = if entry.try(:color).present?
+      safe_join([
+        icon(:circle, style: "color: #{entry.color}"),
+        content_tag(:span, entry.label, class: "ms-1")
+      ])
+    else
+      entry.label
     end
 
     if entry.description.present?
