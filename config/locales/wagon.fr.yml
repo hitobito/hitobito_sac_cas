@@ -476,8 +476,6 @@ fr:
           canceled: Abgemeldet
           attended: Teilgenommen
           absent: Nicht erschienen
-      event/role:
-        self_employed: Activité indépendante
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -1699,10 +1697,6 @@ fr:
         Annule le cours %{name} (%{number}) et annule toutes les participations. Les éventuelles factures seront ainsi annulées et les montants déjà payés seront remboursés. Cette action ne peut pas être annulée.
       inform_participants_caption: Informer tou·te·s les participants de l'annulation par e-mail
       canceled_reason_label: motif
-
-    roles:
-      self_employed: Activité indépendante
-      not_self_employed: salarié·e
 
     sections:
       essentials: Wesentliche Fakten

@@ -9,28 +9,52 @@ class Group::SacCasKurskader < ::Group
   self.static_name = true
 
   ### ROLES
-  class Kursleiter < ::Role
+  class KursleitungSelbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class Klassenlehrer < ::Role
+  class KlassenleitungSelbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class KursleiterAspirant < ::Role
+  class KursleitungAspirantSelbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  class KlassenlehrerAspirant < ::Role
+  class KlassenleitungAspirantSelbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
-  roles Kursleiter,
-    Klassenlehrer,
-    KursleiterAspirant,
-    KlassenlehrerAspirant
+  class KursleitungUnselbstaendig < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class KlassenleitungUnselbstaendig < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class KursleitungAspirantUnselbstaendig < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  class KlassenleitungAspirantUnselbstaendig < ::Role
+    self.permissions = []
+    self.basic_permissions_only = true
+  end
+
+  roles KursleitungSelbstaendig,
+    KlassenleitungSelbstaendig,
+    KursleitungAspirantSelbstaendig,
+    KlassenleitungAspirantSelbstaendig,
+    KursleitungUnselbstaendig,
+    KlassenleitungUnselbstaendig,
+    KursleitungAspirantUnselbstaendig,
+    KlassenleitungAspirantUnselbstaendig
 end

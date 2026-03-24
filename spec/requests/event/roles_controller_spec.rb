@@ -35,7 +35,6 @@ describe Event::RolesController do
         expect(response).to be_successful
         expect_common_fields
         expect(response.body).to include("Allfällige Teilnehmer*Innen-Rolle entfernen")
-        expect(response.body).to include("Selbständig erwerbend")
       end
     end
 
@@ -44,12 +43,11 @@ describe Event::RolesController do
       let(:event) { Fabricate(:course, groups: [group]) }
       let(:event_role) { Event::Course::Role::Participant }
 
-      it "Shows the form without the self_employed field" do
+      it "Shows the form" do
         request
         expect(response).to be_successful
         expect_common_fields
         expect(response.body).not_to include("Allfällige Teilnehmer*Innen-Rolle entfernen")
-        expect(response.body).not_to include("Selbständig erwerbend")
       end
     end
 
@@ -57,12 +55,11 @@ describe Event::RolesController do
       let(:event) { Fabricate(:event, groups: [group]) }
       let(:event_role) { Event::Role::Leader }
 
-      it "Shows the form without the self_employed field" do
+      it "Shows the form" do
         request
         expect(response).to be_successful
         expect_common_fields
         expect(response.body).to include("Allfällige Teilnehmer*Innen-Rolle entfernen")
-        expect(response.body).not_to include("Selbständig erwerbend")
       end
     end
 
@@ -70,7 +67,7 @@ describe Event::RolesController do
       let(:event) { Fabricate(:event, groups: [group]) }
       let(:event_role) { Event::Role::Participant }
 
-      it "Shows the form without the self_employed field" do
+      it "Shows the form" do
         request
         expect(response).to be_successful
         expect_common_fields

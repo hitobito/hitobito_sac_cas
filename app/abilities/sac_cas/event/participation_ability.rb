@@ -62,7 +62,15 @@ module SacCas::Event::ParticipationAbility
   private
 
   def self_employed_leader
-    contains_any?(Event::Course::LEADER_ROLES,
-      participation.roles.select(&:self_employed).map(&:type))
+    participation.person
+      .roles_unscoped
+      .where("start_on <= :event_start_at AND (end_on IS NULL OR end_on >= :event_start_at)",
+        event_start_at: event.start_at)
+      .where(type: [
+        "Group::SacCasKurskader::KursleitungSelbstaendig",
+        "Group::SacCasKurskader::KursleitungAspirantSelbstaendig",
+        "Group::SacCasKurskader::KlassenleitungSelbstaendig",
+        "Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig"
+      ]).exists?
   end
 end

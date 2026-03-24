@@ -472,8 +472,6 @@ en:
           canceled: Abgemeldet
           attended: Teilgenommen
           absent: Nicht erschienen
-      event/role:
-        self_employed: Selbständig erwerbend
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -1638,10 +1636,6 @@ en:
         Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
-
-    roles:
-      self_employed: selbständig erwerbend
-      not_self_employed: unselbständig erwerbend
 
     sections:
       essentials: Wesentliche Fakten

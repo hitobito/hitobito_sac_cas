@@ -474,8 +474,6 @@ it:
           canceled: Abgemeldet
           attended: Teilgenommen
           absent: Nicht erschienen
-      event/role:
-        self_employed: Lavoratore autonomo
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -1697,10 +1695,6 @@ it:
         Cancella il corso %{name} (%{number}) e annulla tutte le partecipazioni. In questo modo tutte le eventuali fatture saranno stornate e gli jmporti già versati saranno rimborsati. Questa operazione non può essere annullata.
       inform_participants_caption: Informare tutti i partecipanti della cancellazione tramite e-mail
       canceled_reason_label: Motivazione
-
-    roles:
-      self_employed: lavoratore autonomo
-      not_self_employed: lavoratore dipendente
 
     sections:
       essentials: Wesentliche Fakten

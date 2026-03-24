@@ -4,7 +4,6 @@ The output of `rake app:hitobito:roles[true]` will show you the roles hierarchy:
 
 ```txt
     * Schweizer Alpen-Club SAC
-      * Schweizer Alpen-Club SAC
       * SAC Geschäftsstelle
         * Mitarbeiter*in (schreibend): 2FA [:layer_and_below_full, :read_all_people]  --  (Group::Geschaeftsstelle::Mitarbeiter)
         * Mitarbeiter*in (lesend): 2FA [:layer_and_below_read, :read_all_people]  --  (Group::Geschaeftsstelle::MitarbeiterLesend)
@@ -59,17 +58,23 @@ The output of `rake app:hitobito:roles[true]` will show you the roles hierarchy:
         * Hüttenchef*in: []  --  (Group::SacCasClubhuette::Huettenchef)
         * Andere: []  --  (Group::SacCasClubhuette::Andere)
       * SAC Kurskader
-        * Kursleiter*in: []  --  (Group::SacCasKurskader::Kursleiter)
-        * Klassenlehrer*in: []  --  (Group::SacCasKurskader::Klassenlehrer)
-        * Kursleiter*in (Aspirant): []  --  (Group::SacCasKurskader::KursleiterAspirant)
-        * Klassenlehrer*in (Aspirant): []  --  (Group::SacCasKurskader::KlassenlehrerAspirant)
+        * Kursleiter*in (selbständig): []  --  (Group::SacCasKurskader::KursleitungSelbstaendig)
+        * Klassenleiter*in (selbständig): []  --  (Group::SacCasKurskader::KlassenleitungSelbstaendig)
+        * Kursleiter*in (Aspirant, selbständig): []  --  (Group::SacCasKurskader::KursleitungAspirantSelbstaendig)
+        * Klassenleiter*in (Aspirant, selbständig): []  --  (Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig)
+        * Kursleiter*in (unselbständig): []  --  (Group::SacCasKurskader::KursleitungUnselbstaendig)
+        * Klassenleiter*in (unselbständig): []  --  (Group::SacCasKurskader::KlassenleitungUnselbstaendig)
+        * Kursleiter*in (Aspirant, unselbständig): []  --  (Group::SacCasKurskader::KursleitungAspirantUnselbstaendig)
+        * Klassenleiter*in (Aspirant, unselbständig): []  --  (Group::SacCasKurskader::KlassenleitungAspirantUnselbstaendig)
       * Verbände & Organisationen
       * Verband & Organisation
         * Präsidium: []  --  (Group::SacCasVerband::Praesidium)
         * Mitglied: []  --  (Group::SacCasVerband::Mitglied)
         * Andere: []  --  (Group::SacCasVerband::Andere)
-    * Sektion
-    * Ortsgruppe
+    * Sektion < Schweizer Alpen-Club SAC
+      * Sektion
+    * Ortsgruppe < Sektion
+      * Ortsgruppe
     * Global
       * Sektionsfunktionäre
         * Präsidium: []  --  (Group::SektionsFunktionaere::Praesidium)
@@ -91,11 +96,11 @@ The output of `rake app:hitobito:roles[true]` will show you the roles hierarchy:
         * Schreibrecht: 2FA [:group_and_below_full]  --  (Group::SektionsVorstand::Schreibrecht)
         * Andere: [:group_read]  --  (Group::SektionsVorstand::Andere)
       * Touren und Kurse
-        * Tourenleiter*in (mit Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::Tourenleiter)
-        * Tourenleiter*in (ohne Qualifikation): [:layer_events_full]  --  (Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation)
-        * Tourenchef*in: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::Tourenchef)
-        * Tourenchef*in Sommer: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::TourenchefSommer)
-        * Tourenchef*in Winter: 2FA [:layer_and_below_read, :layer_events_full, :layer_mitglieder_full, :layer_touren_und_kurse_full]  --  (Group::SektionsTourenUndKurse::TourenchefWinter)
+        * Tourenleiter*in (mit Qualifikation): [:layer_created_events_full]  --  (Group::SektionsTourenUndKurse::Tourenleiter)
+        * Tourenleiter*in (ohne Qualifikation): [:layer_created_events_full]  --  (Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation)
+        * Tourenchef*in: 2FA [:group_and_below_full, :layer_and_below_read, :layer_events_full, :layer_mitglieder_full]  --  (Group::SektionsTourenUndKurse::Tourenchef)
+        * Tourenchef*in Sommer: 2FA [:group_and_below_full, :layer_and_below_read, :layer_events_full, :layer_mitglieder_full]  --  (Group::SektionsTourenUndKurse::TourenchefSommer)
+        * Tourenchef*in Winter: 2FA [:group_and_below_full, :layer_and_below_read, :layer_events_full, :layer_mitglieder_full]  --  (Group::SektionsTourenUndKurse::TourenchefWinter)
         * KiBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::KibeChef)
         * FaBe-Chef*in: []  --  (Group::SektionsTourenUndKurse::FabeChef)
         * JO-Chef*in: []  --  (Group::SektionsTourenUndKurse::JoChef)
