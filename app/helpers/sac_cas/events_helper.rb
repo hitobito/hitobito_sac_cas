@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -118,10 +118,19 @@ module SacCas::EventsHelper
   end
 
   def render_event_essential(entry)
-    if entry.description.present?
-      with_tooltip(entry.label, entry.description)
+    label_content = if entry.try(:color).present?
+      safe_join([
+        icon(:circle, style: "color: #{entry.color}"),
+        content_tag(:span, entry.label, class: "ms-1")
+      ])
     else
       entry.label
+    end
+
+    if entry.description.present?
+      with_tooltip(label_content, entry.description)
+    else
+      label_content
     end
   end
 end

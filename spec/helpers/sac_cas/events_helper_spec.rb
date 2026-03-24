@@ -53,7 +53,18 @@ describe EventsHelper do
       event.disciplines = event_disciplines(:bergtour, :wanderweg, :felsklettern)
 
       html = format_event_disciplines(event)
-      expect(html).to match(/<li><a .+?>Wandern<\/a> \(<a .+?>Wanderweg<\/a>, <a .+?>Bergtour<\/a>\)<\/li>/)
+      expect(html).to match(
+        %r{
+          <li>
+          <a\ .+?>Wandern</a>
+          \s*\(
+            <a\ .+?>Wanderweg</a>
+            ,\s*
+            <a\ .+?>Bergtour</a>
+          \)
+          </li>
+        }x
+      )
       expect(html).to match(/<li><a .+?>Klettern<\/a> \(<a .+?>Fels<\/a>\)<\/li>/)
     end
 
