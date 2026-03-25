@@ -31,11 +31,11 @@ module TTY
 
       def run(dry_run: false)
         Role.transaction do
-          roles = Role.where(type: ROLE_TYPES, terminated: false, end_on: @from)
+          roles = Role.where(type: ROLE_TYPES.map(&:sti_name), terminated: false, end_on: @from)
           people_count = roles.count("distinct(person_id)")
           puts "affects #{roles.count} roles and #{people_count} people" # rubocop:disable Rails/Output
 
-          count = roles.update_all(end_on: @to) unless dry_run
+          roles.update_all(end_on: @to) unless dry_run
         end
       end
     end
