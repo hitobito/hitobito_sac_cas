@@ -23,7 +23,7 @@ module TTY
       super
     end
 
-    def run
+    def run(*args, **kwargs)
       set_papertrail_metadata
       super
     end

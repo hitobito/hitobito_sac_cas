@@ -15,10 +15,11 @@ module TTY
     self.description = "Manage memberships"
 
     MENU_ACTIONS = {
-      "p" => TTY::Memberships::PromoteNeuanmeldung,
-      "s" => TTY::Memberships::SwapStammsektion,
-      "u" => TTY::Memberships::UndoTermination,
-      "e" => TTY::Memberships::EditRole
+      "1" => TTY::Memberships::PromoteNeuanmeldung,
+      "2" => TTY::Memberships::SwapStammsektion,
+      "3" => TTY::Memberships::UndoTermination,
+      "4" => TTY::Memberships::EditRole,
+      "5" => TTY::Memberships::ProlongMembershipRoles
     }.freeze
 
     def run
