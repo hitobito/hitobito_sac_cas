@@ -6,6 +6,25 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::EventsHelper
+  # Temporary fix for core compatibility, should be removed once core `EventsHelper`
+  # implements the `with_tooltip` method.
+  def self.prepended(base)
+    return if base.method_defined?(:with_tooltip)
+
+    base.class_eval do
+      def with_tooltip(text, tooltip)
+        content_tag(
+          :a,
+          text,
+          href: "#",
+          title: tooltip,
+          class: "with-tooltip",
+          data: {bs_toggle: "tooltip", bs_placement: "bottom"}
+        )
+      end
+    end
+  end
+
   def format_event_application_conditions(entry)
     if entry.application_conditions.present?
       safe_auto_link(entry.application_conditions, html: {target: "_blank"})
