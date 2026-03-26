@@ -41,6 +41,8 @@ module SacCas::Event::Participation
 
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
 
+    paper_trail_options[:skip] |= ["previous_state"]
+
     before_validation :clear_price_without_category
     before_validation :round_actual_days
     before_save :update_previous_state, if: :state_changed?
@@ -54,8 +56,6 @@ module SacCas::Event::Participation
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
     validate :assert_actual_days_size, if: :actual_days_changed?
-
-    after_save :create_event_paper_trail_version, if: :saved_change_to_state?
   end
 
   def subsidizable?
@@ -81,17 +81,6 @@ module SacCas::Event::Participation
   end
 
   private
-
-  def create_event_paper_trail_version
-    PaperTrail::Version.create!(
-      item: self,
-      main: event,
-      event: "update",
-      object: attributes.to_yaml,
-      object_changes: {"state" => saved_changes[:state]}.to_yaml,
-      whodunnit: PaperTrail.request.whodunnit
-    )
-  end
 
   def round_actual_days
     if new_record? && roles.any? { |r| r.class.participant? }
