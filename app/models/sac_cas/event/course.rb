@@ -131,6 +131,7 @@ module SacCas::Event::Course
       :similar_tours,
       :program,
       :book_discount_code,
+      :internal_comment,
       *PRICE_ATTRIBUTES
     ]
 

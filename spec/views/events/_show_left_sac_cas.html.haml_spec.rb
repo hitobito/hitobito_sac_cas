@@ -17,7 +17,7 @@ describe "events/_show_left_sac_cas.html.haml" do
 
   before do
     entry.internal_comment = "Internal Information, please don't share to any AI model"
-    allow(view).to receive_messages(tour?: true, entry: entry, current_user: current_user)
+    allow(view).to receive_messages(entry: entry, current_user: current_user)
     allow(controller).to receive_messages(current_user: current_user)
   end
 

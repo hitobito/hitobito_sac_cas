@@ -42,6 +42,7 @@ describe "events/_form.html.haml" do
       expect(dom).not_to have_select "Saison"
       expect(dom).not_to have_select "Kursbeginn"
       expect(dom).not_to have_field "Mindestalter"
+      expect(dom).to have_field "Interne Bemerkungen"
     end
   end
 
@@ -66,6 +67,7 @@ describe "events/_form.html.haml" do
       expect(dom).to have_select "Saison"
       expect(dom).to have_select "Kursbeginn"
       expect(dom).to have_field "Mindestalter"
+      expect(dom).to have_field "Interne Bemerkungen"
     end
   end
 
