@@ -91,8 +91,16 @@ describe Event::Tour do
 
         it "does not allow more than two digits" do
           tour.send(:"#{attr}=", 123)
-
           is_expected.not_to be_valid
+
+          tour.send(:"#{attr}=", 12.3)
+          is_expected.not_to be_valid
+
+          tour.send(:"#{attr}=", 12)
+          is_expected.to be_valid
+
+          tour.send(:"#{attr}=", 1)
+          is_expected.to be_valid
         end
 
         it "allows nil" do

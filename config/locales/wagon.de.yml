@@ -33,6 +33,8 @@ de:
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
+    duration_hour_unit: h
+    duration_minute_unit: m
     elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
 
@@ -495,9 +497,8 @@ de:
         alternative_route: Alternativroute
         ascent: Aufstieg
         descent: Abstieg
-        duration_h: Zeitaufwand (h)
-        duration_m: Zeitaufwand (m)
-        internal_comment: Interne Bemerkungen
+        duration_h: Zeitaufwand
+        duration_m: Zeitaufwand
         maps: Karten
         minimum_age: Mindestalter
         price_description: Beschreibung
