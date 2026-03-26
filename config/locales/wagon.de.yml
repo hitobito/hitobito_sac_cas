@@ -1445,7 +1445,7 @@ de:
           warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
     disciplines:
       form:
-        help_inline_color: 'Gültiger hexadezimaler Farbwert (zb. #fcba03)'
+        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen
@@ -1690,12 +1690,6 @@ de:
 
     sections:
       essentials: Wesentliche Fakten
-  external_trainings:
-    form:
-      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
-    create:
-      flash:
-        success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
 
   events/state:
     flash:
@@ -1792,6 +1786,13 @@ de:
     section_active: Aktive Mitglieder am %{to}
     section_eintritte: Eintritte %{from} - %{to}
     section_austritte: Austritte %{from} - %{to}
+
+  external_trainings:
+    form:
+      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
+    create:
+      flash:
+        success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter

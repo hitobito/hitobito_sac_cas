@@ -45,6 +45,10 @@ Rails.application.routes.draw do
       resources :events, only: [] do
         collection do
           get 'tour' => 'events#index', type: 'Event::Tour'
+
+          scope module: "events", only: [:new, :create] do
+            resources :filters, path: "tour/filters", as: "events_tour_filters", type: "Event::Tour"
+          end
         end
         scope module: "event" do
           resource :key_data_sheets, only: [:create], module: :courses
