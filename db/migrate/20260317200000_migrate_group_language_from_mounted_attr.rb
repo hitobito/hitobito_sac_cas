@@ -10,7 +10,7 @@ class MigrateGroupLanguageFromMountedAttr < ActiveRecord::Migration[8.0]
     MountedAttribute.where(entry_type: "Group", key: "language").find_each do |mounted_attr|
       group = Group.find_by(id: mounted_attr.entry_id)
       next unless group
-      group.update_attribute(:language, mounted_attr.attributes["value"].downcase)
+      group.update_column(:language, mounted_attr.attributes["value"].downcase)
     end
 
     MountedAttribute.where(entry_type: "Group", key: "language").delete_all
