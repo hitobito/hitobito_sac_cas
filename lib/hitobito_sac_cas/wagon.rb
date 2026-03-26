@@ -68,7 +68,7 @@ module HitobitoSacCas
 
       HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
 
-      MailingLists::Filter::Chain::TYPES << Person::Filter::InvoiceReceiver
+      MailingLists::Filter::Chain.types << Person::Filter::InvoiceReceiver
 
       ChangelogEntry.regex_substitutions[/\b(HIT-\d+)\b/] =
         ChangelogEntry.markdown_link(label: '\1', url: 'https://saccas.atlassian.net/browse/\1')

@@ -11,6 +11,8 @@ class Person::QueryExternalTrainingController < Person::QueryController
   def scope
     Person
       .accessible_by(PersonWritables.new(current_user))
-      .distinct.joins(roles: :group)
+      .distinct
+      .joins(roles: :group)
+      .only_public_data
   end
 end
