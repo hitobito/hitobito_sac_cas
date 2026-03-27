@@ -489,7 +489,6 @@ it:
       event/tour:
         ascent: Aufstieg
         descent: Abstieg
-        internal_comment: Interne Bemerkungen
         minimum_age: Mindestalter
         season: Saison
         seasons:
