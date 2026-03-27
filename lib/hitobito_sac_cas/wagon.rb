@@ -74,6 +74,7 @@ module HitobitoSacCas
         ChangelogEntry.markdown_link(label: '\1', url: 'https://saccas.atlassian.net/browse/\1')
 
       # extend application classes here
+      Contactable::Address.prepend SacCas::Contactable::Address
       CustomContent.prepend SacCas::CustomContent
       Event.prepend SacCas::Event
       Event::Kind.prepend SacCas::Event::Kind
@@ -93,7 +94,6 @@ module HitobitoSacCas
       MailingList.include SacCas::MailingList
       Person.prepend SacCas::Person
       Person.prepend SacPhoneNumbers
-      Person::Address.prepend SacCas::Person::Address
       People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
       PhoneNumber.include SacCas::PhoneNumber

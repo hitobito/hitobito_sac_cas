@@ -48,7 +48,7 @@ module Export::Pdf::Participations
       end
     end
 
-    def sender_address = Person::Address.new(person).for_letter_with_invoice
+    def sender_address = Contactable::Address.new(person).for_letter_with_invoice
 
     def title = "#{event.number} — #{event.name}"
 
