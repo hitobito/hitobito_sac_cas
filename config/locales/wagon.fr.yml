@@ -1410,6 +1410,8 @@ fr:
       create:
         confirm_email_before_logging_in: >
           Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation. Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à mv@sac-cas.ch en indiquant ton adresse e-mail stp.
+      oauth_info:
+        sign_in: Se connnecter avec le Portail du CAS
   doorkeeper:
     scopes:
       user_groups: "Lire tes groupes, rôles et champs calculés."
@@ -2347,6 +2349,14 @@ fr:
       link_data_protection: "https://www.sac-cas.ch/fr/meta/protection-des-donnees/"
       link_data_protection_title: Protection des données
       link_membership_title: Demander une adhésion maintenant
+
+  oauth:
+    infos_component:
+      title_questions: Des questions sur le login?
+      title_contact: Contact
+      additional_infos: "Tu trouversa de plus amples informations sur %{link}."
+      link_faqs: "https://www.sac-cas.ch/fr/meta/faq/faq-compte-cas-/-portail-du-cas/"
+      link_faqs_title: FAQ
 
   sheet/memberships/join_zusatzsektion:
     title: Rejoindre la section supplémentaire
