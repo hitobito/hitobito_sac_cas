@@ -96,6 +96,16 @@ describe "events/_form.html.haml" do
       expect(dom).to have_field "Maximalalter"
       expect(dom).to have_field "Link zum Tourenportal"
       expect(dom).to have_field "Ist Subito-Tour"
+      expect(dom).to have_field "Zeitaufwand"
+      expect(dom).to have_field "event_duration_h"
+      expect(dom).to have_field "event_duration_m"
+      expect(dom).to have_field "Karten"
+      expect(dom).to have_field "Alternativroute"
+      expect(dom).to have_field "Zusatzinfo"
+      expect(dom).to have_field "Kosten SAC Sektionsmitglied"
+      expect(dom).to have_field "Kosten SAC-Mitglied (extern)"
+      expect(dom).to have_field "Kosten nicht-SAC-Mitglied (Gast)"
+      expect(dom).to have_field "Beschreibung"
     end
   end
 end

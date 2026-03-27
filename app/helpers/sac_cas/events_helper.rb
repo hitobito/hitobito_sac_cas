@@ -86,10 +86,12 @@ module SacCas::EventsHelper
   end
 
   def price_category_label(entry, attr)
+    i18n_key = entry.decorated? ? entry.object.model_name.i18n_key : entry.model_name.i18n_key
+
     if entry&.kind&.kind_category&.j_s_course
-      I18n.t("activerecord.attributes.event/course.j_s_#{attr}")
+      I18n.t("activerecord.attributes.#{i18n_key}.j_s_#{attr}")
     else
-      I18n.t("activerecord.attributes.event/course.#{attr}")
+      I18n.t("activerecord.attributes.#{i18n_key}.#{attr}")
     end
   end
 

@@ -33,6 +33,8 @@ de:
       website: "https://www.sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
+    duration_hour_unit: h
+    duration_minute_unit: m
     elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
 
@@ -293,6 +295,7 @@ de:
         updated_at: Geändert
         created_at: Erstellt
       event:
+        id: Event-ID
         internal_comment: Interne Bemerkungen
         unconfirmed_count: Unbestätigte
         maximum_age: Maximalalter
@@ -490,9 +493,18 @@ de:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        additional_info: Zusatzinfo
+        alternative_route: Alternativroute
         ascent: Aufstieg
         descent: Abstieg
+        duration_h: Zeitaufwand
+        duration_m: Zeitaufwand
+        maps: Karten
         minimum_age: Mindestalter
+        price_description: Beschreibung
+        price_member: Kosten SAC-Mitglied (extern)
+        price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        price_special: Kosten SAC Sektionsmitglied
         season: Saison
         seasons:
           winter: Winter

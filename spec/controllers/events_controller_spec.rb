@@ -127,7 +127,7 @@ describe EventsController do
 
         expect(dom).to have_css("h1", text: event.name)
         expect(dom.all("li.nav-item a").map(&:text))
-          .to eq(["Allgemein", "Daten", "Anmeldung", "Anmeldeangaben", "Administrationsangaben"])
+          .to eq(["Allgemein", "Daten", "Anmeldung", "Preise", "Anmeldeangaben", "Administrationsangaben"])
       end
 
       it "does not display certain fields in state review" do
