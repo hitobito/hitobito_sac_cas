@@ -43,7 +43,7 @@ class Export::Pdf::Passes::Membership
     private
 
     def person_address
-      ::Person::Address.new(person).for_membership_pass
+      ::Contactable::Address.new(person).for_membership_pass
     end
 
     def person_name
