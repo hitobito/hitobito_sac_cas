@@ -10,3 +10,4 @@ AllCops:
     - config/**/*
     - bin/**/*
     - tmp/**/*
+    - lib/tty/**/*
