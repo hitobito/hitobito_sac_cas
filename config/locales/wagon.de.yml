@@ -2351,6 +2351,14 @@ de:
       link:
         add: Neu
 
+  login:
+    infos_component:
+      title_questions: Fragen zum Login?
+      title_contact: Kontakt
+      additional_infos: Mehr Informationen findest du unter den %{link}.
+      link_faqs: https://www.sac-cas.ch/de/meta/faq/faq-sac-konto-/-sac-portal/
+      link_faqs_title: FAQs
+
   self_registration:
     infos_component:
       title_questions: Fragen zur Mitgliedschaft?
@@ -2370,14 +2378,6 @@ de:
       link_data_protection: https://www.sac-cas.ch/de/meta/datenschutz
       link_data_protection_title: Datenschutzerklärung
       link_membership_title: Jetzt Mitgliedschaft beantragen
-
-  oauth:
-    infos_component:
-      title_questions: Fragen zum Login?
-      title_contact: Kontakt
-      additional_infos: Mehr Informationen findest du unter den %{link}.
-      link_faqs: https://www.sac-cas.ch/de/meta/faq/faq-sac-konto-/-sac-portal/
-      link_faqs_title: FAQs
 
   sheet/memberships/join_zusatzsektion:
     title: Zusatzsektion beitreten

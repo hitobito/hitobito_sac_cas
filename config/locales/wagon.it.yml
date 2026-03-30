@@ -2328,6 +2328,13 @@ it:
       link:
         add: Nuovo
 
+  login:
+    infos_component:
+      title_questions: "Domande sull'accesso?"
+      title_contact: Contatto
+      additional_infos: "Trovi maggiori informazioni nelle %{link}."
+      link_faqs: "https://www.sac-cas.ch/it/faq/faq-account-cas-/-portale-cas/"
+      link_faqs_title: FAQ
   self_registration:
     infos_component:
       title_questions: "Domande sull’affiliazione?"
@@ -2347,14 +2354,6 @@ it:
       link_data_protection: "https://www.sac-cas.ch/it/datenschutz/"
       link_data_protection_title: Protezione dei dati
       link_membership_title: Richiedere ora l’affiliazione
-
-  oauth:
-    infos_component:
-      title_questions: "Domande sull'accesso?"
-      title_contact: Contatto
-      additional_infos: "Trovi maggiori informazioni nelle %{link}."
-      link_faqs: "https://www.sac-cas.ch/it/faq/faq-account-cas-/-portale-cas/"
-      link_faqs_title: FAQ
 
   sheet/memberships/join_zusatzsektion:
     title: Aderire a una sezione aggiuntiva

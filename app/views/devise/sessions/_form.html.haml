@@ -23,7 +23,4 @@
       = f.indented do
         = render "devise/sessions/helpful_links"
   %div{class: col_class}
-    - if oauth
-      = render(Oauth::InfosComponent.new)
-    - else
-      = render 'groups/contact_data', group: Group.root.decorate, only_public: true
+    = render(Login::InfosComponent.new)
