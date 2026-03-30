@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito.
 
 class Event::TourResource < EventResource
+  self.readable_class = EventResource.readable_class
+
   with_options writable: false, filterable: false, sortable: false do
     attribute :state, :string, filterable: true
     attribute :applicant_count, :integer
@@ -26,6 +28,6 @@ class Event::TourResource < EventResource
     foreign_key: :leads_course_id
 
   def base_scope
-    Event::Tour.all.accessible_by(index_ability).includes(:groups, :translations).list
+    super.includes(:groups, :translations).list
   end
 end

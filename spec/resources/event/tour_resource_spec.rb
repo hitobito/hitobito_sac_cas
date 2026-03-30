@@ -12,6 +12,8 @@ describe Event::TourResource, type: :resource do
   let(:event) { events(:section_tour) }
   let(:person) { people(:admin) }
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   it "includes attributes" do
     render
     data = jsonapi_data[0]

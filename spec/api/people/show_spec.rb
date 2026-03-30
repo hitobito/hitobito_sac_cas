@@ -8,8 +8,8 @@
 require "spec_helper"
 
 RSpec.describe "people#show", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
-    let(:token) { service_tokens(:permitted_root_layer_token).token }
+  it_behaves_like "jsonapi authorized requests", person: nil, required_scopes: [] do
+    let(:service_token) { service_tokens(:permitted_root_layer_token) }
     let(:person) do
       people(:admin).tap do |person|
         person.update!(sac_remark_national_office: "Remark", sac_remark_section_1: "Remark")

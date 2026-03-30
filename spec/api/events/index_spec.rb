@@ -8,8 +8,8 @@
 require "spec_helper"
 
 RSpec.describe "events#index", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
-    let!(:token) { service_tokens(:permitted_root_layer_token).token }
+  it_behaves_like "jsonapi authorized requests", person: :admin, required_scopes: [:events] do
+    let!(:service_token) { service_tokens(:permitted_root_layer_token) }
     let(:params) { {} }
 
     subject(:make_request) { jsonapi_get "/api/events", params: }
