@@ -18,10 +18,6 @@ class Event::LevelResource < ApplicationResource
   end
 
   def base_scope
-    Event::Level.accessible_by(index_ability).where(deleted_at: nil).list
-  end
-
-  def index_ability
-    JsonApi::Event::LevelAbility.new(current_ability)
+    Event::Level.all.accessible_by(JsonApi::Event::LevelAbility.new(current_ability))
   end
 end

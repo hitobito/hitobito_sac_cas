@@ -8,9 +8,9 @@
 require "spec_helper"
 
 RSpec.describe "external_invoices#update", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
+  it_behaves_like "jsonapi authorized requests", person: nil, required_scopes: [] do
     let(:group) { groups(:bluemlisalp) }
-    let(:token) { service_tokens(:permitted_root_layer_token).token }
+    let(:service_token) { service_tokens(:permitted_root_layer_token) }
     let!(:external_invoices) do
       Array.new(3) {
         Fabricate(:external_invoice, person: people(:admin), link: group, state: "open", total: 50,
@@ -21,6 +21,18 @@ RSpec.describe "external_invoices#update", type: :request do
 
     let(:external_invoice) { external_invoices.first }
 
+    let(:payload) do
+      {data: {
+        id: external_invoice.id.to_s,
+        type: "external_invoices",
+        attributes: {
+          state: "payed",
+          total: 100,
+          sent_at: "2024-01-01"
+        }
+      }}
+    end
+
     subject(:make_request) do
       Graphiti::Debugger.debug do
         jsonapi_put "/api/external_invoices/#{external_invoice.id}?debug=true", payload
@@ -28,18 +40,6 @@ RSpec.describe "external_invoices#update", type: :request do
     end
 
     describe "basic update" do
-      let(:payload) do
-        {data: {
-          id: external_invoice.id.to_s,
-          type: "external_invoices",
-          attributes: {
-            state: "payed",
-            total: 100,
-            sent_at: "2024-01-01"
-          }
-        }}
-      end
-
       it "updates the resource" do
         expect(ExternalInvoiceResource).to receive(:find).and_call_original
         expect {

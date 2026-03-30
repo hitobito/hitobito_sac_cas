@@ -8,10 +8,8 @@
 require "spec_helper"
 
 RSpec.describe "external_invoices#index", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
-    let!(:token) {
-      service_tokens(:permitted_root_layer_token).token
-    }
+  it_behaves_like "jsonapi authorized requests", person: nil, required_scopes: [] do
+    let!(:service_token) { service_tokens(:permitted_root_layer_token) }
     let!(:external_invoices) do
       Array.new(3) {
         Fabricate(:external_invoice, person: people(:admin), link: groups(:bluemlisalp))

@@ -8,8 +8,8 @@
 require "spec_helper"
 
 RSpec.describe "event_levels#index", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
-    let!(:token) { service_tokens(:permitted_root_layer_token).token }
+  it_behaves_like "jsonapi authorized requests", person: nil, required_scopes: [] do
+    let!(:service_token) { service_tokens(:permitted_root_layer_token) }
     let!(:levels) { Fabricate.times(3, :event_level) + event_levels }
     let(:params) { {} }
 

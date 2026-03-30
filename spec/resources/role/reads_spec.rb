@@ -10,6 +10,8 @@ require "spec_helper"
 RSpec.describe RoleResource, type: :resource do
   let(:ability) { Ability.new(people(:admin)) }
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   describe "serialization" do
     let(:role) { roles(:familienmitglied) }
 

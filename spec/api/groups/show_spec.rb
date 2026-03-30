@@ -8,8 +8,8 @@
 require "spec_helper"
 
 RSpec.describe "groups#show", type: :request do
-  it_behaves_like "jsonapi authorized requests" do
-    let(:token) { service_tokens(:permitted_root_layer_token).token }
+  it_behaves_like "jsonapi authorized requests", person: :admin, required_scopes: [:groups] do
+    let(:service_token) { service_tokens(:permitted_root_layer_token) }
     let(:params) { {} }
     let(:group) { groups(:root) }
 

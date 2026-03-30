@@ -26,6 +26,8 @@ describe Event::KindResource, type: :resource do
     ]
   end
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   it "includes additional attributes" do
     render
     data = jsonapi_data[0]
