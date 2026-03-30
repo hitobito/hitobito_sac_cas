@@ -8,18 +8,16 @@
 module SacCas::TokenAbility
   private
 
-  def define_invoice_abilities
+  def initialize(token)
     super
 
     can :manage, ExternalInvoice if token.layer.root?
     can :manage, Event::Level if token.layer.root?
-  end
 
-  def define_event_abilities
-    super
-
-    can :"index_event/tours", Group do |g|
-      token_layer_and_below.include?(g)
+    if token.events?
+      can :"index_event/tours", Group do |g|
+        token_layer_and_below.include?(g)
+      end
     end
   end
 end

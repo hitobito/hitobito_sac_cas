@@ -36,10 +36,13 @@ class ExternalInvoiceResource < ApplicationResource
     attribute :updated_at, :datetime
   end
 
-  def index_ability
-    return current_ability if current_ability.is_a?(TokenAbility)
+  def base_scope
+    readable = if current_ability.is_a?(TokenAbility)
+      current_ability
+    else
+      JsonApi::ExternalInvoiceAbility.new(current_ability.user)
+    end
 
-    # Necessary because ExternalInvoiceAbility does not give us accessible_by
-    JsonApi::ExternalInvoiceAbility.new(current_ability.user_context.user)
+    ExternalInvoice.all.accessible_by(readable)
   end
 end

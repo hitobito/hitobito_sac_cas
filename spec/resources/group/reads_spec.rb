@@ -16,6 +16,8 @@ describe GroupResource, :draper_with_helpers, type: :resource do
   let(:ortsgruppe) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
   let(:geschaeftsstelle) { groups(:geschaeftsstelle) }
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   it "includes navision id" do
     params[:filter] = {id: {eq: bluemlisalp.id}}
     render

@@ -30,6 +30,8 @@ describe Event::CourseResource, type: :resource do
     ]
   end
 
+  before { allow(Graphiti.context[:object]).to receive(:current_scopes).and_return(["api"]) }
+
   it "includes additional attributes" do
     render
     data = jsonapi_data[0]
@@ -46,7 +48,7 @@ describe Event::CourseResource, type: :resource do
 
     params[:include] = "leaders"
     render
-    data = jsonapi_data[1]
+    data = jsonapi_data.find { |data| data.attributes["id"] == event.id.to_s }
     leaders = data.sideload(:leaders)
     expect(leaders.size).to eq(1)
     expect(leaders.first.id).to eq(leader.id)

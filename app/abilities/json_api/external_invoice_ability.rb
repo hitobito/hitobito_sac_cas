@@ -17,7 +17,7 @@ class JsonApi::ExternalInvoiceAbility
   private
 
   def allow_index
-    can :index, ExternalInvoice
+    can :read, ExternalInvoice
   end
 
   def backoffice?
