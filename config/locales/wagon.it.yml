@@ -15,7 +15,7 @@ it:
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
-    sac:
+    sac: &sac
       name: "Club Alpino Svizzero CAS"
       zentralverband: "Associazione centrale"
       address: "Monbijoustrasse 61"
@@ -31,6 +31,8 @@ it:
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
+    sac_oauth:
+      <<: *sac
     title_event/tour: Tour
     elevation_unit: Hm
     elevation_label: Auf-/Abstieg (Hm)
@@ -1408,6 +1410,8 @@ it:
       create:
         confirm_email_before_logging_in: >
           Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma.Se il vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di contattare mv@sac-cas.ch indicando il proprio indirizzo e-mail.
+      oauth_info:
+        sign_in: Accedi con il Portale CAS
   doorkeeper:
     scopes:
       user_groups: "Leggere i gruppi, i ruoli e i campi calcolati."
@@ -2326,6 +2330,13 @@ it:
       link:
         add: Nuovo
 
+  login:
+    infos_component:
+      title_questions: "Domande sull'accesso?"
+      title_contact: Contatto
+      additional_infos: "Trovi maggiori informazioni nelle %{link}."
+      link_faqs: "https://www.sac-cas.ch/it/faq/faq-account-cas-/-portale-cas/"
+      link_faqs_title: FAQ
   self_registration:
     infos_component:
       title_questions: "Domande sull’affiliazione?"
