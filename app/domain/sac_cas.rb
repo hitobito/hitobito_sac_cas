@@ -126,6 +126,7 @@ module SacCas
 
   PROTECTED_MAILING_LISTS_INTERNAL_KEYS = constants(false)
     .select { |c| c.to_s =~ /MAILING_LIST_.*INTERNAL_KEY/ }
+    .reject { |c| c.to_s =~ /MAILING_LIST_SEKTIONSBULLETIN.*INTERNAL_KEY/ }
     .map { |c| const_get(c) }
 
   AboCost = Data.define(:amount, :country)
