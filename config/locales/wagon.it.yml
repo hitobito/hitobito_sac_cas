@@ -15,7 +15,7 @@ it:
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
-    sac:
+    sac: &sac
       name: "Club Alpino Svizzero CAS"
       zentralverband: "Associazione centrale"
       address: "Monbijoustrasse 61"
@@ -31,6 +31,8 @@ it:
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
+    sac_oauth:
+      <<: *sac
     title_event/tour: Tour
     elevation_unit: Hm
     elevation_label: Auf-/Abstieg (Hm)
