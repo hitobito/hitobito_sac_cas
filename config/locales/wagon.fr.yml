@@ -33,7 +33,6 @@ fr:
       website: "https://www.sac-cas.ch"
     sac_oauth:
       <<: *sac
-      email_mv: "mv@sac-cas.ch"
     title_event/tour: course
     elevation_unit: Hm
     elevation_label: Auf-/Abstieg (Hm)
@@ -1413,7 +1412,8 @@ fr:
         confirm_email_before_logging_in: >
           Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation. Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à mv@sac-cas.ch en indiquant ton adresse e-mail stp.
       oauth_info:
-        sign_in: Se connnecter avec le Portail du CAS
+        sign_in: Anmelden mit dem SAC-Portal
+
   doorkeeper:
     scopes:
       user_groups: "Lire tes groupes, rôles et champs calculés."
@@ -2334,11 +2334,11 @@ fr:
 
   login:
     infos_component:
-      title_questions: Des questions sur le login?
-      title_contact: Contact
-      additional_infos: "Tu trouversa de plus amples informations sur %{link}."
-      link_faqs: "https://www.sac-cas.ch/fr/meta/faq/faq-compte-cas-/-portail-du-cas/"
-      link_faqs_title: FAQ
+      title_questions: "Fragen zum Login?"
+      title_contact: Kontakt
+      additional_infos: "Mehr Informationen findest du unter den %{link}."
+      link_faqs: "https://www.sac-cas.ch/de/meta/faq/faq-sac-konto-/-sac-portal/"
+      link_faqs_title: FAQs
 
   self_registration:
     infos_component:

@@ -15,7 +15,7 @@ de_CH:
     links:
       faq: "https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/"
       membership: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
-    sac:
+    sac: &sac
       name: "Schweizer Alpen-Club SAC"
       zentralverband: "Zentralverband"
       address: "Monbijoustrasse 61"
@@ -31,6 +31,8 @@ de_CH:
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
+    sac_oauth:
+      <<: *sac
     title_event/tour: Tour
     elevation_unit: Hm
     elevation_label: Auf-/Abstieg (Hm)
@@ -1349,6 +1351,9 @@ de_CH:
       create:
         confirm_email_before_logging_in: >
           Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+      oauth_info:
+        sign_in: Anmelden mit dem SAC-Portal
+
   doorkeeper:
     scopes:
       user_groups: "Lesen deiner Gruppen, Rollen und berechneter Felder."
@@ -2257,6 +2262,14 @@ de_CH:
     global:
       link:
         add: Neu
+
+  login:
+    infos_component:
+      title_questions: "Fragen zum Login?"
+      title_contact: Kontakt
+      additional_infos: "Mehr Informationen findest du unter den %{link}."
+      link_faqs: "https://www.sac-cas.ch/de/meta/faq/faq-sac-konto-/-sac-portal/"
+      link_faqs_title: FAQs
 
   self_registration:
     infos_component:
