@@ -21,8 +21,10 @@
   - if @event.course?
     = labeled(Event::Participation.human_attribute_name(:actual_days)) do
       = format_attr(entry, :actual_days)
+  - if @event.course? || @event.tour?
     = labeled(Event::Participation.human_attribute_name(:price)) do
       = format_attr(entry, :price)
+  - if @event.course?
     = labeled(Event::Participation.human_attribute_name(:invoice_state)) do
       = format_attr(entry, :invoice_state)
     = labeled(Event::Participation.human_attribute_name(:correspondence)) do
