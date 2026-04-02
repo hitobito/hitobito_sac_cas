@@ -40,6 +40,12 @@ class Event::Tour < Event
 
   belongs_to :fitness_requirement, optional: true
 
+  has_many :approvals,
+    dependent: :destroy,
+    class_name: "Event::Approval",
+    foreign_key: :event_id,
+    inverse_of: :event
+
   has_and_belongs_to_many :disciplines,
     join_table: :events_disciplines,
     class_name: "Event::Discipline",
