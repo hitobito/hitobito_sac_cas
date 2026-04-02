@@ -49,7 +49,7 @@ describe Event::Tour do
     end
 
     describe "season" do
-      let(:new_valid_value) { "Winter" }
+      let(:new_valid_value) { "winter" }
 
       it_behaves_like "presence validation for draft attributes", attribute: :season
       it_behaves_like "readonly for draft attributes", attribute: :season

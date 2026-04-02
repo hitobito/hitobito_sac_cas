@@ -144,6 +144,15 @@ module SacCas::Event::Course
       :hidden_contact_attrs
     ]
 
+    self.filterable_attrs += [
+      :brief_description,
+      :specialities,
+      :similar_tours,
+      :program,
+      :minimum_age,
+      :maximum_age
+    ]
+
     self.possible_participation_states = %w[unconfirmed applied rejected assigned summoned
       attended absent canceled annulled]
     self.active_participation_states = %w[assigned summoned attended]
@@ -161,9 +170,8 @@ module SacCas::Event::Course
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
     i18n_enum :canceled_reason, CANCELED_REASONS,
       i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
-    # rubocop:todo Layout/LineLength
-    enum :canceled_reason, CANCELED_REASONS # TODO convert column to string and remove this line for consistent enum handling
-    # rubocop:enable Layout/LineLength
+    # TODO: convert column to string and remove this line for consistent enum handling
+    enum :canceled_reason, CANCELED_REASONS
 
     attribute :waiting_list, default: false
 
@@ -180,9 +188,8 @@ module SacCas::Event::Course
     delegate :level, to: :kind, allow_nil: true
   end
 
-  # rubocop:todo Layout/LineLength
-  # This would be defined in Events::State, but is required again here because this module is prepended.
-  # rubocop:enable Layout/LineLength
+  # This would be defined in Events::State, but is required again here because this module is
+  # prepended.
   module ClassMethods
     def possible_states
       @possible_states ||= state_transitions.keys.map(&:to_s)

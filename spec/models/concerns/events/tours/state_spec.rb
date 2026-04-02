@@ -15,7 +15,7 @@ describe Events::Tours::State do
         target_groups: [event_target_groups(:kinder)],
         technical_requirements: [event_technical_requirements(:klettern)],
         fitness_requirement: event_fitness_requirements(:a),
-        season: "Sommer")
+        season: :summer)
     }
 
     before do

@@ -1,0 +1,19 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if [Event::Course, Event::Tour].include?(filter.event_type)
+  = f.fields_for(:sac) do |fields|
+    = render 'radios_field',
+             fields: fields,
+             group: :sac,
+             param: :season,
+             options: ['nil', 'summer', 'winter']
+
+    - if filter.event_type == Event::Tour
+      = render 'radios_field',
+               fields: fields,
+               group: :sac,
+               param: :subito,
+               options: ['nil', 'false', 'true']
