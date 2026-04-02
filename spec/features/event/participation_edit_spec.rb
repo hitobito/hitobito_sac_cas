@@ -42,11 +42,15 @@ describe "participation edit page", :js do
         expect(page).to have_css("option", text: "Keine Kosten")
         select "Keine Kosten"
       end
+
+      sleep(3)
+      expect(find("#event_participation_price").value).to eq "0.00"
+
       expect do
         click_on("Speichern")
         expect(page).to have_css(".alert",
           text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
-      end.to change { participation.reload.price }.from(10).to(nil)
+      end.to change { participation.reload.price }.from(10).to(0.0)
     end
 
     it "shows options for present prices" do
@@ -57,6 +61,10 @@ describe "participation edit page", :js do
         expect(page).to have_css("option", text: "Normalpreis CHF 20.00")
         select "Normalpreis CHF 20.00"
       end
+
+      sleep(3)
+      expect(find("#event_participation_price").value).to eq "20.00"
+
       expect do
         click_on("Speichern")
         expect(page).to have_css(".alert",
@@ -64,35 +72,24 @@ describe "participation edit page", :js do
       end.to change { participation.reload.price }.from(10).to(20)
     end
 
-    it "shows option with former price if event price changed" do
-      event.update!(price_member: 15)
-
+    it "can set custom price" do
       visit participation_path
       within "#event_participation_price_category" do
-        expect(page).to have_css("option[selected]", text: "Bisheriger Mitgliederpreis CHF 10.00")
-        expect(page).to have_css("option", text: "Mitgliederpreis CHF 15.00")
         expect(page).to have_css("option", text: "Normalpreis CHF 20.00")
+        select "Normalpreis CHF 20.00"
       end
+
+      # wait and expect price ot change to new price category
+      sleep(3)
+      expect(find("#event_participation_price").value).to eq "20.00"
+
+      fill_in "Preis", with: "400"
+
       expect do
         click_on("Speichern")
         expect(page).to have_css(".alert",
           text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
-      end.not_to change { participation.reload.price }
-    end
-
-    it "can select new price" do
-      event.update!(price_member: 15)
-
-      visit participation_path
-      within "#event_participation_price_category" do
-        expect(page).to have_css("option[selected]", text: "Bisheriger Mitgliederpreis CHF 10.00")
-        select "Mitgliederpreis CHF 15.00"
-      end
-      expect do
-        click_on("Speichern")
-        expect(page).to have_css(".alert",
-          text: "Teilnahme von Edmund Hillary in Eventus wurde erfolgreich aktualisiert.")
-      end.to change { participation.reload.price }.from(10).to(15)
+      end.to change { participation.reload.price }.from(10).to(400)
     end
 
     it "shows j_s price labels for j_s courses" do
@@ -102,6 +99,14 @@ describe "participation edit page", :js do
         expect(page).to have_css("option", text: "J&S P-Mitgliederpreis CHF 10.00")
         expect(page).to have_css("option", text: "J&S P-Normalpreis CHF 20.00")
       end
+    end
+
+    it "does not show price_category and price field for own participation" do
+      participation.update!(participant: person)
+
+      visit participation_path
+      expect(page).to have_no_text "Preiskategorie"
+      expect(page).to have_no_text "Preis"
     end
   end
 

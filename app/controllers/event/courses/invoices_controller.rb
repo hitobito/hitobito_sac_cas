@@ -36,29 +36,7 @@ class Event::Courses::InvoicesController < ApplicationController
     render_invoice_form
   end
 
-  def recalculate
-    if invoice_form_params[:reference_date]
-      process_parameter(:reference_date) { render json: {value: calculate_annulation_price} }
-    elsif invoice_form_params[:price_category]
-      process_parameter(:price_category) { render json: {value: calculate_participation_price} }
-    else
-      render json: {error: "Invalid query param", status: :bad_request}, status: :bad_request
-    end
-  end
-
   private
-
-  def process_parameter(attribute)
-    invoice_form.send(:"#{attribute}=", invoice_form_params[attribute])
-    invoice_form.valid?
-    return render_validation_error(attribute) if invoice_form.errors[attribute].present?
-    yield
-  end
-
-  def render_validation_error(attribute)
-    render json: {errors: {attribute => invoice_form.errors[attribute].first}},
-      status: :unprocessable_content
-  end
 
   def render_invoice_form(response_status: :ok)
     @group = group
@@ -78,15 +56,6 @@ class Event::Courses::InvoicesController < ApplicationController
       t("event.participations.invoice_not_created_alert")
     end
     invoice
-  end
-
-  def calculate_annulation_price
-    participation.canceled_at = invoice_form.reference_date
-    Invoices::Abacus::CourseAnnulationCost.new(participation).amount_cancelled
-  end
-
-  def calculate_participation_price
-    event.send(invoice_form.price_category)
   end
 
   def assign_attributes

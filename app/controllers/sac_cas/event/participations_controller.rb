@@ -73,7 +73,7 @@ module SacCas::Event::ParticipationsController
 
   def permitted_params
     super.tap do |permitted|
-      calculate_price(permitted) if @event.course?
+      calculate_price(permitted) if @event.course? || @event.tour?
     end
   end
 
@@ -84,16 +84,24 @@ module SacCas::Event::ParticipationsController
   end
 
   def calculate_price(permitted)
-    price_category = permitted[:price_category]
-    if entry.new_record? && !params[:for_someone_else]
+    price_category = if entry.new_record? && !params[:for_someone_else]
       permitted[:subsidy] = false unless entry.subsidizable?
-      permitted[:price_category] = price_category = determine_price_category(permitted[:subsidy])
+      permitted[:price_category] = determine_price_category(permitted[:subsidy])
+    else
+      permitted[:price_category]
     end
 
-    if price_category == "former"
-      permitted.delete(:price_category)
-    elsif permitted.key?(:price_category)
-      permitted[:price] = price_for_category(price_category)
+    price = determine_price_value(price_category)
+    permitted[:price] = price if price.present?
+  end
+
+  # Only allow setting custom price on update of an entry for other people
+  # New records always get the price of the selected category
+  def determine_price_value(price_category)
+    if entry.new_record?
+      price_for_category(price_category)
+    elsif current_user != entry.participant
+      params.dig(:event_participation, :price)
     end
   end
 

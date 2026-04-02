@@ -55,17 +55,16 @@ Rails.application.routes.draw do
           resource :mail_dispatch, only: [:create], module: :courses
           resource :leader_settlement_pdfs, only: [:create], module: :courses
           resources :participations, only: [] do
+            collection do
+              get :recalculate_price, to: "participations/recalculate_price#index"
+            end
             member do
               get "history" => "participations/history#index"
               put :summon
               put :reactivate
             end
 
-            resources :invoices, only: [:new, :create], module: :courses do
-              collection do
-                get :recalculate
-              end
-            end
+            resources :invoices, only: [:new, :create], module: :courses
           end
 
           put "state" => "state#update", :on => :member

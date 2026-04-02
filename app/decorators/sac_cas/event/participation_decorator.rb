@@ -14,11 +14,10 @@ module SacCas::Event::ParticipationDecorator
   end
 
   # rubocop:todo Metrics/CyclomaticComplexity
-  def formatted_event_prices(include_former: false, selected_category: nil)
+  def formatted_event_prices(selected_category: nil)
     prices = present_event_prices.map { |attr, price|
       [format_event_price(attr, price, event), attr]
     }
-    prices.unshift(former_price_select_option) if include_former && event_price_changed?
     prices << [t("no_price_select"), nil] if present_event_prices.empty? || event_leader?
 
     [prices, selected_category ? {selected: selected_category} : {}]
@@ -26,8 +25,7 @@ module SacCas::Event::ParticipationDecorator
   # rubocop:enable Metrics/CyclomaticComplexity
 
   def event_prices
-    formatted_event_prices(include_former: true,
-      selected_category: event_price_changed? ? "former" : nil)
+    formatted_event_prices
   end
 
   def possible_event_prices_for_invoice
@@ -40,15 +38,6 @@ module SacCas::Event::ParticipationDecorator
     # rubocop:todo Layout/LineLength
     @present_event_prices ||= event.attributes.slice(*Event::Course::PRICE_ATTRIBUTES.map(&:to_s)).compact
     # rubocop:enable Layout/LineLength
-  end
-
-  def event_price_changed?
-    @price_changed ||= model.persisted? && present_event_prices[price_category] != price
-  end
-
-  def former_price_select_option
-    [t("former_price_select", price_label: format_event_price(price_category, price, event)),
-      "former"]
   end
 
   def event_leader?

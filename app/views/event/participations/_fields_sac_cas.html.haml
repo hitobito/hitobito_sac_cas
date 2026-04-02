@@ -3,8 +3,17 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
 
-- if @event.course? && can?(:update_full, entry)
-  = f.labeled(Event::Participation.human_attribute_name(:price)) do
-    = f.select(:price_category, *entry.event_prices, {class: 'form-select form-select-sm'})
+- stimulus_ctrl = 'field-remote-update'
 
+- if (@event.tour? || @event.course?) && can?(:update_full, entry) && current_user != entry.participant
+  %div{ data: { controller: stimulus_ctrl, url: recalculate_price_group_event_participations_path(@group, @event, id: entry.id) } }
+    = f.labeled(:price_category) do
+      = f.select(:price_category, *entry.event_prices,
+                                  value: @participation.price_category,
+                                  class: "form-select form-select-sm",
+                                  data: { action: "change->#{stimulus_ctrl}#sourceChanged" })
+
+    = f.labeled_input_field(:price, data: { field_remote_update_target: "field" })
+
+- if @event.course? && can?(:update_full, entry)
   = f.labeled_input_field(:actual_days, help: t("event.participations.answers_step.total_duration_days_help", total_days: @event.total_duration_days))

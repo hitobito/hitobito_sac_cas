@@ -43,7 +43,6 @@ module SacCas::Event::Participation
 
     paper_trail_options[:skip] |= ["previous_state"]
 
-    before_validation :clear_price_without_category
     before_validation :round_actual_days
     before_save :update_previous_state, if: :state_changed?
 
@@ -106,9 +105,5 @@ module SacCas::Event::Participation
 
   def state_changed_to_canceled?
     saved_change_to_attribute(:state)&.second == "canceled"
-  end
-
-  def clear_price_without_category
-    self.price = nil if price_category.blank?
   end
 end

@@ -14,10 +14,11 @@ describe Event::Participation, js: true do
   let(:participant) { people(:mitglied) }
   let(:event) { Fabricate(:sac_open_course, price_regular: 20, price_member: 10) }
   let(:participation) {
-    # rubocop:todo Layout/LineLength
-    Fabricate(:event_participation, event:, participant: participant, price_category: "price_member",
-      # rubocop:enable Layout/LineLength
-      price: 10, application_id: -1)
+    Fabricate(:event_participation, event:,
+      participant: participant,
+      price_category: "price_member",
+      price: 10,
+      application_id: -1)
   }
 
   context "as participant" do
@@ -70,39 +71,39 @@ describe Event::Participation, js: true do
   context "as admin" do
     before { sign_in(admin) }
 
-    it "creates invoice when filling out form" do
-      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
-        id: participation.id)
-      click_on("Rechnung erstellen")
-      expect(page).to have_text("Kursteilnehmerrechnung erstellen")
-      click_button("Kursteilnehmerrechnung erstellen")
-      expect(page).to have_css(".alert", text: "Rechnung wurde erfolgreich erstellt.")
-    end
+    context "invoice" do
+      it "creates invoice when filling out form" do
+        visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
+          id: participation.id)
+        click_on("Rechnung erstellen")
+        expect(page).to have_text("Kursteilnehmerrechnung erstellen")
+        click_button("Kursteilnehmerrechnung erstellen")
+        expect(page).to have_css(".alert", text: "Rechnung wurde erfolgreich erstellt.")
+      end
 
-    it "updates price based on price_category" do
-      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
-        id: participation.id)
-      click_on("Rechnung erstellen")
-      find("#event_participation_invoice_form_price_category").find("option",
-        text: "Normalpreis").click
-      sleep(3)
-      expect(find("#event_participation_invoice_form_price").value).to eq "20.0"
-    end
+      it "updates price based on price_category" do
+        visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
+          id: participation.id)
+        click_on("Rechnung erstellen")
+        find("#event_participation_invoice_form_price_category").find("option",
+          text: "Normalpreis").click
+        sleep(3)
+        expect(find("#event_participation_invoice_form_price").value).to eq "20.00"
+      end
 
-    it "updates price based on reference_date" do
-      # rubocop:todo Layout/LineLength
-      allow_any_instance_of(Event::Courses::InvoicesController).to receive(:invoice_type).and_return(ExternalInvoice::CourseAnnulation)
-      # rubocop:enable Layout/LineLength
-      # rubocop:todo Layout/LineLength
-      allow_any_instance_of(Event::Courses::InvoicesController).to receive(:calculate_annulation_price).and_return(400)
-      # rubocop:enable Layout/LineLength
-      visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
-        id: participation.id)
-      click_on("Rechnung erstellen")
-      find("#event_participation_invoice_form_reference_date").set("01.01.2023")
-      find("#event_participation_invoice_form_reference_date").native.send_keys :tab
-      sleep(3)
-      expect(find("#event_participation_invoice_form_price").value).to eq "400"
+      it "updates price based on reference_date" do
+        allow_any_instance_of(Event::Courses::InvoicesController).to receive(:invoice_type)
+          .and_return(ExternalInvoice::CourseAnnulation)
+        allow_any_instance_of(Invoices::Abacus::CourseAnnulationCost).to receive(:amount_cancelled)
+          .and_return(400)
+        visit group_event_participation_path(group_id: event.group_ids.first, event_id: event.id,
+          id: participation.id)
+        click_on("Rechnung erstellen")
+        find("#event_participation_invoice_form_reference_date").set("01.01.2023")
+        find("#event_participation_invoice_form_reference_date").native.send_keys :tab
+        sleep(3)
+        expect(find("#event_participation_invoice_form_price").value).to eq "400.00"
+      end
     end
 
     context "event questions" do
