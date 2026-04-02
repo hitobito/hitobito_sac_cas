@@ -370,12 +370,6 @@ de:
           self_cooking: Selbst gekochte Mahlzeiten
           full_board: Vollpension
         minimum_age: Mindestalter
-        participation_states:
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          summoned: Aufgeboten
-          annulled: Annulliert
         program: Programm
         reserve_accommodation: Unterkunft reservieren durch SAC
         season: Saison
@@ -465,6 +459,17 @@ de:
           error: Fehler
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
         sac_membership_active?: SAC-Mitglied
+        states:
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          summoned: Aufgeboten
+          annulled: Annulliert
+          tentative: Provisorisch
+          rejected: Abgelehnt
+          canceled: Abgemeldet
+          attended: Teilgenommen
+          absent: Nicht erschienen
       event/role:
         self_employed: Selbständig erwerbend
       event/target_group:
@@ -522,17 +527,7 @@ de:
           published: Publiziert
           ready: Vorbereitung abgeschlossen
           closed: Abgeschlossen
-          canceled: Abgesagt / Annulliert
-        participation_states:
-          tentative: Provisorisch
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          annulled: Annulliert
-          rejected: Abgelehnt
-          canceled: Abgemeldet
-          attended: Teilgenommen
-          absent: Nicht erschienen
+          canceled: Abgesagt / Annulliert          
       external_training:
         person: Person
         event_kind: Kursart

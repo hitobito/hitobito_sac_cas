@@ -41,6 +41,8 @@ module SacCas::Event::Participation
 
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
 
+    paper_trail_options[:skip] |= ["previous_state"]
+
     before_validation :clear_price_without_category
     before_validation :round_actual_days
     before_save :update_previous_state, if: :state_changed?
