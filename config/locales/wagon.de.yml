@@ -1417,6 +1417,7 @@ de:
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
+    event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
 
   event:
     application_market:
@@ -1613,8 +1614,6 @@ de:
   events:
     flash:
       dates_changed: Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast.
-    actions_index_sac_cas:
-      edit_event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
     state_buttons:

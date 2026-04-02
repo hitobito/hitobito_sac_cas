@@ -46,7 +46,7 @@ describe Event::ApprovalCommissionResponsibilitiesController do
         }
       }
     }
-    expect(response).to redirect_to(tour_group_events_path(group))
+    expect(response).to redirect_to(group_path(group))
 
     responsibility_1 = event_approval_commission_responsibilities(:bluemlisalp_wandern_kinder).reload
     responsibility_2 = event_approval_commission_responsibilities(:bluemlisalp_wandern_kinder_subito).reload

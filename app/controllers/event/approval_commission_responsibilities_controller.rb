@@ -18,7 +18,7 @@ class Event::ApprovalCommissionResponsibilitiesController < ApplicationControlle
     assign_attributes
 
     if form.valid? && form.save!
-      redirect_to tour_group_events_path(group), notice: success_message
+      redirect_to group_path(group), notice: success_message
     else
       render :edit, status: :unprocessable_entity, locals: {form: @form}
     end

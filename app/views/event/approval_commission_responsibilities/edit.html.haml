@@ -25,4 +25,4 @@
                                 %td
                                     = render_commission_select(f, entries, subito: true, freigabe_komitees:)
     = submit_button(f, t("global.button.save"))
-    = cancel_link(tour_group_events_path(group))
+    = cancel_link(group_path(group))
