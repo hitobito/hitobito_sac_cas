@@ -35,9 +35,20 @@ describe Group::FreigabeKomitee do
 
   context "destroy" do
     it "does not allow destroy when event_approval_commission_responsibilities exist" do
+      group.event_approvals.destroy_all
+
       expect { group.destroy }.not_to change { described_class.unscoped.count }
-      expect(group.errors.full_messages).to match_array ["Freigabekomitee kann nicht gelöscht werden, es " \
-      "bestehen noch Zuständigkeiten"]
+      expect(group.errors.full_messages).to match_array ["Datensatz kann nicht gelöscht werden, " \
+      "da abhängige Zuständigkeiten existieren."]
+      expect(group.deleted_at).to be_nil
+    end
+
+    it "does not allow destroy when event_approvals exist" do
+      group.event_approval_commission_responsibilities.destroy_all
+
+      expect { group.destroy }.not_to change { described_class.unscoped.count }
+      expect(group.errors.full_messages).to match_array ["Datensatz kann nicht gelöscht werden, " \
+      "da abhängige Freigaben existieren."]
       expect(group.deleted_at).to be_nil
     end
   end

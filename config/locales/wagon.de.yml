@@ -243,6 +243,9 @@ de:
 
   activerecord:
     attributes:
+      group/freigabe_komitee:
+        event_approval_commission_responsibilities: Zuständigkeiten
+        event_approvals: Freigaben
       group/freigabe_komitee/pruefer:
         approval_kinds: Zugewiesene Freigabestufen
       account_completion:
@@ -411,6 +414,11 @@ de:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval:
+        freigabe_komitee: Freigabekomitee
+        approval_kind: Freigabe-Stufe
+        approved: Freigegeben
+        creator: Freigegeben von
       event/approval_kind:
         name: Name
         short_description: Kurzbeschrieb
@@ -732,10 +740,6 @@ de:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren.
-        group/freigabe_komitee:
-          attributes:
-            base:
-              has_event_approval_commission_responsibilities: Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten
 
         event/discipline:
           attributes:
@@ -825,6 +829,9 @@ de:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval_kind:
+        one: Freigabe
+        other: Freigaben
       event/approval_kind:
         one: Freigabestufe
         other: Freigabestufen
