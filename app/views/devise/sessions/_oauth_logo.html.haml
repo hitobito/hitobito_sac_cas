@@ -1,0 +1,10 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+-# We don't want to display any default logo when the oauth app does not have a logo uploaded.
+
+-if oauth_app.present? && upload_exists?(oauth_app, :logo)
+    .oauth-application-logo
+        = image_tag(upload_url(oauth_app, :logo, variant: :thumb), size: '64x64')
