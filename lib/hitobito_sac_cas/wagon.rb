@@ -181,6 +181,21 @@ module HitobitoSacCas
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
       Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
 
+      Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8
+      Synchronize::Addresses::SwissPost::Generator.fields = { # are customized for SAC_v1 batch key
+        "KDNR (QSTAT)": :id,
+        Firma: :company,
+        Vorname: :first_name,
+        Nachname: :last_name,
+        "c/o": :address_care_of,
+        Strasse: :street,
+        Hausnummer: :housenumber,
+        Postfach: :postbox,
+        PLZ: :zip_code,
+        Ort: :town
+      }
+      Synchronize::Addresses::SwissPost::ResultProcessor.remote_identifier = "KDNR"
+
       ## Resources
       GroupResource.include SacCas::GroupResource
       PersonResource.include SacCas::PersonResource
