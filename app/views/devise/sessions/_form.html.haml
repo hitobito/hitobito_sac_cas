@@ -4,12 +4,11 @@
 -#  https://github.com/hitobito/hitobito.
 
 - oauth = params[:oauth] == 'true'
+- content_for :login_info do
+  = render(Login::InfosComponent.new)
+- col_class = oauth ? "col-md-12" : "col-md-6"
 
--# the layout should always be stacked for oauth since the container size is much smaller
-- flex_direction_class = oauth ? "flex-column-reverse" : "flex-md-row flex-column-reverse"
-.row{class: flex_direction_class}
-
-  - col_class = oauth ? "col-md-12" : "col-md-6"
+.row
   %div{class: col_class}
     - form_url = oauth ? person_session_path(oauth: true) : person_session_path
     - autofocus_login = true if autofocus_login.nil?
@@ -20,7 +19,11 @@
       = f.labeled_input_field(:password)
       = f.labeled_boolean_field(:remember_me)
       = f.indented(submit_button(f, t('.sign_in')))
+      %div{class: (oauth ? 'd-block' : 'd-md-none')}
+        = yield :login_info
       = f.indented do
         = render "devise/sessions/helpful_links"
-  %div{class: col_class}
-    = render(Login::InfosComponent.new)
+  - unless oauth
+    %div{class: col_class}
+      .d-none.d-md-block
+        = yield :login_info
