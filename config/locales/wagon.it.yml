@@ -489,7 +489,6 @@ it:
       event/tour:
         ascent: Aufstieg
         descent: Abstieg
-        internal_comment: Interne Bemerkungen
         minimum_age: Mindestalter
         season: Saison
         seasons:
@@ -1411,7 +1410,8 @@ it:
         confirm_email_before_logging_in: >
           Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma.Se il vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di contattare mv@sac-cas.ch indicando il proprio indirizzo e-mail.
       oauth_info:
-        sign_in: Accedi con il Portale CAS
+        sign_in: Anmelden mit dem SAC-Portal
+
   doorkeeper:
     scopes:
       user_groups: "Leggere i gruppi, i ruoli e i campi calcolati."
@@ -2332,11 +2332,12 @@ it:
 
   login:
     infos_component:
-      title_questions: "Domande sull'accesso?"
-      title_contact: Contatto
-      additional_infos: "Trovi maggiori informazioni nelle %{link}."
-      link_faqs: "https://www.sac-cas.ch/it/faq/faq-account-cas-/-portale-cas/"
-      link_faqs_title: FAQ
+      title_questions: "Fragen zum Login?"
+      title_contact: Kontakt
+      additional_infos: "Mehr Informationen findest du unter den %{link}."
+      link_faqs: "https://www.sac-cas.ch/de/meta/faq/faq-sac-konto-/-sac-portal/"
+      link_faqs_title: FAQs
+
   self_registration:
     infos_component:
       title_questions: "Domande sull’affiliazione?"
