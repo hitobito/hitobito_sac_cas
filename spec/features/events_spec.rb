@@ -360,7 +360,7 @@ describe :events, js: true do
         end
 
         click_tab "Daten"
-        expect(page).to have_select "Saison", selected: "(keine)"
+        expect(page).to have_select "Saison", selected: "Sommer"
         select "Winter"
         expect(page).to have_select "Saison", selected: "Winter"
 

@@ -1691,6 +1691,28 @@ de:
     sections:
       essentials: Wesentliche Fakten
 
+  events/filters:
+    tour_essentials:
+      title: Wesentliche Fakten
+    tour_essential_field:
+      disciplines: Disziplinen
+      target_groups: Zielgruppen
+      technical_requirements: Technische Anforderungen
+      traits: Merkmale
+    fitness_requirement_field:
+      fitness_requirements: Konditionelle Anforderungen
+    radios_field:
+      season: Saison
+      seasons:
+        nil: Alle
+        summer: Sommer
+        winter: Winter
+      subito: Tourentyp
+      subitos:
+        nil: Alle
+        false: Regulär
+        true: Subito
+
   events/state:
     flash:
       success: Status wurde auf %{state} gesetzt.

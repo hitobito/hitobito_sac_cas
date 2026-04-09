@@ -1,0 +1,30 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+
+- if filter.event_type == Event::Tour
+  = render(layout: 'panel', locals: { kind: :tour_essentials }) do
+    = f.fields_for(:tour_essentials) do |fields|
+      = render('tour_essential_field',
+               fields: fields,
+               param: :discipline_id,
+               key: '.disciplines',
+               klass: Event::Discipline)
+      = render('tour_essential_field',
+               fields: fields,
+               param: :target_group_id,
+               key: '.target_groups',
+               klass: Event::TargetGroup)
+      = render('fitness_requirement_field', fields: fields)
+      = render('tour_essential_field',
+               fields: fields,
+               param: :technical_requirement_id,
+               key: '.technical_requirements',
+               klass: Event::TechnicalRequirement)
+      = render('tour_essential_field',
+               fields: fields,
+               param: :trait_id,
+               key: '.traits',
+               klass: Event::Trait)

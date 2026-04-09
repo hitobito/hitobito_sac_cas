@@ -7,6 +7,7 @@
 
 class Event::Tour < Event
   include ::Events::Tours::State
+  include I18nEnums
 
   WEAK_VALIDATION_STATES = %w[draft].freeze
 
@@ -18,6 +19,16 @@ class Event::Tour < Event
     :tourenportal_link, :subito, *PRICE_ATTRIBUTES]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
     :signature, :signature_confirmation, :signature_confirmation_text, :guest_limit, :cost]
+
+  self.filterable_attrs += [
+    :summit,
+    :ascent,
+    :descent,
+    :alternative_route,
+    :additional_info,
+    :minimum_age,
+    :maximum_age
+  ]
 
   self.role_types = [
     Event::Role::Leader,
@@ -37,6 +48,8 @@ class Event::Tour < Event
 
   # Used for Event::TourResource
   attr_accessor :leaders
+
+  i18n_enum :season, Event::Kind::SEASONS
 
   belongs_to :fitness_requirement, optional: true
 

@@ -180,6 +180,8 @@ module HitobitoSacCas
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
       Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
+      Events::Filter::Chain.types << Events::Filter::Sac << Events::Filter::TourEssentials
+      Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
 
       Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8
       Synchronize::Addresses::SwissPost::Generator.fields = { # are customized for SAC_v1 batch key

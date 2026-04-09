@@ -1,0 +1,15 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+.row.mb-2
+  = fields.label(param, ti(param), class: "col-form-label col-md-3 col-xl-2")
+  .labeled.col-md-9.mw-63ch
+    - options.each do |option|
+      - empty = option == 'nil'
+      - current = filter.chain.dig(group, param)
+      - checked = empty ? current.blank? : option == current
+      .form-check.form-check-inline
+        = fields.radio_button(param, empty ? "" : option, checked: checked, class: 'form-check-input')
+        = fields.label("#{param}_#{option}", ti("#{param.to_s.pluralize}.#{option}"), class: 'form-check-label')
