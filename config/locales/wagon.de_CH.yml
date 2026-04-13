@@ -33,8 +33,11 @@ de_CH:
       website: "https://www.sac-cas.ch"
     sac_oauth:
       <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
+    duration_hour_unit: h
+    duration_minute_unit: m
     elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
 
@@ -234,6 +237,9 @@ de_CH:
 
   activerecord:
     attributes:
+      group/freigabe_komitee:
+        event_approval_commission_responsibilities: Zuständigkeiten
+        event_approvals: Freigaben
       group/freigabe_komitee/pruefer:
         approval_kinds: Zugewiesene Freigabestufen
       account_completion:
@@ -288,6 +294,7 @@ de_CH:
         updated_at: Geändert
         created_at: Erstellt
       event:
+        id: Event-ID
         internal_comment: Interne Bemerkungen
         unconfirmed_count: Unbestätigte
         maximum_age: Maximalalter
@@ -360,12 +367,6 @@ de_CH:
           self_cooking: Selbst gekochte Mahlzeiten
           full_board: Vollpension
         minimum_age: Mindestalter
-        participation_states:
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          summoned: Aufgeboten
-          annulled: Annulliert
         program: Programm
         reserve_accommodation: Unterkunft reservieren durch SAC
         season: Saison
@@ -407,6 +408,11 @@ de_CH:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval:
+        freigabe_komitee: Freigabekomitee
+        approval_kind: Freigabe-Stufe
+        approved: Freigegeben
+        creator: Freigegeben von
       event/approval_kind:
         name: Name
         short_description: Kurzbeschrieb
@@ -455,6 +461,17 @@ de_CH:
           error: Fehler
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
         sac_membership_active?: SAC-Mitglied
+        states:
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          summoned: Aufgeboten
+          annulled: Annulliert
+          tentative: Provisorisch
+          rejected: Abgelehnt
+          canceled: Abgemeldet
+          attended: Teilgenommen
+          absent: Nicht erschienen
       event/role:
         self_employed: Selbständig erwerbend
       event/target_group:
@@ -485,9 +502,18 @@ de_CH:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        additional_info: Zusatzinfo
+        alternative_route: Alternativroute
         ascent: Aufstieg
         descent: Abstieg
+        duration_h: Zeitaufwand
+        duration_m: Zeitaufwand
+        maps: Karten
         minimum_age: Mindestalter
+        price_description: Beschreibung
+        price_member: Kosten SAC-Mitglied (extern)
+        price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        price_special: Kosten SAC Sektionsmitglied
         season: Saison
         seasons:
           winter: Winter
@@ -504,16 +530,6 @@ de_CH:
           ready: Vorbereitung abgeschlossen
           closed: Abgeschlossen
           canceled: Abgesagt / Annulliert
-        participation_states:
-          tentative: Provisorisch
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          annulled: Annulliert
-          rejected: Abgelehnt
-          canceled: Abgemeldet
-          attended: Teilgenommen
-          absent: Nicht erschienen
       external_training:
         person: Person
         event_kind: Kursart
@@ -718,10 +734,6 @@ de_CH:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren.
-        group/freigabe_komitee:
-          attributes:
-            base:
-              has_event_approval_commission_responsibilities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
         event/discipline:
           attributes:
@@ -810,6 +822,9 @@ de_CH:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval:
+        one: Freigabe
+        other: Freigaben
       event/approval_kind:
         one: Freigabestufe
         other: Freigabestufen
@@ -1421,7 +1436,7 @@ de_CH:
           warning: "Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde."
     disciplines:
       form:
-        help_inline_color: 'Gültiger hexadezimaler Farbwert (zb. #fcba03)'
+        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen
@@ -1632,12 +1647,28 @@ de_CH:
 
     sections:
       essentials: Wesentliche Fakten
-  external_trainings:
-    form:
-      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
-    create:
-      flash:
-        success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
+
+  events/filters:
+    tour_essentials:
+      title: Wesentliche Fakten
+    tour_essential_field:
+      disciplines: Disziplinen
+      target_groups: Zielgruppen
+      technical_requirements: Technische Anforderungen
+      traits: Merkmale
+    fitness_requirement_field:
+      fitness_requirements: Konditionelle Anforderungen
+    radios_field:
+      season: Saison
+      seasons:
+        nil: Alle
+        summer: Sommer
+        winter: Winter
+      subito: Tourentyp
+      subitos:
+        nil: Alle
+        false: Regulär
+        true: Subito
 
   events/state:
     flash:
@@ -1734,6 +1765,13 @@ de_CH:
     section_active: "Aktive Mitglieder am %{to}"
     section_eintritte: "Eintritte %{from} - %{to}"
     section_austritte: "Austritte %{from} - %{to}"
+
+  external_trainings:
+    form:
+      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
+    create:
+      flash:
+        success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
 
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter

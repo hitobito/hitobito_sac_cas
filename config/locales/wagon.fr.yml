@@ -33,8 +33,11 @@ fr:
       website: "https://www.sac-cas.ch"
     sac_oauth:
       <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: course
     elevation_unit: Hm
+    duration_hour_unit: h
+    duration_minute_unit: m
     elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Le jeton utilisé n'est pas valide.
 
@@ -238,6 +241,9 @@ fr:
 
   activerecord:
     attributes:
+      group/freigabe_komitee:
+        event_approval_commission_responsibilities: Zuständigkeiten
+        event_approvals: Freigaben
       group/freigabe_komitee/pruefer:
         approval_kinds: Zugewiesene Freigabestufen
       account_completion:
@@ -292,6 +298,7 @@ fr:
         updated_at: Modifié
         created_at: Créé
       event:
+        id: Event-ID
         internal_comment: Interne Bemerkungen
         unconfirmed_count: Non confirmé
         maximum_age: Age maximal
@@ -364,12 +371,6 @@ fr:
           self_cooking: Repas préparés à la maison
           full_board: Pension complète
         minimum_age: Age minimum
-        participation_states:
-          unconfirmed: Non confirmé
-          applied: Liste d’attente
-          assigned: Confirmé
-          summoned: Convoqué
-          annulled: Annulé
         program: Programme
         reserve_accommodation: Réserver un hébergement via le CAS
         season: Saison
@@ -411,6 +412,11 @@ fr:
         children: Unterdisziplinen
         updated_at: Geändert
         deleted_at: Gelöscht
+      event/approval:
+        freigabe_komitee: Freigabekomitee
+        approval_kind: Freigabe-Stufe
+        approved: Freigegeben
+        creator: Freigegeben von
       event/approval_kind:
         name: Name
         short_description: Kurzbeschrieb
@@ -459,6 +465,17 @@ fr:
           error: Erreur
         external_invoices: Factures # uses include CapitalizedDependentErrors
         sac_membership_active?: SAC-Mitglied
+        states:
+          unconfirmed: Unbestätigt
+          applied: Warteliste
+          assigned: Bestätigt
+          summoned: Aufgeboten
+          annulled: Annulliert
+          tentative: Provisorisch
+          rejected: Abgelehnt
+          canceled: Abgemeldet
+          attended: Teilgenommen
+          absent: Nicht erschienen
       event/role:
         self_employed: Activité indépendante
       event/target_group:
@@ -489,9 +506,18 @@ fr:
         updated_at: Geändert
         deleted_at: Gelöscht
       event/tour:
+        additional_info: Zusatzinfo
+        alternative_route: Alternativroute
         ascent: Aufstieg
         descent: Abstieg
+        duration_h: Zeitaufwand
+        duration_m: Zeitaufwand
+        maps: Karten
         minimum_age: Mindestalter
+        price_description: Beschreibung
+        price_member: Kosten SAC-Mitglied (extern)
+        price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        price_special: Kosten SAC Sektionsmitglied
         season: Saison
         seasons:
           winter: Winter
@@ -508,16 +534,6 @@ fr:
           ready: Vorbereitung abgeschlossen
           closed: terminé
           canceled: Abgesagt / Annulliert
-        participation_states:
-          tentative: provisoire
-          unconfirmed: pas confirmé
-          applied: liste d'attente
-          assigned: confirmé
-          annulled: annulé
-          rejected: refusé
-          canceled: Déconnecté
-          attended: Participé
-          absent: Non paru
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -723,10 +739,6 @@ fr:
           attributes:
             course_compensation_category_id:
               uniqueness_during_validity_period: ne peut référencer qu’un seul taux de rémunération par période de validité.
-        group/freigabe_komitee:
-          attributes:
-            base:
-              has_event_approval_commission_responsibilities: "Freigabekomitee kann nicht gelöscht werden, es bestehen noch Zuständigkeiten"
 
         event/discipline:
           attributes:
@@ -826,6 +838,9 @@ fr:
       event/trait:
         one: Merkmal
         other: Merkmale
+      event/approval:
+        one: Freigabe
+        other: Freigaben
       event/approval_kind:
         one: Freigabestufe
         other: Freigabestufen
@@ -1412,7 +1427,7 @@ fr:
         confirm_email_before_logging_in: >
           Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation. Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à mv@sac-cas.ch en indiquant ton adresse e-mail stp.
       oauth_info:
-        sign_in: Anmelden mit dem SAC-Portal
+        sign_in: Se connnecter avec le Portail du CAS
 
   doorkeeper:
     scopes:
@@ -1482,7 +1497,7 @@ fr:
           warning: "Aucun e-mail n’a été envoyé, car aucun lien vers un sondage n’a été saisi."
     disciplines:
       form:
-        help_inline_color: 'Gültiger hexadezimaler Farbwert (zb. #fcba03)'
+        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Transférer les valeurs aux cours
@@ -1693,12 +1708,28 @@ fr:
 
     sections:
       essentials: Wesentliche Fakten
-  external_trainings:
-    form:
-      help_other_people: Personnes supplémentaires pour lesquelles la formation externe doit être saisie.
-    create:
-      flash:
-        success_multiple: "%{model} a été créé avec succès pour %{names} "
+
+  events/filters:
+    tour_essentials:
+      title: Wesentliche Fakten
+    tour_essential_field:
+      disciplines: Disziplinen
+      target_groups: Zielgruppen
+      technical_requirements: Technische Anforderungen
+      traits: Merkmale
+    fitness_requirement_field:
+      fitness_requirements: Konditionelle Anforderungen
+    radios_field:
+      season: Saison
+      seasons:
+        nil: Alle
+        summer: Sommer
+        winter: Winter
+      subito: Tourentyp
+      subitos:
+        nil: Alle
+        false: Regulär
+        true: Subito
 
   events/state:
     flash:
@@ -1795,6 +1826,13 @@ fr:
     section_active: "Membres actifs le %{to}"
     section_eintritte: "Entrées %{from} - %{to}"
     section_austritte: "Départs %{from} - %{to}"
+
+  external_trainings:
+    form:
+      help_other_people: Personnes supplémentaires pour lesquelles la formation externe doit être saisie.
+    create:
+      flash:
+        success_multiple: "%{model} a été créé avec succès pour %{names} "
 
   filter_navigation/people:
     tour_guides_none: Pas de chef·fe de course
@@ -2334,11 +2372,11 @@ fr:
 
   login:
     infos_component:
-      title_questions: "Fragen zum Login?"
-      title_contact: Kontakt
-      additional_infos: "Mehr Informationen findest du unter den %{link}."
-      link_faqs: "https://www.sac-cas.ch/de/meta/faq/faq-sac-konto-/-sac-portal/"
-      link_faqs_title: FAQs
+      title_questions: "Des questions sur le login?"
+      title_contact: Contact
+      additional_infos: "Tu trouversa de plus amples informations sur %{link}."
+      link_faqs: "https://www.sac-cas.ch/fr/meta/faq/faq-compte-cas-/-portail-du-cas/"
+      link_faqs_title: FAQ
 
   self_registration:
     infos_component:
