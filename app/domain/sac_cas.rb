@@ -123,6 +123,8 @@ module SacCas
   MAILING_LIST_SPENDENAUFRUFE_INTERNAL_KEY = "spendenaufrufe"
   MAILING_LIST_SEKTIONSBULLETIN_PAPER_INTERNAL_KEY = "sektionsbulletin_paper"
   MAILING_LIST_SEKTIONSBULLETIN_DIGITAL_INTERNAL_KEY = "sektionsbulletin_digital"
+  MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY = "regular_tour_notification"
+  MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY = "subito_tour_notification"
 
   PROTECTED_MAILING_LISTS_INTERNAL_KEYS = constants(false)
     .select { |c| c.to_s =~ /MAILING_LIST_.*INTERNAL_KEY/ }

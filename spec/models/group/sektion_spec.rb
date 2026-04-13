@@ -52,4 +52,58 @@ describe Group::Sektion do
       expect(url).to be_nil
     end
   end
+
+  context "tour notification mailing lists" do
+    let(:sektion) { groups(:bluemlisalp) }
+
+    context "if already present" do
+      before do
+        expect(sektion.tours_enabled).to eq(false)
+
+        sektion.send(:create_tour_notification_mailing_lists)
+        expect(sektion.mailing_lists.size).to eq(3)
+        expect(sektion.mailing_lists.pluck(:internal_key)).to include(
+          ::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+          ::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY
+        )
+      end
+
+      it "do not get created when enabling tours" do
+        expect do
+          sektion.update!(tours_enabled: true)
+        end.to_not change { MailingList.count }
+
+        expect(sektion.reload.tours_enabled).to eq(true)
+      end
+
+      it "do not get deleted when disabling tours" do
+        sektion.update!(tours_enabled: true)
+        expect do
+          sektion.update!(tours_enabled: false)
+        end.to_not change { MailingList.count }
+      end
+    end
+
+    context "if not present" do
+      before do
+        expect(sektion.mailing_lists.size).to eq(1)
+        expect(sektion.mailing_lists.pluck(:internal_key)).to_not include(
+          ::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+          ::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY
+        )
+      end
+
+      it "get created when enabling tours" do
+        expect do
+          sektion.update!(tours_enabled: true)
+        end.to change { MailingList.count }.by(2)
+
+        expect(sektion.mailing_lists.size).to eq(3)
+        expect(sektion.mailing_lists.pluck(:internal_key)).to include(
+          ::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+          ::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY
+        )
+      end
+    end
+  end
 end

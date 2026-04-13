@@ -36,11 +36,30 @@ class Group::Sektion < Group
     class_name: "Event::ApprovalCommissionResponsibility"
   has_and_belongs_to_many :section_offerings, foreign_key: :group_id
 
+  after_save :create_tour_notification_mailing_lists, if: -> { tours_enabled == true }
+
   def sorting_name
     display_name.delete_prefix("SAC ").delete_prefix("CAS ")
   end
 
   def active_sac_section_membership_config
     @active_sac_section_membership_config ||= sac_section_membership_configs.active
+  end
+
+  private
+
+  def create_tour_notification_mailing_lists
+    [
+      [::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+        "Benachrichtigung bei neuen normalen Tourausschreibungen"],
+      [::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY,
+        "Benachrichtigung bei neuen Subito-Tourausschreibungen"]
+    ].each do |internal_key, name|
+      MailingList.find_or_create_by(internal_key:,
+        group_id: id,
+        name:,
+        subscribable_for: "configured",
+        subscribable_mode: "opt_in")
+    end
   end
 end
