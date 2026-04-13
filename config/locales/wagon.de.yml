@@ -830,7 +830,7 @@ de:
       event/trait:
         one: Merkmal
         other: Merkmale
-      event/approval_kind:
+      event/approval:
         one: Freigabe
         other: Freigaben
       event/approval_kind:
