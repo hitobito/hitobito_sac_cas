@@ -14,6 +14,13 @@ module SacCas::Event::Participation
     Event::LeaderReminderMailer::REMINDER_8_WEEKS
   ]
 
+  SELF_EMPLOYED_LEADER_ROLES = [
+    Group::SacCasKurskader::KursleitungSelbstaendig,
+    Group::SacCasKurskader::KursleitungAspirantSelbstaendig,
+    Group::SacCasKurskader::KlassenleitungSelbstaendig,
+    Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig
+  ]
+
   delegate :sac_membership_active?, :membership_years, :membership_number, :correspondence,
     to: :person
 
