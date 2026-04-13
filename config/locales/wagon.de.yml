@@ -1417,7 +1417,7 @@ de:
   dropdown/group_edit:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
-    event_approval_commission_responsibility: Freigabe-Zuständigkeiten bearbeiten
+    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten bearbeiten
 
   event:
     application_market:

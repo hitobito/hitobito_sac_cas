@@ -40,7 +40,8 @@ module SacCas::Dropdown::GroupEdit
   end
 
   def edit_approval_commission_responsibilities?
-    template.can?(:update,
-      group) && group.event_types.include?(::Event::Tour) && group.tours_enabled
+    template.can?(:update, group) &&
+      group.event_types.include?(::Event::Tour) &&
+      group.tours_enabled
   end
 end
