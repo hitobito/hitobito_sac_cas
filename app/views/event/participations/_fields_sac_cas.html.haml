@@ -8,7 +8,7 @@
 - if (@event.tour? || @event.course?) && can?(:update_full, entry) && current_user != entry.participant
   %div{ data: { controller: stimulus_ctrl, url: recalculate_price_group_event_participations_path(@group, @event, id: entry.id) } }
     = f.labeled(:price_category) do
-      = f.select(:price_category, *entry.event_prices,
+      = f.select(:price_category, *entry.formatted_event_prices,
                                   value: @participation.price_category,
                                   class: "form-select form-select-sm",
                                   data: { action: "change->#{stimulus_ctrl}#sourceChanged" })

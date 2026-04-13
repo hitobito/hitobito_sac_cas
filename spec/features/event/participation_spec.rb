@@ -87,8 +87,7 @@ describe Event::Participation, js: true do
         click_on("Rechnung erstellen")
         find("#event_participation_invoice_form_price_category").find("option",
           text: "Normalpreis").click
-        sleep(3)
-        expect(find("#event_participation_invoice_form_price").value).to eq "20.00"
+        expect(page).to have_field("event_participation_invoice_form_price", with: "20.00")
       end
 
       it "updates price based on reference_date" do
@@ -101,8 +100,7 @@ describe Event::Participation, js: true do
         click_on("Rechnung erstellen")
         find("#event_participation_invoice_form_reference_date").set("01.01.2023")
         find("#event_participation_invoice_form_reference_date").native.send_keys :tab
-        sleep(3)
-        expect(find("#event_participation_invoice_form_price").value).to eq "400.00"
+        expect(page).to have_field("event_participation_invoice_form_price", with: "400.00")
       end
     end
 

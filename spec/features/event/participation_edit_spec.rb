@@ -43,8 +43,7 @@ describe "participation edit page", :js do
         select "Keine Kosten"
       end
 
-      sleep(3)
-      expect(find("#event_participation_price").value).to eq "0.00"
+      expect(page).to have_field("event_participation_price", with: "0.00")
 
       expect do
         click_on("Speichern")
@@ -62,8 +61,7 @@ describe "participation edit page", :js do
         select "Normalpreis CHF 20.00"
       end
 
-      sleep(3)
-      expect(find("#event_participation_price").value).to eq "20.00"
+      expect(page).to have_field("event_participation_price", with: "20.00")
 
       expect do
         click_on("Speichern")
@@ -79,9 +77,7 @@ describe "participation edit page", :js do
         select "Normalpreis CHF 20.00"
       end
 
-      # wait and expect price ot change to new price category
-      sleep(3)
-      expect(find("#event_participation_price").value).to eq "20.00"
+      expect(page).to have_field("event_participation_price", with: "20.00")
 
       fill_in "Preis", with: "400"
 

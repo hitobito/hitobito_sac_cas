@@ -24,10 +24,6 @@ module SacCas::Event::ParticipationDecorator
   end
   # rubocop:enable Metrics/CyclomaticComplexity
 
-  def event_prices
-    formatted_event_prices
-  end
-
   def possible_event_prices_for_invoice
     formatted_event_prices(selected_category: price_category)
   end
