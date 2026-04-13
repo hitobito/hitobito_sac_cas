@@ -1596,7 +1596,6 @@ it:
         terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf"
         subscribe_newsletter: "Sì, desidero essere informato sulle novità del Club Alpino Svizzero CAS"
       fields_sac_cas:
-        former_price_select: "In precedenza %{price_label}"
         no_price_select: Nessun costo
       summoned_notice: "%{participant} è stato convocato."
       reactivated_notice: "%{participant} è stato riattivato."

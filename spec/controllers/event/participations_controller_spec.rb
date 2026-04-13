@@ -624,40 +624,20 @@ describe Event::ParticipationsController do
     context "#price_category" do
       before { participation.update!(price: 20, price_category: "price_regular") }
 
-      it "updates price when changing price_category" do
+      it "sets custom price when changing price no matter the category" do
         expect do
           put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
-                                event_participation: {price_category: "price_member"}}
-        end.to change { participation.reload.price }.from(20).to(10)
-          .and change { participation.price_category }.from("price_regular").to("price_member")
+                                event_participation: {price: 300}}
+        end.to change { participation.reload.price }.from(20).to(300)
       end
 
-      it "updates price when event#price changed, even if price_category stays the same" do
-        event.update!(price_regular: 30)
+      it "keeps custom price even without price_category" do
         expect do
           put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
-                                event_participation: {price_category: "price_regular"}}
-        end.to change { participation.reload.price }.from(20).to(30)
-          .and not_change { participation.price_category }
-      end
-
-      it "clears price when removing price_category" do
-        expect do
-          put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
-                                event_participation: {price_category: ""}}
-        end.to change { participation.reload.price }.from(20).to(nil)
+                                event_participation: {price_category: "",
+                                                      price: 1622}}
+        end.to change { participation.reload.price }.from(20).to(1622)
           .and change { participation.price_category }.from("price_regular").to(nil)
-      end
-
-      # rubocop:todo Layout/LineLength
-      it "doesn't update price when event#price changed if price_category should still use former price" do
-        # rubocop:enable Layout/LineLength
-        event.update!(price_regular: 30)
-        expect do
-          put :update, params: {group_id: group.id, event_id: event.id, id: participation.id,
-                                event_participation: {price_category: "former"}}
-        end.to not_change { participation.reload.price }
-          .and not_change { participation.price_category }
       end
 
       context "for user participation" do
@@ -670,6 +650,7 @@ describe Event::ParticipationsController do
             event_id: event.id,
             id: participation.id,
             event_participation: {price_category: "price_special",
+                                  price: 50,
                                   additional_information: "Bla bla"}
           }
           expect(response).to redirect_to(participation_path)

@@ -45,56 +45,6 @@ describe Event::Courses::InvoicesController do
     end
   end
 
-  describe "GET#recalculate" do
-    context "as participant" do
-      before { sign_in(participant) }
-
-      it "is unauthorized" do
-        expect { get :recalculate, params: }.to raise_error(CanCan::AccessDenied)
-      end
-    end
-
-    context "as admin" do
-      before { sign_in(admin) }
-
-      it "is unauthorized for leader participations" do
-        Fabricate(Event::Course::Role::Leader.name.to_sym, participation: participation)
-        expect { get :recalculate, params: }.to raise_error(CanCan::AccessDenied)
-      end
-
-      it "recalculates price when price_category changed" do
-        params[:event_participation_invoice_form] = {price_category: "price_member"}
-        get :recalculate, params: params
-        expect(JSON.parse(response.body)["value"]).to eq "5.0"
-      end
-
-      it "returns unprocessable_content when invalid price_category is passed" do
-        params[:event_participation_invoice_form] =
-          {price_category: "this_price_category_doesnt_exist"}
-        get :recalculate, params: params
-        expect(response.status).to eq 422
-      end
-
-      it "recalculates price when reference_date changed" do
-        params[:event_participation_invoice_form] = {reference_date: "12.12.2025"}
-        get :recalculate, params: params
-        expect(JSON.parse(response.body)["value"]).to eq "10.0"
-      end
-
-      it "returns unprocessable_content when invalid reference_date is passed" do
-        params[:event_participation_invoice_form] = {reference_date: "12.12"}
-        get :recalculate, params: params
-        expect(response.status).to eq 422
-      end
-
-      it "returns not found when unknown query param is passed" do
-        params[:event_participation_invoice_form] = {unknown_query_param: "price_member"}
-        get :recalculate, params: params
-        expect(response.status).to eq 400
-      end
-    end
-  end
-
   describe "POST#create" do
     context "as participant" do
       before { sign_in(participant) }

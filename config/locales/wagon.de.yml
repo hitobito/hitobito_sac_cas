@@ -1561,7 +1561,6 @@ de:
         terms_and_conditions_link_href: https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/AGBs_Kurse_SAC.pdf
         subscribe_newsletter: Ja, ich möchte über Neuigkeiten des Schweizer Alpen-Club SAC informiert werden
       fields_sac_cas:
-        former_price_select: Bisheriger %{price_label}
         no_price_select: Keine Kosten
       summoned_notice: "%{participant} wurde aufgeboten."
       reactivated_notice: "%{participant} wurde reaktiviert."

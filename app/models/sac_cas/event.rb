@@ -101,6 +101,10 @@ module SacCas::Event
     def receiving_reminders = where.not(state: [:closed, :canceled])
   end
 
+  def tour?
+    is_a?(Event::Tour)
+  end
+
   def total_duration_days
     dates.sum { _1.duration.days }
   end

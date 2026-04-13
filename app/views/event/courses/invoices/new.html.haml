@@ -6,7 +6,7 @@
 - stimulus_ctrl = 'field-remote-update'
 -title @invoice_type == ExternalInvoice::CourseParticipation ? t(".create_course_participation_invoice") : t(".create_course_annulation_invoice")
 
-= standard_form(@invoice_form, url: group_event_participation_invoices_path(@group, @event, @participation), method: :post, data: { controller: stimulus_ctrl, url: recalculate_group_event_participation_invoices_path(@group, @event, @participation) }) do |f|
+= standard_form(@invoice_form, url: group_event_participation_invoices_path(@group, @event, @participation), method: :post, data: { controller: stimulus_ctrl, url: recalculate_price_group_event_participations_path(@group, @event, id: @participation.id) }) do |f|
   = f.error_messages
   = f.labeled(:reference_date) do
     = f.date_field :reference_date, data: { action: (@invoice_type == ExternalInvoice::CourseAnnulation) ? "change->#{stimulus_ctrl}#sourceChanged" : "" }
@@ -20,7 +20,7 @@
                                   value: @participation.price_category,
                                   class: "form-select form-select-sm",
                                   data: { action: "change->#{stimulus_ctrl}#sourceChanged" })
-  = f.labeled_input_field(:price, value: @participation.price, data: { field_remote_update_target: "field" })
+  = f.labeled_input_field(:price, value: number_with_precision(@participation.price), data: { field_remote_update_target: "field" })
 
   = f.indented do
     = submit_button(f, @invoice_type ? t(".create_course_participation_invoice") : t(".create_course_annulation_invoice"))

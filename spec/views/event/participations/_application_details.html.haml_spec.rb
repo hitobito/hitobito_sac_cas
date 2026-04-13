@@ -62,6 +62,10 @@ describe "event/participations/_application_details.html.haml" do
   context "tour" do
     let(:event) { events(:section_tour) }
 
+    before do
+      participation.update!(price: 20, price_category: "price_regular")
+    end
+
     it "does render all relevant attributes" do
       expect_attribute_row(membership_attributes_container, 1, "Personennummer", participation.participant_id)
       expect_attribute_row(membership_attributes_container, 2, "SAC-Mitglied", "ja")
@@ -70,8 +74,8 @@ describe "event/participations/_application_details.html.haml" do
 
       expect_attribute_row(event_attrributes_container, 1, "Anmeldedatum")
       expect_attribute_row(event_attrributes_container, 2, "Status", "Bestätigt")
+      expect_attribute_row(event_attrributes_container, 3, "Preis", "CHF 20.00 (Normalpreis)")
       expect(dom).not_to have_text "Effektive Tage"
-      expect(dom).not_to have_text "Preis"
       expect(dom).not_to have_text "Rechnung"
       expect(dom).not_to have_text "Rechnungsstellung"
     end
