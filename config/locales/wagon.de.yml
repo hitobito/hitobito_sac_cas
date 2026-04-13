@@ -33,6 +33,7 @@ de:
       website: "https://www.sac-cas.ch"
     sac_oauth:
       <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
     duration_hour_unit: h
@@ -535,7 +536,7 @@ de:
           published: Publiziert
           ready: Vorbereitung abgeschlossen
           closed: Abgeschlossen
-          canceled: Abgesagt / Annulliert          
+          canceled: Abgesagt / Annulliert
       external_training:
         person: Person
         event_kind: Kursart
