@@ -28,14 +28,14 @@ describe Participations::History do
 
     it "only lists past course participations" do
       past = create_course_participation(start_at: 10.days.ago, finish_at: 2.days.ago)
-      create_course_participation(start_at: 10.days.ago, finish_at: nil)
+      past_single_day = create_course_participation(start_at: 11.days.ago, finish_at: nil)
       create_course_participation(start_at: 10.days.ago, finish_at: 2.days.from_now)
       create_course_participation(start_at: 30.days.ago, finish_at: 20.days.ago).tap do |participation|
         participation.event.dates += [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 2.days.from_now)]
         participation.save!
       end
 
-      expect(history.recent_trainings).to match_array([to_history_row(past)])
+      expect(history.recent_trainings).to match_array([to_history_row(past_single_day), to_history_row(past)])
     end
 
     it "only lists course participations with active participation state" do
@@ -76,14 +76,14 @@ describe Participations::History do
 
     it "only lists past tour participations" do
       past = create_tour_participation(start_at: 10.days.ago, finish_at: 2.days.ago)
-      create_tour_participation(start_at: 10.days.ago, finish_at: nil)
+      past_single_day = create_tour_participation(start_at: 10.days.ago, finish_at: nil)
       create_tour_participation(start_at: 10.days.ago, finish_at: 2.days.from_now)
       create_tour_participation(start_at: 30.days.ago, finish_at: 20.days.ago).tap do |participation|
         participation.event.dates += [Fabricate(:event_date, start_at: 10.days.ago, finish_at: 2.days.from_now)]
         participation.save!
       end
 
-      expect(history.recent_tours).to match_array([to_history_row(past)])
+      expect(history.recent_tours).to match_array([to_history_row(past_single_day), to_history_row(past)])
     end
 
     it "only lists tour participations with active participation state" do

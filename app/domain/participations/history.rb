@@ -35,10 +35,12 @@ class Participations::History
     end
 
     def self.from_event(event)
+      first_date = event.dates.filter_map(&:start_at).min
+      last_date = event.dates.flat_map { |date| [date.start_at, date.finish_at] }.compact.max
       new(
         name: event.name,
-        start_at: event.dates.filter_map(&:start_at).min.to_date,
-        finish_at: event.dates.filter_map(&:finish_at).max.to_date,
+        start_at: first_date.to_date,
+        finish_at: last_date.to_date,
         provider: event.groups.min_by(&:id)&.layer_group&.name
       )
     end
