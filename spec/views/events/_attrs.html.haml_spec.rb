@@ -61,6 +61,7 @@ describe "events/_attrs.html.haml" do
     let(:event) { events(:section_tour) }
 
     before do
+      event.subito = true
       assign(:group, groups(:bluemlisalp))
       allow(view).to receive(:course?).and_return(false)
       allow(view).to receive(:tour?).and_return(true)

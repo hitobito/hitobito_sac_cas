@@ -43,7 +43,7 @@ describe Event::Tour do
     end
 
     describe "subito" do
-      let(:new_valid_value) { false }
+      let(:new_valid_value) { true }
 
       it_behaves_like "readonly for draft attributes", attribute: :subito
     end

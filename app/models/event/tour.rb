@@ -148,6 +148,14 @@ class Event::Tour < Event
     }
   end
 
+  def main_target_groups
+    Event::TargetGroup.where(id: target_groups.select("COALESCE(parent_id, id)"))
+  end
+
+  def main_disciplines
+    Event::Discipline.where(id: disciplines.select("COALESCE(parent_id, id)"))
+  end
+
   private
 
   def prevent_changes_in_weak_validation_state
