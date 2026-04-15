@@ -42,12 +42,13 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
 
     # Create Kurskader roles for event_roles
     new_group_roles = []
+    kurskader_group = Group.find_by(type: "Group::SacCasKurskader")
 
     relevant_event_roles = fetch_relevant_roles.sort_by { _1.participation.event.dates.map(&:start_at).min }
 
-    relevant_event_roles.group_by { [_1.participation.participant_id, _1.type] }.each do |(person_id, base_role_type), person_roles|
+    relevant_event_roles.group_by { _1.participation.participant_id }.each do |person_id, person_roles|
       new_group_roles.concat(
-        build_role_attributes_for_person(person_id, base_role_type, person_roles, Group.find_by(type: "Group::SacCasKurskader"))
+        build_role_attributes_for_person(person_id, person_roles, kurskader_group)
       )
     end
 
@@ -92,30 +93,34 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
     Event::Role.joins(participation: :event)
               .where("events.number LIKE '2026-%'")
               .where(type: ROLE_TO_GROUP_MAPPING.keys)
-              .where("EXISTS (SELECT 1 FROM event_dates WHERE event_dates.event_id = events.id AND event_dates.start_at <= ?)", Time.zone.now)
               .includes(participation: { event: :dates })
   end
 
-  def build_role_attributes_for_person(person_id, base_role_type, person_roles, target_group)
+  def build_role_attributes_for_person(person_id, person_roles, target_group)
     role_attributes = []
+
+    current_role_type = person_roles.first.type
     current_self_employed = person_roles.first.self_employed
     current_start_date = Date.new(2025, 9, 1)
 
-    person_roles.each do |role|
+    person_roles.select do |role|
+      role.participation.event.dates.map(&:start_at).min.to_date <= Time.zone.today
+    end.each do |role|
       event_date = role.participation.event.dates.map(&:start_at).min.to_date
 
-      if role.self_employed != current_self_employed
+      if role.self_employed != current_self_employed || role.type != current_role_type
         role_attributes << build_role_attributes(
-          target_group, base_role_type, current_self_employed, person_id, current_start_date, (event_date - 1.day)
+          target_group, current_role_type, current_self_employed, person_id, current_start_date, (event_date - 1.day)
         )
 
         current_start_date = event_date
+        current_role_type = role.type
         current_self_employed = role.self_employed
       end
     end
 
     role_attributes << build_role_attributes(
-      target_group, base_role_type, current_self_employed, person_id, current_start_date
+      target_group, current_role_type, current_self_employed, person_id, current_start_date
     )
 
     role_attributes
