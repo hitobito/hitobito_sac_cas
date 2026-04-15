@@ -4,13 +4,32 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
+  ROLE_TO_GROUP_MAPPING = {
+    "Event::Course::Role::Leader" => {
+      true  => "KursleitungSelbstaendig",
+      false => "KursleitungUnselbstaendig"
+    },
+    "Event::Course::Role::LeaderAspirant" => {
+      true  => "KursleitungAspirantSelbstaendig",
+      false => "KursleitungAspirantUnselbstaendig"
+    },
+    "Event::Course::Role::AssistantLeader" => {
+      true  => "KlassenleitungSelbstaendig",
+      false => "KlassenleitungUnselbstaendig"
+    },
+    "Event::Course::Role::AssistantLeaderAspirant" => {
+      true  => "KlassenleitungAspirantSelbstaendig",
+      false => "KlassenleitungAspirantUnselbstaendig"
+    }
+  }.freeze
+
   def up
     # End all roles in SacCasKurskader by yesterday
     execute <<~SQL
       UPDATE roles
-      SET end_on = '#{Time.zone.yesterday}'
-      WHERE end_on IS NULL
-      AND group_id = (SELECT id FROM groups WHERE type = 'Group::SacCasKurskader' LIMIT 1)
+      SET end_on = '2025-08-31'
+      WHERE group_id = (SELECT id FROM groups WHERE type = 'Group::SacCasKurskader' LIMIT 1)
+      AND (end_on IS NULL OR end_on > '2025-08-31')
     SQL
 
     # Update types of SacCasKurskader roles
@@ -22,35 +41,17 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
     SQL
 
     # Create Kurskader roles for event_roles
-    execute <<~SQL
-      INSERT INTO roles (person_id, group_id, type, start_on, created_at, updated_at)
-      SELECT DISTINCT
-        event_participations.participant_id,
-        (SELECT id FROM groups WHERE type = 'Group::SacCasKurskader' LIMIT 1),
-        CASE
-          WHEN event_roles.type = 'Event::Course::Role::Leader' AND event_roles.self_employed = TRUE  THEN 'Group::SacCasKurskader::KursleitungSelbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::Leader' AND event_roles.self_employed = FALSE THEN 'Group::SacCasKurskader::KursleitungUnselbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::LeaderAspirant' AND event_roles.self_employed = TRUE  THEN 'Group::SacCasKurskader::KursleitungAspirantSelbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::LeaderAspirant' AND event_roles.self_employed = FALSE THEN 'Group::SacCasKurskader::KursleitungAspirantUnselbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::AssistantLeader' AND event_roles.self_employed = TRUE  THEN 'Group::SacCasKurskader::KlassenleitungSelbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::AssistantLeader' AND event_roles.self_employed = FALSE THEN 'Group::SacCasKurskader::KlassenleitungUnselbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::AssistantLeaderAspirant' AND event_roles.self_employed = TRUE  THEN 'Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig'
-          WHEN event_roles.type = 'Event::Course::Role::AssistantLeaderAspirant' AND event_roles.self_employed = FALSE THEN 'Group::SacCasKurskader::KlassenleitungAspirantUnselbstaendig'
-        END,
-        NOW(),
-        NOW(),
-        NOW()
-      FROM event_roles
-      JOIN event_participations ON event_participations.id = event_roles.participation_id
-      JOIN events ON events.id = event_participations.event_id
-      WHERE events.number LIKE '2026-%'
-      AND event_roles.type IN (
-        'Event::Course::Role::Leader',
-        'Event::Course::Role::LeaderAspirant',
-        'Event::Course::Role::AssistantLeader',
-        'Event::Course::Role::AssistantLeaderAspirant'
+    new_group_roles = []
+
+    relevant_event_roles = fetch_relevant_roles.sort_by { _1.participation.event.dates.map(&:start_at).min }
+
+    relevant_event_roles.group_by { [_1.participation.participant_id, _1.type] }.each do |(person_id, base_role_type), person_roles|
+      new_group_roles.concat(
+        build_role_attributes_for_person(person_id, base_role_type, person_roles, Group.find_by(type: "Group::SacCasKurskader"))
       )
-    SQL
+    end
+
+    Role.insert_all(new_group_roles) if new_group_roles.any?
 
     # Update roles for some selected non self employed people to self employed roles
     execute <<~SQL
@@ -83,5 +84,50 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
 
   def down
     add_column :event_roles, :self_employed, :boolean, default: false
+  end
+
+  private
+
+  def fetch_relevant_roles
+    Event::Role.joins(participation: :event)
+              .where("events.number LIKE '2026-%'")
+              .where(type: ROLE_TO_GROUP_MAPPING.keys)
+              .where("EXISTS (SELECT 1 FROM event_dates WHERE event_dates.event_id = events.id AND event_dates.start_at <= ?)", Time.zone.now)
+              .includes(participation: { event: :dates })
+  end
+
+  def build_role_attributes_for_person(person_id, base_role_type, person_roles, target_group)
+    role_attributes = []
+    current_self_employed = person_roles.first.self_employed
+    current_start_date = Date.new(2025, 9, 1)
+
+    person_roles.each do |role|
+      event_date = role.participation.event.dates.map(&:start_at).min.to_date
+
+      if role.self_employed != current_self_employed
+        role_attributes << build_role_attributes(
+          target_group, base_role_type, current_self_employed, person_id, current_start_date, (event_date - 1.day)
+        )
+
+        current_start_date = event_date
+        current_self_employed = role.self_employed
+      end
+    end
+
+    role_attributes << build_role_attributes(
+      target_group, base_role_type, current_self_employed, person_id, current_start_date
+    )
+
+    role_attributes
+  end
+
+  def build_role_attributes(target_group, base_role_type, self_employed, person_id, start_on, end_on = nil)
+    {
+      type: "Group::SacCasKurskader::#{ROLE_TO_GROUP_MAPPING[base_role_type][self_employed]}",
+      group_id: target_group.id,
+      person_id: person_id,
+      start_on: start_on,
+      end_on: end_on
+    }
   end
 end
