@@ -113,10 +113,22 @@ describe EventAbility do
           sektion: groups(:bluemlisalp),
           discipline: event_disciplines(:wandern),
           target_group: event_target_groups(:kinder),
-          subito: true
+          subito: false
         )
 
         expect(ability).to be_able_to(:update, tour)
+      end
+
+      it "may not update tour if komitee covers another responsibility" do
+        freigabe_komitee.event_approval_commission_responsibilities.destroy_all
+        freigabe_komitee.event_approval_commission_responsibilities.create!(
+          sektion: groups(:bluemlisalp),
+          discipline: event_disciplines(:wandern),
+          target_group: event_target_groups(:kinder),
+          subito: true
+        )
+
+        expect(ability).not_to be_able_to(:update, tour)
       end
 
       it "may update matching tour from ortsgruppe in same sektion" do

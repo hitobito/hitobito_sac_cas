@@ -9,3 +9,5 @@
   = Dropdown::Events::Courses::MailDispatch.new(self, entry, @group)
 - if entry.course? && can?(:create, entry)
   = action_button(t(".attach_key_data_sheets"), group_event_key_data_sheets_path(@group, entry), :file_pdf, method: :post)
+- if entry.tour? && can?(:update, entry)
+  = action_button(t(".approval"), edit_group_event_approval_path(@group, entry), :clipboard_check)

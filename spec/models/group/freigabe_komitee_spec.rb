@@ -13,23 +13,29 @@ describe Group::FreigabeKomitee do
   context "create" do
     it "enqueues CreateApprovalCommissionResponsibilitiesJob if its the first freigabekomitee in layer" do
       matterhorn_touren_und_kurse = Fabricate(Group::SektionsTourenUndKurse.sti_name.to_sym,
-        name: "Touren und Kurse Matterhorn", parent: groups(:matterhorn_funktionaere), layer_group: groups(:matterhorn))
+        name: "Touren und Kurse Matterhorn",
+        parent: groups(:matterhorn_funktionaere),
+        layer_group: groups(:matterhorn))
 
       expect do
-        Fabricate(Group::FreigabeKomitee.sti_name.to_sym, name: "FreigabeKomitee Matterhorn",
-          parent: matterhorn_touren_und_kurse, layer_group: groups(:matterhorn))
+        Fabricate(Group::FreigabeKomitee.sti_name.to_sym,
+          name: "FreigabeKomitee Matterhorn",
+          parent: matterhorn_touren_und_kurse,
+          layer_group: groups(:matterhorn))
       end.to change {
-        Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
-      }
+               Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
+             }
     end
 
     it "does not enqueue CreateApprovalCommissionResponsibilitiesJob if its the second freigabekomitee in layer" do
       expect do
-        Fabricate(Group::FreigabeKomitee.sti_name.to_sym, name: "Zweites FreigabeKomitee",
-          parent: groups(:bluemlisalp_touren_und_kurse), layer_group: groups(:bluemlisalp))
+        Fabricate(Group::FreigabeKomitee.sti_name.to_sym,
+          name: "Zweites FreigabeKomitee",
+          parent: groups(:bluemlisalp_touren_und_kurse),
+          layer_group: groups(:bluemlisalp))
       end.to_not change {
-        Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
-      }
+                   Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
+                 }
     end
   end
 
@@ -45,6 +51,11 @@ describe Group::FreigabeKomitee do
 
     it "does not allow destroy when event_approvals exist" do
       group.event_approval_commission_responsibilities.destroy_all
+      Event::Approval.create!(
+        event: events(:section_tour),
+        freigabe_komitee: group,
+        approval_kind: event_approval_kinds(:security)
+      )
 
       expect { group.destroy }.not_to change { described_class.unscoped.count }
       expect(group.errors.full_messages).to match_array ["Datensatz kann nicht gelöscht werden, " \

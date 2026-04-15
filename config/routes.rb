@@ -51,6 +51,7 @@ Rails.application.routes.draw do
           end
         end
         scope module: "event" do
+          resource :approval, only: [:edit, :update], module: :tours
           resource :key_data_sheets, only: [:create], module: :courses
           resource :mail_dispatch, only: [:create], module: :courses
           resource :leader_settlement_pdfs, only: [:create], module: :courses

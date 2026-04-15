@@ -153,6 +153,14 @@ class Event::Tour < Event
     ::HoursDuration.new(duration).to_s
   end
 
+  def main_target_groups
+    Event::TargetGroup.where(id: target_groups.select("COALESCE(parent_id, id)"))
+  end
+
+  def main_disciplines
+    Event::Discipline.where(id: disciplines.select("COALESCE(parent_id, id)"))
+  end
+
   private
 
   def duration_valid?
