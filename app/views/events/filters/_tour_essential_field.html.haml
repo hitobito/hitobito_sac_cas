@@ -13,5 +13,6 @@
       data: { controller: 'tom-select',
       tom_select_options_value: tour_essentials_nested_select_options(entries),
       tom_select_selected_value: Array(filter.chain.dig(:tour_essentials, param)).to_json,
+      tom_select_render_option_function_value: SacCas::EventsHelper::TOM_SELECT_COLORED_OPTION,
       tom_select_no_results_value: I18n.t('global.no_list_entries'),
       })

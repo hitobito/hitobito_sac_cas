@@ -6,6 +6,34 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::EventsHelper
+  COLOR_ICON = '<i style="color: ${escape(data.color)}" class="fas fa-circle"></i>'
+
+  TOM_SELECT_COLORED_OPTGROUP = <<~JS
+    return function(data, escape) {
+      if (!data.color) {
+        return `<div class="optgroup-header">${escape(data.label)}</div>`;
+      }
+      return `<div class="optgroup-header">
+                #{COLOR_ICON}
+                <span class="ms-1">${escape(data.label)}</span>
+              </div>`;
+    }
+  JS
+
+  TOM_SELECT_COLORED_OPTION = <<~JS
+    return function(data, escape) {
+      let label = `<div>${escape(data.label)}</div>`;
+      if (data.color) {
+        label = `<div>#{COLOR_ICON}<span class="ms-1">${escape(data.label)}</span></div>`;
+      }
+      if (data.description) {
+        const desc = `<div class="muted small">${escape(data.description)}</div>`;
+        label = `<div>${label}${desc}</div>`;
+      }
+      return label;
+    }
+  JS
+
   # Temporary fix for core compatibility, should be removed once core `EventsHelper`
   # implements the `with_tooltip` method.
   def self.prepended(base)
@@ -46,9 +74,9 @@ module SacCas::EventsHelper
     end.to_json
   end
 
-  def tour_essentials_grouped_select_optgroups(entries, color: false)
+  def tour_essentials_grouped_select_optgroups(entries)
     entries.select(&:main?).flat_map do |main|
-      color = main.color if color
+      color = main.color if main.respond_to?(:color)
       {value: main.id, label: main.to_s, color:}.compact_blank
     end.to_json
   end
@@ -56,27 +84,18 @@ module SacCas::EventsHelper
   # main entries are regular selectable options
   def tour_essentials_nested_select_options(entries)
     entries.select(&:main?).flat_map do |main|
-      [{id: main.id, label: main.to_s, description: main.short_description}] +
-        entries.select { |d| d.parent_id == main.id }.map do |child|
-          {id: child.id,
-           label: "    #{child}",
-           description: child.short_description.present? ? "     #{child.short_description}" : nil}
-        end
+      color = main.color if main.respond_to?(:color)
+      [{id: main.id, label: main.to_s, description: main.short_description, color:}] +
+        tour_essentials_nested_select_child_options(entries.select { |d| d.parent_id == main.id })
     end.to_json
   end
 
-  def tour_essentials_opt_group_header_with_color
-    <<~JS
-      return function(data, escape) {
-        if (!data.color) {
-          return `<div class="optgroup-header">${escape(data.label)}</div>`;
-        }
-        return `<div class="optgroup-header">
-                  <i style="color: ${escape(data.color)}" class="fas fa-circle"></i>
-                  <span class="ms-1">${escape(data.label)}</span>
-                </div>`;
-      }
-    JS
+  def tour_essentials_nested_select_child_options(children)
+    children.map do |child|
+      {id: child.id,
+       label: "    #{child}",
+       description: child.short_description.present? ? "     #{child.short_description}" : nil}
+    end
   end
 
   def fitness_requirements_select_options(requirements)
