@@ -13,7 +13,7 @@ describe Event::ParticipationAbility do
     Event::Participation.new(event: event, person: person, application_id: -1)
   end
 
-  def build_participation_role(person, role_type, participation: nil, self_employed: false)
+  def build_participation_role(person, role_type, participation: nil)
     build(:bluemlisalp_funktionaere, event: top_course, person: person).tap(&:save!)
       .roles.create!(type: role_type, participation: participation)
   end
@@ -93,57 +93,80 @@ describe Event::ParticipationAbility do
     describe "leader_settlement" do
       let(:top_course) { events(:top_course) }
       let(:role) { build_role(:bluemlisalp_mitglieder, "Mitglied") }
-      let(:participation) { build(:bluemlisalp_mitglieder, event: top_course, person: role.person) }
+      let(:person) { role.person }
+      let(:participation) { build(:bluemlisalp_mitglieder, event: top_course, person: person) }
+      let(:group) { Group::SacCasKurskader.create!(parent: Group.root) }
 
-      context "not self employed" do
-        before do
-          participation.save!
-          participation.roles.create!(type: Event::Course::Role::Leader, self_employed: false)
+      before do
+        event_dates(:top_course_first).update!(start_at: 2.days.from_now, finish_at: 3.days.from_now)
+        event_dates(:top_course_second).update!(start_at: 5.days.from_now, finish_at: 10.days.from_now)
+      end
+
+      shared_examples "a self employed leader" do |role_type|
+        let!(:leader_role) { role_type.create!(person: person, group: group, end_on: 1.year.from_now) }
+
+        it "may leader_settlement for her own participation" do
+          expect(subject).to be_able_to(:leader_settlement, participation)
         end
 
-        it "may not leader_settlement when participation is not self employed" do
+        it "may not leader_settlement if role start_on is after event finish_at" do
+          leader_role.update!(start_on: 30.days.from_now)
           expect(subject).not_to be_able_to(:leader_settlement, participation)
         end
-      end
 
-      context "leader" do
-        before do
-          participation.save!
-          participation.roles.build(type: Event::Course::Role::Leader, self_employed: true)
+        it "may not leader_settlement if role start_on is after event start_at during event date range" do
+          leader_role.update!(start_on: 6.days.from_now)
+          expect(subject).not_to be_able_to(:leader_settlement, participation)
         end
 
-        it "may leader_settlement her own" do
+        it "may not leader_settlement if role end_on is before event start_at" do
+          leader_role.update!(end_on: 1.day.from_now)
+          expect(subject).not_to be_able_to(:leader_settlement, participation)
+        end
+
+        it "may leader_settlement if role end_on is nil" do
+          leader_role.update!(end_on: nil)
           expect(subject).to be_able_to(:leader_settlement, participation)
         end
 
-        it "may not leader_settlement other participations" do
+        it "may not leader_settlement for other participations" do
           other_participation = build(:bluemlisalp_mitglieder, event: top_course)
           expect(subject).not_to be_able_to(:leader_settlement, other_participation)
         end
       end
 
-      context "assistant leader" do
+      shared_examples "a non self employed leader" do |role_type|
         before do
           participation.save!
-          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+          role_type.create!(person: person, group: group)
         end
 
-        it "may leader_settlement her own" do
-          expect(subject).to be_able_to(:leader_settlement, participation)
+        it "may not leader_settlement for her own participation" do
+          expect(subject).not_to be_able_to(:leader_settlement, participation)
         end
 
-        it "may not leader_settlement other participations" do
+        it "may not leader_settlement for other participations" do
           other_participation = build(:bluemlisalp_mitglieder, event: top_course)
           expect(subject).not_to be_able_to(:leader_settlement, other_participation)
         end
       end
+
+      it_behaves_like "a self employed leader", Group::SacCasKurskader::KursleitungSelbstaendig
+      it_behaves_like "a self employed leader", Group::SacCasKurskader::KlassenlehrerSelbstaendig
+      it_behaves_like "a self employed leader", Group::SacCasKurskader::KursleitungAspirantSelbstaendig
+      it_behaves_like "a self employed leader", Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig
+
+      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KursleitungUnselbstaendig
+      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KlassenlehrerUnselbstaendig
+      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KursleitungAspirantUnselbstaendig
+      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KlassenlehrerAspirantUnselbstaendig
 
       context "layer and below full" do
         let(:role) { roles(:admin) }
 
         before do
           participation.save!
-          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+          Group::SacCasKurskader::KursleitungSelbstaendig.create!(person:, group:)
         end
 
         it "may leader_settlement on anty participations" do
@@ -166,7 +189,7 @@ describe Event::ParticipationAbility do
 
         before do
           participation.save!
-          participation.roles.build(type: Event::Course::Role::AssistantLeader, self_employed: true)
+          participation.roles.build(type: Event::Course::Role::AssistantLeader)
         end
 
         it "may reactivate on any participations" do

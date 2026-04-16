@@ -62,7 +62,9 @@ module SacCas::Event::ParticipationAbility
   private
 
   def self_employed_leader
-    contains_any?(Event::Course::LEADER_ROLES,
-      participation.roles.select(&:self_employed).map(&:type))
+    participation.person
+      .roles_unscoped
+      .active(event.start_at)
+      .where(type: Event::Participation::SELF_EMPLOYED_LEADER_ROLES.map(&:sti_name)).exists?
   end
 end

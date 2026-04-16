@@ -203,14 +203,6 @@ module SacCas::Event::Course
       .order("course_compensation_categories.short_name")
   end
 
-  def start_at
-    dates.first.start_at
-  end
-
-  def finish_at
-    dates.last.finish_at
-  end
-
   def minimum_age
     read_attribute(:minimum_age)
   end

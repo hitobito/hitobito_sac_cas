@@ -74,10 +74,14 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Hüttenchef*in: []  --  (Group::SacCasClubhuette::Huettenchef)
         * Andere: []  --  (Group::SacCasClubhuette::Andere)
       * SAC Kurskader
-        * Kursleiter*in: []  --  (Group::SacCasKurskader::Kursleiter)
-        * Klassenlehrer*in: []  --  (Group::SacCasKurskader::Klassenlehrer)
-        * Kursleiter*in (Aspirant): []  --  (Group::SacCasKurskader::KursleiterAspirant)
-        * Klassenlehrer*in (Aspirant): []  --  (Group::SacCasKurskader::KlassenlehrerAspirant)
+        * Kursleiter*in (selbständig): []  --  (Group::SacCasKurskader::KursleitungSelbstaendig)
+        * Klassenlehrer*in (selbständig): []  --  (Group::SacCasKurskader::KlassenlehrerSelbstaendig)
+        * Kursleiter*in (Aspirant, selbständig): []  --  (Group::SacCasKurskader::KursleitungAspirantSelbstaendig)
+        * Klassenlehrer*in (Aspirant, selbständig): []  --  (Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig)
+        * Kursleiter*in (unselbständig): []  --  (Group::SacCasKurskader::KursleitungUnselbstaendig)
+        * Klassenlehrer*in (unselbständig): []  --  (Group::SacCasKurskader::KlassenlehrerUnselbstaendig)
+        * Kursleiter*in (Aspirant, unselbständig): []  --  (Group::SacCasKurskader::KursleitungAspirantUnselbstaendig)
+        * Klassenlehrer*in (Aspirant, unselbständig): []  --  (Group::SacCasKurskader::KlassenlehrerAspirantUnselbstaendig)
       * Verbände & Organisationen
       * Verband & Organisation
         * Präsidium: []  --  (Group::SacCasVerband::Praesidium)
