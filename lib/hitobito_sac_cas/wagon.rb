@@ -166,7 +166,6 @@ module HitobitoSacCas
       RoleDecorator.prepend SacCas::RoleDecorator
       PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
-      Event::RoleDecorator.prepend SacCas::Event::RoleDecorator
       EventDecorator.icons["Event::Tour"] = :mountain
 
       ## Domain
@@ -276,7 +275,6 @@ module HitobitoSacCas
         SacCas::Event::Participations::MailDispatchesController
       )
       Event::RegisterController.prepend SacCas::Event::RegisterController
-      Event::RolesController.prepend SacCas::Event::RolesController
       GroupsController.prepend SacCas::GroupsController
       Groups::SelfRegistrationController.prepend SacCas::Groups::SelfRegistrationController
       Groups::SelfInscriptionController.prepend SacCas::Groups::SelfInscriptionController

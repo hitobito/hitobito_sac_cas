@@ -17,14 +17,22 @@ describe Event::Courses::LeaderSettlementPdfsController do
     ])
   end
   let(:group) { course.groups.first }
+  let(:kurskader_group) { Group::SacCasKurskader.create!(parent: Group.root) }
 
-  let!(:leader_participations) do
-    [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
-      Fabricate(event_role.name.to_sym,
-        # rubocop:todo Layout/LineLength
-        participation: Fabricate(:event_participation, event: course), self_employed: true).participation
-      # rubocop:enable Layout/LineLength
-    end
+  let!(:leader_participation) {
+    Fabricate(Event::Course::Role::Leader.sti_name,
+      participation: Fabricate(:event_participation, event: course)).participation
+  }
+  let!(:assistant_leader_participation) {
+    Fabricate(Event::Course::Role::AssistantLeader.sti_name,
+      participation: Fabricate(:event_participation, event: course)).participation
+  }
+
+  before do
+    Group::SacCasKurskader::KursleitungSelbstaendig.create!(person: leader_participation.person, group: kurskader_group,
+      start_on: Time.zone.local(2021, 5, 1))
+    Group::SacCasKurskader::KlassenlehrerSelbstaendig.create!(person: leader_participation.person,
+      group: kurskader_group, start_on: Time.zone.local(2021, 5, 1))
   end
 
   describe "POST #create" do
@@ -35,19 +43,19 @@ describe Event::Courses::LeaderSettlementPdfsController do
         expect do
           post :create,
             params: {group_id: group, event_id: course,
-                     participation_id: leader_participations.first.id}
+                     participation_id: leader_participation.id}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
 
     context "as leader_participation" do
-      let(:user) { leader_participations.first.person }
+      let(:user) { leader_participation.person }
 
       it "unauthorized if not his own participation" do
         expect do
           post :create,
             params: {group_id: group, event_id: course,
-                     participation_id: leader_participations.second.id}
+                     participation_id: assistant_leader_participation.id}
         end.to raise_error(CanCan::AccessDenied)
       end
 
@@ -57,7 +65,7 @@ describe Event::Courses::LeaderSettlementPdfsController do
         # rubocop:enable Layout/LineLength
         post :create, params: {group_id: group,
                                event_id: course,
-                               participation_id: leader_participations.first.id,
+                               participation_id: leader_participation.id,
                                event_courses_leader_settlement_form: {iban: "", actual_days: 2}}
         expect(response.media_type).to eq Mime[:turbo_stream]
       end
@@ -66,7 +74,7 @@ describe Event::Courses::LeaderSettlementPdfsController do
         expect do
           post :create, params: {group_id: group,
                                  event_id: course,
-                                 participation_id: leader_participations.first.id,
+                                 participation_id: leader_participation.id,
                                  event_courses_leader_settlement_form: {
                                    iban: "CH66 0076 2011 6238 5295 8", actual_days: 2
                                  }}

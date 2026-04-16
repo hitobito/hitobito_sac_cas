@@ -15,7 +15,7 @@ describe Event::Courses::MailDispatchesController do
     # leader participations
     [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
       Fabricate(event_role.name.to_sym,
-        participation: Fabricate(:event_participation, event: course), self_employed: true)
+        participation: Fabricate(:event_participation, event: course))
     end
     # active participants
     4.times do

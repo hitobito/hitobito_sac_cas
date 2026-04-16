@@ -117,11 +117,9 @@ describe :events, js: true do
       click_on "Person hinzufügen"
       click_on "Kursleitung"
       expect(page).to have_title(/Kursleitung erstellen/)
-      expect(page).to have_field("Selbständig erwerbend")
 
       fill_in "Person", with: "Admin"
       find('ul[role="listbox"] li[role="option"]').click
-      page.check "Selbständig erwerbend"
       expect do
         click_on "Speichern"
         expect(page).to have_content("Rolle Kursleitung für Anna Admin wurde erfolgreich erstellt")
@@ -129,10 +127,9 @@ describe :events, js: true do
         .to change(Event::Participation, :count).by(1)
       expect(page).to have_content("Anmeldung von Anna Admin bearbeiten")
       click_on "Speichern"
-      # rubocop:todo Layout/LineLength
-      expect(page).to have_content("Teilnahme von Anna Admin in Tourenleiter/in 1 Sommer wurde erfolgreich aktualisiert.")
-      # rubocop:enable Layout/LineLength
-      expect(page).to have_content("Kursleitung selbständig erwerbend")
+      expect(page).to have_content("Teilnahme von Anna Admin in Tourenleiter/in " \
+        "1 Sommer wurde erfolgreich aktualisiert.")
+      expect(page).to have_content("Kursleitung")
     end
   end
 

@@ -91,8 +91,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
     before do
       Fabricate.create(:event_role,
         participation: participation,
-        type: Event::Course::Role::Leader,
-        self_employed: true)
+        type: Event::Course::Role::Leader)
       participation.roles.reload
     end
 
@@ -273,8 +272,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
       it "calculates total_amount for highest role if multiple exist" do
         Fabricate.create(:event_role,
           participation: participation,
-          type: Event::Course::Role::AssistantLeaderAspirant,
-          self_employed: true)
+          type: Event::Course::Role::AssistantLeaderAspirant)
 
         expect(pdf_content.strings).to include("143.00")
       end
@@ -285,8 +283,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
     before do
       Fabricate.create(:event_role,
         participation: participation,
-        type: Event::Course::Role::AssistantLeader,
-        self_employed: true)
+        type: Event::Course::Role::AssistantLeader)
       participation.roles.reload
     end
 
@@ -300,8 +297,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
     before do
       Fabricate.create(:event_role,
         participation: participation,
-        type: Event::Course::Role::LeaderAspirant,
-        self_employed: true)
+        type: Event::Course::Role::LeaderAspirant)
       participation.roles.reload
     end
 
@@ -315,8 +311,7 @@ describe Export::Pdf::Participations::LeaderSettlement do
     before do
       Fabricate.create(:event_role,
         participation: participation,
-        type: Event::Course::Role::AssistantLeaderAspirant,
-        self_employed: true)
+        type: Event::Course::Role::AssistantLeaderAspirant)
       participation.roles.reload
       course_compensation_categories(:day).update!(
         name_assistant_leader_aspirant: "Tageshonorar - Klassenleitung Aspirant"
