@@ -152,14 +152,14 @@ describe Event::ParticipationAbility do
       end
 
       it_behaves_like "a self employed leader", Group::SacCasKurskader::KursleitungSelbstaendig
-      it_behaves_like "a self employed leader", Group::SacCasKurskader::KlassenleitungSelbstaendig
+      it_behaves_like "a self employed leader", Group::SacCasKurskader::KlassenlehrerSelbstaendig
       it_behaves_like "a self employed leader", Group::SacCasKurskader::KursleitungAspirantSelbstaendig
-      it_behaves_like "a self employed leader", Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig
+      it_behaves_like "a self employed leader", Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig
 
       it_behaves_like "a non self employed leader", Group::SacCasKurskader::KursleitungUnselbstaendig
-      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KlassenleitungUnselbstaendig
+      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KlassenlehrerUnselbstaendig
       it_behaves_like "a non self employed leader", Group::SacCasKurskader::KursleitungAspirantUnselbstaendig
-      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KlassenleitungAspirantUnselbstaendig
+      it_behaves_like "a non self employed leader", Group::SacCasKurskader::KlassenlehrerAspirantUnselbstaendig
 
       context "layer and below full" do
         let(:role) { roles(:admin) }

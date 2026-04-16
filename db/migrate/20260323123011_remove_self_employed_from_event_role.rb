@@ -14,12 +14,12 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
       false => "KursleitungAspirantUnselbstaendig"
     },
     "Event::Course::Role::AssistantLeader" => {
-      true  => "KlassenleitungSelbstaendig",
-      false => "KlassenleitungUnselbstaendig"
+      true  => "KlassenlehrerSelbstaendig",
+      false => "KlassenlehrerUnselbstaendig"
     },
     "Event::Course::Role::AssistantLeaderAspirant" => {
-      true  => "KlassenleitungAspirantSelbstaendig",
-      false => "KlassenleitungAspirantUnselbstaendig"
+      true  => "KlassenlehrerAspirantSelbstaendig",
+      false => "KlassenlehrerAspirantUnselbstaendig"
     }
   }.freeze
 
@@ -35,9 +35,9 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
     # Update types of SacCasKurskader roles
     execute <<~SQL
       UPDATE roles SET type = 'Group::SacCasKurskader::KursleitungSelbstaendig' WHERE type = 'Group::SacCasKurskader::Kursleiter';
-      UPDATE roles SET type = 'Group::SacCasKurskader::KlassenleitungSelbstaendig' WHERE type = 'Group::SacCasKurskader::Klassenlehrer';
+      UPDATE roles SET type = 'Group::SacCasKurskader::KlassenlehrerSelbstaendig' WHERE type = 'Group::SacCasKurskader::Klassenlehrer';
       UPDATE roles SET type = 'Group::SacCasKurskader::KursleitungAspirantSelbstaendig' WHERE type = 'Group::SacCasKurskader::KursleiterAspirant';
-      UPDATE roles SET type = 'Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig' WHERE type = 'Group::SacCasKurskader::KlassenlehrerAspirant';
+      UPDATE roles SET type = 'Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig' WHERE type = 'Group::SacCasKurskader::KlassenlehrerAspirant';
     SQL
 
     # Create Kurskader roles for event_roles
@@ -60,8 +60,8 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
       SET type = CASE
         WHEN type = 'Group::SacCasKurskader::KursleitungUnselbstaendig' THEN 'Group::SacCasKurskader::KursleitungSelbstaendig'
         WHEN type = 'Group::SacCasKurskader::KursleitungAspirantUnselbstaendig' THEN 'Group::SacCasKurskader::KursleitungAspirantSelbstaendig'
-        WHEN type = 'Group::SacCasKurskader::KlassenleitungUnselbstaendig' THEN 'Group::SacCasKurskader::KlassenleitungSelbstaendig'
-        WHEN type = 'Group::SacCasKurskader::KlassenleitungAspirantUnselbstaendig' THEN 'Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig'
+        WHEN type = 'Group::SacCasKurskader::KlassenlehrerUnselbstaendig' THEN 'Group::SacCasKurskader::KlassenlehrerSelbstaendig'
+        WHEN type = 'Group::SacCasKurskader::KlassenlehrerAspirantUnselbstaendig' THEN 'Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig'
       END
       WHERE person_id IN (
         490821, 231663, 385167, 228002, 368341, 437092, 518011, 461133, 404226, 295103,
@@ -74,8 +74,8 @@ class RemoveSelfEmployedFromEventRole < ActiveRecord::Migration[8.0]
       AND type IN (
         'Group::SacCasKurskader::KursleitungUnselbstaendig',
         'Group::SacCasKurskader::KursleitungAspirantUnselbstaendig',
-        'Group::SacCasKurskader::KlassenleitungUnselbstaendig',
-        'Group::SacCasKurskader::KlassenleitungAspirantUnselbstaendig'
+        'Group::SacCasKurskader::KlassenlehrerUnselbstaendig',
+        'Group::SacCasKurskader::KlassenlehrerAspirantUnselbstaendig'
       )
     SQL
 

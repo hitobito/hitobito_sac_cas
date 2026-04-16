@@ -1083,27 +1083,27 @@ de:
       group/sac_cas_kurskader/kursleitung_selbstaendig:
         one: Kursleiter*in (selbständig)
         description: Kursleiter*in (selbständig)
-      group/sac_cas_kurskader/klassenleitung_selbstaendig:
-        one: Klassenleiter*in (selbständig)
-        description: Klassenleiter*in (selbständig)
+      group/sac_cas_kurskader/klassenlehrer_selbstaendig:
+        one: Klassenlehrer*in (selbständig)
+        description: Klassenlehrer*in (selbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
         one: Kursleiter*in (Aspirant, selbständig)
         description: Kursleiter*in (Aspirant, selbständig)
-      group/sac_cas_kurskader/klassenleitung_aspirant_selbstaendig:
-        one: Klassenleiter*in (Aspirant, selbständig)
-        description: Klassenleiter*in (Aspirant, selbständig)
+      group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
+        one: Klassenlehrer*in (Aspirant, selbständig)
+        description: Klassenlehrer*in (Aspirant, selbständig)
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
         one: Kursleiter*in (unselbständig)
         description: Kursleiter*in (unselbständig)
-      group/sac_cas_kurskader/klassenleitung_unselbstaendig:
-        one: Klassenleiter*in (unselbständig)
-        description: Klassenleiter*in (unselbständig)
+      group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
+        one: Klassenlehrer*in (unselbständig)
+        description: Klassenlehrer*in (unselbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
         one: Kursleiter*in (Aspirant, unselbständig)
         description: Kursleiter*in (Aspirant, unselbständig)
-      group/sac_cas_kurskader/klassenleitung_aspirant_unselbstaendig:
-        one: Klassenleiter*in (Aspirant, unselbständig)
-        description: Klassenleiter*in (Aspirant, unselbständig)
+      group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
+        one: Klassenlehrer*in (Aspirant, unselbständig)
+        description: Klassenlehrer*in (Aspirant, unselbständig)
       group/sac_cas_privathuetten/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht

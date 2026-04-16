@@ -31,7 +31,7 @@ describe Event::Courses::LeaderSettlementPdfsController do
   before do
     Group::SacCasKurskader::KursleitungSelbstaendig.create!(person: leader_participation.person, group: kurskader_group,
       start_on: Time.zone.local(2021, 5, 1))
-    Group::SacCasKurskader::KlassenleitungSelbstaendig.create!(person: leader_participation.person,
+    Group::SacCasKurskader::KlassenlehrerSelbstaendig.create!(person: leader_participation.person,
       group: kurskader_group, start_on: Time.zone.local(2021, 5, 1))
   end
 

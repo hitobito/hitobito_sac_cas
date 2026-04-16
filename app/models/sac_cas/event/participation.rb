@@ -17,8 +17,8 @@ module SacCas::Event::Participation
   SELF_EMPLOYED_LEADER_ROLES = [
     Group::SacCasKurskader::KursleitungSelbstaendig,
     Group::SacCasKurskader::KursleitungAspirantSelbstaendig,
-    Group::SacCasKurskader::KlassenleitungSelbstaendig,
-    Group::SacCasKurskader::KlassenleitungAspirantSelbstaendig
+    Group::SacCasKurskader::KlassenlehrerSelbstaendig,
+    Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig
   ]
 
   delegate :sac_membership_active?, :membership_years, :membership_number, :correspondence,

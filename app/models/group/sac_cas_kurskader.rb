@@ -14,7 +14,7 @@ class Group::SacCasKurskader < ::Group
     self.basic_permissions_only = true
   end
 
-  class KlassenleitungSelbstaendig < ::Role
+  class KlassenlehrerSelbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -24,7 +24,7 @@ class Group::SacCasKurskader < ::Group
     self.basic_permissions_only = true
   end
 
-  class KlassenleitungAspirantSelbstaendig < ::Role
+  class KlassenlehrerAspirantSelbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -34,7 +34,7 @@ class Group::SacCasKurskader < ::Group
     self.basic_permissions_only = true
   end
 
-  class KlassenleitungUnselbstaendig < ::Role
+  class KlassenlehrerUnselbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -44,17 +44,17 @@ class Group::SacCasKurskader < ::Group
     self.basic_permissions_only = true
   end
 
-  class KlassenleitungAspirantUnselbstaendig < ::Role
+  class KlassenlehrerAspirantUnselbstaendig < ::Role
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   roles KursleitungSelbstaendig,
-    KlassenleitungSelbstaendig,
+    KlassenlehrerSelbstaendig,
     KursleitungAspirantSelbstaendig,
-    KlassenleitungAspirantSelbstaendig,
+    KlassenlehrerAspirantSelbstaendig,
     KursleitungUnselbstaendig,
-    KlassenleitungUnselbstaendig,
+    KlassenlehrerUnselbstaendig,
     KursleitungAspirantUnselbstaendig,
-    KlassenleitungAspirantUnselbstaendig
+    KlassenlehrerAspirantUnselbstaendig
 end
