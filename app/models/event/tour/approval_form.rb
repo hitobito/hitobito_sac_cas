@@ -53,6 +53,12 @@ class Event::Tour::ApprovalForm
     komitee_approvals.each(&:pre_check_approvable)
   end
 
+  def reset_approvals
+    find_self_approval&.mark_for_destruction
+    remove_not_responsible_komitee_approvals
+    event.state = :approved if all_approved?
+  end
+
   private
 
   def update_approved
@@ -137,6 +143,15 @@ class Event::Tour::ApprovalForm
       .new(records: pruefer_roles, associations: :approval_kinds)
       .call
     pruefer_roles
+  end
+
+  def remove_not_responsible_komitee_approvals
+    komitee_ids = komitee_approvals.map(&:freigabe_komitee_id)
+    event.approvals.each do |a|
+      unless komitee_ids.include?(a.freigabe_komitee_id)
+        a.mark_for_destruction
+      end
+    end
   end
 
   def composer

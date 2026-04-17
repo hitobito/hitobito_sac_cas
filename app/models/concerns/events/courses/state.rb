@@ -29,9 +29,9 @@ module Events::Courses::State
       application_closed: [:assignment_closed, :canceled],
       assignment_closed: [:ready, :application_closed, :canceled],
       ready: [:closed, :assignment_closed, :canceled],
-      # rubocop:todo Layout/LineLength
-      canceled: [:application_open], # BEWARE: canceled means "annulliert" here and matches `annulled` on participation, where `canceled` means "abgemeldet"
-      # rubocop:enable Layout/LineLength
+      # BEWARE: canceled means "annulliert" here and matches `annulled` on participation,
+      # where `canceled` means "abgemeldet"
+      canceled: [:application_open],
       closed: [:ready]
     }.freeze
 

@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Approval < ApplicationRecord
+  model_stamper
+  stampable stamper_class_name: :person, deleter: false
+
   belongs_to :event
   belongs_to :freigabe_komitee, class_name: "Group"
   belongs_to :approval_kind

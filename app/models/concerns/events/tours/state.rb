@@ -15,7 +15,7 @@ module Events::Tours::State
     # value: array of possible next states
     self.state_transitions = {
       draft: [:review, :approved],
-      review: [:draft, approved: {dropdown: false}],
+      review: [:draft, :approved],
       approved: [:draft, :published, :canceled],
       published: [:draft, :approved, :ready, :canceled],
       ready: [:published, :closed, :canceled],

@@ -1709,6 +1709,9 @@ de:
         Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
+    popover_tour_review:
+      destroy_and_review: Bestehende Freigaben zurücksetzen
+      keep_and_review: Bestehende Freigaben beibehalten
 
     sections:
       essentials: Wesentliche Fakten

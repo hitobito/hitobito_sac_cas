@@ -559,4 +559,62 @@ describe Event::Tour::ApprovalForm do
       expect(tour.reload.internal_comment).to eq("Tiptop")
     end
   end
+
+  context "reset_approvals" do
+    let!(:other_komitee) do
+      Group::FreigabeKomitee.create!(name: "Komitee 2", parent: groups(:bluemlisalp_touren_und_kurse))
+    end
+
+    def present_approvals
+      tour.approvals.reject(&:marked_for_destruction?)
+    end
+
+    it "removes approvals of non-responsible komitees, keeps responsible" do
+      existing = create_approval(:professional, true)
+      tour.approvals.create!(
+        approval_kind: event_approval_kinds(:professional),
+        approved: true,
+        freigabe_komitee: other_komitee
+      )
+      tour.approvals.create!(
+        approval_kind: event_approval_kinds(:security),
+        approved: false,
+        freigabe_komitee: other_komitee
+      )
+
+      expect { form.reset_approvals }.to change { present_approvals.size }.by(-2)
+      expect(tour.state).to eq("review")
+      expect(present_approvals).to eq([existing])
+    end
+
+    it "removes self approval" do
+      tour.approvals.create!(approved: true)
+
+      expect { form.reset_approvals }.to change { present_approvals.size }.by(-1)
+      expect(tour.state).to eq("review")
+    end
+
+    it "changes state to approved if all approvals are present" do
+      tour.approvals.create!(
+        approval_kind: event_approval_kinds(:professional),
+        approved: true,
+        freigabe_komitee: other_komitee
+      )
+      create_approval(:professional, true)
+      create_approval(:security, true)
+      create_approval(:editorial, true)
+
+      expect { form.reset_approvals }.to change { present_approvals.size }.by(-1)
+      expect(tour.state).to eq("approved")
+    end
+
+    it "keeps state to if all approvals are present but not approved" do
+      create_approval(:professional, true)
+      create_approval(:security, true)
+      create_approval(:editorial, false)
+
+      expect { form.reset_approvals }.not_to change { present_approvals.size }
+      expect(tour.state).to eq("review")
+    end
+  end
 end
