@@ -1130,18 +1130,30 @@ it:
         description: Altro
         huettenwartspartner: Partner del custode
         schluesseldepot: Deposito chiavi
-      group/sac_cas_kurskader/kursleiter:
-        one: Capocorso
-        description: Capocorso
-      group/sac_cas_kurskader/klassenlehrer:
-        one: Docente
-        description: Docente
-      group/sac_cas_kurskader/kursleiter_aspirant:
-        one: Istruttore del corso (aspirante)
-        description: Istruttore del corso (aspirante)
-      group/sac_cas_kurskader/klassenlehrer_aspirant:
-        one: Insegnante di classe (aspirante)
-        description: Insegnante di classe (aspirante)
+      group/sac_cas_kurskader/kursleitung_selbstaendig:
+        one: Kursleiter*in (selbständig)
+        description: Kursleiter*in (selbständig)
+      group/sac_cas_kurskader/klassenlehrer_selbstaendig:
+        one: Klassenlehrer*in (selbständig)
+        description: Klassenlehrer*in (selbständig)
+      group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
+        one: "Kursleiter*in (Aspirant, selbständig)"
+        description: "Kursleiter*in (Aspirant, selbständig)"
+      group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
+        one: "Klassenlehrer*in (Aspirant, selbständig)"
+        description: "Klassenlehrer*in (Aspirant, selbständig)"
+      group/sac_cas_kurskader/kursleitung_unselbstaendig:
+        one: Kursleiter*in (unselbständig)
+        description: Kursleiter*in (unselbständig)
+      group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
+        one: Klassenlehrer*in (unselbständig)
+        description: Klassenlehrer*in (unselbständig)
+      group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
+        one: "Kursleiter*in (Aspirant, unselbständig)"
+        description: "Kursleiter*in (Aspirant, unselbständig)"
+      group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
+        one: "Klassenlehrer*in (Aspirant, unselbständig)"
+        description: "Klassenlehrer*in (Aspirant, unselbständig)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
@@ -2069,13 +2081,13 @@ it:
           text: La decisione sarà presa congiuntamente in base al numero di iscrizioni alla data di scadenza delle iscrizioni.
         participation_cancellation:
           label: Svolgimento – Cancellazione
-          text: Si prega di informare il docente e l’alloggio
+          text: Bitte Klassenleiter*in und Unterkunft informieren
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
         class_teacher:
-          label: Docente
+          label: Klassenleiter*in
           text: >-
-            In base al numero massimo di partecipanti, è responsabilità della Direzione indicare in anticipo i docenti nel programma dettagliato per i corsi e le escursioni e inviarlo per e-mail al Segretariato centrale.
+            Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenleiter*in - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
     participant_list:
       title: Elenco dei partecipanti
       link: www.sac-cas.ch
