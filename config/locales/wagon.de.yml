@@ -1708,6 +1708,11 @@ de:
       essentials: Wesentliche Fakten
 
   events/filters:
+    approval:
+      title: Freigabe
+      self_approved: Selbst freigegeben
+      pending_at_komitee: Ausstehend bei Freigabe-Komitee
+      responsible_komitee: Zuständiges Freigabe-Komitee
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
@@ -1838,6 +1843,10 @@ de:
     tour_guides_stalled: Sistierte Tourenleiter
     tour_guides_inactive: Inaktive Tourenleiter
     tour_guides_expired: Abgelaufene Tourenleiter
+
+  filter_navigation/events:
+    my_pending_approvals: Meine ausstehenden Freigaben
+    my_approval_responsibilities: Meine Freigabe-Zuständigkeiten
 
   groups:
     actions_show_sac_cas:
