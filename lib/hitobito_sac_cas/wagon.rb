@@ -179,7 +179,12 @@ module HitobitoSacCas
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
       Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
-      Events::Filter::Chain.types << Events::Filter::Sac << Events::Filter::TourEssentials
+      Events::Filter::Chain.types <<
+        Events::Filter::Sac <<
+        Events::Filter::TourEssentials <<
+        Events::Filter::Tour::MyPendingApprovals <<
+        Events::Filter::Tour::MyApprovalResponsibilities <<
+        Events::Filter::Tour::Approval
       Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
 
       Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8
@@ -215,6 +220,7 @@ module HitobitoSacCas
       PeopleHelper.prepend SacCas::PeopleHelper
       RolesHelper.prepend SacCas::RolesHelper
       FilterNavigation::People.prepend SacCas::FilterNavigation::People
+      FilterNavigation::Events.prepend SacCas::FilterNavigation::Events
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit

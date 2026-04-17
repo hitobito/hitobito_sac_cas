@@ -26,15 +26,24 @@ describe Events::FiltersController do
         year: 2023,
         filters: {
           sac: {season: "summer"},
-          tour_essentials: {discipline_id: [event_disciplines(:wandern).id]}
+          tour_essentials: {discipline_id: [event_disciplines(:wandern).id]},
+          approval: {self_approved: "true", responsible_komitee_id: groups(:bluemlisalp_freigabekomitee).id}
         }
       }
 
       expect(response).to have_http_status(:ok)
+
       expect(dom).to have_content("Saison")
       expect(dom).to have_checked_field("filters_sac_season_summer")
       expect(dom).to have_content("Subito")
-      expect(dom).to have_content("Wesentliche Fakten")
+
+      expect(dom).to have_selector(".accordion-button", text: "Felder")
+
+      expect(dom).to have_selector(".accordion-button", text: "Freigabe")
+      expect(dom).to have_checked_field("Selbst freigegeben")
+      expect(dom).to have_select("Zuständiges Freigabe-Komitee", selected: "Freigabekomitee")
+
+      expect(dom).to have_selector(".accordion-button", text: "Wesentliche Fakten")
     end
   end
 
@@ -47,7 +56,8 @@ describe Events::FiltersController do
           year: 2023,
           range: "group",
           filters: {sac: {subito: "false"},
-                    tour_essentials: {discipline_id: [event_disciplines(:wandern).id], target_group_id: [""]}}
+                    tour_essentials: {discipline_id: [event_disciplines(:wandern).id], target_group_id: [""]},
+                    approval: {self_approved: "1", responsible_komitee_id: groups(:bluemlisalp_freigabekomitee).id}}
         }
 
       expect(response).to redirect_to(tour_group_events_path(
@@ -55,7 +65,8 @@ describe Events::FiltersController do
         year: 2023,
         range: "group",
         filters: {sac: {subito: "false"},
-                  tour_essentials: {discipline_id: [event_disciplines(:wandern).id.to_s]}}
+                  tour_essentials: {discipline_id: [event_disciplines(:wandern).id.to_s]},
+                  approval: {self_approved: "1", responsible_komitee_id: groups(:bluemlisalp_freigabekomitee).id.to_s}}
       ))
     end
   end

@@ -104,6 +104,14 @@ module SacCas::EventsHelper
     end.to_json
   end
 
+  def freigabe_komitee_select_options(group)
+    Group::FreigabeKomitee
+      .without_deleted
+      .where(layer_group_id: group.layer_group.id)
+      .order(:name)
+      .pluck(:name, :id)
+  end
+
   def price_category_label(entry, attr)
     i18n_key = entry.decorated? ? entry.object.model_name.i18n_key : entry.model_name.i18n_key
 
