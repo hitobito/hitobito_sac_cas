@@ -4,5 +4,5 @@
 - #  https://github.com/hitobito/hitobito_sac_cas
 
 - entry.used?(:subito) do
-  - if entry.weak_validation_state?
+  - if entry.state == "draft"
     = f.labeled_input_field :subito

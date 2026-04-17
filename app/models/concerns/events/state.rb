@@ -43,8 +43,16 @@ module Events::State
     states.index(state1.to_sym) < states.index(state2.to_sym)
   end
 
+  def state_reached?(state)
+    state.to_s == self.state.to_s || state_comes_before?(state, self.state)
+  end
+
   def state_possible?(new_state)
     available_states.any?(new_state.to_sym)
+  end
+
+  def state
+    super || possible_states.first
   end
 
   private
