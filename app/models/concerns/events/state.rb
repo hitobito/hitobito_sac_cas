@@ -28,12 +28,6 @@ module Events::State
     end
   end
 
-  def manually_configurable_states
-    transitions_for_current_state(state).reject {
-      _1.is_a?(Hash) && _1.values.any? { |v| v[:dropdown] == false }
-    }.flat_map { extract_state_name(_1) }
-  end
-
   def available_states(state = self.state)
     transitions_for_current_state(state).flat_map { extract_state_name(_1) }
   end
@@ -64,9 +58,8 @@ module Events::State
   end
 
   def set_default_state
-    # rubocop:todo Layout/LineLength
-    # Explicitly call self[:state].blank? because self.state is overridden in youth wagon to return first possible state if nil.
-    # rubocop:enable Layout/LineLength
+    # Explicitly call self[:state].blank? because self.state is overridden in youth wagon
+    # to return first possible state if nil.
     self.state = possible_states.first if self[:state].blank?
   end
 

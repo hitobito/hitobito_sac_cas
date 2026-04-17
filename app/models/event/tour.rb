@@ -58,7 +58,8 @@ class Event::Tour < Event
     dependent: :destroy,
     class_name: "Event::Approval",
     foreign_key: :event_id,
-    inverse_of: :event
+    inverse_of: :event,
+    autosave: true
 
   has_and_belongs_to_many :disciplines,
     join_table: :events_disciplines,

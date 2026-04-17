@@ -20,6 +20,7 @@ class Event::StateController < ApplicationController
     entry.state = next_state
 
     set_course_attrs if entry.course?
+    set_tour_attrs if entry.tour?
 
     if entry.save
       set_success_notice
@@ -38,9 +39,17 @@ class Event::StateController < ApplicationController
     end
   end
 
+  def set_tour_attrs
+    case next_state&.to_sym
+    when :approved
+      build_self_approval if entry.state_comes_before?(entry.state_was, :approved)
+    when :review
+      rebuild_approvals
+    end
+  end
+
   def set_success_notice
-    flash.now[:notice] = t("events/state.flash.success",
-      state: entry.decorate.state_translated)
+    flash.now[:notice] = t("events/state.flash.success", state: entry.decorate.state_translated)
   end
 
   def set_failure_notice
@@ -61,6 +70,19 @@ class Event::StateController < ApplicationController
 
   def reset_canceled_reason
     entry.canceled_reason = nil
+  end
+
+  def build_self_approval
+    entry.approvals.each(&:mark_for_destruction)
+    entry.approvals.build(approved: true)
+  end
+
+  def rebuild_approvals
+    if params[:button] == "destroy"
+      entry.approvals.each(&:mark_for_destruction)
+    elsif params[:button] == "keep"
+      Event::Tour::ApprovalForm.new(entry, current_user).reset_approvals
+    end
   end
 
   def entry

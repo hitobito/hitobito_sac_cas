@@ -31,8 +31,9 @@ module Dropdown::Events
     private
 
     def optional_email_popover?(transition_to)
-      event.state_transition_emails_skippable.fetch(event.state.to_sym,
-        []).include?(transition_to.to_sym)
+      event.state_transition_emails_skippable
+        .fetch(event.state.to_sym, [])
+        .include?(transition_to.to_sym)
     end
 
     def current_state_label
@@ -40,17 +41,19 @@ module Dropdown::Events
     end
 
     def init_items # rubocop:todo Metrics/AbcSize
-      event.manually_configurable_states.each do |state|
+      event.available_states.each do |state|
         link = template.state_group_event_path(template.params[:group_id], event, {state:})
         label = label_for(state)
         custom_method = :"state_item_#{event.klass.name.demodulize.downcase}_#{state}"
         if respond_to?(custom_method, true)
           send(custom_method, label, link)
         elsif optional_email_popover?(state)
-          add_item_with_popover(label,
-            template.render("events/popover_emails_optional", state:))
+          add_item_with_popover(
+            label,
+            template.render("events/popover_emails_optional", state:)
+          )
         else
-          add_item(label, link, method: :put, "data-confirm": confirm_text_for(state))
+          add_default_item(label, link, state)
         end
       end
     end
@@ -58,7 +61,8 @@ module Dropdown::Events
     def label_for(state)
       label_translation_default = t("#{i18n_base_key}.#{state}")
       if event.state_comes_before?(state, event.state)
-        t(state, scope: "events.state_back_buttons.#{event.klass.model_name.i18n_key}",
+        t(state,
+          scope: "events.state_back_buttons.#{event.klass.model_name.i18n_key}",
           default: label_translation_default)
       else
         label_translation_default
@@ -74,6 +78,14 @@ module Dropdown::Events
       add_item_with_popover(label, template.render("events/popover_canceled_reason", entry: event))
     end
 
+    def state_item_tour_review(label, link)
+      if event.approvals.exists?
+        add_item_with_popover(label, template.render("events/popover_tour_review", entry: event))
+      else
+        add_default_item(label, link, :review)
+      end
+    end
+
     def add_item_with_popover(label, content)
       add_item(label, "javascript:void(0)",
         "data-bs-toggle": "popover",
@@ -81,6 +93,10 @@ module Dropdown::Events
         "data-bs-placement": :bottom,
         "data-bs-content": content,
         "data-bs-title": label)
+    end
+
+    def add_default_item(label, link, state)
+      add_item(label, link, method: :put, "data-confirm": confirm_text_for(state))
     end
 
     def i18n_base_key
