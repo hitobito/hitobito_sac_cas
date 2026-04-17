@@ -1,0 +1,38 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC CAS. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+- if filter.event_type == Event::Tour
+  - freigabe_komitee_options = freigabe_komitee_select_options(filter.group)
+  = render(layout: 'panel', locals: { kind: :approval }) do
+    = f.fields_for(:approval) do |fields|
+      .row.mb-2
+        .col-md-3.col-xl-2
+        .col-md-9
+          .form-check
+            - checked = filter.chain.dig(:approval, :self_approved).present?
+            = fields.check_box(:self_approved, checked: checked, include_hidden: false, class: 'form-check-input')
+            = fields.label(:self_approved,
+                           t('events/filters.approval.self_approved'),
+                           class: 'form-check-label')
+      .row.mb-2
+        = fields.label(:pending_at_komitee_id,
+                       t('events/filters.approval.pending_at_komitee'),
+                       class: 'col-form-label col-md-3 col-xl-2')
+        .col-md-9
+          = fields.select(:pending_at_komitee_id,
+                          options_for_select(freigabe_komitee_options,
+                                             filter.chain.dig(:approval, :pending_at_komitee_id)&.to_i),
+                          {include_blank: true},
+                          class: 'form-select')
+      .row.mb-2
+        = fields.label(:responsible_komitee_id,
+                       t('events/filters.approval.responsible_komitee'),
+                       class: 'col-form-label col-md-3 col-xl-2')
+        .col-md-9
+          = fields.select(:responsible_komitee_id,
+                          options_for_select(freigabe_komitee_options,
+                                             filter.chain.dig(:approval, :responsible_komitee_id)&.to_i),
+                          {include_blank: true},
+                          class: 'form-select')
