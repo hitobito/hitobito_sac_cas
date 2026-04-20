@@ -16,7 +16,7 @@ module SacCas::EventParticipationHelper
   end
 
   def format_event_price(attr, price, event)
-    [price_category_label(event, attr), I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
+    [I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
   end
 
   def format_event_participation_correspondence(entry)

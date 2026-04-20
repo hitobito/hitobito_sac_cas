@@ -7,6 +7,8 @@
   %dl.dl-horizontal
     - entry.used?(:minimum_participants) do
       = present_labeled_attr(entry, :minimum_participants)
+    - entry.used?(:maximum_participants) do
+      = present_labeled_attr(entry, :maximum_participants)
     - entry.used?(:application_opening_at) do
       = present_labeled_attr(entry, :application_opening_at)
     - entry.used?(:application_closing_at) do

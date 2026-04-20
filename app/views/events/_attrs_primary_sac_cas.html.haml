@@ -25,10 +25,15 @@
     = present_labeled_attr(entry, :maps)
 
   - entry.used?(:alternative_route) do
-    = present_labeled_attr(entry, :alternative_route)
+    - if entry.alternative_route.present?
+      = labeled(entry.object.class.human_attribute_name(:alternative_route)) do
+        %p.multiline= safe_auto_link(entry.alternative_route, html: { target: '_blank' })
+
 
   - entry.used?(:additional_info) do
-    = present_labeled_attr(entry, :additional_info)
+    - if entry.additional_info.present?
+      = labeled(entry.object.class.human_attribute_name(:additional_info)) do
+        %p.multiline= safe_auto_link(entry.additional_info, html: { target: '_blank' })
 
   - entry.used?(:language) do
     = labeled_attr(entry, :language)
@@ -41,11 +46,16 @@
 
   - entry.used?(:start_point_of_time) do
     = labeled_attr(entry, :start_point_of_time)
+
   - if course? || tour?
     = labeled t("events.form_tabs.prices") do
-      - entry.object.class::PRICE_ATTRIBUTES.each do |price_attr|
-        - if entry.send(price_attr).present?
-          = format_event_price(price_attr, entry.send(price_attr), entry.event)
-          %br
+      %table
+        %tbody
+          - entry.object.class::PRICE_ATTRIBUTES.each do |price_attr|
+            - if entry.send(price_attr).present?
+              %tr
+                %td.pr-1
+                  = "#{price_category_label(entry.event, price_attr)}:"
+                %td= format_event_price(price_attr, entry.send(price_attr), entry.event)
       - entry.used?(:price_description) do
         .muted=entry.price_description
