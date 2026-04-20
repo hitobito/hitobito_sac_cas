@@ -77,5 +77,12 @@ describe "events/_attrs.html.haml" do
       expect(dom).to have_css ".well dt", text: "Zusatzinfo"
       expect(dom).to have_css "aside dt", text: "Ist Subito-Tour"
     end
+
+    it "renders minimum and maximum_age regardless of other conditions" do
+      event.update!(application_conditions: nil, minimum_age: 10, maximum_age: 80)
+
+      expect(dom).to have_css "dt", text: "Mindestalter"
+      expect(dom).to have_css "dt", text: "Maximalalter"
+    end
   end
 end
