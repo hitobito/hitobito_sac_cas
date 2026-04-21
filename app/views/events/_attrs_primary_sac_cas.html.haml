@@ -11,11 +11,8 @@
     = labeled t("global.elevation_label") do
       = format_elevation(entry)
 
-  - entry.used?(:duration_h) do
-    = present_labeled_attr(entry, :duration_h)
-
-  - entry.used?(:duration_m) do
-    = present_labeled_attr(entry, :duration_m)
+  - entry.used?(:duration_in_hours) do
+    = present_labeled_attr(entry, :duration_in_hours)
 
   - if entry.tourenportal_link.present?
     = labeled t("activerecord.attributes.event/tour.tourenportal_link") do

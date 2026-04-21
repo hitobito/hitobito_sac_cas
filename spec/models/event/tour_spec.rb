@@ -83,31 +83,39 @@ describe Event::Tour do
       it_behaves_like "readonly for draft attributes", attribute: :technical_requirements
     end
 
-    [:duration_h, :duration_m].each do |attr|
-      describe attr do
-        it "is valid" do
-          is_expected.to be_valid
-        end
+    describe "duration_in_hours" do
+      it "sets military time (e.g 1430)" do
+        tour.duration_in_hours = "1430"
 
-        it "does not allow more than two digits" do
-          tour.send(:"#{attr}=", 123)
-          is_expected.not_to be_valid
+        expect(tour.duration).to eq(870) # 14 * 60 + 30
 
-          tour.send(:"#{attr}=", 12.3)
-          is_expected.not_to be_valid
+        tour.duration_in_hours = "140"
 
-          tour.send(:"#{attr}=", 12)
-          is_expected.to be_valid
+        expect(tour.duration).to eq(100) # 1 * 60 + 40
+      end
 
-          tour.send(:"#{attr}=", 1)
-          is_expected.to be_valid
-        end
+      it "sets decimal hours" do
+        tour.duration_in_hours = "6.5"
 
-        it "allows nil" do
-          tour.send(:"#{attr}=", nil)
+        expect(tour.duration).to eq(390) # 6 * 60 + 30
 
-          is_expected.to be_valid
-        end
+        tour.duration_in_hours = "2"
+
+        expect(tour.duration).to eq(120) # 2 * 60
+      end
+
+      it "sets hh:mm format" do
+        tour.duration_in_hours = "12:20"
+
+        expect(tour.duration).to eq(740) # 12 * 60 + 20
+
+        tour.duration_in_hours = "3:15"
+
+        expect(tour.duration).to eq(195) # 3 * 60 + 15
+
+        tour.duration_in_hours = "4:5"
+
+        expect(tour.duration).to eq(245) # 4 * 60 + 5
       end
     end
 

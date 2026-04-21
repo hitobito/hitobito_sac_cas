@@ -9,12 +9,13 @@ class Event::Tour < Event
   include ::Events::Tours::State
   include I18nEnums
 
+  H_M = /^(\d*):([0-5]\d)/
   WEAK_VALIDATION_STATES = %w[draft].freeze
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
 
   self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants,
-    :summit, :ascent, :descent, :duration_h, :duration_m, :maps, :season, :alternative_route,
+    :summit, :ascent, :descent, :duration, :duration_in_hours, :maps, :season, :alternative_route,
     :additional_info, :price_description, :internal_comment, :minimum_age, :maximum_age,
     :tourenportal_link, :subito, *PRICE_ATTRIBUTES]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
@@ -102,11 +103,6 @@ class Event::Tour < Event
   validates :disciplines, :target_groups, :technical_requirements,
     :fitness_requirement, :season, presence: {unless: :weak_validation_state?}
 
-  validates :duration_h, :duration_m, numericality: {
-    greater_than_or_equal_to: 0,
-    less_than: 100
-  }, allow_nil: true
-
   ### INSTANCE METHODS
 
   # Define methods to query if a course is in the given state.
@@ -146,6 +142,36 @@ class Event::Tour < Event
         _1.new_record? ||
         _1.marked_for_destruction?
     }
+  end
+
+  def duration_in_hours=(value)
+    self.duration = if value.include?(":")
+      # Handle "hh:mm" or "h:m"
+      hours, minutes = value.split(":").map(&:to_i)
+      (hours * 60) + (minutes || 0)
+    elsif value.include?(".")
+      # Handle "hh.mm" as decimal hours (e.g., 1.5 = 90 mins)
+      (value.to_f * 60).round
+    elsif value.match?(/^\d{3,4}$/)
+      # Handle "hhmm" or "hmm" (e.g., 0130 or 130)
+      # We take the last two digits as minutes, the rest as hours
+      hours = value[0...-2].to_i
+      minutes = value[-2..].to_i
+      (hours * 60) + minutes
+    elsif value.present?
+      # Handle "hh" or "h"
+      value.to_i * 60
+    else
+      nil
+    end
+  end
+
+  def duration_in_hours
+    return unless duration
+
+    hours, minutes = duration.to_i.divmod(60)
+
+    format("%d:%02d", hours, minutes)
   end
 
   private

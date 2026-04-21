@@ -68,6 +68,5 @@ section_tour:
   tourenportal_link: https://tourenportal.test/bettmerhorn
   subito: true
   season: summer
-  duration_h: 12
-  duration_m: 30
+  duration: 750
   maps: "Piratenkarte"
