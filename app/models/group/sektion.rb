@@ -31,6 +31,7 @@ class Group::Sektion < Group
   mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
   mounted_attr :tours_enabled, :boolean, default: false, null: false
 
+  has_many :custom_contents, dependent: :destroy, as: :context
   has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
   has_many :event_approval_commission_responsibilities, dependent: :destroy,
     class_name: "Event::ApprovalCommissionResponsibility"

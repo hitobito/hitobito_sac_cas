@@ -1425,9 +1425,10 @@ de:
     list_for_leaders: Liste für Kurskader
 
   dropdown/group_edit:
+    custom_content: E-Mail Vorlagen
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
-    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten bearbeiten
+    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten
 
   event:
     application_market:
