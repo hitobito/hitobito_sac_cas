@@ -1,0 +1,10 @@
+-#  Copyright (c) 2026, Schweizer Alpenclub SAC. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+= crud_table do |t|
+  - t.sortable_attrs :label, :subject
+  - t.attr :body
+  - action_col(t) do |e|
+    = link_action_edit(edit_group_sac_section_custom_content_path(@group.id, e.id))

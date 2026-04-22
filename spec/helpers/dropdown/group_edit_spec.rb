@@ -38,8 +38,12 @@ describe "Dropdown::GroupEdit" do
   context "sektion" do
     let(:group) { groups(:bluemlisalp) }
 
-    it "renders sac membership config item" do
+    it "renders section specific items with permission" do
+      allow(group).to receive(:tours_enabled).and_return(true)
+
       is_expected.to have_selector "a", text: "Parameter für Mitgliedschaftsrechnungen"
+      is_expected.to have_selector "a", text: "Freigabe-Zuständigkeiten"
+      is_expected.to have_selector "a", text: "E-Mail Vorlagen"
     end
 
     it "does not render sac membership config item without index permission on config" do
@@ -48,23 +52,18 @@ describe "Dropdown::GroupEdit" do
       is_expected.to have_no_selector "a", text: "Parameter für Mitgliedschaftsrechnungen"
     end
 
-    it "renders edit commission responsibility item" do
-      allow(group).to receive(:tours_enabled).and_return(true)
-
-      is_expected.to have_selector "a", text: "Freigabe-Zuständigkeiten bearbeiten"
-    end
-
     it "does not render edit commission responsibility item without update permission" do
       allow(group).to receive(:tours_enabled).and_return(true)
       allow(self).to receive(:can?).with(:update, group).and_return(false)
 
-      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten bearbeiten"
+      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten"
+      is_expected.to have_no_selector "a", text: "E-Mail Vorlagen"
     end
 
     it "does not render edit commission responsibility item if tours are disabled" do
       allow(group).to receive(:tours_enabled).and_return(false)
 
-      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten bearbeiten"
+      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten"
     end
   end
 
@@ -84,20 +83,20 @@ describe "Dropdown::GroupEdit" do
     it "renders edit commission responsibility item" do
       allow(group).to receive(:tours_enabled).and_return(true)
 
-      is_expected.to have_selector "a", text: "Freigabe-Zuständigkeiten bearbeiten"
+      is_expected.to have_selector "a", text: "Freigabe-Zuständigkeiten"
     end
 
     it "does not render edit commission responsibility item without update permission" do
       allow(group).to receive(:tours_enabled).and_return(true)
       allow(self).to receive(:can?).with(:update, group).and_return(false)
 
-      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten bearbeiten"
+      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten"
     end
 
     it "does not render edit commission responsibility item if tours are disabled" do
       allow(group).to receive(:tours_enabled).and_return(false)
 
-      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten bearbeiten"
+      is_expected.to have_no_selector "a", text: "Freigabe-Zuständigkeiten"
     end
   end
 end
