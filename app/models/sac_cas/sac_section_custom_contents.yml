@@ -1,0 +1,614 @@
+event_tour_publication:
+  label: "Tour: E-Mail Publikation"
+  subject: "Publikation der Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Gerne informieren wir dich, dass die Tour "{event-name} ({event-id})" heute publiziert wurde:
+    {event-link}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_subito_publication:
+  label: "Tour: E-Mail Publikation (Subito)"
+  subject: "Publikation der Subito-Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Gerne informieren wir dich, dass die Subito-Tour "{event-name} ({event-id})" heute publiziert wurde:
+    {event-link}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_closing:
+  label: "Tour: E-Mail Abschluss"
+  subject: "Abschluss der Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link, application-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Teilnahme an der Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Hiermit bestätigten wir deine Teilnahme.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur abgeschlossenen Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Deine Anmeldung kannst du unter folgendem Link einsehen:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_canceled_minimum_participants:
+  label: "Tour: E-Mail Absage (TN-Anzahl)"
+  subject: "Absage der Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link, application-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung zur Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Leider müssen wir dir mitteilen, dass die Tour abgesagt wurde. Grund dafür sind zuwenig Teilnehmende.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur abgesagten Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Deine abgesagte Anmeldung kannst du unter folgendem Link einsehen:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_canceled_no_leader:
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link, application-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  label: "Tour: E-Mail Absage (Ausfall Leitung)"
+  subject: "Absage der Tour {event-name}"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung zur Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Leider müssen wir dir mitteilen, dass die Tour abgesagt wurde. Grund dafür ist ein Ausfall der Tourenleitung.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur abgesagten Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Deine abgesagte Anmeldung kannst du unter folgendem Link einsehen:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_canceled_weather:
+  label: "Tour: E-Mail Absage (Wetterrisiko)"
+  subject: "Absage der Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link, application-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung zur Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Leider müssen wir dir mitteilen, dass die Tour abgesagt wurde. Grund dafür ist schlechtes Wetter.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur abgesagten Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Deine abgesagte Anmeldung kannst du unter folgendem Link einsehen:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_back_to_draft:
+  label: "Tour: E-Mail Zurück zu Entfwurf (intern)"
+  subject: "Statuswechsel der Tour {event-name} zurück zu Entwurf"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat
+    die Tour "{event-name} ({event-id})" in den Status "Entwurf" verschoben:
+    {event-link}
+
+    {event-internal-comment}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_back_to_approved:
+  label: "Tour: E-Mail Zurück zu Freigegeben (intern)"
+  subject: "Statuswechsel der Tour {event-name} zurück zu Freigegeben"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat die Tour "{event-name} ({event-id})" in den Status "Freigegeben" verschoben:
+
+    {event-link}
+
+    {event-internal-comment}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_back_to_published:
+  label: "Tour: E-Mail Zurück zu Publiziert (intern)"
+  subject: "Statuswechsel der Tour {event-name} zurück zu Publiziert"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat die Tour "{event-name} ({event-id})" in den Status "Publiziert" verschoben:
+
+    {event-link}
+
+    {event-internal-comment}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_back_to_ready:
+  label: "Tour: E-Mail Zurück zu Vorbereitung abgeschlossen (intern)"
+  subject: "Statuswechsel der Tour {event-name} zurück zu Vorbereitung abgeschlossen"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat die Tour "{event-name} ({event-id})" in den Status "Vorbereitung abgeschlossen" verschoben:
+
+    {event-link}
+
+    {event-internal-comment}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_application_confirmation_assigned:
+  label: "Tour: E-Mail Bestätigte Touranmeldung"
+  subject: "Anmeldung zur Tour {event-name} bestätigt"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    application-link, participation-additional-information, participation-answers,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung für die Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Gerne teilen wir dir mit, dass deine Anmeldung bestätigt wurde.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Nachfolgend findest du wichtigsten Angaben aus deiner Anmeldung.
+
+    {participation-answers}
+
+    {participation-additional-information}
+
+    Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_application_confirmation_unconfirmed:
+  label: "Tour: E-Mail Unbestätigte Touranmeldung"
+  subject: "Anmeldung zur Tour {event-name} (unbestätigt)"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    application-link, participation-additional-information, participation-answers,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung für die Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Es handelt sich hierbei um keine definitive Zusage. Deine Anmeldung wird in den kommenden Tagen/Wochen bearbeitet.
+    Du erhältst nochmals eine E-Mail von uns mit der definitiven Zusage oder Absage.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Nachfolgend findest du wichtigsten Angaben aus deiner Anmeldung.
+
+    {participation-answers}
+
+    {participation-additional-information}
+
+    Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_application_confirmation_applied:
+  label: "Tour: E-Mail Unbestätigte Warteliste"
+  subject: "Auf Warteliste zur Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    application-link, participation-additional-information, participation-answers,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung für die Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Aktuell sind alle Plätze belegt, weshalb wir dich auf die Warteliste genommen haben.
+    Deine Anmeldung wird in den kommenden Tagen/Wochen bearbeitet. Du erhältst nochmals eine E-Mail von uns mit der definitiven Zusage oder Absage.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Nachfolgend findest du wichtigsten Angaben aus deiner Anmeldung.
+
+    {participation-answers}
+
+    {participation-additional-information}
+
+    Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_participation_summon:
+  label: "Tour: E-Mail Aufgebot"
+  subject: "Aufgebot zur Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    application-link, participation-additional-information, participation-answers,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    event-attachments,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Gerne bieten wir dich für die Tour "{event-name} ({event-id})" auf:
+    {event-link}
+
+    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    {event-attachments}
+
+    Nachfolgend findest du wichtigsten Angaben aus deiner Anmeldung.
+
+    {participation-answers}
+
+    {participation-additional-information}
+
+    Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_participation_reject:
+  label: "Tour: E-Mail Ablehnung"
+  subject: "Anmeldung zur Tour {event-name} abgelehnt"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link, application-link,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Anmeldung zur Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Leider können wir dich für diese Tour diesmal nicht berücksichtigen. Wir wissen dein Interesse sehr zu schätzen und hoffen, dich bei einer unserer nächsten Touren dabei zu haben.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur abgelehnten Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Deine abgelehnte Anmeldung kannst du unter folgendem Link einsehen:
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_participation_canceled:
+  label: "Tour: E-Mail Abmeldung"
+  subject: "Abmeldung zur Tour {event-name}"
+  placeholders_optional:
+    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
+    application-link, participation-additional-information, participation-answers,
+    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Vielen Dank für deine Abmeldung für die Tour "{event-name} ({event-id})":
+    {event-link}
+
+    Wir hoffen dich bald auf einer anderen Tour begrüssen zu dürfen.
+
+    Nachfolgend findest du wichtigsten Eckdaten zur abgemeldeten Tour.
+
+    {event-dates}
+
+    {event-essentials}
+
+    {event-requirements}
+
+    {event-details}
+
+    Nachfolgend findest du wichtigsten Angaben aus deiner abgemeldeten Anmeldung.
+
+    {participation-answers}
+
+    {participation-additional-information}
+
+    {application-link}
+
+    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+
+    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
+    {recipient-link}
+
+    Wir freuen uns auf deine Anmeldung.
+
+    Bergsportliche Grüsse,
+    {section-name}
