@@ -1637,9 +1637,20 @@ de:
           approved: Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>.
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
 
+    tour_mailer:
+      application_window: Anmeldefenster
+      application: Anmeldung
+      download_ics: Herunterladen
+      ics_link: Kalendereintrag (ics)
+      sub_target_groups: Unterzielgruppe(n)
+      sub_disciplines: Unterdisziplin(en)
+      traits: Merkmal(e)
+      technical_requirements: Technische Anforderung(en)
+      attachments: Anhänge
+      no_attachments: Aktuell sind keine Anhänge verfügbar
+      none: (keine)
+
   events:
-    flash:
-      dates_changed: Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast.
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
@@ -1675,8 +1686,8 @@ de:
         approved: Zurück zu Freigegeben
         published: Zurück zu Publiziert
 
-    show_contacts_sac_cas:
-      title: Leitung
+    flash:
+      dates_changed: Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast.
 
     form_tabs:
       communication: Kommunikation
@@ -1699,6 +1710,7 @@ de:
       prompt_email_choice: Sollen E-Mails verschickt werden?
       submit_with_emails: E-Mails verschicken
       submit_without_emails: Keine E-Mails verschicken
+
     popover_canceled_reason:
       cancel_button: Definitiv Absagen
       cancel_confirmation: >-
@@ -1716,6 +1728,42 @@ de:
 
     sections:
       essentials: Wesentliche Fakten
+
+    show_contacts_sac_cas:
+      title: Leitung
+
+    state_buttons:
+      event/course:
+        created: Zurück als Entwurf
+        application_open: Publizieren
+        application_paused: Anmeldung pausieren
+        application_closed: Anmeldung abschliessen
+        assignment_closed: Zuteilung abschliessen
+        ready: Bereit zur Durchführung
+        closed: Abschliessen
+        closed_confirm_text: >-
+          Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen.
+          Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
+        canceled: Absagen
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Vorbereitung abgeschlossen
+        review: Zur Freigabe weiterleiten
+        approved: Selbst freigeben
+        published: Publizieren
+        closed: Abschliessen
+        canceled: Absagen
+
+    state_back_buttons:
+      event/course:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+        approved: Zurück zur Freigabe
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Zurück zu Vorbereitung abgeschlossen
+        approved: Zurück zu Freigegeben
+        published: Zurück zu Publiziert
 
   events/filters:
     tour_essentials:
