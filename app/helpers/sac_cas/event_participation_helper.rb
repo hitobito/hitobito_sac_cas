@@ -19,6 +19,10 @@ module SacCas::EventParticipationHelper
     [I18n.t("global.currency"), sprintf("%.2f", price)].join(" ")
   end
 
+  def format_event_price_with_label(attr, price, event)
+    [price_category_label(event, attr), format_event_price(attr, price, event)].join(" ")
+  end
+
   def format_event_participation_correspondence(entry)
     Person.human_attribute_name("correspondence.#{entry.correspondence}")
   end

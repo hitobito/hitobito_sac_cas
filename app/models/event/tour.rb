@@ -9,7 +9,6 @@ class Event::Tour < Event
   include ::Events::Tours::State
   include I18nEnums
 
-  H_M = /^(\d*):([0-5]\d)/
   WEAK_VALIDATION_STATES = %w[draft].freeze
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
@@ -144,7 +143,7 @@ class Event::Tour < Event
     }
   end
 
-  def duration_in_hours=(value)
+  def duration_in_hours=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     self.duration = if value.include?(":")
       # Handle "hh:mm" or "h:m"
       hours, minutes = value.split(":").map(&:to_i)
