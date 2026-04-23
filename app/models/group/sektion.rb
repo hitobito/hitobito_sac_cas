@@ -37,11 +37,19 @@ class Group::Sektion < Group
     class_name: "Event::ApprovalCommissionResponsibility"
   has_and_belongs_to_many :section_offerings, foreign_key: :group_id
 
+  after_create :init_section_custom_contents
+
   def sorting_name
     display_name.delete_prefix("SAC ").delete_prefix("CAS ")
   end
 
   def active_sac_section_membership_config
     @active_sac_section_membership_config ||= sac_section_membership_configs.active
+  end
+
+  private
+
+  def init_section_custom_contents
+    Groups::InitSacSectionCustomContentsJob.new(self).enqueue!
   end
 end

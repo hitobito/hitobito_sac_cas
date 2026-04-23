@@ -37,7 +37,15 @@ class Group::Ortsgruppe < Group
     foreign_key: :sektion_id,
     class_name: "Event::ApprovalCommissionResponsibility"
 
+  after_create :init_section_custom_contents
+
   def active_sac_section_membership_config
     @active_sac_section_membership_config ||= sac_section_membership_configs.active
+  end
+
+  private
+
+  def init_section_custom_contents
+    Groups::InitSacSectionCustomContentsJob.new(self).enqueue!
   end
 end

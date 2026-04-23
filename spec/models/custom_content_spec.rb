@@ -144,4 +144,37 @@ describe SacCas::CustomContent do
       expect(output).not_to include("<table>")
     end
   end
+
+  context ".init_section_specific_contents" do
+    let(:group) { groups(:bluemlisalp) }
+
+    it "initializes contents for section, keeping existing contents" do
+      existing = group.custom_contents.create!(
+        key: :event_tour_publication,
+        label: "Tour: E-Mail Publi",
+        subject: "Publikation der Tour",
+        placeholders_optional: "recipient-first-name, recipient-last-name",
+        body: "Tour wurde publiziert"
+      )
+
+      expect { CustomContent.init_section_specific_contents(group) }
+        .to change { group.custom_contents.count }.by(15)
+
+      # updated values
+      expect(existing.reload.label).to eq("Tour: E-Mail Publikation")
+      expect(existing.placeholders_optional.split("\n").size).to eq(1)
+      # unchanged values
+      expect(existing.subject).to eq("Publikation der Tour")
+      expect(existing.body.body.to_s).to include("Tour wurde publiziert")
+
+      created = group.custom_contents.find_by(key: :event_tour_subito_publication)
+      expect(created.reload.label).to eq("Tour: E-Mail Publikation (Subito)")
+      expect(created.placeholders_optional.split(",").size).to be >= 15
+      expect(created.subject).to eq("Publikation der Subito-Tour {event-name}")
+      br_count = created.body.body.to_s.split("<br>").size
+      br2_count = created.body.body.to_s.split("<br><br>").size
+      expect(br_count).to be >= 20
+      expect(br2_count).to be < br_count
+    end
+  end
 end
