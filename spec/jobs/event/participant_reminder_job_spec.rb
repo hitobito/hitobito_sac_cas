@@ -33,8 +33,8 @@ describe Event::ParticipantReminderJob do
 
     it "sends email to both participants" do
       expect { job.perform }
-        .to have_enqueued_mail(Event::ParticipantReminderMailer, :reminder).with(participation_1)
-        .and have_enqueued_mail(Event::ParticipantReminderMailer, :reminder).with(participation_2)
+        .to have_enqueued_mail(Event::CourseParticipationMailer, :reminder).with(participation_1)
+        .and have_enqueued_mail(Event::CourseParticipationMailer, :reminder).with(participation_2)
     end
   end
 
@@ -46,7 +46,7 @@ describe Event::ParticipantReminderJob do
 
     it "sends email to the participant" do
       expect { job.perform }
-        .to have_enqueued_mail(Event::ParticipantReminderMailer,
+        .to have_enqueued_mail(Event::CourseParticipationMailer,
           :reminder).once.with(participation_2)
     end
   end
@@ -60,7 +60,7 @@ describe Event::ParticipantReminderJob do
 
     it "sends email to the participants" do
       expect { job.perform }
-        .to have_enqueued_mail(Event::ParticipantReminderMailer, :reminder).twice
+        .to have_enqueued_mail(Event::CourseParticipationMailer, :reminder).twice
     end
   end
 
@@ -68,7 +68,7 @@ describe Event::ParticipantReminderJob do
     before { event.dates.update_all(start_at: 6.weeks.from_now + 1.day) }
 
     it "doesn't send an email" do
-      expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
+      expect { job.perform }.not_to have_enqueued_mail(Event::CourseParticipationMailer)
     end
   end
 
@@ -76,19 +76,19 @@ describe Event::ParticipantReminderJob do
     before { question.update!(admin: false) }
 
     it "doesn't send an email" do
-      expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
+      expect { job.perform }.not_to have_enqueued_mail(Event::CourseParticipationMailer)
     end
   end
 
   context "states" do
     it "doesn't send an email in closed state" do
       event.update_column(:state, :closed)
-      expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
+      expect { job.perform }.not_to have_enqueued_mail(Event::CourseParticipationMailer)
     end
 
     it "doesn't send an email in canceled state" do
       event.update_column(:state, :canceled)
-      expect { job.perform }.not_to have_enqueued_mail(Event::ParticipantReminderMailer)
+      expect { job.perform }.not_to have_enqueued_mail(Event::CourseParticipationMailer)
     end
   end
 end

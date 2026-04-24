@@ -361,9 +361,7 @@ describe Event::Course do
 
       expect(course).not_to be_valid
       expect(course.errors.attribute_names).to include(:state)
-      # rubocop:todo Layout/LineLength
       expect(course.errors[:state].first).to eq("State cannot be changed from application_closed to created")
-      # rubocop:enable Layout/LineLength
     end
 
     it "state can be changed from application_closed to canceled" do
@@ -379,21 +377,21 @@ describe Event::Course do
 
     # set up participants who have been rejected
     let(:application) { Fabricate(:event_application, priority_1: course, rejected: true) }
-    let!(:applied_participation) {
+    let!(:applied_participation) do
       Fabricate(:event_participation, event: course, application:, state: :applied)
-    }
-    let!(:rejected_participation) {
+    end
+    let!(:rejected_participation) do
       Fabricate(:event_participation, event: course, application:, state: :rejected)
-    }
-    let!(:unconfirmed_participation) {
+    end
+    let!(:unconfirmed_participation) do
       Fabricate(:event_participation, event: course, application:, state: :unconfirmed)
-    }
+    end
 
     it "queues job to notify rejected and applied participants" do
       expect { course.update!(state: :assignment_closed) }
-        .to have_enqueued_mail(Event::ParticipationMailer, :reject_applied).once
-        .and have_enqueued_mail(Event::ParticipationMailer, :reject_rejected).once
-        .and have_enqueued_mail(Event::ParticipationMailer, :reject_unconfirmed).once
+        .to have_enqueued_mail(Event::CourseParticipationMailer, :reject_applied).once
+        .and have_enqueued_mail(Event::CourseParticipationMailer, :reject_rejected).once
+        .and have_enqueued_mail(Event::CourseParticipationMailer, :reject_unconfirmed).once
     end
   end
 
@@ -410,8 +408,8 @@ describe Event::Course do
         {participant: people(:admin)},
         {participant: people(:mitglied), state: :assigned, price: 10,
          price_category: "price_regular", application: application},
-        {participant: people(:familienmitglied), state: :assigned, price: 10,
-         price_category: "price_regular"}
+        {participant: people(:familienmitglied), state: :assigned,
+         price: 10, price_category: "price_regular"}
       ])
       @participations.first.roles.create!(type: Event::Course::Role::Leader)
       @participations.second.roles.create!(type: Event::Course::Role::Participant)
@@ -422,7 +420,7 @@ describe Event::Course do
       it "updates assigned participants to summoned" do
         expect { course.update!(state: :ready) }
           .to change { participant.reload.state }.to(eq("summoned"))
-          .and have_enqueued_mail(Event::ParticipationMailer, :summon).twice
+          .and have_enqueued_mail(Event::CourseParticipationMailer, :summon).twice
           .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(2)
         expect(leader.reload.state).to eq("assigned")
       end
@@ -432,17 +430,18 @@ describe Event::Course do
         expect { course.update!(state: :ready) }
           .to change { participant.reload.state }.to(eq("summoned"))
           .and change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(2)
-          .and not_have_enqueued_mail(Event::ParticipationMailer, :summon)
+          .and not_have_enqueued_mail(Event::CourseParticipationMailer, :summon)
         expect(leader.reload.state).to eq("assigned")
       end
 
       it "doesn't enqueue a job if there already is an external invoice" do
-        ExternalInvoice::CourseParticipation.create!(person_id: participant.participant_id,
-          link: participant)
+        ExternalInvoice::CourseParticipation.create!(
+          person_id: participant.participant_id,
+          link: participant
+        )
 
-        expect { course.update!(state: :ready) }.to change(
-          Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count
-        ).by(1)
+        expect { course.update!(state: :ready) }
+          .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
       end
 
       it "doesn't enqueue a job if participation price is nil" do
@@ -469,8 +468,11 @@ describe Event::Course do
 
     context "from created" do
       before do
-        course.participations.create!([{participant: people(:admin)},
-          {participant: people(:mitglied)}, {participant: people(:familienmitglied)}])
+        course.participations.create!([
+          {participant: people(:admin)},
+          {participant: people(:mitglied)},
+          {participant: people(:familienmitglied)}
+        ])
         course.update!(state: :created)
       end
 
@@ -483,7 +485,7 @@ describe Event::Course do
 
         it "sends an email to the course admin and leader" do
           expect { course.update!(state: :application_open) }
-            .to have_enqueued_mail(Event::PublishedMailer, :notice).twice
+            .to have_enqueued_mail(Event::CourseMailer, :published).twice
         end
 
         it "skips email if told to do so" do
@@ -493,20 +495,20 @@ describe Event::Course do
       end
 
       context "with course assistant leader" do
-        before {
+        before do
           course.participations.first.roles.create!(type: Event::Course::Role::AssistantLeader)
-        }
+        end
 
         it "sends an email to the course admin and assistant leader" do
           expect { course.update!(state: :application_open) }
-            .to have_enqueued_mail(Event::PublishedMailer, :notice).once
+            .to have_enqueued_mail(Event::CourseMailer, :published).once
         end
       end
 
       context "without course leaders" do
         it "doesn't queue a job to send an email" do
           expect { course.update!(state: :application_open) }
-            .not_to have_enqueued_mail(Event::PublishedMailer)
+            .not_to have_enqueued_mail(Event::CourseMailer)
         end
       end
     end
@@ -516,7 +518,7 @@ describe Event::Course do
 
       it "doesn't send an email" do
         expect { course.update!(state: :application_open) }
-          .not_to have_enqueued_mail(Event::PublishedMailer)
+          .not_to have_enqueued_mail(Event::CourseMailer)
       end
     end
   end
@@ -529,7 +531,7 @@ describe Event::Course do
 
       it "sends an email to the course admin" do
         expect { course.update!(state: :application_paused) }
-          .to have_enqueued_mail(Event::ApplicationPausedMailer, :notice).once
+          .to have_enqueued_mail(Event::CourseMailer, :application_paused).once
       end
     end
 
@@ -538,7 +540,7 @@ describe Event::Course do
 
       it "doesn't queue the job to send an email" do
         expect { course.update!(state: :application_paused) }
-          .not_to have_enqueued_mail(Event::ApplicationPausedMailer, :notice)
+          .not_to have_enqueued_mail(Event::CourseMailer, :application_paused)
       end
     end
   end
@@ -556,7 +558,7 @@ describe Event::Course do
 
       it "sends an email to the course admin" do
         expect { course.update!(state: :application_closed) }
-          .to have_enqueued_mail(Event::ApplicationClosedMailer, :notice).once
+          .to have_enqueued_mail(Event::CourseMailer, :application_closed).once
       end
     end
 
@@ -565,7 +567,7 @@ describe Event::Course do
 
       it "doesn't queue the job to send an email" do
         expect { course.update!(state: :application_closed) }
-          .not_to have_enqueued_mail(Event::ApplicationClosedMailer)
+          .not_to have_enqueued_mail(Event::CourseMailer)
       end
     end
   end
@@ -596,29 +598,25 @@ describe Event::Course do
         expect(participations.map(&:previous_state)).to eq(["assigned", "rejected", nil])
       end
 
-      # rubocop:todo Layout/LineLength
       it "sends an email to all leaders and participants if canceled because of minimum participants" do
-        # rubocop:enable Layout/LineLength
         expect { course.update!(state: :canceled, canceled_reason: :minimum_participants) }
-          .to have_enqueued_mail(Event::CanceledMailer, :minimum_participants).thrice
+          .to have_enqueued_mail(Event::CourseParticipationMailer, :event_canceled_minimum_participants).thrice
       end
 
       it "sends an email to all leaders and participants if canceled because of no_leader" do
         expect { course.update!(state: :canceled, canceled_reason: :no_leader) }
-          .to have_enqueued_mail(Event::CanceledMailer, :no_leader).thrice
+          .to have_enqueued_mail(Event::CourseParticipationMailer, :event_canceled_no_leader).thrice
       end
 
       it "sends an email to all leaders and participants if canceled because of weather" do
         expect { course.update!(state: :canceled, canceled_reason: :weather) }
-          .to have_enqueued_mail(Event::CanceledMailer, :weather).thrice
+          .to have_enqueued_mail(Event::CourseParticipationMailer, :event_canceled_weather).thrice
       end
 
       it "does not send email to cancele when participant is canceled" do
         course.participations.joins(:roles)
           .where(event_roles: {type: course.participant_types.collect(&:sti_name)})
-          # rubocop:todo Layout/LineLength
           .first.update!(state: :canceled, canceled_at: Time.zone.today) # cancel one of the participants
-        # rubocop:enable Layout/LineLength
 
         expect { course.update!(state: :canceled, canceled_reason: :weather) }
           .to have_enqueued_mail.twice
@@ -633,14 +631,17 @@ describe Event::Course do
 
     context "without participants" do
       it "doesnt send an email" do
-        expect { course.update!(state: :canceled) }.not_to have_enqueued_mail(Event::CanceledMailer)
+        expect { course.update!(state: :canceled) }
+          .not_to have_enqueued_mail(Event::CourseParticipationMailer)
       end
     end
 
     context "invoice" do
       before do
-        p1, p2 = course.participations.create!([{participant: people(:admin)},
-          {participant: people(:mitglied)}])
+        p1, p2 = course.participations.create!([
+          {participant: people(:admin)},
+          {participant: people(:mitglied)}
+        ])
         ExternalInvoice::CourseParticipation.create!(person_id: p1.participant_id, link: p1)
         ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2)
       end
@@ -659,20 +660,14 @@ describe Event::Course do
     before do
       _p1, p2, p3, p4 = course.participations.create!([
         {participant: people(:admin), roles: [Event::Course::Role::Leader.new], price: 0},
-        {participant: people(:mitglied), state: :absent, price: 42,
-         price_category: "price_regular"},
-        {participant: people(:familienmitglied), state: :attended, price: 42,
-         price_category: "price_regular"},
-        {participant: people(:familienmitglied2), state: :absent, price: 42,
-         price_category: "price_regular"}
+        {participant: people(:mitglied), state: :absent, price: 42, price_category: "price_regular"},
+        {participant: people(:familienmitglied), state: :attended, price: 42, price_category: "price_regular"},
+        {participant: people(:familienmitglied2), state: :absent, price: 42, price_category: "price_regular"}
       ])
-      ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2,
-        total: p2.price)
-      ExternalInvoice::CourseParticipation.create!(person_id: p3.participant_id, link: p3,
-        total: p3.price)
-      # rubocop:todo Layout/LineLength
-      ExternalInvoice::CourseAnnulation.create!(person_id: p4.participant_id, link: p4, total: p4.price) # annulation invoice alredy exists
-      # rubocop:enable Layout/LineLength
+      ExternalInvoice::CourseParticipation.create!(person_id: p2.participant_id, link: p2, total: p2.price)
+      ExternalInvoice::CourseParticipation.create!(person_id: p3.participant_id, link: p3, total: p3.price)
+      # annulation invoice alredy exists
+      ExternalInvoice::CourseAnnulation.create!(person_id: p4.participant_id, link: p4, total: p4.price)
     end
 
     it "does not set participation state for assigned participations" do
@@ -689,12 +684,9 @@ describe Event::Course do
     end
 
     it "queues job for absent invoices for absent participants" do
-      expect do
-        course.update!(state: :closed)
-      end.to change {
-               Delayed::Job.where("handler like '%CreateCourseInvoiceJob%'").count
-             }.by(1).and \
-               change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(1)
+      expect { course.update!(state: :closed) }
+        .to change { Delayed::Job.where("handler like '%CreateCourseInvoiceJob%'").count }.by(1)
+        .and change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(1)
     end
   end
 

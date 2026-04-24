@@ -16,9 +16,9 @@ describe Event::ParticipationConfirmationJob do
   let(:person) { people(:mitglied) }
 
   let(:application) { Fabricate(:event_application, priority_1: event, priority_2: event) }
-  let(:participation) {
+  let(:participation) do
     Fabricate(:event_participation, event: event, participant: person, application: application)
-  }
+  end
 
   before do
     SeedFu.quiet = true
@@ -28,60 +28,94 @@ describe Event::ParticipationConfirmationJob do
   subject { Event::ParticipationConfirmationJob.new(participation) }
 
   describe "Event sends directly" do
-    let(:event) {
-      Fabricate(:event, application_opening_at: 5.days.ago, groups: [group],
+    let(:event) do
+      Fabricate(:event,
+        application_opening_at: 5.days.ago,
+        groups: [group],
         applications_cancelable: true)
-    }
+    end
 
-    it "sends event via coure unconfirmed email" do
-      # rubocop:todo Layout/LineLength
-      expect(Event::ParticipationMailer).to receive(:confirmation).with(participation).and_call_original
-      # rubocop:enable Layout/LineLength
-      expect do
-        subject.perform
-      end.to change { ActionMailer::Base.deliveries.size }.by(1)
-        .and not_have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation)
+    it "sends event via regular unconfirmed email" do
+      expect(Event::ParticipationMailer)
+        .to receive(:confirmation).with(participation).and_call_original
+      expect { subject.perform }
+        .to change { ActionMailer::Base.deliveries.size }.by(1)
+        .and not_have_enqueued_mail(Event::CourseParticipationMailer, :confirmation)
     end
   end
 
-  describe "Event::Course uses Event::ApplicationConfirmationMailer" do
+  describe "Event::Course uses Event::CourseParticipationMailer" do
     let(:group) { groups(:root) }
 
-    let(:event) {
-      Fabricate(:sac_course, application_opening_at: 5.days.ago, groups: [group],
+    let(:event) do
+      Fabricate(:sac_course,
+        application_opening_at: 5.days.ago,
+        groups: [group],
         applications_cancelable: true)
-    }
+    end
 
     before do
       expect(Event::ParticipationMailer).not_to receive(:confirmation)
     end
 
     it "sends course specific unconfirmed email" do
-      expect do
-        subject.perform
-      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(
-        participation, "course_application_confirmation_unconfirmed"
-      )
+      expect { subject.perform }
+        .to have_enqueued_mail(Event::CourseParticipationMailer, :confirmation)
+        .with(participation, "course_application_confirmation_unconfirmed")
         .and not_change { ActionMailer::Base.deliveries.size }
     end
 
     it "sends course specific assigned email" do
       participation.update!(state: :assigned)
-      expect do
-        subject.perform
-      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(
-        participation, "course_application_confirmation_assigned"
-      )
+      expect { subject.perform }
+        .to have_enqueued_mail(Event::CourseParticipationMailer, :confirmation)
+        .with(participation, "course_application_confirmation_assigned")
         .and not_change { ActionMailer::Base.deliveries.size }
     end
 
     it "sends course specific applied email" do
       participation.update!(state: :applied)
-      expect do
-        subject.perform
-      end.to have_enqueued_mail(Event::ApplicationConfirmationMailer, :confirmation).with(
-        participation, "course_application_confirmation_applied"
-      )
+      expect { subject.perform }
+        .to have_enqueued_mail(Event::CourseParticipationMailer, :confirmation)
+        .with(participation, "course_application_confirmation_applied")
+        .and not_change { ActionMailer::Base.deliveries.size }
+    end
+  end
+
+  describe "Event::Tour uses Event::TourParticipationMailer" do
+    let(:group) { groups(:bluemlisalp) }
+
+    let(:event) do
+      Fabricate(:sac_tour,
+        application_opening_at: 5.days.ago,
+        groups: [group],
+        applications_cancelable: true)
+    end
+
+    before do
+      expect(Event::ParticipationMailer).not_to receive(:confirmation)
+    end
+
+    it "sends course specific unconfirmed email" do
+      expect { subject.perform }
+        .to have_enqueued_mail(Event::TourParticipationMailer, :confirmation)
+        .with(participation, "event_tour_application_confirmation_unconfirmed")
+        .and not_change { ActionMailer::Base.deliveries.size }
+    end
+
+    it "sends course specific assigned email" do
+      participation.update!(state: :assigned)
+      expect { subject.perform }
+        .to have_enqueued_mail(Event::TourParticipationMailer, :confirmation)
+        .with(participation, "event_tour_application_confirmation_assigned")
+        .and not_change { ActionMailer::Base.deliveries.size }
+    end
+
+    it "sends course specific applied email" do
+      participation.update!(state: :applied)
+      expect { subject.perform }
+        .to have_enqueued_mail(Event::TourParticipationMailer, :confirmation)
+        .with(participation, "event_tour_application_confirmation_applied")
         .and not_change { ActionMailer::Base.deliveries.size }
     end
   end

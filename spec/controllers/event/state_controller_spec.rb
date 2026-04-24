@@ -76,7 +76,7 @@ describe Event::StateController do
           expect do
             put :update, params: {group_id: group.id, id: course.id, state: :application_open}
           end.to change { course.reload.state }.from("created").to("application_open")
-            .and have_enqueued_mail(Event::PublishedMailer, :notice).twice
+            .and have_enqueued_mail(Event::CourseMailer, :published).twice
         end
 
         it "skips sending emails when told to do so" do

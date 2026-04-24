@@ -55,7 +55,8 @@ module CommonMailerPlaceholders
   end
 
   def placeholder_profile_links
-    safe_join(@person.household.people.map { link_to(_1.full_name, person_url(_1)) }, raw("<br />"))
+    links = @person.household.people.map { link_to(_1.full_name, person_url(_1)) }
+    safe_join(links, raw("<br />"))
   end
 
   def placeholder_faq_url
@@ -63,9 +64,8 @@ module CommonMailerPlaceholders
   end
 
   def placeholder_person_ids
-    # rubocop:todo Layout/LineLength
-    if @person.sac_family_main_person && @beitragskategorie.to_s == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s
-      # rubocop:enable Layout/LineLength
+    if @person.sac_family_main_person &&
+        @beitragskategorie.to_s == SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY.to_s
       family_ids = @person.household_people.distinct.order(:id).pluck(:id)
       family_ids.present? ? "#{@person.id} (#{family_ids.join(", ")})" : @person.id
     else
@@ -88,7 +88,10 @@ module CommonMailerPlaceholders
       @person,
       main: false
     )
-    ApplicationController.render("wizards/signup/_section_fee_positions_table", layout: false,
-      locals: {active: true, group: @section, presenter:}).html_safe
+    ApplicationController.render(
+      "wizards/signup/_section_fee_positions_table",
+      layout: false,
+      locals: {active: true, group: @section, presenter:}
+    ).html_safe
   end
 end

@@ -692,12 +692,12 @@ describe Event::ParticipationsController do
 
       it "sends summon email when send_email is true" do
         expect { put :summon, params: params.merge(send_email: true) }
-          .to have_enqueued_mail(Event::ParticipationMailer, :summon).once
+          .to have_enqueued_mail(Event::CourseParticipationMailer, :summon).once
       end
 
       it "does not send summon email when send_email is false" do
         expect { put :summon, params: params.merge(send_email: false) }
-          .not_to have_enqueued_mail(Event::ParticipationMailer, :summon)
+          .not_to have_enqueued_mail(Event::CourseParticipationMailer, :summon)
       end
     end
 
@@ -756,7 +756,7 @@ describe Event::ParticipationsController do
 
         it "always sends email" do
           expect { put :cancel, params: params }
-            .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
+            .to have_enqueued_mail(Event::CourseParticipationMailer, :canceled).once
         end
 
         # rubocop:todo Layout/LineLength
@@ -802,8 +802,7 @@ describe Event::ParticipationsController do
 
         context "for tour" do
           let(:event) do
-            Fabricate(:sac_tour, groups: [groups(:bluemlisalp)],
-              applications_cancelable: true).tap do |c|
+            Fabricate(:sac_tour, groups: [groups(:bluemlisalp)], applications_cancelable: true).tap do |c|
               c.dates.first.update_columns(start_at: 1.day.from_now, finish_at: 1.week.from_now)
             end
           end
@@ -814,10 +813,9 @@ describe Event::ParticipationsController do
             expect do
               expect do
                 put :cancel, params: params
-              end.to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
+              end.to have_enqueued_mail(Event::TourParticipationMailer, :canceled).once
             end
-              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"),
-                :count).by(0)
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
               .and change { participation.reload.state }.to("canceled")
               .and change { ExternalInvoice::CourseAnnulation.count }.by(0)
 
@@ -844,21 +842,23 @@ describe Event::ParticipationsController do
         end
 
         it "sends application canceled email when send_email is true" do
-          expect {
+          expect do
             put :cancel,
-              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
-send_email: true})
-          }
-            .to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
+              params: params.merge({
+                event_participation: {canceled_at: 1.day.ago.to_date},
+                send_email: true
+              })
+          end.to have_enqueued_mail(Event::CourseParticipationMailer, :canceled).once
         end
 
         it "does not send application canceled email when send_email is false" do
-          expect {
+          expect do
             put :cancel,
-              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
-send_email: false})
-          }
-            .not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+              params: params.merge({
+                event_participation: {canceled_at: 1.day.ago.to_date},
+                send_email: false
+              })
+          end.not_to have_enqueued_mail(Event::CourseParticipationMailer, :canceled)
         end
 
         context "for tour" do
@@ -872,14 +872,14 @@ send_email: false})
             expect do
               expect do
                 put :cancel,
-                  # rubocop:todo Layout/LineLength
-                  params: params.merge({event_participation: {canceled_at: 5.days.ago.to_date}, send_email: false,
-# rubocop:enable Layout/LineLength
-invoice_option: "standard"})
-              end.not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+                  params: params.merge({
+                    event_participation: {canceled_at: 5.days.ago.to_date},
+                    send_email: false,
+                    invoice_option: "standard"
+                  })
+              end.not_to have_enqueued_mail(Event::CourseParticipationMailer, :canceled)
             end
-              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"),
-                :count).by(0)
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(0)
               .and change { participation.reload.state }.to("canceled")
               .and change { ExternalInvoice::CourseAnnulation.count }.by(0)
 
@@ -888,9 +888,7 @@ invoice_option: "standard"})
         end
 
         context "invoice_option standard" do
-          # rubocop:todo Layout/LineLength
           it "creates course annulation invoice and enqueues cancel invoice job if person has invoice" do
-            # rubocop:enable Layout/LineLength
             invoice = participation.person.external_invoices.create!(
               type: ExternalInvoice::SacMembership.sti_name, link: participation
             )
@@ -899,18 +897,18 @@ invoice_option: "standard"})
 
             expect {
               put :cancel,
-                params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
-            invoice_option: "standard"})
+                params: params.merge({
+                  event_participation: {canceled_at: 1.day.ago.to_date},
+                  invoice_option: "standard"
+                })
             }
-              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"),
-                :count).by(1)
+              .to change(Delayed::Job.where("handler LIKE '%CreateCourseInvoiceJob%'"), :count).by(1)
               .and change(Delayed::Job.where("handler LIKE '%CancelInvoiceJob%'"), :count).by(1)
               .and change { invoice.reload.state }.to("cancelled")
               .and change { participation.reload.state }.to("canceled")
               .and change { ExternalInvoice::CourseAnnulation.count }.by(1)
 
-            invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation,
-              person: participation.person)
+            invoice = ExternalInvoice::CourseAnnulation.find_by(link: participation, person: participation.person)
             expect(invoice).to be_present
             expect(invoice.issued_at).to eq(Date.current)
             expect(invoice.sent_at).to eq(Date.current)
@@ -921,19 +919,23 @@ invoice_option: "standard"})
 
         context "invoice_option custom" do
           it "creates course annulation invoice with custom amount" do
-            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation,
-              custom_price: 400.50)
+            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 400.50)
             put :cancel,
-              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
-invoice_option: "custom", custom_price: "400.50"})
+              params: params.merge({
+                event_participation: {canceled_at: 1.day.ago.to_date},
+                invoice_option: "custom",
+                custom_price: "400.50"
+              })
           end
 
           it "custom amount is zero when no amount passed" do
-            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation,
-              custom_price: 0)
+            expect(ExternalInvoice::CourseAnnulation).to receive(:invoice!).with(participation, custom_price: 0)
             put :cancel,
-              params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
-invoice_option: "custom", custom_price: ""})
+              params: params.merge({
+                event_participation: {canceled_at: 1.day.ago.to_date},
+                invoice_option: "custom",
+                custom_price: ""
+              })
           end
         end
 
@@ -942,8 +944,10 @@ invoice_option: "custom", custom_price: ""})
             expect(ExternalInvoice::CourseAnnulation).not_to receive(:invoice!)
             expect do
               put :cancel,
-                params: params.merge({event_participation: {canceled_at: 1.day.ago.to_date},
-invoice_option: "no_invoice"})
+                params: params.merge({
+                  event_participation: {canceled_at: 1.day.ago.to_date},
+                  invoice_option: "no_invoice"
+                })
             end.not_to change { ExternalInvoice::CourseAnnulation.count }
           end
         end
@@ -961,8 +965,7 @@ invoice_option: "no_invoice"})
               event_id: event.id,
               id: participation.id
             }
-        end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"),
-          :count).by(1)
+        end.to change(Delayed::Job.where("handler like '%ParticipationConfirmationJob%'"), :count).by(1)
 
         participation.reload
         expect(participation.active).to be true
