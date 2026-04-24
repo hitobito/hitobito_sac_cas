@@ -39,6 +39,8 @@ class Event::TourParticipationMailer < ApplicationMailer
     @person = participation.person
     @group = @context = @event.groups.first # @context is required for mailer layout
 
-    compose(@person, content_key, context: @context)
+    I18n.with_locale(@group.language) do
+      compose(@person, content_key, context: @context)
+    end
   end
 end

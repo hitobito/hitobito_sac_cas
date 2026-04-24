@@ -1529,6 +1529,10 @@ de:
         custom: Annullationskostenrechnung mit einem benutzerdefinierten Betrag
         no_invoice: Keine Annullationskostenrechnung
         custom_price: Betrag
+      print:
+        heading_event/tour: Touranmeldung
+        read_and_agreed_for_event_tour: Ich erfülle die Voraussetzungen, habe die Beschreibung gelesen und bin damit einverstanden.
+        requirements_for_event_tour: Voraussetzungen für die Tour
       states:
         absent: Keine Teilnahme an diesem Kurs.
         annulled: Dieser Kurs wurde abgesagt.

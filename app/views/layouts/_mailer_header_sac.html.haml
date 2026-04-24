@@ -1,0 +1,14 @@
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+%header
+  .logo
+    - if @context && @context.is_a?(Group) && @context.logo.attached?
+      = image_tag(@context.logo, alt: @context.name)
+    - else
+      - logo = Settings.application.logo
+      - path = logo&.dig(:multilanguage_image, I18n.locale) || logo&.image
+      - url = url_to_asset(current_webpacker_instance.manifest.lookup!("media/images/#{path}"))
+      = image_tag(url, alt: Settings.application.name)
