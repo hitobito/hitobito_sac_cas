@@ -41,3 +41,36 @@
   address p {
     margin: 0;
   }
+
+  header {
+    padding: var(--padding);
+  }
+
+  .logo {
+    display: block;
+    width: 200px;
+    height: 85px;
+    object-fit: contain;
+    object-position: center center;
+    text-align: center;
+
+    img {
+      max-width: 200px;
+      max-height: 85px;
+    }
+  }
+
+  dl {
+    margin: 0;
+    display: grid;
+    grid-column-gap: 1em;
+    grid-template-columns: 15em auto;
+  }
+
+  dd {
+    margin: 0;
+  }
+
+  dl + br {
+    display: none;
+  }
