@@ -28,7 +28,7 @@ describe Event::CloseApplicationsJob do
     it "updates course state when application_closing_at is in the past" do
       travel_to(course.application_closing_at + 1.day) do
         expect { job.perform }.to change { course.reload.state }.to("application_closed")
-          .and have_enqueued_mail(Event::ApplicationClosedMailer, :notice)
+          .and have_enqueued_mail(Event::CourseMailer, :application_closed)
       end
     end
 
@@ -47,7 +47,7 @@ describe Event::CloseApplicationsJob do
     it "updates course state when application_closing_at is in the past" do
       travel_to(course.application_closing_at + 1.day) do
         expect { job.perform }.to change { course.reload.state }.to("application_closed")
-          .and have_enqueued_mail(Event::ApplicationClosedMailer, :notice)
+          .and have_enqueued_mail(Event::CourseMailer, :application_closed)
       end
     end
 
@@ -55,7 +55,7 @@ describe Event::CloseApplicationsJob do
       travel_to(course.application_closing_at) do
         expect do
           expect { job.perform }.not_to change { course.reload.state }
-        end.not_to have_enqueued_mail(Event::ApplicationClosedMailer, :notice)
+        end.not_to have_enqueued_mail(Event::CourseMailer, :application_closed)
       end
     end
   end

@@ -83,7 +83,6 @@ module HitobitoSacCas
       Event::ParticipationBanner.prepend SacCas::Event::ParticipationBanner
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
-      Event::ParticipationMailer.prepend SacCas::Event::ParticipationMailer
       Event::Participation.prepend SacCas::Event::Participation
       Event::Answer.include SacCas::Event::Answer
       Group.prepend SacPhoneNumbers

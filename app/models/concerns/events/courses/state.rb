@@ -69,7 +69,10 @@ module Events::Courses::State
 
     participations.find_each do |participation|
       next if participation.previous_state == "canceled"
-      Event::CanceledMailer.send(canceled_reason, participation).deliver_later
+
+      Event::CourseParticipationMailer
+        .send(:"event_canceled_#{canceled_reason}", participation)
+        .deliver_later
     end
   end
 
@@ -89,7 +92,9 @@ module Events::Courses::State
 
   def notify_rejected_participants
     rejected_participants.each do |participation|
-      Event::ParticipationMailer.send(:"reject_#{participation.state}", participation).deliver_later
+      Event::CourseParticipationMailer
+        .send(:"reject_#{participation.state}", participation)
+        .deliver_later
     end
   end
 
@@ -99,7 +104,7 @@ module Events::Courses::State
 
   def summon_assigned_participants
     assigned_participants.each do |participation|
-      Event::ParticipationMailer.summon(participation).deliver_later unless skip_emails
+      Event::CourseParticipationMailer.summon(participation).deliver_later unless skip_emails
       if !ExternalInvoice::CourseParticipation.exists?(link: participation) && groups.first.root?
         ExternalInvoice::CourseParticipation.invoice!(participation)
       end
@@ -141,7 +146,7 @@ module Events::Courses::State
 
   def send_application_published_email
     all_leaders.each do |leader|
-      Event::PublishedMailer.notice(self, leader).deliver_later
+      Event::CourseMailer.published(self, leader).deliver_later
     end
   end
 
@@ -153,11 +158,11 @@ module Events::Courses::State
   end
 
   def send_application_paused_email
-    Event::ApplicationPausedMailer.notice(self).deliver_later if course_admin_email?
+    Event::CourseMailer.application_paused(self).deliver_later if course_admin_email?
   end
 
   def send_application_closed_email
-    Event::ApplicationClosedMailer.notice(self).deliver_later if course_admin_email?
+    Event::CourseMailer.application_closed(self).deliver_later if course_admin_email?
   end
 
   def send_absent_invoices

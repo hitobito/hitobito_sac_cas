@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-module SacCas::Event::ParticipationsController
+module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
 
   WIZARD_STEPS = %w[contact answers subsidy summary].freeze
@@ -18,9 +18,9 @@ module SacCas::Event::ParticipationsController
     around_create :proceed_wizard
     after_create :subscribe_newsletter
     after_summon :enqueue_invoice_job
-    # rubocop:todo Layout/LineLength
-    after_assign :enqueue_confirmation_job # send_confirmation_email in core checks current_user_interested_in_mail? which should be irrelevant here
-    # rubocop:enable Layout/LineLength
+    # send_confirmation_email in core checks current_user_interested_in_mail? which should be
+    # irrelevant here
+    after_assign :enqueue_confirmation_job
     before_cancel :assert_participant_cancelable?
 
     before_render_show :load_recent_trainings_and_participations
@@ -200,11 +200,16 @@ module SacCas::Event::ParticipationsController
   end
 
   def send_application_canceled_email
-    Event::ParticipationCanceledMailer.confirmation(entry).deliver_later
+    case event
+    when Event::Course
+      Event::CourseParticipationMailer.canceled(entry).deliver_later
+    when Event::Tour
+      Event::TourParticipationMailer.canceled(entry).deliver_later
+    end
   end
 
   def send_application_summoned_email
-    Event::ParticipationMailer.summon(entry).deliver_later
+    Event::CourseParticipationMailer.summon(entry).deliver_later
   end
 
   def enqueue_invoice_job

@@ -39,7 +39,7 @@ describe "event state transitions", js: true do
       expect do
         accept_confirm
         expect(page).to have_content "Absagegrund\nWetterrisiko"
-      end.not_to have_enqueued_mail(Event::CanceledMailer)
+      end.not_to have_enqueued_mail(Event::CourseParticipationMailer)
     end
 
     it "may cancel and send emails" do
@@ -48,7 +48,7 @@ describe "event state transitions", js: true do
       expect do
         accept_confirm
         expect(page).to have_content "Absagegrund\nWetterrisiko"
-      end.to have_enqueued_mail(Event::CanceledMailer).once
+      end.to have_enqueued_mail(Event::CourseParticipationMailer, :event_canceled_weather).once
     end
   end
 
@@ -68,7 +68,7 @@ describe "event state transitions", js: true do
         click_on "E-Mails verschicken"
         expect(page).to have_link "Publiziert"
       end.to change { event.reload.state }.from("created").to("application_open")
-        .and have_enqueued_mail(Event::PublishedMailer, :notice)
+        .and have_enqueued_mail(Event::CourseMailer, :published)
     end
 
     it "may transition without sending emails" do

@@ -9,9 +9,9 @@ module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
   MANUALLY_SENDABLE_LEADERSHIP_MAILS = [
-    Event::PublishedMailer::NOTICE,
-    Event::LeaderReminderMailer::REMINDER_NEXT_WEEK,
-    Event::LeaderReminderMailer::REMINDER_8_WEEKS
+    Event::CourseMailer::PUBLISHED,
+    Event::CourseParticipationMailer::LEADER_REMINDER_NEXT_WEEK,
+    Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS
   ]
 
   SELF_EMPLOYED_LEADER_ROLES = [
@@ -27,18 +27,18 @@ module SacCas::Event::Participation
   prepended do # rubocop:todo Metrics/BlockLength
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.clear
     self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.concat([
-      Event::ParticipationCanceledMailer::CONFIRMATION,
-      Event::CanceledMailer::NO_LEADER,
-      Event::CanceledMailer::MINIMUM_PARTICIPANTS,
-      Event::CanceledMailer::WEATHER,
-      Event::ParticipationMailer::SUMMONED_PARTICIPATION,
-      Event::ApplicationConfirmationMailer::ASSIGNED,
-      Event::ParticipationMailer::REJECT_REJECTED_PARTICIPATION,
-      Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION,
-      Event::ParticipantReminderMailer::REMINDER,
-      Event::SurveyMailer::SURVEY,
-      Event::ApplicationConfirmationMailer::UNCONFIRMED,
-      Event::ApplicationConfirmationMailer::APPLIED
+      Event::CourseParticipationMailer::SUMMONED_PARTICIPATION,
+      Event::CourseParticipationMailer::ASSIGNED,
+      Event::CourseParticipationMailer::UNCONFIRMED,
+      Event::CourseParticipationMailer::APPLIED,
+      Event::CourseParticipationMailer::REJECT_REJECTED_PARTICIPATION,
+      Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION,
+      Event::CourseParticipationMailer::CANCELED_PARTICIPATION,
+      Event::CourseParticipationMailer::REMINDER,
+      Event::CourseParticipationMailer::SURVEY,
+      Event::CourseParticipationMailer::EVENT_CANCELED_NO_LEADER,
+      Event::CourseParticipationMailer::EVENT_CANCELED_MINIMUM_PARTICIPANTS,
+      Event::CourseParticipationMailer::EVENT_CANCELED_WEATHER
     ])
 
     include I18nEnums
