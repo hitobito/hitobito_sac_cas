@@ -49,7 +49,7 @@ describe Event::Courses::MailDispatchesController do
       it "sends leader reminder emails only to leader roles" do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :leader_reminder}
-        end.to have_enqueued_mail(Event::LeaderReminderMailer, :reminder).exactly(2).times
+        end.to have_enqueued_mail(Event::CourseParticipationMailer, :leader_reminder).exactly(2).times
         expect(flash[:notice]).to eq("Es wurden 2 E-Mails verschickt.")
       end
 
@@ -66,7 +66,7 @@ describe Event::Courses::MailDispatchesController do
       it "sends survey emails to every active participation" do
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
-        end.to have_enqueued_mail(Event::SurveyMailer, :survey).exactly(4).times
+        end.to have_enqueued_mail(Event::CourseParticipationMailer, :survey).exactly(4).times
         expect(flash[:notice]).to eq("Es wurden 4 E-Mails verschickt.")
       end
 
@@ -74,10 +74,8 @@ describe Event::Courses::MailDispatchesController do
         course.update_column(:link_survey, nil)
         expect do
           post :create, params: {group_id: group, event_id: course, mail_type: :survey}
-        end.not_to have_enqueued_mail(Event::SurveyMailer, :survey)
-        # rubocop:todo Layout/LineLength
+        end.not_to have_enqueued_mail(Event::CourseParticipationMailer, :survey)
         expect(flash[:alert]).to eq("Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.")
-        # rubocop:enable Layout/LineLength
       end
 
       [:created, :application_open, :application_paused, :application_closed, :assignment_closed,

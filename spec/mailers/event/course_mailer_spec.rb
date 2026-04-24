@@ -7,13 +7,11 @@
 
 require "spec_helper"
 
-describe Event::ApplicationClosedMailer do
-  let(:event) {
-    Fabricate(:sac_open_course).tap { |c|
-   c.update_attribute(:state, :assignment_closed) # rubocop:todo Layout/IndentationWidth
-    }
-  }
-  let(:mail) { described_class.notice(event) }
+describe Event::CourseMailer do
+  let(:event) do
+    Fabricate(:sac_open_course).tap { |c| c.update_attribute(:state, :assignment_closed) }
+  end
+  let(:mail) { described_class.application_closed(event) }
 
   before { Group.root.update!(course_admin_email: "admin@example.com") }
 

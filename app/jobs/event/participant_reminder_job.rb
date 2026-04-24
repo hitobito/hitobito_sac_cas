@@ -12,7 +12,7 @@ class Event::ParticipantReminderJob < RecurringJob
 
   def perform_internal
     participations_with_missing_answers.each do |participation|
-      Event::ParticipantReminderMailer.reminder(participation).deliver_later
+      Event::CourseParticipationMailer.reminder(participation).deliver_later
     end
   end
 

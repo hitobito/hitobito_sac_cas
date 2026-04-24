@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe SacCas::CustomContent do
-  subject { CustomContent.get(Event::ParticipationMailer::REJECT_APPLIED_PARTICIPATION) }
+  subject { CustomContent.get(Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION) }
 
   let(:output) do
     subject.body_with_values("event-name" => "Example|Event", "event-link" => "example.com/event")
