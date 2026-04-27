@@ -5,12 +5,11 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-def seed_list(internal_key, name, subscribable_mode: "opt_in",
-  uniqueness_identifiers: [:internal_key], **opts)
+def seed_list(internal_key, name, subscribable_mode: "opt_in", **opts)
   # Seed the newsletter with `seed_once` to avoid overwriting changed attributes.
 
   MailingList.seed_once(
-    *uniqueness_identifiers,
+    :group_id, :internal_key,
     internal_key:,
     **opts.reverse_merge(
       group_id: Group.root_id,
@@ -131,11 +130,9 @@ Group::Sektion.where(id: MountedAttribute.where(key: "tours_enabled", value: tru
   entry_type: "Group").select(:entry_id)).find_each do |sektion|
   normal_list = seed_list(SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
     "Benachrichtigung bei neuen normalen Tourausschreibungen",
-    uniqueness_identifiers: [:group_id, :internal_key],
     group_id: sektion.id)
   subito_list = seed_list(SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY,
     "Benachrichtigung bei neuen Subito-Tourausschreibungen",
-    uniqueness_identificators: [:group_id, :internal_key],
     group_id: sektion.id)
 
   [normal_list, subito_list].each do |list|
