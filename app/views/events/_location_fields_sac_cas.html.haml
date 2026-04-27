@@ -13,8 +13,7 @@
 - if tour?
   = f.labeled_input_field(:summit)
   = f.labeled_input_fields(:ascent, :descent, addon: I18n.t('global.elevation_unit'))
-  = f.labeled_input_field(:duration_h, addon: I18n.t("global.duration_hour_unit"))
-  = f.labeled_input_field(:duration_m, addon: I18n.t("global.duration_minute_unit"))
+  = f.labeled_input_field(:duration_in_hours, addon: I18n.t("global.duration_format"))
 
   = f.labeled_input_fields(:tourenportal_link, :maps)
   - if entry.weak_validation_state?

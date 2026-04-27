@@ -79,10 +79,10 @@ describe :events, js: true do
         .and change { event.price_special }.to(89.05)
 
       price_selector = "#main article"
-      find(price_selector).assert_text("Mitgliederpreis CHF 100.05")
-      find(price_selector).assert_text("Normalpreis CHF 100.15")
-      find(price_selector).assert_text("Subventionierter Preis CHF 90.05")
-      find(price_selector).assert_text("Spezialpreis CHF 89.05")
+      find(price_selector).assert_text("Mitgliederpreis: CHF 100.05")
+      find(price_selector).assert_text("Normalpreis: CHF 100.15")
+      find(price_selector).assert_text("Subventionierter Preis: CHF 90.05")
+      find(price_selector).assert_text("Spezialpreis: CHF 89.05")
     end
 
     it "displays j_s price labels in form when course is a j_s course" do

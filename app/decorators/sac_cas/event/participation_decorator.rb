@@ -16,7 +16,7 @@ module SacCas::Event::ParticipationDecorator
   # rubocop:todo Metrics/CyclomaticComplexity
   def formatted_event_prices(selected_category: nil)
     prices = present_event_prices.map { |attr, price|
-      [format_event_price(attr, price, event), attr]
+      [format_event_price_with_label(attr, price, event), attr]
     }
     prices << [t("no_price_select"), nil] if present_event_prices.empty? || event_leader?
 

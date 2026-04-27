@@ -97,8 +97,6 @@ describe "events/_form.html.haml" do
       expect(dom).to have_field "Link zum Tourenportal"
       expect(dom).to have_field "Ist Subito-Tour"
       expect(dom).to have_field "Zeitaufwand"
-      expect(dom).to have_field "event_duration_h"
-      expect(dom).to have_field "event_duration_m"
       expect(dom).to have_field "Karten"
       expect(dom).to have_field "Alternativroute"
       expect(dom).to have_field "Zusatzinfo"
