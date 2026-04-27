@@ -41,8 +41,14 @@ class Event::ApprovalCommissionResponsibility < ActiveRecord::Base
   end
 
   def reset_associated_approvals
-    tours = Event::Tour.joins(:disciplines).where(event_disciplines: {id: [discipline.id]})
-      .joins(:target_groups).where(event_target_groups: {id: [target_group.id]})
+    tours = Event::Tour.joins(:groups).where(groups: {id: [sektion.id]})
+      .where.not(state: Event::Tour::APPROVAL_IN_PROGRESS_STATES)
+      .joins(:disciplines)
+      .where("event_disciplines.id = :id OR " \
+             "event_disciplines.parent_id = :id", id: discipline.id)
+      .joins(:target_groups)
+      .where("event_target_groups.id = :id OR " \
+             "event_target_groups.parent_id = :id", id: target_group.id)
 
     Event::Approval.where(event: tours,
       freigabe_komitee_id: [freigabe_komitee_id_previously_was, freigabe_komitee_id]).delete_all

@@ -49,3 +49,15 @@ senioren_b:
 senioren_c:
   parent: senioren
   order: 3
+
+familien_a:
+  parent: familien
+  order: 1
+
+familien_b:
+  parent: familien
+  order: 2
+
+familien_c:
+  parent: familien
+  order: 3
