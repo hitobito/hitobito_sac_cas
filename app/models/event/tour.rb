@@ -14,7 +14,7 @@ class Event::Tour < Event
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
 
   self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants,
-    :summit, :ascent, :descent, :duration, :duration_in_hours, :maps, :season, :alternative_route,
+    :summit, :ascent, :descent, :duration, :maps, :season, :alternative_route,
     :additional_info, :price_description, :internal_comment, :minimum_age, :maximum_age,
     :tourenportal_link, :subito, *PRICE_ATTRIBUTES]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
@@ -101,6 +101,7 @@ class Event::Tour < Event
   validates :state, inclusion: possible_states
   validates :disciplines, :target_groups, :technical_requirements,
     :fitness_requirement, :season, presence: {unless: :weak_validation_state?}
+  validate :duration_valid?
 
   ### INSTANCE METHODS
 
@@ -144,36 +145,20 @@ class Event::Tour < Event
   end
 
   def duration_in_hours=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
-    self.duration = if value.include?(":")
-      # Handle "hh:mm" or "h:m"
-      hours, minutes = value.split(":").map(&:to_i)
-      (hours * 60) + (minutes || 0)
-    elsif value.include?(".")
-      # Handle "hh.mm" as decimal hours (e.g., 1.5 = 90 mins)
-      (value.to_f * 60).round
-    elsif value.match?(/^\d{3,4}$/)
-      # Handle "hhmm" or "hmm" (e.g., 0130 or 130)
-      # We take the last two digits as minutes, the rest as hours
-      hours = value[0...-2].to_i
-      minutes = value[-2..].to_i
-      (hours * 60) + minutes
-    elsif value.present?
-      # Handle "hh" or "h"
-      value.to_i * 60
-    else
-      nil
-    end
+    self.duration = ::HoursDuration.parse(value).total_minutes
   end
 
   def duration_in_hours
-    return unless duration
-
-    hours, minutes = duration.to_i.divmod(60)
-
-    format("%d:%02d", hours, minutes)
+    ::HoursDuration.new(duration).to_s
   end
 
   private
+
+  def duration_valid?
+    unless ::HoursDuration.new(duration).valid?
+      errors.add(:duration_in_hours, :invalid)
+    end
+  end
 
   def prevent_changes_in_weak_validation_state
     [:subito, :fitness_requirement_id, :season].each do |attribute|

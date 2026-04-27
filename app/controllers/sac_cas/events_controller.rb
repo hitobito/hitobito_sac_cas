@@ -11,6 +11,7 @@ module SacCas::EventsController
   prepended do
     self.permitted_attrs += [
       :fitness_requirement_id,
+      :duration_in_hours,
       discipline_ids: [],
       target_group_ids: [],
       technical_requirement_ids: [],
