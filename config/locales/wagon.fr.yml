@@ -476,8 +476,6 @@ fr:
           canceled: Abgemeldet
           attended: Teilgenommen
           absent: Nicht erschienen
-      event/role:
-        self_employed: Activité indépendante
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -1134,18 +1132,30 @@ fr:
         description: Autres
         huettenwartspartner: Partenaire gardien·ne de cabane
         schluesseldepot: Dépôt de clés
-      group/sac_cas_kurskader/kursleiter:
-        one: Responsable du cours
-        description: Responsable du cours
-      group/sac_cas_kurskader/klassenlehrer:
-        one: Chef·fe de classe
-        description: Chef·fe de classe
-      group/sac_cas_kurskader/kursleiter_aspirant:
-        one: Responsable de cours* (aspirant)
-        description: Responsable de cours* (aspirant)
-      group/sac_cas_kurskader/klassenlehrer_aspirant:
-        one: Chef de classe* (aspirant)
-        description: Chef de classe* (aspirant)
+      group/sac_cas_kurskader/kursleitung_selbstaendig:
+        one: Kursleiter*in (selbständig)
+        description: Kursleiter*in (selbständig)
+      group/sac_cas_kurskader/klassenlehrer_selbstaendig:
+        one: Klassenlehrer*in (selbständig)
+        description: Klassenlehrer*in (selbständig)
+      group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
+        one: "Kursleiter*in (Aspirant, selbständig)"
+        description: "Kursleiter*in (Aspirant, selbständig)"
+      group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
+        one: "Klassenlehrer*in (Aspirant, selbständig)"
+        description: "Klassenlehrer*in (Aspirant, selbständig)"
+      group/sac_cas_kurskader/kursleitung_unselbstaendig:
+        one: Kursleiter*in (unselbständig)
+        description: Kursleiter*in (unselbständig)
+      group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
+        one: Klassenlehrer*in (unselbständig)
+        description: Klassenlehrer*in (unselbständig)
+      group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
+        one: "Kursleiter*in (Aspirant, unselbständig)"
+        description: "Kursleiter*in (Aspirant, unselbständig)"
+      group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
+        one: "Klassenlehrer*in (Aspirant, unselbständig)"
+        description: "Klassenlehrer*in (Aspirant, unselbständig)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Droit d’écriture
         description: Droit d’écriture
@@ -1700,10 +1710,6 @@ fr:
       inform_participants_caption: Informer tou·te·s les participants de l'annulation par e-mail
       canceled_reason_label: motif
 
-    roles:
-      self_employed: Activité indépendante
-      not_self_employed: salarié·e
-
     sections:
       essentials: Wesentliche Fakten
 
@@ -2077,13 +2083,13 @@ fr:
           text: La décision sera prise ensemble en fonction du nombre d'inscriptions à la clôture des inscriptions.
         participation_cancellation:
           label: Réalisation – annulation
-          text: Veuillez informer le / la chef·fe de classe et l’hébergement
+          text: Bitte Klassenleiter*in und Unterkunft informieren
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
         class_teacher:
-          label: Chef·fe de classe
+          label: Klassenleiter*in
           text: >-
-            La direction est assuré par les chef-fes de classe en fonction du nombre maximal de participant·e·s. Merci de l'indiquer dans la lettre d'information (pour les cours) ou de l'envoyer par courriel à l'administration (pour les courses).
+            Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenleiter*in - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
     participant_list:
       title: Liste des participant-es-
       link: www.sac-cas.ch
