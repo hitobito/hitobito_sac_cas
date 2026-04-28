@@ -3,17 +3,12 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
 
-ga_template:
+notfallkontakt_1_template:
   group: root
-  question: ga
+  question: notfallkontakt_1
   default: true
 
-vegi_template:
+notfallkontakt_2_template:
   group: root
-  question: vegi
-  default: true
-
-late_template:
-  group: root
-  question: late
+  question: notfallkontakt_2
   default: true

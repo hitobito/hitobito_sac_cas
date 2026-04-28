@@ -80,13 +80,6 @@ class SacEventSeeder < EventSeeder
 
   def seed_questions(event)
     event.init_questions
-    event.application_questions.map do |question|
-      if question.question == "Notfallkontakt 1 - Name und Telefonnummer"
-        question.update(required: true)
-      else
-        question.update(required: false)
-      end
-    end
   end
 
   def seed_participation(event)

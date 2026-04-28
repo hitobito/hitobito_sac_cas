@@ -330,8 +330,7 @@ describe Event::ParticipationsController do
           step: "answers",
           event_participation: {answers_attributes: {
             "0" => {"question_id" => event.application_questions.first.id, "answer" => ""},
-            "1" => {"question_id" => event.application_questions.second.id, "answer" => ""},
-            "2" => {"question_id" => event.application_questions.third.id, "answer" => ""}
+            "1" => {"question_id" => event.application_questions.second.id, "answer" => ""}
           }}
         )
 
@@ -344,10 +343,8 @@ describe Event::ParticipationsController do
         post :create, params: params.merge(
           step: "answers",
           event_participation: {answers_attributes: {
-            "0" => {"question_id" => event.application_questions.first.id,
-                    "answer" => "756.1234.5678.97"},
-            "1" => {"question_id" => event.application_questions.second.id, "answer" => "Henä"},
-            "2" => {"question_id" => event.application_questions.third.id, "answer" => "Fränä"}
+            "0" => {"question_id" => event.application_questions.first.id, "answer" => "Henä"},
+            "1" => {"question_id" => event.application_questions.second.id, "answer" => "Fränä"}
           }}
         )
 

@@ -42,13 +42,14 @@ describe :events, js: true do
     end
 
     it "orders event questions alphabetically on edit page" do
-      event_questions(:vegi).update!(question: "Aaa question?")
+      event_questions(:notfallkontakt_1).update!(question: "Aaa question?")
 
       visit edit_group_event_path(group_id: group.id, id: event.id)
       click_on "Anmeldeangaben"
       expect(find("#event_application_questions_attributes_0_question+p").text)
         .to eq "Aaa question?"
-      expect(find("#event_application_questions_attributes_1_question+p").text).to eq "Ich habe folgendes ÖV Abo"
+      expect(find("#event_application_questions_attributes_1_question+p").text)
+        .to eq "Notfallkontakt 2 - Name und Telefonnummer"
     end
   end
 

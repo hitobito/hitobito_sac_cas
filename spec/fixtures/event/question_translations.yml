@@ -3,26 +3,16 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_youth.
 
-ga_de:
-  event_question_id: <%= ActiveRecord::FixtureSet.identify(:ga) %>
+notfallkontakt_1_de:
+  event_question_id: <%= ActiveRecord::FixtureSet.identify(:notfallkontakt_1) %>
   locale: de
-  question: Ich habe folgendes ÖV Abo
-  choices: GA, Halbtax / unter 16, keine Vergünstigung
+  question: Notfallkontakt 1 - Name und Telefonnummer
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
-vegi_de:
-  event_question_id: <%= ActiveRecord::FixtureSet.identify(:vegi) %>
+notfallkontakt_2_de:
+  event_question_id: <%= ActiveRecord::FixtureSet.identify(:notfallkontakt_2) %>
   locale: de
-  question: Ich bin Vegetarier
-  choices: ja,nein
-  created_at: <%= Time.zone.now %>
-  updated_at: <%= Time.zone.now %>
-
-late_de:
-  event_question_id: <%= ActiveRecord::FixtureSet.identify(:late) %>
-  locale: de
-  question: Wieviel werde ich zu spät kommen? (min)
-  choices: 10,20,30,40,50,60
+  question: Notfallkontakt 2 - Name und Telefonnummer
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

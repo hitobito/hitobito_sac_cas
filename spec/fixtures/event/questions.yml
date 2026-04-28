@@ -4,14 +4,10 @@
 #  https://github.com/hitobito/hitobito_youth.
 
 # global questions (not assigned to event)
-ga:
+notfallkontakt_1:
   required: true
   type: Event::Question::Default
 
-vegi:
-  required: false
-  type: Event::Question::Default
-
-late:
+notfallkontakt_2:
   required: false
   type: Event::Question::Default
