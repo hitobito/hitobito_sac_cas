@@ -36,8 +36,7 @@ de_CH:
       email_mv: "mv@sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
-    duration_hour_unit: h
-    duration_minute_unit: m
+    duration_format: "h:mm"
     elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
 
@@ -504,8 +503,8 @@ de_CH:
         alternative_route: Alternativroute
         ascent: Aufstieg
         descent: Abstieg
-        duration_h: Zeitaufwand
-        duration_m: Zeitaufwand
+        duration: Zeitaufwand
+        duration_in_hours: Zeitaufwand
         maps: Karten
         minimum_age: Mindestalter
         price_description: Beschreibung
