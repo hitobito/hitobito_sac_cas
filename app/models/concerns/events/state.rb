@@ -40,6 +40,9 @@ module Events::State
 
   def state_comes_before?(state1, state2)
     states = state_transitions.keys
+
+    return false unless states.include?(state2)
+
     states.index(state1.to_sym) < states.index(state2.to_sym)
   end
 
