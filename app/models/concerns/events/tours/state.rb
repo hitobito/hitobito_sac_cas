@@ -22,5 +22,13 @@ module Events::Tours::State
       closed: [:ready],
       canceled: [:approved, :published, :ready]
     }.freeze
+
+    # Define methods to query if a tour is in the given state.
+    # eg tour.canceled?
+    possible_states.each do |state|
+      define_method :"#{state}?" do
+        self.state == state
+      end
+    end
   end
 end

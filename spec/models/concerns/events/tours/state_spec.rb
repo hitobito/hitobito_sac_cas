@@ -15,6 +15,15 @@ describe Events::Tours::State do
         target_groups: [event_target_groups(:kinder)],
         technical_requirements: [event_technical_requirements(:klettern)],
         fitness_requirement: event_fitness_requirements(:a),
+        description: "Something",
+        maximum_participants: 2,
+        minimum_participants: 1,
+        application_opening_at: 1.day.ago,
+        application_closing_at: 1.day.from_now,
+        contact: people(:admin),
+        price_regular: 10,
+        price_member: 5,
+        price_special: 40,
         season: :summer)
     }
 
