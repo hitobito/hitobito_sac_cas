@@ -1428,6 +1428,12 @@ de:
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
     event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten bearbeiten
 
+  agenda:
+    index:
+      title: Agenda %{group_name}
+    event_card:
+      show_details: Details anzeigen
+
   event:
     application_market:
       application:

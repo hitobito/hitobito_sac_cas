@@ -1,0 +1,27 @@
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
+-#  hitobito and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito.
+
+!!! 5
+
+%html{lang: I18n.locale}
+  %head
+    %meta{charset: 'utf-8'}
+    %title= "#{Settings.application.name} - #{title}"
+    %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
+
+    = csrf_meta_tags
+    = wagon_favicon_pack_tag 'favicon.ico'
+
+    = javascript_pack_tag 'agenda', 'data-turbo-track': true
+    = stylesheet_pack_tag 'agenda', media: 'all', 'data-turbo-track': true
+
+    = yield(:head)
+
+  %body
+    #flash
+      = render partial: 'layouts/flash', collection: [:notice, :warning, :alert], as: :level
+
+    %main#main-content
+      = yield
