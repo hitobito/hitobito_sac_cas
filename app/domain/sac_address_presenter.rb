@@ -44,7 +44,7 @@ class SacAddressPresenter
 
   def leader_settlement_invoice_attributes
     {
-      recipient_name: @data[:name],
+      recipient_last_name: @data[:name],
       recipient_street: "#{@data[:zentralverband]}, #{@data[:street]}",
       recipient_housenumber: @data[:housenumber],
       recipient_zip_code: @data[:zip_code],
