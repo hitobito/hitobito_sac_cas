@@ -16,7 +16,7 @@
   = f.labeled_input_field(:duration_in_hours, addon: I18n.t("global.duration_format"))
 
   = f.labeled_input_fields(:tourenportal_link, :maps)
-  - if entry.state == "draft"
+  - if entry.draft?
     = f.labeled(:disciplines) do
       = f.select(:discipline_ids, [], {},
         multiple: true,
