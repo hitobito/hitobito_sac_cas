@@ -1,0 +1,14 @@
+#  Copyright (c) 2026, Hitobito AG. This file is part of
+#  hitobito_youth and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_youth.
+
+notfallkontakt_1_template:
+  group: root
+  question: notfallkontakt_1
+  default: true
+
+notfallkontakt_2_template:
+  group: root
+  question: notfallkontakt_2
+  default: true

@@ -14,7 +14,7 @@ describe Event::ParticipantReminderMailer do
 
   before do
     %w[nil_example no_example yes_example].each do |question|
-      event.questions.create!(admin: true, question:, disclosure: :optional)
+      event.questions.create!(admin: true, question:, required: false)
     end
     event.questions.second.answers.update_all(answer: "no")
     event.questions.third.answers.update_all(answer: "yes")
