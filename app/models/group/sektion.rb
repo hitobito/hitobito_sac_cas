@@ -7,6 +7,7 @@
 
 class Group::Sektion < Group
   include Groups::WithNeuanmeldung
+  include Groups::WithTours
 
   self.layer = true
   self.event_types = [Event, Event::Tour]

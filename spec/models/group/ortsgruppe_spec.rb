@@ -38,4 +38,58 @@ describe Group::Ortsgruppe do
       expect(url).to eq("http://db.sac-cas.ch/de/groups/#{neuanmeldungen_nv.id}/self_registration")
     end
   end
+
+  context "tour notification mailing lists" do
+    let(:ortsgruppe) { groups(:bluemlisalp_ortsgruppe_ausserberg) }
+
+    context "if already present" do
+      before do
+        expect(ortsgruppe.tours_enabled).to eq(false)
+
+        ortsgruppe.send(:create_tour_notification_mailing_lists)
+        expect(ortsgruppe.mailing_lists.size).to eq(3)
+        expect(ortsgruppe.mailing_lists.pluck(:internal_key)).to include(
+          ::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+          ::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY
+        )
+      end
+
+      it "do not get created when enabling tours" do
+        expect do
+          ortsgruppe.update!(tours_enabled: true)
+        end.to_not change { MailingList.count }
+
+        expect(ortsgruppe.reload.tours_enabled).to eq(true)
+      end
+
+      it "do not get deleted when disabling tours" do
+        ortsgruppe.update!(tours_enabled: true)
+        expect do
+          ortsgruppe.update!(tours_enabled: false)
+        end.to_not change { MailingList.count }
+      end
+    end
+
+    context "if not present" do
+      before do
+        expect(ortsgruppe.mailing_lists.size).to eq(1)
+        expect(ortsgruppe.mailing_lists.pluck(:internal_key)).to_not include(
+          ::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+          ::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY
+        )
+      end
+
+      it "get created when enabling tours" do
+        expect do
+          ortsgruppe.update!(tours_enabled: true)
+        end.to change { MailingList.count }.by(2)
+
+        expect(ortsgruppe.mailing_lists.size).to eq(3)
+        expect(ortsgruppe.mailing_lists.pluck(:internal_key)).to include(
+          ::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+          ::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY
+        )
+      end
+    end
+  end
 end

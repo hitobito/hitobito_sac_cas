@@ -7,8 +7,9 @@
 
 def seed_list(internal_key, name, subscribable_mode: "opt_in", **opts)
   # Seed the newsletter with `seed_once` to avoid overwriting changed attributes.
+
   MailingList.seed_once(
-    :internal_key,
+    :group_id, :internal_key,
     internal_key:,
     **opts.reverse_merge(
       group_id: Group.root_id,
@@ -16,11 +17,12 @@ def seed_list(internal_key, name, subscribable_mode: "opt_in", **opts)
       subscribable_for: "configured",
       subscribable_mode:
     )
-  ).first || MailingList.find_by(internal_key: internal_key)
+  ).first || MailingList.find_by(internal_key: internal_key,
+    group_id: opts[:group_id] || Group.root_id)
 end
 
-def seed_subscription(list, *role_types)
-  sub = Subscription.where(mailing_list_id: list.id, subscriber: Group.root).first_or_initialize
+def seed_subscription(list, *role_types, group: Group.root)
+  sub = Subscription.where(mailing_list_id: list.id, subscriber: group).first_or_initialize
   if sub.role_types.sort != role_types.map(&:sti_name).sort
     sub.role_types = role_types
   end
@@ -123,6 +125,20 @@ fundraising_list = seed_list(
   "Spendenaufrufe",
   subscribable_for: "nobody"
 )
+
+Group::Sektion.where(id: MountedAttribute.where(key: "tours_enabled", value: true,
+  entry_type: "Group").select(:entry_id)).find_each do |sektion|
+  normal_list = seed_list(SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+    "Benachrichtigung bei neuen normalen Tourausschreibungen",
+    group_id: sektion.id)
+  subito_list = seed_list(SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY,
+    "Benachrichtigung bei neuen Subito-Tourausschreibungen",
+    group_id: sektion.id)
+
+  [normal_list, subito_list].each do |list|
+    seed_subscription(list, Group::SektionsMitglieder::Mitglied, group: sektion)
+  end
+end
 
 # Set the mailing list ID attrs on the root group.
 Group.root.update!(
