@@ -93,7 +93,7 @@ describe Event::ApprovalCommissionResponsibility do
     let(:senioren) { event_target_groups(:senioren) }
 
     subject do
-      assign_approval_commission_responsibility(discipline: hochtour, target_group: familien,
+      assign_approval_commission_responsibility(discipline: hochtour, target_group: senioren,
         freigabe_komitee: freigabe_komitee_b)
     end
 
@@ -103,10 +103,8 @@ describe Event::ApprovalCommissionResponsibility do
 
       tour = create_tour
 
-      to_delete_a = Event::Approval.create!(freigabe_komitee: freigabe_komitee_a, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
-      to_delete_b = Event::Approval.create!(freigabe_komitee: freigabe_komitee_b, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
+      to_delete_a = create_approval(tour, freigabe_komitee_a)
+      to_delete_b = create_approval(tour, freigabe_komitee_b)
 
       expect do
         subject.update!(freigabe_komitee: freigabe_komitee_a)
@@ -122,10 +120,8 @@ describe Event::ApprovalCommissionResponsibility do
       disciplines = Event::Discipline.where(parent: [hochtour, klettern])
       tour = create_tour(disciplines:)
 
-      to_delete_a = Event::Approval.create!(freigabe_komitee: freigabe_komitee_a, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
-      to_delete_b = Event::Approval.create!(freigabe_komitee: freigabe_komitee_b, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
+      to_delete_a = create_approval(tour, freigabe_komitee_a)
+      to_delete_b = create_approval(tour, freigabe_komitee_b)
 
       expect do
         subject.update!(freigabe_komitee: freigabe_komitee_a)
@@ -141,10 +137,8 @@ describe Event::ApprovalCommissionResponsibility do
       target_groups = Event::TargetGroup.where(parent: [familien, senioren])
       tour = create_tour(target_groups:)
 
-      to_delete_a = Event::Approval.create!(freigabe_komitee: freigabe_komitee_a, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
-      to_delete_b = Event::Approval.create!(freigabe_komitee: freigabe_komitee_b, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
+      to_delete_a = create_approval(tour, freigabe_komitee_a)
+      to_delete_b = create_approval(tour, freigabe_komitee_b)
 
       expect do
         subject.update!(freigabe_komitee: freigabe_komitee_a)
@@ -159,10 +153,8 @@ describe Event::ApprovalCommissionResponsibility do
 
       tour = create_tour(state: :draft)
 
-      to_keep_a = Event::Approval.create!(freigabe_komitee: freigabe_komitee_a, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
-      to_keep_b = Event::Approval.create!(freigabe_komitee: freigabe_komitee_b, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
+      to_keep_a = create_approval(tour, freigabe_komitee_a)
+      to_keep_b = create_approval(tour, freigabe_komitee_b)
 
       expect do
         subject.update!(freigabe_komitee: freigabe_komitee_a)
@@ -183,10 +175,8 @@ describe Event::ApprovalCommissionResponsibility do
 
       tour = create_tour(groups: [groups(:matterhorn)], state: :approved)
 
-      to_keep_a = Event::Approval.create!(freigabe_komitee: freigabe_komitee_a, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
-      to_keep_b = Event::Approval.create!(freigabe_komitee: freigabe_komitee_b, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
+      to_keep_a = create_approval(tour, freigabe_komitee_a)
+      to_keep_b = create_approval(tour, freigabe_komitee_b)
 
       expect do
         subject.update!(freigabe_komitee: freigabe_komitee_a)
@@ -203,10 +193,8 @@ describe Event::ApprovalCommissionResponsibility do
       target_groups = [familien]
       tour = create_tour(disciplines:, target_groups:)
 
-      to_keep_a = Event::Approval.create!(freigabe_komitee: freigabe_komitee_a, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
-      to_keep_b = Event::Approval.create!(freigabe_komitee: freigabe_komitee_b, event: tour,
-        approval_kind: event_approval_kinds(:professional), creator: people(:admin))
+      to_keep_a = create_approval(tour, freigabe_komitee_a)
+      to_keep_b = create_approval(tour, freigabe_komitee_b)
 
       expect do
         subject.update!(freigabe_komitee: freigabe_komitee_a)
@@ -221,6 +209,13 @@ describe Event::ApprovalCommissionResponsibility do
       target_group:, subito: false).tap do |responsibility|
       responsibility.update!(freigabe_komitee:)
     end
+  end
+
+  def create_approval(tour, freigabe_komitee)
+    Event::Approval.create!(freigabe_komitee: freigabe_komitee,
+      event: tour,
+      approval_kind: event_approval_kinds(:professional),
+      creator: people(:admin))
   end
 
   def create_tour(**attrs)
