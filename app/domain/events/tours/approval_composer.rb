@@ -8,8 +8,6 @@
 module Events
   module Tours
     class ApprovalComposer
-      FREIGABE_PENDING_STATES = %w[draft review].freeze
-
       attr_reader :event, :user
 
       def initialize(event, user)
@@ -18,7 +16,7 @@ module Events
       end
 
       def relevant_freigabe_komitees
-        if event.state.in?(FREIGABE_PENDING_STATES)
+        if event.state.in?(Event::Tour::FREIGABE_PENDING_STATES)
           responsible_freigabe_komitees
         else
           involved_freigabe_komitees
