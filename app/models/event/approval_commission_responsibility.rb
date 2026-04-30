@@ -42,7 +42,7 @@ class Event::ApprovalCommissionResponsibility < ActiveRecord::Base
 
   def reset_associated_approvals
     tours = Event::Tour.joins(:groups).where(groups: {id: [sektion.id]})
-      .where.not(state: Event::Tour::APPROVAL_IN_PROGRESS_STATES)
+      .where.not(state: Event::Tour::FREIGABE_PENDING_STATES)
       .joins(:disciplines)
       .where("event_disciplines.id = :id OR " \
              "event_disciplines.parent_id = :id", id: discipline.id)

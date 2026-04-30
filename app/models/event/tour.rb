@@ -10,7 +10,7 @@ class Event::Tour < Event
   include I18nEnums
 
   WEAK_VALIDATION_STATES = %w[draft].freeze
-  APPROVAL_IN_PROGRESS_STATES = %w[draft review].freeze
+  FREIGABE_PENDING_STATES = %w[draft review].freeze
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
 
@@ -151,6 +151,14 @@ class Event::Tour < Event
 
   def duration_in_hours
     ::HoursDuration.new(duration).to_s
+  end
+
+  def main_target_groups
+    Event::TargetGroup.where(id: target_groups.select("COALESCE(parent_id, id)"))
+  end
+
+  def main_disciplines
+    Event::Discipline.where(id: disciplines.select("COALESCE(parent_id, id)"))
   end
 
   private

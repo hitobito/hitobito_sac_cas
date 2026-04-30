@@ -8,10 +8,19 @@
 require "spec_helper"
 
 describe Event::Approval do
-  let(:approval) { event_approvals(:bluemlisalp_freigabekomitee_professional) }
+  let(:tour) { events(:section_tour) }
+  let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
+  let(:approval) do
+    tour.approvals.build(freigabe_komitee: komitee, approval_kind: event_approval_kinds(:professional))
+  end
 
   describe "validations" do
+    it "is valid with all required attributes" do
+      expect(approval).to be_valid
+    end
+
     it "validates uniqueness on event, freigabe_komitee and approval_kind" do
+      tour.approvals.create!(freigabe_komitee: komitee, approval_kind: event_approval_kinds(:security))
       approval.approval_kind = event_approval_kinds(:security)
 
       expect(approval).not_to be_valid

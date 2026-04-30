@@ -66,7 +66,7 @@ section_tour:
   ascent: 2872
   descent: 911
   tourenportal_link: https://tourenportal.test/bettmerhorn
-  subito: true
+  subito: false
   season: summer
   duration: 750
   maps: "Piratenkarte"

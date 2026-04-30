@@ -8,6 +8,8 @@
 class Event::ApprovalKind < ActiveRecord::Base
   include Paranoia::Globalized
 
+  has_many :approvals, class_name: "Event::Approval" # rubocop:disable Rails/HasManyOrHasOneDependent
+
   has_and_belongs_to_many :roles, join_table: "roles_event_approval_kinds"
 
   translates :name, :short_description
@@ -21,7 +23,7 @@ class Event::ApprovalKind < ActiveRecord::Base
 
   # Soft destroy if roles exist, otherwise hard destroy
   def destroy
-    if roles.present?
+    if roles.present? || approvals.exists?
       delete
     else
       really_destroy!

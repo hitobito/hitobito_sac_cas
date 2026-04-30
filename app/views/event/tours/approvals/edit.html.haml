@@ -1,0 +1,52 @@
+= standard_form(entry, url: group_event_approval_path(@group, @event), method: :put) do |f|
+  - if entry.komitee_approvals.present?
+    = f.fields_for(:komitee_approvals) do |f|
+      = f.hidden_field(:freigabe_komitee_id)
+      .row.mb-2
+        = content_tag(:div, f.object.freigabe_komitee.id, class: "col-md-3 col-xl-2 col-form-label text-md-end pb-1") do
+          = f.object.freigabe_komitee.to_s
+          - if entry.komitee_approvals.size > 1
+            - f.object.disciplines_target_groups.each do |discipline, target_group|
+              .text-muted
+                = discipline
+                = target_group
+
+        .labeled.col-md-9.col-lg-8.col-xl-8.mw-90ch.mw-md-60ch.mw-lg-90ch{data: { controller: "sac--hierarchical-checkboxes" }}
+          = f.fields_for(:approval_kind_approvals) do |f|
+            - approval = f.object.approval
+            = f.hidden_field(:approval_kind_id)
+            .row
+              .col-md-3.form-check
+                = f.label(:checked, f.object.approval_kind.to_s, class: "form-check-label")
+              .col-md-9.col-form-label.text-muted.pb-0
+                - if f.object.responsible && !approval&.approved?
+                  = f.check_box(:checked,
+                                class: "form-check-input me-2",
+                                disabled: !f.object.approvable,
+                                data: { "sac--hierarchical-checkboxes-target": "checkbox",
+                                        action: "sac--hierarchical-checkboxes#toggle" })
+                - elsif approval
+                  %span.d-inline-block.me-2{style: "width: 14px;"} &nbsp;
+
+                - if approval
+                  = t(approval.approved ? '.approved' : '.rejected',
+                      creator: approval.creator,
+                      at: format_attr(approval, :created_at))
+                - elsif !f.object.responsible
+                  = "–"
+
+  - elsif entry.self_approval
+    .row.mb-2
+      .labeled.col-form-label.offset-md-3.offset-lg-2.col-md-9.col-lg-8.mw-90ch.mw-md-60ch.mw-lg-90ch
+        = t(".self_approval", creator: entry.self_approval.creator, at: format_attr(entry.self_approval, :created_at))
+
+
+  = f.labeled_text_area(:internal_comment, label: t(".internal_comment"))
+
+  = button_toolbar(f, toolbar_class: "bottom") do
+    - if entry.approvable?
+      = submit_button(f, t(".approve"), value: "approve")
+      = submit_button(f, t(".reject"), value: "reject")
+    - else
+      = submit_button(f, t("global.button.save"))
+    = cancel_link(group_event_path(@group, @event))
