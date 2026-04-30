@@ -10,6 +10,7 @@ class Event::Tour < Event
   include I18nEnums
 
   WEAK_VALIDATION_STATES = %w[draft].freeze
+  APPROVAL_IN_PROGRESS_STATES = %w[draft review].freeze
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
 

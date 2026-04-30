@@ -77,4 +77,154 @@ describe Event::ApprovalCommissionResponsibility do
                                                      .full_messages).to include "Disziplin ist keine Hauptdisziplin."
     end
   end
+
+  describe "updating freigabe_komitee" do
+    let(:touren_und_kurse) { groups(:bluemlisalp_touren_und_kurse) }
+    let(:bluemlisalp) { groups(:bluemlisalp) }
+    let(:freigabe_komitee_a) do
+      Fabricate(Group::FreigabeKomitee.sti_name.to_sym, parent: touren_und_kurse, layer_group_id: bluemlisalp.id)
+    end
+    let(:freigabe_komitee_b) do
+      Fabricate(Group::FreigabeKomitee.sti_name.to_sym, parent: touren_und_kurse, layer_group_id: bluemlisalp.id)
+    end
+    let(:klettern) { event_disciplines(:klettern) }
+    let(:hochtour) { event_disciplines(:hochtour) }
+    let(:familien) { event_target_groups(:familien) }
+    let(:senioren) { event_target_groups(:senioren) }
+
+    subject do
+      assign_approval_commission_responsibility(discipline: hochtour, target_group: senioren,
+        freigabe_komitee: freigabe_komitee_b)
+    end
+
+    it "removes approvals by old and new freigabe_komitee on tours where discipline and target_group are matching" do
+      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+        freigabe_komitee: freigabe_komitee_a)
+
+      tour = create_tour
+
+      to_delete_a = create_approval(tour, freigabe_komitee_a)
+      to_delete_b = create_approval(tour, freigabe_komitee_b)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_a)
+      end.to change { Event::Approval.count }.by(-2)
+
+      expect(Event::Approval.where(id: [to_delete_a, to_delete_b].map(&:id))).to be_empty
+    end
+
+    it "removes approvals by old and new freigabe_komitee on tours where sub discipline is matching" do
+      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+        freigabe_komitee: freigabe_komitee_a)
+
+      disciplines = Event::Discipline.where(parent: [hochtour, klettern])
+      tour = create_tour(disciplines:)
+
+      to_delete_a = create_approval(tour, freigabe_komitee_a)
+      to_delete_b = create_approval(tour, freigabe_komitee_b)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_a)
+      end.to change { Event::Approval.count }.by(-2)
+
+      expect(Event::Approval.where(id: [to_delete_a, to_delete_b].map(&:id))).to be_empty
+    end
+
+    it "removes approvals by old and new freigabe_komitee on tours where sub target group is matching" do
+      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+        freigabe_komitee: freigabe_komitee_a)
+
+      target_groups = Event::TargetGroup.where(parent: [familien, senioren])
+      tour = create_tour(target_groups:)
+
+      to_delete_a = create_approval(tour, freigabe_komitee_a)
+      to_delete_b = create_approval(tour, freigabe_komitee_b)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_a)
+      end.to change { Event::Approval.count }.by(-2)
+
+      expect(Event::Approval.where(id: [to_delete_a, to_delete_b].map(&:id))).to be_empty
+    end
+
+    it "keeps approvals by old and new freigabe_komitee on tours with approval in progress states" do
+      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+        freigabe_komitee: freigabe_komitee_a)
+
+      tour = create_tour(state: :draft)
+
+      to_keep_a = create_approval(tour, freigabe_komitee_a)
+      to_keep_b = create_approval(tour, freigabe_komitee_b)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_a)
+      end.to_not change { Event::Approval.count }
+
+      tour.update!(state: :review)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_b)
+      end.to_not change { Event::Approval.count }
+
+      expect(Event::Approval.where(id: [to_keep_a, to_keep_b].map(&:id))).to be_present
+    end
+
+    it "keeps approvals by old and new freigabe_komitee on tours in different sektion" do
+      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+        freigabe_komitee: freigabe_komitee_a)
+
+      tour = create_tour(groups: [groups(:matterhorn)], state: :approved)
+
+      to_keep_a = create_approval(tour, freigabe_komitee_a)
+      to_keep_b = create_approval(tour, freigabe_komitee_b)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_a)
+      end.to_not change { Event::Approval.count }
+
+      expect(Event::Approval.where(id: [to_keep_a, to_keep_b].map(&:id))).to be_present
+    end
+
+    it "keeps approvals by old and new freigabe_komitee on tours where discipline and target_group are not matching" do
+      assign_approval_commission_responsibility(discipline: klettern, target_group: familien,
+        freigabe_komitee: freigabe_komitee_a)
+
+      disciplines = [klettern]
+      target_groups = [familien]
+      tour = create_tour(disciplines:, target_groups:)
+
+      to_keep_a = create_approval(tour, freigabe_komitee_a)
+      to_keep_b = create_approval(tour, freigabe_komitee_b)
+
+      expect do
+        subject.update!(freigabe_komitee: freigabe_komitee_a)
+      end.to_not change { Event::Approval.count }
+
+      expect(Event::Approval.where(id: [to_keep_a, to_keep_b].map(&:id))).to be_present
+    end
+  end
+
+  def assign_approval_commission_responsibility(discipline:, target_group:, freigabe_komitee:)
+    Event::ApprovalCommissionResponsibility.find_by(sektion: bluemlisalp, discipline:,
+      target_group:, subito: false).tap do |responsibility|
+      responsibility.update!(freigabe_komitee:)
+    end
+  end
+
+  def create_approval(tour, freigabe_komitee)
+    Event::Approval.create!(freigabe_komitee: freigabe_komitee,
+      event: tour,
+      approval_kind: event_approval_kinds(:professional),
+      creator: people(:admin))
+  end
+
+  def create_tour(**attrs)
+    Fabricate(:sac_tour, attrs.reverse_merge(
+      disciplines: [hochtour, klettern],
+      target_groups: [familien, senioren],
+      technical_requirements: [event_technical_requirements(:klettern)],
+      fitness_requirement: event_fitness_requirements(:a),
+      season: :winter, state: :approved
+    ))
+  end
 end
