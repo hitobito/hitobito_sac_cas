@@ -89,7 +89,10 @@ module SacCas::Event
       :hidden_contact_attrs
     ]
 
-    translates :brief_description, :specialities, :similar_tours, :program
+    # all translated attributes must be configured on the main event class,
+    # even if they are only used in a specific subclass
+    translates :brief_description, :specialities, :similar_tours, :program,
+      :alternative_route, :additional_info, :price_description
 
     validates :training_days,
       numericality: {less_than_or_equal_to: :total_duration_days, allow_nil: true}, if: -> {

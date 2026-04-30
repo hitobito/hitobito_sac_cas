@@ -93,8 +93,6 @@ class Event::Tour < Event
     after_add: :track_association_addition,
     after_remove: :track_association_removal
 
-  translates :alternative_route, :additional_info, :price_description
-
   ### VALIDATIONS
 
   before_save :prevent_changes_in_weak_validation_state, unless: :weak_validation_state?
