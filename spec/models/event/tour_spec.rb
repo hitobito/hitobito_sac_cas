@@ -83,6 +83,28 @@ describe Event::Tour do
       it_behaves_like "readonly for draft attributes", attribute: :technical_requirements
     end
 
+    describe "price_regular" do
+      it "may be empty in state approved" do
+        tour.state = :approved
+        tour.price_regular = nil
+        expect(tour).to be_valid
+      end
+
+      it "may be empty in state canceled" do
+        tour.update!(state: :approved)
+        tour.state = :canceled
+        tour.price_regular = nil
+        expect(tour).to be_valid
+      end
+
+      it "must be present in state published" do
+        tour.state = :published
+        tour.price_regular = nil
+        expect(tour).not_to be_valid
+        expect(tour.errors[:price_regular]).to eq ["muss ausgefüllt werden"]
+      end
+    end
+
     describe "duration_in_hours" do
       it "sets military time (e.g 1430)" do
         tour.duration_in_hours = "1430"
@@ -118,7 +140,9 @@ describe Event::Tour do
         expect(tour.duration).to eq(245) # 4 * 60 + 5
       end
     end
+  end
 
+  describe "translated attributes" do
     [:alternative_route, :additional_info, :price_description].each do |attr|
       it "translates #{attr}" do
         tour.send(:"#{attr}_de=", "ja ja")

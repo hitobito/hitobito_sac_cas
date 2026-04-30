@@ -224,7 +224,9 @@ describe Event::ApprovalCommissionResponsibility do
       target_groups: [familien, senioren],
       technical_requirements: [event_technical_requirements(:klettern)],
       fitness_requirement: event_fitness_requirements(:a),
-      season: :winter, state: :approved
+      season: :winter,
+      state: :approved,
+      description: "Schöne Tour"
     ))
   end
 end

@@ -30,7 +30,7 @@ module SacCas::EventsController
   private
 
   def display_warning_for_date_changes
-    if entry.dates_changed? && !entry.weak_validation_state?
+    if entry.dates_changed? && entry.state_reached?(:review)
       flash[:warning] = I18n.t("events.flash.dates_changed", event_name: entry.name)
       flash[:notice] = nil
     end

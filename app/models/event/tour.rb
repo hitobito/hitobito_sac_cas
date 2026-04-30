@@ -9,7 +9,6 @@ class Event::Tour < Event
   include ::Events::Tours::State
   include I18nEnums
 
-  WEAK_VALIDATION_STATES = %w[draft].freeze
   FREIGABE_PENDING_STATES = %w[draft review].freeze
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
@@ -65,8 +64,8 @@ class Event::Tour < Event
     join_table: :events_disciplines,
     class_name: "Event::Discipline",
     foreign_key: :event_id,
-    before_add: :prevent_association_changes_in_weak_validation_state,
-    before_remove: :prevent_association_changes_in_weak_validation_state,
+    before_add: :prevent_association_changes_after_draft,
+    before_remove: :prevent_association_changes_after_draft,
     after_add: :track_association_addition,
     after_remove: :track_association_removal
 
@@ -74,8 +73,8 @@ class Event::Tour < Event
     join_table: :events_target_groups,
     class_name: "Event::TargetGroup",
     foreign_key: :event_id,
-    before_add: :prevent_association_changes_in_weak_validation_state,
-    before_remove: :prevent_association_changes_in_weak_validation_state,
+    before_add: :prevent_association_changes_after_draft,
+    before_remove: :prevent_association_changes_after_draft,
     after_add: :track_association_addition,
     after_remove: :track_association_removal
 
@@ -83,8 +82,8 @@ class Event::Tour < Event
     join_table: :events_technical_requirements,
     class_name: "Event::TechnicalRequirement",
     foreign_key: :event_id,
-    before_add: :prevent_association_changes_in_weak_validation_state,
-    before_remove: :prevent_association_changes_in_weak_validation_state,
+    before_add: :prevent_association_changes_after_draft,
+    before_remove: :prevent_association_changes_after_draft,
     after_add: :track_association_addition,
     after_remove: :track_association_removal
 
@@ -99,25 +98,22 @@ class Event::Tour < Event
 
   ### VALIDATIONS
 
-  before_save :prevent_changes_in_weak_validation_state, unless: :weak_validation_state?
   validates :state, inclusion: possible_states
-  validates :disciplines, :target_groups, :technical_requirements,
-    :fitness_requirement, :season, presence: {unless: :weak_validation_state?}
-  validate :duration_valid?
+  validates :description, :disciplines, :target_groups, :technical_requirements,
+    :fitness_requirement, :season,
+    presence: {if: -> { state_reached?(:review) }}
+  validates :price_special, :price_member, :price_regular, :contact_id,
+    :application_opening_at, :application_closing_at,
+    :maximum_participants, :minimum_participants,
+    presence: {if: -> { state_reached?(:published) && !canceled? }}
+
+  validate :assert_duration_valid?
+
+  ### CALLBACKS
+
+  before_save :prevent_changes_after_draft, if: -> { state_reached?(:review) }
 
   ### INSTANCE METHODS
-
-  # Define methods to query if a course is in the given state.
-  # eg course.canceled?
-  possible_states.each do |state|
-    define_method :"#{state}?" do
-      self.state == state
-    end
-  end
-
-  def state
-    super || possible_states.first
-  end
 
   def tentative_application_possible?
     tentative_applications?
@@ -133,10 +129,6 @@ class Event::Tour < Event
     end
   end
 
-  def weak_validation_state?
-    state.blank? || WEAK_VALIDATION_STATES.include?(state)
-  end
-
   def dates_changed?
     dates.any? {
       _1.saved_change_to_start_at? ||
@@ -146,7 +138,7 @@ class Event::Tour < Event
     }
   end
 
-  def duration_in_hours=(value) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def duration_in_hours=(value)
     self.duration = ::HoursDuration.parse(value).total_minutes
   end
 
@@ -164,20 +156,20 @@ class Event::Tour < Event
 
   private
 
-  def duration_valid?
+  def assert_duration_valid?
     unless ::HoursDuration.new(duration).valid?
       errors.add(:duration_in_hours, :invalid)
     end
   end
 
-  def prevent_changes_in_weak_validation_state
+  def prevent_changes_after_draft
     [:subito, :fitness_requirement_id, :season].each do |attribute|
       send(:"restore_#{attribute}!")
     end
   end
 
-  def prevent_association_changes_in_weak_validation_state(record)
-    throw :abort unless weak_validation_state?
+  def prevent_association_changes_after_draft(record)
+    throw :abort unless draft?
   end
 
   def track_association_addition(record)
