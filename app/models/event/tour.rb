@@ -94,8 +94,6 @@ class Event::Tour < Event
     after_add: :track_association_addition,
     after_remove: :track_association_removal
 
-  translates :alternative_route, :additional_info, :price_description
-
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
