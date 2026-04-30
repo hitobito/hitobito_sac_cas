@@ -1474,9 +1474,10 @@ fr:
     list_for_leaders: Liste pour les cadres de cours
 
   dropdown/group_edit:
+    custom_content: E-Mail Vorlagen
     sac_membership_configs: Paramètres pour les factures des membres
     sac_section_membership_configs: Paramètres pour les factures des membres
-    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten bearbeiten
+    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten
 
   event:
     application_market:
@@ -1644,11 +1645,28 @@ fr:
       email_check:
         enter_email: "" # to not display in sac wagon
 
+    tours:
+      approvals:
+        title: Freigabe
+        edit:
+          internal_comment: Interne Bemerkungen
+          approve: Freigeben
+          reject: Ablehnen
+          approved: "Freigegeben von %{creator} am %{at}"
+          rejected: "Abgelehnt von %{creator} am %{at}"
+          self_approval: "Selbst freigegeben von %{creator} am %{at}"
+        update:
+          success: Deine Bemerkung wurde gespeichert.
+          review: Deine Freigabe wurde gespeichert.
+          approved: "Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>."
+          draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
+
   events:
     flash:
       dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
     actions_show_sac_cas:
       attach_key_data_sheets: Créer toutes les fiches techniques
+      approval: Freigabe
     state_buttons:
       event/course:
         created: Retour en tant que projet
