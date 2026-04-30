@@ -13,17 +13,23 @@
 module SacCas
   ### Membership roles
 
-  MITGLIED_STAMMSEKTION_ROLES = [::Group::SektionsMitglieder::Mitglied].freeze
-  NEUANMELDUNG_NV_STAMMSEKTION_ROLES = [::Group::SektionsNeuanmeldungenNv::Neuanmeldung].freeze
+  MITGLIED_STAMMSEKTION_ROLES = [
+    ::Group::SektionsMitglieder::Mitglied
+  ].freeze
+  NEUANMELDUNG_NV_STAMMSEKTION_ROLES = [
+    ::Group::SektionsNeuanmeldungenNv::Neuanmeldung
+  ].freeze
   NEUANMELDUNG_STAMMSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung
   ].freeze
 
-  MITGLIED_ZUSATZSEKTION_ROLES = [::Group::SektionsMitglieder::MitgliedZusatzsektion].freeze
-  # rubocop:todo Layout/LineLength
-  NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES = [::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion].freeze
-  # rubocop:enable Layout/LineLength
+  MITGLIED_ZUSATZSEKTION_ROLES = [
+    ::Group::SektionsMitglieder::MitgliedZusatzsektion
+  ].freeze
+  NEUANMELDUNG_NV_ZUSATZSEKTION_ROLES = [
+    ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
+  ].freeze
   NEUANMELDUNG_ZUSATZSEKTION_ROLES = [
     ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion

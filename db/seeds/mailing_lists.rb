@@ -126,8 +126,9 @@ fundraising_list = seed_list(
   subscribable_for: "nobody"
 )
 
-Group::Sektion.where(id: MountedAttribute.where(key: "tours_enabled", value: true,
-  entry_type: "Group").select(:entry_id)).find_each do |sektion|
+tours_enabled = MountedAttribute.where(key: "tours_enabled", value: true, entry_type: "Group")
+tour_types = [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)
+Group.where(id: tours_enabled.select(:entry_id), type: tour_types).find_each do |sektion|
   normal_list = seed_list(SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
     "Benachrichtigung bei neuen normalen Tourausschreibungen",
     group_id: sektion.id)
@@ -136,7 +137,7 @@ Group::Sektion.where(id: MountedAttribute.where(key: "tours_enabled", value: tru
     group_id: sektion.id)
 
   [normal_list, subito_list].each do |list|
-    seed_subscription(list, Group::SektionsMitglieder::Mitglied, group: sektion)
+    seed_subscription(list, *SacCas::MITGLIED_ROLES, group: sektion)
   end
 end
 
