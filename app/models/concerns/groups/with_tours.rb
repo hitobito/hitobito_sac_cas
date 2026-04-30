@@ -28,7 +28,7 @@ module Groups::WithTours
         subscribable_mode: "opt_in")
 
       sub = Subscription.where(mailing_list_id: list.id, subscriber: self).first_or_initialize
-      sub.role_types = [Group::SektionsMitglieder::Mitglied]
+      sub.role_types = SacCas::MITGLIED_ROLES
       sub.save!
     end
   end
