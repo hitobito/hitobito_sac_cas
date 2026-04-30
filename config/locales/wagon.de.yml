@@ -1621,6 +1621,19 @@ de:
       email_check:
         enter_email: "" # to not display in sac wagon
 
+    tour_mailer:
+      application_window: Anmeldefenster
+      application_link: Anmeldelink
+      download_ics: Herunterladen
+      ics_link: Kalendereintrag (ics)
+      sub_target_groups: Unterzielgruppe(n)
+      sub_disciplines: Unterdisziplin(en)
+      traits: Merkmal(e)
+      technical_requirements: Technische Anforderung(en)
+      attachments: Anhänge
+      no_attachments: Aktuell sind keine Anhänge verfügbar
+      none: (keine)
+
     tours:
       approvals:
         title: Freigabe
@@ -1638,8 +1651,6 @@ de:
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
 
   events:
-    flash:
-      dates_changed: Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast.
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
@@ -1678,6 +1689,9 @@ de:
     show_contacts_sac_cas:
       title: Leitung
 
+    flash:
+      dates_changed: Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast.
+
     form_tabs:
       communication: Kommunikation
       prices: Preise
@@ -1698,6 +1712,7 @@ de:
       prompt_email_choice: Sollen E-Mails verschickt werden?
       submit_with_emails: E-Mails verschicken
       submit_without_emails: Keine E-Mails verschicken
+
     popover_canceled_reason:
       cancel_button: Definitiv Absagen
       cancel_confirmation: >-

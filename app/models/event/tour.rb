@@ -14,7 +14,7 @@ class Event::Tour < Event
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
 
-  self.used_attributes += [:state, :display_booking_info, :waiting_list, :minimum_participants,
+  self.used_attributes += [:state, :display_booking_info, :minimum_participants,
     :summit, :ascent, :descent, :duration, :maps, :season, :alternative_route,
     :additional_info, :price_description, :internal_comment, :minimum_age, :maximum_age,
     :tourenportal_link, :subito, *PRICE_ATTRIBUTES]
