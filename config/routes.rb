@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     resources :external_invoices, only: [:show], module: :people, param: :invoice_id
 
     resources :groups, only: [] do
+      resources :sac_section_custom_contents,  only: [:index, :edit, :update]
       resources :sac_membership_configs, except: [:destroy]
       resources :sac_section_membership_configs, except: [:destroy]
       resources :yearly_membership_invoices, only: [:create, :new], module: :people
