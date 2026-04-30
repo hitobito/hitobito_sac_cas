@@ -1692,7 +1692,8 @@ de:
       link:
         add_event/tour: Tour erstellen
 
-    maximum_age_with_years: "%{maximum_age} Jahre (Jahrgang)"
+    minimum_age_with_years: "%{minimum_age} Jahre"
+    maximum_age_with_years: "%{maximum_age} Jahre"
 
     popover_emails_optional:
       prompt_email_choice: Sollen E-Mails verschickt werden?
