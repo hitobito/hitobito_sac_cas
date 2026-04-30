@@ -791,4 +791,26 @@ describe Event::Course do
       end
     end
   end
+
+  describe "#duplicate" do
+    it "duplicates a course with translations" do
+      orig = events(:top_course)
+      I18n.with_locale(:fr) do
+        orig.update!(name: "Le cours", description: "description du cours", brief_description: "Un cours de test")
+      end
+      dup = orig.duplicate
+      expect(dup).to be_a_new(Event::Course)
+      excluded_attrs = %w[id created_at updated_at application_opening_at application_closing_at state
+        participations_visible]
+      expect(dup.attributes.except(*excluded_attrs)).to eq(orig.attributes.except(*excluded_attrs))
+
+      expect(dup.name).to eq("Tourenleiter/in 1 Sommer")
+      expect(dup.description).to eq("Tourenleiter/in 1 Sommer")
+      I18n.with_locale(:fr) do
+        expect(dup.name).to eq("Le cours")
+        expect(dup.description).to eq("description du cours")
+        expect(dup.brief_description).to eq("Un cours de test")
+      end
+    end
+  end
 end
