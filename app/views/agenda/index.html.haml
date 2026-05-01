@@ -3,6 +3,9 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-= t(".title", group_name: group.name)
-- events.each do |event|
+- if group.present?
+  = t(".title", group_name: group.name)
+  - events.each do |event|
     = render "event_card", event: event
+- else
+  = t(".select_group_alert")

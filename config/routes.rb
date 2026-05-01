@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     # Define wagon routes here
 
     scope :agenda, controller: :agenda, as: :agenda do
-      get ':group_id', action: :index, as: :index
+      get '(/:group_id)', action: :index, as: :index
       get ':group_id/:event_id', action: :show, as: :show
     end
 

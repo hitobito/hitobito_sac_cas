@@ -1432,6 +1432,7 @@ de:
   agenda:
     index:
       title: Agenda %{group_name}
+      select_group_alert: Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen
     event_card:
       show_details: Details anzeigen
 

@@ -43,7 +43,7 @@ class AgendaController < ApplicationController
 
   def event_filter = @event_filter ||= Events::Filter::AgendaList.new(nil, params)
 
-  def group = @group ||= Group.find(params[:group_id])
+  def group = @group ||= params[:group_id].present? ? Group.find(params[:group_id]) : nil
 
   def event = @event ||= events.find(params[:event_id])
 end

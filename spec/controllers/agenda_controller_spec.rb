@@ -8,9 +8,12 @@
 require "spec_helper"
 
 describe AgendaController do
+  render_views
+
   let(:group) { groups(:bluemlisalp) }
   let(:tour) { events(:section_tour) }
   let(:course) { events(:top_course) }
+  let(:dom) { Capybara::Node::Simple.new(response.body) }
 
   before do
     tour.update!(globally_visible: true)
@@ -24,6 +27,13 @@ describe AgendaController do
   end
 
   describe "GET #index" do
+    it "renders info alert when no group_id given" do
+      get :index
+
+      expect(response).to render_template(layout: "agenda")
+      expect(dom).to have_content("Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen")
+    end
+
     it "renders without a layout" do
       get :index, params: {group_id: group.id}
       expect(response).to render_template(layout: "agenda")
