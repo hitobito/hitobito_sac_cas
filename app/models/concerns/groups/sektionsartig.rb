@@ -1,0 +1,97 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas.
+
+module Groups::Sektionsartig
+  extend ActiveSupport::Concern
+
+  ORDERED_NEUANMELDUNG_GROUPS = [
+    Group::SektionsNeuanmeldungenSektion.sti_name,
+    Group::SektionsNeuanmeldungenNv.sti_name
+  ].freeze
+
+  TOUR_MAILING_LISTS = [
+    [::SacCas::MAILING_LIST_REGULAR_TOUR_INTERNAL_KEY,
+      "Benachrichtigung bei neuen normalen Tourausschreibungen"],
+    [::SacCas::MAILING_LIST_SUBITO_TOUR_INTERNAL_KEY,
+      "Benachrichtigung bei neuen Subito-Tourausschreibungen"]
+  ]
+
+  included do
+    self.layer = true
+    self.event_types = [Event, Event::Tour]
+
+    children Group::SektionsFunktionaere,
+      Group::SektionsMitglieder,
+      Group::SektionsNeuanmeldungenSektion,
+      Group::SektionsNeuanmeldungenNv
+
+    self.default_children = [
+      Group::SektionsFunktionaere,
+      Group::SektionsMitglieder,
+      Group::SektionsNeuanmeldungenNv
+    ]
+
+    mounted_attr :foundation_year, :integer
+    mounted_attr :section_canton, :string, enum: Cantons.short_name_strings.map(&:upcase)
+    mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
+    mounted_attr :tours_enabled, :boolean, default: false, null: false
+
+    has_many :custom_contents, dependent: :destroy, as: :context
+    has_many :sac_section_membership_configs,
+      dependent: :destroy,
+      foreign_key: :group_id,
+      inverse_of: :group
+    has_many :event_approval_commission_responsibilities,
+      dependent: :destroy,
+      foreign_key: :sektion_id,
+      inverse_of: :sektion,
+      class_name: "Event::ApprovalCommissionResponsibility"
+
+    after_create :init_section_custom_contents
+    after_save :create_tour_notification_mailing_lists, if: :tours_enabled
+
+    validates :foundation_year,
+      numericality: {greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2}
+  end
+
+  def group_for_neuanmeldung
+    @group_for_neuanmeldung ||= children_without_deleted
+      .without_archived
+      .where(type: ORDERED_NEUANMELDUNG_GROUPS)
+      .min_by { |g| ORDERED_NEUANMELDUNG_GROUPS.index(g.type) }
+  end
+
+  def sac_cas_self_registration_url(host)
+    Groups::SektionSelfRegistrationLink.new(group_for_neuanmeldung, host).url
+  end
+
+  def active_sac_section_membership_config
+    @active_sac_section_membership_config ||= sac_section_membership_configs.active
+  end
+
+  private
+
+  def init_section_custom_contents
+    Groups::InitSacSectionCustomContentsJob.new(self).enqueue!
+  end
+
+  def create_tour_notification_mailing_lists
+    TOUR_MAILING_LISTS.each do |internal_key, name|
+      list = MailingList.find_or_create_by(
+        internal_key:,
+        group_id: id,
+        name:,
+        subscribable_for: "configured",
+        subscribable_mode: "opt_in"
+      )
+
+      sub = Subscription.where(mailing_list_id: list.id, subscriber: self).first_or_initialize
+      sub.role_types = SacCas::MITGLIED_ROLES
+      sub.save!
+    end
+  end
+end

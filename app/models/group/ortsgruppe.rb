@@ -6,47 +6,5 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Group::Ortsgruppe < Group
-  include Groups::WithNeuanmeldung
-  include Groups::WithTours
-
-  self.layer = true
-  self.event_types = [Event, Event::Tour]
-
-  children Group::SektionsFunktionaere,
-    Group::SektionsMitglieder,
-    Group::SektionsNeuanmeldungenSektion,
-    Group::SektionsNeuanmeldungenNv
-
-  self.default_children = [
-    Group::SektionsFunktionaere,
-    Group::SektionsMitglieder,
-    Group::SektionsNeuanmeldungenNv
-  ]
-
-  validates :foundation_year,
-    numericality:
-    {greater_or_equal_to: 1863, smaller_than: Time.zone.now.year + 2}
-
-  mounted_attr :foundation_year, :integer
-  mounted_attr :section_canton, :string, enum: Cantons.short_name_strings.map(&:upcase)
-  mounted_attr :mitglied_termination_by_section_only, :boolean, default: false, null: false
-  mounted_attr :tours_enabled, :boolean, default: false, null: false
-
-  has_many :custom_contents, dependent: :destroy, as: :context
-  has_many :sac_section_membership_configs, dependent: :destroy, foreign_key: :group_id
-  has_many :event_approval_commission_responsibilities, dependent: :destroy,
-    foreign_key: :sektion_id,
-    class_name: "Event::ApprovalCommissionResponsibility"
-
-  after_create :init_section_custom_contents
-
-  def active_sac_section_membership_config
-    @active_sac_section_membership_config ||= sac_section_membership_configs.active
-  end
-
-  private
-
-  def init_section_custom_contents
-    Groups::InitSacSectionCustomContentsJob.new(self).enqueue!
-  end
+  include Groups::Sektionsartig
 end
