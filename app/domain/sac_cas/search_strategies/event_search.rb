@@ -4,22 +4,14 @@
 #  https://github.com/hitobito/hitobito.
 
 module SacCas::SearchStrategies
-  module PersonSearch
+  module EventSearch
     extend ActiveSupport::Concern
 
     prepended do
-      self.searchable_identifiers = {id: /\A\d+\z/}
-    end
-
-    private
-
-    def accessible_scope
-      if ability.can?(:read_all_people, @user)
-        # skip all other restrictions if user can read all people to optimize performance
-        Person.all
-      else
-        super
-      end
+      self.searchable_identifiers = {
+        id: /\A\d+\z/,
+        number: /\A\d{4}-\d+\z/
+      }
     end
   end
 end

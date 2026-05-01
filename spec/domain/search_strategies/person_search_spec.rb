@@ -12,7 +12,7 @@ describe SearchStrategies::PersonSearch do
     let(:user) { people(:admin) }
 
     it "finds accessible person by id" do
-      result = search_class(people(:admin).id.to_s).search_fulltext
+      result = search_class(people(:admin).id.to_s).search
 
       expect(result).to include(people(:admin))
     end

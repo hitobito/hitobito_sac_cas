@@ -170,13 +170,12 @@ module HitobitoSacCas
       ## Domain
       People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
-      SearchStrategies::SqlConditionBuilder.matchers.merge!(
-        "people.id" => SearchStrategies::SqlConditionBuilder::IdMatcher,
-        "people.birthday" => SearchStrategies::SqlConditionBuilder::BirthdayMatcher
-      )
+      SearchStrategies::SqlConditionBuilder.matchers["people.birthday"] =
+        SearchStrategies::SqlConditionBuilder::BirthdayMatcher
       Event::Qualifier::StartAtCalculator.prepend SacCas::Event::Qualifier::StartAtCalculator
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
+      SearchStrategies::EventSearch.prepend SacCas::SearchStrategies::EventSearch
       Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
       Events::Filter::Chain.types <<
         Events::Filter::Sac <<
