@@ -1712,7 +1712,8 @@ fr:
       link:
         add_event/tour: Créer un tour
 
-    maximum_age_with_years: "%{maximum_age} Années (millésime)"
+    minimum_age_with_years: "%{minimum_age} Jahre"
+    maximum_age_with_years: "%{maximum_age} Jahre"
 
     popover_emails_optional:
       prompt_email_choice: "Faut-il envoyer des e-mails ?"
@@ -1726,6 +1727,9 @@ fr:
         Annule le cours %{name} (%{number}) et annule toutes les participations. Les éventuelles factures seront ainsi annulées et les montants déjà payés seront remboursés. Cette action ne peut pas être annulée.
       inform_participants_caption: Informer tou·te·s les participants de l'annulation par e-mail
       canceled_reason_label: motif
+    popover_tour_review:
+      destroy_and_review: Bestehende Freigaben zurücksetzen
+      keep_and_review: Bestehende Freigaben beibehalten
 
     sections:
       essentials: Wesentliche Fakten

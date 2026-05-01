@@ -1710,7 +1710,8 @@ it:
       link:
         add_event/tour: Crea tour
 
-    maximum_age_with_years: "%{maximum_age} anni (anno)"
+    minimum_age_with_years: "%{minimum_age} Jahre"
+    maximum_age_with_years: "%{maximum_age} Jahre"
 
     popover_emails_optional:
       prompt_email_choice: "È opportuno inviare e-mail?"
@@ -1724,6 +1725,9 @@ it:
         Cancella il corso %{name} (%{number}) e annulla tutte le partecipazioni. In questo modo tutte le eventuali fatture saranno stornate e gli jmporti già versati saranno rimborsati. Questa operazione non può essere annullata.
       inform_participants_caption: Informare tutti i partecipanti della cancellazione tramite e-mail
       canceled_reason_label: Motivazione
+    popover_tour_review:
+      destroy_and_review: Bestehende Freigaben zurücksetzen
+      keep_and_review: Bestehende Freigaben beibehalten
 
     sections:
       essentials: Wesentliche Fakten

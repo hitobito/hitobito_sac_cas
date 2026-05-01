@@ -1651,7 +1651,8 @@ en:
       link:
         add_event/tour: Tour erstellen
 
-    maximum_age_with_years: "%{maximum_age} Years (vintage)"
+    minimum_age_with_years: "%{minimum_age} Jahre"
+    maximum_age_with_years: "%{maximum_age} Jahre"
 
     popover_emails_optional:
       prompt_email_choice: "Sollen E-Mails verschickt werden?"
@@ -1665,6 +1666,9 @@ en:
         Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
+    popover_tour_review:
+      destroy_and_review: Bestehende Freigaben zurücksetzen
+      keep_and_review: Bestehende Freigaben beibehalten
 
     sections:
       essentials: Wesentliche Fakten
