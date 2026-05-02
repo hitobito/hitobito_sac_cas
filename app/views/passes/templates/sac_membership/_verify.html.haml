@@ -1,7 +1,16 @@
--#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito_sac_cas.
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+- pass = @pass.decorate
+- person = @person
+- template_name = @template.pass_view_partial
+
+.pass-card-wrapper
+  .pass-card-sides
+    = render pass_template_partial(template_name, 'card_front'), pass: pass, person: person
+    = render pass_template_partial(template_name, 'card_back'), pass: pass
 
 - if person
   #sections.pt-2.border-top.mb-2
@@ -20,10 +29,11 @@
   - if person.sac_tour_guide?
     #tour-guides.pt-2.border-top.mb-2
       %div.mb-2
-        = t('.tour_guide')
+        = t('people.membership.verify.member_details_sac_cas.tour_guide')
 
   #logo-reciprocate.pt-5.border-top.mb-2
     = wagon_image_pack_tag('logo_gegenrecht.svg', alt: 'gegenrecht logo')
+
 #sponsors
   %a{href: localized_sac_sponsors_url, target: '_blank'}
     = wagon_image_pack_tag(localized_sponsor_logo_path, alt: 'sponsors')

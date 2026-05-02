@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  https://github.com/hitobito/hitobito_sac_cas
 
-class Export::Pdf::Passes::Membership
+class SacCas::Export::Pdf::Passes::Membership
   class Footer < Export::Pdf::Section
     EMERGENCY_SERVICES_DETAILS = "REGA 1414#{" " * 20}SOS Europe 112".freeze
 
@@ -152,7 +152,6 @@ class Export::Pdf::Passes::Membership
         width: DASHED_BOX_SCISSORS_IMAGE_WIDTH)
       pdf.dash(*DASH_PATTERN)
 
-      # Draw the lines for both boxes
       dashed_box_points.each do |start_point, end_point|
         pdf.stroke_line(start_point, end_point)
       end
