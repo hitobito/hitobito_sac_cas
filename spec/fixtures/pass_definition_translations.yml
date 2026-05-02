@@ -1,0 +1,30 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+sac_membership_de:
+  pass_definition_id: <%= ActiveRecord::FixtureSet.identify(:sac_membership) %>
+  locale: de
+  name: SAC Mitgliederausweis
+  description: Mitgliederausweis des Schweizer Alpen-Clubs
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+sac_membership_fr:
+  pass_definition_id: <%= ActiveRecord::FixtureSet.identify(:sac_membership) %>
+  locale: fr
+  name: Carte de membre CAS
+  description: Carte de membre du Club Alpin Suisse
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+sac_membership_it:
+  pass_definition_id: <%= ActiveRecord::FixtureSet.identify(:sac_membership) %>
+  locale: it
+  name: Tessera di membro CAS
+  description: Tessera di membro del Club Alpino Svizzero
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>

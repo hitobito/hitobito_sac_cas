@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  https://github.com/hitobito/hitobito_sac_cas
 
-class Export::Pdf::Passes::Membership
+class SacCas::Export::Pdf::Passes::Membership
   class Person < Export::Pdf::Section
-    alias_method :person, :model
-
     ADDRESS_BOUNDING_BOX_WIDTH = 180
     ADDRESS_BOUNDING_BOX_HEIGHT = 500
     ADDRESS_BOUNDING_BOX_POSITION = [65, 711].freeze
@@ -42,6 +40,14 @@ class Export::Pdf::Passes::Membership
 
     private
 
+    def pass
+      model
+    end
+
+    def person
+      pass.person
+    end
+
     def person_address
       ::Contactable::Address.new(person).for_membership_pass
     end
@@ -55,7 +61,7 @@ class Export::Pdf::Passes::Membership
     end
 
     def verify_qr_code
-      qr_code = People::Membership::VerificationQrCode.new(person).generate
+      qr_code = Passes::VerificationQrCode.new(pass).generate
       qr_code = qr_code.as_png(size: 70).to_s
       StringIO.new(qr_code)
     end

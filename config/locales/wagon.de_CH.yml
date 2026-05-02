@@ -2078,6 +2078,11 @@ de_CH:
       sponsor_url: "https://www.sac-cas.ch/de/der-sac/unsere-partner/"
       emergency_number: "Notfallnummer"
       emergency_contact: "Notfallkontakt"
+    sac_membership:
+      section: Sektion
+      additional_sections: Zusatzsektionen
+      tour_guide: Tourenleiter/in
+      tour_guide_active: Aktiv
 
   people:
     abo_magazin_invoices:

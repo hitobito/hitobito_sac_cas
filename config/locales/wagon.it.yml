@@ -2141,6 +2141,11 @@ it:
       sponsor_url: "https://www.sac-cas.ch/it/il-cas/i-nostri-partner/"
       emergency_number: "Numero di emergenza"
       emergency_contact: "Contatto di emergenza"
+    sac_membership:
+      section: Sezione
+      additional_sections: Sezioni aggiuntive
+      tour_guide: Capo escursione
+      tour_guide_active: Attivo/a
 
   people:
     abo_magazin_invoices:
