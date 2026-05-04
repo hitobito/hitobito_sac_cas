@@ -37,7 +37,7 @@ module SacCas::CustomContent
         entry.attributes = attrs.slice("label", "placeholders_optional", "placeholders_required")
         if entry.new_record?
           entry.subject = attrs["subject"]
-          entry.body = attrs["body"].split("\n").join("<br>")
+          entry.body = attrs["body"].split("\n").join("\n<br>\n")
         end
         entry.save!
       end

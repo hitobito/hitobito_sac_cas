@@ -145,7 +145,7 @@ describe Event::Participation, js: true do
             click_on "Abmelden"
           end
           expect(page).to have_content "Edmund Hillary wurde abgemeldet."
-        end.to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation).once
+        end.to have_enqueued_mail(Event::CourseParticipationMailer, :canceled).once
       end
 
       it "can cancel participation without sending email" do
@@ -155,7 +155,7 @@ describe Event::Participation, js: true do
             click_on "Abmelden"
           end
           expect(page).to have_content "Edmund Hillary wurde abgemeldet."
-        end.not_to have_enqueued_mail(Event::ParticipationCanceledMailer, :confirmation)
+        end.not_to have_enqueued_mail(Event::CourseParticipationMailer, :canceled)
       end
     end
 
@@ -173,14 +173,14 @@ describe Event::Participation, js: true do
         expect do
           click_on "Aufbieten und E-Mail senden"
           expect(page).to have_text "Edmund Hillary wurde aufgeboten."
-        end.to have_enqueued_mail(Event::ParticipationMailer, :summon).once
+        end.to have_enqueued_mail(Event::CourseParticipationMailer, :summon).once
       end
 
       it "does not send mail when selecting send email false" do
         expect do
           click_on "Aufbieten ohne E-Mail"
           expect(page).to have_text "Edmund Hillary wurde aufgeboten."
-        end.not_to have_enqueued_mail(Event::ParticipationMailer, :summon)
+        end.not_to have_enqueued_mail(Event::CourseParticipationMailer, :summon)
       end
     end
 

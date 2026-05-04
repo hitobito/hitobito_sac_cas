@@ -8,23 +8,48 @@
 module SacCas::Event::ParticipationConfirmationJob
   extend ActiveSupport::Concern
 
-  delegate :course?, to: "@participation.event"
-
   private
 
   def send_confirmation
-    course? ? send_confirmation_for_course : super
+    case @participation.event
+    when Event::Course
+      send_confirmation_for_course
+    when Event::Tour
+      send_confirmation_for_tour
+    else
+      super
+    end
   end
 
   def send_confirmation_for_course
-    content_key = if participation.state == "assigned"
-      Event::ApplicationConfirmationMailer::ASSIGNED
-    elsif participation.state == "unconfirmed"
-      Event::ApplicationConfirmationMailer::UNCONFIRMED
-    else
-      Event::ApplicationConfirmationMailer::APPLIED
-    end
+    Event::CourseParticipationMailer
+      .confirmation(participation, course_confirmation_content_key)
+      .deliver_later
+  end
 
-    Event::ApplicationConfirmationMailer.confirmation(participation, content_key).deliver_later
+  def course_confirmation_content_key
+    if participation.state == "assigned"
+      Event::CourseParticipationMailer::ASSIGNED
+    elsif participation.state == "unconfirmed"
+      Event::CourseParticipationMailer::UNCONFIRMED
+    else
+      Event::CourseParticipationMailer::APPLIED
+    end
+  end
+
+  def send_confirmation_for_tour
+    Event::TourParticipationMailer
+      .confirmation(participation, tour_confirmation_content_key)
+      .deliver_later
+  end
+
+  def tour_confirmation_content_key
+    if participation.state == "assigned"
+      Event::TourParticipationMailer::ASSIGNED
+    elsif participation.state == "unconfirmed"
+      Event::TourParticipationMailer::UNCONFIRMED
+    else
+      Event::TourParticipationMailer::APPLIED
+    end
   end
 end

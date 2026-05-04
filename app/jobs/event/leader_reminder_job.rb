@@ -11,12 +11,12 @@ class Event::LeaderReminderJob < RecurringJob
   private
 
   def perform_internal
-    send_reminder(8.weeks.from_now, Event::LeaderReminderMailer::REMINDER_8_WEEKS)
+    send_reminder(8.weeks.from_now, Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS)
   end
 
   def send_reminder(start_at, content_key)
     leader_participations_of_events_starting_at(start_at).each do |participation|
-      Event::LeaderReminderMailer.reminder(participation, content_key).deliver_now
+      Event::CourseParticipationMailer.leader_reminder(participation, content_key).deliver_now
     end
   end
 
