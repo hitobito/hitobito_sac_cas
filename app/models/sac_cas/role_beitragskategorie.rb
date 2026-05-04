@@ -33,7 +33,7 @@ module ::SacCas::RoleBeitragskategorie
   end
 
   def to_s(format = :default)
-    if beitragskategorie_label
+    if I18n.exists?("roles.beitragskategorie.#{beitragskategorie}")
       "#{super(:short)} (#{beitragskategorie_label})"
     else
       super
