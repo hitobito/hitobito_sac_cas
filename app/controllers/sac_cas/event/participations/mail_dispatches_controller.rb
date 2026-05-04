@@ -81,5 +81,4 @@ module SacCas::Event::Participations::MailDispatchesController
   def send_event_published_notice_mail
     Event::CourseMailer.published(event, participation.person).deliver_later
   end
-
 end

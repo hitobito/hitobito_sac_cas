@@ -20,7 +20,8 @@
 module SacCas::CustomContent
   extend ActiveSupport::Concern
 
-  SECTION_SPECIFIC_CONTENTS_FILE = File.join(__dir__, "sac_section_custom_contents.yml")
+  SECTION_SPECIFIC_CONTENTS_FILE =
+    HitobitoSacCas::Wagon.root.join("db/seeds/sac_section_custom_contents.yml")
 
   def body_with_values(placeholders = {})
     body.to_s.html_safe

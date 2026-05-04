@@ -7,12 +7,4 @@
 
 class Group::Ortsgruppe < Group
   include Groups::Sektionsartig
-
-  after_create :init_section_custom_contents
-
-  private
-
-  def init_section_custom_contents
-    Groups::InitSacSectionCustomContentsJob.new(self).enqueue!
-  end
 end
