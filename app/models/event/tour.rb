@@ -109,6 +109,8 @@ class Event::Tour < Event
 
   ### CALLBACKS
 
+  after_save :track_approval_addition
+
   before_save :prevent_changes_after_draft, if: -> { state_reached?(:review) }
 
   ### INSTANCE METHODS
@@ -172,6 +174,14 @@ class Event::Tour < Event
 
   def track_association_addition(record)
     track_association_change(record, :create)
+  end
+
+  def track_approval_addition
+    approvals.select(&:saved_changes?).reject(&:marked_for_destruction?).each do |approval|
+      PaperTrail::Version.create!(main: self, item: approval,
+        event: :create, object: approval.to_yaml,
+        object_changes: "", whodunnit: PaperTrail.request.whodunnit)
+    end
   end
 
   # We use removed as a custom event for paper trail versions, since destroy would be wrong

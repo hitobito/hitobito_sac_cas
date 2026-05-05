@@ -203,6 +203,34 @@ describe Event::Tour do
       tour.update_column(:state, :draft)
     end
 
+    it "sets main to event on approval create" do
+      expect do
+        tour.approvals.build(freigabe_komitee: groups(:bluemlisalp_freigabekomitee),
+          approval_kind: event_approval_kinds(:professional), approved: true)
+        tour.save!
+      end.to change { PaperTrail::Version.count }.by(2)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.item).to eq(tour.approvals.first)
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(tour)
+    end
+
+    it "do not create version on approval remove" do
+      tour.approvals.create!(freigabe_komitee: groups(:bluemlisalp_freigabekomitee),
+        approval_kind: event_approval_kinds(:professional), approved: true)
+
+      expect do
+        tour.approvals.each(&:mark_for_destruction)
+        tour.save!
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.order(:created_at, :id).last
+      expect(version.item).to eq(tour)
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(tour)
+    end
+
     it "sets main to event on discipline create" do
       expect do
         tour.disciplines << event_disciplines(:wandern)
