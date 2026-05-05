@@ -8,7 +8,7 @@ it:
     date_field_placeholder: GG.MM.AAAA
     phone_placeholder: +41 77 123 45 67
     currency: CHF
-    deleted_at: "gelöscht am %{date}"
+    deleted_at: "cancellato su %{date}"
     years: anni
     link:
       push_down: Valore di trasferimento ai corsi
@@ -27,7 +27,7 @@ it:
       postbox: "Casella postale"
       country: "CH"
       phone: "+41 31 370 18 18"
-      phone_self_registration: "+41 31 370 18 43/44"
+      phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
@@ -37,7 +37,7 @@ it:
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: "h:mm"
-    elevation_label: Auf-/Abstieg (Hm)
+    elevation_label: Salita/discesa (metri di altitudine)
     token_invalid: Il token utilizzato non è valido.
 
   layouts:
@@ -84,14 +84,14 @@ it:
         new_entry: "Quota di adesione"
         dont_send: Inviare la fattura
         section_id: "Affiliazione"
-        sac_fee: Zentralverbandsbeitrag
-        sac_entry_fee: Zentralverbandseintrittsgebühren
-        hut_solidarity_fee: Hüttensolidaritätsbeitrag
-        sac_magazine: Abogebühr SAC Magazin
-        sac_magazine_postage_abroad: Porto Ausland SAC Magazin
-        section_entry_fee: Sektionseintrittsgebühren
-        section_fee: Sektionsbeitrag
-        section_bulletin_postage_abroad: Porto Ausland Sektionsbulletin
+        sac_fee: Contributo dell'organizzazione centrale
+        sac_entry_fee: Quote di iscrizione all'organizzazione centrale
+        hut_solidarity_fee: Contributo di solidarietà della capanna
+        sac_magazine: Abbonamento alla rivista SAC
+        sac_magazine_postage_abroad: Affrancatura all'estero Rivista SAC
+        section_entry_fee: Quote di iscrizione alle sezioni
+        section_fee: Contributo di sezione
+        section_bulletin_postage_abroad: Bollettino postale della sezione estero
       people/yearly_membership/invoice_form:
         invoice_year: "Esercizio finanziario"
         invoice_date: "Data di prenotazione"
@@ -171,7 +171,7 @@ it:
         event/approval_commission_responsibility_form:
           attributes:
             base:
-              invalid_event_comission_responsibilities: Es wurden nicht alle Zuständigkeiten ausgefüllt.
+              invalid_event_comission_responsibilities: Non tutte le responsabilità sono state completate.
         household:
           attributes:
             members:
@@ -239,10 +239,10 @@ it:
   activerecord:
     attributes:
       group/freigabe_komitee:
-        event_approval_commission_responsibilities: Zuständigkeiten
-        event_approvals: Freigaben
+        event_approval_commission_responsibilities: Responsabilità
+        event_approvals: Approvazioni
       group/freigabe_komitee/pruefer:
-        approval_kinds: Zugewiesene Freigabestufen
+        approval_kinds: Livelli di rilascio assegnati
       account_completion:
         email: e-mail
         password: password
@@ -259,7 +259,7 @@ it:
         courses: Corsi
         updated_at: Modificato
         created_at: Creato
-        deleted_at: Gelöscht
+        deleted_at: Soppresso
       cost_unit:
         label: Denominazione
         event_kind_categories: Categorie di corsi
@@ -267,7 +267,7 @@ it:
         courses: Corsi
         updated_at: Modificato
         created_at: Creato
-        deleted_at: Gelöscht
+        deleted_at: Soppresso
       course_compensation_category:
         short_name: Abbreviazione
         kind: Tipo
@@ -295,18 +295,18 @@ it:
         updated_at: Modificato
         created_at: Creato
       event:
-        id: Event-ID
-        internal_comment: Interne Bemerkungen
+        id: ID evento
+        internal_comment: Commenti interni
         unconfirmed_count: Non confermato
         maximum_age: Età massima
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
-        disciplines: Disziplin(en)
-        target_groups: Zielgruppe(n)
-        fitness_requirement: Konditionelle Anforderung
-        fitness_requirement_id: Konditionelle Anforderung
-        technical_requirements: Technische Anforderung(en)
-        traits: Merkmal(e)
+        disciplines: Disciplina/e
+        target_groups: Gruppo/i di riferimento
+        fitness_requirement: Requisito condizionale
+        fitness_requirement_id: Requisito condizionale
+        technical_requirements: Requisiti tecnici
+        traits: Caratteristiche
       event/kind:
         accommodation: Alloggio
         accommodations:
@@ -395,36 +395,36 @@ it:
         j_s_price_subsidized: Prezzo per i soci G+S - A
         j_s_price_special: Prezzo normale G+S - A
       event/approval_commission_responsibility:
-        freigabe_komitee: Freigabekomitee
-        target_group: Zielgruppe
-        discipline: Disziplin
+        freigabe_komitee: Comitato di rilascio
+        target_group: Gruppo target
+        discipline: Disciplina
         subito: Subito
       event/discipline:
-        color: Farbe
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Übergeordnete Disziplin
-        children: Unterdisziplinen
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        color: Colore
+        label: Designazione
+        short_description: Breve descrizione
+        description: Descrizione del
+        order: Chiave di ordinamento
+        parent_id: Disciplina sovraordinata
+        children: Sottodiscipline
+        updated_at: Modificato
+        deleted_at: Soppresso
       event/approval:
-        freigabe_komitee: Freigabekomitee
-        approval_kind: Freigabe-Stufe
-        approved: Freigegeben
-        creator: Freigegeben von
+        freigabe_komitee: Comitato di rilascio
+        approval_kind: Livello di rilascio
+        approved: Rilasciato
+        creator: Rilasciato da
       event/approval_kind:
-        name: Name
-        short_description: Kurzbeschrieb
-        order: Reihenfolge
+        name: Nome
+        short_description: Breve descrizione
+        order: Sequenza
       event/fitness_requirement:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Designazione
+        short_description: Breve descrizione
+        description: Descrizione del
+        order: Chiave di ordinamento
+        updated_at: Modificato
+        deleted_at: Soppresso
       event/kind_category:
         cost_center_id: Centro di costo
         cost_unit_id: Unità di costo
@@ -440,11 +440,11 @@ it:
       event/participation:
         additional_information: Commento
         cancel_statement: Motivazione
-        correspondence: Rechnungsstellung
+        correspondence: Fatturazione
         adult_consent: Conferma dell’età
         terms_and_conditions: CGC
         actual_days: Giorni effettivi
-        membership_number: Personennummer
+        membership_number: Numero personale
         price: "Prezzo"
         price_category: "Categoria di prezzo"
         price_categories:
@@ -461,74 +461,74 @@ it:
           cancelled: Stornata
           error: Errore
         external_invoices: Fatture # uses include CapitalizedDependentErrors
-        sac_membership_active?: SAC-Mitglied
+        sac_membership_active?: Membro del SAC
         states:
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          summoned: Aufgeboten
-          annulled: Annulliert
-          tentative: Provisorisch
-          rejected: Abgelehnt
-          canceled: Abgemeldet
-          attended: Teilgenommen
-          absent: Nicht erschienen
+          unconfirmed: Non confermato
+          applied: Lista d'attesa
+          assigned: Confermato
+          summoned: Richiamato
+          annulled: Annullato
+          tentative: Provvisorio
+          rejected: Rifiutato
+          canceled: Annullato
+          attended: Partecipato
+          absent: Non pubblicato
       event/target_group:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Übergeordnete Gruppe
-        children: Untergruppen
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Designazione
+        short_description: Breve descrizione
+        description: Descrizione del
+        order: Chiave di ordinamento
+        parent_id: Gruppo sovraordinato
+        children: Sottogruppi
+        updated_at: Modificato
+        deleted_at: Soppresso
       event/technical_requirement:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Anforderungskategorie
-        children: Anforderungen
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Designazione
+        short_description: Breve descrizione
+        description: Descrizione del
+        order: Chiave di ordinamento
+        parent_id: Categoria di requisiti
+        children: Requisiti
+        updated_at: Modificato
+        deleted_at: Soppresso
       event/trait:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Kategorie
-        children: Merkmale
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Designazione
+        short_description: Breve descrizione
+        description: Descrizione del
+        order: Chiave di ordinamento
+        parent_id: Categoria
+        children: Caratteristiche
+        updated_at: Modificato
+        deleted_at: Soppresso
       event/tour:
-        additional_info: Zusatzinfo
-        alternative_route: Alternativroute
-        ascent: Aufstieg
-        descent: Abstieg
-        duration: Zeitaufwand
-        duration_in_hours: Zeitaufwand
-        maps: Karten
-        minimum_age: Mindestalter
-        price_description: Beschreibung
-        price_member: Kosten SAC-Mitglied (extern)
-        price_regular: Kosten nicht-SAC-Mitglied (Gast)
-        price_special: Kosten SAC Sektionsmitglied
-        season: Saison
+        additional_info: Informazioni aggiuntive
+        alternative_route: Percorso alternativo
+        ascent: Salita
+        descent: Discesa
+        duration: Tempo richiesto
+        duration_in_hours: Tempo richiesto
+        maps: Mappe
+        minimum_age: Età minima
+        price_description: Descrizione del
+        price_member: Costi Membro del SAC (esterno)
+        price_regular: Costi non socio SAC (ospite)
+        price_special: Costi Membro della sezione SAC
+        season: Stagione
         seasons:
-          winter: Winter
-          summer: Sommer
-        subito: Ist Subito-Tour
-        summit: Gipfel
-        tourenportal_link: Link zum Tourenportal
+          winter: Inverno
+          summer: Estate
+        subito: È Subito Tour
+        summit: Vertice
+        tourenportal_link: Link al portale del tour
         state_translated: Stato
         states:
           draft: Bozza
-          review: In Freigabe
+          review: In uscita
           approved: Rilasciato
           published: Pubblicato
-          ready: Vorbereitung abgeschlossen
+          ready: Preparazione completata
           closed: Completato
-          canceled: Abgesagt / Annulliert
+          canceled: Annullato / Annullato
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -628,7 +628,7 @@ it:
           nobody: Nessuno
 
       role:
-        approval_kinds: Zugewiesene Freigabestufen
+        approval_kinds: Livelli di rilascio assegnati
         membership_years: Anni di affiliazione
         class:
           kind:
@@ -641,7 +641,7 @@ it:
               read_all_people: Letto da tutte le persone.
               layer_events_full: Gestire gli eventi nella sezione.
               layer_mitglieder_full: Gestire le persone del gruppo di appartenenza della sezione/gruppo locale.
-              layer_created_events_full: "Erstellen und Editieren eigener Anlässe, Kurse und Touren in der Sektion"
+              layer_created_events_full: "Creare e modificare i propri eventi, corsi e visite guidate nella sezione"
       qualification_kind:
         tourenchef_may_edit: Modificabile dal responsabile delle escursioni
       qualification:
@@ -726,8 +726,8 @@ it:
         must_have_mitglied_role: "deve essere socio per l’intero periodo di validità della sezione aggiuntiva."
         must_have_mitglied_role_in_group: "deve essere socio del gruppo selezionato."
         must_have_one_family_main_person_in_family: "Per ogni affiliazione famigliare deve essere indicato un desinatario per le fatture."
-        parent_is_not_main: muss ein Haupteintrag sein.
-        has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
+        parent_is_not_main: deve essere una voce principale.
+        has_children: "Non è possibile eliminare una voce con sottovoci."
 
       models:
         course_compensation_rate:
@@ -739,17 +739,17 @@ it:
           attributes:
             color:
               invalid_hex_color: >-
-                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
+                deve essere un valore esadecimale a 6 cifre ammesso che inizia con #
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: non deve essere superiore alla durata del corso prevista.
 
         event/approval_commission_responsibility:
-          not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
-          no_base_target_group: ist keine Hauptzielgruppe.
-          no_base_discipline: ist keine Hauptdisziplin.
-          combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
+          not_in_layer: non è nella stessa sezione/gruppo locale.
+          no_base_target_group: non è un gruppo target principale.
+          no_base_discipline: non è una disciplina principale.
+          combination_exists: ha già definito una responsabilità corrispondente.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La persona deve avere almeno una qualifica attiva.
@@ -788,14 +788,17 @@ it:
         many: Approcci retributivi
         other: Tassi di retribuzione
       event/approval_commission_responsibility:
-        one: Zuständigkeit Freigabe-Kommission
-        other: Zuständigkeiten Freigabe-Kommission
+        one: Responsabilità Commissione di rilascio
+        many: Responsabilità della Commissione di rilascio
+        other: Responsabilità della Commissione di rilascio
       event/discipline:
-        one: Disziplin
-        other: Disziplinen
+        one: Disciplina
+        many: Discipline
+        other: Discipline
       event/fitness_requirement:
-        one: Konditionelle Anforderung
-        other: Konditionelle Anforderungen
+        one: Requisito condizionale
+        many: Requisiti condizionali
+        other: Requisiti condizionali
       event/level:
         one: Livello del corso
         many: Livelli del corso
@@ -821,24 +824,29 @@ it:
         many: Capoclasse (aspirante)
         other: Capoclasse (aspirante)
       event/target_group:
-        one: Zielgruppe
-        other: Zielgruppen
+        one: Gruppo target
+        many: Gruppi target
+        other: Gruppi target
       event/technical_requirement:
-        one: Technische Anforderung
-        other: Technische Anforderungen
+        one: Requisiti tecnici
+        many: Requisiti tecnici
+        other: Requisiti tecnici
       event/tour:
         one: Tour
         many: Tour
         other: Tour
       event/trait:
-        one: Merkmal
-        other: Merkmale
+        one: Caratteristica
+        many: Caratteristiche
+        other: Caratteristiche
       event/approval:
-        one: Freigabe
-        other: Freigaben
+        one: Rilascio
+        many: Approvazioni
+        other: Approvazioni
       event/approval_kind:
-        one: Freigabestufe
-        other: Freigabestufen
+        one: Livello di rilascio
+        many: Livelli di rilascio
+        other: Livelli di rilascio
       external_training:
         one: Formazione esterna
         many: Formazione esterna
@@ -878,8 +886,9 @@ it:
         many: Contatti esterni
         other: Contatti esterni
       group/freigabe_komitee:
-        one: Freigabekomitee
-        other: Freigabekomitee
+        one: Comitato di rilascio
+        many: Comitato di rilascio
+        other: Comitato di rilascio
       group/geschaeftsleitung:
         one: Gestione SAC
         many: Gestione SAC
@@ -1027,7 +1036,7 @@ it:
         description: Socio onorario
       group/freigabe_komitee/pruefer:
         one: Esaminatore
-        description: Prüfer*in
+        description: Esaminatore
       group/geschaeftsstelle/mitarbeiter:
         one: Collaboratore/Collaboratrice (scrittura)
         description: Collaboratore/Collaboratrice (scrittura)
@@ -1130,29 +1139,29 @@ it:
         huettenwartspartner: Partner del custode
         schluesseldepot: Deposito chiavi
       group/sac_cas_kurskader/kursleitung_selbstaendig:
-        one: Kursleiter*in (selbständig)
-        description: Kursleiter*in (selbständig)
+        one: Istruttore di corsi (lavoratore autonomo)
+        description: Istruttore di corsi (lavoratore autonomo)
       group/sac_cas_kurskader/klassenlehrer_selbstaendig:
-        one: Klassenlehrer*in (selbständig)
-        description: Klassenlehrer*in (selbständig)
+        one: Insegnante di classe (indipendente)
+        description: Insegnante di classe (indipendente)
       group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
-        one: "Kursleiter*in (Aspirant, selbständig)"
-        description: "Kursleiter*in (Aspirant, selbständig)"
+        one: "Istruttore di corsi (aspirante, libero professionista)"
+        description: "Istruttore di corsi (aspirante, libero professionista)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Klassenlehrer*in (Aspirant, selbständig)"
-        description: "Klassenlehrer*in (Aspirant, selbständig)"
+        one: "Insegnante di classe (aspirante, lavoratore autonomo)"
+        description: "Insegnante di classe (aspirante, lavoratore autonomo)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
-        one: Kursleiter*in (unselbständig)
-        description: Kursleiter*in (unselbständig)
+        one: Istruttore del corso (dipendente)
+        description: Istruttore del corso (dipendente)
       group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
-        one: Klassenlehrer*in (unselbständig)
-        description: Klassenlehrer*in (unselbständig)
+        one: Insegnante di classe (dipendente)
+        description: Insegnante di classe (dipendente)
       group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
-        one: "Kursleiter*in (Aspirant, unselbständig)"
-        description: "Kursleiter*in (Aspirant, unselbständig)"
+        one: "Istruttore del corso (aspirante, dipendente)"
+        description: "Istruttore del corso (aspirante, dipendente)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
-        one: "Klassenlehrer*in (Aspirant, unselbständig)"
-        description: "Klassenlehrer*in (Aspirant, unselbständig)"
+        one: "Insegnante di classe (aspirante, dipendente)"
+        description: "Insegnante di classe (aspirante, dipendente)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
@@ -1309,14 +1318,14 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_touren_und_kurse/tourenchef:
-        one: Tourenchef*in
-        description: Tourenchef*in
+        one: Tour manager
+        description: Tour manager
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Tourenchef*in Sommer
-        description: Tourenchef*in Sommer
+        one: Manager del tour estivo
+        description: Manager del tour estivo
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Tourenchef*in Winter
-        description: Tourenchef*in Winter
+        one: Tour Manager Inverno
+        description: Tour Manager Inverno
       group/sektions_clubhuetten/leserecht:
         one: Autorizzazione lettura
         description: Autorizzazione lettura
@@ -1432,7 +1441,7 @@ it:
         login_identity: E-mail  o numero di socio
       create:
         confirm_email_before_logging_in: >
-          Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma.Se il vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di contattare mv@sac-cas.ch indicando il proprio indirizzo e-mail.
+          Conferma il tuo indirizzo e-mail prima di continuare. Ti abbiamo appena inviato un’e-mail di conferma.<br/>Se il vostro indirizzo e-mail non è più valido o non avete ricevuto un'e-mail (anche nella cartella SPAM): Si prega di <a href="https://www.sac-cas.ch/it/contatto/">contattarci</a>indicando il proprio indirizzo e-mail.
       oauth_info:
         sign_in: Accedi con il Portale CAS
 
@@ -1472,10 +1481,17 @@ it:
     list_for_leaders: Elenco dei quadri dei corsi
 
   dropdown/group_edit:
-    custom_content: E-Mail Vorlagen
+    custom_content: Modelli di e-mail
     sac_membership_configs: Parametri per le fatture di affiliazione
     sac_section_membership_configs: Parametri per le fatture di affiliazione
-    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten
+    event_approval_commission_responsibility: Responsabilità del rilascio del tour
+
+  agenda:
+    index:
+      title: "Agenda %{group_name}"
+      select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
+    event_card:
+      show_details: Details anzeigen
 
   event:
     application_market:
@@ -1486,9 +1502,9 @@ it:
         remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
     approval_commission_responsibilities:
       edit:
-        title: Zuständigkeiten Freigabe-Kommission bearbeiten
-        normal_tours: Normal-Touren
-        subito_tours: Subito-Touren
+        title: Responsabilità Modifica della commissione di rilascio
+        normal_tours: Visite normali
+        subito_tours: Tour immediati
     courses:
       invoices:
         new:
@@ -1506,7 +1522,7 @@ it:
           warning: Nessuna e-mail è stata inviata poiché non è stato acquisito alcun link al sondaggio.
     disciplines:
       form:
-        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
+        help_inline_color: "Valore esadecimale valido del colore (ad es. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Valori di trasferimento ai corsi
@@ -1541,8 +1557,8 @@ it:
         explanation: I tour organizzati dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
     participations:
       asides_sac_cas:
-        recent_trainings: Ausbildungshistorie
-        recent_tours: Tourenhistorie
+        recent_trainings: Storia della formazione
+        recent_tours: Storia del tour
       fields:
         explain_required_checkmark: "* = risposta obbligatoria"
       missing_information: >-
@@ -1552,7 +1568,7 @@ it:
       edit:
         title: Dati aggiuntivi
       cancel_application:
-        caption: Abmelden
+        caption: Disconnettersi
       course_signup_aside:
         summary_title: Panoramica dei costi
         summary_course_price: Costi del corso
@@ -1611,7 +1627,7 @@ it:
       summoned_notice: "%{participant} è stato convocato."
       reactivated_notice: "%{participant} è stato riattivato."
       actions_show_youth:
-        cancel_button: Abmelden
+        cancel_button: Disconnettersi
         summon_button: Convocare
         assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
       actions_show_sac_cas:
@@ -1630,7 +1646,7 @@ it:
       invoice_created_notice: La fattura è stata creata con successo.
       invoice_not_created_alert: Non è stato possibile creare la fattura poiché manca la quota di partecipazione.
       tabs:
-        history: Verlauf
+        history: Corso
 
       popover_participant_cancels:
         cancel_info: >-
@@ -1645,26 +1661,89 @@ it:
 
     tours:
       approvals:
-        title: Freigabe
+        title: Rilascio
         edit:
-          internal_comment: Interne Bemerkungen
-          approve: Freigeben
-          reject: Ablehnen
-          approved: "Freigegeben von %{creator} am %{at}"
-          rejected: "Abgelehnt von %{creator} am %{at}"
-          self_approval: "Selbst freigegeben von %{creator} am %{at}"
+          internal_comment: Commenti interni
+          approve: Rilascio
+          reject: Rifiuto
+          approved: "Pubblicato da %{creator} su %{at}"
+          rejected: "Respinto da %{creator} su %{at}"
+          self_approval: "Autoapprovata da %{creator} il %{at}"
         update:
-          success: Deine Bemerkung wurde gespeichert.
-          review: Deine Freigabe wurde gespeichert.
-          approved: "Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>."
-          draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
+          success: Il tuo commento è stato salvato.
+          review: La vostra approvazione è stata salvata.
+          approved: "La liberazione è stata salvata, il tour ha ora lo stato <i>Rilasciato</i>."
+          draft: Il vostro rifiuto è stato salvato e il tour è stato riportato allo stato di <i>bozza</i>.
+
+    tour_mailer:
+      application_window: Anmeldefenster
+      application: Anmeldung
+      download_ics: Herunterladen
+      ics_link: Kalendereintrag (ics)
+      sub_target_groups: Unterzielgruppe(n)
+      sub_disciplines: Unterdisziplin(en)
+      traits: Merkmal(e)
+      technical_requirements: Technische Anforderung(en)
+      attachments: Anhänge
+      no_attachments: Aktuell sind keine Anhänge verfügbar
+      none: (keine)
 
   events:
-    flash:
-      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
     actions_show_sac_cas:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
-      approval: Freigabe
+      approval: Rilascio
+
+    flash:
+      dates_changed: "Il tour %{event_name} è stato aggiornato con successo. Assicuratevi di aver concordato le date di partenza e di arrivo con il vostro comitato del tour."
+
+    form_tabs:
+      communication: Comunicazione
+      prices: Prezzi
+
+    general_fields:
+      kind_overrides_link_title: >-
+        Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo
+    global:
+      link:
+        add_event/tour: Crea tour
+
+    minimum_age_with_years: "%{minimum_age} anni"
+    maximum_age_with_years: "%{maximum_age} anni"
+
+    popover_emails_optional:
+      prompt_email_choice: "È opportuno inviare e-mail?"
+      submit_with_emails: Invio di e-mail
+      submit_without_emails: Non inviare e-mail
+
+    popover_canceled_reason:
+      cancel_button: Cancellare definitivamente
+      cancel_confirmation: >-
+        Desidera davvero cancellare il corso %{name} (%{number})? Questa operazione non può essere annullata.
+      cancel_info: >-
+        Cancella il corso %{name} (%{number}) e annulla tutte le partecipazioni. In questo modo tutte le eventuali fatture saranno stornate e gli jmporti già versati saranno rimborsati. Questa operazione non può essere annullata.
+      inform_participants_caption: Informare tutti i partecipanti della cancellazione tramite e-mail
+      canceled_reason_label: Motivazione
+    popover_tour_review:
+      destroy_and_review: Azzeramento delle autorizzazioni esistenti
+      keep_and_review: Mantenere le autorizzazioni esistenti
+
+    sections:
+      essentials: Fatti salienti
+
+    show_contacts_sac_cas:
+      title: Gestione
+
+    state_back_buttons:
+      event/course:
+        assignment_closed: Torna all'assegnazione
+        application_closed: Torna alla registrazione completata
+        approved: Torna alla pubblicazione
+      event/tour:
+        draft: Torna al design
+        ready: Torna alla Preparazione completata
+        approved: Torna a Rilasciato
+        published: Torna a Pubblicato
+
     state_buttons:
       event/course:
         created: Indietro come bozza
@@ -1678,80 +1757,39 @@ it:
           Il completamento imposta tutte le registrazioni con lo stato Offerto allo stato Partecipato. Per tutte le registrazioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
         canceled: Cancellazioni
       event/tour:
-        draft: Zurück zu Entwurf
-        ready: Vorbereitung abgeschlossen
-        review: Zur Freigabe weiterleiten
-        approved: Selbst freigeben
+        draft: Torna al design
+        ready: Preparazione completata
+        review: Inoltrare per l'approvazione
+        approved: Rilasciare se stessi
         published: Pubblicare
         closed: Finalizzare
         canceled: Cancellazioni
-    state_back_buttons:
-      event/course:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
-        approved: Zurück zur Freigabe
-      event/tour:
-        draft: Zurück zu Entwurf
-        ready: Zurück zu Vorbereitung abgeschlossen
-        approved: Zurück zu Freigegeben
-        published: Zurück zu Publiziert
-
-    show_contacts_sac_cas:
-      title: Leitung
-
-    form_tabs:
-      communication: Comunicazione
-      prices: Prezzi
-
-    general_fields:
-      kind_overrides_link_title: >-
-        Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo
-    global:
-      link:
-        add_event/tour: Crea tour
-
-    minimum_age_with_years: "%{minimum_age} Jahre"
-    maximum_age_with_years: "%{maximum_age} Jahre"
-
-    popover_emails_optional:
-      prompt_email_choice: "È opportuno inviare e-mail?"
-      submit_with_emails: Invio di e-mail
-      submit_without_emails: Non inviare e-mail
-    popover_canceled_reason:
-      cancel_button: Cancellare definitivamente
-      cancel_confirmation: >-
-        Desidera davvero cancellare il corso %{name} (%{number})? Questa operazione non può essere annullata.
-      cancel_info: >-
-        Cancella il corso %{name} (%{number}) e annulla tutte le partecipazioni. In questo modo tutte le eventuali fatture saranno stornate e gli jmporti già versati saranno rimborsati. Questa operazione non può essere annullata.
-      inform_participants_caption: Informare tutti i partecipanti della cancellazione tramite e-mail
-      canceled_reason_label: Motivazione
-    popover_tour_review:
-      destroy_and_review: Bestehende Freigaben zurücksetzen
-      keep_and_review: Bestehende Freigaben beibehalten
-
-    sections:
-      essentials: Wesentliche Fakten
 
   events/filters:
+    approval:
+      title: Freigabe
+      self_approved: Selbst freigegeben
+      pending_at_komitee: Ausstehend bei Freigabe-Komitee
+      responsible_komitee: Zuständiges Freigabe-Komitee
     tour_essentials:
-      title: Wesentliche Fakten
+      title: Fatti salienti
     tour_essential_field:
-      disciplines: Disziplinen
-      target_groups: Zielgruppen
-      technical_requirements: Technische Anforderungen
-      traits: Merkmale
+      disciplines: Discipline
+      target_groups: Gruppi target
+      technical_requirements: Requisiti tecnici
+      traits: Caratteristiche
     fitness_requirement_field:
-      fitness_requirements: Konditionelle Anforderungen
+      fitness_requirements: Requisiti condizionali
     radios_field:
-      season: Saison
+      season: Stagione
       seasons:
-        nil: Alle
-        summer: Sommer
-        winter: Winter
-      subito: Tourentyp
+        nil: Tutti
+        summer: Estate
+        winter: Inverno
+      subito: Tipo di tour
       subitos:
-        nil: Alle
-        false: Regulär
+        nil: Tutti
+        false: Regolare
         true: Subito
 
   events/state:
@@ -1770,52 +1808,52 @@ it:
 
   export/tabular/people/mitgliedschaft:
     attributes:
-      id: Mitgliedernummer
-      url: Mitgliedschaften
-      sektion: Sektion
-      membership_years: Anzahl Mitgliedsjahre
-      sac_entry_on: Frühestes Beitrittsdatum beim SAC
-      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
-      start_on: Eintrittsdatum
-      end_on: Austrittsdatum
-      terminate_on: Austritt geplant
-      changed_on: Mutationsdatum
-      sac_is_new_entry: Ist SAC Neueintritt
-      sac_is_re_entry: Ist SAC Wiedereintritt
-      sac_is_section_new_entry: Ist Sektion Ersteintritt
-      sac_is_section_change: Ist Sektionswechsel
-      sac_is_terminated: Ist SAC Austritt
-      termination_reason: Austrittsgrund
+      id: Numero di membro
+      url: Associazioni
+      sektion: Sezione
+      membership_years: Numero di anni di appartenenza
+      sac_entry_on: Data massima di adesione al SAC
+      sektion_entry_on: Data di inizio dell'iscrizione alla sezione
+      start_on: Data di iscrizione
+      end_on: Data di partenza
+      terminate_on: Uscita prevista
+      changed_on: Data della mutazione
+      sac_is_new_entry: Il SAC è una nuova voce
+      sac_is_re_entry: Il rientro del SAC è
+      sac_is_section_new_entry: È la sezione Prima voce
+      sac_is_section_change: È la modifica della sezione
+      sac_is_terminated: È l'uscita del SAC
+      termination_reason: Motivo della partenza
       no_termination_reason: ADM
-      self_registration_reason: Eintrittsgrund
-      data_retention_consent: Datenaufbewahrungszustimmung
-      changed_youth_adult: Ist Wechsel Jugend-Einzel
-      changed_youth_family: Ist Wechsel Jugend-Familie
-      changed_adult_family: Ist Wechsel Einzel-Familie
-      changed_family_adult: Ist Wechsel Familie-Einzel
-      changed_family_youth: Ist Wechsel Familie-Jugend
-      type: Typ
+      self_registration_reason: Motivo dell'ingresso
+      data_retention_consent: Consenso alla conservazione dei dati
+      changed_youth_adult: Il cambiamento è la gioventù single
+      changed_youth_family: Il cambiamento è la famiglia dei giovani
+      changed_adult_family: Il cambiamento è una famiglia singola
+      changed_family_adult: Il cambiamento è famiglia-singolo
+      changed_family_youth: Il cambiamento è famiglia-giovani
+      type: Tipo
       types:
-        mitglied: Stammsektion
-        mitglied_zusatzsektion: Zusatzsektion
-      beitragskategorie: Beitragskategorie
-      ehrenmitglied: Ist Ehrenmitglied
-      beguenstigt: Ist Begünstigt
-      last_name: Nachname
-      first_name: Vorname
-      gender: Geschlecht
-      birthday: Geburtsdatum
-      correspondence: Korrespondenz
-      email: E-Mail
-      phone_number_mobile: Mobil
-      phone_number_landline: Festnetz
-      postbox: Postfach
-      street: Strasse
-      housenumber: Hausnummer
-      address_care_of: Adresszusatz
-      zip_code: PLZ
-      town: Ort
-      country: Land
+        mitglied: Sezione centrale
+        mitglied_zusatzsektion: Sezione aggiuntiva
+      beitragskategorie: Categoria di contributo
+      ehrenmitglied: È un membro onorario
+      beguenstigt: È beneficiario
+      last_name: Cognome
+      first_name: Nome
+      gender: Genere
+      birthday: Data di nascita
+      correspondence: Corrispondenza
+      email: e-mail
+      phone_number_mobile: Mobile
+      phone_number_landline: Linea fissa
+      postbox: Casella postale
+      street: Via
+      housenumber: Numero civico
+      address_care_of: Suffisso dell'indirizzo
+      zip_code: CAP
+      town: Posizione
+      country: Paese
 
   export/tabular/people/jubilare:
     sheet_name: "Membri per %{reference_date}"
@@ -1863,6 +1901,10 @@ it:
     tour_guides_stalled: Guide escursionistiche sospese
     tour_guides_inactive: Guide escursionistiche non attive
     tour_guides_expired: Guide escursionistiche precedenti
+
+  filter_navigation/events:
+    my_pending_approvals: Meine ausstehenden Freigaben
+    my_approval_responsibilities: Meine Freigabe-Zuständigkeiten
 
   groups:
     actions_show_sac_cas:
@@ -2027,7 +2069,7 @@ it:
     terminate_sac_memberships:
       show:
         family_but_not_main_person:
-          "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
+          "Il prelievo viene effettuato solo per voi. Un prelievo familiare può essere effettuato solo da %{main_person}."
       create:
         success:
           one: "Le vos"
@@ -2102,13 +2144,13 @@ it:
           text: La decisione sarà presa congiuntamente in base al numero di iscrizioni alla data di scadenza delle iscrizioni.
         participation_cancellation:
           label: Svolgimento – Cancellazione
-          text: Bitte Klassenleiter*in und Unterkunft informieren
+          text: Informare l'insegnante di classe e l'alloggio
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
         class_teacher:
-          label: Klassenleiter*in
+          label: Capoclasse
           text: >-
-            Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenleiter*in - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
+            La gestione è responsabilità del responsabile della classe in anticipo in base al numero massimo di partecipanti - si prega di elencare nel programma dettagliato per i corsi e di inviare all'ufficio via e-mail per le visite guidate.
     participant_list:
       title: Elenco dei partecipanti
       link: www.sac-cas.ch
@@ -2193,15 +2235,15 @@ it:
           Questa persona non dispone di una propria fattura di affiliazione. Le quote sono comunque calcolate nella fattura di un’altra persona.
         alert_error: "I seguenti controlli di qualità dei dati impediscono la creazione di una fattura di affiliazione:"
         create_invoice: "Creare la fattura"
-        manual_positions: "Manuelle Differenzrechnung"
+        manual_positions: "Calcolo manuale della differenza"
         mv_yearly_invoice: "Bilancio annuale AS"
         zusatzsektion_eintrittsrechnung: "Fattura di adesione alla sezione aggiuntiva"
       manual_fee_fields:
-        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
-        manual_positions_subtitle: "Manuelle Rechnungsposten"
-        section_entry_fee: "Sektionseintrittsgebühren %{section}"
-        section_fee: "Sektionsbeitrag %{section}"
-        section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
+        do_not_transmit_nil_values_help: "Lasciare in bianco per non trasmettere questa posizione"
+        manual_positions_subtitle: "Voci di fattura manuali"
+        section_entry_fee: "Quote di iscrizione alle sezioni %{section}"
+        section_fee: "Contributo di sezione %{section}"
+        section_bulletin_postage_abroad: "Bollettino postale della sezione estero %{section}"
 
     neuanmeldungen:
       multiselect_actions:

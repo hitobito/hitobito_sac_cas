@@ -27,7 +27,7 @@ de_CH:
       postbox: "Postfach"
       country: "CH"
       phone: "+41 31 370 18 18"
-      phone_self_registration: "+41 31 370 18 43/44"
+      phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
       email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
@@ -1374,7 +1374,7 @@ de_CH:
         login_identity: E-Mail oder Mitgliedernummer
       create:
         confirm_email_before_logging_in: >
-          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="mail_to:mv@sac-cas.ch">mv@sac-cas.ch</a>.
+          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an<a href="https://www.sac-cas.ch/de/kontakt">uns .</a>
       oauth_info:
         sign_in: Anmelden mit dem SAC-Portal
 
@@ -1418,6 +1418,13 @@ de_CH:
     sac_membership_configs: Parameter für Mitgliedschaftsrechnungen
     sac_section_membership_configs: Parameter für Mitgliedschaftsrechnungen
     event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten
+
+  agenda:
+    index:
+      title: "Agenda %{group_name}"
+      select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
+    event_card:
+      show_details: Details anzeigen
 
   event:
     application_market:
@@ -1600,12 +1607,75 @@ de_CH:
           approved: "Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>."
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
 
+    tour_mailer:
+      application_window: Anmeldefenster
+      application: Anmeldung
+      download_ics: Herunterladen
+      ics_link: Kalendereintrag (ics)
+      sub_target_groups: Unterzielgruppe(n)
+      sub_disciplines: Unterdisziplin(en)
+      traits: Merkmal(e)
+      technical_requirements: Technische Anforderung(en)
+      attachments: Anhänge
+      no_attachments: Aktuell sind keine Anhänge verfügbar
+      none: (keine)
+
   events:
-    flash:
-      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
+
+    flash:
+      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
+
+    form_tabs:
+      communication: Kommunikation
+      prices: Preise
+
+    general_fields:
+      kind_overrides_link_title: >-
+        Folgende Felder werden übernommen: Beschreibung, Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison, Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger
+    global:
+      link:
+        add_event/tour: Tour erstellen
+
+    minimum_age_with_years: "%{minimum_age} Jahre"
+    maximum_age_with_years: "%{maximum_age} Jahre"
+
+    popover_emails_optional:
+      prompt_email_choice: "Sollen E-Mails verschickt werden?"
+      submit_with_emails: E-Mails verschicken
+      submit_without_emails: Keine E-Mails verschicken
+
+    popover_canceled_reason:
+      cancel_button: Definitiv Absagen
+      cancel_confirmation: >-
+        Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden.
+      cancel_info: >-
+        Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
+      inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
+      canceled_reason_label: Grund
+    popover_tour_review:
+      destroy_and_review: Bestehende Freigaben zurücksetzen
+      keep_and_review: Bestehende Freigaben beibehalten
+
+    sections:
+      essentials: Wesentliche Fakten
+
+    show_contacts_sac_cas:
+      title: Leitung
+
+    state_back_buttons:
+      event/course:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+        approved: Zurück zur Freigabe
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Zurück zu Vorbereitung abgeschlossen
+        approved: Zurück zu Freigegeben
+        published: Zurück zu Publiziert
+
     state_buttons:
       event/course:
         created: Zurück als Entwurf
@@ -1626,54 +1696,13 @@ de_CH:
         published: Publizieren
         closed: Abschliessen
         canceled: Absagen
-    state_back_buttons:
-      event/course:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
-        approved: Zurück zur Freigabe
-      event/tour:
-        draft: Zurück zu Entwurf
-        ready: Zurück zu Vorbereitung abgeschlossen
-        approved: Zurück zu Freigegeben
-        published: Zurück zu Publiziert
-
-    show_contacts_sac_cas:
-      title: Leitung
-
-    form_tabs:
-      communication: Kommunikation
-      prices: Preise
-
-    general_fields:
-      kind_overrides_link_title: >-
-        Folgende Felder werden übernommen: Beschreibung, Aufnahmebedingungen, Minimale Teilnehmerzahl, Maximale Teilnehmerzahl, Mindestalter, Saison, Ausbildungstage, Unterkunft reservieren durch SAC, Unterkunft, Kostenstelle, Kostenträger
-    global:
-      link:
-        add_event/tour: Tour erstellen
-
-    minimum_age_with_years: "%{minimum_age} Jahre"
-    maximum_age_with_years: "%{maximum_age} Jahre"
-
-    popover_emails_optional:
-      prompt_email_choice: "Sollen E-Mails verschickt werden?"
-      submit_with_emails: E-Mails verschicken
-      submit_without_emails: Keine E-Mails verschicken
-    popover_canceled_reason:
-      cancel_button: Definitiv Absagen
-      cancel_confirmation: >-
-        Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden.
-      cancel_info: >-
-        Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
-      inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
-      canceled_reason_label: Grund
-    popover_tour_review:
-      destroy_and_review: Bestehende Freigaben zurücksetzen
-      keep_and_review: Bestehende Freigaben beibehalten
-
-    sections:
-      essentials: Wesentliche Fakten
 
   events/filters:
+    approval:
+      title: Freigabe
+      self_approved: Selbst freigegeben
+      pending_at_komitee: Ausstehend bei Freigabe-Komitee
+      responsible_komitee: Zuständiges Freigabe-Komitee
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
@@ -1804,6 +1833,10 @@ de_CH:
     tour_guides_stalled: Sistierte Tourenleiter
     tour_guides_inactive: Inaktive Tourenleiter
     tour_guides_expired: Abgelaufene Tourenleiter
+
+  filter_navigation/events:
+    my_pending_approvals: Meine ausstehenden Freigaben
+    my_approval_responsibilities: Meine Freigabe-Zuständigkeiten
 
   groups:
     actions_show_sac_cas:
@@ -2270,7 +2303,7 @@ de_CH:
       sac_cas/role/mitglied_common:
         no_permission: Für einen Austritt musst du dich an den Mitgliederdienst der Sektion wenden
       group/abo_magazin/abonnent:
-        no_permission: "Eine Kündigung kann nur über den Mitgliederdienst des SAC erfolgen. Bitte schreibe eine E-Mail mit dem gewünschten Kündigungstermin sowie deinem Vor- und Nachnamen an mv@sac-cas.ch."
+        no_permission: "Eine Kündigung kann nur über den Mitgliederdienst des SAC erfolgen. Bitte schreibe eine E-Mail mit dem gewünschten Kündigungstermin sowie deinem Vor- und Nachnamen an uns."
 
   sac_membership_configs:
     form:
@@ -2433,7 +2466,7 @@ de_CH:
           family_fields:
             add: Weiteres Familienmitglied hinzufügen
             email_taken: >-
-              Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch
+              Die E-Mail Adresse ist bereits registriert und somit kann diese Person der Familie nicht hinzugefügt werden. Bitte wende dich an den Mitgliederdienst, um deine Familie zu erfassen: 031 370 18 18, https://www.sac-cas.ch/de/kontakt
             membership_info_box: >-
               Indem du weitere Personen hinzufügst, wählst du eine Familienmitgliedschaft. Diese ist für max. 2 Erwachsene ab 23 Jahren und beliebig viele Kinder im Alter zwischen 6 und 17 Jahren möglich.
 

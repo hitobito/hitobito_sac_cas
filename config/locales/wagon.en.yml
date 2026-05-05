@@ -1419,6 +1419,13 @@ en:
     sac_section_membership_configs: Parameters for membership invoices
     event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten
 
+  agenda:
+    index:
+      title: "Agenda %{group_name}"
+      select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
+    event_card:
+      show_details: Details anzeigen
+
   event:
     application_market:
       application:
@@ -1600,12 +1607,75 @@ en:
           approved: "Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>."
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
 
+    tour_mailer:
+      application_window: Anmeldefenster
+      application: Anmeldung
+      download_ics: Herunterladen
+      ics_link: Kalendereintrag (ics)
+      sub_target_groups: Unterzielgruppe(n)
+      sub_disciplines: Unterdisziplin(en)
+      traits: Merkmal(e)
+      technical_requirements: Technische Anforderung(en)
+      attachments: Anhänge
+      no_attachments: Aktuell sind keine Anhänge verfügbar
+      none: (keine)
+
   events:
-    flash:
-      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
+
+    flash:
+      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
+
+    form_tabs:
+      communication: Communication
+      prices: Preise
+
+    general_fields:
+      kind_overrides_link_title: >-
+        The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit
+    global:
+      link:
+        add_event/tour: Tour erstellen
+
+    minimum_age_with_years: "%{minimum_age} Jahre"
+    maximum_age_with_years: "%{maximum_age} Jahre"
+
+    popover_emails_optional:
+      prompt_email_choice: "Sollen E-Mails verschickt werden?"
+      submit_with_emails: E-Mails verschicken
+      submit_without_emails: Keine E-Mails verschicken
+
+    popover_canceled_reason:
+      cancel_button: Definitiv Absagen
+      cancel_confirmation: >-
+        Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden.
+      cancel_info: >-
+        Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
+      inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
+      canceled_reason_label: Grund
+    popover_tour_review:
+      destroy_and_review: Bestehende Freigaben zurücksetzen
+      keep_and_review: Bestehende Freigaben beibehalten
+
+    sections:
+      essentials: Wesentliche Fakten
+
+    show_contacts_sac_cas:
+      title: Leitung
+
+    state_back_buttons:
+      event/course:
+        assignment_closed: Zurück zur Zuteilung
+        application_closed: Zurück zur abgeschlossenen Anmeldung
+        approved: Zurück zur Freigabe
+      event/tour:
+        draft: Zurück zu Entwurf
+        ready: Zurück zu Vorbereitung abgeschlossen
+        approved: Zurück zu Freigegeben
+        published: Zurück zu Publiziert
+
     state_buttons:
       event/course:
         created: Zurück als Entwurf
@@ -1626,54 +1696,13 @@ en:
         published: Publizieren
         closed: Abschliessen
         canceled: Absagen
-    state_back_buttons:
-      event/course:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
-        approved: Zurück zur Freigabe
-      event/tour:
-        draft: Zurück zu Entwurf
-        ready: Zurück zu Vorbereitung abgeschlossen
-        approved: Zurück zu Freigegeben
-        published: Zurück zu Publiziert
-
-    show_contacts_sac_cas:
-      title: Leitung
-
-    form_tabs:
-      communication: Communication
-      prices: Preise
-
-    general_fields:
-      kind_overrides_link_title: >-
-        The following fields are transferred: Description, Admission requirements, Minimum number of participants, Maximum number of participants, Minimum age, Season, Training days, Accommodation reserved by SAC, Accommodation, Cost center, Cost unit
-    global:
-      link:
-        add_event/tour: Tour erstellen
-
-    minimum_age_with_years: "%{minimum_age} Jahre"
-    maximum_age_with_years: "%{maximum_age} Jahre"
-
-    popover_emails_optional:
-      prompt_email_choice: "Sollen E-Mails verschickt werden?"
-      submit_with_emails: E-Mails verschicken
-      submit_without_emails: Keine E-Mails verschicken
-    popover_canceled_reason:
-      cancel_button: Definitiv Absagen
-      cancel_confirmation: >-
-        Wollen Sie den Kurs %{name} (%{number}) wirklich absagen? Diese Aktion kann nicht rückgängig gemacht werden.
-      cancel_info: >-
-        Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
-      inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
-      canceled_reason_label: Grund
-    popover_tour_review:
-      destroy_and_review: Bestehende Freigaben zurücksetzen
-      keep_and_review: Bestehende Freigaben beibehalten
-
-    sections:
-      essentials: Wesentliche Fakten
 
   events/filters:
+    approval:
+      title: Freigabe
+      self_approved: Selbst freigegeben
+      pending_at_komitee: Ausstehend bei Freigabe-Komitee
+      responsible_komitee: Zuständiges Freigabe-Komitee
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
@@ -1804,6 +1833,10 @@ en:
     tour_guides_stalled: Suspended tour guides
     tour_guides_inactive: Inactive tour leaders
     tour_guides_expired: Expired tour leaders
+
+  filter_navigation/events:
+    my_pending_approvals: Meine ausstehenden Freigaben
+    my_approval_responsibilities: Meine Freigabe-Zuständigkeiten
 
   groups:
     actions_show_sac_cas:

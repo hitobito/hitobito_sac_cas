@@ -8,7 +8,7 @@ fr:
     date_field_placeholder: JJ.MM.AAAA
     phone_placeholder: +41 77 123 45 67
     currency: CHF
-    deleted_at: "gelöscht am %{date}"
+    deleted_at: "supprimé le %{date}"
     years: Années
     link:
       push_down: Transférer la valeur aux cours
@@ -27,7 +27,7 @@ fr:
       postbox: "Boîte postale"
       country: "CH"
       phone: "+41 31 370 18 18"
-      phone_self_registration: "+41 31 370 18 43/44"
+      phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
       email_mv: "info@sac-cas.ch"
       website: "https://www.sac-cas.ch"
@@ -37,7 +37,7 @@ fr:
     title_event/tour: course
     elevation_unit: Hm
     duration_format: "h:mm"
-    elevation_label: Auf-/Abstieg (Hm)
+    elevation_label: Montée/descente (Hm)
     token_invalid: Le jeton utilisé n'est pas valide.
 
   layouts:
@@ -84,14 +84,14 @@ fr:
         new_entry: "Frais d’entrée"
         dont_send: Envoyer une facture
         section_id: "Adhésion"
-        sac_fee: Zentralverbandsbeitrag
-        sac_entry_fee: Zentralverbandseintrittsgebühren
-        hut_solidarity_fee: Hüttensolidaritätsbeitrag
-        sac_magazine: Abogebühr SAC Magazin
-        sac_magazine_postage_abroad: Porto Ausland SAC Magazin
-        section_entry_fee: Sektionseintrittsgebühren
-        section_fee: Sektionsbeitrag
-        section_bulletin_postage_abroad: Porto Ausland Sektionsbulletin
+        sac_fee: Cotisation à l'association centrale
+        sac_entry_fee: Droits d'entrée de l'association centrale
+        hut_solidarity_fee: Contribution de solidarité des cabanes
+        sac_magazine: Abonnement au CAS Magazine
+        sac_magazine_postage_abroad: Port étranger CAS Magazine
+        section_entry_fee: Droits d'entrée à la section
+        section_fee: Cotisation à la section
+        section_bulletin_postage_abroad: Port étranger Bulletin de la section
       people/yearly_membership/invoice_form:
         invoice_year: "Exercice comptable"
         invoice_date: "Date de réservation"
@@ -173,7 +173,7 @@ fr:
         event/approval_commission_responsibility_form:
           attributes:
             base:
-              invalid_event_comission_responsibilities: Es wurden nicht alle Zuständigkeiten ausgefüllt.
+              invalid_event_comission_responsibilities: Toutes les compétences n'ont pas été remplies.
         household:
           attributes:
             members:
@@ -241,10 +241,10 @@ fr:
   activerecord:
     attributes:
       group/freigabe_komitee:
-        event_approval_commission_responsibilities: Zuständigkeiten
-        event_approvals: Freigaben
+        event_approval_commission_responsibilities: Compétences
+        event_approvals: Libérations
       group/freigabe_komitee/pruefer:
-        approval_kinds: Zugewiesene Freigabestufen
+        approval_kinds: Niveaux d'autorisation attribués
       account_completion:
         email: E-mail
         password: Mot de passe
@@ -261,7 +261,7 @@ fr:
         courses: Cours
         updated_at: Modifié
         created_at: Créé
-        deleted_at: Gelöscht
+        deleted_at: Supprimé
       cost_unit:
         label: Désignation
         event_kind_categories: Catégories de cours
@@ -269,7 +269,7 @@ fr:
         courses: Cours
         updated_at: Modifié
         created_at: Créé
-        deleted_at: Gelöscht
+        deleted_at: Supprimé
       course_compensation_category:
         short_name: Nom court
         kind: Type
@@ -297,18 +297,18 @@ fr:
         updated_at: Modifié
         created_at: Créé
       event:
-        id: Event-ID
-        internal_comment: Interne Bemerkungen
+        id: ID de l'événement
+        internal_comment: Remarques internes
         unconfirmed_count: Non confirmé
         maximum_age: Age maximal
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
-        disciplines: Disziplin(en)
-        target_groups: Zielgruppe(n)
-        fitness_requirement: Konditionelle Anforderung
-        fitness_requirement_id: Konditionelle Anforderung
-        technical_requirements: Technische Anforderung(en)
-        traits: Merkmal(e)
+        disciplines: Discipline(s)
+        target_groups: Groupe(s) cible(s)
+        fitness_requirement: Exigence en matière de condition physique
+        fitness_requirement_id: Exigence en matière de condition physique
+        technical_requirements: Exigence(s) technique(s)
+        traits: Caractéristique(s)
       event/kind:
         accommodation: Hébergement
         accommodations:
@@ -397,36 +397,36 @@ fr:
         j_s_price_subsidized: Prix pour les membres A J+S
         j_s_price_special: Prix normal A J+S
       event/approval_commission_responsibility:
-        freigabe_komitee: Freigabekomitee
-        target_group: Zielgruppe
-        discipline: Disziplin
+        freigabe_komitee: Comité de libération
+        target_group: Groupe cible
+        discipline: Discipline
         subito: Subito
       event/discipline:
-        color: Farbe
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Übergeordnete Disziplin
-        children: Unterdisziplinen
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        color: Couleur
+        label: Désignation
+        short_description: Brève description
+        description: Description
+        order: Clé de tri
+        parent_id: Discipline supérieure
+        children: Sous-disciplines
+        updated_at: Modifié
+        deleted_at: Supprimé
       event/approval:
-        freigabe_komitee: Freigabekomitee
-        approval_kind: Freigabe-Stufe
-        approved: Freigegeben
-        creator: Freigegeben von
+        freigabe_komitee: Comité de libération
+        approval_kind: Niveau d'autorisation
+        approved: Libéré
+        creator: Partagé par
       event/approval_kind:
-        name: Name
-        short_description: Kurzbeschrieb
-        order: Reihenfolge
+        name: Nom
+        short_description: Brève description
+        order: Ordre
       event/fitness_requirement:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Désignation
+        short_description: Brève description
+        description: Description
+        order: Clé de tri
+        updated_at: Modifié
+        deleted_at: Supprimé
       event/kind_category:
         cost_center_id: Centre de coûts
         cost_unit_id: Support de coûts
@@ -442,11 +442,11 @@ fr:
       event/participation:
         additional_information: Commentaire
         cancel_statement: Justification
-        correspondence: Rechnungsstellung
+        correspondence: Facturation
         adult_consent: Confirmation de l’âge
         terms_and_conditions: CGV
         actual_days: Jours effectifs
-        membership_number: Personennummer
+        membership_number: Numéro de personne
         price: "Prix"
         price_category: "Catégorie de prix"
         price_categories:
@@ -463,74 +463,74 @@ fr:
           cancelled: Annulé
           error: Erreur
         external_invoices: Factures # uses include CapitalizedDependentErrors
-        sac_membership_active?: SAC-Mitglied
+        sac_membership_active?: Membre du CAS
         states:
-          unconfirmed: Unbestätigt
-          applied: Warteliste
-          assigned: Bestätigt
-          summoned: Aufgeboten
-          annulled: Annulliert
-          tentative: Provisorisch
-          rejected: Abgelehnt
-          canceled: Abgemeldet
-          attended: Teilgenommen
-          absent: Nicht erschienen
+          unconfirmed: Non confirmé
+          applied: Liste d'attente
+          assigned: Confirmé
+          summoned: Convoqué
+          annulled: Annulé
+          tentative: Provisoire
+          rejected: Refusé
+          canceled: Déconnecté
+          attended: Participé
+          absent: Non paru
       event/target_group:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Übergeordnete Gruppe
-        children: Untergruppen
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Désignation
+        short_description: Brève description
+        description: Description
+        order: Clé de tri
+        parent_id: Groupe parent
+        children: Sous-groupes
+        updated_at: Modifié
+        deleted_at: Supprimé
       event/technical_requirement:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Anforderungskategorie
-        children: Anforderungen
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Désignation
+        short_description: Brève description
+        description: Description
+        order: Clé de tri
+        parent_id: Catégorie d'exigences
+        children: Exigences
+        updated_at: Modifié
+        deleted_at: Supprimé
       event/trait:
-        label: Bezeichnung
-        short_description: Kurzbeschreibung
-        description: Beschreibung
-        order: Sortierschlüssel
-        parent_id: Kategorie
-        children: Merkmale
-        updated_at: Geändert
-        deleted_at: Gelöscht
+        label: Désignation
+        short_description: Brève description
+        description: Description
+        order: Clé de tri
+        parent_id: Catégorie
+        children: Caractéristiques
+        updated_at: Modifié
+        deleted_at: Supprimé
       event/tour:
-        additional_info: Zusatzinfo
-        alternative_route: Alternativroute
-        ascent: Aufstieg
-        descent: Abstieg
-        duration: Zeitaufwand
-        duration_in_hours: Zeitaufwand
-        maps: Karten
-        minimum_age: Mindestalter
-        price_description: Beschreibung
-        price_member: Kosten SAC-Mitglied (extern)
-        price_regular: Kosten nicht-SAC-Mitglied (Gast)
-        price_special: Kosten SAC Sektionsmitglied
+        additional_info: Infos supplémentaires
+        alternative_route: Itinéraire alternatif
+        ascent: Montée
+        descent: Descente
+        duration: Temps nécessaire
+        duration_in_hours: Temps nécessaire
+        maps: Cartes
+        minimum_age: Âge minimum
+        price_description: Description
+        price_member: Coûts membre CAS (externe)
+        price_regular: Frais non membre du CAS (invité)
+        price_special: Coût membre de la section CAS
         season: Saison
         seasons:
-          winter: Winter
-          summer: Sommer
-        subito: Ist Subito-Tour
-        summit: Gipfel
-        tourenportal_link: Link zum Tourenportal
+          winter: Hiver
+          summer: Été
+        subito: Est Subito Tour
+        summit: Sommet
+        tourenportal_link: Lien vers le portail des randonnées
         state_translated: Statut
         states:
           draft: projet
-          review: In Freigabe
+          review: En cours de validation
           approved: Libéré
           published: publié
-          ready: Vorbereitung abgeschlossen
+          ready: Préparation terminée
           closed: terminé
-          canceled: Abgesagt / Annulliert
+          canceled: Annulé / Annulation
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -630,7 +630,7 @@ fr:
           nobody: Personne
 
       role:
-        approval_kinds: Zugewiesene Freigabestufen
+        approval_kinds: Niveaux d'autorisation attribués
         membership_years: Années-membres
         class:
           kind:
@@ -643,7 +643,7 @@ fr:
               read_all_people: Lecture de toutes les personnes.
               layer_events_full: Gérer les événements sur la section.
               layer_mitglieder_full: Gérer les personnes dans le groupe de membres de la section/du groupe local.
-              layer_created_events_full: "Erstellen und Editieren eigener Anlässe, Kurse und Touren in der Sektion"
+              layer_created_events_full: "Créer et éditer ses propres événements, cours et randonnées dans la section"
       qualification_kind:
         tourenchef_may_edit: Editable par le·la préposé·e aux courses
       qualification:
@@ -728,8 +728,8 @@ fr:
         must_have_mitglied_role: "doit être membre pendant toute la durée de validité de la section supplémentaire."
         must_have_mitglied_role_in_group: "doit être membre du groupe sélectionné."
         must_have_one_family_main_person_in_family: "Dans une adhésion familiale, un destinataire de facture doit être défini."
-        parent_is_not_main: muss ein Haupteintrag sein.
-        has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
+        parent_is_not_main: doit être une entrée principale.
+        has_children: "Une entrée avec des sous-entrées ne peut pas être supprimée."
 
       models:
         course_compensation_rate:
@@ -741,17 +741,17 @@ fr:
           attributes:
             color:
               invalid_hex_color: >-
-                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
+                doit être une valeur hexadécimale admissible de 6 caractères commençant par #.
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: ne doit pas être plus long que la durée prévue du cours
 
         event/approval_commission_responsibility:
-          not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
-          no_base_target_group: ist keine Hauptzielgruppe.
-          no_base_discipline: ist keine Hauptdisziplin.
-          combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
+          not_in_layer: ne fait pas partie de la même section/du même groupe local.
+          no_base_target_group: n'est pas un groupe cible principal.
+          no_base_discipline: n'est pas une discipline principale.
+          combination_exists: a déjà défini une compétence correspondante.
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La personne doit posséder au moins une qualification active.
@@ -790,14 +790,17 @@ fr:
         many: Taux de rémunération
         other: Taux de rémunération
       event/approval_commission_responsibility:
-        one: Zuständigkeit Freigabe-Kommission
-        other: Zuständigkeiten Freigabe-Kommission
+        one: Compétence de la commission de validation
+        many: Compétences Commission de validation
+        other: Compétences Commission de validation
       event/discipline:
-        one: Disziplin
-        other: Disziplinen
+        one: Discipline
+        many: Disciplines
+        other: Disciplines
       event/fitness_requirement:
-        one: Konditionelle Anforderung
-        other: Konditionelle Anforderungen
+        one: Exigence en matière de condition physique
+        many: Exigences en matière de condition physique
+        other: Exigences en matière de condition physique
       event/level:
         one: Niveau de cours
         many: Niveaux de cours
@@ -823,24 +826,29 @@ fr:
         many: Responsable de classe (aspirant)
         other: Responsable de classe (aspirant)
       event/target_group:
-        one: Zielgruppe
-        other: Zielgruppen
+        one: Groupe cible
+        many: Groupes cibles
+        other: Groupes cibles
       event/technical_requirement:
-        one: Technische Anforderung
-        other: Technische Anforderungen
+        one: Exigence technique
+        many: Exigences techniques
+        other: Exigences techniques
       event/tour:
         one: Tour
         many: Tours
         other: Tours
       event/trait:
-        one: Merkmal
-        other: Merkmale
+        one: Caractéristique
+        many: Caractéristiques
+        other: Caractéristiques
       event/approval:
-        one: Freigabe
-        other: Freigaben
+        one: Validation
+        many: Libérations
+        other: Libérations
       event/approval_kind:
-        one: Freigabestufe
-        other: Freigabestufen
+        one: Niveau d'autorisation
+        many: Niveaux d'autorisation
+        other: Niveaux d'autorisation
       external_training:
         one: Formation externe
         many: Formations externes
@@ -880,8 +888,9 @@ fr:
         many: Contacts externes
         other: Contacts externes
       group/freigabe_komitee:
-        one: Freigabekomitee
-        other: Freigabekomitee
+        one: Comité de validation
+        many: Comité de libération
+        other: Comité de libération
       group/geschaeftsleitung:
         one: Direction du CAS
         many: Direction du CAS
@@ -1029,7 +1038,7 @@ fr:
         description: Membre d’honneur
       group/freigabe_komitee/pruefer:
         one: Examinateur
-        description: Prüfer*in
+        description: Examinateur
       group/geschaeftsstelle/mitarbeiter:
         one: Collaborateur·rice (écriture)
         description: Collaborateur·rice (écriture)
@@ -1132,29 +1141,29 @@ fr:
         huettenwartspartner: Partenaire gardien·ne de cabane
         schluesseldepot: Dépôt de clés
       group/sac_cas_kurskader/kursleitung_selbstaendig:
-        one: Kursleiter*in (selbständig)
-        description: Kursleiter*in (selbständig)
+        one: Responsable de cours (indépendant)
+        description: Responsable de cours (indépendant)
       group/sac_cas_kurskader/klassenlehrer_selbstaendig:
-        one: Klassenlehrer*in (selbständig)
-        description: Klassenlehrer*in (selbständig)
+        one: Chef·fe de classe (indépendant)
+        description: Chef·fe de classe (indépendant)
       group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
-        one: "Kursleiter*in (Aspirant, selbständig)"
-        description: "Kursleiter*in (Aspirant, selbständig)"
+        one: "Responsable de cours (aspirant, indépendant)"
+        description: "Responsable de cours (aspirant, indépendant)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Klassenlehrer*in (Aspirant, selbständig)"
-        description: "Klassenlehrer*in (Aspirant, selbständig)"
+        one: "Chef de classe* (aspirant, indépendant)"
+        description: "Chef·fe de classe (aspirant, indépendant)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
-        one: Kursleiter*in (unselbständig)
-        description: Kursleiter*in (unselbständig)
+        one: Responsable de cours (salarié)
+        description: Responsable de cours (salarié)
       group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
-        one: Klassenlehrer*in (unselbständig)
-        description: Klassenlehrer*in (unselbständig)
+        one: Chef·fe de classe (salarié)
+        description: Chef·fe de classe (salarié)
       group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
-        one: "Kursleiter*in (Aspirant, unselbständig)"
-        description: "Kursleiter*in (Aspirant, unselbständig)"
+        one: "Responsable de cours (aspirant, salarié)"
+        description: "Responsable de cours (aspirant, salarié)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
-        one: "Klassenlehrer*in (Aspirant, unselbständig)"
-        description: "Klassenlehrer*in (Aspirant, unselbständig)"
+        one: "Chef·fe de classe (aspirant, salarié)"
+        description: "Chef·fe de classe (aspirant, salarié)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Droit d’écriture
         description: Droit d’écriture
@@ -1311,14 +1320,14 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_touren_und_kurse/tourenchef:
-        one: Tourenchef*in
-        description: Tourenchef*in
+        one: Responsable de tournée
+        description: Responsable de tournée
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Tourenchef*in Sommer
-        description: Tourenchef*in Sommer
+        one: Chef de tour* été
+        description: Chef de tour* été
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Tourenchef*in Winter
-        description: Tourenchef*in Winter
+        one: Chef de tour* hiver
+        description: Chef de tour* hiver
       group/sektions_clubhuetten/leserecht:
         one: Droit de lecture
         description: Droit de lecture
@@ -1434,7 +1443,7 @@ fr:
         login_identity: E-mail ou N° de membre
       create:
         confirm_email_before_logging_in: >
-          Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation. Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): Adresse-toi à mv@sac-cas.ch en indiquant ton adresse e-mail stp.
+          Merci de confirmer ton adresse e-mail avant de continuer. Nous venons de t’envoyer un courriel de confirmation.<br/> Si ton adresse e-mail n'est plus valable ou si tu n'as pas reçu d'e-mail (même dans le dossier SPAM): <a href="test">Adresse-toi</a> à en indiquant ton adresse e-mail stp.
       oauth_info:
         sign_in: Se connnecter avec le Portail du CAS
 
@@ -1474,10 +1483,17 @@ fr:
     list_for_leaders: Liste pour les cadres de cours
 
   dropdown/group_edit:
-    custom_content: E-Mail Vorlagen
+    custom_content: Modèles d'e-mail
     sac_membership_configs: Paramètres pour les factures des membres
     sac_section_membership_configs: Paramètres pour les factures des membres
-    event_approval_commission_responsibility: Tour-Freigabe-Zuständigkeiten
+    event_approval_commission_responsibility: Responsabilités de validation de la tournée
+
+  agenda:
+    index:
+      title: "Agenda %{group_name}"
+      select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
+    event_card:
+      show_details: Details anzeigen
 
   event:
     application_market:
@@ -1488,9 +1504,9 @@ fr:
         remove_participant_confirm: "Voulez-vous vraiment supprimer cette inscription? Un e-mail sera envoyé à la personne participante."
     approval_commission_responsibilities:
       edit:
-        title: Zuständigkeiten Freigabe-Kommission bearbeiten
-        normal_tours: Normal-Touren
-        subito_tours: Subito-Touren
+        title: Traiter les compétences de la commission de validation
+        normal_tours: Tours normaux
+        subito_tours: Tours Subito
     courses:
       invoices:
         new:
@@ -1508,7 +1524,7 @@ fr:
           warning: "Aucun e-mail n’a été envoyé, car aucun lien vers un sondage n’a été saisi."
     disciplines:
       form:
-        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
+        help_inline_color: "Valeur de couleur hexadécimale valide (par ex. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Transférer les valeurs aux cours
@@ -1543,8 +1559,8 @@ fr:
         explanation: Ici sont affichées les randonnées des sections dont tu es membre. Tu trouveras d'autres tours auprès de la section organisatrice.
     participations:
       asides_sac_cas:
-        recent_trainings: Ausbildungshistorie
-        recent_tours: Tourenhistorie
+        recent_trainings: Historique de la formation
+        recent_tours: Historique des tours
       fields:
         explain_required_checkmark: "* = réponse obligatoire"
       missing_information: >-
@@ -1554,7 +1570,7 @@ fr:
       edit:
         title: Données supplémentaires
       cancel_application:
-        caption: Abmelden
+        caption: Se désinscrire
       course_signup_aside:
         summary_title: Aperçu des coûts
         summary_course_price: Frais de cours
@@ -1613,7 +1629,7 @@ fr:
       summoned_notice: "%{participant} a été convoqué·e."
       reactivated_notice: "%{participant} a été réactivé."
       actions_show_youth:
-        cancel_button: Abmelden
+        cancel_button: Se désinscrire
         summon_button: Convocation
         assign_confirm: "Voulez-vous vraiment confirmer cette inscription? Un e-mail sera envoyé à la personne participante."
       actions_show_sac_cas:
@@ -1632,7 +1648,7 @@ fr:
       invoice_created_notice: La facture a été créée avec succès.
       invoice_not_created_alert: La facture n’a pas pu être établie en raison de l’absence du prix de participation.
       tabs:
-        history: Verlauf
+        history: Parcours
 
       popover_participant_cancels:
         cancel_info: >-
@@ -1647,26 +1663,89 @@ fr:
 
     tours:
       approvals:
-        title: Freigabe
+        title: Validation
         edit:
-          internal_comment: Interne Bemerkungen
-          approve: Freigeben
-          reject: Ablehnen
-          approved: "Freigegeben von %{creator} am %{at}"
-          rejected: "Abgelehnt von %{creator} am %{at}"
-          self_approval: "Selbst freigegeben von %{creator} am %{at}"
+          internal_comment: Remarques internes
+          approve: Partager
+          reject: Refuser
+          approved: "Partagé par %{creator} le %{at}"
+          rejected: "Refusé par %{creator} le %{at}"
+          self_approval: "Auto-validé par %{creator} le %{at}"
         update:
-          success: Deine Bemerkung wurde gespeichert.
-          review: Deine Freigabe wurde gespeichert.
-          approved: "Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>."
-          draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
+          success: Ton commentaire a été enregistré.
+          review: Ton partage a été enregistré.
+          approved: "Ta validation a été enregistrée, la tournée a maintenant le statut <i>Validé</i>."
+          draft: Ton refus a été enregistré et la visite est revenue à l'état de <i>projet</i>.
+
+    tour_mailer:
+      application_window: Anmeldefenster
+      application: Anmeldung
+      download_ics: Herunterladen
+      ics_link: Kalendereintrag (ics)
+      sub_target_groups: Unterzielgruppe(n)
+      sub_disciplines: Unterdisziplin(en)
+      traits: Merkmal(e)
+      technical_requirements: Technische Anforderung(en)
+      attachments: Anhänge
+      no_attachments: Aktuell sind keine Anhänge verfügbar
+      none: (keine)
 
   events:
-    flash:
-      dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
     actions_show_sac_cas:
       attach_key_data_sheets: Créer toutes les fiches techniques
-      approval: Freigabe
+      approval: Validation
+
+    flash:
+      dates_changed: "Tour %{event_name} a été mis à jour avec succès. Assure-toi que les dates de départ et d'arrivée modifiées ont été approuvées par ta commission des tours."
+
+    form_tabs:
+      communication: Communication
+      prices: Prix
+
+    general_fields:
+      kind_overrides_link_title: >-
+        Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
+    global:
+      link:
+        add_event/tour: Créer un tour
+
+    minimum_age_with_years: "%{minimum_age} Années"
+    maximum_age_with_years: "%{maximum_age} Années"
+
+    popover_emails_optional:
+      prompt_email_choice: "Faut-il envoyer des e-mails ?"
+      submit_with_emails: Envoyer des e-mails
+      submit_without_emails: Ne pas envoyer d'e-mails
+
+    popover_canceled_reason:
+      cancel_button: Refus définitif
+      cancel_confirmation: >-
+        Voulez-vous vraiment annuler le cours%{name} (%{number})? Cette action ne peut pas être annulée.
+      cancel_info: >-
+        Annule le cours %{name} (%{number}) et annule toutes les participations. Les éventuelles factures seront ainsi annulées et les montants déjà payés seront remboursés. Cette action ne peut pas être annulée.
+      inform_participants_caption: Informer tou·te·s les participants de l'annulation par e-mail
+      canceled_reason_label: motif
+    popover_tour_review:
+      destroy_and_review: Réinitialiser les partages existants
+      keep_and_review: Conserver les partages existants
+
+    sections:
+      essentials: Faits essentiels
+
+    show_contacts_sac_cas:
+      title: Direction
+
+    state_back_buttons:
+      event/course:
+        assignment_closed: Retour à l'allocation
+        application_closed: Retour à l'inscription clôturée
+        approved: Retour à la validation
+      event/tour:
+        draft: Retour à la conception
+        ready: Retour à Préparation terminée
+        approved: Retour à Partagé
+        published: Retour à Publié
+
     state_buttons:
       event/course:
         created: Retour en tant que projet
@@ -1680,80 +1759,39 @@ fr:
           La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
         canceled: annuler
       event/tour:
-        draft: Zurück zu Entwurf
-        ready: Vorbereitung abgeschlossen
-        review: Zur Freigabe weiterleiten
-        approved: Selbst freigeben
+        draft: Retour à la conception
+        ready: Préparation terminée
+        review: Transmettre pour validation
+        approved: Partager soi-même
         published: Publier
         closed: Fermer
         canceled: annuler
-    state_back_buttons:
-      event/course:
-        assignment_closed: Zurück zur Zuteilung
-        application_closed: Zurück zur abgeschlossenen Anmeldung
-        approved: Zurück zur Freigabe
-      event/tour:
-        draft: Zurück zu Entwurf
-        ready: Zurück zu Vorbereitung abgeschlossen
-        approved: Zurück zu Freigegeben
-        published: Zurück zu Publiziert
-
-    show_contacts_sac_cas:
-      title: Leitung
-
-    form_tabs:
-      communication: Communication
-      prices: Prix
-
-    general_fields:
-      kind_overrides_link_title: >-
-        Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
-    global:
-      link:
-        add_event/tour: Créer un tour
-
-    minimum_age_with_years: "%{minimum_age} Jahre"
-    maximum_age_with_years: "%{maximum_age} Jahre"
-
-    popover_emails_optional:
-      prompt_email_choice: "Faut-il envoyer des e-mails ?"
-      submit_with_emails: Envoyer des e-mails
-      submit_without_emails: Ne pas envoyer d'e-mails
-    popover_canceled_reason:
-      cancel_button: Refus définitif
-      cancel_confirmation: >-
-        Voulez-vous vraiment annuler le cours%{name} (%{number})? Cette action ne peut pas être annulée.
-      cancel_info: >-
-        Annule le cours %{name} (%{number}) et annule toutes les participations. Les éventuelles factures seront ainsi annulées et les montants déjà payés seront remboursés. Cette action ne peut pas être annulée.
-      inform_participants_caption: Informer tou·te·s les participants de l'annulation par e-mail
-      canceled_reason_label: motif
-    popover_tour_review:
-      destroy_and_review: Bestehende Freigaben zurücksetzen
-      keep_and_review: Bestehende Freigaben beibehalten
-
-    sections:
-      essentials: Wesentliche Fakten
 
   events/filters:
+    approval:
+      title: Freigabe
+      self_approved: Selbst freigegeben
+      pending_at_komitee: Ausstehend bei Freigabe-Komitee
+      responsible_komitee: Zuständiges Freigabe-Komitee
     tour_essentials:
-      title: Wesentliche Fakten
+      title: Faits essentiels
     tour_essential_field:
-      disciplines: Disziplinen
-      target_groups: Zielgruppen
-      technical_requirements: Technische Anforderungen
-      traits: Merkmale
+      disciplines: Disciplines
+      target_groups: Groupes cibles
+      technical_requirements: Exigences techniques
+      traits: Caractéristiques
     fitness_requirement_field:
-      fitness_requirements: Konditionelle Anforderungen
+      fitness_requirements: Exigences en matière de condition physique
     radios_field:
       season: Saison
       seasons:
-        nil: Alle
-        summer: Sommer
-        winter: Winter
-      subito: Tourentyp
+        nil: Tous les
+        summer: Été
+        winter: Hiver
+      subito: Type de tour
       subitos:
-        nil: Alle
-        false: Regulär
+        nil: Tous les
+        false: Régulièrement
         true: Subito
 
   events/state:
@@ -1772,52 +1810,52 @@ fr:
 
   export/tabular/people/mitgliedschaft:
     attributes:
-      id: Mitgliedernummer
-      url: Mitgliedschaften
-      sektion: Sektion
-      membership_years: Anzahl Mitgliedsjahre
-      sac_entry_on: Frühestes Beitrittsdatum beim SAC
-      sektion_entry_on: Frühestes Beitrittsdatum in der Sektion
-      start_on: Eintrittsdatum
-      end_on: Austrittsdatum
-      terminate_on: Austritt geplant
-      changed_on: Mutationsdatum
-      sac_is_new_entry: Ist SAC Neueintritt
-      sac_is_re_entry: Ist SAC Wiedereintritt
-      sac_is_section_new_entry: Ist Sektion Ersteintritt
-      sac_is_section_change: Ist Sektionswechsel
-      sac_is_terminated: Ist SAC Austritt
-      termination_reason: Austrittsgrund
+      id: Numéro de membre
+      url: Adhésions
+      sektion: Section
+      membership_years: Nombre d'années d'adhésion
+      sac_entry_on: Date d'adhésion au plus tôt au CAS
+      sektion_entry_on: Date d'adhésion au plus tôt à la section
+      start_on: Date d'entrée
+      end_on: Date de sortie
+      terminate_on: Sortie prévue
+      changed_on: Date de mutation
+      sac_is_new_entry: Est CAS nouvelle adhésion
+      sac_is_re_entry: Est la rentrée du CAS
+      sac_is_section_new_entry: Section réelle Première entrée
+      sac_is_section_change: Est Changement de section
+      sac_is_terminated: Est sortie du CAS
+      termination_reason: Motif de sortie
       no_termination_reason: ADM
-      self_registration_reason: Eintrittsgrund
-      data_retention_consent: Datenaufbewahrungszustimmung
-      changed_youth_adult: Ist Wechsel Jugend-Einzel
-      changed_youth_family: Ist Wechsel Jugend-Familie
-      changed_adult_family: Ist Wechsel Einzel-Familie
-      changed_family_adult: Ist Wechsel Familie-Einzel
-      changed_family_youth: Ist Wechsel Familie-Jugend
-      type: Typ
+      self_registration_reason: Motif d'entrée
+      data_retention_consent: Consentement à la conservation des données
+      changed_youth_adult: Est Changement Jeunesse Simple
+      changed_youth_family: Est Changement Jeunesse-Famille
+      changed_adult_family: Est Changement Famille unique
+      changed_family_adult: Est-ce que le changement Famille-Individuel
+      changed_family_youth: Est Changement Famille-Jeunesse
+      type: Type
       types:
-        mitglied: Stammsektion
-        mitglied_zusatzsektion: Zusatzsektion
-      beitragskategorie: Beitragskategorie
-      ehrenmitglied: Ist Ehrenmitglied
-      beguenstigt: Ist Begünstigt
-      last_name: Nachname
-      first_name: Vorname
-      gender: Geschlecht
-      birthday: Geburtsdatum
-      correspondence: Korrespondenz
-      email: E-Mail
-      phone_number_mobile: Mobil
-      phone_number_landline: Festnetz
-      postbox: Postfach
-      street: Strasse
-      housenumber: Hausnummer
-      address_care_of: Adresszusatz
-      zip_code: PLZ
-      town: Ort
-      country: Land
+        mitglied: Section de base
+        mitglied_zusatzsektion: Section complémentaire
+      beitragskategorie: Catégorie de contribution
+      ehrenmitglied: Est membre honoraire
+      beguenstigt: Est bénéficiaire
+      last_name: Nom de famille
+      first_name: Prénom
+      gender: Sexe
+      birthday: Date de naissance
+      correspondence: Correspondance
+      email: Courrier électronique
+      phone_number_mobile: Mobile
+      phone_number_landline: Ligne fixe
+      postbox: Boîte postale
+      street: Rue
+      housenumber: Numéro de maison
+      address_care_of: Complément d'adresse
+      zip_code: CODE POSTAL
+      town: Lieu
+      country: Pays
 
   export/tabular/people/jubilare:
     sheet_name: "Membres par %{reference_date}"
@@ -1865,6 +1903,10 @@ fr:
     tour_guides_stalled: Chef·fe de course suspendu·e
     tour_guides_inactive: Chef·fe de course inactif·ves
     tour_guides_expired: Chef·fe de course expiré·e
+
+  filter_navigation/events:
+    my_pending_approvals: Meine ausstehenden Freigaben
+    my_approval_responsibilities: Meine Freigabe-Zuständigkeiten
 
   groups:
     actions_show_sac_cas:
@@ -2029,7 +2071,7 @@ fr:
     terminate_sac_memberships:
       show:
         family_but_not_main_person:
-          "Austritt wird nur für dich durchgeführt. Ein Familienaustritt kann nur von %{main_person} durchgeführt werden."
+          "La sortie n'est effectuée que pour toi. Une sortie de famille ne peut être effectuée que par %{main_person}."
       create:
         success:
           one: "Ton adhésion au CAS a été résiliée."
@@ -2104,13 +2146,13 @@ fr:
           text: La décision sera prise ensemble en fonction du nombre d'inscriptions à la clôture des inscriptions.
         participation_cancellation:
           label: Réalisation – annulation
-          text: Bitte Klassenleiter*in und Unterkunft informieren
+          text: Veuillez informer le chef·fe de classe et le logement
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
         class_teacher:
-          label: Klassenleiter*in
+          label: Chef·fe de classe
           text: >-
-            Leitung verpflichtet gem. max. Teilnehmerzahl im Voraus die Klassenleiter*in - bitte im Detailprogramm für Kurse aufführen und für Touren per Mail an Geschäftsstelle senden.
+            La direction engage le chef·fe de classe en fonction du nombre maximal de participants - à mentionner dans le programme détaillé pour les cours et à envoyer par e-mail au secrétariat pour les randonnées.
     participant_list:
       title: Liste des participant-es-
       link: www.sac-cas.ch
@@ -2195,15 +2237,15 @@ fr:
           Cette personne ne dispose pas de sa propre facture d’adhésion. Le cas échéant, les frais seront déduits de la facture d’une autre personne.
         alert_error: "Les contrôles de qualité des données suivants empêchent la création d’une facture d’adhésion:"
         create_invoice: "Créer une facture"
-        manual_positions: "Manuelle Differenzrechnung"
+        manual_positions: "Calcul manuel des différences"
         mv_yearly_invoice: "Comptes annuels du service des membres"
         zusatzsektion_eintrittsrechnung: "Facture d’entrée dans la section supplémentaire"
       manual_fee_fields:
-        do_not_transmit_nil_values_help: "leer lassen, um diese Position nicht zu übermitteln"
-        manual_positions_subtitle: "Manuelle Rechnungsposten"
-        section_entry_fee: "Sektionseintrittsgebühren %{section}"
-        section_fee: "Sektionsbeitrag %{section}"
-        section_bulletin_postage_abroad: "Porto Ausland Sektionsbulletin %{section}"
+        do_not_transmit_nil_values_help: "laisser vide pour ne pas transmettre cette position"
+        manual_positions_subtitle: "Postes de facturation manuels"
+        section_entry_fee: "Droits d'entrée à la section %{section}"
+        section_fee: "Cotisation à la section %{section}"
+        section_bulletin_postage_abroad: "Port étranger Bulletin de la section %{section}"
 
     neuanmeldungen:
       multiselect_actions:
