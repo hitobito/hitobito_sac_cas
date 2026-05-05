@@ -15,8 +15,6 @@ module SacCas::Person
   PAPER_TRAIL_PASSWORD_OVERRIDE_EVENT = :password_override
 
   prepended do # rubocop:todo Metrics/BlockLength
-    Person::SEARCHABLE_ATTRS << :id
-
     Person::SAC_REMARK_NATIONAL_OFFICE = "sac_remark_national_office"
     Person::SAC_SECTION_REMARKS = %w[sac_remark_section_1 sac_remark_section_2 sac_remark_section_3
       sac_remark_section_4 sac_remark_section_5]
