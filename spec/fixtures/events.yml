@@ -70,3 +70,11 @@ section_tour:
   season: summer
   duration: 750
   maps: "Piratenkarte"
+  price_special: 50
+  price_member: 60
+  price_regular: 80
+  contact: admin
+  application_opening_at: <%= 10.days.ago %>
+  application_closing_at: <%= 2.months.from_now %>
+  maximum_participants: 30
+  minimum_participants: 8
