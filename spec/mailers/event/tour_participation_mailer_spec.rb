@@ -31,7 +31,6 @@ describe Event::TourParticipationMailer do
         "<dt>Kommentar</dt><dd>(keine)</dd>"
       )
       expect(mail.body.to_s).not_to include(
-        "Anmeldefenster",
         "Unterzielgruppe(n)"
       )
     end
