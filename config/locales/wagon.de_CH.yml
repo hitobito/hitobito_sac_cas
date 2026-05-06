@@ -1374,7 +1374,7 @@ de_CH:
         login_identity: E-Mail oder Mitgliedernummer
       create:
         confirm_email_before_logging_in: >
-          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an<a href="https://www.sac-cas.ch/de/kontakt">uns .</a>
+          Bitte bestätige Deine E-Mail-Adresse, bevor Du fortfahren kannst. Wir haben Dir soeben eine Bestätigungs-E-Mail geschickt.<br/> Falls deine E-Mail-Adresse nicht mehr gültig ist oder du (auch im SPAM-Ordner) keine E-Mail erhalten hast: Wende dich bitte mit Angabe deiner E-Mail an <a href="https://www.sac-cas.ch/de/kontakt">uns</a>.
       oauth_info:
         sign_in: Anmelden mit dem SAC-Portal
 
@@ -2046,8 +2046,9 @@ de_CH:
         accommodation: Unterkunft
         accommodation_budget:
           label: Unterkunft Budget
-          text: >2-
-                     accommodations:
+          text: >-
+            Pro Person/Nacht mit Halbpension
+        accommodations:
           sac: Wird reserviert durch SAC
           event_specific: Wird reserviert durch Kursleitung
         accommodation_category: Unterkunft Kategorie
