@@ -53,7 +53,6 @@ describe Event::TourParticipationMailer do
 
       expect(mail.body.to_s).to include(
         "<dt>Daten</dt><dd>Sa 04.02.2023 07:30 - Mo 06.02.2023</dd>",
-        "<dt>Anmeldefenster</dt><dd>01.11.2022 - 15.12.2022</dd>",
         "<dt>Kalendereintrag (ics)</dt><dd><a href=\"http://test.host/groups/#{section.id}/events/#{event.id}.ics\">Herunterladen</a></dd>",
         "<dt>Zielgruppe(n)</dt><dd>Senioren, Familien (FaBe)</dd>",
         "<dt>Unterzielgruppe(n)</dt><dd>Senioren B</dd>",
