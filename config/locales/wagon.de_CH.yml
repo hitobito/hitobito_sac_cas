@@ -299,7 +299,7 @@ de_CH:
         maximum_age: Maximalalter
         ideal_class_size: Ideale Klassengrösse
         maximum_class_size: Maximale Klassengrösse
-        disciplines: Disziplin(en)
+        disciplines: Aktivität(en)
         target_groups: Zielgruppe(n)
         fitness_requirement: Konditionelle Anforderung
         fitness_requirement_id: Konditionelle Anforderung
@@ -395,7 +395,7 @@ de_CH:
       event/approval_commission_responsibility:
         freigabe_komitee: Freigabekomitee
         target_group: Zielgruppe
-        discipline: Disziplin
+        discipline: Aktivität
         subito: Subito
       event/discipline:
         color: Farbe
@@ -403,8 +403,8 @@ de_CH:
         short_description: Kurzbeschreibung
         description: Beschreibung
         order: Sortierschlüssel
-        parent_id: Übergeordnete Disziplin
-        children: Unterdisziplinen
+        parent_id: Übergeordnete Aktivität
+        children: Unteraktivität
         updated_at: Geändert
         deleted_at: Gelöscht
       event/approval:
@@ -745,7 +745,7 @@ de_CH:
         event/approval_commission_responsibility:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
           no_base_target_group: ist keine Hauptzielgruppe.
-          no_base_discipline: ist keine Hauptdisziplin.
+          no_base_discipline: ist keine Hauptaktivität
           combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -1613,7 +1613,7 @@ de_CH:
       download_ics: Herunterladen
       ics_link: Kalendereintrag (ics)
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unterdisziplin(en)
+      sub_disciplines: Unteraktivität(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1706,7 +1706,7 @@ de_CH:
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
-      disciplines: Disziplinen
+      disciplines: Aktivitäten
       target_groups: Zielgruppen
       technical_requirements: Technische Anforderungen
       traits: Merkmale
