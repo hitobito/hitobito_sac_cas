@@ -1649,6 +1649,7 @@ de:
       application: Anmeldung
       download_ics: Herunterladen
       ics_link: Kalendereintrag (ics)
+      application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
       sub_disciplines: Unterdisziplin(en)
       traits: Merkmal(e)

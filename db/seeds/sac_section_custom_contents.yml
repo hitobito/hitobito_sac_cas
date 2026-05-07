@@ -8,7 +8,8 @@ event_tour_publication:
   subject: "Publikation der Tour {event-name}"
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
-    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    event-name, event-id, event-link, event-dates, event-application, event-essentials,
+    event-requirements, event-details,
     contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -19,6 +20,8 @@ event_tour_publication:
     Nachfolgend findest du wichtigsten Eckdaten zur Tour.
 
     {event-dates}
+
+    {event-application}
 
     {event-essentials}
 
@@ -41,7 +44,8 @@ event_tour_subito_publication:
   subject: "Publikation der Subito-Tour {event-name}"
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
-    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
+    event-name, event-id, event-link, event-dates, event-application, event-essentials,
+    event-requirements, event-details,
     contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -52,6 +56,8 @@ event_tour_subito_publication:
     Nachfolgend findest du wichtigsten Eckdaten zur Tour.
 
     {event-dates}
+
+    {event-application}
 
     {event-essentials}
 
