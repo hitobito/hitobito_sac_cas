@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
     resource :account_completion, module: :people, only: [:show, :update]
 
-    get "/people/:id/membership" => "people/membership#show", :as => "membership"
+    get "/people/:id/membership", to: "people/membership#show", :as => "membership"
     put "/people/:id/sac_family_main_person" => "people/sac_family_main_person#update", :as => "sac_family_main_person"
 
     get "/people/query_external_training" => "person/query_external_training#index",

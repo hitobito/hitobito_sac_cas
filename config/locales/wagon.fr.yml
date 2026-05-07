@@ -2186,6 +2186,11 @@ fr:
       sponsor_url: "https://www.sac-cas.ch/fr/le-cas/nos-partenaires/"
       emergency_number: "No d'urgence"
       emergency_contact: "Contact d’urgence"
+    sac_membership:
+      section: Section
+      additional_sections: Sections supplémentaires
+      tour_guide: Chef·fe de course
+      tour_guide_active: Actif·ve
 
   people:
     abo_magazin_invoices:

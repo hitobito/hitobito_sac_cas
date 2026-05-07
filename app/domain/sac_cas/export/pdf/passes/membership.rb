@@ -1,17 +1,18 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  https://github.com/hitobito/hitobito_sac_cas
 
-module Export::Pdf::Passes
+module SacCas::Export::Pdf::Passes
   class Membership
     FONT = "Helvetica"
     MARGIN = [0, 0, 0, 0].freeze
 
-    def initialize(person)
-      @person = person
+    def initialize(pass)
+      @pass = pass
+      @person = pass.person
     end
 
     def render
@@ -37,8 +38,9 @@ module Export::Pdf::Passes
 
     def sections
       @sections ||=
-        [Export::Pdf::Passes::Sections::Logo, Person, Footer].collect do |section|
-          section.new(pdf, @person, {})
+        [SacCas::Export::Pdf::Passes::Sections::Logo, Membership::Person,
+          Membership::Footer].collect do |section|
+          section.new(pdf, @pass, {})
         end
     end
 

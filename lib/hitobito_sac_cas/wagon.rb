@@ -93,7 +93,6 @@ module HitobitoSacCas
       MailingList.include SacCas::MailingList
       Person.prepend SacCas::Person
       Person.prepend SacPhoneNumbers
-      People::Membership::Verifier.prepend SacCas::People::Membership::Verifier
       PeopleManager.prepend SacCas::PeopleManager
       PhoneNumber.include SacCas::PhoneNumber
       Role.prepend SacCas::Role

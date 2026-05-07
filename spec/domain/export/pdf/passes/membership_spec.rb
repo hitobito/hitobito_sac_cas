@@ -7,8 +7,10 @@
 
 require "spec_helper"
 
-describe Export::Pdf::Passes::Membership do
+describe SacCas::Export::Pdf::Passes::Membership do
   include PdfHelpers
+
+  let(:pass_definition) { pass_definitions(:sac_membership) }
 
   let(:member) do
     person = Fabricate(:person, birthday: Time.zone.today - 42.years)
@@ -17,12 +19,13 @@ describe Export::Pdf::Passes::Membership do
       group: groups(:bluemlisalp_mitglieder))
     Person.with_membership_years.find(person.id)
   end
+  let(:pass) { Fabricate(:pass, person: member, pass_definition: pass_definition) }
   let(:pdf) { subject.render }
   let(:analyzer) { PDF::Inspector::Text.analyze(pdf) }
   let(:page_analysis) { PDF::Inspector::Page.analyze(pdf) }
   let(:year) { Time.zone.now.year }
 
-  subject { described_class.new(member) }
+  subject { described_class.new(pass) }
 
   before do
     member.update!(first_name: "Bob", last_name: "Muster", street: "Bergstrasse",
