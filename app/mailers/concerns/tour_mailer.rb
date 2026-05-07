@@ -105,7 +105,6 @@ module TourMailer
   def placeholder_event_dates
     join_lines([
       labeled_event_dates,
-      labeled_event_application_dates,
       labeled_ics_link
     ].compact, "\n")
   end
@@ -116,19 +115,32 @@ module TourMailer
     labeled(label, value)
   end
 
+  def labeled_ics_link
+    url = group_event_url(group_id: @event.group_ids.first, id: @event.id, format: :ics)
+    value = link_to(t(:download_ics), url)
+    labeled(t(:ics_link), value)
+  end
+
+  def placeholder_event_application
+    join_lines([
+      labeled_event_application_dates,
+      labeled_application_link
+    ].compact, "\n")
+  end
+
   def labeled_event_application_dates
     return if !@event.application_opening_at && !@event.application_closing_at
 
-    label = t(:application_window)
     value = Duration.new(@event.application_opening_at, @event.application_closing_at).to_s
-    labeled(label, value)
+    labeled(t(:application_window), value)
   end
 
-  def labeled_ics_link
-    label = t(:ics_link)
-    url = group_event_url(group_id: @event.group_ids.first, id: @event.id, format: :ics)
-    value = link_to(t(:download_ics), url)
-    labeled(label, value)
+  def labeled_application_link
+    url = contact_data_group_event_participations_path(
+      group_id: @event.group_ids.first,
+      id: @event.id
+    )
+    labeled(t(:application_link), link_to(url))
   end
 
   def placeholder_event_essentials
