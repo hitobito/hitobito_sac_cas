@@ -19,7 +19,7 @@ describe Passes::VerificationsController do
 
   it "shows invalid token information" do
     visit "/passes/verify/nOnExistentTOOKen"
-    expect(page).to have_text "Pass ist ungültig"
+    expect(page).to have_text "Pass konnte nicht verifiziert werden."
   end
 
   context "with valid token" do
@@ -27,9 +27,8 @@ describe Passes::VerificationsController do
 
     it "shows invalid membership information" do
       pass.update!(state: :ended)
-
       visit "/passes/verify/#{pass.verify_token}"
-      expect(page).to have_css(".alert-warning", text: "Pass ist abgelaufen")
+      expect(page).to have_css(".alert-warning", text: "Mitgliedschaft abgelaufen")
     end
 
     context "check output structure" do
@@ -38,7 +37,7 @@ describe Passes::VerificationsController do
         expect(page).to have_text full_name
         expect(page).to have_text "Mitglied (Stammsektion) (Einzel)\nSAC Blüemlisalp"
         expect(page).to have_text "Mitglied (Zusatzsektion) (Einzel)\nSAC Matterhorn"
-        expect(page).to have_css(".alert-success", text: "Pass ist gültig")
+        expect(page).to have_css(".alert-success", text: "Mitgliedschaft gültig")
         expect(page).not_to have_text "Aktive/r Tourenleiter/in"
       end
 
@@ -50,8 +49,8 @@ describe Passes::VerificationsController do
 
       it "shows name and member info before the alert" do
         visit "/passes/verify/#{pass.verify_token}"
-        expect(page.body.index(full_name)).to be < page.body.index("Pass ist gültig")
-        expect(page.body.index("Mitglied (Stammsektion) (Einzel")).to be < page.body.index("Pass ist gültig")
+        expect(page.body.index(full_name)).to be < page.body.index("Mitgliedschaft gültig")
+        expect(page.body.index("Mitglied (Stammsektion) (Einzel")).to be > page.body.index("Mitgliedschaft gültig")
       end
     end
 
