@@ -8,6 +8,7 @@
 sac_group = Group::SacCas.first!
 
 PassDefinition.find_or_create_by!(
+  id: 1,
   owner: sac_group,
   template_key: "sac_membership"
 ) do |pd|
