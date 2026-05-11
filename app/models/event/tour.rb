@@ -10,6 +10,7 @@ class Event::Tour < Event
   include I18nEnums
 
   FREIGABE_PENDING_STATES = %w[draft review].freeze
+  CANCELED_REASONS = %w[minimum_participants no_leader weather].freeze
 
   PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
 
@@ -50,6 +51,8 @@ class Event::Tour < Event
   attr_accessor :leaders
 
   i18n_enum :season, Event::Kind::SEASONS
+  i18n_enum :canceled_reason, CANCELED_REASONS,
+    i18n_prefix: "activerecord.attributes.event/tour.canceled_reasons"
 
   belongs_to :fitness_requirement, optional: true
 

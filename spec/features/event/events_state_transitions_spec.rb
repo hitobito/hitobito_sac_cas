@@ -79,4 +79,45 @@ describe "event state transitions", js: true do
         .and not_have_enqueued_mail
     end
   end
+
+  describe "dependent receiver_option checkboxes behaviour" do
+    let(:event) { events(:section_tour) }
+
+    before do
+      sign_in(person)
+      visit event_path
+    end
+
+    it "checks and unchecks checkboxes based on input" do
+      expect(page).to have_text "In Freigabe"
+      click_on "In Freigabe" # open dropdown
+      click_on "Zurück zu Entwurf"
+
+      checkbox_leaders = find("#receiver_option_leaders")
+      checkbox_assigned_freigabe_komitee = find("#receiver_option_assigned_freigabe_komitees")
+      checkbox_none = find("#receiver_option_none")
+
+      expect(checkbox_leaders).to be_checked
+      expect(checkbox_assigned_freigabe_komitee).to be_checked
+      expect(checkbox_none).not_to be_checked
+
+      checkbox_none.check
+
+      expect(checkbox_leaders).not_to be_checked
+      expect(checkbox_assigned_freigabe_komitee).not_to be_checked
+      expect(checkbox_none).to be_checked
+
+      checkbox_leaders.check
+
+      expect(checkbox_leaders).to be_checked
+      expect(checkbox_assigned_freigabe_komitee).not_to be_checked
+      expect(checkbox_none).not_to be_checked
+
+      checkbox_leaders.uncheck
+
+      expect(checkbox_leaders).not_to be_checked
+      expect(checkbox_assigned_freigabe_komitee).not_to be_checked
+      expect(checkbox_none).not_to be_checked
+    end
+  end
 end

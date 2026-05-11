@@ -48,6 +48,9 @@ module Events::Courses::State
     after_update :summon_assigned_participants, if: -> {
       saved_change_to_state?(from: :assignment_closed, to: :ready)
     }
+    after_update :reject_unconfirmed_and_applied_participants, if: -> {
+      saved_change_to_state?(from: :assignment_closed, to: :ready)
+    }
     after_update :annul_participations, if: -> { state_changed_to?(:canceled) }
     after_update :send_absent_invoices, if: -> { state_changed_to?(:closed) }
 
@@ -110,6 +113,10 @@ module Events::Courses::State
       end
     end
     assigned_participants.update_all(state: :summoned)
+  end
+
+  def reject_unconfirmed_and_applied_participants
+    all_participants.where(state: [:unconfirmed, :applied]).update_all(state: :rejected)
   end
 
   def assigned_participants

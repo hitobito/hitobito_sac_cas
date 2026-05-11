@@ -170,8 +170,6 @@ module SacCas::Event::Course
     i18n_enum :start_point_of_time, START_POINTS_OF_TIME
     i18n_enum :canceled_reason, CANCELED_REASONS,
       i18n_prefix: "activerecord.attributes.event/course.canceled_reasons"
-    # TODO: convert column to string and remove this line for consistent enum handling
-    enum :canceled_reason, CANCELED_REASONS
 
     attribute :waiting_list, default: false
 

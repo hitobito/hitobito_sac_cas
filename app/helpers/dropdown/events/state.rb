@@ -74,18 +74,6 @@ module Dropdown::Events
       I18n.t(key) if I18n.exists?(key)
     end
 
-    def state_item_course_canceled(label, _link)
-      add_item_with_popover(label, template.render("events/popover_canceled_reason", entry: event))
-    end
-
-    def state_item_tour_review(label, link)
-      if event.approvals.exists?
-        add_item_with_popover(label, template.render("events/popover_tour_review", entry: event))
-      else
-        add_default_item(label, link, :review)
-      end
-    end
-
     def add_item_with_popover(label, content)
       add_item(label, "javascript:void(0)",
         "data-bs-toggle": "popover",

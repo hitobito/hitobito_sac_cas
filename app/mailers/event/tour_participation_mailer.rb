@@ -9,11 +9,15 @@ class Event::TourParticipationMailer < ApplicationMailer
   include TourMailer
 
   APPLIED = "event_tour_application_confirmation_applied"
+  CLOSING = "event_tour_closing"
   UNCONFIRMED = "event_tour_application_confirmation_unconfirmed"
   ASSIGNED = "event_tour_application_confirmation_assigned"
   REJECT_PARTICIPATION = "event_tour_participation_reject"
   SUMMONED_PARTICIPATION = "event_tour_participation_summon"
   CANCELED_PARTICIPATION = "event_tour_participation_canceled"
+  CANCELED_MINIMUM_PARTICIPANTS = "event_tour_canceled_minimum_participants"
+  CANCELED_NO_LEADER = "event_tour_canceled_no_leader"
+  CANCELED_WEATHER = "event_tour_canceled_weather"
 
   def confirmation(participation, content_key)
     compose_email(participation, content_key)
@@ -29,6 +33,22 @@ class Event::TourParticipationMailer < ApplicationMailer
 
   def canceled(participation)
     compose_email(participation, CANCELED_PARTICIPATION)
+  end
+
+  def closing(participation)
+    compose_email(participation, CLOSING)
+  end
+
+  def canceled_minimum_participants(participation)
+    compose_email(participation, CANCELED_MINIMUM_PARTICIPANTS)
+  end
+
+  def canceled_no_leader(participation)
+    compose_email(participation, CANCELED_NO_LEADER)
+  end
+
+  def canceled_weather(participation)
+    compose_email(participation, CANCELED_WEATHER)
   end
 
   private

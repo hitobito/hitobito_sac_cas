@@ -167,7 +167,7 @@ describe SacCas::CustomContent do
       expect(existing.subject).to eq("Publikation der Tour")
       expect(existing.body.body.to_s).to include("Tour wurde publiziert")
 
-      created = group.custom_contents.find_by(key: :event_tour_subito_publication)
+      created = group.custom_contents.find_by(key: :event_tour_publication_subito)
       expect(created.reload.label).to eq("Tour: E-Mail Publikation (Subito)")
       expect(created.placeholders_optional.split(",").size).to be >= 15
       expect(created.subject).to eq("Publikation der Subito-Tour {event-name}")

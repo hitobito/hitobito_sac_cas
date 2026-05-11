@@ -9,21 +9,6 @@ module TourMailer
   extend ActiveSupport::Concern
   include Rails.application.routes.url_helpers
 
-  # this class is only a placeholder for the custom content keys.
-  # move the keys once the actual mailers for them are implemented.
-  PUBLICATION = "event_tour_publication"
-  PUBLICATION_SUBITO = "event_tour_subito_publication"
-  PARTICIPATION_SUMMON = "event_tour_participation_summon"
-  PARTICIPATION_REJECT = "event_tour_participation_reject"
-  CLOSING = "event_tour_closing"
-  CANCELED_MINIMUM_PARTICIPANTS = "event_tour_canceled_minimum_participants"
-  CANCELED_NO_LEADER = "event_tour_canceled_no_leader"
-  CANCELED_WEATHER = "event_tour_canceled_weather"
-  BACK_TO_DRAFT = "event_tour_back_to_draft"
-  BACK_TO_APPROVED = "event_tour_back_to_approved"
-  BACK_TO_PUBLISHED = "event_tour_back_to_published"
-  BACK_TO_READY = "event_tour_back_to_ready"
-
   private
 
   [:id, :first_name, :last_name, :email].each do |attr|
@@ -60,6 +45,8 @@ module TourMailer
   end
 
   def placeholder_participation_link
+    return "" unless @participation
+
     link_to(
       t(:application),
       group_event_participation_url(
@@ -71,10 +58,14 @@ module TourMailer
   end
 
   def placeholder_participation_additional_information
+    return "" unless @participation
+
     labeled_text_attr(@participation, :additional_information, t(:none))
   end
 
   def placeholder_participation_answers
+    return "" unless @participation
+
     answers = @participation.answers.list.where(event_questions: {admin: false}).to_a
     if answers.present?
       label = Event::Participation.human_attribute_name(:answers)
