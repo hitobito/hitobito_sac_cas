@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -80,13 +80,6 @@ class SacEventSeeder < EventSeeder
 
   def seed_questions(event)
     event.init_questions
-    event.application_questions.map do |question|
-      if question.question == "Notfallkontakt 1 - Name und Telefonnummer"
-        question.update(disclosure: :required)
-      else
-        question.update(disclosure: :optional)
-      end
-    end
   end
 
   def seed_participation(event)

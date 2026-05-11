@@ -1,0 +1,18 @@
+#  Copyright (c) 2026, Hotibito AG. This file is part of
+#  hitobito_youth and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_youth.
+
+notfallkontakt_1_de:
+  event_question_id: <%= ActiveRecord::FixtureSet.identify(:notfallkontakt_1) %>
+  locale: de
+  question: Notfallkontakt 1 - Name und Telefonnummer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
+
+notfallkontakt_2_de:
+  event_question_id: <%= ActiveRecord::FixtureSet.identify(:notfallkontakt_2) %>
+  locale: de
+  question: Notfallkontakt 2 - Name und Telefonnummer
+  created_at: <%= Time.zone.now %>
+  updated_at: <%= Time.zone.now %>
