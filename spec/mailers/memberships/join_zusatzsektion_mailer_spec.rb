@@ -33,16 +33,19 @@ describe Memberships::JoinZusatzsektionMailer do
       expect(body).to include("PLZ: #{person.zip_code}")
       expect(body).to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
       expect(body).to include(person_path(person))
-      expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 42.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)",
-        text: "CHF 21.00\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 42.00 jährlicher Beitrag", normalize_ws: true)
+      expect(fees).to have_css(
+        "tr:nth-of-type(2)",
+        text: "CHF 21.00 - 50% Rabatt auf den jährlichen Beitrag",
+        normalize_ws: true
+      )
       expect(fees).not_to have_css("tr:nth-of-type(3)")
-      expect(fees).to have_css("tfoot tr", text: "CHF 21.00\r\nTotal erstmalig")
+      expect(fees).to have_css("tfoot tr", text: "CHF 21.00 Total erstmalig", normalize_ws: true)
     end
 
     it "includes abroad fees for person living abroad" do
       person.update!(country: "BE")
-      expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 6.50\r\n+ Gebühren Ausland")
+      expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 6.50 + Gebühren Ausland", normalize_ws: true)
     end
 
     it "uses person language to localize message" do
@@ -88,16 +91,19 @@ describe Memberships::JoinZusatzsektionMailer do
       expect(body).to include("PLZ: #{person.zip_code}")
       expect(body).not_to include("Über die Aufnahme neuer Mitglieder entscheidet die Sektion")
       expect(body).to include(person_path(person))
-      expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 84.00\r\njährlicher Beitrag")
-      expect(fees).to have_css("tr:nth-of-type(2)",
-        text: "CHF 42.00\r\n- 50% Rabatt auf den jährlichen Beitrag")
+      expect(fees).to have_css("tr:nth-of-type(1)", text: "CHF 84.00 jährlicher Beitrag", normalize_ws: true)
+      expect(fees).to have_css(
+        "tr:nth-of-type(2)",
+        text: "CHF 42.00 - 50% Rabatt auf den jährlichen Beitrag",
+        normalize_ws: true
+      )
       expect(fees).not_to have_css("tr:nth-of-type(3)")
-      expect(fees).to have_css("tfoot tr", text: "CHF 42.00\r\nTotal erstmalig")
+      expect(fees).to have_css("tfoot tr", text: "CHF 42.00 Total erstmalig", normalize_ws: true)
     end
 
     it "includes abroad fees for person living abroad" do
       person.update!(country: "BE")
-      expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 6.50\r\n+ Gebühren Ausland")
+      expect(fees).to have_css("tr:nth-of-type(3)", text: "CHF 6.50 + Gebühren Ausland", normalize_ws: true)
     end
 
     it "uses person language to localize message" do
