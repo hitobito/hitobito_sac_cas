@@ -150,6 +150,12 @@ module SacCas::Person
     super
   end
 
+  def membership_pass
+    @membership_pass ||= passes.joins(:pass_definition).find_by(
+      pass_definitions: {template_key: Settings.passes.legacy_verify_pass_definition_key}
+    )
+  end
+
   protected
 
   def after_confirmation # Devise::Models::Confirmable

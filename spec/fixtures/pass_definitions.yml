@@ -8,5 +8,4 @@
 sac_membership:
   owner: root (Group)
   template_key: sac_membership
-
   background_color: "#ffffff"
