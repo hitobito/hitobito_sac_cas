@@ -151,9 +151,8 @@ module SacCas::Person
   end
 
   def membership_pass
-    @membership_pass ||= passes.joins(:pass_definition).find_by(
-      pass_definitions: {template_key: Settings.passes.legacy_verify_pass_definition_key}
-    )
+    @membership_pass ||= passes
+      .find_by(pass_definition_id: Settings.passes.membership_pass_definition_id)
   end
 
   protected

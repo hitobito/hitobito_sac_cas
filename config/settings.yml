@@ -94,7 +94,7 @@ hitobito_log:
     - it@sac-cas.ch
 
 passes:
-  legacy_verify_pass_definition_key: sac_membership
+  membership_pass_definition_id: 1
 
 #invoicing:
 #  abo_magazin:
