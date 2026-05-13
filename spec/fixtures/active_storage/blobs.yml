@@ -5,9 +5,5 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-sac_membership:
-  owner: root (Group)
-  template_key: sac_membership
-  background_color: "#ffffff"
-  logo_banner_de: sac_membership_logo_banner_de
-  logo_icon_de: sac_membership_logo_icon_de
+sac_membership_logo_banner_de_blob: <%= ActiveStorage::FixtureSet.blob filename: "banner_de.png", service_name: "test_fixtures" %>
+sac_membership_logo_icon_de_blob: <%= ActiveStorage::FixtureSet.blob filename: "icon.png", service_name: "test_fixtures" %>

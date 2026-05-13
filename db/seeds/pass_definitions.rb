@@ -15,6 +15,14 @@ PassDefinition.find_or_create_by!(
   pd.name = "SAC Mitgliederausweis"
   pd.description = "Mitgliederausweis des Schweizer Alpen-Clubs"
 
+  # Attach logo banners for all languages
+  pd.logo_banner_de.attach(io: File.open(Rails.root.join("app/assets/images/wallets/banner_de.png")), filename: "banner_de.png")
+  pd.logo_banner_fr.attach(io: File.open(Rails.root.join("app/assets/images/wallets/banner_fr.png")), filename: "banner_fr.png")
+  pd.logo_banner_it.attach(io: File.open(Rails.root.join("app/assets/images/wallets/banner_it.png")), filename: "banner_it.png")
+
+  # Attach logo icon only for German (fallback for all languages)
+  pd.logo_icon_de.attach(io: File.open(Rails.root.join("app/assets/images/wallets/icon.png")), filename: "icon.png")
+
   grant = pd.pass_grants.build(grantor: sac_group)
 
   # Rollentypen die zur Berechtigung führen
