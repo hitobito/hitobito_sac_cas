@@ -8,12 +8,16 @@
 sac_group = Group::SacCas.first!
 
 def read_image(name)
-  File.open(Pathname(File.dirname(__FILE__)).join("../../app/assets/images/wallets").join(name))
+  File.open(HitobitoSacCas::Wagon.config.root.join("app/assets/images/wallets").join(name))
 end
 
-PassDefinition.find_or_create_by!(owner: sac_group, template_key: "sac_membership") do |pd|
-  pd.name = "SAC Mitgliederausweis"
-  pd.description = "Mitgliederausweis des Schweizer Alpen-Clubs"
+PassDefinition.find_or_create_by!(
+  id: 1,
+  owner: sac_group,
+  template_key: "sac_membership"
+) do |pd|
+  pd.name_de = "SAC Mitgliederausweis"
+  pd.description_de = "Mitgliederausweis des Schweizer Alpen-Clubs"
 
   # Attach logo banners for all languages
   pd.logo_banner_de.attach(io: read_image("banner_de.png"), filename: "banner_de.png")
