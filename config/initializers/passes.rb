@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Rails.application.config.to_prepare do
-  Passes::TemplateRegistry.register(Settings.passes.legacy_verify_pass_definition_key,
+  Passes::TemplateRegistry.register("sac_membership",
     pdf_class: SacCas::Export::Pdf::Passes::Membership,
-    pass_view_partial: Settings.passes.legacy_verify_pass_definition_key,
+    pass_view_partial: "sac_membership",
     wallet_data_provider: SacCas::Passes::MembershipDataProvider)
 end

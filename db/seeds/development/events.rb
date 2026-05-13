@@ -19,10 +19,10 @@ end
 end
 
 Group.where(type: [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)).find_each do |group|
-  10.times do
+  1.times do
     seeder.seed_event(group.id, :tour)
   end
-  2.times do
+  1.times do
     seeder.seed_event(group.id, :base)
   end
 end
