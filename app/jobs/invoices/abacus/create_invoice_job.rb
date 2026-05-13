@@ -23,7 +23,7 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
     end
   end
 
-  def error(job, exception)
+  def error(job, exception, payload = parameters)
     super
     create_error_log_entry(I18n.t("invoices.errors.create_invoice_failed"), exception.to_s)
   end

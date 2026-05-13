@@ -21,7 +21,7 @@ class Invoices::Abacus::CancelInvoiceJob < BaseJob
     Invoices::Abacus::SalesOrderInterface.new.cancel(sales_order)
   end
 
-  def error(_job, exception)
+  def error(_job, exception, payload = parameters)
     HitobitoLogEntry.create!(
       level: "error",
       category: "rechnungen",
