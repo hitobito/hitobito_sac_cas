@@ -6,23 +6,17 @@
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
-- pass = entry.membership_pass&.decorate
-- if can?(:update, entry) && entry.sac_membership_active? && pass
+- if can?(:update, entry) && entry.sac_membership_active?
   %section.sac-membership.row
     %h2.col-md-8
       = t('.section_sac_membership')
     .col-sm-4.d-flex.justify-content-end
-      = action_button(t('.download_pdf'), group_person_pass_path(parent, entry, pass, format: :pdf),
+      = action_button(t('.download_pdf'), membership_path(entry, format: :pdf),
         :download, class: 'membership-download', target: '_blank')
-    .col
-      - if google_wallet_configured?
-        = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(parent, entry, pass), "add"
-      - if apple_wallet_configured?
-        = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(parent, entry, pass, format: :pkpass), "add"
 
     .d-flex.justify-content-center.w-100
       .qr-code-wrapper
         .inner
-          = pass_qr_code_svg(pass, size: 220)
+          = people_sac_membership_qr_code(entry)
           .hint
             = t('.qr_code_hint')
