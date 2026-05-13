@@ -7,21 +7,21 @@
 
 sac_group = Group::SacCas.first!
 
-PassDefinition.find_or_create_by!(
-  id: 1,
-  owner: sac_group,
-  template_key: "sac_membership"
-) do |pd|
+def read_image(name)
+  File.open(Pathname(File.dirname(__FILE__)).join("../../app/assets/images/wallets").join(name))
+end
+
+PassDefinition.find_or_create_by!(owner: sac_group, template_key: "sac_membership") do |pd|
   pd.name = "SAC Mitgliederausweis"
   pd.description = "Mitgliederausweis des Schweizer Alpen-Clubs"
 
   # Attach logo banners for all languages
-  pd.logo_banner_de.attach(io: File.open(Rails.root.join("app/assets/images/wallets/banner_de.png")), filename: "banner_de.png")
-  pd.logo_banner_fr.attach(io: File.open(Rails.root.join("app/assets/images/wallets/banner_fr.png")), filename: "banner_fr.png")
-  pd.logo_banner_it.attach(io: File.open(Rails.root.join("app/assets/images/wallets/banner_it.png")), filename: "banner_it.png")
+  pd.logo_banner_de.attach(io: read_image("banner_de.png"), filename: "banner_de.png")
+  pd.logo_banner_fr.attach(io: read_image("banner_fr.png"), filename: "banner_fr.png")
+  pd.logo_banner_it.attach(io: read_image("banner_it.png"), filename: "banner_it.png")
 
   # Attach logo icon only for German (fallback for all languages)
-  pd.logo_icon_de.attach(io: File.open(Rails.root.join("app/assets/images/wallets/icon.png")), filename: "icon.png")
+  pd.logo_icon_de.attach(io: read_image("icon.png"), filename: "icon.png")
 
   grant = pd.pass_grants.build(grantor: sac_group)
 
