@@ -13,7 +13,7 @@ describe Export::AustritteExportJob do
   let(:from) { Date.new(2015, 1, 1) }
   let(:to) { Date.new(2015, 12, 31) }
   let(:filename) { "Austritte" }
-  let(:file) { job.send(:async_download_file) }
+  let(:file) { job.user_job_result }
 
   subject(:job) { described_class.new(user.id, group.id, filename, from, to) }
 
@@ -47,7 +47,9 @@ describe Export::AustritteExportJob do
       .and_call_original
 
     travel_to(Time.zone.local(2015, 10, 10)) do
-      expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+      expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+      job.perform
+
       expect(file.filename).to eq("Austritte.xlsx")
     end
   end

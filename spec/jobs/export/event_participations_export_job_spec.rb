@@ -8,24 +8,23 @@ require "spec_helper"
 describe Export::EventParticipationsExportJob do
   subject {
     Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:bluemlisalp).id,
-      params.merge(filename: filename))
+      params.merge(filename: "event_participation_export"))
   }
 
   let!(:participation) { event_participations(:top_mitglied) }
   let(:user) { participation.person }
   let(:event) { participation.event }
-  let(:filename) { AsyncDownloadFile.create_name("event_participation_export", user.id) }
 
   let(:params) { {} }
 
-  let(:file) do
-    AsyncDownloadFile
-      .from_filename(filename, format)
-  end
+  let(:file) { subject.user_job_result }
 
   before do
     SeedFu.quiet = true
     SeedFu.seed [Rails.root.join("db", "seeds")]
+
+    subject.enqueue!
+    subject.perform
   end
 
   context "creates a course data export" do
@@ -33,8 +32,6 @@ describe Export::EventParticipationsExportJob do
     let(:params) { {course_data: true, filter: "all"} }
 
     it "and saves it" do
-      subject.perform
-
       lines = file.read.lines
       expect(lines.size).to eq(3)
       # rubocop:todo Layout/LineLength
@@ -54,8 +51,6 @@ describe Export::EventParticipationsExportJob do
       let(:format) { :xlsx }
 
       it "and saves it" do
-        subject.perform
-
         expect(file.generated_file).to be_attached
       end
     end

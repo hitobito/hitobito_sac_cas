@@ -29,7 +29,9 @@ describe People::Export::JubilareController do
       job = jobs.first
       expect(job.handler).to match("reference_date: 2025-10-01")
       expect(job.handler).to match("membership_years: 20")
-      expect(job.handler).to match("filename: 578575972_SAC-Blueemlisalp_Jubilare_per_20251001-")
+      expect(job.handler).to match("filename: 578575972_SAC Blüemlisalp_Jubilare_per_20251001-")
+      expect(UserJobResult.find_by!(delayed_job: job).filename)
+        .to match("578575972_SAC-Blueemlisalp_Jubilare_per_20251001-")
     end
 
     it "returns turbo frame when form is invalid" do

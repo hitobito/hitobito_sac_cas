@@ -29,7 +29,9 @@ describe People::Export::MitgliederStatisticsController do
       job = jobs.first
       expect(job.handler).to match("from: 2015-04-01")
       expect(job.handler).to match("to: 2015-12-31")
-      expect(job.handler).to match("filename: 578575972_SAC-Blueemlisalp_Mitgliederstatistik_20150401_20151231-")
+      expect(job.handler).to match("filename: 578575972_SAC Blüemlisalp_Mitgliederstatistik_20150401_20151231-")
+      expect(UserJobResult.find_by!(delayed_job: job).filename)
+        .to match("578575972_SAC-Blueemlisalp_Mitgliederstatistik_20150401_20151231-")
     end
 
     it "returns turbo frame when form is invalid" do

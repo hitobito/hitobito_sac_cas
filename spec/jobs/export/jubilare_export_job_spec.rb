@@ -12,10 +12,9 @@ describe Export::JubilareExportJob do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:reference_date) { Date.new(2025, 10, 1) }
   let(:membership_years) { nil }
-  let(:filename) { "jubilare" }
-  let(:file) { job.send(:async_download_file) }
+  let(:file) { job.user_job_result }
 
-  subject(:job) { described_class.new(user.id, group.id, filename, reference_date, membership_years) }
+  subject(:job) { described_class.new(user.id, group.id, "jubilare", reference_date, membership_years) }
 
   it "creates a XLSX-Export" do
     expect_any_instance_of(Axlsx::Worksheet)
@@ -23,7 +22,9 @@ describe Export::JubilareExportJob do
       .exactly(5).times
       .and_call_original
 
-    expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+    expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+    job.perform
+
     expect(file.filename).to eq("jubilare.xlsx")
   end
 end

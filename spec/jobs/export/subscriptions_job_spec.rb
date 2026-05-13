@@ -22,6 +22,7 @@ describe Export::SubscriptionsJob do
 
     it "uses PeopleAddress tabular export" do
       expect(Export::Tabular::People::PeopleAddress).to receive(:export).and_call_original
+      job.enqueue!
       job.perform
     end
   end
@@ -33,6 +34,7 @@ describe Export::SubscriptionsJob do
 
     it "uses SacRecipients tabular export" do
       expect(Export::Tabular::People::SacRecipients).to receive(:export).and_call_original
+      job.enqueue!
       job.perform
     end
   end
@@ -45,6 +47,7 @@ describe Export::SubscriptionsJob do
 
     it "uses SacRecipients tabular export" do
       expect(Export::Tabular::People::SacRecipientHouseholds).to receive(:export).and_call_original
+      job.enqueue!
       job.perform
     end
   end
@@ -57,7 +60,8 @@ describe Export::SubscriptionsJob do
     def export_table_display_as_csv
       Tempfile.create do |file|
         expect(Export::Tabular::People::TableDisplays).to receive(:export).and_call_original
-        expect(AsyncDownloadFile).to receive(:maybe_from_filename).and_return(file)
+        expect(job).to receive(:user_job_result).and_return(file)
+        job.enqueue!
         job.perform
         file.rewind
         yield CSV.parse(file.read, col_sep: ";", headers: true)
