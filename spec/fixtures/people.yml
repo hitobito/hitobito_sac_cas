@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 root:
+  first_name: Rebecca
+  last_name: Root
   email: <%= Settings.root_email %>
   correspondence: digital
 
