@@ -16,7 +16,7 @@
         :download, class: 'membership-download', target: '_blank')
     .col
       - if google_wallet_configured?
-        = action_button t('person.passes.index.add_to_google_wallet'), google_wallet_group_person_pass_path(parent, entry, pass), "add"
+        = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(parent, entry, pass), "add"
       - if apple_wallet_configured?
         = action_button t('person.passes.index.add_to_apple_wallet'), group_person_pass_path(parent, entry, pass, format: :pkpass), "add"
 
