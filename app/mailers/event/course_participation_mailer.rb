@@ -81,6 +81,7 @@ class Event::CourseParticipationMailer < ApplicationMailer
     @person = participation.person
     headers[:bcc] = Group.root.course_admin_email
     locales = @course.language.split("_")
+    record_system_mail_for(@person)
 
     compose_multilingual(@person, content_key, locales)
   end

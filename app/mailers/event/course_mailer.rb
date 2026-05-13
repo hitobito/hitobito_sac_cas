@@ -16,6 +16,7 @@ class Event::CourseMailer < ApplicationMailer
   def published(course, leader)
     @person = leader
     headers[:bcc] = Group.root.course_admin_email
+    record_system_mail_for(leader)
     compose_email(course, leader, PUBLISHED)
   end
 
