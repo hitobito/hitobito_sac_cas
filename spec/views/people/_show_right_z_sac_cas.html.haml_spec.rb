@@ -7,6 +7,7 @@ require "spec_helper"
 
 describe "people/_show_right_z_sac_cas.html.haml" do
   include FormatHelper
+  let(:group) { groups(:bluemlisalp_mitglieder) }
 
   let(:dom) {
     render
@@ -14,8 +15,11 @@ describe "people/_show_right_z_sac_cas.html.haml" do
   }
 
   before do
-    allow(view).to receive_messages(current_user: person)
-    allow(view).to receive_messages(entry: PersonDecorator.decorate(person))
+    allow(view).to receive_messages(
+      current_user: person,
+      entry: PersonDecorator.decorate(person),
+      parent: group
+    )
     allow(controller).to receive_messages(current_user: Person.new)
     allow(view).to receive(:can?).with(:update, person).and_return true
   end
@@ -23,8 +27,12 @@ describe "people/_show_right_z_sac_cas.html.haml" do
   context "member" do
     let(:person) { Person.with_membership_years.find(people(:mitglied).id) }
 
+    let!(:pass) do
+      Fabricate(:pass, person: person, pass_definition: pass_definitions(:sac_membership))
+    end
+
     it "renders download button for active membership" do
-      expect(dom).to have_link(nil, href: membership_path(person, format: :pdf))
+      expect(dom).to have_link(nil, href: group_person_pass_path(group, person, pass, format: :pdf))
     end
 
     it "renders membership info for active membership" do
@@ -43,7 +51,7 @@ describe "people/_show_right_z_sac_cas.html.haml" do
       person.roles.destroy_all
       Group::SektionsMitglieder::Mitglied.create!(
         person:,
-        group: groups(:bluemlisalp_mitglieder),
+        group:,
         start_on: 1.month.from_now,
         end_on: 1.year.from_now
       )

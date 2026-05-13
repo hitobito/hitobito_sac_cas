@@ -8,11 +8,9 @@
 class People::MembershipController < ApplicationController
   def show
     authorize!(:show, person)
-    pass = person.passes.joins(:pass_definition)
-      .find_by(pass_definitions: {name: Settings.passes.legacy_verify_pass_definition_name})
 
-    if pass
-      redirect_to group_person_pass_path(person.primary_group, person, pass)
+    if person.membership_pass
+      redirect_to group_person_pass_path(person.primary_group, person, person.membership_pass)
     else
       redirect_to person_path(person)
     end

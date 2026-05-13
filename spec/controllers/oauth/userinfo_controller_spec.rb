@@ -46,9 +46,8 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
       context "with membership" do
         let(:user) { mitglied.person }
         let(:mitglied) { roles(:mitglied) }
-        let!(:membership_pass) do
-          Fabricate(:pass, pass_definition: Fabricate(:pass_definition, id: 1), person: user)
-        end
+        let(:pass_definition) { pass_definitions(:sac_membership) }
+        let!(:membership_pass) { Fabricate(:pass, pass_definition:, person: user) }
 
         it "includes membership_verify_url" do
           get :show, params: {access_token: token.token}
