@@ -46,7 +46,7 @@ describe Event::CourseParticipationMailer do
     end
 
     context "missing information" do
-      before { event.questions.create!(admin: true, question: "AHV-Nummer", disclosure: :optional) }
+      before { event.questions.create!(admin: true, question: "AHV-Nummer", required: false) }
 
       it "shows a list of missing answers" do
         expect(mail.body.to_s).to include(
@@ -246,7 +246,7 @@ describe Event::CourseParticipationMailer do
 
     before do
       %w[nil_example no_example yes_example].each do |question|
-        event.questions.create!(admin: true, question:, disclosure: :optional)
+        event.questions.create!(admin: true, question:, required: false)
       end
       participation
       event.questions.second.answers.update_all(answer: "no")

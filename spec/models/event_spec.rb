@@ -36,16 +36,16 @@ describe Event do
 
   describe "admin_questions" do
     it "sorts by question asc" do
-      Event::Question.create!(question: "B", disclosure: :optional, event: event, admin: true)
-      Event::Question.create!(question: "A", disclosure: :optional, event: event, admin: true)
+      Event::Question.create!(question: "B", required: false, event: event, admin: true)
+      Event::Question.create!(question: "A", required: false, event: event, admin: true)
       expect(event.reload.admin_questions.map(&:question)).to eq ["A", "B"]
     end
   end
 
   describe "application_questions" do
     it "sorts by question asc" do
-      Event::Question.create!(question: "B", disclosure: :optional, event: event)
-      Event::Question.create!(question: "A", disclosure: :optional, event: event)
+      Event::Question.create!(question: "B", required: false, event: event)
+      Event::Question.create!(question: "A", required: false, event: event)
       expect(event.reload.application_questions.map(&:question)).to eq ["A", "B"]
     end
   end
