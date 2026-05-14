@@ -968,14 +968,14 @@ de_CH:
         one: Ehrenmitglied
         description: Ehrenmitglied
       group/freigabe_komitee/pruefer:
-        one: Prüfer*in
-        description: Prüfer*in
+        one: Prüfer/in
+        description: Prüfer/in
       group/geschaeftsstelle/mitarbeiter:
-        one: Mitarbeiter*in (schreibend)
-        description: Mitarbeiter*in (schreibend)
+        one: Mitarbeiter/in (schreibend)
+        description: Mitarbeiter/in (schreibend)
       group/geschaeftsstelle/mitarbeiter_lesend:
-        one: Mitarbeiter*in (lesend)
-        description: Mitarbeiter*in (lesend)
+        one: Mitarbeiter/in (lesend)
+        description: Mitarbeiter/in (lesend)
       group/geschaeftsstelle/admin:
         one: Administration
         description: Administration
@@ -1013,14 +1013,14 @@ de_CH:
         one: Kontakt
         description: Kontakt
       group/abo_magazine/autor:
-        one: Autor*in
-        description: Autor*in
+        one: Autor/in
+        description: Autor/in
       group/abo_magazine/andere:
         one: Andere
         description: Andere
       group/abo_magazine/uebersetzer:
-        one: Übersetzer*in
-        description: Übersetzer*in
+        one: Übersetzer/in
+        description: Übersetzer/in
       group/abo_magazin/abonnent:
         one: Abonnent
         description: Abonnent
@@ -1043,8 +1043,8 @@ de_CH:
         one: Neuanmeldung
         description: Neuanmeldung
       group/abo_touren_portal/autor:
-        one: Autor*in
-        description: Autor*in
+        one: Autor/in
+        description: Autor/in
       group/abo_touren_portal/community:
         one: Community
         description: Community
@@ -1061,53 +1061,53 @@ de_CH:
         one: Schreibrecht
         description: Schreibrecht
       group/sac_cas_clubhuette/huettenchef:
-        one: Hüttenchef*in
-        description: Hüttenchef*in
+        one: Hüttenchef/in
+        description: Hüttenchef/in
       group/sac_cas_clubhuette/huettenwart:
-        one: Hüttenwart*in
-        description: Hüttenwart*in
+        one: Hüttenwart/in
+        description: Hüttenwart/in
       group/sac_cas_clubhuette/andere:
         one: Andere
         description: Andere
-        huettenwartspartner: Hüttenwartspartner*in
+        huettenwartspartner: Hüttenwartspartner/in
         schluesseldepot: Schlüsseldepot
       group/sac_cas_kurskader/kursleitung_selbstaendig:
-        one: Kursleiter*in (selbständig)
-        description: Kursleiter*in (selbständig)
+        one: Kursleiter/in (selbständig)
+        description: Kursleiter/in (selbständig)
       group/sac_cas_kurskader/klassenlehrer_selbstaendig:
-        one: Klassenlehrer*in (selbständig)
-        description: Klassenlehrer*in (selbständig)
+        one: Klassenlehrer/in (selbständig)
+        description: Klassenlehrer/in (selbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
-        one: "Kursleiter*in (Aspirant, selbständig)"
-        description: "Kursleiter*in (Aspirant, selbständig)"
+        one: "Kursleiter/in (Aspirant, selbständig)"
+        description: "Kursleiter/in (Aspirant, selbständig)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Klassenlehrer*in (Aspirant, selbständig)"
-        description: "Klassenlehrer*in (Aspirant, selbständig)"
+        one: "Klassenlehrer/in (Aspirant, selbständig)"
+        description: "Klassenlehrer/in (Aspirant, selbständig)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
-        one: Kursleiter*in (unselbständig)
-        description: Kursleiter*in (unselbständig)
+        one: Kursleiter/in (unselbständig)
+        description: Kursleiter/in (unselbständig)
       group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
-        one: Klassenlehrer*in (unselbständig)
-        description: Klassenlehrer*in (unselbständig)
+        one: Klassenlehrer/in (unselbständig)
+        description: Klassenlehrer/in (unselbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
-        one: "Kursleiter*in (Aspirant, unselbständig)"
-        description: "Kursleiter*in (Aspirant, unselbständig)"
+        one: "Kursleiter/in (Aspirant, unselbständig)"
+        description: "Kursleiter/in (Aspirant, unselbständig)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
-        one: "Klassenlehrer*in (Aspirant, unselbständig)"
-        description: "Klassenlehrer*in (Aspirant, unselbständig)"
+        one: "Klassenlehrer/in (Aspirant, unselbständig)"
+        description: "Klassenlehrer/in (Aspirant, unselbständig)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
       group/sac_cas_privathuette/huettenchef:
-        one: Hüttenchef*in
-        description: Hüttenchef*in
+        one: Hüttenchef/in
+        description: Hüttenchef/in
       group/sac_cas_privathuette/huettenwart:
-        one: Hüttenwart*in
-        description: Hüttenwart*in
+        one: Hüttenwart/in
+        description: Hüttenwart/in
       group/sac_cas_privathuette/andere:
         one: Andere
         description: Andere
-        huettenwartspartner: Hüttenwartspartner*in
+        huettenwartspartner: Hüttenwartspartner/in
         schluesseldepot: Schlüsseldepot
       group/sac_cas_verband/praesidium:
         one: Leitung
@@ -1131,11 +1131,11 @@ de_CH:
         one: Mitgliederverwaltung
         description: Mitgliederverwaltung Sektion
       group/sektions_funktionaere/kulturbeauftragter:
-        one: Kulturbeauftragte*r
-        description: Kulturbeauftragte*r
+        one: Kulturbeauftragte/r
+        description: Kulturbeauftragte/r
       group/sektions_funktionaere/umweltbeauftragter:
-        one: Umweltbeauftragte*r
-        description: Umweltbeauftragte*r
+        one: Umweltbeauftragte/r
+        description: Umweltbeauftragte/r
       group/sektions_funktionaere/finanzen:
         one: Finanzen
         description: Finanzen
@@ -1143,8 +1143,8 @@ de_CH:
         one: Redaktion
         description: Redaktion
       group/sektions_funktionaere/huettenobmann:
-        one: Hüttenobmann*frau
-        description: Hüttenobmann*frau
+        one: Hüttenobmann/frau
+        description: Hüttenobmann/frau
       group/sektions_funktionaere/leserecht:
         one: Leserecht
         description: Leserecht
@@ -1227,20 +1227,20 @@ de_CH:
         one: Andere
         description: Andere
       group/sektions_touren_und_kurse/tourenleiter:
-        one: Tourenleiter*in (mit Qualifikation)
-        description: Tourenleiter*in (mit Qualifikation)
+        one: Tourenleiter/in (mit Qualifikation)
+        description: Tourenleiter/in (mit Qualifikation)
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
-        one: Tourenleiter*in (ohne Qualifikation)
-        description: Tourenleiter*in (ohne Qualifikation)
+        one: Tourenleiter/in (ohne Qualifikation)
+        description: Tourenleiter/in (ohne Qualifikation)
       group/sektions_touren_und_kurse/kibe_chef:
-        one: KiBe-Chef*in
-        description: KiBe-Chef*in
+        one: KiBe-Chef/in
+        description: KiBe-Chef/in
       group/sektions_touren_und_kurse/fabe_chef:
-        one: FaBe-Chef*in
-        description: FaBe-Chef*in
+        one: FaBe-Chef/in
+        description: FaBe-Chef/in
       group/sektions_touren_und_kurse/jo_chef:
-        one: JO-Chef*in
-        description: JO-Chef*in
+        one: JO-Chef/in
+        description: JO-Chef/in
       group/sektions_touren_und_kurse/js_coach:
         one: J+S Coach
         description: J+S Coach
@@ -1251,14 +1251,14 @@ de_CH:
         one: Schreibrecht
         description: Schreibrecht
       group/sektions_touren_und_kurse/tourenchef:
-        one: Tourenchef*in
-        description: Tourenchef*in
+        one: Tourenchef/in
+        description: Tourenchef/in
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Tourenchef*in Sommer
-        description: Tourenchef*in Sommer
+        one: Tourenchef/in Sommer
+        description: Tourenchef/in Sommer
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Tourenchef*in Winter
-        description: Tourenchef*in Winter
+        one: Tourenchef/in Winter
+        description: Tourenchef/in Winter
       group/sektions_clubhuetten/leserecht:
         one: Leserecht
         description: Leserecht
@@ -1266,15 +1266,15 @@ de_CH:
         one: Schreibrecht
         description: Schreibrecht
       group/sektions_clubhuette/huettenchef:
-        one: Hüttenchef*in
-        description: Hüttenchef*in
+        one: Hüttenchef/in
+        description: Hüttenchef/in
       group/sektions_clubhuette/huettenwart:
-        one: Hüttenwart*in
-        description: Hüttenwart*in
+        one: Hüttenwart/in
+        description: Hüttenwart/in
       group/sektions_clubhuette/andere:
         one: Andere
         description: Andere
-        huettenwartspartner: Hüttenwartspartner*in
+        huettenwartspartner: Hüttenwartspartner/in
         schluesseldepot: Schlüsseldepot
       group/sektionshuetten/leserecht:
         one: Leserecht
@@ -1283,15 +1283,15 @@ de_CH:
         one: Schreibrecht
         description: Schreibrecht
       group/sektionshuette/huettenchef:
-        one: Hüttenchef*in
-        description: Hüttenchef*in
+        one: Hüttenchef/in
+        description: Hüttenchef/in
       group/sektionshuette/huettenwart:
-        one: Hüttenwart*in
-        description: Hüttenwart*in
+        one: Hüttenwart/in
+        description: Hüttenwart/in
       group/sektionshuette/andere:
         one: Andere
         description: Andere
-        huettenwartspartner: Hüttenwartspartner*in
+        huettenwartspartner: Hüttenwartspartner/in
         schluesseldepot: Schlüsseldepot
       group/sektions_kommissionen/leserecht:
         one: Leserecht

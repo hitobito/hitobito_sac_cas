@@ -1055,8 +1055,8 @@ fr:
         one: Direction
         description: Direction
       group/geschaeftsleitung/ressortleitung:
-        one: Direction du département
-        description: Direction du département
+        one: Chef·fe du domaine
+        description: Chef·fe du domaine
       group/geschaeftsleitung/andere:
         one: Autres
         description: Autres
@@ -1130,8 +1130,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sac_cas_clubhuette/huettenchef:
-        one: Chef·fe de cabane
-        description: Chef·fe de cabane
+        one: Préposé·e aux cabanes
+        description: Préposé·e aux cabanes
       group/sac_cas_clubhuette/huettenwart:
         one: Gardien·ne de cabane
         description: Gardien·ne de cabane
@@ -1150,7 +1150,7 @@ fr:
         one: "Responsable de cours (aspirant, indépendant)"
         description: "Responsable de cours (aspirant, indépendant)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Chef de classe* (aspirant, indépendant)"
+        one: "Chef·fe de classe (aspirant, indépendant)"
         description: "Chef·fe de classe (aspirant, indépendant)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
         one: Responsable de cours (salarié)
@@ -1168,8 +1168,8 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sac_cas_privathuette/huettenchef:
-        one: Chef·fe de cabane
-        description: Chef·fe de cabane
+        one: Préposé·e aux cabanes
+        description: Préposé·e aux cabanes
       group/sac_cas_privathuette/huettenwart:
         one: Gardien·ne de cabane
         description: Gardien·ne de cabane
@@ -1200,11 +1200,11 @@ fr:
         one: Gestion des membres
         description: Gestion des membres de la section
       group/sektions_funktionaere/kulturbeauftragter:
-        one: Chargé·e de la culture
-        description: Chargé·e de la culture
+        one: Préposé·e à la culture
+        description: Préposé·e à la culture
       group/sektions_funktionaere/umweltbeauftragter:
-        one: Préposé à l’environnement
-        description: Préposé à l’environnement
+        one: Préposé·e à l’environnement
+        description: Préposé·e à l’environnement
       group/sektions_funktionaere/finanzen:
         one: Finances
         description: Finances
@@ -1230,8 +1230,8 @@ fr:
         one: Membre (section supplémentaire)
         description: Membre (section supplémentaire)
       group/sektions_mitglieder/ehrenmitglied:
-        one: Membre honoraire
-        description: Membre honoraire
+        one: Membre d’honneur
+        description: Membre d’honneur
       group/sektions_mitglieder/beguenstigt:
         one: Bénéficiaire
         description: Bénéficiaire
@@ -1839,7 +1839,7 @@ fr:
         mitglied: Section de base
         mitglied_zusatzsektion: Section complémentaire
       beitragskategorie: Catégorie de contribution
-      ehrenmitglied: Est membre honoraire
+      ehrenmitglied: Est membre d’honneur
       beguenstigt: Est bénéficiaire
       last_name: Nom de famille
       first_name: Prénom

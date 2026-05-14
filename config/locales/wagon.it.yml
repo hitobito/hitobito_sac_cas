@@ -1131,8 +1131,8 @@ it:
         one: Responsabile di capanna
         description: Responsabile di capanna
       group/sac_cas_clubhuette/huettenwart:
-        one: Custode
-        description: Custode
+        one: Guardiano/-a
+        description: Guardiano/-a
       group/sac_cas_clubhuette/andere:
         one: Altro
         description: Altro
@@ -1169,8 +1169,8 @@ it:
         one: Responsabile di capanna
         description: Responsabile di capanna
       group/sac_cas_privathuette/huettenwart:
-        one: Custode
-        description: Custode
+        one: Guardiano/-a
+        description: Guardiano/-a
       group/sac_cas_privathuette/andere:
         one: Altro
         description: Altro
@@ -1198,11 +1198,11 @@ it:
         one: Amministrazione soci
         description: Amministrazione soci di sezione
       group/sektions_funktionaere/kulturbeauftragter:
-        one: Commissario culturale
-        description: Commissario culturale
+        one: Responsabile Cultura
+        description: Responsabile Cultura
       group/sektions_funktionaere/umweltbeauftragter:
-        one: Commissario ambientale
-        description: Commissario ambientale
+        one: Responsabile ambiente
+        description: Responsabile ambiente
       group/sektions_funktionaere/finanzen:
         one: Finanze
         description: Finanze
@@ -1222,8 +1222,8 @@ it:
         one: Altro
         description: Altro
       group/sektions_mitglieder/mitglied:
-        one: Socio (sezione base)
-        description: Socio (sezione base)
+        one: Socio (sezione originaria)
+        description: Socio (sezione originaria)
       group/sektions_mitglieder/mitglied_zusatzsektion:
         one: Socio (sezione aggiuntiva)
         description: Socio (sezione aggiuntiva)
@@ -1240,7 +1240,7 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_neuanmeldungen_sektion/neuanmeldung:
-        one: Nuova registrazione (sezione base)
+        one: Nuova registrazione (sezione originaria)
         description: Nuova registrazione affiliazione (sezione principale)
       group/sektions_neuanmeldungen_sektion/neuanmeldung_zusatzsektion:
         one: Nuova registrazione (sezione aggiuntiva)
@@ -1252,8 +1252,8 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_neuanmeldungen_nv/neuanmeldung:
-        one: Nuova registrazione (sezione base)
-        description: Nuova registrazione affiliazione (sezione base)
+        one: Nuova registrazione (sezione originaria)
+        description: Nuova registrazione affiliazione (sezione originaria)
       group/sektions_neuanmeldungen_nv/neuanmeldung_zusatzsektion:
         one: Nuova registrazione (sezione aggiuntiva)
         description: Nuova registrazione affiliazione (sezione aggiuntiva)
@@ -1273,8 +1273,8 @@ it:
         one: Direzione
         description: Direzione
       group/sektions_ressort/mitglied:
-        one: Membro
-        description: Membro
+        one: Socio
+        description: Socio
       group/sektions_ressort/andere:
         one: Altro
         description: Altro
@@ -1294,11 +1294,11 @@ it:
         one: Altro
         description: Altro
       group/sektions_touren_und_kurse/tourenleiter:
-        one: Guida escursionistica (con qualifica)
-        description: Guida escursionistica (con qualifica)
+        one: Capo Gita (con qualifica)
+        description: Capo Gita (con qualifica)
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
-        one: Guida escursionistica (senza qualifica)
-        description: Guida escursionistica (senza qualifica)
+        one: Capo Gita (senza qualifica)
+        description: Capo Gita (senza qualifica)
       group/sektions_touren_und_kurse/kibe_chef:
         one: Responsabile Alpinismo Bambini
         description: Responsabile Alpinismo Bambini
@@ -1318,14 +1318,14 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_touren_und_kurse/tourenchef:
-        one: Tour manager
-        description: Tour manager
+        one: Responsabile gite
+        description: Responsabile gite
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Manager del tour estivo
-        description: Manager del tour estivo
+        one: Responsabile gite estivo
+        description: Responsabile gite estivo
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Tour Manager Inverno
-        description: Tour Manager Inverno
+        one: Responsabile gite Inverno
+        description: Responsabile gite Inverno
       group/sektions_clubhuetten/leserecht:
         one: Autorizzazione lettura
         description: Autorizzazione lettura
@@ -1336,8 +1336,8 @@ it:
         one: Responsabile di capanna
         description: Responsabile di capanna
       group/sektions_clubhuette/huettenwart:
-        one: Custode
-        description: Custode
+        one: Guardiano/-a
+        description: Guardiano/-a
       group/sektions_clubhuette/andere:
         one: Altro
         description: Altro
@@ -1353,8 +1353,8 @@ it:
         one: Responsabile di capanna
         description: Responsabile di capanna
       group/sektionshuette/huettenwart:
-        one: Custode
-        description: Custode
+        one: Guardiano/-a
+        description: Guardiano/-a
       group/sektionshuette/andere:
         one: Altro
         description: Altro
