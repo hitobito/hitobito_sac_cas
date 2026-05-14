@@ -16,7 +16,7 @@ RSpec.describe "GET oauth/profile", type: :request do
       resource_owner_id: user.id)
   end
   let!(:membership_pass) do
-    Fabricate(:pass, pass_definition: Fabricate(:pass_definition, id: 1), person: user)
+    Fabricate(:pass, pass_definition: pass_definitions(:sac_membership), person: user)
   end
 
   def make_request(skip_checks: true)

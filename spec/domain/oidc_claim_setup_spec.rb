@@ -58,14 +58,14 @@ describe OidcClaimSetup, :outside_language_scope do
     context "mitglied" do
       let(:owner) { people(:mitglied) }
 
-      before {
-        # rubocop:todo Layout/LineLength
-        allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
-      }
-      # rubocop:enable Layout/LineLength
+      before do
+        allow(Settings.application).to receive(:hostname).and_return("hitobito.example.com")
+        Fabricate(:pass, person: owner, pass_definition: pass_definitions(:sac_membership),
+          verify_token: "aSuperSweetToken42")
+      end
 
       it "membership_verify_url is present" do
-        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/verify_membership/aSuperSweetToken42"
+        expect(claims[:membership_verify_url]).to eq "http://hitobito.example.com/passes/verify/aSuperSweetToken42"
       end
     end
 
