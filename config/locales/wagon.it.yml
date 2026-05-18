@@ -2217,10 +2217,10 @@ it:
     membership:
       verify:
         member_details_sac_cas:
-          tour_guide: Guida escursionistica attiva
+          tour_guide: Aktive/r Tourenleiter/in
         below_name_sac_cas:
-          membership_number: "Socio: %{membership_number}"
-          membership_years: "Numero anni di affiliazione: %{membership_years}"
+          membership_number: "Mitglied: %{membership_number}"
+          membership_years: "Anzahl Mitgliedsjahre: %{membership_years}"
 
     membership_invoices:
       no_invoice_possible: >-
@@ -2492,10 +2492,10 @@ it:
       foreign_key_error: "Questo motivo di disdetta risulta in uso da parte di alcune persone, pertanto la cancellazione non è possibile."
 
   verify_membership:
-    title: Verifica dell’affiliazione al SAC-CAS
-    not_found: Codice di verifica non valido
-    status_valid: Affiliazione valida
-    status_invalid: Affiliazione non valida
+    title: Verifizierung SAC CAS Mitgliedschaft
+    not_found: Ungültiger Verifikationscode
+    status_valid: Mitgliedschaft gültig
+    status_invalid: Mitgliedschaft ungültig
 
   wizards:
     signup:
