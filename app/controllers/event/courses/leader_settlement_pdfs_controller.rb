@@ -30,7 +30,9 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
       filename: "Kurskaderabrechnung Kurs #{event.number}"
     ).enqueue!
 
-    respond_to_export_job(redirection_target: group_event_participation_path(group, event, participation))
+    respond_to_export_job(
+      redirection_target: group_event_participation_path(group, event, participation)
+    )
   end
 
   def rerender_form(status)
