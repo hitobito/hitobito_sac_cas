@@ -18,7 +18,7 @@
       - if google_wallet_configured?
         = action_button t('person.passes.index.add_to_google_wallet'), google_add_to_wallet_group_person_pass_path(parent, entry, pass), "add"
       - if apple_wallet_configured?
-        = action_button t('person.passes.index.add_to_apple_wallet'), group_person_pass_path(parent, entry, pass, format: :pkpass), "add"
+        = action_button t('person.passes.index.add_to_apple_wallet'), apple_download_pkpass_group_person_pass_path(parent, entry, pass, format: :pkpass), "add"
 
     .d-flex.justify-content-center.w-100
       .qr-code-wrapper
