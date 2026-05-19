@@ -69,14 +69,14 @@ class Event::ApprovalCommissionResponsibilityForm
   end
 
   def existing_responsibility_entries
-    group.event_approval_commission_responsibilities
+    @existing_responsibility_entries ||= group.event_approval_commission_responsibilities
       .includes(:sektion, :freigabe_komitee, target_group: :translations, discipline: :translations)
       .index_by { [_1.target_group_id, _1.discipline_id, _1.subito] }
   end
 
   def all_responsibility_combinations
-    Event::TargetGroup.assignable.main.list.flat_map do |target_group|
-      Event::Discipline.assignable.main.list.flat_map do |discipline|
+    Event::TargetGroup.without_deleted.main.list.flat_map do |target_group|
+      Event::Discipline.without_deleted.main.list.flat_map do |discipline|
         [true, false].map { |subito| [target_group, discipline, subito] }
       end
     end

@@ -30,17 +30,19 @@ describe Event::ApprovalCommissionResponsibilityForm do
     end
 
     it "does not return responsibilities of soft deleted disciplines" do
-      event_disciplines(:klettern).delete
+      event_disciplines(:wanderweg).destroy
+      expect(event_disciplines(:wanderweg).deleted?).to be_truthy
 
       expect(subject.event_approval_commission_responsibilities)
-        .to match_array group_responsibilities.where(discipline_id: Event::Discipline.without_deleted)
+        .not_to include(event_disciplines(:wanderweg))
     end
 
     it "does not return responsibilities of soft deleted target groups" do
-      event_target_groups(:kinder).delete
+      event_target_groups(:kinder).destroy
+      expect(event_target_groups(:kinder).deleted?).to be_truthy
 
       expect(subject.event_approval_commission_responsibilities)
-        .to match_array group_responsibilities.where(target_group_id: Event::TargetGroup.without_deleted)
+        .not_to include(event_target_groups(:kinder))
     end
   end
 
