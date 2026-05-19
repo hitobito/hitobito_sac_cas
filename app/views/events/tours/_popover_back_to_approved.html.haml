@@ -3,12 +3,7 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-.alert.alert-info="#{icon("info-circle")} #{t(".alert_info")}"
-
-= standard_form(entry, url: state_group_event_path(params[:group_id], params[:id], {state: :approved}), method: :put) do |f|
-  = f.labeled_input_field :internal_comment
-
-  = render "events/tours/popover_email_option", f: f, receiver_options: [:assigned_freigabe_komitees, :leaders], none_selected: false
-
-  = submit_button(f, t("global.button.save"), name: :button, value: :keep)
-  = cancel_link("#")
+= render "events/tours/popover_state_change", info_alert: t(".alert_info"),
+                                              next_state: :approved,
+                                              receiver_options: [:assigned_freigabe_komitees, :leaders],
+                                              none_selected: false

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Event::Tour::EssentialPeopleEmailDispatchJob do
+describe Event::Tour::InvolvedPeopleEmailDispatchJob do
   include ActiveJob::TestHelper
 
   let(:tour) { events(:section_tour) }

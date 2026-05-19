@@ -7,6 +7,9 @@
 
 require "spec_helper"
 
+class Group::FreigabeKomitee::SomeDifferentRole < ::Group::FreigabeKomitee::Pruefer
+end
+
 describe Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob do
   include ActiveJob::TestHelper
 
@@ -19,7 +22,8 @@ describe Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob do
   end
 
   it "sends email to all people in assigned freigabe komitee" do
-    Fabricate(Group::FreigabeKomitee::Pruefer.sti_name, person: people(:mitglied),
+    Fabricate(Group::FreigabeKomitee::Pruefer.sti_name,
+      person: people(:mitglied),
       group: groups(:bluemlisalp_freigabekomitee))
 
     expect { subject.perform }
@@ -28,6 +32,18 @@ describe Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob do
 
   it "does not send any emails if there is no assigned freigabe komitee" do
     tour.groups.first.event_approval_commission_responsibilities.destroy_all
+
+    expect { subject.perform }
+      .not_to have_enqueued_mail(Event::TourMailer, :publication)
+  end
+
+  it "does not send any emails for people with different role type than pruefer" do
+    allow_any_instance_of(Group::FreigabeKomitee::SomeDifferentRole).to receive(:assert_type_is_allowed_for_group)
+      .and_return(true)
+    Group::FreigabeKomitee::SomeDifferentRole.create!(
+      person: people(:mitglied),
+      group: groups(:bluemlisalp_freigabekomitee)
+    )
 
     expect { subject.perform }
       .not_to have_enqueued_mail(Event::TourMailer, :publication)

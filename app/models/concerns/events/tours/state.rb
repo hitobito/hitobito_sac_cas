@@ -11,7 +11,7 @@ module Events::Tours::State
   include Events::State
 
   RECEIVER_JOB_MAP = {
-    interested_section_people: Event::Tour::InterestedSectionPeopleEmailDispatchJob,
+    mailing_list_people: Event::Tour::MailingListPeopleEmailDispatchJob,
     assigned_freigabe_komitees: Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob,
     leaders: Event::Tour::LeadersEmailDispatchJob,
     participants_confirmed: Event::Tour::ParticipantsEmailDispatchJob,
@@ -71,16 +71,17 @@ module Events::Tours::State
     participations.where(state: :assigned).update_all(state: :summoned)
     participations.where(state: [:unconfirmed, :applied]).update_all(state: :rejected)
 
-    unless no_emails?
-      receiver_options.each do |option|
-        mailer_method = (option.to_sym == :participants_unconfirmed) ?
-            :participation_reject : :participation_summon
+    return if no_emails?
 
-        enqueue_email_job(option, mailer_method)
-        if option.to_sym != :participants_unconfirmed
-          Event::Tour::EssentialPeopleEmailDispatchJob.new(mailer_method, id).enqueue!
-        end
-      end
+    receiver_options.each do |option|
+      mailer_method = (option == "participants_unconfirmed") ?
+          :participation_reject : :participation_summon
+
+      enqueue_email_job(option, mailer_method)
+    end
+
+    unless receiver_options.include?("participants_unconfirmed")
+      Event::Tour::InvolvedPeopleEmailDispatchJob.new(:participation_summon, id).enqueue!
     end
   end
 
@@ -123,7 +124,7 @@ module Events::Tours::State
     receiver_options.each do |option|
       enqueue_email_job(option, mailer_method)
     end
-    Event::Tour::EssentialPeopleEmailDispatchJob.new(mailer_method, id).enqueue!
+    Event::Tour::InvolvedPeopleEmailDispatchJob.new(mailer_method, id).enqueue!
   end
 
   def enqueue_email_job(receiver_option, mailer_method)
@@ -131,7 +132,7 @@ module Events::Tours::State
     args = [mailer_method, id]
     args << states if states.present?
 
-    RECEIVER_JOB_MAP[receiver_option].new(*args).enqueue!
+    RECEIVER_JOB_MAP.fetch(receiver_option).new(*args).enqueue!
   end
 
   def no_emails?

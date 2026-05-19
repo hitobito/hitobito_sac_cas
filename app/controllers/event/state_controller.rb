@@ -33,27 +33,18 @@ class Event::StateController < ApplicationController
 
   def set_course_attrs
     entry.skip_emails = params[:skip_emails]
-    if next_state&.to_sym == :canceled
+    if next_state == :canceled
       entry.canceled_reason = params.dig(:event, :canceled_reason)
       entry.inform_participants = params.dig(:event, :inform_participants)
-    elsif next_state&.to_sym == :application_open
+    elsif next_state == :application_open
       reset_canceled_reason
     end
   end
 
   def set_tour_attrs
-    handle_tour_email_state_change(next_state&.to_sym)
-    handle_tour_state_transitions(next_state&.to_sym)
-  end
-
-  def handle_tour_email_state_change(next_state)
-    return unless tour_email_state_change?(next_state)
-
     entry.receiver_options = receiver_options
-  end
 
-  def handle_tour_state_transitions(next_state)
-    assign_internal_comment if tour_email_state_change?(next_state)
+    assign_internal_comment
 
     case next_state
     when :approved then build_self_approval
@@ -75,7 +66,7 @@ class Event::StateController < ApplicationController
   end
 
   def next_state
-    params[:state]
+    params[:state]&.to_sym
   end
 
   def receiver_options
@@ -117,10 +108,6 @@ class Event::StateController < ApplicationController
 
   def assign_internal_comment
     entry.internal_comment = params.dig(:event, :internal_comment)
-  end
-
-  def tour_email_state_change?(next_state)
-    [:approved, :published, :canceled, :ready, :closed, :draft].include?(next_state)
   end
 
   def entry

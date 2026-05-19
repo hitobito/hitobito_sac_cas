@@ -3,13 +3,8 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
-.alert.alert-info="#{icon("info-circle")} #{t(".alert_info")}"
-
-= standard_form(entry, url: state_group_event_path(params[:group_id], params[:id], {state: :canceled}), method: :put) do |f|
-  = f.labeled_input_field :internal_comment
-  = f.labeled_collection_select(:canceled_reason, entry.model.class.canceled_reason_labels, :first, :last, { prompt: true}, { class: 'form-select form-select-sm', required: true })
-
-  = render "events/tours/popover_email_option", f: f, receiver_options: [:participants, :assigned_freigabe_komitees, :leaders], none_selected: false
-
-  = submit_button(f, t("global.button.save"), name: :button, value: :keep)
-  = cancel_link("#")
+= render "events/tours/popover_state_change", info_alert: t(".alert_info"),
+                                              next_state: :canceled,
+                                              receiver_options: [:participants, :assigned_freigabe_komitees, :leaders],
+                                              none_selected: false do |f|
+  = f.labeled_collection_select(:canceled_reason, entry.model.class.canceled_reason_labels, :first, :last, { prompt: true}, { class: "form-select form-select-sm w-100", required: true, label_class: "col-3" })

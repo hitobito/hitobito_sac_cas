@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -158,45 +158,30 @@ describe Event::Tour do
         expect { tour.update!(state: :published) }.not_to change(Delayed::Job, :count)
       end
 
-      it "enqueues job for interested_section_people with publication key" do
-        tour.receiver_options = ["interested_section_people"]
+      it "enqueues job for mailing_list_people with publication key" do
+        tour.receiver_options = ["mailing_list_people"]
 
-        expect(tour).to receive(:enqueue_email_job).with("interested_section_people", :publication)
-          .once
-          .and_call_original
         expect { tour.update!(state: :published) }
-          .to change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::InterestedSectionPeopleEmailDispatchJob%'"), :count
-          ).by(1)
-          .and change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-          ).by(1)
+          .to change(enqueued_job_for("Event::Tour::MailingListPeopleEmailDispatchJob", :publication), :count).by(1)
+          .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
       end
 
       it "enqueues job for assigned_freigabe_komitees with publication key" do
         tour.receiver_options = ["assigned_freigabe_komitees"]
 
-        expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :publication)
-          .once
-          .and_call_original
         expect { tour.update!(state: :published) }
           .to change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+            enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :publication), :count
           ).by(1)
-          .and change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-          ).by(1)
+          .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
       end
 
       it "enqueues job for leaders with publication key" do
         tour.receiver_options = ["leaders"]
 
-        expect(tour).to receive(:enqueue_email_job).with("leaders", :publication).once.and_call_original
         expect { tour.update!(state: :published) }
-          .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
-          .and change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-          ).by(1)
+          .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :publication), :count).by(1)
+          .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
       end
 
       context "subito tour" do
@@ -204,44 +189,33 @@ describe Event::Tour do
           tour.update_column(:subito, true)
         end
 
-        it "enqueues job for interested_section_people with publication_subito key" do
-          tour.receiver_options = ["interested_section_people"]
+        it "enqueues job for mailing_list_people with publication_subito key" do
+          tour.receiver_options = ["mailing_list_people"]
 
-          expect(tour).to receive(:enqueue_email_job).with("interested_section_people", :publication_subito)
-            .once
-            .and_call_original
           expect { tour.update!(state: :published) }
-            .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::InterestedSectionPeopleEmailDispatchJob%'"), :count
-            ).by(1)
-            .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-            ).by(1)
+            .to change(enqueued_job_for("Event::Tour::MailingListPeopleEmailDispatchJob", :publication), :count).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
         end
 
         it "enqueues job for assigned_freigabe_komitees with publication_subito key" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :publication_subito)
-            .once
-            .and_call_original
           expect { tour.update!(state: :published) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :publication_subito), :count
             ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication_subito), :count
             ).by(1)
         end
 
         it "enqueues job for leaders with publication_subito key" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :publication_subito).once.and_call_original
           expect { tour.update!(state: :published) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :publication_subito), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication_subito), :count
             ).by(1)
         end
       end
@@ -266,26 +240,22 @@ describe Event::Tour do
         it "enqueues job for assigned_freigabe_komitees with back_to_published key" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :back_to_published)
-            .once
-            .and_call_original
           expect { tour.update!(state: :published) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_published), :count
             ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_published), :count
             ).by(1)
         end
 
         it "enqueues job for leaders with back_to_published key" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :back_to_published).once.and_call_original
           expect { tour.update!(state: :published) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_published), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_published), :count
             ).by(1)
         end
       end
@@ -341,13 +311,10 @@ describe Event::Tour do
         tour.receiver_options = ["participants_confirmed"]
 
         expect(tour).to receive(:participant_states).once.and_return(["assigned"])
-        expect(tour).to receive(:enqueue_email_job).with("participants_confirmed", :participation_summon)
-          .once
-          .and_call_original
         expect { tour.update!(state: :ready) }
-          .to change(Delayed::Job.where("handler LIKE '%Event::Tour::ParticipantsEmailDispatchJob%'"), :count).by(1)
+          .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :participation_summon), :count).by(1)
           .and change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_summon), :count
           ).by(1)
       end
 
@@ -357,27 +324,32 @@ describe Event::Tour do
         expect(tour).to receive(:participant_states)
           .once
           .and_return(["unconfirmed", "applied"])
-        expect(tour).to receive(:enqueue_email_job).with("participants_unconfirmed", :participation_reject)
-          .once
-          .and_call_original
         expect { tour.update!(state: :ready) }
-          .to change(Delayed::Job.where("handler LIKE '%Event::Tour::ParticipantsEmailDispatchJob%'"), :count).by(1)
+          .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :participation_reject), :count).by(1)
           .and change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_reject), :count
           ).by(0)
       end
 
       it "enqueues job for leaders with participation_summon key" do
         tour.receiver_options = ["leaders"]
 
-        expect(tour).to receive(:enqueue_email_job).with("leaders", :participation_summon)
-          .once
-          .and_call_original
         expect { tour.update!(state: :ready) }
-          .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+          .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :participation_summon), :count).by(1)
           .and change(
-            Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_summon), :count
           ).by(1)
+      end
+
+      it "enqueues multiple receiver option jobs and the involved people once" do
+        tour.receiver_options = ["participants_confirmed", "leaders"]
+
+        expect { tour.update!(state: :ready) }
+          .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :participation_summon), :count).by(1)
+          .and change(
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_summon), :count
+          ).by(1)
+          .and change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :participation_summon), :count).by(1)
       end
     end
 
@@ -413,29 +385,30 @@ describe Event::Tour do
         it "enqueues job for assigned_freigabe_komitees" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :back_to_ready)
-            .once
-            .and_call_original
           expect { tour.update!(state: :ready) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_ready), :count
             ).by(1)
-            .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-            ).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_ready), :count).by(1)
         end
 
         it "enqueues job for leaders" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :back_to_ready)
-            .once
-            .and_call_original
           expect { tour.update!(state: :ready) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_ready), :count).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_ready), :count).by(1)
+        end
+
+        it "enqueues multiple receiver option jobs and the involved people once" do
+          tour.receiver_options = ["assigned_freigabe_komitees", "leaders"]
+
+          expect { tour.update!(state: :ready) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_ready), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_ready), :count
             ).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_ready), :count).by(1)
         end
       end
     end
@@ -475,27 +448,17 @@ describe Event::Tour do
       tour.receiver_options = ["participants_participated"]
 
       expect(tour).to receive(:participant_states).once.and_return(["attended"])
-      expect(tour).to receive(:enqueue_email_job).with("participants_participated", :closing)
-        .once
-        .and_call_original
       expect { tour.update!(state: :closed) }
-        .to change(Delayed::Job.where("handler LIKE '%Event::Tour::ParticipantsEmailDispatchJob%'"), :count).by(1)
-        .and change(
-          Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-        ).by(1)
+        .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :closing), :count).by(1)
+        .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :closing), :count).by(1)
     end
 
     it "enqueues job for leaders with closing key" do
       tour.receiver_options = ["leaders"]
 
-      expect(tour).to receive(:enqueue_email_job).with("leaders", :closing)
-        .once
-        .and_call_original
       expect { tour.update!(state: :closed) }
-        .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
-        .and change(
-          Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-        ).by(1)
+        .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :closing), :count).by(1)
+        .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :closing), :count).by(1)
     end
   end
 
@@ -532,41 +495,32 @@ describe Event::Tour do
           expect(tour).to receive(:participant_states)
             .once
             .and_return(["unconfirmed", "applied", "assigned", "summoned"])
-          expect(tour).to receive(:enqueue_email_job).with("participants", :canceled_weather)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :weather) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::ParticipantsEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :canceled_weather), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_weather), :count
             ).by(1)
         end
 
         it "enqueues job for assigned_freigabe_komitees with weather mail if canceled_reason is weather" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :canceled_weather)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :weather) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :canceled_weather), :count
             ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_weather), :count
             ).by(1)
         end
 
         it "enqueues job for leaders with weather mail if canceled_reason is weather" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :canceled_weather)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :weather) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :canceled_weather), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_weather), :count
             ).by(1)
         end
 
@@ -576,43 +530,32 @@ describe Event::Tour do
           expect(tour).to receive(:participant_states)
             .once
             .and_return(["unconfirmed", "applied", "assigned", "summoned"])
-          expect(tour).to receive(:enqueue_email_job).with("participants", :canceled_no_leader)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :no_leader) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::ParticipantsEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :canceled_no_leader), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_no_leader), :count
             ).by(1)
         end
 
         it "enqueues job for assigned_freigabe_komitees with no leader mail if canceled_reason is no_leader" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :canceled_no_leader)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :no_leader) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :canceled_no_leader), :count
             ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_no_leader), :count
             ).by(1)
         end
 
         it "enqueues job for leaders with no leader mail if canceled_reason is no_leader" do
           tour.receiver_options = ["leaders"]
 
-          tour.receiver_options = ["leaders"]
-
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :canceled_no_leader)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :no_leader) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :canceled_no_leader), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_no_leader), :count
             ).by(1)
         end
 
@@ -622,41 +565,40 @@ describe Event::Tour do
           expect(tour).to receive(:participant_states)
             .once
             .and_return(["unconfirmed", "applied", "assigned", "summoned"])
-          expect(tour).to receive(:enqueue_email_job).with("participants", :canceled_minimum_participants)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :minimum_participants) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::ParticipantsEmailDispatchJob%'"), :count).by(1)
+            .to change(
+              enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :canceled_minimum_participants), :count
+            ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for(
+                "Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_minimum_participants
+              ), :count
             ).by(1)
         end
 
         it "enqueues job for assigned_freigabe_komitees with minimum participants mail if minimum_participants" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :canceled_minimum_participants)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :minimum_participants) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob",
+                :canceled_minimum_participants), :count
             ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob",
+                :canceled_minimum_participants), :count
             ).by(1)
         end
 
         it "enqueues job for leaders with minimum participants mail if canceled_reason is minimum_participants" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :canceled_minimum_participants)
-            .once
-            .and_call_original
           expect { tour.update!(state: :canceled, canceled_reason: :minimum_participants) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(
+              enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :canceled_minimum_participants), :count
+            ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_minimum_participants), :count
             ).by(1)
         end
       end
@@ -683,29 +625,19 @@ describe Event::Tour do
         it "enqueues job for assigned_freigabe_komitees with back_to_draft key" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :back_to_draft)
-            .once
-            .and_call_original
           expect { tour.update!(state: :draft) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_draft), :count
             ).by(1)
-            .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-            ).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_draft), :count).by(1)
         end
 
         it "enqueues job for leaders with back_to_draft key" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :back_to_draft)
-            .once
-            .and_call_original
           expect { tour.update!(state: :draft) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
-            .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
-            ).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_draft), :count).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_draft), :count).by(1)
         end
       end
     end
@@ -731,28 +663,22 @@ describe Event::Tour do
         it "enqueues job for assigned_freigabe_komitees with back_to_approved key" do
           tour.receiver_options = ["assigned_freigabe_komitees"]
 
-          expect(tour).to receive(:enqueue_email_job).with("assigned_freigabe_komitees", :back_to_approved)
-            .once
-            .and_call_original
           expect { tour.update!(state: :approved) }
             .to change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_approved), :count
             ).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_approved), :count
             ).by(1)
         end
 
         it "enqueues job for leaders with back_to_approved key" do
           tour.receiver_options = ["leaders"]
 
-          expect(tour).to receive(:enqueue_email_job).with("leaders", :back_to_approved)
-            .once
-            .and_call_original
           expect { tour.update!(state: :approved) }
-            .to change(Delayed::Job.where("handler LIKE '%Event::Tour::LeadersEmailDispatchJob%'"), :count).by(1)
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_approved), :count).by(1)
             .and change(
-              Delayed::Job.where("handler LIKE '%Event::Tour::EssentialPeopleEmailDispatchJob%'"), :count
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_approved), :count
             ).by(1)
         end
       end
@@ -913,5 +839,9 @@ describe Event::Tour do
       expect(version.event).to eq("removed")
       expect(version.main).to eq(tour)
     end
+  end
+
+  def enqueued_job_for(job_class, receiver_option)
+    Delayed::Job.where("handler LIKE '%#{job_class}%' AND handler LIKE '%#{receiver_option}%'")
   end
 end

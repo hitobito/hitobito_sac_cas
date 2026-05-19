@@ -19,47 +19,42 @@ module Dropdown::Events::Tours
 
     def state_item_tour_published(label, link)
       if event.state_comes_before?(event.state, :published)
-        add_item_with_popover(label,
-          template.render("events/tours/popover_published",
-            entry: event))
+        email_popover(label, "events/tours/popover_published")
       else
-        add_item_with_popover(label,
-          template.render("events/tours/popover_back_to_published",
-            entry: event))
+        email_popover(label, "events/tours/popover_back_to_published")
       end
     end
 
     def state_item_tour_ready(label, link)
       if event.state_comes_before?(event.state, :ready)
-        add_item_with_popover(label, template.render("events/tours/popover_ready", entry: event))
+        email_popover(label, "events/tours/popover_ready")
       else
-        add_item_with_popover(label,
-          template.render("events/tours/popover_back_to_ready",
-            entry: event))
+        email_popover(label, "events/tours/popover_back_to_ready")
       end
     end
 
     def state_item_tour_closed(label, link)
-      add_item_with_popover(label, template.render("events/tours/popover_closed", entry: event))
+      email_popover(label, "events/tours/popover_closed")
     end
 
     def state_item_tour_canceled(label, link)
-      add_item_with_popover(label, template.render("events/tours/popover_canceled", entry: event))
+      email_popover(label, "events/tours/popover_canceled")
     end
 
     def state_item_tour_draft(label, link)
-      add_item_with_popover(label,
-        template.render("events/tours/popover_back_to_draft", entry: event))
+      email_popover(label, "events/tours/popover_back_to_draft")
     end
 
     def state_item_tour_approved(label, link)
       if event.state_comes_before?(event.state, :approved)
         add_default_item(label, link, :approved)
       else
-        add_item_with_popover(label,
-          template.render("events/tours/popover_back_to_approved",
-            entry: event))
+        email_popover(label, "events/tours/popover_back_to_approved")
       end
+    end
+
+    def email_popover(label, partial)
+      add_item_with_popover(label, template.render(partial, entry: event))
     end
   end
 end

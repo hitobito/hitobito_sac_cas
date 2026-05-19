@@ -7,12 +7,9 @@
 
 class Event::TourMailer < ApplicationMailer
   include ::TourMailer
-  include MultilingualMailer
 
   PUBLICATION = "event_tour_publication"
   PUBLICATION_SUBITO = "event_tour_publication_subito"
-  PARTICIPATION_SUMMON = "event_tour_participation_summon"
-  PARTICIPATION_REJECT = "event_tour_participation_reject"
   BACK_TO_DRAFT = "event_tour_back_to_draft"
   BACK_TO_APPROVED = "event_tour_back_to_approved"
   BACK_TO_PUBLISHED = "event_tour_back_to_published"
@@ -24,14 +21,6 @@ class Event::TourMailer < ApplicationMailer
 
   def publication_subito(tour, recipient)
     compose_email(tour, recipient, PUBLICATION_SUBITO)
-  end
-
-  def participation_summon(tour, recipient)
-    compose_email(tour, recipient, PARTICIPATION_SUMMON)
-  end
-
-  def participation_reject(tour, recipient)
-    compose_email(tour, recipient, PARTICIPATION_REJECT)
   end
 
   def back_to_draft(tour, recipient)
@@ -54,6 +43,13 @@ class Event::TourMailer < ApplicationMailer
   # These can also be sent to people without an ongoing participation
   # To keep the method parameters for the participation mailer the same
   # for all mailer methods, we have implemented these emails here too.
+  def participation_summon(tour, recipient)
+    compose_email(tour, recipient, Event::TourParticipationMailer::SUMMONED_PARTICIPATION)
+  end
+
+  def participation_reject(tour, recipient)
+    compose_email(tour, recipient, Event::TourParticipationMailer::REJECT_PARTICIPATION)
+  end
 
   def closing(tour, recipient)
     compose_email(tour, recipient, Event::TourParticipationMailer::CLOSING)
@@ -78,6 +74,8 @@ class Event::TourMailer < ApplicationMailer
     @event = tour
     @group = @context = tour.groups.first
 
-    compose(recipient, content_key, context: @context)
+    I18n.with_locale(@group.language) do
+      compose(recipient, content_key, context: @context)
+    end
   end
 end
