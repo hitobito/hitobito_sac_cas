@@ -80,11 +80,14 @@ class Events::AnnualCourseDuplicateBuilder
       .joins(:roles)
       .where(state: :assigned,
         roles: {type: Event::Course::LEADER_ROLES}).find_each do |source_participation|
-          course.participations.build(source_participation.attributes.except("id", "event_id"))
+          participation = course.participations.build(
+            source_participation.attributes.except("id", "event_id")
+          )
 
           source_participation.roles.each do |source_role|
-            course.participations.last.roles.build(source_role.attributes.except("id",
-              "participation_id"))
+            participation.roles.build(
+              source_role.attributes.except("id", "participation_id")
+            )
           end
         end
     course.participations.each { _1.event = course }

@@ -46,16 +46,21 @@ describe Events::AnnualCourseDuplicateBuilder do
       end
     end
 
-    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation,
-      event: course))
-    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation,
-      event: course))
-    Event::Course::Role::Leader.create!(participation: Fabricate(:event_participation,
-      event: course, state: :assigned))
-    Event::Course::Role::LeaderAspirant.create!(participation: Fabricate(:event_participation,
-      event: course, state: :assigned))
-    Event::Course::Role::LeaderAspirant.create!(participation: Fabricate(:event_participation,
-      event: course, state: :applied))
+    Event::Course::Role::Participant.create!(
+      participation: Fabricate(:event_participation, event: course)
+    )
+    Event::Course::Role::Participant.create!(
+      participation: Fabricate(:event_participation, event: course)
+    )
+    Event::Course::Role::Leader.create!(
+      participation: Fabricate(:event_participation, event: course, state: :assigned)
+    )
+    Event::Course::Role::LeaderAspirant.create!(
+      participation: Fabricate(:event_participation, event: course, state: :assigned)
+    )
+    Event::Course::Role::LeaderAspirant.create!(
+      participation: Fabricate(:event_participation, event: course, state: :applied)
+    )
 
     course.refresh_participant_counts!
     course.reload
