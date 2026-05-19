@@ -36,29 +36,29 @@ module SacCas
   ].freeze
 
   MITGLIED_ROLES = [
-    MITGLIED_STAMMSEKTION_ROLES,
-    MITGLIED_ZUSATZSEKTION_ROLES
-  ].flatten.freeze
+    *MITGLIED_STAMMSEKTION_ROLES,
+    *MITGLIED_ZUSATZSEKTION_ROLES
+  ].freeze
 
   NEUANMELDUNG_ROLES = [
-    NEUANMELDUNG_STAMMSEKTION_ROLES,
-    NEUANMELDUNG_ZUSATZSEKTION_ROLES
-  ].flatten.freeze
+    *NEUANMELDUNG_STAMMSEKTION_ROLES,
+    *NEUANMELDUNG_ZUSATZSEKTION_ROLES
+  ].freeze
 
   MITGLIED_AND_NEUANMELDUNG_ROLES = [
-    MITGLIED_ROLES,
-    NEUANMELDUNG_ROLES
-  ].flatten.freeze
+    *MITGLIED_ROLES,
+    *NEUANMELDUNG_ROLES
+  ].freeze
 
   STAMMSEKTION_ROLES = [
-    MITGLIED_STAMMSEKTION_ROLES,
-    NEUANMELDUNG_STAMMSEKTION_ROLES
-  ].flatten.freeze
+    *MITGLIED_STAMMSEKTION_ROLES,
+    *NEUANMELDUNG_STAMMSEKTION_ROLES
+  ].freeze
 
   ZUSATZSEKTION_ROLES = [
-    MITGLIED_ZUSATZSEKTION_ROLES,
-    NEUANMELDUNG_ZUSATZSEKTION_ROLES
-  ].flatten.freeze
+    *MITGLIED_ZUSATZSEKTION_ROLES,
+    *NEUANMELDUNG_ZUSATZSEKTION_ROLES
+  ].freeze
 
   ### Various roles
 
@@ -101,9 +101,17 @@ module SacCas
     ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
     ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion,
     ::Group::AboMagazin::Abonnent,
-    ::Group::AboMagazin::Neuanmeldung,
+    ::Group::AboMagazin::Neuanmeldung
+  ].freeze
+
+  API_MANAGED_ROLES = [
     ::Group::AboTourenPortal::Abonnent,
     ::Group::AboTourenPortal::Neuanmeldung
+  ].freeze
+
+  MANAGED_ROLES = [
+    *WIZARD_MANAGED_ROLES,
+    *API_MANAGED_ROLES
   ].freeze
 
   MEMBERSHIP_PROLONGABLE_ROLES = [
@@ -113,10 +121,10 @@ module SacCas
   ]
 
   BACKOFFICE_DESTROYABLE_ROLES = [
-    NEUANMELDUNG_ROLES,
+    *NEUANMELDUNG_ROLES,
     ::Group::AboMagazin::Neuanmeldung,
     ::Group::AboTourenPortal::Neuanmeldung
-  ].flatten.freeze
+  ].freeze
 
   ###
 

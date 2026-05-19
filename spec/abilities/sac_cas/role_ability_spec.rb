@@ -18,7 +18,12 @@ describe RoleAbility do
     role.group.parent.update!(mitglied_termination_by_section_only: value)
   end
 
-  describe "destroying neuanmeldung roles" do
+  describe "managed roles" do
+    let(:abo_touren_portal) { Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos)) }
+    let(:matterhorn_mitglied) do
+      Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
+        group: groups(:matterhorn_mitglieder)).person
+    end
     let(:backoffice_destroyable_roles) do
       [
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym,
@@ -26,40 +31,88 @@ describe RoleAbility do
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name.to_sym,
           group: groups(:bluemlisalp_neuanmeldungen_nv),
-          person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
-            group: groups(:matterhorn_mitglieder)).person),
+          person: matterhorn_mitglied),
         Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.name.to_sym,
           group: groups(:bluemlisalp_neuanmeldungen_sektion)),
 
         Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.name.to_sym,
           group: groups(:bluemlisalp_neuanmeldungen_sektion),
-          person: Fabricate(Group::SektionsMitglieder::Mitglied.name.to_sym,
-            group: groups(:matterhorn_mitglieder)).person),
+          person: matterhorn_mitglied),
 
-        Fabricate(Group::AboMagazin::Neuanmeldung.name.to_sym, group: groups(:abo_die_alpen)),
-
+        Fabricate(Group::AboMagazin::Neuanmeldung.name.to_sym, group: groups(:abo_die_alpen))
+      ]
+    end
+    let(:wizard_managed_roles) do
+      [
+        Fabricate(::Group::SektionsMitglieder::Mitglied.name.to_sym,
+          group: groups(:bluemlisalp_mitglieder)),
+        Fabricate(::Group::SektionsMitglieder::MitgliedZusatzsektion.name.to_sym,
+          group: groups(:bluemlisalp_mitglieder),
+          person: matterhorn_mitglied),
+        Fabricate(::Group::AboMagazin::Abonnent.name.to_sym,
+          group: groups(:abo_die_alpen))
+      ]
+    end
+    let(:api_managed_roles) do
+      [
+        Fabricate(::Group::AboTourenPortal::Abonnent.name.to_sym,
+          group: abo_touren_portal)
+      ]
+    end
+    let(:api_managed_neuanmeldung_roles) do
+      [
         Fabricate(Group::AboTourenPortal::Neuanmeldung.name.to_sym,
-          group: Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos)))
+          group: abo_touren_portal)
       ]
     end
 
     context "as backoffice" do
-      let(:person) {
+      let(:person) do
         Fabricate(Group::Geschaeftsstelle::Admin.name.to_sym,
           group: groups(:geschaeftsstelle)).person
-      }
+      end
 
-      it "is allowed to destroy" do
-        backoffice_destroyable_roles.each do |to_destroy|
+      it "is allowed to destroy neuanmeldungen" do
+        (backoffice_destroyable_roles + api_managed_neuanmeldung_roles).each do |to_destroy|
           expect(ability).to be_able_to(:destroy, to_destroy)
+        end
+      end
+
+      it "cannot destroy mitglied or abonnent roles" do
+        (wizard_managed_roles + api_managed_roles).each do |to_destroy|
+          expect(ability).not_to be_able_to(:destroy, to_destroy)
         end
       end
     end
 
-    context "as mitglied" do
+    context "as sektions admin" do
+      let(:person) do
+        Fabricate(Group::SektionsFunktionaere::Administration.name.to_sym,
+          group: groups(:bluemlisalp_funktionaere)).person
+      end
+
       it "is not allowed to destroy" do
-        backoffice_destroyable_roles.each do |to_destroy|
+        (backoffice_destroyable_roles + wizard_managed_roles).each do |to_destroy|
           expect(ability).to_not be_able_to(:destroy, to_destroy)
+        end
+      end
+    end
+
+    context "as top layer service token" do
+      let(:service_token) do
+        Fabricate(:service_token, layer: groups(:root), permission: :layer_and_below_full, groups: true, people: true)
+      end
+      let(:ability) { TokenAbility.new(service_token) }
+
+      it "can destroy api managed roles" do
+        (api_managed_roles + api_managed_neuanmeldung_roles).each do |to_destroy|
+          expect(ability).to be_able_to(:destroy, to_destroy)
+        end
+      end
+
+      it "cannot destroy wizard managed roles" do
+        (backoffice_destroyable_roles + wizard_managed_roles).each do |to_destroy|
+          expect(ability).not_to be_able_to(:destroy, to_destroy)
         end
       end
     end
@@ -201,47 +254,6 @@ describe RoleAbility do
 
       it "is not able to destroy role with admin permission" do
         expect(ability).not_to be_able_to(:destroy, admin_role)
-      end
-    end
-  end
-
-  describe "wizard managed roles" do
-    {
-      bluemslisap_mitglieder: [
-        ::Group::SektionsMitglieder::Mitglied,
-        ::Group::SektionsMitglieder::MitgliedZusatzsektion
-      ],
-      bluemlisalp_neuanmeldungen_nv: [
-        ::Group::SektionsNeuanmeldungenNv::Neuanmeldung,
-        ::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion
-      ],
-      bluemlisalp_neuanmeldungen_sektion: [
-        ::Group::SektionsNeuanmeldungenSektion::Neuanmeldung,
-        ::Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion
-      ],
-      abo_magazine: [
-        ::Group::AboMagazin::Abonnent,
-        ::Group::AboMagazin::Neuanmeldung
-      ],
-      abo_touren_portal: [
-        ::Group::AboTourenPortal::Abonnent,
-        ::Group::AboTourenPortal::Neuanmeldung
-      ]
-    }.each do |group_key, role_types|
-      let(:group) do
-        if group_key == :abo_touren_portal
-          Fabricate(Group::AboTourenPortal.sti_name, parent: groups(:abos))
-        else
-          groups(group_key)
-        end
-      end
-
-      role_types.each do |role_type|
-        let(:role) { Fabricate(role_type.sti_name, group: group) }
-
-        it "cannot destroy #{role_type}" do
-          expect(ability).not_to be_able_to(:destroy, role)
-        end
       end
     end
   end
