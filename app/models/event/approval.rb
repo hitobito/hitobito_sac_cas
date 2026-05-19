@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Approval < ApplicationRecord
+  has_paper_trail meta: {main_id: ->(a) { a.event_id }, main_type: Event.sti_name},
+    on: [:create, :update]
+
   model_stamper
   stampable stamper_class_name: :person, deleter: false
 
