@@ -60,14 +60,6 @@ de:
       total_event_days_exceeded: darf die totalen Tage des Kurses nicht überschreiten
       must_be_no_more_than_12_months: Der Zeitraum darf maximimal 12 Monate betragen.
 
-  version:
-    association_change:
-      event/approval:
-        approved: Freigabe %{approval_kind} durch %{freigabe_komitee}
-        rejected: Ablehnung %{approval_kind} durch %{freigabe_komitee}
-        self_approval: Selbstfreigabe
-
-
   activemodel:
     attributes:
       event/courses/leader_settlement_form:
@@ -1826,6 +1818,11 @@ de:
 
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
+
+  event/approval:
+    approved: Freigabe %{approval_kind} durch %{freigabe_komitee}
+    rejected: Ablehnung %{approval_kind} durch %{freigabe_komitee}
+    self_approval: Selbstfreigabe
 
   export/tabular/people/mitgliedschaft:
     attributes:

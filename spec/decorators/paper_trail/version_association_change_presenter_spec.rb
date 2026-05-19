@@ -20,28 +20,12 @@ describe PaperTrail::VersionAssociationChangePresenter, :draper_with_helpers, ve
     let(:tour) { events(:section_tour) }
     let(:version) { PaperTrail::Version.where(main_id: tour.id).order(:created_at, :id).last }
 
-    it "builds approve text" do
+    it "returns only the item_label" do
       tour.approvals.build(freigabe_komitee: groups(:bluemlisalp_freigabekomitee),
         approval_kind: event_approval_kinds(:professional), approved: true)
       tour.save!
 
       is_expected.to eq("<div>Freigabe Fachlich durch Freigabekomitee</div>")
-    end
-
-    it "builds refused text" do
-      tour.approvals.build(freigabe_komitee: groups(:bluemlisalp_freigabekomitee),
-        approval_kind: event_approval_kinds(:professional), approved: false)
-      tour.save!
-
-      is_expected.to eq("<div>Ablehnung Fachlich durch Freigabekomitee</div>")
-    end
-
-    it "builds self approved text" do
-      tour.approvals.build(freigabe_komitee: nil,
-        approval_kind: event_approval_kinds(:professional), approved: false)
-      tour.save!
-
-      is_expected.to eq("<div>Selbstfreigabe</div>")
     end
   end
 end

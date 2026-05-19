@@ -42,6 +42,26 @@ describe Event::Approval do
     end
   end
 
+  describe "#to_s" do
+    it "builds approve text" do
+      approval.update!(approved: true)
+
+      expect(approval.to_s).to eq "Freigabe Fachlich durch Freigabekomitee"
+    end
+
+    it "builds refused text" do
+      approval.update!(approved: false)
+
+      expect(approval.to_s).to eq "Ablehnung Fachlich durch Freigabekomitee"
+    end
+
+    it "builds self approved text" do
+      approval.update!(freigabe_komitee: nil)
+
+      expect(approval.to_s).to eq "Selbstfreigabe"
+    end
+  end
+
   context "paper trails", versioning: true do
     let(:event) { events(:top_course) }
 

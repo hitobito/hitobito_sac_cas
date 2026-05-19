@@ -20,4 +20,20 @@ class Event::Approval < ApplicationRecord
 
   validates :event_id, uniqueness: {scope: [:freigabe_komitee_id, :approval_kind_id]}
   validates :approval_kind, presence: true, if: :freigabe_komitee
+
+  def to_s
+    key = if freigabe_komitee.nil?
+      "self_approval"
+    elsif approved?
+      "approved"
+    else
+      "rejected"
+    end
+
+    I18n.t(
+      "event/approval.#{key}",
+      freigabe_komitee: freigabe_komitee&.name,
+      approval_kind: approval_kind
+    )
+  end
 end
