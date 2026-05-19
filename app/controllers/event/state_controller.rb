@@ -9,6 +9,8 @@ class Event::StateController < ApplicationController
   def update
     authorize!(:update, entry)
 
+    return head :unprocessable_content unless valid_receiver_options?
+
     save_next_state if state_possible?
 
     redirect_to group_event_path
@@ -31,20 +33,23 @@ class Event::StateController < ApplicationController
 
   def set_course_attrs
     entry.skip_emails = params[:skip_emails]
-    if next_state&.to_sym == :canceled
+    if next_state == :canceled
       entry.canceled_reason = params.dig(:event, :canceled_reason)
       entry.inform_participants = params.dig(:event, :inform_participants)
-    elsif next_state&.to_sym == :application_open
+    elsif next_state == :application_open
       reset_canceled_reason
     end
   end
 
   def set_tour_attrs
-    case next_state&.to_sym
-    when :approved
-      build_self_approval if entry.state_comes_before?(entry.state_was, :approved)
-    when :review
-      rebuild_approvals
+    entry.receiver_options = receiver_options
+
+    assign_internal_comment
+
+    case next_state
+    when :approved then build_self_approval
+    when :review then rebuild_approvals
+    when :canceled then assign_canceled_reason
     end
   end
 
@@ -61,7 +66,17 @@ class Event::StateController < ApplicationController
   end
 
   def next_state
-    params[:state]
+    params[:state]&.to_sym
+  end
+
+  def receiver_options
+    params[:receiver_options]
+  end
+
+  def valid_receiver_options?
+    return true if receiver_options.nil? || receiver_options.include?("none")
+
+    receiver_options.all? { Event::Tour::RECEIVER_JOB_MAP.key?(_1) }
   end
 
   def state_possible?
@@ -73,6 +88,8 @@ class Event::StateController < ApplicationController
   end
 
   def build_self_approval
+    return unless entry.state_comes_before?(entry.state_was, :approved)
+
     entry.approvals.each(&:mark_for_destruction)
     entry.approvals.build(approved: true)
   end
@@ -83,6 +100,14 @@ class Event::StateController < ApplicationController
     elsif params[:button] == "keep"
       Event::Tour::ApprovalForm.new(entry, current_user).reset_approvals
     end
+  end
+
+  def assign_canceled_reason
+    entry.canceled_reason = params.dig(:event, :canceled_reason)
+  end
+
+  def assign_internal_comment
+    entry.internal_comment = params.dig(:event, :internal_comment)
   end
 
   def entry

@@ -1,0 +1,10 @@
+- #  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+- #  hitobito_sac_cas and licensed under the Affero General Public License version 3
+- #  or later. See the COPYING file at the top-level directory or at
+- #  https://github.com/hitobito/hitobito_sac_cas.
+
+= render "events/tours/popover_state_change", info_alert: t(".alert_info"),
+                                              next_state: :canceled,
+                                              receiver_options: [:participants, :assigned_freigabe_komitees, :leaders],
+                                              none_selected: false do |f|
+  = f.labeled_collection_select(:canceled_reason, entry.model.class.canceled_reason_labels, :first, :last, { prompt: true}, { class: "form-select form-select-sm w-100", required: true, label_class: "col-3" })

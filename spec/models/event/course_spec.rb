@@ -434,6 +434,20 @@ describe Event::Course do
         expect(leader.reload.state).to eq("assigned")
       end
 
+      it "updates unconfirmed participants to rejected" do
+        participant.update_column(:state, :unconfirmed)
+
+        expect { course.update!(state: :ready) }
+          .to change { participant.reload.state }.to(eq("rejected"))
+      end
+
+      it "updates applied participants to rejected" do
+        participant.update_column(:state, :unconfirmed)
+
+        expect { course.update!(state: :ready) }
+          .to change { participant.reload.state }.to(eq("rejected"))
+      end
+
       it "doesn't enqueue a job if there already is an external invoice" do
         ExternalInvoice::CourseParticipation.create!(
           person_id: participant.participant_id,

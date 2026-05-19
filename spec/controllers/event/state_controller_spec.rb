@@ -113,26 +113,47 @@ describe Event::StateController do
         end
 
         context "approve" do
-          it "updates state and creates self approval" do
-            put :update, params: {group_id: group.id, id: event.id, state: "approved"}
+          it "updates state, creates self approval and sets internal comment" do
+            put :update, params: {group_id: group.id,
+                                  id: event.id,
+                                  state: "approved",
+                                  event: {internal_comment: "Some internal info"}}
 
             expect(event.reload.state).to eq("approved")
             expect(event.approvals.count).to eq(1)
             expect(event.approvals.first.approved).to eq(true)
             expect(event.approvals.first.creator).to eq(user)
+            expect(event.reload.internal_comment).to eq "Some internal info"
           end
 
-          it "updates state, clears existing approvals and creates self approval" do
+          it "updates state, clears existing approvals, creates self approval and sets internal comment" do
             create_approval(:professional)
             create_approval(:security, approved: false)
             event.update!(state: :draft)
 
-            put :update, params: {group_id: group.id, id: event.id, state: "approved"}
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "approved",
+              event: {internal_comment: "Some internal info"}
+            }
 
             expect(event.reload.state).to eq("approved")
             expect(event.approvals.count).to eq(1)
             expect(event.approvals.first.approved).to eq(true)
             expect(event.approvals.first.creator).to eq(user)
+            expect(event.reload.internal_comment).to eq "Some internal info"
+          end
+
+          it "does not allow invalid receiver_option" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "approved",
+              receiver_options: ["this_options_doesnt_exist"]
+            }
+
+            expect(response.status).to eq 422
           end
         end
 
@@ -157,6 +178,147 @@ describe Event::StateController do
 
             expect(event.reload.state).to eq("review")
             expect(event.approvals.count).to eq(2)
+          end
+        end
+
+        context "publish" do
+          before { event.update_column(:state, :approved) }
+
+          it "updates state and sets internal comment" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "published",
+              receiver_options: ["leaders"],
+              event: {internal_comment: "Some internal info"}
+            }
+
+            expect(event.reload.state).to eq "published"
+            expect(event.reload.internal_comment).to eq "Some internal info"
+          end
+
+          it "does not allow invalid receiver_option" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "published",
+              receiver_options: ["this_options_doesnt_exist"]
+            }
+
+            expect(response.status).to eq 422
+          end
+        end
+
+        context "cancel" do
+          before { event.update_column(:state, :approved) }
+
+          it "updates state, sets internal comment and sets canceled_reason" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "canceled",
+              receiver_options: ["leaders"],
+              event: {internal_comment: "Some internal info", canceled_reason: "weather"}
+            }
+
+            expect(event.reload.state).to eq "canceled"
+            expect(event.reload.internal_comment).to eq "Some internal info"
+            expect(event.reload.canceled_reason).to eq "weather"
+          end
+
+          it "does not allow invalid receiver_option" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "canceled",
+              receiver_options: ["this_options_doesnt_exist"]
+            }
+
+            expect(response.status).to eq 422
+          end
+        end
+
+        context "ready" do
+          before { event.update_column(:state, :published) }
+
+          it "updates state and sets internal comment" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "ready",
+              receiver_options: ["leaders"],
+              event: {internal_comment: "Some internal info"}
+            }
+
+            expect(event.reload.state).to eq "ready"
+            expect(event.reload.internal_comment).to eq "Some internal info"
+          end
+
+          it "does not allow invalid receiver_option" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "ready",
+              receiver_options: ["this_options_doesnt_exist"]
+            }
+
+            expect(response.status).to eq 422
+          end
+        end
+
+        context "close" do
+          before { event.update_column(:state, :ready) }
+
+          it "updates state and sets internal comment" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "closed",
+              receiver_options: ["leaders"],
+              event: {internal_comment: "Some internal info"}
+            }
+
+            expect(event.reload.state).to eq "closed"
+            expect(event.reload.internal_comment).to eq "Some internal info"
+          end
+
+          it "does not allow invalid receiver_option" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "ready",
+              receiver_options: ["this_options_doesnt_exist"]
+            }
+
+            expect(response.status).to eq 422
+          end
+        end
+
+        context "draft" do
+          before { event.update_column(:state, :published) }
+
+          it "updates state and sets internal comment" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "draft",
+              receiver_options: ["leaders"],
+              event: {internal_comment: "Some internal info"}
+            }
+
+            expect(event.reload.state).to eq "draft"
+            expect(event.reload.internal_comment).to eq "Some internal info"
+          end
+
+          it "does not allow invalid receiver_option" do
+            put :update, params: {
+              group_id: group.id,
+              id: event.id,
+              state: "draft",
+              receiver_options: ["this_options_doesnt_exist"]
+            }
+
+            expect(response.status).to eq 422
           end
         end
       end

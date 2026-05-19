@@ -4,7 +4,10 @@
 - #  https://github.com/hitobito/hitobito_sac_cas
 
 - if entry.states? && can?(:update, entry)
-  = Dropdown::Events::State.new(self, entry)
+  - if entry.course?
+    = Dropdown::Events::Courses::State.new(self, entry)
+  - elsif entry.tour?
+    = Dropdown::Events::Tours::State.new(self, entry)
 -if entry.course? && can?(:create, entry) && entry.any_email_possible?
   = Dropdown::Events::Courses::MailDispatch.new(self, entry, @group)
 - if entry.course? && can?(:create, entry)

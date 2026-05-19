@@ -39,7 +39,7 @@ event_tour_publication:
     Bergsportliche Grüsse,
     {section-name}
 
-event_tour_subito_publication:
+event_tour_publication_subito:
   label: "Tour: E-Mail Publikation (Subito)"
   subject: "Publikation der Subito-Tour {event-name}"
   placeholders_optional:

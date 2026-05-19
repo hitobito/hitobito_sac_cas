@@ -7,33 +7,25 @@
 
 require "spec_helper"
 
-describe Event::TourParticipationMailer do
+describe Event::TourMailer do
   let(:section) { groups(:bluemlisalp) }
   let(:person) { people(:mitglied) }
   let(:event) { events(:section_tour) }
-  let(:participation) { Fabricate(:event_participation, event:, participant: person) }
 
   before do
     CustomContent.init_section_specific_contents(section)
   end
 
-  context "applied" do
-    let(:mail) { described_class.confirmation(participation, described_class::APPLIED) }
+  describe "publication" do
+    let(:mail) { described_class.publication(event, person) }
 
-    it "sends email to participant" do
-      event.update!(application_opening_at: nil, application_closing_at: nil)
-
+    it "sends email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq("Auf Warteliste zur Tour Bundstock")
+      expect(mail.subject).to eq("Publikation der Tour #{event.name}")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Aktuell sind alle Plätze belegt, weshalb wir dich auf die Warteliste genommen haben.",
-        "Bei Fragen kannst du dich jederzeit an   wenden (, , ).",
-        "Bergsportliche Grüsse,<br>SAC Blüemlisalp",
-        "<dt>Kommentar</dt><dd>(keine)</dd>"
-      )
-      expect(mail.body.to_s).not_to include(
-        "Unterzielgruppe(n)"
+        "Gerne informieren wir dich, dass die Tour \"#{event.name} (#{event.id})\" heute publiziert wurde:",
+        "Bergsportliche Grüsse,<br>SAC Blüemlisalp"
       )
     end
 
@@ -55,6 +47,7 @@ describe Event::TourParticipationMailer do
 
       expect(mail.body.to_s).to include(
         "<dt>Daten</dt><dd>Sa 04.02.2023 07:30 - Mo 06.02.2023</dd>",
+        "<dt>Anmeldefenster</dt><dd>01.11.2022 - 15.12.2022</dd>",
         "<dt>Kalendereintrag (ics)</dt><dd><a href=\"http://test.host/groups/#{section.id}/events/#{event.id}.ics\">Herunterladen</a></dd>",
         "<dt>Zielgruppe(n)</dt><dd>Senioren, Familien (FaBe)</dd>",
         "<dt>Unterzielgruppe(n)</dt><dd>Senioren B</dd>",
@@ -74,75 +67,101 @@ describe Event::TourParticipationMailer do
     end
   end
 
-  context "unconfirmed" do
-    let(:mail) { described_class.confirmation(participation, described_class::UNCONFIRMED) }
+  describe "publication_subito" do
+    let(:mail) { described_class.publication_subito(event, person) }
 
-    it "sends email to participant" do
+    it "sends email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq("Anmeldung zur Tour Bundstock (unbestätigt)")
+      expect(mail.subject).to eq("Publikation der Subito-Tour #{event.name}")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Es handelt sich hierbei um keine definitive Zusage."
+        "Gerne informieren wir dich, dass die Subito-Tour \"#{event.name} (#{event.id})\" heute publiziert wurde:"
       )
     end
   end
 
-  context "assigned" do
-    let(:mail) { described_class.confirmation(participation, described_class::ASSIGNED) }
+  describe "participation_summon" do
+    let(:mail) { described_class.participation_summon(event, person) }
 
-    it "sends email to participant" do
+    it "sends email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq("Anmeldung zur Tour Bundstock bestätigt")
+      expect(mail.subject).to eq("Aufgebot zur Tour #{event.name}")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Gerne teilen wir dir mit, dass deine Anmeldung bestätigt wurde."
+        "Gerne bieten wir dich für die Tour \"#{event.name} (#{event.id})\" auf:"
       )
     end
   end
 
-  describe "#reject" do
-    let(:mail) { described_class.reject(participation) }
+  describe "participation_reject" do
+    let(:mail) { described_class.participation_reject(event, person) }
 
-    it "sends to email addresses of declined participant" do
+    it "sends email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq "Anmeldung zur Tour #{event.name} abgelehnt"
+      expect(mail.subject).to eq("Anmeldung zur Tour #{event.name} abgelehnt")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Leider können wir dich für diese Tour diesmal nicht berücksichtigen."
+        "Leider können wir dich für diese Tour diesmal nicht berücksichtigen. " \
+          "Wir wissen dein Interesse sehr zu schätzen und hoffen, dich bei einer " \
+          "unserer nächsten Touren dabei zu haben."
       )
     end
   end
 
-  describe "#summon" do
-    subject { mail.body }
+  describe "back_to_draft" do
+    let(:mail) { described_class.back_to_draft(event, person) }
 
-    let(:mail) { described_class.summon(participation) }
-
-    it "sends to email addresses of summoned participant" do
+    it "sends email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq "Aufgebot zur Tour #{event.name}"
+      expect(mail.subject).to eq("Statuswechsel der Tour #{event.name} zurück zu Entwurf")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Gerne bieten wir dich für die Tour \"#{event.name} (#{event.id})\" auf"
+        "die Tour \"#{event.name} (#{event.id})\" in den Status \"Entwurf\" verschoben:"
       )
     end
   end
 
-  describe "#canceled" do
-    let(:mail) { described_class.canceled(participation) }
+  describe "back_to_approved" do
+    let(:mail) { described_class.back_to_approved(event, person) }
 
-    it "sends to email addresses of participant" do
+    it "sends email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq "Abmeldung zur Tour #{event.name}"
+      expect(mail.subject).to eq("Statuswechsel der Tour #{event.name} zurück zu Freigegeben")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Vielen Dank für deine Abmeldung für die Tour \"#{event.name} (#{event.id})\":"
+        "die Tour \"#{event.name} (#{event.id})\" in den Status \"Freigegeben\" verschoben:"
+      )
+    end
+  end
+
+  describe "back_to_published" do
+    let(:mail) { described_class.back_to_published(event, person) }
+
+    it "sends email to person" do
+      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
+      expect(mail.subject).to eq("Statuswechsel der Tour #{event.name} zurück zu Publiziert")
+      expect(mail.body.to_s).to include(
+        "Hallo Edmund Hillary (#{person.id})",
+        "die Tour \"#{event.name} (#{event.id})\" in den Status \"Publiziert\" verschoben:"
+      )
+    end
+  end
+
+  describe "back_to_ready" do
+    let(:mail) { described_class.back_to_ready(event, person) }
+
+    it "sends email to person" do
+      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
+      expect(mail.subject).to eq("Statuswechsel der Tour #{event.name} zurück zu Vorbereitung abgeschlossen")
+      expect(mail.body.to_s).to include(
+        "Hallo Edmund Hillary (#{person.id})",
+        "die Tour \"#{event.name} (#{event.id})\" in den Status \"Vorbereitung abgeschlossen\" verschoben:"
       )
     end
   end
 
   describe "#closing" do
-    let(:mail) { described_class.closing(participation) }
+    let(:mail) { described_class.closing(event, person) }
 
     it "sends to email addresses of participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
@@ -155,7 +174,7 @@ describe Event::TourParticipationMailer do
   end
 
   describe "#canceled_minimum_participants" do
-    let(:mail) { described_class.canceled_minimum_participants(participation) }
+    let(:mail) { described_class.canceled_minimum_participants(event, person) }
 
     it "sends to email addresses of participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
@@ -169,7 +188,7 @@ describe Event::TourParticipationMailer do
   end
 
   describe "#canceled_no_leader" do
-    let(:mail) { described_class.canceled_no_leader(participation) }
+    let(:mail) { described_class.canceled_no_leader(event, person) }
 
     it "sends to email addresses of participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
@@ -183,7 +202,7 @@ describe Event::TourParticipationMailer do
   end
 
   describe "#canceled_weather" do
-    let(:mail) { described_class.canceled_weather(participation) }
+    let(:mail) { described_class.canceled_weather(event, person) }
 
     it "sends to email addresses of participant" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])

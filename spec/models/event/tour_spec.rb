@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -138,6 +138,563 @@ describe Event::Tour do
         tour.duration_in_hours = "4:5"
 
         expect(tour.duration).to eq(245) # 4 * 60 + 5
+      end
+    end
+  end
+
+  describe "when state changes to published" do
+    context "from approved" do
+      before do
+        tour.update_column(:state, :approved)
+      end
+
+      it "does not send email without receiver_options" do
+        expect { tour.update!(state: :published) }.not_to change(Delayed::Job, :count)
+      end
+
+      it "does not send email when none is selected" do
+        tour.receiver_options = ["none"]
+
+        expect { tour.update!(state: :published) }.not_to change(Delayed::Job, :count)
+      end
+
+      it "enqueues job for mailing_list_people with publication key" do
+        tour.receiver_options = ["mailing_list_people"]
+
+        expect { tour.update!(state: :published) }
+          .to change(enqueued_job_for("Event::Tour::MailingListPeopleEmailDispatchJob", :publication), :count).by(1)
+          .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
+      end
+
+      it "enqueues job for assigned_freigabe_komitees with publication key" do
+        tour.receiver_options = ["assigned_freigabe_komitees"]
+
+        expect { tour.update!(state: :published) }
+          .to change(
+            enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :publication), :count
+          ).by(1)
+          .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
+      end
+
+      it "enqueues job for leaders with publication key" do
+        tour.receiver_options = ["leaders"]
+
+        expect { tour.update!(state: :published) }
+          .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :publication), :count).by(1)
+          .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
+      end
+
+      context "subito tour" do
+        before do
+          tour.update_column(:subito, true)
+        end
+
+        it "enqueues job for mailing_list_people with publication_subito key" do
+          tour.receiver_options = ["mailing_list_people"]
+
+          expect { tour.update!(state: :published) }
+            .to change(enqueued_job_for("Event::Tour::MailingListPeopleEmailDispatchJob", :publication), :count).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication), :count).by(1)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with publication_subito key" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :published) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :publication_subito), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication_subito), :count
+            ).by(1)
+        end
+
+        it "enqueues job for leaders with publication_subito key" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :published) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :publication_subito), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :publication_subito), :count
+            ).by(1)
+        end
+      end
+    end
+
+    [:ready, :canceled].each do |from_state|
+      context "from #{from_state}" do
+        before do
+          tour.update_column(:state, from_state)
+        end
+
+        it "does not send email without receiver_options" do
+          expect { tour.update!(state: :published) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "does not send email when none is selected" do
+          tour.receiver_options = ["none"]
+
+          expect { tour.update!(state: :published) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with back_to_published key" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :published) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_published), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_published), :count
+            ).by(1)
+        end
+
+        it "enqueues job for leaders with back_to_published key" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :published) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_published), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_published), :count
+            ).by(1)
+        end
+      end
+    end
+  end
+
+  describe "when state changes to ready" do
+    let(:participant) { Fabricate(:event_participation, event: tour) }
+
+    context "from published" do
+      before do
+        tour.update_column(:state, :published)
+      end
+
+      it "updates participation state from assigned to summoned" do
+        participant.update!(state: :assigned)
+
+        expect { tour.update!(state: :ready) }
+          .to change { participant.reload.state }.to(eq("summoned"))
+      end
+
+      it "updates participation state from unconfirmed to rejected" do
+        participant.update!(state: :unconfirmed)
+
+        expect { tour.update!(state: :ready) }
+          .to change { participant.reload.state }.to(eq("rejected"))
+      end
+
+      it "updates participation state from applied to rejected" do
+        participant.update!(state: :applied)
+
+        expect { tour.update!(state: :ready) }
+          .to change { participant.reload.state }.to(eq("rejected"))
+      end
+
+      it "does not update participation state to previous state if not assigned, unconfirmed or applied" do
+        participant.update_column(:state, :summoned)
+
+        expect { tour.update!(state: :ready) }.not_to change { participant.reload.state }
+      end
+
+      it "does not send email without receiver_options" do
+        expect { tour.update!(state: :ready) }.not_to change(Delayed::Job, :count)
+      end
+
+      it "does not send email when none is selected" do
+        tour.receiver_options = ["none"]
+
+        expect { tour.update!(state: :ready) }.not_to change(Delayed::Job, :count)
+      end
+
+      it "enqueues job for participants_confirmed with participation_summon key" do
+        tour.receiver_options = ["participants_confirmed"]
+
+        expect(tour).to receive(:participant_states).once.and_return(["assigned"])
+        expect { tour.update!(state: :ready) }
+          .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :participation_summon), :count).by(1)
+          .and change(
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_summon), :count
+          ).by(1)
+      end
+
+      it "enqueues job for participants_unconfirmed with participation_reject key" do
+        tour.receiver_options = ["participants_unconfirmed"]
+
+        expect(tour).to receive(:participant_states)
+          .once
+          .and_return(["unconfirmed", "applied"])
+        expect { tour.update!(state: :ready) }
+          .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :participation_reject), :count).by(1)
+          .and change(
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_reject), :count
+          ).by(0)
+      end
+
+      it "enqueues job for leaders with participation_summon key" do
+        tour.receiver_options = ["leaders"]
+
+        expect { tour.update!(state: :ready) }
+          .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :participation_summon), :count).by(1)
+          .and change(
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_summon), :count
+          ).by(1)
+      end
+
+      it "enqueues multiple receiver option jobs and the involved people once" do
+        tour.receiver_options = ["participants_confirmed", "leaders"]
+
+        expect { tour.update!(state: :ready) }
+          .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :participation_summon), :count).by(1)
+          .and change(
+            enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :participation_summon), :count
+          ).by(1)
+          .and change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :participation_summon), :count).by(1)
+      end
+    end
+
+    [:closed, :canceled].each do |from_state|
+      context "from #{from_state}" do
+        before do
+          tour.update_column(:state, from_state)
+        end
+
+        it "updates participation state from annulled to previous state" do
+          participant.update_columns(state: :annulled, previous_state: :summoned)
+
+          expect { tour.update!(state: :ready) }
+            .to change { participant.reload.state }.to(eq("summoned"))
+        end
+
+        it "does not update participation state to previous state if not annuled" do
+          participant.update_column(:state, :assigned)
+
+          expect { tour.update!(state: :ready) }.not_to change { participant.reload.state }
+        end
+
+        it "does not send email without receiver_options" do
+          expect { tour.update!(state: :ready) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "does not send email when none is selected" do
+          tour.receiver_options = ["none"]
+
+          expect { tour.update!(state: :ready) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :ready) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_ready), :count
+            ).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_ready), :count).by(1)
+        end
+
+        it "enqueues job for leaders" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :ready) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_ready), :count).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_ready), :count).by(1)
+        end
+
+        it "enqueues multiple receiver option jobs and the involved people once" do
+          tour.receiver_options = ["assigned_freigabe_komitees", "leaders"]
+
+          expect { tour.update!(state: :ready) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_ready), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_ready), :count
+            ).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_ready), :count).by(1)
+        end
+      end
+    end
+  end
+
+  describe "when state changes to closed" do
+    let(:participant) { Fabricate(:event_participation, event: tour) }
+
+    before do
+      tour.update_column(:state, :ready)
+    end
+
+    it "updates participation state from summoned to attended" do
+      participant.update_column(:state, :summoned)
+
+      expect { tour.update!(state: :closed) }
+        .to change { participant.reload.state }.to(eq("attended"))
+    end
+
+    it "does not update participation state to attended if not summoned" do
+      participant.update_column(:state, :assigned)
+
+      expect { tour.update!(state: :closed) }.not_to change { participant.reload.state }
+    end
+
+    it "does not send email without receiver_options" do
+      expect { tour.update!(state: :closed) }.not_to change(Delayed::Job, :count)
+    end
+
+    it "does not send email when none is selected" do
+      tour.receiver_options = ["none"]
+
+      expect { tour.update!(state: :closed) }.not_to change(Delayed::Job, :count)
+    end
+
+    it "enqueues job for participants_participated with closing key" do
+      tour.receiver_options = ["participants_participated"]
+
+      expect(tour).to receive(:participant_states).once.and_return(["attended"])
+      expect { tour.update!(state: :closed) }
+        .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :closing), :count).by(1)
+        .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :closing), :count).by(1)
+    end
+
+    it "enqueues job for leaders with closing key" do
+      tour.receiver_options = ["leaders"]
+
+      expect { tour.update!(state: :closed) }
+        .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :closing), :count).by(1)
+        .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :closing), :count).by(1)
+    end
+  end
+
+  describe "when state changes to canceled" do
+    let(:participant) { Fabricate(:event_participation, event: tour) }
+
+    [:approved, :published, :ready].each do |from_state|
+      context "from #{from_state}" do
+        before do
+          tour.update_column(:state, from_state)
+        end
+
+        it "updates participation state to annulled and sets previous state" do
+          participant.update_column(:state, :summoned)
+
+          expect { tour.update!(state: :canceled, canceled_reason: "weather") }
+            .to change { participant.reload.state }.to(eq("annulled"))
+            .and change { participant.reload.previous_state }.to(eq("summoned"))
+        end
+
+        it "does not send email without receiver_options" do
+          expect { tour.update!(state: :canceled, canceled_reason: :weather) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "does not send email when none is selected" do
+          tour.receiver_options = ["none"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :weather) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "enqueues job for participants with weather mail if canceled_reason is weather" do
+          tour.receiver_options = ["participants"]
+
+          expect(tour).to receive(:participant_states)
+            .once
+            .and_return(["unconfirmed", "applied", "assigned", "summoned"])
+          expect { tour.update!(state: :canceled, canceled_reason: :weather) }
+            .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :canceled_weather), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_weather), :count
+            ).by(1)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with weather mail if canceled_reason is weather" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :weather) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :canceled_weather), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_weather), :count
+            ).by(1)
+        end
+
+        it "enqueues job for leaders with weather mail if canceled_reason is weather" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :weather) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :canceled_weather), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_weather), :count
+            ).by(1)
+        end
+
+        it "enqueues job for participants with no leader mail if canceled_reason is no_leader" do
+          tour.receiver_options = ["participants"]
+
+          expect(tour).to receive(:participant_states)
+            .once
+            .and_return(["unconfirmed", "applied", "assigned", "summoned"])
+          expect { tour.update!(state: :canceled, canceled_reason: :no_leader) }
+            .to change(enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :canceled_no_leader), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_no_leader), :count
+            ).by(1)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with no leader mail if canceled_reason is no_leader" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :no_leader) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :canceled_no_leader), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_no_leader), :count
+            ).by(1)
+        end
+
+        it "enqueues job for leaders with no leader mail if canceled_reason is no_leader" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :no_leader) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :canceled_no_leader), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_no_leader), :count
+            ).by(1)
+        end
+
+        it "enqueues job for participants with minimum participants mail if canceled_reason is minimum_participants" do
+          tour.receiver_options = ["participants"]
+
+          expect(tour).to receive(:participant_states)
+            .once
+            .and_return(["unconfirmed", "applied", "assigned", "summoned"])
+          expect { tour.update!(state: :canceled, canceled_reason: :minimum_participants) }
+            .to change(
+              enqueued_job_for("Event::Tour::ParticipantsEmailDispatchJob", :canceled_minimum_participants), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for(
+                "Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_minimum_participants
+              ), :count
+            ).by(1)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with minimum participants mail if minimum_participants" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :minimum_participants) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob",
+                :canceled_minimum_participants), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob",
+                :canceled_minimum_participants), :count
+            ).by(1)
+        end
+
+        it "enqueues job for leaders with minimum participants mail if canceled_reason is minimum_participants" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :canceled, canceled_reason: :minimum_participants) }
+            .to change(
+              enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :canceled_minimum_participants), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :canceled_minimum_participants), :count
+            ).by(1)
+        end
+      end
+    end
+  end
+
+  describe "when state changes to draft" do
+    [:review, :published, :approved].each do |from_state|
+      context "from #{from_state}" do
+        before do
+          tour.update_column(:state, from_state)
+        end
+
+        it "does not send email without receiver_options" do
+          expect { tour.update!(state: :draft) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "does not send email when none is selected" do
+          tour.receiver_options = ["none"]
+
+          expect { tour.update!(state: :draft) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with back_to_draft key" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :draft) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_draft), :count
+            ).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_draft), :count).by(1)
+        end
+
+        it "enqueues job for leaders with back_to_draft key" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :draft) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_draft), :count).by(1)
+            .and change(enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_draft), :count).by(1)
+        end
+      end
+    end
+  end
+
+  describe "when state changes to approved" do
+    [:published, :canceled].each do |from_state|
+      context "from #{from_state}" do
+        before do
+          tour.update_column(:state, from_state)
+        end
+
+        it "does not send email without receiver_options" do
+          expect { tour.update!(state: :approved) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "does not send email when none is selected" do
+          tour.receiver_options = ["none"]
+
+          expect { tour.update!(state: :approved) }.not_to change(Delayed::Job, :count)
+        end
+
+        it "enqueues job for assigned_freigabe_komitees with back_to_approved key" do
+          tour.receiver_options = ["assigned_freigabe_komitees"]
+
+          expect { tour.update!(state: :approved) }
+            .to change(
+              enqueued_job_for("Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob", :back_to_approved), :count
+            ).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_approved), :count
+            ).by(1)
+        end
+
+        it "enqueues job for leaders with back_to_approved key" do
+          tour.receiver_options = ["leaders"]
+
+          expect { tour.update!(state: :approved) }
+            .to change(enqueued_job_for("Event::Tour::LeadersEmailDispatchJob", :back_to_approved), :count).by(1)
+            .and change(
+              enqueued_job_for("Event::Tour::InvolvedPeopleEmailDispatchJob", :back_to_approved), :count
+            ).by(1)
+        end
+      end
+    end
+
+    [:draft, :review].each do |from_state|
+      context "from #{from_state}" do
+        before do
+          tour.update_column(:state, from_state)
+        end
+
+        it "does not send email" do
+          tour.receiver_options = ["assigned_freigabe_komitees", "leaders"]
+
+          expect { tour.update!(state: :approved) }.not_to change(Delayed::Job, :count)
+        end
       end
     end
   end
@@ -282,5 +839,9 @@ describe Event::Tour do
       expect(version.event).to eq("removed")
       expect(version.main).to eq(tour)
     end
+  end
+
+  def enqueued_job_for(job_class, receiver_option)
+    Delayed::Job.where("handler LIKE '%#{job_class}%' AND handler LIKE '%#{receiver_option}%'")
   end
 end
