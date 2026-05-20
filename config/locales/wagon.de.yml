@@ -2814,3 +2814,12 @@ de:
         subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
         inform_mitglied_via_email: Mitglied via E-Mail informieren?
         submit_button: Die Alpen-Abonnent beenden
+
+  delayed_job:
+    export/austritte_export_job: Austritte-Export
+    export/beitragskategorie_wechsel_export_job.rb: Beitragskategorie-Wechsel-Export
+    export/eintritte_export_job.rb: Eintritte-Export
+    export/jubilare_export_job.rb: Jubilare-Export
+    export/leader_settlement_export_job.rb: Kurskaderabrechnungs-Export
+    export/mitglieder_csv_export_job.rb: Mitglieder-CSV-Export
+    export/mitglieder_statistics_export_job.rb: Mitgliederstatistik-Export
