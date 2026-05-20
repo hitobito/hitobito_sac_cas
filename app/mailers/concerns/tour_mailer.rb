@@ -129,7 +129,7 @@ module TourMailer
   def labeled_application_link
     url = contact_data_group_event_participations_path(
       group_id: @event.group_ids.first,
-      id: @event.id
+      event_id: @event.id
     )
     labeled(t(:application_link), link_to(url))
   end
