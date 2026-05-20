@@ -47,5 +47,17 @@ describe People::Export::PeriodForm do
         expect(form.errors.full_messages).to eq ["Bis muss 23.11.2025 oder danach sein"]
       end
     end
+
+    it "is invalid if from is nil" do
+      form.from = nil
+      expect(form).not_to be_valid
+      expect(form.errors[:from]).to be_present
+    end
+
+    it "is invalid if to is nil" do
+      form.to = nil
+      expect(form).not_to be_valid
+      expect(form.errors[:to]).to be_present
+    end
   end
 end

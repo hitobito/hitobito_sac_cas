@@ -12,6 +12,7 @@ class People::Export::PeriodForm
   attribute :from, :date, default: -> { Date.current.beginning_of_year }
   attribute :to, :date, default: -> { Date.current.end_of_year }
 
+  validates :from, :to, presence: true
   validates_date :to, on_or_after: :from
   validate :assert_range_no_more_than_12_months
 
