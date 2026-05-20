@@ -31,7 +31,7 @@ module SacCas::EventsController
 
   def display_warning_for_date_changes
     if entry.dates_changed? && entry.state_reached?(:review)
-      flash[:warning] = I18n.t("events.flash.dates_changed", event_name: entry.name)
+      flash[:warning] = I18n.t("events.flash.dates_changed", event_name: entry.to_s)
       flash[:notice] = nil
     end
   end
