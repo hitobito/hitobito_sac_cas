@@ -1851,7 +1851,7 @@ de:
       title: Kursstufe erstellen
 
   event/courses/leader_settlement_pdfs:
-    export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
+    export_enqueued: "Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."

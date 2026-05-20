@@ -81,6 +81,10 @@ describe Event::Courses::LeaderSettlementPdfsController do
         end.to change {
                  Delayed::Job.where("handler like '%LeaderSettlementExportJob%'").count
                }.by(1)
+
+        expect(flash[:notice]).to match(
+          /Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht/
+        )
       end
     end
   end
