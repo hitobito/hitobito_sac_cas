@@ -14,7 +14,7 @@ describe Event::ApprovalCommissionResponsibilitiesController do
   let(:group) { groups(:bluemlisalp) }
   let(:dom) { Capybara::Node::Simple.new(response.body) }
   let(:another_freigabe_komitee) {
-    Group::FreigabeKomitee.create!(name: "Freigabekomitee", parent: groups(:bluemlisalp_touren_und_kurse))
+    Group::FreigabeKomitee.create!(name: "Another Freigabekomitee", parent: groups(:bluemlisalp_touren_und_kurse))
   }
 
   render_views
@@ -22,6 +22,19 @@ describe Event::ApprovalCommissionResponsibilitiesController do
   it "GET#edit renders dropdown for each approval_commission_responsibility" do
     get :edit, params: {group_id: group.id}
     expect(dom).to have_css "select", count: 36
+  end
+
+  it "GET#edit does not render archived groups in the dropdown" do
+    allow(Group).to receive(:archival_validation).and_return(false)
+    another_freigabe_komitee.archive!
+    get :edit, params: {group_id: group.id}
+    expect(dom).not_to have_css "option", text: another_freigabe_komitee.name
+  end
+
+  it "GET#edit does not render deleted groups in the dropdown" do
+    another_freigabe_komitee.destroy!
+    get :edit, params: {group_id: group.id}
+    expect(dom).not_to have_css "option", text: another_freigabe_komitee.name
   end
 
   it "PATCH#update can update multiple entries" do

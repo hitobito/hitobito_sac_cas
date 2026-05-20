@@ -64,12 +64,12 @@ describe Event::TargetGroup do
     end
 
     it "soft deletes if events exist" do
-      group = events(:section_tour).target_groups.first
-      expect { group.destroy }
+      target_group = events(:section_tour).target_groups.first
+      expect { target_group.destroy }
         .to change { described_class.unscoped.count }.by(0)
         .and change { Event::TargetGroup::Translation.count }.by(0)
-      expect(group.deleted_at).to be_present
-      expect(group.translations).to be_present
+      expect(target_group.deleted_at).to be_present
+      expect(target_group.translations).to be_present
     end
 
     it "prevents delete if children exist" do

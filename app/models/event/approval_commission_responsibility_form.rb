@@ -62,16 +62,22 @@ class Event::ApprovalCommissionResponsibilityForm
   end
 
   def find_or_build_responsibilties
-    existing_entries = group.event_approval_commission_responsibilities
+    all_responsibility_combinations.map do |target_group, discipline, subito|
+      existing_responsibility_entries[[target_group.id, discipline.id, subito]] ||
+        build_responsibilty(group, target_group, discipline, subito)
+    end
+  end
+
+  def existing_responsibility_entries
+    @existing_responsibility_entries ||= group.event_approval_commission_responsibilities
       .includes(:sektion, :freigabe_komitee, target_group: :translations, discipline: :translations)
       .index_by { [_1.target_group_id, _1.discipline_id, _1.subito] }
+  end
 
-    Event::TargetGroup.main.list.flat_map do |target_group|
-      Event::Discipline.main.list.flat_map do |discipline|
-        [true, false].map do |subito|
-          existing_entries[[target_group.id, discipline.id, subito]] ||
-            build_responsibilty(group, target_group, discipline, subito)
-        end
+  def all_responsibility_combinations
+    Event::TargetGroup.without_deleted.main.list.flat_map do |target_group|
+      Event::Discipline.without_deleted.main.list.flat_map do |discipline|
+        [true, false].map { |subito| [target_group, discipline, subito] }
       end
     end
   end

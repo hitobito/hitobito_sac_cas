@@ -28,6 +28,22 @@ describe Event::ApprovalCommissionResponsibilityForm do
       expect(new_record.subito).to eq missing_respponsibility.subito
       expect(new_record.sektion_id).to eq missing_respponsibility.sektion_id
     end
+
+    it "does not return responsibilities of soft deleted disciplines" do
+      event_disciplines(:wanderweg).destroy
+      expect(event_disciplines(:wanderweg).deleted?).to be_truthy
+
+      expect(subject.event_approval_commission_responsibilities)
+        .not_to include(event_disciplines(:wanderweg))
+    end
+
+    it "does not return responsibilities of soft deleted target groups" do
+      event_target_groups(:kinder).destroy
+      expect(event_target_groups(:kinder).deleted?).to be_truthy
+
+      expect(subject.event_approval_commission_responsibilities)
+        .not_to include(event_target_groups(:kinder))
+    end
   end
 
   describe "#grouped_event_approval_commission_responsibilities" do
