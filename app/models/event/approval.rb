@@ -6,6 +6,9 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Approval < ApplicationRecord
+  has_paper_trail meta: {main_id: ->(a) { a.event_id }, main_type: Event.sti_name},
+    on: [:create, :update]
+
   model_stamper
   stampable stamper_class_name: :person, deleter: false
 
@@ -17,4 +20,20 @@ class Event::Approval < ApplicationRecord
 
   validates :event_id, uniqueness: {scope: [:freigabe_komitee_id, :approval_kind_id]}
   validates :approval_kind, presence: true, if: :freigabe_komitee
+
+  def to_s
+    key = if freigabe_komitee.nil?
+      "self_approval"
+    elsif approved?
+      "approved"
+    else
+      "rejected"
+    end
+
+    I18n.t(
+      "event/approval.#{key}",
+      freigabe_komitee: freigabe_komitee&.name,
+      approval_kind: approval_kind
+    )
+  end
 end

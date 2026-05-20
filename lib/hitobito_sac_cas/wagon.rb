@@ -166,6 +166,9 @@ module HitobitoSacCas
       PersonDecorator.prepend SacCas::PersonDecorator
       Event::ParticipationDecorator.prepend SacCas::Event::ParticipationDecorator
       EventDecorator.icons["Event::Tour"] = :mountain
+      PaperTrail::VersionAssociationChangePresenter.prepend(
+        SacCas::PaperTrail::VersionAssociationChangePresenter
+      )
 
       ## Domain
       People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange

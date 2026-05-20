@@ -10,6 +10,7 @@ require "spec_helper"
 describe Event::Approval do
   let(:tour) { events(:section_tour) }
   let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
+  let(:approval_kind) { event_approval_kinds(:security) }
   let(:approval) do
     tour.approvals.build(freigabe_komitee: komitee, approval_kind: event_approval_kinds(:professional))
   end
@@ -20,8 +21,8 @@ describe Event::Approval do
     end
 
     it "validates uniqueness on event, freigabe_komitee and approval_kind" do
-      tour.approvals.create!(freigabe_komitee: komitee, approval_kind: event_approval_kinds(:security))
-      approval.approval_kind = event_approval_kinds(:security)
+      tour.approvals.create!(freigabe_komitee: komitee, approval_kind: approval_kind)
+      approval.approval_kind = approval_kind
 
       expect(approval).not_to be_valid
     end
@@ -38,6 +39,60 @@ describe Event::Approval do
 
       expect(approval).not_to be_valid
       expect(approval.errors.full_messages).to eq ["Freigabe-Stufe muss ausgefüllt werden"]
+    end
+  end
+
+  describe "#to_s" do
+    it "builds approve text" do
+      approval.update!(approved: true)
+
+      expect(approval.to_s).to eq "Freigabe Fachlich durch Freigabekomitee"
+    end
+
+    it "builds refused text" do
+      approval.update!(approved: false)
+
+      expect(approval.to_s).to eq "Ablehnung Fachlich durch Freigabekomitee"
+    end
+
+    it "builds self approved text" do
+      approval.update!(freigabe_komitee: nil)
+
+      expect(approval.to_s).to eq "Selbstfreigabe"
+    end
+  end
+
+  context "paper trails", versioning: true do
+    let(:event) { events(:top_course) }
+
+    it "sets main to event on create" do
+      expect do
+        tour.approvals.create!(freigabe_komitee: komitee, approval_kind: approval_kind, approved: true)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.where(item_type: Event::Approval.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("create")
+      expect(version.main).to eq(tour)
+    end
+
+    it "sets main to event on update" do
+      tour.approvals.create!(freigabe_komitee: komitee, approval_kind: approval_kind, approved: true)
+
+      expect do
+        tour.approvals.first.update!(approved: false)
+      end.to change { PaperTrail::Version.count }.by(1)
+
+      version = PaperTrail::Version.where(item_type: Event::Approval.sti_name).order(:created_at, :id).last
+      expect(version.event).to eq("update")
+      expect(version.main).to eq(tour)
+    end
+
+    it "does not create version on destroy" do
+      tour.approvals.create!(freigabe_komitee: komitee, approval_kind: approval_kind, approved: true)
+
+      expect do
+        tour.approvals.first.destroy!
+      end.not_to change { PaperTrail::Version.count }
     end
   end
 end
