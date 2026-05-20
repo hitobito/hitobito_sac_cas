@@ -506,6 +506,11 @@ fr:
         additional_info: Infos supplémentaires
         alternative_route: Itinéraire alternatif
         ascent: Montée
+        canceled_reason: Absagegrund
+        canceled_reasons:
+          minimum_participants: Minimale Teilnehmerzahl nicht erreicht
+          no_leader: Ausfall Kursleitung
+          weather: Wetterrisiko
         descent: Descente
         duration: Temps nécessaire
         duration_in_hours: Temps nécessaire
@@ -1682,6 +1687,7 @@ fr:
       application: Anmeldung
       download_ics: Herunterladen
       ics_link: Kalendereintrag (ics)
+      application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
       sub_disciplines: Unterdisziplin(en)
       traits: Merkmal(e)
@@ -1725,9 +1731,40 @@ fr:
         Annule le cours %{name} (%{number}) et annule toutes les participations. Les éventuelles factures seront ainsi annulées et les montants déjà payés seront remboursés. Cette action ne peut pas être annulée.
       inform_participants_caption: Informer tou·te·s les participants de l'annulation par e-mail
       canceled_reason_label: motif
-    popover_tour_review:
-      destroy_and_review: Réinitialiser les partages existants
-      keep_and_review: Conserver les partages existants
+    tours:
+      popover_review:
+        destroy_and_review: Bestehende Freigaben zurücksetzen
+        keep_and_review: Bestehende Freigaben beibehalten
+      popover_published:
+        alert_info: Beim Bestätigen wird die Tour im Tourenprogramm öffentlich publiziert.
+        alert_info_subito: Beim Bestätigen wird die Subito-Tour im Tourenprogramm öffentlich publiziert.
+      popover_back_to_published:
+        alert_info: Beim Bestätigen gelangt die Tour (zurück) in den Status “Publiziert”.
+      popover_ready:
+        alert_info: Beim Bestätigen wird die Tourvorbereitung abgeschlossen.
+      popover_closed:
+        alert_info: "Beim Bestätigen wird die Tour abgeschlossen. Bitte stelle vorgängig sicher, dass du in der Ansicht “Teilnehmende” die nicht erschienenen Personen entsprechend markierst."
+      popover_canceled:
+        alert_info: Beim Bestätigen wird die Tour abgesagt.
+      popover_back_to_draft:
+        alert_info: Beim Bestätigen gelangt die Tour (zurück) in den Status “Entwurf”.
+      popover_back_to_approved:
+        alert_info: Beim Bestätigen gelangt die Tour (zurück) in den Status “Freigegeben”.
+      popover_back_to_ready:
+        alert_info: Beim Bestätigen gelangt die Tour (zurück) in den Status “Vorbereitung abgeschlossen”.
+
+      popover_email_option:
+        send_email: E-Mail senden
+        receiver_options:
+          no_email: Keine E-Mail versenden
+          mailing_list_people: Interessierte Sektionsmitglieder
+          assigned_freigabe_komitees: Zuständige(s) Freigabe-Komitee(s)
+          leaders: Leitungsperson(en)
+          participants_confirmed: "Bestätigte Teilnehmer:innen"
+          participants_unconfirmed: "Unbestätigte Teilnehmer:innen"
+          participants_participated: "Teilgenommene Teilnehmer:innen"
+          participants: "Teilnehmer:innen"
+          none: Keine E-Mail versenden
 
     sections:
       essentials: Faits essentiels
