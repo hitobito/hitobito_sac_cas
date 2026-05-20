@@ -32,7 +32,8 @@ class People::ExternalInvoicesController < ListController
   end
 
   def person
-    @person ||= fetch_person
+    group
+    @person ||= Person.find(params[:id])
   end
 
   def group

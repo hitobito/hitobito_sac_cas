@@ -9,6 +9,14 @@
 module SacCas::PersonAbility
   extend ActiveSupport::Concern
 
+  WRITE_PERMISSIONS = [
+    :group_full,
+    :group_and_below_full,
+    :layer_full,
+    :layer_and_below_full,
+    :layer_events_full
+  ]
+
   prepended do
     on(Person) do
       class_side(:create_households).if_backoffice
@@ -20,14 +28,18 @@ module SacCas::PersonAbility
         .if_backoffice
 
       permission(:layer_and_below_full)
-        # rubocop:todo Layout/LineLength
-        .may(:index_external_invoices, :create_membership_invoice, :create_abo_magazin_invoice, :cancel_external_invoice, :security)
-        # rubocop:enable Layout/LineLength
+        .may(
+          :create_membership_invoice,
+          :create_abo_magazin_invoice,
+          :cancel_external_invoice,
+          :security
+        )
         .if_backoffice
       permission(:any).may(:index_invoices, :security).none
-      permission(:any).may(:show_remarks).if_backoffice_or_functionary
+      permission(:any)
+        .may(:show_remarks, :manage_section_remarks, :index_external_invoices)
+        .if_backoffice_or_functionary
       permission(:any).may(:manage_national_office_remark).if_backoffice
-      permission(:any).may(:manage_section_remarks).if_backoffice_or_functionary
       permission(:any).may(:log).if_backoffice_or_backoffice_readonly
 
       permission(:group_full).may(:create_tags).none
@@ -42,9 +54,7 @@ module SacCas::PersonAbility
   end
 
   def if_any_writing_permissions
-    writing_permissions = [:group_full, :group_and_below_full,
-      :layer_full, :layer_and_below_full, :layer_events_full]
-    contains_any?(writing_permissions, user_context.all_permissions)
+    contains_any?(WRITE_PERMISSIONS, user_context.all_permissions)
   end
 
   def if_backoffice_or_functionary
