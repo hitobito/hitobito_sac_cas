@@ -28,7 +28,7 @@ module SacCas::Person
 
     Person.used_attributes.delete(:nickname)
 
-    delegate :active?, :anytime?, :invoice?, :family?, :stammsektion_role, :terminated?,
+    delegate :active?, :anytime?, :family?, :stammsektion_role, :terminated?,
       to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
 
@@ -143,6 +143,10 @@ module SacCas::Person
 
   def sac_membership
     People::SacMembership.new(self)
+  end
+
+  def sac_membership_invoice?
+    People::SacMembershipInvoice.new(self).invoicable?
   end
 
   def login_status

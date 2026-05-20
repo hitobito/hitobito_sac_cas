@@ -109,9 +109,7 @@ describe People::SacMembership do
         end_on: Time.zone.today.end_of_year
       )
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
-      # rubocop:todo Layout/LineLength
       expect(membership.active_in?(groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder))).to eq false
-      # rubocop:enable Layout/LineLength
       expect(membership.active_in?(groups(:bluemlisalp))).to eq false
       expect(membership.active_in?(groups(:matterhorn))).to eq false
     end
@@ -145,9 +143,7 @@ describe People::SacMembership do
         start_on: Time.zone.now.beginning_of_year,
         end_on: Time.zone.today.end_of_year
       )
-      # rubocop:todo Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
-      # rubocop:enable Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
     end
 
@@ -158,51 +154,8 @@ describe People::SacMembership do
         start_on: Time.zone.now.beginning_of_year,
         end_on: Time.zone.today.end_of_year
       )
-      # rubocop:todo Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp_ortsgruppe_ausserberg))).to eq true
-      # rubocop:enable Layout/LineLength
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
-    end
-  end
-
-  describe "#invoice?" do
-    it "is false for non member" do
-      expect_invoice(people(:admin), false)
-    end
-
-    it "is true for neuanmeldung" do
-      person = people(:admin)
-      Fabricate(::Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
-        group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv),
-        person: person,
-        beitragskategorie: :adult)
-      expect_invoice(person, true)
-    end
-
-    it "is true for member" do
-      expect_invoice(people(:mitglied), true)
-    end
-
-    it "is true for main family person" do
-      expect_invoice(people(:familienmitglied), true)
-    end
-
-    it "is false for family child" do
-      expect_invoice(people(:familienmitglied_kind), false)
-    end
-
-    it "is true for family child with individual zusatzsektion" do
-      person = people(:familienmitglied_kind)
-      Fabricate(::Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name,
-        group: groups(:bluemlisalp_ortsgruppe_ausserberg_neuanmeldungen_nv),
-        person: person,
-        beitragskategorie: :youth)
-      expect_invoice(person, true)
-    end
-
-    def expect_invoice(person, value)
-      expect(person.sac_membership.invoice?).to eq(value)
-      expect(People::SacMembership.new(person, in_memory: true).invoice?).to eq(value)
     end
   end
 end
