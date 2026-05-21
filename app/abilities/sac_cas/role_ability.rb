@@ -38,6 +38,7 @@ module SacCas::RoleAbility
   # beitragskategorie change, we prevent termination on that very same day for consistency
   def stammsektion_only_if_no_other_ended_yesterday
     return true if !subject.is_a?(Group::SektionsMitglieder::Mitglied)
+
     ident_attrs = subject
       .attributes.slice(*%w[person_id type])
       .merge(end_on: Time.zone.yesterday)
@@ -46,7 +47,7 @@ module SacCas::RoleAbility
 
   # core: general(:destroy).not_permission_giving
   def not_permission_giving
-    return false if wizard_managed_role?
+    return false if managed_role?
 
     subject_with_admin_permission? ? if_admin : super
   end
@@ -54,10 +55,8 @@ module SacCas::RoleAbility
   def subject_with_admin_permission? = subject.type&.safe_constantize&.permissions&.include?(:admin)
 
   def modify_admin_permission_only_of_admin_themself
-    # rubocop:todo Layout/LineLength
-    # subject is non admin role, in this case, return true, if user is not allowed to perform any actions on roles
-    # rubocop:enable Layout/LineLength
-    # other permission checks will handle it
+    # subject is non admin role, in this case, return true;
+    # if user is not allowed to perform any actions on roles other permission checks will handle it
     subject_with_admin_permission? ? if_admin : true
   end
 
@@ -88,8 +87,9 @@ module SacCas::RoleAbility
       &.mitglied_termination_by_section_only
   end
 
-  def wizard_managed_role?(role = subject)
-    SacCas::WIZARD_MANAGED_ROLES.include?(role.class)
+  def managed_role?(role = subject)
+    SacCas::WIZARD_MANAGED_ROLES.include?(role.class) ||
+      (user.service_token? ? false : SacCas::API_MANAGED_ROLES.include?(role.class))
   end
 
   def abonnent_magazin_neuanmeldung? = subject.is_a?(Group::AboMagazin::Neuanmeldung)
