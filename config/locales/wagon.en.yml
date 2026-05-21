@@ -1775,6 +1775,11 @@ en:
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
 
+  event/approval:
+    approved: "Freigabe %{approval_kind} durch %{freigabe_komitee}"
+    rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
+    self_approval: Selbstfreigabe
+
   export/tabular/people/mitgliedschaft:
     attributes:
       id: Mitgliedernummer

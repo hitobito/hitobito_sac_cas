@@ -1843,6 +1843,11 @@ it:
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
 
+  event/approval:
+    approved: "Freigabe %{approval_kind} durch %{freigabe_komitee}"
+    rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
+    self_approval: Selbstfreigabe
+
   export/tabular/people/mitgliedschaft:
     attributes:
       id: Numero di membro

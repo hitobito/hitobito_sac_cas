@@ -1845,6 +1845,11 @@ fr:
   event/participations:
     pending: "Une notification préalable a été établie. Celle-ci n'est pas encore définitive et doit être confirmée par l'administration du cours."
 
+  event/approval:
+    approved: "Freigabe %{approval_kind} durch %{freigabe_komitee}"
+    rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
+    self_approval: Selbstfreigabe
+
   export/tabular/people/mitgliedschaft:
     attributes:
       id: Numéro de membre
