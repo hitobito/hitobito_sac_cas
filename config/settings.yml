@@ -57,6 +57,9 @@ delayed_jobs:
     jobs:
       - Export::BackupMitgliederExportJob
 
+mailchimp:
+  subscribe_managers: false
+
 people:
   people_managers:
     enabled: false
