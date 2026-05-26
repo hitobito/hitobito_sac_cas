@@ -11,11 +11,10 @@ def read_image(name)
   File.open(HitobitoSacCas::Wagon.config.root.join("app/assets/images/wallets").join(name))
 end
 
-PassDefinition.find_or_create_by!(
-  id: 1,
-  owner: sac_group,
-  template_key: "sac_membership"
-) do |pd|
+id = Settings.passes.membership_pass_definition_id
+PassDefinition.find_or_create_by!(id:) do |pd|
+  pd.owner = sac_group
+  pd.template_key = "sac_membership"
   pd.name_de = "SAC Mitgliederausweis"
   pd.description_de = "Mitgliederausweis des Schweizer Alpen-Clubs"
 
