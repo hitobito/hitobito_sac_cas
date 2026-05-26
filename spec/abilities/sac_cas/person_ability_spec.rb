@@ -46,9 +46,9 @@ describe PersonAbility do
     [Group::SektionsFunktionaere::Mitgliederverwaltung,
       Group::SektionsFunktionaere::Administration].each do |role_type|
       context role_type do
-        let(:person) {
+        let(:person) do
           Fabricate(role_type.sti_name, group: groups(:bluemlisalp_funktionaere)).person
-        }
+        end
 
         it "is not permitted" do
           expect(ability).not_to be_able_to(:create_households, mitglied)
@@ -150,8 +150,7 @@ describe PersonAbility do
     end
   end
 
-  [:index_external_invoices, :create_membership_invoice, :create_abo_magazin_invoice,
-    :cancel_external_invoice, :security].each do |action|
+  [:create_membership_invoice, :create_abo_magazin_invoice, :cancel_external_invoice, :security].each do |action|
     describe action do
       let(:person) { people(:mitglied) }
 
@@ -160,11 +159,11 @@ describe PersonAbility do
           context role_type do
             let(:person) { Fabricate(role_type.sti_name, group: groups(:geschaeftsstelle)).person }
 
-            it "is permitted to #{action} of other people" do
+            it "is permitted for other people" do
               expect(ability).to be_able_to(action, mitglied)
             end
 
-            it "is permitted to #{action} of yourself" do
+            it "is permitted for yourself" do
               expect(ability).to be_able_to(action, person)
             end
           end
@@ -172,24 +171,65 @@ describe PersonAbility do
       end
 
       context "as member" do
-        it "is not permitted to #{action} yourself" do
+        it "is not permitted for yourself" do
           expect(ability).not_to be_able_to(action, person)
         end
       end
 
-      context "as a group leader" do
+      context "as a sektion admin" do
         let(:person) do
           Fabricate(Group::SektionsFunktionaere::Administration.sti_name,
             group: groups(:bluemlisalp_funktionaere)).person
         end
 
-        it "is not permitted to #{action} of yourself" do
+        it "is not permitted for yourself" do
           expect(ability).not_to be_able_to(action, person)
         end
 
-        it "is not permitted to #{action} of other people" do
+        it "is not permitted for other people" do
           expect(ability).not_to be_able_to(action, mitglied)
         end
+      end
+    end
+  end
+
+  describe :index_external_invoices do
+    let(:person) { people(:mitglied) }
+
+    context "as employee" do
+      [Group::Geschaeftsstelle::Mitarbeiter, Group::Geschaeftsstelle::Admin].each do |role_type|
+        context role_type do
+          let(:person) { Fabricate(role_type.sti_name, group: groups(:geschaeftsstelle)).person }
+
+          it "is permitted for other people" do
+            expect(ability).to be_able_to(:index_external_invoices, mitglied)
+          end
+
+          it "is permitted for yourself" do
+            expect(ability).to be_able_to(:index_external_invoices, person)
+          end
+        end
+      end
+    end
+
+    context "as member" do
+      it "is not permitted for yourself" do
+        expect(ability).not_to be_able_to(:index_external_invoices, person)
+      end
+    end
+
+    context "as a sektion admin" do
+      let(:person) do
+        Fabricate(Group::SektionsFunktionaere::Administration.sti_name,
+          group: groups(:bluemlisalp_funktionaere)).person
+      end
+
+      it "is permitted for yourself" do
+        expect(ability).to be_able_to(:index_external_invoices, person)
+      end
+
+      it "is permitted for other people" do
+        expect(ability).to be_able_to(:index_external_invoices, mitglied)
       end
     end
   end
