@@ -25,8 +25,8 @@ module SacCas::PeopleHelper
   end
 
   def people_sac_membership_qr_code(person, html_options = {})
-    if person.membership_pass
-      image = pass_qr_code_svg(person.membership_pass, size: 220)
+    if (pass = person.membership_pass&.decorate)
+      image = pass_qr_code_svg(pass, size: 220)
 
       if Rails.env.development?
         people_sac_membership_qr_code_clickable(pass, image)
