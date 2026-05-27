@@ -150,6 +150,11 @@ module SacCas::Person
     super
   end
 
+  def membership_pass
+    @membership_pass ||= passes
+      .find_by(pass_definition_id: Settings.passes.membership_pass_definition_id)
+  end
+
   protected
 
   def after_confirmation # Devise::Models::Confirmable

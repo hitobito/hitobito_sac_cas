@@ -13,12 +13,6 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
   let(:redirect_uri) { "urn:ietf:wg:oauth:2.0:oob" }
   let(:data) { JSON.parse(response.body) }
 
-  before do
-    # rubocop:todo Layout/LineLength
-    allow_any_instance_of(People::Membership::VerificationQrCode).to receive(:membership_verify_token).and_return("aSuperSweetToken42")
-    # rubocop:enable Layout/LineLength
-  end
-
   describe "GET#show" do
     context "with name scope" do
       let(:token) do
@@ -52,18 +46,20 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
       context "with membership" do
         let(:user) { mitglied.person }
         let(:mitglied) { roles(:mitglied) }
+        let(:pass_definition) { pass_definitions(:sac_membership) }
+        let!(:membership_pass) { Fabricate(:pass, pass_definition:, person: user) }
 
         it "includes membership_verify_url" do
           get :show, params: {access_token: token.token}
           expect(response.status).to eq 200
-          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42"
+          expect(data["membership_verify_url"]).to eq "http://hitobito.example.com/passes/verify/#{membership_pass.verify_token}"
         end
 
         it "includes membership_verify_url even if expired" do
-          mitglied.update!(end_on: 1.year.ago)
+          membership_pass.update!(state: :ended)
           get :show, params: {access_token: token.token}
           expect(response.status).to eq 200
-          expect(data["membership_verify_url"]).to eq "http://localhost:3000/verify_membership/aSuperSweetToken42"
+          expect(data["membership_verify_url"]).to eq "http://hitobito.example.com/passes/verify/#{membership_pass.verify_token}"
         end
       end
     end

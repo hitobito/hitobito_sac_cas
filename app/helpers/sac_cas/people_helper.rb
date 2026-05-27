@@ -25,18 +25,14 @@ module SacCas::PeopleHelper
   end
 
   def people_sac_membership_qr_code(person, html_options = {})
-    verification_qr_code = People::Membership::VerificationQrCode.new(person)
-    qr_code = verification_qr_code.generate
-    qr_code_png = qr_code.as_png(size: 220)
-    qr_code_data = Base64.encode64(qr_code_png.to_blob)
-    default_options = {alt: "QR Code", size: "220x220"}
-    options = default_options.merge(html_options)
-    image = image_tag("data:image/png;base64,#{qr_code_data}", options)
+    if (pass = person.membership_pass&.decorate)
+      image = pass_qr_code_svg(pass, size: 220)
 
-    if Rails.env.development?
-      people_sac_membership_qr_code_clickable(verification_qr_code, image)
-    else
-      image
+      if Rails.env.development?
+        people_sac_membership_qr_code_clickable(pass, image)
+      else
+        image
+      end
     end
   end
 
@@ -57,9 +53,8 @@ module SacCas::PeopleHelper
 
   private
 
-  def people_sac_membership_qr_code_clickable(verification_qr_code, image)
-    verify_url = verification_qr_code.verify_url
-    link_to(verify_url, target: "_blank", rel: "noopener") do
+  def people_sac_membership_qr_code_clickable(pass, image)
+    link_to(pass.qrcode_value, target: "_blank", rel: "noopener") do
       image
     end
   end

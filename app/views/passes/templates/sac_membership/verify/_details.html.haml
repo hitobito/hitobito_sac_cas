@@ -1,0 +1,21 @@
+-#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+
+#details.mt-3
+  %header{style: 'flex-direction: row-reverse'}
+    #logo{style: 'width: 50%'}
+      = membership_verify_logo
+  #member-img= image_tag(upload_url(@person, :picture))
+  #member-name= @person.full_name
+  #member-info.mb-2
+    %div
+      =t('.membership_number', membership_number: @person.membership_number)
+    %div
+      - membership_years = Person.where(id: @person.id).with_membership_years.first.membership_years
+      =t('.membership_years', membership_years: membership_years)
+  = render pass_template_partial('verify/state'), i18n_scope: 'passes.templates.sac_membership.verify.states'
+  = render pass_template_partial('verify/additional_infos'), person: @person
+  = render pass_template_partial('verify/sponsors')

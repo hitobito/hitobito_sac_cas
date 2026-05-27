@@ -1,0 +1,35 @@
+# frozen_string_literal: true
+
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+#  or later. See the COPYING file at the top-level directory or at
+#  https://github.com/hitobito/hitobito_sac_cas
+
+sac_group = Group::SacCas.first!
+
+def read_image(name)
+  File.open(HitobitoSacCas::Wagon.config.root.join("app/assets/images/wallets").join(name))
+end
+
+id = Settings.passes.membership_pass_definition_id
+PassDefinition.find_or_create_by!(id:) do |pd|
+  pd.owner = sac_group
+  pd.template_key = "sac_membership"
+  pd.name_de = "SAC Mitgliederausweis"
+  pd.description_de = "Mitgliederausweis des Schweizer Alpen-Clubs"
+
+  # Attach logo banners for all languages
+  pd.logo_banner_de.attach(io: read_image("banner_de.png"), filename: "banner_de.png")
+  pd.logo_banner_fr.attach(io: read_image("banner_fr.png"), filename: "banner_fr.png")
+  pd.logo_banner_it.attach(io: read_image("banner_it.png"), filename: "banner_it.png")
+
+  # Attach logo icon only for German (fallback for all languages)
+  pd.logo_icon_de.attach(io: read_image("icon.png"), filename: "icon.png")
+
+  grant = pd.pass_grants.build(grantor: sac_group)
+
+  # Rollentypen die zur Berechtigung führen
+  SacCas::MITGLIED_STAMMSEKTION_ROLES.each do |role_type|
+    grant.related_role_types.build(role_type: role_type.sti_name)
+  end
+end

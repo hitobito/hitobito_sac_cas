@@ -61,7 +61,7 @@ module SacCas::OidcClaimSetup
   end
 
   def membership_verify_url(owner)
-    People::Membership::VerificationQrCode.new(owner).verify_url if owner.sac_membership_anytime?
+    Passes::VerificationQrCode.new(owner.membership_pass).verify_url if owner.membership_pass
   end
 
   def phone_number_landline(owner) = owner.phone_number_landline&.number

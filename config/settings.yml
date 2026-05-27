@@ -93,6 +93,9 @@ hitobito_log:
   recipient_emails:
     - it@sac-cas.ch
 
+passes:
+  membership_pass_definition_id: 1
+
 #invoicing:
 #  abo_magazin:
 #    # Wenn true, dann wird für Abo Magazine bei der Neuanmeldung und beim
