@@ -52,14 +52,14 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
         it "includes membership_verify_url" do
           get :show, params: {access_token: token.token}
           expect(response.status).to eq 200
-          expect(data["membership_verify_url"]).to eq "http://localhost:3000/passes/verify/#{membership_pass.verify_token}"
+          expect(data["membership_verify_url"]).to eq "http://hitobito.example.com/passes/verify/#{membership_pass.verify_token}"
         end
 
         it "includes membership_verify_url even if expired" do
           membership_pass.update!(state: :ended)
           get :show, params: {access_token: token.token}
           expect(response.status).to eq 200
-          expect(data["membership_verify_url"]).to eq "http://localhost:3000/passes/verify/#{membership_pass.verify_token}"
+          expect(data["membership_verify_url"]).to eq "http://hitobito.example.com/passes/verify/#{membership_pass.verify_token}"
         end
       end
     end
