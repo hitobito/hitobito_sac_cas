@@ -4,7 +4,10 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 #period_form
-  %p.muted
+  - if defined?(info) && info.present?
+    %p.alert.alert-info= info
+  - else
+    %p
 
   = standard_form(model, url: url, method: :post) do |f|
     = f.error_messages

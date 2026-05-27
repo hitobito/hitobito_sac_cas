@@ -9,5 +9,5 @@
                   :envelope,
                   method: :get)
 
-- if can?(:download_statistics, entry) && entry.root?
-  = build_download_statistics_button(entry)
+- if entry.root? && can?(:download_statistics, entry)
+  = Dropdown::SacCasExports.new(self, entry).to_s
