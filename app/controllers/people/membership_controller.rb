@@ -10,7 +10,7 @@ class People::MembershipController < ApplicationController
     authorize!(:show, person)
 
     if person.membership_pass
-      redirect_to group_person_pass_path(person.primary_group, person, person.membership_pass)
+      redirect_to group_person_pass_path(person.default_group_id, person, person.membership_pass)
     else
       redirect_to person_path(person)
     end

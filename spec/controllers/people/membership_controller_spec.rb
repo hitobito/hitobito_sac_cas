@@ -36,6 +36,18 @@ describe People::MembershipController, type: :controller do
       )
     end
 
+    it "redirects member to their pass show page on first group if pimary_group is nil" do
+      sign_in(member)
+      member.update!(primary_group: nil)
+      pass = member.passes.first
+
+      get :show, params: {id: member.id}
+
+      expect(response).to redirect_to(
+        group_person_pass_path(member.roles.first.group, member, pass)
+      )
+    end
+
     it "redirects to person page when no sac_membership pass exists" do
       sign_in(other_person)
 
