@@ -23,6 +23,24 @@ module Events
         end
       end
 
+      def next_relevant_pruefer
+        komitee = next_pending_komitee
+        return Person.none unless komitee
+        Person.where(
+          id: pruefer_roles_for(komitee, first_unapproved_kind_for(komitee)).select(:person_id)
+        )
+      end
+
+      def all_pruefers
+        Person.where(
+          id: pruefer_roles_for(responsible_freigabe_komitees).select(:person_id)
+        )
+      end
+
+      def remaining_pruefers
+        all_pruefers.where.not(id: next_relevant_pruefer.select(:id))
+      end
+
       def fetch_freigabe_komitee_disciplines_target_groups(komitees)
         scope =
           Event::ApprovalCommissionResponsibility
@@ -58,6 +76,27 @@ module Events
           .joins(:event_approvals)
           .where(event_approvals: {event_id: event.id})
           .distinct
+      end
+
+      def approved_kind_ids_for(komitee)
+        event.approvals
+          .where(freigabe_komitee: komitee, approved: true)
+          .pluck(:approval_kind_id)
+      end
+
+      def next_pending_komitee
+        responsible_freigabe_komitees.list.find { |komitee| first_unapproved_kind_for(komitee) }
+      end
+
+      def first_unapproved_kind_for(komitee)
+        approved_ids = approved_kind_ids_for(komitee)
+        Event::ApprovalKind.list.without_deleted.find { |kind| !approved_ids.include?(kind.id) }
+      end
+
+      def pruefer_roles_for(komitees, kind = nil)
+        scope = Group::FreigabeKomitee::Pruefer.where(group: komitees)
+        return scope unless kind
+        scope.joins(:approval_kinds).where(event_approval_kinds: {id: kind})
       end
 
       def sektion

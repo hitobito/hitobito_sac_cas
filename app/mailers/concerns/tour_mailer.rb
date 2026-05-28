@@ -13,7 +13,11 @@ module TourMailer
 
   [:id, :first_name, :last_name, :email].each do |attr|
     define_method :"placeholder_recipient_#{attr}" do
-      @person.public_send(attr)
+      if @people.present?
+        @people.first.public_send(attr)
+      else
+        @person.public_send(attr)
+      end
     end
 
     define_method :"placeholder_contact_#{attr}" do
@@ -23,6 +27,10 @@ module TourMailer
     define_method :"placeholder_updater_#{attr}" do
       @event.updater&.public_send(attr)
     end
+  end
+
+  def placeholder_recipient_names
+    @people.map(&:full_name).join(", ")
   end
 
   def placeholder_recipient_link

@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-class Group::FreigabeKomitee::SomeDifferentRole < ::Group::FreigabeKomitee::Pruefer
+class Group::FreigabeKomitee::SomeDifferentRole < ::Role
 end
 
 describe Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob do

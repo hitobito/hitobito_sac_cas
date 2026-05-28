@@ -10,6 +10,7 @@ require "spec_helper"
 describe Event::TourParticipationMailer do
   let(:section) { groups(:bluemlisalp) }
   let(:person) { people(:mitglied) }
+  let(:admin) { people(:admin) }
   let(:event) { events(:section_tour) }
   let(:participation) { Fabricate(:event_participation, event:, participant: person) }
 
@@ -28,7 +29,8 @@ describe Event::TourParticipationMailer do
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
         "Aktuell sind alle Plätze belegt, weshalb wir dich auf die Warteliste genommen haben.",
-        "Bei Fragen kannst du dich jederzeit an   wenden (, , ).",
+        "Bei Fragen kannst du dich jederzeit an " \
+          "#{admin.first_name} #{admin.last_name} wenden (#{admin.id}, , #{admin.email}).",
         "Bergsportliche Grüsse,<br>SAC Blüemlisalp",
         "<dt>Kommentar</dt><dd>(keine)</dd>"
       )

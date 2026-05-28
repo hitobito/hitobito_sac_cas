@@ -8,6 +8,7 @@
 class Event::Tours::ApprovalsController < ApplicationController
   PERMITTED_ATTRS = [
     :internal_comment,
+    :receiver_option,
     komitee_approvals_attributes: [[
       :freigabe_komitee_id,
       approval_kind_approvals_attributes: [[:approval_kind_id, :checked]]

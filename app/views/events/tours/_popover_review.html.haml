@@ -3,9 +3,21 @@
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
+.alert.alert-info=t(".alert_info", event_name: entry.to_s, event_id: entry.id)
+
 = standard_form(entry, url: state_group_event_path(params[:group_id], params[:id], {state: :review}), method: :put) do |f|
-  .row
-    .col-12
-      = submit_button(f, t('.destroy_and_review'), name: :button, value: :destroy)
-      = submit_button(f, t('.keep_and_review'), name: :button, value: :keep)
-      = cancel_link('#')
+  = f.labeled(t("event.tours.approvals.edit.email_send_to"), label_class: "col-3") do
+    - Event::Tour::ApprovalForm::EMAIL_RECEIVER_OPTIONS.each do |option|
+      .form-check
+        = radio_button_tag(:receiver_options, option, option == :responsible_people, class: "form-check-input")
+        = label_tag("button_#{option}", t("event.tours.approvals.edit.receiver_options.#{option}"), class: "form-check-label")
+
+  = f.labeled(t(".existing_approvals"), label_class: "col-3") do
+    - [:keep, :destroy].each do |option|
+      .form-check
+        = radio_button_tag(:existing_approvals, option, option == :keep, class: "form-check-input")
+        = label_tag("button_#{option}", t(".existing_approval_options.#{option}"), class: "form-check-label")
+
+  = button_toolbar(f, toolbar_class: "bottom offset-xl-3") do
+    = submit_button(f, t(".change_to_review"))
+    = cancel_link("#")

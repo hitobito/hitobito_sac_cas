@@ -12,6 +12,6 @@
 
   = render "events/tours/popover_email_option", f: f, receiver_options: receiver_options, none_selected: none_selected
 
-  = button_toolbar(f, toolbar_class: 'bottom') do
+  = button_toolbar(f, toolbar_class: "bottom offset-xl-3") do
     = submit_button(f, t("global.button.confirm"), name: :button)
     = cancel_link("#")

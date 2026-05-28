@@ -73,7 +73,8 @@ section_tour:
   price_special: 50
   price_member: 60
   price_regular: 80
-  contact: admin
+  contact_id: 600_000
+  creator_id: 600_002
   application_opening_at: <%= 10.days.ago %>
   application_closing_at: <%= 2.months.from_now %>
   maximum_participants: 30

@@ -73,7 +73,7 @@ describe Event::Tours::ApprovalsController do
 
         expect(dom).to have_content("Fachlich", count: 2)
 
-        expect(dom).to have_checked_field(count: 3)
+        expect(dom).to have_checked_field(count: 4) # one is the email option radio
         expect(dom).to have_checked_field(checkbox_id(0, 0))
         expect(dom).to have_checked_field(checkbox_id(0, 1))
         expect(dom).not_to have_checked_field(checkbox_id(0, 2))
@@ -103,7 +103,7 @@ describe Event::Tours::ApprovalsController do
         expect(dom).to have_content("Abgelehnt von Anna Admin am", count: 2)
         expect(dom).to have_content("Freigegeben von Anna Admin am", count: 2)
 
-        expect(dom).to have_checked_field(count: 3)
+        expect(dom).to have_checked_field(count: 4) # one is the email option radio
         expect(dom).to have_checked_field(checkbox_id(0, 0))
         expect(dom).to have_checked_field(checkbox_id(0, 1))
         expect(dom).not_to have_checked_field(checkbox_id(0, 2))
@@ -128,12 +128,13 @@ describe Event::Tours::ApprovalsController do
 
         expect(dom).to have_content("Fachlich", count: 2)
         expect(dom).to have_content("–", count: 6)
-        expect(dom).not_to have_checked_field
+        expect(dom).to have_checked_field(count: 1) # one is the email option radio
 
         expect(dom).to have_button("Speichern")
       end
 
       it "renders self approval infos" do
+        komitee.update!(name: "some other name") # dom already has "Freigabekomitee" in email options
         event.update!(state: :approved)
         event.approvals.create!(approved: true, creator: people(:admin))
 
@@ -167,7 +168,7 @@ describe Event::Tours::ApprovalsController do
         expect(dom).to have_content("Abgelehnt von Anna Admin am", count: 2)
         expect(dom).to have_content("Freigegeben von Anna Admin am", count: 2)
 
-        expect(dom).not_to have_checked_field
+        expect(dom).to have_checked_field(count: 1) # one is the email option radio
 
         expect(dom).to have_button("Speichern")
       end

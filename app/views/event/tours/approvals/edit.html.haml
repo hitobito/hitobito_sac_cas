@@ -43,6 +43,13 @@
 
   = f.labeled_text_area(:internal_comment, label: t(".internal_comment"))
 
+  .row.mb-2
+    = f.labeled(t(".email_send_to")) do
+      - Event::Tour::ApprovalForm::EMAIL_RECEIVER_OPTIONS.each do |option|
+        .form-check
+          = f.radio_button(:receiver_option, option, class: "form-check-input")
+          = f.label(:receiver_option, t(".receiver_options.#{option}"), value: option, class: "form-check-label")
+
   = button_toolbar(f, toolbar_class: "bottom") do
     - if entry.approvable?
       = submit_button(f, t(".approve"), value: "approve")

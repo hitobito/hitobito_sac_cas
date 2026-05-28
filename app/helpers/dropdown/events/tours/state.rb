@@ -10,11 +10,7 @@ module Dropdown::Events::Tours
     private
 
     def state_item_tour_review(label, link)
-      if event.approvals.exists?
-        add_item_with_popover(label, template.render("events/tours/popover_review", entry: event))
-      else
-        add_default_item(label, link, :review)
-      end
+      email_popover(label, "events/tours/popover_review")
     end
 
     def state_item_tour_published(label, link)
@@ -47,7 +43,7 @@ module Dropdown::Events::Tours
 
     def state_item_tour_approved(label, link)
       if event.state_comes_before?(event.state, :approved)
-        add_default_item(label, link, :approved)
+        email_popover(label, "events/tours/popover_approved")
       else
         email_popover(label, "events/tours/popover_back_to_approved")
       end
