@@ -83,6 +83,7 @@ fr:
         discount: "Réduction"
         new_entry: "Frais d’entrée"
         dont_send: Envoyer une facture
+        update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
         section_id: "Adhésion"
         sac_fee: Cotisation à l'association centrale
         sac_entry_fee: Droits d'entrée de l'association centrale

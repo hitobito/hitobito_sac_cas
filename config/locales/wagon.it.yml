@@ -83,6 +83,7 @@ it:
         discount: "Sconto"
         new_entry: "Quota di adesione"
         dont_send: Inviare la fattura
+        update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
         section_id: "Affiliazione"
         sac_fee: Contributo dell'organizzazione centrale
         sac_entry_fee: Quote di iscrizione all'organizzazione centrale

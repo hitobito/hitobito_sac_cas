@@ -83,6 +83,7 @@ en:
         discount: "Discount"
         new_entry: "Entrance fee"
         dont_send: Rechnung versenden
+        update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
         section_id: "Membership"
         sac_fee: Zentralverbandsbeitrag
         sac_entry_fee: Zentralverbandseintrittsgebühren
