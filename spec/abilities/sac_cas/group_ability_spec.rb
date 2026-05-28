@@ -8,42 +8,28 @@
 require "spec_helper"
 
 describe GroupAbility do
+  subject { Ability.new(person) }
+
   describe "create_yearly_membership_invoice" do
-    it "as admin it is permitted" do
-      expect(Ability.new(people(:admin))).to be_able_to(:create_yearly_membership_invoice,
-        groups(:bluemlisalp))
-    end
-
-    it "as mitglied it is denied" do
-      expect(Ability.new(people(:mitglied))).not_to be_able_to(:create_yearly_membership_invoice,
-        groups(:bluemlisalp))
-    end
-  end
-
-  describe "download_statistics" do
-    let(:person) { people(:roleless) }
-
-    def create_role_with_permission(permission)
-      stub_const "TestRole", Class.new(::Role)
-      TestRole.permissions = Array(permission)
-      TestRole.new(person:, group: groups(:bluemlisalp_funktionaere)).save(validate: false)
-    end
-
-    it "without permissions denies download_statistics on any layer" do
-      create_role_with_permission(nil)
-      ability = Ability.new(person)
-      expect(ability.user_context.all_permissions).to be_empty
-      expect(ability).not_to be_able_to(:download_statistics, groups(:bluemlisalp))
-      expect(ability).not_to be_able_to(:download_statistics, groups(:root))
-      expect(ability).not_to be_able_to(:download_statistics,
-        groups(:bluemlisalp_ortsgruppe_ausserberg))
-    end
-
     context "as admin" do
       let(:person) { people(:admin) }
 
-      it "allows download_statistics on root layer" do
-        expect(Ability.new(person)).to be_able_to(:download_statistics, groups(:root))
+      it { is_expected.to be_able_to(:create_yearly_membership_invoice, groups(:bluemlisalp)) }
+    end
+
+    context "as mitglied" do
+      let(:person) { people(:mitglied) }
+
+      it { is_expected.not_to be_able_to(:create_yearly_membership_invoice, groups(:bluemlisalp)) }
+    end
+
+    describe "download_statistics" do
+      context "as admin" do
+        let(:person) { people(:admin) }
+
+        it { is_expected.to be_able_to(:download_statistics, groups(:root)) }
+
+        it { is_expected.not_to be_able_to(:download_statistics, groups(:bluemlisalp)) }
       end
     end
   end

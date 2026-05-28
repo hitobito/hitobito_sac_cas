@@ -5,7 +5,6 @@
 
 # We'd normally use stimulus but since this is very sac-specific behaviour
 # and creating new stimulus controllers in wagons currently does not work we opted to use javascript
-require './download_statistics.js'
 require './abo_magazin_company_toggling.js'
 
 #  Handles conditional buttons when adding people to household during signup

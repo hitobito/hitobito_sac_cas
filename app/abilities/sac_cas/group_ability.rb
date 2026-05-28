@@ -18,7 +18,7 @@ module SacCas::GroupAbility
 
       permission(:layer_and_below_read)
         .may(:download_statistics)
-        .in_same_layer_or_below
+        .in_same_layer
     end
   end
 

@@ -20,14 +20,14 @@ describe "groups/_actions_show_sac_cas.html.haml" do
   end
 
   it "renders statistics download button" do
-    expect(dom).to have_button "Mitgliederstatistik"
+    expect(dom).to have_selector("a.dropdown-toggle", text: "SAC Exporte")
   end
 
   context "member" do
     let(:person) { people(:mitglied) }
 
     it "hides statistics download button" do
-      expect(dom).not_to have_button "Mitgliederstatistik"
+      expect(dom).not_to have_selector("a.dropdown-toggle", text: "SAC Exporte")
     end
   end
 
@@ -35,7 +35,7 @@ describe "groups/_actions_show_sac_cas.html.haml" do
     let(:group) { groups(:bluemlisalp) }
 
     it "has no statistics download button" do
-      expect(dom).not_to have_button "Mitgliederstatistik"
+      expect(dom).not_to have_selector("a.dropdown-toggle", text: "SAC Exporte")
     end
   end
 end
