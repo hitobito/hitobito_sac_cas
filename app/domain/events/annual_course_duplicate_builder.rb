@@ -37,6 +37,7 @@ class Events::AnnualCourseDuplicateBuilder
     build_dates(course)
     build_translations(course)
     build_questions(course)
+    build_leaders(course)
 
     course
   end
@@ -51,6 +52,13 @@ class Events::AnnualCourseDuplicateBuilder
     course.teamer_count = 0
     course.created_at = nil
     course.updated_at = nil
+
+    course.internal_comment = nil
+    course.link_survey = nil
+    course.book_discount_code = nil
+    Event::Course::PRICE_ATTRIBUTES.each do |attribute|
+      course.send(:"#{attribute}=", nil)
+    end
   end
 
   def build_dates(course) # rubocop:todo Metrics/AbcSize
@@ -65,6 +73,24 @@ class Events::AnnualCourseDuplicateBuilder
       date.start_at = determine_next_datetime(source_date.start_at&.to_datetime)
       date.finish_at = determine_next_datetime(source_date.finish_at&.to_datetime)
     end
+  end
+
+  def build_leaders(course)
+    @source_course.participations
+      .joins(:roles)
+      .where(state: :assigned,
+        roles: {type: Event::Course::LEADER_ROLES}).find_each do |source_participation|
+          participation = course.participations.build(
+            source_participation.attributes.except("id", "event_id")
+          )
+
+          source_participation.roles.each do |source_role|
+            participation.roles.build(
+              source_role.attributes.except("id", "participation_id")
+            )
+          end
+        end
+    course.participations.each { _1.event = course }
   end
 
   def build_translations(course)

@@ -46,12 +46,21 @@ describe Events::AnnualCourseDuplicateBuilder do
       end
     end
 
-    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation,
-      event: course))
-    Event::Course::Role::Participant.create!(participation: Fabricate(:event_participation,
-      event: course))
-    Event::Course::Role::Leader.create!(participation: Fabricate(:event_participation,
-      event: course))
+    Event::Course::Role::Participant.create!(
+      participation: Fabricate(:event_participation, event: course)
+    )
+    Event::Course::Role::Participant.create!(
+      participation: Fabricate(:event_participation, event: course)
+    )
+    Event::Course::Role::Leader.create!(
+      participation: Fabricate(:event_participation, event: course, state: :assigned)
+    )
+    Event::Course::Role::LeaderAspirant.create!(
+      participation: Fabricate(:event_participation, event: course, state: :assigned)
+    )
+    Event::Course::Role::LeaderAspirant.create!(
+      participation: Fabricate(:event_participation, event: course, state: :applied)
+    )
 
     course.refresh_participant_counts!
     course.reload
@@ -110,6 +119,20 @@ describe Events::AnnualCourseDuplicateBuilder do
         end
       end
 
+      expect(duplicate.participations.size).to eq(2)
+      source_leader_participations = source_course.participations.select do |source_participation|
+        Event::Course::LEADER_ROLES.include?(source_participation.roles.map(&:type)) &&
+          source_participation.state == :assigned
+      end
+
+      source_leader_participations.each do |source_participation|
+        duplicate_participation = duplicate.participations.find {
+          _1.participant_id == source_participation.participant_id
+        }
+
+        expect(Event::Course::LEADER_ROLES).to include(duplicate_participation.roles.map(&:type))
+      end
+
       expect(duplicate).to be_valid
     end
   end
@@ -124,8 +147,8 @@ describe Events::AnnualCourseDuplicateBuilder do
             change { Event::Translation.count }.by(3).and \
               change { Event::Question.count }.by(3).and \
                 change { Event::Question::Translation.count }.by(9).and \
-                  change { Event::Participation.count }.by(0).and \
-                    change { Event::Role.count }.by(0)
+                  change { Event::Participation.count }.by(2).and \
+                    change { Event::Role.count }.by(2)
 
       expect(duplicate.created_at).to be_present
     end

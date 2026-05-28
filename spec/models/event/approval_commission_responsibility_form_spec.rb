@@ -48,12 +48,15 @@ describe Event::ApprovalCommissionResponsibilityForm do
 
   describe "#grouped_event_approval_commission_responsibilities" do
     it "groups entries by target_group and discipline" do
-      responsibility_1 = instance_double(Event::ApprovalCommissionResponsibility, target_group: "Youth",
-        discipline: "Eating")
-      responsibility_2 = instance_double(Event::ApprovalCommissionResponsibility, target_group: "Youth",
-        discipline: "Sleeping")
-      responsibility_3 = instance_double(Event::ApprovalCommissionResponsibility, target_group: "Adult",
-        discipline: "Sleeping")
+      responsibility_1 = instance_double(
+        Event::ApprovalCommissionResponsibility, target_group: "Youth", discipline: "Eating"
+      )
+      responsibility_2 = instance_double(
+        Event::ApprovalCommissionResponsibility, target_group: "Youth", discipline: "Sleeping"
+      )
+      responsibility_3 = instance_double(
+        Event::ApprovalCommissionResponsibility, target_group: "Adult", discipline: "Sleeping"
+      )
       allow(subject).to receive(:event_approval_commission_responsibilities).and_return([responsibility_1,
         responsibility_2, responsibility_3])
 
