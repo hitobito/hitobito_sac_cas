@@ -33,8 +33,13 @@ describe Dropdown::Events::Tours::State do
     expect(dom).to have_css "a.dropdown-item[data-bs-toggle]", text: "Zur Freigabe weiterleiten"
 
     content = Capybara::Node::Simple.new(dom.find_link("Zur Freigabe weiterleiten")["data-bs-content"])
-    expect(content).to have_button "Bestehende Freigaben zurücksetzen", name: "button", value: "destroy"
-    expect(content).to have_button "Bestehende Freigaben beibehalten", name: "button", value: "keep"
+    expect(content).to have_text "E-mail senden an"
+    expect(content).to have_text "E-Mail an zuständige Person(en)"
+    expect(content).to have_text "E-Mail an zuständige Person(en) und Freigabekomitee(s)"
+    expect(content).to have_text "Keine E-Mail versenden"
+    expect(content).to have_text "Bestehende freigaben"
+    expect(content).to have_text "Beibehalten"
+    expect(content).to have_text "Zurücksetzen"
   end
 
   it "renders publish popover" do
@@ -111,6 +116,15 @@ describe Dropdown::Events::Tours::State do
     expect(content).to have_field "Interne Bemerkungen"
     expect(content).to have_text "Zuständige(s) Freigabe-Komitee(s)"
     expect(content).to have_text "Leitungsperson(en)"
+  end
+
+  it "renders approve popover" do
+    event.state = :draft
+
+    expect(dom).to have_css "a.dropdown-item[data-bs-toggle]", text: "Selbst freigeben"
+
+    content = Capybara::Node::Simple.new(dom.find_link("Selbst freigeben")["data-bs-content"])
+    expect(content).to have_text "Du gibst die Tour “#{event.name} (#{event.id})“ ohne zusätzliche Prüfung frei."
   end
 
   it "renders back to approved popover" do

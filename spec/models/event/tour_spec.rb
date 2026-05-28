@@ -644,6 +644,14 @@ describe Event::Tour do
   end
 
   describe "when state changes to approved" do
+    before do
+      Group::FreigabeKomitee::Pruefer.create!(
+        group: groups(:bluemlisalp_freigabekomitee),
+        person: people(:mitglied),
+        approval_kinds: [event_approval_kinds(:professional)]
+      )
+    end
+
     [:published, :canceled].each do |from_state|
       context "from #{from_state}" do
         before do
@@ -690,12 +698,55 @@ describe Event::Tour do
           tour.update_column(:state, from_state)
         end
 
-        it "does not send email" do
-          tour.receiver_options = ["assigned_freigabe_komitees", "leaders"]
+        it "does not send mail if not self_approval" do
+          allow(tour).to receive(:self_approved?).and_return(false)
 
-          expect { tour.update!(state: :approved) }.not_to change(Delayed::Job, :count)
+          expect { tour.update!(state: :approved) }.not_to have_enqueued_mail(Event::TourApprovalMailer, :self_approved)
+        end
+
+        it "sends self_approved mail to all pruefers with cc contact and creator" do
+          allow(tour).to receive(:self_approved?).and_return(true)
+
+          expect { tour.update!(state: :approved) }
+            .to have_enqueued_mail(Event::TourApprovalMailer, :self_approved)
+            .with(tour, [people(:mitglied)], [people(:admin), people(:familienmitglied)])
         end
       end
+    end
+  end
+
+  describe "when state changes to review" do
+    before do
+      tour.update_column(:state, :draft)
+      Group::FreigabeKomitee::Pruefer.create!(
+        group: groups(:bluemlisalp_freigabekomitee),
+        person: people(:mitglied),
+        approval_kinds: event_approval_kinds(:professional, :security, :editorial)
+      )
+      Group::FreigabeKomitee::Pruefer.create!(
+        group: groups(:bluemlisalp_freigabekomitee),
+        person: people(:tourenchef),
+        approval_kinds: [event_approval_kinds(:editorial)]
+      )
+    end
+
+    it "sends required mail to next pruefer with cc contact and creator" do
+      tour.receiver_options = ["responsible_people"]
+      expect { tour.update!(state: :review) }
+        .to have_enqueued_mail(Event::TourApprovalMailer, :required)
+        .with(tour, [people(:mitglied)], [people(:admin), people(:familienmitglied)])
+    end
+
+    it "sends required mail to next pruefer with cc contact and creator and all other pruefers" do
+      tour.receiver_options = ["responsible_people_and_assigned_freigabe_komitees"]
+      expect { tour.update!(state: :review) }
+        .to have_enqueued_mail(Event::TourApprovalMailer, :required)
+        .with(tour, [people(:mitglied)], [people(:admin), people(:familienmitglied), people(:tourenchef)])
+    end
+
+    it "sends nothing when receiver_options is none" do
+      tour.receiver_options = ["none"]
+      expect { tour.update!(state: :review) }.not_to have_enqueued_mail
     end
   end
 
@@ -752,6 +803,22 @@ describe Event::Tour do
         tour.participant_count = 2
         expect(state).to eq "applied"
       end
+    end
+  end
+
+  describe "#self_approved?" do
+    it "is true when all approvals have no freigabe_komitee" do
+      tour.approvals.build(freigabe_komitee_id: nil)
+      expect(tour).to be_self_approved
+    end
+
+    it "is false with no approvals" do
+      expect(tour).not_to be_self_approved
+    end
+
+    it "is false when any approval has a freigabe_komitee" do
+      tour.approvals.build(freigabe_komitee_id: 42)
+      expect(tour).not_to be_self_approved
     end
   end
 

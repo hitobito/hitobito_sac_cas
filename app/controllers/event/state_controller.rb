@@ -70,13 +70,16 @@ class Event::StateController < ApplicationController
   end
 
   def receiver_options
-    params[:receiver_options]
+    Array(params[:receiver_options])
   end
 
   def valid_receiver_options?
     return true if receiver_options.nil? || receiver_options.include?("none")
 
-    receiver_options.all? { Event::Tour::RECEIVER_JOB_MAP.key?(_1) }
+    receiver_options.all? {
+      Event::Tour::RECEIVER_JOB_MAP.key?(_1) ||
+        Event::Tour::ApprovalForm::EMAIL_RECEIVER_OPTIONS.include?(_1.to_sym)
+    }
   end
 
   def state_possible?
@@ -95,9 +98,9 @@ class Event::StateController < ApplicationController
   end
 
   def rebuild_approvals
-    if params[:button] == "destroy"
+    if params[:existing_approvals] == "destroy"
       entry.approvals.each(&:mark_for_destruction)
-    elsif params[:button] == "keep"
+    elsif params[:existing_approvals] == "keep"
       Event::Tour::ApprovalForm.new(entry, current_user).reset_approvals
     end
   end

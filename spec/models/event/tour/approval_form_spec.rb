@@ -13,8 +13,8 @@ describe Event::Tour::ApprovalForm do
   let(:form) { described_class.new(tour, user) }
   let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
 
-  def create_pruefer(approval_kinds)
-    Group::FreigabeKomitee::Pruefer.create!(group: komitee, person: user, approval_kinds: approval_kinds)
+  def create_pruefer(approval_kinds, person: user)
+    Group::FreigabeKomitee::Pruefer.create!(group: komitee, person:, approval_kinds: approval_kinds)
   end
 
   def create_approval(kind, approved)
@@ -557,6 +557,97 @@ describe Event::Tour::ApprovalForm do
       expect { form.save("approve") }.not_to change { tour.approvals.count }
 
       expect(tour.reload.internal_comment).to eq("Tiptop")
+    end
+
+    describe "email dispatch" do
+      let(:contact) { people(:admin) }
+      let(:creator) { people(:familienmitglied) }
+      let(:other_pruefer) { people(:mitglied) }
+
+      context "when no email" do
+        before { create_pruefer(event_approval_kinds(:professional, :security, :editorial)) }
+
+        it "sends nothing for receiver_option: none on approve" do
+          form.receiver_option = "none"
+          form.attributes = build_check_attrs(true, true, false)
+          expect { form.save("approve") }.not_to have_enqueued_mail
+        end
+
+        it "sends nothing for receiver_option: none on last approve" do
+          form.receiver_option = "none"
+          form.attributes = build_check_attrs(true, true, true)
+          expect { form.save("approve") }.not_to have_enqueued_mail
+        end
+
+        it "sends nothing for receiver_option: none on reject" do
+          form.receiver_option = "none"
+          form.attributes = build_check_attrs(true, false, false)
+          expect { form.save("reject") }.not_to have_enqueued_mail
+        end
+
+        it "sends nothing for receiver_option: nil" do
+          form.receiver_option = nil
+          form.attributes = build_check_attrs(true, true, false)
+          expect { form.save("approve") }.not_to have_enqueued_mail
+        end
+      end
+
+      # user pruefer for professional+security, other_pruefer for editorial.
+      context "on partial approve" do
+        before do
+          create_pruefer(event_approval_kinds(:professional, :security))
+          create_pruefer([event_approval_kinds(:editorial)], person: other_pruefer)
+          form.attributes = build_check_attrs(true, true, false)
+        end
+
+        it "sends required to next pruefer, cc: contact and creator" do
+          expect { form.save("approve") }
+            .to have_enqueued_mail(Event::TourApprovalMailer, :required)
+            .with(tour, [other_pruefer], [contact, creator])
+        end
+
+        it "also ccs remaining pruefers for the committees option" do
+          form.receiver_option = "responsible_people_and_assigned_freigabe_komitees"
+          expect { form.save("approve") }
+            .to have_enqueued_mail(Event::TourApprovalMailer, :required)
+            .with(tour, [other_pruefer], [contact, creator, user])
+        end
+      end
+
+      context "on last approve" do
+        before do
+          create_pruefer(event_approval_kinds(:professional, :security, :editorial))
+          form.attributes = build_check_attrs(true, true, true)
+        end
+
+        it "sends granted to creator, cc: contact" do
+          expect { form.save("approve") }
+            .to have_enqueued_mail(Event::TourApprovalMailer, :granted)
+            .with(tour, creator, contact)
+        end
+      end
+
+      # user pruefer for professional, other_pruefer for security+editorial.
+      context "on reject" do
+        before do
+          create_pruefer([event_approval_kinds(:professional)])
+          create_pruefer(event_approval_kinds(:security, :editorial), person: other_pruefer)
+          form.attributes = build_check_attrs(true, false, false)
+        end
+
+        it "sends rejected to creator, cc: contact and rejecting pruefer" do
+          expect { form.save("reject") }
+            .to have_enqueued_mail(Event::TourApprovalMailer, :rejected)
+            .with(tour, creator, [contact, user])
+        end
+
+        it "also ccs all pruefers for the committees option" do
+          form.receiver_option = "responsible_people_and_assigned_freigabe_komitees"
+          expect { form.save("reject") }
+            .to have_enqueued_mail(Event::TourApprovalMailer, :rejected)
+            .with(tour, creator, contain_exactly(contact, user, other_pruefer))
+        end
+      end
     end
   end
 

@@ -155,6 +155,10 @@ class Event::Tour < Event
     Event::Discipline.where(id: disciplines.select("COALESCE(parent_id, id)"))
   end
 
+  def self_approved?
+    approvals.any? && approvals.none? { |a| a.freigabe_komitee_id.present? }
+  end
+
   private
 
   def assert_duration_valid?

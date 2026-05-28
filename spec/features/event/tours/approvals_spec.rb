@@ -41,7 +41,7 @@ describe "event/tours/approvals", js: true do
 
     expect(page).to have_selector("h1", text: "Freigabe")
 
-    expect(page).to have_checked_field(count: 2)
+    expect(page).to have_checked_field(count: 3) # one is the email option radio
 
     fill_in "Interne Bemerkungen", with: "Gut so"
     expect(page).to have_selector("button", text: "Freigeben")
@@ -63,7 +63,7 @@ describe "event/tours/approvals", js: true do
 
     expect(page).to have_selector("h1", text: "Freigabe")
 
-    expect(page).to have_checked_field(count: 2)
+    expect(page).to have_checked_field(count: 3) # one is the email option radio
     uncheck("Sicherheit")
     fill_in "Interne Bemerkungen", with: "Nochmals"
 
@@ -101,7 +101,7 @@ describe "event/tours/approvals", js: true do
     expect(page).to have_content(komitee.to_s)
     expect(page).to have_content(other_komitee.to_s)
 
-    expect(page).to have_checked_field(count: 5)
+    expect(page).to have_checked_field(count: 6) # one is the email option radio
 
     within("form > .row:nth-of-type(1)") do
       expect(page).to have_checked_field(count: 2)

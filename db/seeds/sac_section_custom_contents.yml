@@ -3,6 +3,103 @@
 # This happens everytime when a new Sektion or Ortsgruppe is created,
 # therefore this is not a regular deploy time seed.
 
+event_tour_approval_required:
+  label: "Tour: E-Mail Freigabe notwendig"
+  subject: "Aktion erforderlich: Tour {event-name} ({event-id}) zur Prüfung"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-names}
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email}) hat die Tour {event-name} ({event-id}) zur Freigabe weitergeleitet:
+    {event-link}
+
+    Deine Aktion ist erforderlich: Bitte beurteile die zur Freigabe eingereichte Tour in deiner Prüferrolle.
+
+    {event-internal-comment}
+
+    {event-dates}
+
+    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+
+    Beste Grüsse,
+    SAC-Portal
+
+event_tour_approval_rejected:
+  label: "Tour: E-Mail Freigabe abgelehnt"
+  subject: "Tour {event-name} ({event-id}) wurde abgelehnt"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email}) hat die Tour {event-name} ({event-id}) abgelehnt:
+    {event-link}
+
+    Deine Aktion ist erforderlich: Bitte nimm die notwendigen Korrekturen vor.
+
+    {event-internal-comment}
+
+    {event-dates}
+
+    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+
+    Beste Grüsse,
+    SAC-Portal
+
+event_tour_approval_granted:
+  label: "Tour: E-Mail Freigabe erfolgt"
+  subject: "Tour {event-name} ({event-id}) wurde freigegeben"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Die Tour {event-name} ({event-id}) wurde freigegeben:
+    {event-link}
+
+    Keine Aktion ist erforderlich, diese Information dient für dich zur Information.
+    Du kannst die Tour nun in einem nächsten Schritt publizieren.
+
+    {event-internal-comment}
+
+    {event-dates}
+
+    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+
+    Beste Grüsse,
+    SAC-Portal
+
+event_tour_self_approved:
+  label: "Tour: E-Mail Selbst freigegeben"
+  subject: "Tour {event-name} ({event-id}) wurde selbst freigegeben"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
+  body: |
+    Hallo {recipient-names}
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email}) hat die Tour {event-name} ({event-id}) selbst freigegeben:
+    {event-link}
+
+    Keine Aktion ist erforderlich, diese E-Mail dient für dich zur Information.
+
+    {event-internal-comment}
+
+    {event-dates}
+
+    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+
+    Beste Grüsse,
+    SAC-Portal
+
 event_tour_publication:
   label: "Tour: E-Mail Publikation"
   subject: "Publikation der Tour {event-name}"

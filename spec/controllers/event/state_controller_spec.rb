@@ -164,7 +164,7 @@ describe Event::StateController do
             create_approval(:professional)
             create_approval(:security, approved: false)
 
-            put :update, params: {group_id: group.id, id: event.id, state: "review", button: "destroy"}
+            put :update, params: {group_id: group.id, id: event.id, state: "review", existing_approvals: "destroy"}
 
             expect(event.reload.state).to eq("review")
             expect(event.approvals.count).to eq(0)
@@ -174,7 +174,7 @@ describe Event::StateController do
             create_approval(:professional)
             create_approval(:security, approved: false)
 
-            put :update, params: {group_id: group.id, id: event.id, state: "review", button: "keep"}
+            put :update, params: {group_id: group.id, id: event.id, state: "review", existing_approvals: "keep"}
 
             expect(event.reload.state).to eq("review")
             expect(event.approvals.count).to eq(2)

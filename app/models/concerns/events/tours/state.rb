@@ -59,12 +59,22 @@ module Events::Tours::State
     end
   end
 
+  def handle_state_transition_to_review
+    return if no_emails?
+
+    cc = [contact, creator]
+    cc += approval_composer.remaining_pruefers.to_a if email_receivers_include_komitees?
+    Event::TourApprovalMailer.required(
+      self, approval_composer.next_relevant_pruefer.to_a, cc.compact
+    ).deliver_later
+  end
+
   def handle_state_transition_to_published
-    send_emails(subito? ? :publication_subito : :publication)
+    send_individual_emails(subito? ? :publication_subito : :publication)
   end
 
   def handle_state_transition_back_to_published
-    send_emails(:back_to_published)
+    send_individual_emails(:back_to_published)
   end
 
   def handle_state_transition_to_ready
@@ -89,13 +99,13 @@ module Events::Tours::State
     participations.where(state: :annulled)
       .update_all("state = previous_state, active = TRUE, previous_state = NULL")
 
-    send_emails(:back_to_ready)
+    send_individual_emails(:back_to_ready)
   end
 
   def handle_state_transition_to_closed
     participations.where(state: :summoned).update_all(state: :attended)
 
-    send_emails(:closing)
+    send_individual_emails(:closing)
   end
 
   def handle_state_transition_to_canceled
@@ -105,20 +115,29 @@ module Events::Tours::State
     when :minimum_participants then :canceled_minimum_participants
     end
 
-    send_emails(mailer_method)
+    send_individual_emails(mailer_method)
 
     participations.update_all("previous_state = state, active = FALSE, state = 'annulled'")
   end
 
   def handle_state_transition_back_to_draft
-    send_emails(:back_to_draft)
+    send_individual_emails(:back_to_draft)
+  end
+
+  def handle_state_transition_to_approved
+    return unless self_approved?
+
+    cc = [contact, creator]
+    Event::TourApprovalMailer.self_approved(
+      self, approval_composer.all_pruefers.to_a, cc.compact
+    ).deliver_later
   end
 
   def handle_state_transition_back_to_approved
-    send_emails(:back_to_approved)
+    send_individual_emails(:back_to_approved)
   end
 
-  def send_emails(mailer_method)
+  def send_individual_emails(mailer_method)
     return if no_emails?
 
     receiver_options.each do |option|
@@ -139,6 +158,10 @@ module Events::Tours::State
     receiver_options.nil? || receiver_options.include?("none")
   end
 
+  def email_receivers_include_komitees?
+    receiver_options.include?("responsible_people_and_assigned_freigabe_komitees")
+  end
+
   def participant_states(receiver_option)
     case receiver_option.to_sym
     when :participants_unconfirmed then ["unconfirmed", "applied"]
@@ -148,4 +171,6 @@ module Events::Tours::State
     else []
     end
   end
+
+  def approval_composer = @approval_composer ||= Events::Tours::ApprovalComposer.new(self, nil)
 end

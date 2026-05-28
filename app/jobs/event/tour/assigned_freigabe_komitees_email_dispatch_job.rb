@@ -9,9 +9,8 @@ class Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob < Event::Tour::Email
   private
 
   def recipients
-    Person.joins(:roles).where(roles: {group: composer.relevant_freigabe_komitees,
-                                       type: Group::FreigabeKomitee::Pruefer.sti_name})
+    approval_composer.all_pruefers
   end
 
-  def composer = @composer ||= Events::Tours::ApprovalComposer.new(tour, nil)
+  def approval_composer = @approval_composer ||= Events::Tours::ApprovalComposer.new(tour, nil)
 end
