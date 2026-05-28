@@ -68,7 +68,14 @@ describe People::MembershipInvoicesController do
     it "creates external invoice and enqueues job" do
       expect do
         post :create,
-          params: params.deep_merge(people_membership_invoice_form: {discount: 50, new_entry: true})
+          params: params.deep_merge(
+            people_membership_invoice_form: {
+              discount: 50,
+              new_entry: true,
+              update_membership: false,
+              dont_send: false
+            }
+          )
       end.to change { ExternalInvoice.count }.by(1)
         .and change { Delayed::Job.where("handler like '%CreateMembershipInvoiceJob%'").count }
 
@@ -77,9 +84,16 @@ describe People::MembershipInvoicesController do
       ))
       expect(flash[:notice]).to eq("Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt")
 
+      invoice = ExternalInvoice.last
+      expect(invoice.person).to eq person
+      expect(invoice.update_membership).to eq(false)
+      expect(invoice.link).to eq(bluemlisalp)
+      expect(invoice.sent_at).to eq today
+      expect(invoice.year).to eq today.year
+
       job = Delayed::Job.last.payload_object
       expect(job.new_entry).to eq true
-      expect(job.dont_send).to eq nil
+      expect(job.dont_send).to eq false
       expect(job.discount).to eq 50
       expect(job.reference_date).to eq today
       expect(job.manual_positions).to eq({})

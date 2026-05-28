@@ -47,6 +47,10 @@
       = f.inline_radio_button :dont_send, false, t("global.yes"), true, checked: true
       = f.inline_radio_button :dont_send, true, t("global.no"), true
 
+    = f.labeled(:update_membership) do
+      = f.inline_radio_button :update_membership, true, t("global.yes"), true, checked: true
+      = f.inline_radio_button :update_membership, false, t("global.no"), true
+
     %div{data: { 'form-field-toggle-target': "toggleOpposite" }}
       = f.labeled(:discount) do
         = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true

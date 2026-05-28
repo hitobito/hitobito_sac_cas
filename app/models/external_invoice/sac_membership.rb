@@ -52,14 +52,14 @@ class ExternalInvoice::SacMembership < ExternalInvoice
     return if year.blank?
 
     date = Date.new(year, 1, 1)
-    self.beitragskategorie = People::SacMembership.new(person,
-      date:).stammsektion_role&.beitragskategorie
+    self.beitragskategorie =
+      People::SacMembership.new(person, date:).stammsektion_role&.beitragskategorie
   end
 
   private
 
   def handle_state_change_to_payed
-    if state_changed_to_payed?
+    if state_changed_to_payed? && update_membership?
       Invoices::SacMemberships::InvoicePayedJob.new(person.id, link.id, year).enqueue!
     end
   end

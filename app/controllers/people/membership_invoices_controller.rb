@@ -40,7 +40,8 @@ class People::MembershipInvoicesController < ApplicationController
       link: link_group,
       year: invoice_form.reference_date&.year,
       issued_at: invoice_form.invoice_date,
-      sent_at: invoice_form.send_date
+      sent_at: invoice_form.send_date,
+      update_membership: invoice_form.update_membership
     }
   end
 
@@ -73,7 +74,7 @@ class People::MembershipInvoicesController < ApplicationController
     params
       .require(:people_membership_invoice_form)
       .permit(:reference_date, :invoice_date, :send_date,
-        :section_id, :new_entry, :discount, :dont_send,
+        :section_id, :new_entry, :discount, :dont_send, :update_membership,
         :sac_fee, :sac_entry_fee, :hut_solidarity_fee,
         :sac_magazine, :sac_magazine_postage_abroad, :section_entry_fee,
         section_fees_attributes: [:section_id, :fee],

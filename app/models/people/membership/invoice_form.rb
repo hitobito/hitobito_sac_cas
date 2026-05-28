@@ -11,10 +11,20 @@ class People::Membership::InvoiceForm
 
   DISCOUNTS = [0, 50, 100].freeze
 
+  MANUAL_POSITION_KEYS = [
+    :sac_fee,
+    :sac_entry_fee,
+    :hut_solidarity_fee,
+    :sac_magazine,
+    :sac_magazine_postage_abroad,
+    :section_entry_fee
+  ].freeze
+
   attribute :reference_date, :date
   attribute :invoice_date, :date
   attribute :send_date, :date
   attribute :dont_send, :boolean
+  attribute :update_membership, :boolean, default: true
   attribute :discount, :integer
   attribute :new_entry, :boolean
   attribute :section_id, :integer
@@ -42,7 +52,7 @@ class People::Membership::InvoiceForm
   validate :assert_active_membership, if: :assert_active_membership?
 
   delegate :sac_membership, to: :person
-  delegate :stammsektion_role, :neuanmeldung_stammsektion_role, :select_paying, to: :sac_membership
+  delegate :stammsektion_role, :neuanmeldung_stammsektion_role, to: :sac_membership
   delegate :zusatzsektion_roles, :neuanmeldung_nv_zusatzsektion_roles, to: :ref_date_sac_membership
 
   def initialize(person, attrs = {})
@@ -58,30 +68,30 @@ class People::Membership::InvoiceForm
   end
 
   def stammsektion
-    select_paying([stammsektion_role, neuanmeldung_stammsektion_role]).first&.layer_group
+    select_paying([stammsektion_role, neuanmeldung_stammsektion_role]).first&.layer_group ||
+      select_paying([year_sac_membership.stammsektion_role]).first&.layer_group
   end
 
   def zusatzsektionen
     select_paying(neuanmeldung_nv_zusatzsektion_roles + zusatzsektion_roles).map(&:layer_group)
   end
 
+  def select_paying(roles)
+    roles.compact.select { |role| sac_membership.paying_person?(role.beitragskategorie) }
+  end
+
   def min_date = @min_date ||= today.beginning_of_year
 
   def max_date = @max_date ||= today.next_year.end_of_year
 
-  def max_send_date = already_member_next_year? ? today.next_year.end_of_year : today.end_of_year
+  def max_send_date
+    already_member_next_year? ? today.next_year.end_of_year : today.end_of_year
+  end
 
   def manual_positions
     return {} unless manual_positions?
 
-    [
-      :sac_fee,
-      :sac_entry_fee,
-      :hut_solidarity_fee,
-      :sac_magazine,
-      :sac_magazine_postage_abroad,
-      :section_entry_fee
-    ].index_with { send(_1) }.tap do |positions|
+    MANUAL_POSITION_KEYS.index_with { send(_1) }.tap do |positions|
       positions[:section_fees] = section_fees_hash
       positions[:section_bulletin_postage_abroads] = section_bulletin_postage_abroad_hash
     end
@@ -161,14 +171,25 @@ class People::Membership::InvoiceForm
 
   def today = @today ||= Time.zone.today
 
-  def ref_date_sac_membership = @ref_date_sac_membership ||= People::SacMembership.new(person,
-    date: reference_date)
+  def ref_date_sac_membership
+    @ref_date_sac_membership ||= People::SacMembership.new(person, date: reference_date)
+  end
 
-  def active_membership_section_ids = ([ref_date_stammsektion] + zusatzsektionen).compact.map(&:id)
+  def active_membership_section_ids
+    ([ref_date_stammsektion] + zusatzsektionen).compact.map(&:id)
+  end
 
   def ref_date_stammsektion
     select_paying([ref_date_sac_membership.stammsektion_role,
       ref_date_sac_membership.neuanmeldung_stammsektion_role]).first&.layer_group
+  end
+
+  def year_sac_membership
+    @year_sac_membership ||= People::SacMembership.new(person, date: current_year_range)
+  end
+
+  def current_year_range
+    Date.new(today.year, 1, 1)..Date.new(today.year, 12, 31)
   end
 
   def context = @context ||= Invoices::SacMemberships::Context.new(today)

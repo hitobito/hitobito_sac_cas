@@ -12,11 +12,9 @@ describe People::DataQualityChecker do
   let(:checker) { described_class.new(person) }
 
   it "creates issues" do
-    expect_query_count do
-      expect { checker.check_data_quality }.to change {
-        person.reload.data_quality_issues.count
-      }.by(1)
-    end.to eq(11)
+    expect do
+      expect { checker.check_data_quality }.to change { person.reload.data_quality_issues.count }.by(1)
+    end.to make(13).db_queries
 
     issue = person.data_quality_issues.first
     expect(issue).to have_attributes(
@@ -54,7 +52,7 @@ describe People::DataQualityChecker do
     end
   end
 
-  it "performs no queries if everything is ok" do
+  it "performs only membership invoicable queries if everything is ok" do
     person.data_quality_issues.create!(attr: :phone_numbers, key: :empty, severity: "warning")
     person.update_column(:data_quality, "warning")
 
@@ -65,7 +63,7 @@ describe People::DataQualityChecker do
     person.phone_numbers.to_a
 
     expect do
-      expect_query_count { checker.check_data_quality }.to eq(0)
+      expect { checker.check_data_quality }.to make(2).db_queries
     end.not_to change { person.data_quality_issues.count }
   end
 
@@ -74,9 +72,7 @@ describe People::DataQualityChecker do
     person.data_quality_issues.create!(attr: :last_name, key: :empty, severity: "error")
     person.update_column(:data_quality, "error")
 
-    expect { checker.check_data_quality }.to change {
-      person.reload.data_quality_issues.count
-    }.by(-1)
+    expect { checker.check_data_quality }.to change { person.reload.data_quality_issues.count }.by(-1)
     expect(person.data_quality).to eq("warning")
     expect(person.data_quality_issues.first.attr).to eq("phone_numbers")
   end

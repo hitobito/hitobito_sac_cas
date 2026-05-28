@@ -54,10 +54,6 @@ class People::SacMembership
     active_roles_of_type(mitglied_zusatzsektion_types)
   end
 
-  def select_paying(roles)
-    roles.compact.select { |role| paying_person?(role.beitragskategorie) }
-  end
-
   def future_stammsektion_roles
     @person.roles.future.where(type: mitglied_stammsektion_types)
   end
@@ -103,15 +99,6 @@ class People::SacMembership
       .any? { |r| r.layer_group.id == sektion.id }
   end
 
-  # Für eine Person kann eine Mitgliedschaftsrechnung erzeugt werden, wenn
-  # die Person eine Stammsektionsmitgliedschaft oder -anmeldung hat UND
-  # (die Person die Familienhauptperson ist ODER mindestens eine
-  #  individuelle Rolle hat (Beitragskategorie != "family"))
-  def invoice?
-    (stammsektion_role.present? || neuanmeldung_nv_stammsektion_roles.present?) &&
-      (@person.sac_family_main_person? || individual_membership?)
-  end
-
   def recent_abonnent_magazin_roles
     @person
       .roles.with_inactive
@@ -144,18 +131,6 @@ class People::SacMembership
   end
 
   private
-
-  def individual_membership?
-    if in_memory?
-      invoicable_roles.any? { |r| !r.family? }
-    else
-      invoicable_roles.where.not(beitragskategorie: :family).exists?
-    end
-  end
-
-  def invoicable_roles
-    active_roles_of_type(invoicable_types)
-  end
 
   def all_roles
     @person.roles_unscoped
@@ -232,12 +207,5 @@ class People::SacMembership
 
   def abonnent_magazin_types
     SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
-  end
-
-  def invoicable_types
-    mitglied_stammsektion_types +
-      mitglied_zusatzsektion_types +
-      neuanmeldung_nv_stammsektion_types +
-      neuanmeldung_nv_zusatzsektion_types
   end
 end

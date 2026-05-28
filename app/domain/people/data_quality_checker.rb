@@ -6,8 +6,17 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::DataQualityChecker
-  ATTRIBUTES_TO_CHECK = %w[first_name last_name street zip_code postbox town email phone_numbers
-    birthday].freeze
+  ATTRIBUTES_TO_CHECK = %w[
+    first_name
+    last_name
+    street
+    zip_code
+    postbox
+    town
+    email
+    phone_numbers
+    birthday
+  ].freeze
 
   attr_reader :person
 
@@ -42,15 +51,21 @@ class People::DataQualityChecker
   end
 
   def check_birthday
-    stammsektion = sac_membership.stammsektion_role
+    stammsektion_role = sac_membership.stammsektion_role
+    check_blank(:birthday, stammsektion_role.present?)
 
-    check_blank(:birthday, stammsektion.present?)
+    create_or_destroy(
+      invalid_birthday?(stammsektion_role),
+      attr: :birthday,
+      severity: :warning,
+      key: :less_than_6_years_before_entry
+    )
+  end
 
-    # rubocop:todo Layout/LineLength
-    invalid = stammsektion.present? && person.birthday && person.birthday > stammsektion.created_at - 6.years
-    # rubocop:enable Layout/LineLength
-    create_or_destroy(invalid, attr: :birthday, severity: :warning,
-      key: :less_than_6_years_before_entry)
+  def invalid_birthday?(stammsektion_role)
+    stammsektion_role.present? &&
+      person.birthday &&
+      person.birthday > stammsektion_role.created_at - 6.years
   end
 
   def check_blank(attr, precondition, severity = :error)
@@ -77,9 +92,9 @@ class People::DataQualityChecker
   end
 
   def find_highest_severity
-    issues.reject(&:destroyed?).max_by { |i|
+    issues.reject(&:destroyed?).max_by do |i|
       Person::DataQualityIssue.severities[i.severity]
-    }&.severity || "ok"
+    end&.severity || "ok"
   end
 
   def sac_membership
@@ -89,7 +104,7 @@ class People::DataQualityChecker
   def abacus_transmittable?
     return @abacus_transmittable if defined?(@abacus_transmittable)
 
-    @abacus_transmittable = sac_membership.invoice? || sac_membership.abonnent_magazin?
+    @abacus_transmittable = @person.sac_membership_invoice? || sac_membership.abonnent_magazin?
   end
 
   def check_street?

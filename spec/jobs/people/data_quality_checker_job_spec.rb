@@ -18,11 +18,11 @@ describe People::DataQualityCheckerJob do
       batch_selects = 4
       issues_created = 6 # 1 exists query from uniqueness validation and 1 insert per issue
       affected_people = 4 # update data_quality
+      membership_invoicable = 13
 
       expect do
-        expect_query_count {
-          job.perform
-        }.to eq(batch_selects + issues_created * 2 + affected_people)
+        expect { job.perform }
+          .to make(batch_selects + issues_created * 2 + affected_people + membership_invoicable).db_queries
       end.to change { person.data_quality_issues.count }.by(1)
         .and change { Person::DataQualityIssue.count }.by(issues_created)
     end
