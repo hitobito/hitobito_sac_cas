@@ -19,11 +19,11 @@ describe Events::Tours::ApprovalComposer do
     Group::FreigabeKomitee::Pruefer.create!(group: komitee, person:, approval_kinds:)
   end
 
-  def approve(kind)
+  def approve(kind, freigabe_komitee: komitee)
     tour.approvals.create!(
       approval_kind: event_approval_kinds(kind),
       approved: true,
-      freigabe_komitee: komitee,
+      freigabe_komitee:,
       creator: people(:admin)
     )
   end
@@ -52,7 +52,7 @@ describe Events::Tours::ApprovalComposer do
 
     it "returns pruefer person when pruefer for next relevant approval kind exists" do
       create_pruefer(approval_kinds: [event_approval_kinds(:professional)], person:)
-      expect(composer.next_relevant_pruefer).to contain_exactly(person)
+      expect(composer.next_relevant_pruefer).to match_array [person]
     end
 
     it "returns both people when multiple pruefer for next relevant approval kind exist" do
@@ -65,12 +65,43 @@ describe Events::Tours::ApprovalComposer do
       before { create_pruefer(approval_kinds: event_approval_kinds(:professional, :security, :editorial), person:) }
 
       it "returns pruefer person for the next relevant kind" do
-        expect(composer.next_relevant_pruefer).to contain_exactly(person)
+        expect(composer.next_relevant_pruefer).to match_array [person]
       end
 
       it "returns pruefer person after first kind is approved" do
         approve(:professional)
-        expect(composer.next_relevant_pruefer).to contain_exactly(person)
+        expect(composer.next_relevant_pruefer).to match_array [person]
+      end
+    end
+
+    context "with multiple relevant komitees" do
+      let!(:second_komitee) do
+        Group::FreigabeKomitee.create!(
+          name: "Komitee 2",
+          parent: groups(:bluemlisalp_touren_und_kurse)
+        )
+      end
+
+      before do
+        event_approval_commission_responsibilities(:bluemlisalp_wandern_familien)
+          .update!(freigabe_komitee: second_komitee)
+        create_pruefer(approval_kinds: [event_approval_kinds(:professional)], person:)
+        Group::FreigabeKomitee::Pruefer.create!(group: second_komitee, person: people(:admin),
+          approval_kinds: [event_approval_kinds(:professional)])
+      end
+
+      it "returns pruefer for next relevant kind in each komitee" do
+        expect(composer.next_relevant_pruefer).to match_array [person, people(:admin)]
+      end
+
+      it "returns empty when all komitees approved all approval kinds" do
+        approve(:professional)
+        approve(:security)
+        approve(:editorial)
+        approve(:professional, freigabe_komitee: second_komitee)
+        approve(:security, freigabe_komitee: second_komitee)
+        approve(:editorial, freigabe_komitee: second_komitee)
+        expect(composer.next_relevant_pruefer).to be_empty
       end
     end
   end
@@ -88,7 +119,7 @@ describe Events::Tours::ApprovalComposer do
 
     it "does not return duplicates when a pruefer has multiple kinds" do
       create_pruefer(approval_kinds: event_approval_kinds(:professional, :security), person:)
-      expect(composer.all_pruefers).to contain_exactly(person)
+      expect(composer.all_pruefers).to match_array [person]
     end
   end
 
@@ -101,7 +132,7 @@ describe Events::Tours::ApprovalComposer do
       create_pruefer(approval_kinds: [event_approval_kinds(:professional)], person:)
       create_pruefer(approval_kinds: [event_approval_kinds(:security)], person: people(:admin))
       # next_relevant_pruefer is person (professional is first unapproved kind)
-      expect(composer.remaining_pruefers).to contain_exactly(people(:admin))
+      expect(composer.remaining_pruefers).to match_array [people(:admin)]
     end
 
     it "returns all pruefers when next_relevant_pruefer is empty" do
@@ -109,7 +140,7 @@ describe Events::Tours::ApprovalComposer do
       approve(:security)
       approve(:editorial)
       create_pruefer(approval_kinds: [event_approval_kinds(:professional)], person:)
-      expect(composer.remaining_pruefers).to contain_exactly(person)
+      expect(composer.remaining_pruefers).to match_array [person]
     end
   end
 end

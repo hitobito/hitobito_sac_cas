@@ -9,8 +9,8 @@ class Event::Tour::AssignedFreigabeKomiteesEmailDispatchJob < Event::Tour::Email
   private
 
   def recipients
-    composer.all_pruefers
+    approval_composer.all_pruefers
   end
 
-  def composer = @composer ||= Events::Tours::ApprovalComposer.new(tour, nil)
+  def approval_composer = @approval_composer ||= Events::Tours::ApprovalComposer.new(tour, nil)
 end

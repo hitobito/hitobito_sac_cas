@@ -8,8 +8,8 @@ event_tour_approval_required:
   subject: "Aktion erforderlich: Tour {event-name} ({event-id}) zur Prüfung"
   placeholders_optional:
     "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, updater-id, updater-first-name, 
-    updater-last-name, updater-email, updater-phone"
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-names}
 
@@ -81,8 +81,8 @@ event_tour_self_approved:
   subject: "Tour {event-name} ({event-id}) wurde selbst freigegeben"
   placeholders_optional:
     "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, updater-id, updater-first-name, 
-    updater-last-name, updater-email, updater-phone"
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-names}
 

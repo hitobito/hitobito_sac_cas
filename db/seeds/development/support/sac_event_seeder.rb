@@ -42,11 +42,15 @@ class SacEventSeeder < EventSeeder
   end
   # rubocop:enable Metrics/MethodLength
 
+  # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
   def tour_attributes(values)
+    state = Event::Tour.possible_states.sample
+
     values.merge({
       name: Faker::Mountain.name,
-      state: Event::Tour.possible_states.sample,
+      state: state,
+      canceled_reason: (state == "canceled") ? Event::Tour::CANCELED_REASONS.sample : nil,
       automatic_assignment: true,
       priorization: false,
       requires_approval: false,
@@ -60,6 +64,7 @@ class SacEventSeeder < EventSeeder
     })
   end
   # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   def course_attributes(values)
     super.merge(

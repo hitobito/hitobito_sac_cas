@@ -63,9 +63,9 @@ module Events::Tours::State
     return if no_emails?
 
     cc = [contact, creator]
-    cc += composer.remaining_pruefers.to_a if email_receivers_include_komitees?
+    cc += approval_composer.remaining_pruefers.to_a if email_receivers_include_komitees?
     Event::TourApprovalMailer.required(
-      self, composer.next_relevant_pruefer.to_a, cc.compact
+      self, approval_composer.next_relevant_pruefer.to_a, cc.compact
     ).deliver_later
   end
 
@@ -109,7 +109,7 @@ module Events::Tours::State
   end
 
   def handle_state_transition_to_canceled
-    mailer_method = case canceled_reason&.to_sym
+    mailer_method = case canceled_reason.to_sym
     when :no_leader then :canceled_no_leader
     when :weather then :canceled_weather
     when :minimum_participants then :canceled_minimum_participants
@@ -129,7 +129,7 @@ module Events::Tours::State
 
     cc = [contact, creator]
     Event::TourApprovalMailer.self_approved(
-      self, composer.all_pruefers.to_a, cc.compact
+      self, approval_composer.all_pruefers.to_a, cc.compact
     ).deliver_later
   end
 
@@ -172,5 +172,5 @@ module Events::Tours::State
     end
   end
 
-  def composer = @composer ||= Events::Tours::ApprovalComposer.new(self, nil)
+  def approval_composer = @approval_composer ||= Events::Tours::ApprovalComposer.new(self, nil)
 end

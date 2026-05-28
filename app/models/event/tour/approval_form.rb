@@ -22,7 +22,7 @@ class Event::Tour::ApprovalForm
   def initialize(event, user)
     @event = event
     @user = user
-    @receiver_option = "responsible_people"
+    @receiver_option = EMAIL_RECEIVER_OPTIONS.first
     @pruefer_roles = preload_pruefer_roles
     @komitee_approvals = build_komitee_approvals
     @self_approval = find_self_approval if @komitee_approvals.blank?

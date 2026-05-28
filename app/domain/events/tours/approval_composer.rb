@@ -24,11 +24,14 @@ module Events
       end
 
       def next_relevant_pruefer
-        komitee = next_pending_komitee
-        return Person.none unless komitee
-        Person.where(
-          id: pruefer_roles_for(komitee, first_unapproved_kind_for(komitee)).select(:person_id)
-        )
+        @next_relevant_pruefer ||= begin
+          person_ids = responsible_freigabe_komitees.list.flat_map do |komitee|
+            kind = first_unapproved_kind_for(komitee)
+            next [] unless kind
+            pruefer_roles_for(komitee, kind).pluck(:person_id)
+          end
+          Person.where(id: person_ids)
+        end
       end
 
       def all_pruefers
@@ -84,19 +87,19 @@ module Events
           .pluck(:approval_kind_id)
       end
 
-      def next_pending_komitee
-        responsible_freigabe_komitees.list.find { |komitee| first_unapproved_kind_for(komitee) }
-      end
-
       def first_unapproved_kind_for(komitee)
         approved_ids = approved_kind_ids_for(komitee)
-        Event::ApprovalKind.list.without_deleted.find { |kind| !approved_ids.include?(kind.id) }
+        approval_kinds.where.not(id: approved_ids).first
       end
 
       def pruefer_roles_for(komitees, kind = nil)
         scope = Group::FreigabeKomitee::Pruefer.where(group: komitees)
         return scope unless kind
         scope.joins(:approval_kinds).where(event_approval_kinds: {id: kind})
+      end
+
+      def approval_kinds
+        @approval_kinds ||= Event::ApprovalKind.list.without_deleted
       end
 
       def sektion
