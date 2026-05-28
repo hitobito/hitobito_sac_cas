@@ -36,6 +36,9 @@ describe Events::AnnualCourseDuplicateBuilder do
       translation.save!
     end
 
+    course.init_questions
+    course.save!
+
     3.times do
       question = Fabricate(:event_question, event: course)
 
@@ -105,7 +108,7 @@ describe Events::AnnualCourseDuplicateBuilder do
         end
       end
 
-      expect(duplicate.questions.size).to eq(3)
+      expect(duplicate.questions.size).to eq(5)
       source_course.questions.each do |source_question|
         duplicate_question = duplicate.questions.find { _1.question == source_question.question }
 
@@ -145,8 +148,8 @@ describe Events::AnnualCourseDuplicateBuilder do
         change { Event::Course.count }.by(1).and \
           change { Event::Date.count }.by(1).and \
             change { Event::Translation.count }.by(3).and \
-              change { Event::Question.count }.by(3).and \
-                change { Event::Question::Translation.count }.by(9).and \
+              change { Event::Question.count }.by(5).and \
+                change { Event::Question::Translation.count }.by(15).and \
                   change { Event::Participation.count }.by(2).and \
                     change { Event::Role.count }.by(2)
 

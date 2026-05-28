@@ -109,7 +109,7 @@ class Events::AnnualCourseDuplicateBuilder
     return unless original_datetime
 
     DateTime.commercial(
-      original_datetime.year + @years_diff,
+      original_datetime.cwyear + @years_diff,
       original_datetime.cweek,
       original_datetime.cwday,
       original_datetime.hour,
