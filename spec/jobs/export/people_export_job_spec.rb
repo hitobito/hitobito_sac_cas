@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Export::PeopleExportJob do
+  include JobObservationSpecHelper
+
   let(:user) { people(:root) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
@@ -20,7 +22,7 @@ describe Export::PeopleExportJob do
     job.perform
 
     file = job.job_observation
-    csv = CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true)
+    csv = CSV.parse(read_data_from_generated_file(file), col_sep: Settings.csv.separator.strip, headers: true)
 
     expect(file.generated_file).to be_attached
     expect(csv).to have(4).items

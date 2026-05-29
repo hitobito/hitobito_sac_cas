@@ -6,6 +6,8 @@
 require "spec_helper"
 
 describe Export::EventParticipationsExportJob do
+  include JobObservationSpecHelper
+
   subject {
     Export::EventParticipationsExportJob.new(format, user.id, event.id, groups(:bluemlisalp).id,
       params.merge(filename: "event_participation_export"))
@@ -32,7 +34,7 @@ describe Export::EventParticipationsExportJob do
     let(:params) { {course_data: true, filter: "all"} }
 
     it "and saves it" do
-      lines = file.read.lines
+      lines = read_data_from_generated_file(file).lines
       expect(lines.size).to eq(3)
       # rubocop:todo Layout/LineLength
       expect(lines[0]).to match(/Veranstaltungsnummer;Kursortname;Kursbezeichnung;Anfangsdatum;Enddatum;Teilnehmernummer;Geschlecht;Familienname;Vorname;Sprachcode;Adresse;PLZ;Ort;Sektionsname;Geburtsdatum;Haupt-E-Mail.*/)
