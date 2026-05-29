@@ -11,7 +11,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionEintritte do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:matterhorn) { groups(:matterhorn_mitglieder) }
 
-  let(:section) { described_class.new(group, range) }
+  let(:section) { described_class.new(range, group) }
 
   let(:reasons) do
     SelfRegistrationReason.all.sort_by(&:text)
@@ -61,7 +61,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionEintritte do
 
     def scope_for(range_string)
       from, to = range_string.split("-").map { |s| Date.parse(s) }
-      described_class.new(group, from..to).send(:scope)
+      described_class.new(from..to, group).send(:scope)
     end
 
     it "testing most common cases" do
@@ -202,7 +202,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionEintritte do
       end
     end
 
-    describe "range border" do
+    context "range border" do
       it "does not include if role starts a day before range" do
         create_role(start_on: "30.6.2024")
         expect(scope).to be_empty
@@ -221,6 +221,81 @@ describe Export::Xlsx::MitgliederStatistics::SectionEintritte do
       it "does not include if role starts a day after range" do
         create_role(start_on: "1.7.2025")
         expect(scope).to be_empty
+      end
+    end
+
+    context "sac wide" do
+      let(:section) { described_class.new(range, relevant_role_types: SacCas::MITGLIED_STAMMSEKTION_ROLES) }
+
+      it "testing most common cases" do
+        stammsektion = create_role(start_on: "10.7.2024")
+
+        # only zusatzsektion eintritt, no sac eintritt
+        stamm_mit_zusatzsektion = create_role(group: matterhorn, start_on: "3.2.2000")
+        _zusatzsektion = create_role("MitgliedZusatzsektion", start_on: "30.6.2025",
+          person: stamm_mit_zusatzsektion.person)
+
+        # ignored
+        stammsektions_wechsel_person = create_role(group: matterhorn, start_on: "3.2.2000", end_on: "30.6.2024").person
+        _stammsektions_wechsel = create_role(start_on: "1.7.2024", person: stammsektions_wechsel_person)
+
+        # ignored
+        bk_change = create_role(start_on: "1.1.2024", end_on: "31.12.2024")
+        bk_change.person.update!(sac_family_main_person: true)
+        create_role(start_on: "1.1.2025", beitragskategorie: :family, person: bk_change.person)
+
+        sac_re_entry_person = create_role("Mitglied", group: matterhorn, start_on: "3.2.2000",
+          end_on: "30.6.2010").person
+        sac_re_entry = create_role(start_on: "30.6.2025", person: sac_re_entry_person)
+
+        # ignored
+        prolongation = create_role(start_on: "1.1.2020", end_on: "30.6.2024")
+        create_role(start_on: "1.7.2024", person: prolongation.person)
+
+        # eintritt with multiple roles in the same year => uses first role
+        multi = create_role(start_on: "1.9.2024", end_on: "31.12.2024")
+        create_role(start_on: "1.1.2025", end_on: "31.3.2025", person: multi.person)
+        create_role(start_on: "1.4.2025", person: multi.person)
+
+        # gap within same year is ignored
+        with_gap1 = create_role("Mitglied", start_on: "30.6.2024", end_on: "31.12.2024")
+        with_gap2 = create_role(start_on: "3.3.2025", person: with_gap1.person)
+
+        # not part of scope
+        create_role(start_on: "1.7.2025") # too new
+        create_role("Leserecht", start_on: "1.1.2025") # outside of roles scope
+
+        _too_new = create_role("Mitglied", group: matterhorn, start_on: "1.7.2025")
+
+        too_old = create_role(start_on: "30.6.2024")
+        # only zusatzsektion eintritt
+        create_role("MitgliedZusatzsektion", group: matterhorn, start_on: "30.6.2025", person: too_old.person)
+
+        expect(scope).to match_array [
+          stammsektion,
+          sac_re_entry,
+          multi
+        ]
+
+        expect(section.total).to eq(3)
+
+        expect(section.counts(:language)).to eq(
+          {"de" => 3, "fr" => 0, "it" => 0, "en" => 0}
+        )
+
+        expect(section.counts(:age)).to eq(
+          {"6-17" => 0, "18-22" => 0, "23-35" => 3, "36-50" => 0, "51-60" => 0, "61+" => 0}
+        )
+
+        expect(section.counts(:beitragskategorie)).to eq(
+          {"adult" => 3, "family_main" => 0, "family_adult" => 0, "family_child" => 0, "youth" => 0}
+        )
+
+        expect(scope_for("1.1.2024-29.6.2024")).to eq [bk_change]
+        expect(scope_for("30.6.2024-30.6.2024")).to match_array [with_gap1, too_old]
+        expect(scope_for("1.1.2025-1.3.2025")).to be_empty
+        expect(scope_for("1.3.2025-1.5.2025")).to eq [with_gap2]
+        expect(scope_for("1.1.2026-31.12.2026")).to be_empty
       end
     end
   end

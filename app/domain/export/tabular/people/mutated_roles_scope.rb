@@ -7,9 +7,13 @@
 
 module Export::Tabular::People
   class MutatedRolesScope
-    def initialize(group, range)
-      @group = group
+    attr_reader :range, :group, :relevant_role_types
+
+    # group should be a Group::SektionMitglieder or nil for the entire SAC
+    def initialize(range, group = nil, relevant_role_types: nil)
       @range = range
+      @group = group
+      @relevant_role_types = (relevant_role_types || SacCas::MITGLIED_ROLES).map(&:sti_name)
     end
 
     def roles
@@ -23,20 +27,14 @@ module Export::Tabular::People
 
     def multiple_roles_in_range
       roles_scope
-        .joins("INNER JOIN roles other ON other.person_id = roles.person_id " \
-          "AND other.group_id = roles.group_id")
+        .joins("INNER JOIN roles other ON other.person_id = roles.person_id" +
+          (group ? " AND other.group_id = roles.group_id" : ""))
         .where(other: {type: relevant_role_types})
     end
 
     def roles_scope
-      Role.unscoped.where(
-        group_id: @group.id,
-        type: relevant_role_types
-      )
-    end
-
-    def relevant_role_types
-      SacCas::MITGLIED_ROLES.map(&:sti_name)
+      scope = Role.unscoped.where(type: relevant_role_types)
+      group ? scope.where(group_id: group.id) : scope
     end
   end
 end

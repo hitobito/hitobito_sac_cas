@@ -11,7 +11,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:matterhorn) { groups(:matterhorn_mitglieder) }
 
-  let(:section) { described_class.new(group, range) }
+  let(:section) { described_class.new(range, group) }
 
   let(:reasons) do
     TerminationReason.all.sort_by(&:text)
@@ -70,7 +70,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
 
     def scope_for(range_string)
       from, to = range_string.split("-").map { |s| Date.parse(s) }
-      described_class.new(group, from..to).send(:scope)
+      described_class.new(from..to, group).send(:scope)
     end
 
     it "testing most common cases" do
@@ -219,7 +219,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       end
     end
 
-    describe "range border" do
+    context "range border" do
       it "does not include if role ends a day before range" do
         create_role(end_on: "30.6.2024")
         expect(scope).to be_empty
@@ -238,6 +238,91 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       it "does not include if role ends a day after range" do
         create_role(end_on: "1.7.2025")
         expect(scope).to be_empty
+      end
+    end
+
+    context "sac wide" do
+      let(:section) { described_class.new(range, relevant_role_types: SacCas::MITGLIED_STAMMSEKTION_ROLES) }
+
+      it "testing most common cases" do
+        stammsektion = create_role(end_on: "10.7.2024")
+
+        # only zusatzsektion austritt, no sac austritt
+        zusatzsektion_person = create_role(group: matterhorn, start_on: "3.2.2000").person
+        _zusatzsektion = create_role("MitgliedZusatzsektion", end_on: "30.6.2025", person: zusatzsektion_person)
+
+        # ignored
+        stammsektions_wechsel = create_role(start_on: "3.2.2000", end_on: "30.6.2025")
+        create_role(group: matterhorn, start_on: "1.7.2025", person: stammsektions_wechsel.person)
+
+        # ignored
+        bk_change_person = create_role(start_on: "1.1.2024", end_on: "31.12.2024").person
+        bk_change_person.update!(sac_family_main_person: true)
+        bk_change = create_role(start_on: "1.1.2025", end_on: "30.12.2025", beitragskategorie: :family,
+          person: bk_change_person)
+
+        sac_re_entry = create_role("Mitglied", start_on: "3.2.2000", end_on: "1.6.2025")
+        create_role(group: matterhorn, start_on: "1.9.2025", person: sac_re_entry.person)
+
+        section_re_entry_person = create_role(group: matterhorn, start_on: "3.2.2000").person
+        _section_re_entry = create_role("MitgliedZusatzsektion", start_on: "30.6.2010", end_on: "30.7.2024",
+          person: section_re_entry_person)
+        create_role("MitgliedZusatzsektion", start_on: "1.7.2025", person: section_re_entry_person)
+
+        # ignored
+        prolongation = create_role(end_on: "30.6.2025")
+        create_role(start_on: "1.7.2025", person: prolongation.person)
+
+        # austritt with multiple roles in the same year => uses last role
+        multi_person = create_role(end_on: "31.8.2024").person
+        create_role(start_on: "1.9.2024", end_on: "31.12.2024", person: multi_person)
+        multi = create_role(start_on: "1.1.2025", end_on: "31.3.2025", person: multi_person)
+
+        # gap within same year is ignored
+        with_gap = create_role("Mitglied", end_on: "9.9.2024")
+        create_role(start_on: "1.1.2025", person: with_gap.person)
+
+        # not part of scope
+        too_early = create_role(end_on: "30.6.2024") # too early
+        create_role("Leserecht", end_on: "1.1.2025") # outside of roles scope
+
+        _too_new = create_role("Mitglied", group: matterhorn, end_on: "1.7.2025")
+
+        too_old = create_role(end_on: "31.12.2025")
+        # only zusatzsektion austritt, no sac austritt
+        create_role("MitgliedZusatzsektion", group: matterhorn, end_on: "30.6.2025", person: too_old.person)
+
+        # non-terminated role with end on
+        non_terminated = create_role_plain(end_on: "2024-12-31")
+        non_terminated.person.update!(language: :fr, birthday: 55.years.ago)
+        create_role_plain(end_on: "2025-12-31")
+
+        expect(scope).to match_array [
+          stammsektion,
+          sac_re_entry,
+          multi,
+          non_terminated
+        ]
+
+        expect(section.total).to eq(4)
+
+        expect(section.counts(:language)).to eq(
+          {"de" => 3, "fr" => 1, "it" => 0, "en" => 0}
+        )
+
+        expect(section.counts(:age)).to eq(
+          {"6-17" => 0, "18-22" => 0, "23-35" => 3, "36-50" => 0, "51-60" => 1, "61+" => 0}
+        )
+
+        expect(section.counts(:beitragskategorie)).to eq(
+          {"adult" => 4, "family_main" => 0, "family_adult" => 0, "family_child" => 0, "youth" => 0}
+        )
+
+        expect(scope_for("1.8.2025-30.12.2025")).to eq [bk_change]
+        expect(scope_for("30.6.2024-30.6.2024")).to match_array [too_early]
+        expect(scope_for("1.1.2025-1.3.2025")).to be_empty
+        expect(scope_for("1.9.2024-30.9.2024")).to eq [with_gap]
+        expect(scope_for("1.1.2026-31.12.2026")).to be_empty
       end
     end
   end

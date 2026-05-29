@@ -12,11 +12,10 @@ class Export::Xlsx::MitgliederStatistics
     private
 
     def scope
-      roles = Export::Tabular::People::EintritteScope.new(@group, @range).roles
-      rownum = "ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY start_on ASC) AS rownum"
-      ranked = Role.unscoped.from(roles.select(:id, rownum)).where("rownum = 1")
-
-      Role.unscoped.where("roles.id IN (?)", ranked.select(:id)).joins(:person)  # rubocop:disable Rails/WhereEquals
+      Export::Tabular::People::EintritteScope
+        .new(@range, @group, relevant_role_types:)
+        .first_roles_by_person
+        .joins(:person)
     end
 
     def count_by_self_registration_reason

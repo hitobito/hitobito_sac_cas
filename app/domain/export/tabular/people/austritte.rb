@@ -29,7 +29,7 @@ module Export::Tabular::People
     private
 
     def relevant_person_ids
-      Export::Tabular::People::AustritteScope.new(group, @range).roles.select(:person_id)
+      Export::Tabular::People::AustritteScope.new(@range, @group).roles.select(:person_id)
     end
   end
 end

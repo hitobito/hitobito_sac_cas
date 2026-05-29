@@ -9,7 +9,7 @@ class People::Export::PopoverExportableController < ApplicationController
   include AsyncDownload
 
   def create
-    authorize!(:index_people, group)
+    authorize_export!
 
     entry.attributes = model_params
     if entry.valid?
@@ -21,14 +21,18 @@ class People::Export::PopoverExportableController < ApplicationController
 
   private
 
+  def authorize_export!
+    authorize!(:index_people, group)
+  end
+
   def export_in_background
-    with_async_download_cookie(
-      :xlsx,
-      filename,
-      redirection_target: group_people_path(group, returning: true)
-    ) do |name|
+    with_async_download_cookie(:xlsx, filename, redirection_target: redirection_target) do |name|
       enqueue_job(name)
     end
+  end
+
+  def redirection_target
+    group_people_path(group, returning: true)
   end
 
   def render_unprocessable

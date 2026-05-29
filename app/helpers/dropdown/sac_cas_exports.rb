@@ -17,7 +17,7 @@ class Dropdown::SacCasExports < Dropdown::Base
   private
 
   def init_items
-    # add_sac_statistics_item
+    add_sac_statistics_item
     @items.sort_by!(&:label)
   end
 

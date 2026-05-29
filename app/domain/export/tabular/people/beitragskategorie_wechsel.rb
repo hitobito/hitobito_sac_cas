@@ -30,7 +30,7 @@ module Export::Tabular::People
     private
 
     def relevant_person_ids
-      BeitragskategorieWechselScope.new(@group, @range).relevant_person_ids
+      BeitragskategorieWechselScope.new(@range, @group).relevant_person_ids
     end
   end
 end

@@ -7,6 +7,12 @@
 
 module Export::Tabular::People
   class EintritteScope < MutatedRolesScope
+    def first_roles_by_person
+      rownum = "ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY start_on ASC) AS rownum"
+      ranked = Role.unscoped.from(roles.select(:id, rownum)).where("rownum = 1")
+      Role.unscoped.where("roles.id IN (?)", ranked.select(:id)) # rubocop:disable Rails/WhereEquals
+    end
+
     private
 
     def multiple_roles_in_range
