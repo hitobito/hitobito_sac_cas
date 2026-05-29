@@ -6,6 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Events::AnnualCourseDuplicateBuilder
+  ROLES_TO_COPY = [
+    Event::Course::Role::Leader,
+    Event::Course::Role::LeaderAspirant
+  ].map(&:sti_name).freeze
+
   def initialize(source_course, target_year, years_diff)
     @source_course = source_course
     @target_year = target_year
@@ -79,7 +84,7 @@ class Events::AnnualCourseDuplicateBuilder
     @source_course.participations
       .joins(:roles)
       .where(state: :assigned,
-        roles: {type: Event::Course::LEADER_ROLES}).find_each do |source_participation|
+        roles: {type: ROLES_TO_COPY}).find_each do |source_participation|
           participation = course.participations.build(
             source_participation.attributes.except("id", "event_id")
           )

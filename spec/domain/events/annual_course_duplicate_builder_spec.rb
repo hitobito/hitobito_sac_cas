@@ -64,6 +64,9 @@ describe Events::AnnualCourseDuplicateBuilder do
     Event::Course::Role::LeaderAspirant.create!(
       participation: Fabricate(:event_participation, event: course, state: :applied)
     )
+    Event::Course::Role::AssistantLeader.create!(
+      participation: Fabricate(:event_participation, event: course, state: :assigned)
+    )
 
     course.refresh_participant_counts!
     course.reload
