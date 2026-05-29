@@ -1494,6 +1494,11 @@ fr:
     sac_section_membership_configs: Paramètres pour les factures des membres
     event_approval_commission_responsibility: Responsabilités de validation de la tournée
 
+  dropdown/sac_cas_exports:
+    button: SAC Exporte
+    sac_statistics: SAC Statistik
+    sac_statistics_info: >
+      Wichtiges zum Export
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1677,6 +1682,11 @@ fr:
           approved: "Partagé par %{creator} le %{at}"
           rejected: "Refusé par %{creator} le %{at}"
           self_approval: "Auto-validé par %{creator} le %{at}"
+          email_send_to: E-Mail senden an
+          receiver_options:
+            responsible_people: E-Mail an zuständige Person(en)
+            responsible_people_and_assigned_freigabe_komitees: "E-Mail an zuständige Person(en) und Freigabekomitee(s)"
+            none: Keine E-Mail versenden
         update:
           success: Ton commentaire a été enregistré.
           review: Ton partage a été enregistré.
@@ -1734,8 +1744,12 @@ fr:
       canceled_reason_label: motif
     tours:
       popover_review:
-        destroy_and_review: Bestehende Freigaben zurücksetzen
-        keep_and_review: Bestehende Freigaben beibehalten
+        alert_info: "Du startest den Freigabeprozess für die Tour “%{event_name} (%{event_id})”."
+        change_to_review: Zu Freigabe weiterleiten
+        existing_approvals: Bestehende Freigaben
+        existing_approval_options:
+          destroy: Zurücksetzen
+          keep: Beibehalten
       popover_published:
         alert_info: Beim Bestätigen wird die Tour im Tourenprogramm öffentlich publiziert.
         alert_info_subito: Beim Bestätigen wird die Subito-Tour im Tourenprogramm öffentlich publiziert.
@@ -1749,6 +1763,9 @@ fr:
         alert_info: Beim Bestätigen wird die Tour abgesagt.
       popover_back_to_draft:
         alert_info: Beim Bestätigen gelangt die Tour (zurück) in den Status “Entwurf”.
+      popover_approved:
+        self_approve: Selbst freigeben
+        alert_warning: "Du gibst die Tour “%{event_name} (%{event_id})“ ohne zusätzliche Prüfung frei."
       popover_back_to_approved:
         alert_info: Beim Bestätigen gelangt die Tour (zurück) in den Status “Freigegeben”.
       popover_back_to_ready:
@@ -1954,14 +1971,8 @@ fr:
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: Encaissement annuel du service des membres
-      download_statistics_button: Statistiques des membres
     sektion_primary: Section de base
     sektion_secondary: Section supplémentaire
-    popover_download_statistics:
-      title: Télécharger les statistiques des membres
-      from: De
-      to: Jusqu'à
-      download: Télécharger
 
     self_registration:
       form:
