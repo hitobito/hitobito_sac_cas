@@ -98,6 +98,27 @@ module SacCas::Event::Course
   PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_special]
 
   prepended do # rubocop:disable Metrics/BlockLength
+    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+      Event::CourseParticipationMailer::SUMMONED_PARTICIPATION,
+      Event::CourseParticipationMailer::ASSIGNED,
+      Event::CourseParticipationMailer::UNCONFIRMED,
+      Event::CourseParticipationMailer::APPLIED,
+      Event::CourseParticipationMailer::REJECT_REJECTED_PARTICIPATION,
+      Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION,
+      Event::CourseParticipationMailer::CANCELED_PARTICIPATION,
+      Event::CourseParticipationMailer::REMINDER,
+      Event::CourseParticipationMailer::SURVEY,
+      Event::CourseParticipationMailer::EVENT_CANCELED_NO_LEADER,
+      Event::CourseParticipationMailer::EVENT_CANCELED_MINIMUM_PARTICIPANTS,
+      Event::CourseParticipationMailer::EVENT_CANCELED_WEATHER
+    ]
+
+    self::MANUALLY_SENDABLE_LEADER_MAILS = [
+      Event::CourseMailer::PUBLISHED,
+      Event::CourseParticipationMailer::LEADER_REMINDER_NEXT_WEEK,
+      Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS
+    ]
+
     include I18nEnums
     # all course state specific callbacks are defined here
     include Events::Courses::State

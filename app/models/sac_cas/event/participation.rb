@@ -8,12 +8,6 @@
 module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
-  MANUALLY_SENDABLE_LEADERSHIP_MAILS = [
-    Event::CourseMailer::PUBLISHED,
-    Event::CourseParticipationMailer::LEADER_REMINDER_NEXT_WEEK,
-    Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS
-  ]
-
   SELF_EMPLOYED_LEADER_ROLES = [
     Group::SacCasKurskader::KursleitungSelbstaendig,
     Group::SacCasKurskader::KursleitungAspirantSelbstaendig,
@@ -25,22 +19,6 @@ module SacCas::Event::Participation
     to: :person
 
   prepended do # rubocop:todo Metrics/BlockLength
-    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.clear
-    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS.concat([
-      Event::CourseParticipationMailer::SUMMONED_PARTICIPATION,
-      Event::CourseParticipationMailer::ASSIGNED,
-      Event::CourseParticipationMailer::UNCONFIRMED,
-      Event::CourseParticipationMailer::APPLIED,
-      Event::CourseParticipationMailer::REJECT_REJECTED_PARTICIPATION,
-      Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION,
-      Event::CourseParticipationMailer::CANCELED_PARTICIPATION,
-      Event::CourseParticipationMailer::REMINDER,
-      Event::CourseParticipationMailer::SURVEY,
-      Event::CourseParticipationMailer::EVENT_CANCELED_NO_LEADER,
-      Event::CourseParticipationMailer::EVENT_CANCELED_MINIMUM_PARTICIPANTS,
-      Event::CourseParticipationMailer::EVENT_CANCELED_WEATHER
-    ])
-
     include I18nEnums
     include CapitalizedDependentErrors
 

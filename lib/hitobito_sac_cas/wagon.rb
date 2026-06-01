@@ -221,9 +221,6 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
-      Dropdown::Event::Participation::MailDispatch.prepend(
-        SacCas::Dropdown::Event::Participation::MailDispatch
-      )
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person

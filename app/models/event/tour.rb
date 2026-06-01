@@ -9,6 +9,21 @@ class Event::Tour < Event
   include ::Events::Tours::State
   include I18nEnums
 
+  MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+    Event::TourParticipationMailer::APPLIED,
+    Event::TourParticipationMailer::UNCONFIRMED,
+    Event::TourParticipationMailer::ASSIGNED,
+    Event::TourParticipationMailer::REJECT_PARTICIPATION,
+    Event::TourParticipationMailer::SUMMONED_PARTICIPATION,
+    Event::TourParticipationMailer::CLOSING,
+    Event::TourParticipationMailer::CANCELED_NO_LEADER,
+    Event::TourParticipationMailer::CANCELED_MINIMUM_PARTICIPANTS,
+    Event::TourParticipationMailer::CANCELED_WEATHER,
+    Event::TourParticipationMailer::CANCELED_PARTICIPATION
+  ]
+
+  MANUALLY_SENDABLE_LEADER_MAILS = MANUALLY_SENDABLE_PARTICIPANT_MAILS
+
   FREIGABE_PENDING_STATES = %w[draft review].freeze
   CANCELED_REASONS = %w[minimum_participants no_leader weather].freeze
 
