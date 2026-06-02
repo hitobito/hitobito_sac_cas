@@ -95,6 +95,11 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
     * Global
       * Sektionsfunktionäre
         * Präsidium: []  --  (Group::SektionsFunktionaere::Praesidium)
+        * Co-Präsidium: []  --  (Group::SektionsFunktionaere::CoPraesidium)
+        * Vize-Präsidium: []  --  (Group::SektionsFunktionaere::VizePraesidium)
+        * Präsidium Ortsgruppe: []  --  (Group::SektionsFunktionaere::PraesidiumOrtsgruppe)
+        * Co-Präsidium Ortsgruppe: []  --  (Group::SektionsFunktionaere::CoPraesidiumOrtsgruppe)
+        * Vize-Präsidium Ortsgruppe: []  --  (Group::SektionsFunktionaere::VizePraesidiumOrtsgruppe)
         * Mitgliederverwaltung: []  --  (Group::SektionsFunktionaere::Mitgliederverwaltung)
         * Administration: 2FA [:layer_and_below_full]  --  (Group::SektionsFunktionaere::Administration)
         * Administration (nur lesend): 2FA [:layer_and_below_read]  --  (Group::SektionsFunktionaere::AdministrationReadOnly)
