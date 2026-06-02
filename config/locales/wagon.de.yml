@@ -1044,6 +1044,9 @@ de:
       group/abo_magazin/gratisabonnent:
         one: Gratisabonnent
         description: Gratisabonnent
+      group/abo_magazin/gratisabonnent_digital:
+        one: Gratisabonnent (Digital)
+        description: Gratisabonnent (Digital)
       group/abo_magazin/andere:
         one: Andere
         description: Andere

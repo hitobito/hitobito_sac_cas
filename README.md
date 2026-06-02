@@ -56,6 +56,7 @@ This hitobito wagon defines the organization hierarchy with groups and roles of 
         * Abonnent: []  --  (Group::AboMagazin::Abonnent)
         * Neuanmeldung: []  --  (Group::AboMagazin::Neuanmeldung)
         * Gratisabonnent: []  --  (Group::AboMagazin::Gratisabonnent)
+        * Gratisabonnent (Digital): []  --  (Group::AboMagazin::GratisabonnentDigital)
         * Andere: []  --  (Group::AboMagazin::Andere)
       * SAC/CAS Login
         * Basis Konto: []  --  (Group::AboBasicLogin::BasicLogin)

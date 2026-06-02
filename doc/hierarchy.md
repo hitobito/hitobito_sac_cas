@@ -40,6 +40,7 @@ The output of `rake app:hitobito:roles[true]` will show you the roles hierarchy:
         * Abonnent: []  --  (Group::AboMagazin::Abonnent)
         * Neuanmeldung: []  --  (Group::AboMagazin::Neuanmeldung)
         * Gratisabonnent: []  --  (Group::AboMagazin::Gratisabonnent)
+        * Gratisabonnent (Digital): []  --  (Group::AboMagazin::GratisabonnentDigital)
         * Andere: []  --  (Group::AboMagazin::Andere)
       * SAC/CAS Login
         * Basis Konto: []  --  (Group::AboBasicLogin::BasicLogin)
