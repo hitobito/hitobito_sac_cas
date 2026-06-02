@@ -36,8 +36,8 @@ describe "event/participation_contact_datas/_fields.html.haml" do
       end
     end
 
-    it "address is rendered with required mark" do
-      expect(dom).to have_css "label.required", text: "Adresse"
+    it "street is rendered with required mark" do
+      expect(dom).to have_css "label.required", text: "Strasse"
     end
   end
 end
