@@ -7,11 +7,10 @@
 
 require "spec_helper"
 
-describe Export::Xlsx::MitgliederStatistics do
-  let(:group) { groups(:bluemlisalp_mitglieder) }
+describe Export::Xlsx::SacStatistics do
   let(:range) { Date.new(2024, 1, 1)..Date.new(2024, 12, 31) }
 
-  let(:xlsx) { described_class.new(group, range) }
+  let(:xlsx) { described_class.new(range) }
 
   it "renders xlsx" do
     expect(xlsx).to receive(:add_row).with(["Aktive Mitglieder am 31.12.2024"], :title)
@@ -24,6 +23,12 @@ describe Export::Xlsx::MitgliederStatistics do
     expect(xlsx).to receive(:add_row).with(["  - Eintrittsgrund", "Weil der SAC eine gute Sache ist.", 0])
     expect(xlsx).to receive(:add_row).with(["Austritte 01.01.2024 - 31.12.2024"], :title)
     expect(xlsx).to receive(:add_row).with(["  - Austrittsgrund", "Umgezogen", 0])
+    expect(xlsx).to receive(:add_row).with(
+      ["Monat", "SAC-Eintritte", "SAC-Austritte", "Total aktive Mitglieder"], :title
+    )
+    expect(xlsx).to receive(:add_row).with(
+      ["Id", "Name", "Typ", "Total", "Einzel", "Jugend", "Familie", "FreiFam", "FreiKind"], :title
+    ).exactly(3).times
     expect(xlsx).to receive(:add_row).at_least(10).times
 
     xlsx.generate

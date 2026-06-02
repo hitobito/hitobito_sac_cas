@@ -22,31 +22,31 @@ describe Dropdown::People::SacExports do
   def menu = subject.find(".btn-group > ul.dropdown-menu")
 
   it "has jubilare popover link" do
-    jubilare = dom.find_link "Jubilare"
-    expect(jubilare["data-anchor"]).to eq "#dropdown_people_sac_exports"
-    expect(jubilare["data-bs-toggle"]).to eq "popover"
-    expect(jubilare["data-bs-title"]).to eq "Jubilare"
-    form = Capybara::Node::Simple.new(jubilare["data-bs-content"])
+    item = dom.find_link "Jubilare"
+    expect(item["data-anchor"]).to eq "#dropdown_people_sac_exports"
+    expect(item["data-bs-toggle"]).to eq "popover"
+    expect(item["data-bs-title"]).to eq "Jubilare"
+    form = Capybara::Node::Simple.new(item["data-bs-content"])
     expect(form).to have_field "Stichtag"
     expect(form).to have_field "Anzahl Mitgliedsjahre"
   end
 
   it "has eintritte popover link" do
-    jubilare = dom.find_link "Eingetretene Mitglieder"
-    expect(jubilare["data-anchor"]).to eq "#dropdown_people_sac_exports"
-    expect(jubilare["data-bs-toggle"]).to eq "popover"
-    expect(jubilare["data-bs-title"]).to eq "Eingetretene Mitglieder"
-    form = Capybara::Node::Simple.new(jubilare["data-bs-content"])
+    item = dom.find_link "Eingetretene Mitglieder"
+    expect(item["data-anchor"]).to eq "#dropdown_people_sac_exports"
+    expect(item["data-bs-toggle"]).to eq "popover"
+    expect(item["data-bs-title"]).to eq "Eingetretene Mitglieder"
+    form = Capybara::Node::Simple.new(item["data-bs-content"])
     expect(form).to have_field "Von"
     expect(form).to have_field "Bis"
   end
 
   it "has mitglieder statistics popover link" do
-    jubilare = dom.find_link "Mitgliederstatistik"
-    expect(jubilare["data-anchor"]).to eq "#dropdown_people_sac_exports"
-    expect(jubilare["data-bs-toggle"]).to eq "popover"
-    expect(jubilare["data-bs-title"]).to eq "Mitgliederstatistik"
-    form = Capybara::Node::Simple.new(jubilare["data-bs-content"])
+    item = dom.find_link "Mitgliederstatistik"
+    expect(item["data-anchor"]).to eq "#dropdown_people_sac_exports"
+    expect(item["data-bs-toggle"]).to eq "popover"
+    expect(item["data-bs-title"]).to eq "Mitgliederstatistik"
+    form = Capybara::Node::Simple.new(item["data-bs-content"])
     expect(form).to have_field "Von"
     expect(form).to have_field "Bis"
   end

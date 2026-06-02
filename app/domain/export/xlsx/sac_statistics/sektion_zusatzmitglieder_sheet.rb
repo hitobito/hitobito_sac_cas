@@ -5,17 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Export::Xlsx::MitgliederStatistics
-  class SectionActive < Section
-    self.groupings = [:gender, :language, :age, :beitragskategorie]
-
-    private
-
-    def scope
-      Export::Tabular::People::AktiveScope
-        .new(reference_date, group, relevant_role_types:)
-        .roles
-        .joins(:person)
+class Export::Xlsx::SacStatistics
+  class SektionZusatzmitgliederSheet < SektionMitgliederSheet
+    def relevant_role_types
+      SacCas::MITGLIED_ZUSATZSEKTION_ROLES
     end
   end
 end

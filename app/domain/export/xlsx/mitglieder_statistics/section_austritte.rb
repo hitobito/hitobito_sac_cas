@@ -12,11 +12,10 @@ class Export::Xlsx::MitgliederStatistics
     private
 
     def scope
-      roles = Export::Tabular::People::AustritteScope.new(@group, @range).roles
-      rownum = "ROW_NUMBER() OVER (PARTITION BY person_id ORDER BY end_on DESC) AS rownum"
-      ranked = Role.unscoped.from(roles.select(:id, rownum)).where("rownum = 1")
-
-      Role.unscoped.where("roles.id IN (?)", ranked.select(:id)).joins(:person) # rubocop:disable Rails/WhereEquals
+      Export::Tabular::People::AustritteScope
+        .new(@range, @group, relevant_role_types:)
+        .last_roles_by_person
+        .joins(:person)
     end
 
     def count_by_termination_reason

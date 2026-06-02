@@ -78,6 +78,10 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :export do
+        post :sac_statistics, to: "sac_statistics#create"
+      end
+
       resources :people, only: [] do
         resources :external_trainings, except: [:edit, :show, :index]
         resources :membership_invoices, only: [:create, :new], module: :people

@@ -36,7 +36,7 @@ module Export::Tabular::People
     private
 
     def relevant_person_ids
-      EintritteScope.new(@group, @range).roles.select(:person_id)
+      EintritteScope.new(@range, @group).roles.select(:person_id)
     end
   end
 end

@@ -11,7 +11,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
   let(:group) { groups(:bluemlisalp_mitglieder) }
 
   let(:range) { Date.new(2024, 1, 1)..Date.new(2024, 12, 31) }
-  let(:section) { described_class.new(group, range) }
+  let(:section) { described_class.new(range, group) }
 
   before do
     # household with child turning 18 in 2022
