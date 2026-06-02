@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 require "spec_helper"
-require_relative "row_collector"
 
 describe Export::Xlsx::SacStatistics::SektionZusatzmitgliederSheet do
   let(:range) { Date.new(2024, 1, 1)..Date.new(2024, 12, 31) }

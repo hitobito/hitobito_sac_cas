@@ -14,28 +14,17 @@ describe Export::Xlsx::MitgliederStatistics do
   let(:xlsx) { described_class.new(group, range) }
 
   it "renders xlsx" do
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["Aktive Mitglieder am 31.12.2024"], :title)
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["Anzahl Total", nil, 4]).once
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["  Davon"]).exactly(4).times
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["  - Geschlecht", "m", 0])
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["  - Geschlecht", "d", 3])
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["Eintritte 01.01.2024 - 31.12.2024"], :title)
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["  - Eintrittsgrund", "Keine Angabe", 0])
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["  - Eintrittsgrund", "Weil der SAC eine gute Sache ist.", 0])
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["Austritte 01.01.2024 - 31.12.2024"], :title)
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).with(["  - Austrittsgrund", "Umgezogen", 0])
-    expect_any_instance_of(Export::Xlsx::MitgliederStatistics::Sheet)
-      .to receive(:add_row).at_least(10).times
+    expect(xlsx).to receive(:add_row).with(["Aktive Mitglieder am 31.12.2024"], :title)
+    expect(xlsx).to receive(:add_row).with(["Anzahl Total", nil, 4]).once
+    expect(xlsx).to receive(:add_row).with(["  Davon"]).exactly(4).times
+    expect(xlsx).to receive(:add_row).with(["  - Geschlecht", "m", 0])
+    expect(xlsx).to receive(:add_row).with(["  - Geschlecht", "d", 3])
+    expect(xlsx).to receive(:add_row).with(["Eintritte 01.01.2024 - 31.12.2024"], :title)
+    expect(xlsx).to receive(:add_row).with(["  - Eintrittsgrund", "Keine Angabe", 0])
+    expect(xlsx).to receive(:add_row).with(["  - Eintrittsgrund", "Weil der SAC eine gute Sache ist.", 0])
+    expect(xlsx).to receive(:add_row).with(["Austritte 01.01.2024 - 31.12.2024"], :title)
+    expect(xlsx).to receive(:add_row).with(["  - Austrittsgrund", "Umgezogen", 0])
+    expect(xlsx).to receive(:add_row).at_least(10).times
 
     xlsx.generate
   end
