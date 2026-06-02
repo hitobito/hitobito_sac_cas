@@ -26,6 +26,26 @@ class Group::SektionsFunktionaere < ::Group
     self.basic_permissions_only = true
   end
 
+  class CoPraesidium < ::Role
+    self.basic_permissions_only = true
+  end
+
+  class VizePraesidium < ::Role
+    self.basic_permissions_only = true
+  end
+
+  class PraesidiumOrtsgruppe < ::Role
+    self.basic_permissions_only = true
+  end
+
+  class CoPraesidiumOrtsgruppe < ::Role
+    self.basic_permissions_only = true
+  end
+
+  class VizePraesidiumOrtsgruppe < ::Role
+    self.basic_permissions_only = true
+  end
+
   class Mitgliederverwaltung < ::Role
   end
 
@@ -77,7 +97,9 @@ class Group::SektionsFunktionaere < ::Group
     self.basic_permissions_only = true
   end
 
-  roles Praesidium, Mitgliederverwaltung, Administration,
+  roles Praesidium, CoPraesidium, VizePraesidium,
+    PraesidiumOrtsgruppe, CoPraesidiumOrtsgruppe, VizePraesidiumOrtsgruppe,
+    Mitgliederverwaltung, Administration,
     AdministrationReadOnly, Finanzen, Redaktion, Huettenobmann,
     Leserecht, Schreibrecht, Andere, Umweltbeauftragter, Kulturbeauftragter
 end
