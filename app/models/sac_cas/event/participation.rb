@@ -59,9 +59,8 @@ module SacCas::Event::Participation
   end
 
   def highest_leader_role_type
-    @highest_leader_role_type ||= Event::Course::LEADER_ROLES.find do |type|
-      roles.any? { |role| role.type == type }
-    end&.demodulize&.underscore
+    @highest_leader_role_type ||=
+      (Event::Course.leader_types.map(&:sti_name) & roles.map(&:type)).first&.demodulize&.underscore
   end
 
   private

@@ -18,7 +18,7 @@ module SacCas::Event::ParticipationDecorator
     prices = present_event_prices.map { |attr, price|
       [format_event_price_with_label(attr, price, event), attr]
     }
-    prices << [t("no_price_select"), nil] if present_event_prices.empty? || event_leader?
+    prices << [t("no_price_select"), nil] if present_event_prices.empty? || leader?
 
     [prices, selected_category ? {selected: selected_category} : {}]
   end
@@ -34,10 +34,6 @@ module SacCas::Event::ParticipationDecorator
     # rubocop:todo Layout/LineLength
     @present_event_prices ||= event.attributes.slice(*Event::Course::PRICE_ATTRIBUTES.map(&:to_s)).compact
     # rubocop:enable Layout/LineLength
-  end
-
-  def event_leader?
-    roles.exists?(type: Event::Course::LEADER_ROLES)
   end
 
   def t(key, **)

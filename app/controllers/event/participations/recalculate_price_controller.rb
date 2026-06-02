@@ -61,7 +61,7 @@ class Event::Participations::RecalculatePriceController < ApplicationController
     return authorize!(:create, Event::Participation) if participation.nil?
 
     if params.dig(:event_participation_invoice_form)
-      raise CanCan::AccessDenied if participation.roles.exists?(type: Event::Course::LEADER_ROLES)
+      raise CanCan::AccessDenied if participation.leader?
 
       authorize!(:summon, participation)
     else

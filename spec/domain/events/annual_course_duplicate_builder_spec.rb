@@ -127,8 +127,7 @@ describe Events::AnnualCourseDuplicateBuilder do
 
       expect(duplicate.participations.size).to eq(2)
       source_leader_participations = source_course.participations.select do |source_participation|
-        Event::Course::LEADER_ROLES.include?(source_participation.roles.map(&:type)) &&
-          source_participation.state == :assigned
+        source_participation.leader? && source_participation.state == :assigned
       end
 
       source_leader_participations.each do |source_participation|
@@ -136,7 +135,7 @@ describe Events::AnnualCourseDuplicateBuilder do
           _1.participant_id == source_participation.participant_id
         }
 
-        expect(Event::Course::LEADER_ROLES).to include(duplicate_participation.roles.map(&:type))
+        expect(duplicate_participation).to be_leader
       end
 
       expect(duplicate).to be_valid

@@ -159,7 +159,7 @@ module Events::Courses::State
 
   def all_leaders
     Person.where(id: participations.joins(:roles)
-      .where(roles: {type: SacCas::Event::Course::LEADER_ROLES})
+      .where(roles: {type: Event::Course.leader_types.map(&:sti_name)})
       .where(participant_type: Person.sti_name)
       .select(:participant_id))
   end
