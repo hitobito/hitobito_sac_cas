@@ -85,6 +85,7 @@ describe Export::MitgliederCsvExportJob do
   it "file name" do
     job.enqueue!
 
-    expect(file.filename).to eq("Adressen_#{group.id_padded}.csv")
+    expect(file.filename).to eq("Adressen_#{group.id_padded}")
+    expect(file.filename_with_extension).to eq("Adressen_#{group.id_padded}.csv")
   end
 end
