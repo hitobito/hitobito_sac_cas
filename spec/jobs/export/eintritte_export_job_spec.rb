@@ -25,6 +25,7 @@ describe Export::EintritteExportJob do
     expect { job.enqueue! }.to change { JobObservation.count }.by(1)
     job.perform
 
-    expect(file.filename).to eq("eintritte.xlsx")
+    expect(file.filename).to eq("eintritte")
+    expect(file.filename_with_extension).to eq("eintritte.xlsx")
   end
 end

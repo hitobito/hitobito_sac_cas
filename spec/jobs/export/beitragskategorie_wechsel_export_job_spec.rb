@@ -36,6 +36,7 @@ describe Export::BeitragskategorieWechselExportJob do
     expect { job.enqueue! }.to change { JobObservation.count }.by(1)
     job.perform
 
-    expect(file.filename).to eq("Wechsel_Beitragskategorie.xlsx")
+    expect(file.filename).to eq("Wechsel_Beitragskategorie")
+    expect(file.filename_with_extension).to eq("Wechsel_Beitragskategorie.xlsx")
   end
 end
