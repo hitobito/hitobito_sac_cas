@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Courses::LeaderSettlementPdfsController < ApplicationController
-  include UserManageableExportJob
+  include ExportableRedirect
 
   before_action :authorize_class
 
@@ -30,8 +30,8 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
       filename: "Kurskaderabrechnung Kurs #{event.number}"
     ).enqueue!
 
-    respond_to_export_job(
-      redirection_target: group_event_participation_path(group, event, participation)
+    redirect_after_enqueued_export(
+      group_event_participation_path(group, event, participation)
     )
   end
 

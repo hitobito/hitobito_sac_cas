@@ -60,7 +60,7 @@ describe Export::SubscriptionsJob do
     def export_table_display_as_csv
       Tempfile.create do |file|
         expect(Export::Tabular::People::TableDisplays).to receive(:export).and_call_original
-        expect(job).to receive(:user_job_result).and_return(file)
+        expect(job).to receive(:job_observation).and_return(file)
         job.enqueue!
         job.perform
         file.rewind

@@ -30,7 +30,7 @@ describe People::Export::EintritteController do
       expect(job.handler).to match("from: 2015-01-01")
       expect(job.handler).to match("to: 2015-12-31")
       expect(job.handler).to match("filename: 578575972_SAC Blüemlisalp_Eintritte_20150101_20151231-")
-      expect(UserJobResult.find_by!(delayed_job: job).filename)
+      expect(JobObservation.find_by!(delayed_job: job).filename)
         .to match("578575972_SAC-Blueemlisalp_Eintritte_20150101_20151231-")
     end
 

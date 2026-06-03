@@ -12,7 +12,7 @@ describe Export::EintritteExportJob do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:from) { Date.new(2015, 1, 1) }
   let(:to) { Date.new(2015, 12, 31) }
-  let(:file) { job.user_job_result }
+  let(:file) { job.job_observation }
 
   subject(:job) { described_class.new(user.id, group.id, "eintritte", from, to) }
 
@@ -22,7 +22,7 @@ describe Export::EintritteExportJob do
       .exactly(5).times
       .and_call_original
 
-    expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+    expect { job.enqueue! }.to change { JobObservation.count }.by(1)
     job.perform
 
     expect(file.filename).to eq("eintritte.xlsx")

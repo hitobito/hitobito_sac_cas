@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::Export::PopoverExportableController < ApplicationController
-  include UserManageableExportJob
+  include ExportableRedirect
 
   def create
     authorize_export!
@@ -28,7 +28,7 @@ class People::Export::PopoverExportableController < ApplicationController
   def export_in_background
     enqueue_job(filename)
 
-    respond_to_export_job(redirection_target: redirection_target)
+    redirect_after_enqueued_export(redirection_target)
   end
 
   def redirection_target

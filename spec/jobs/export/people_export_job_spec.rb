@@ -19,7 +19,7 @@ describe Export::PeopleExportJob do
     job.enqueue!
     job.perform
 
-    file = job.user_job_result
+    file = job.job_observation
     csv = CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true)
 
     expect(file.generated_file).to be_attached

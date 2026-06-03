@@ -12,14 +12,14 @@ describe Export::MitgliederCsvExportJob do
   let(:group) { groups(:bluemlisalp) }
   subject(:job) { described_class.new(user.id, group.id) }
 
-  let(:file) { job.user_job_result }
+  let(:file) { job.job_observation }
   let(:contents) { file.generated_file.download.force_encoding("ISO-8859-1") }
   let(:csv) { CSV.parse(contents.lines[0...-1].join, col_sep: "$") }
   let(:summary_line) { contents.lines.last }
 
   it "creates a CSV-Export" do
     freeze_time
-    expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+    expect { job.enqueue! }.to change { JobObservation.count }.by(1)
     job.perform
 
     expect(csv).to have(4).items
@@ -44,7 +44,7 @@ describe Export::MitgliederCsvExportJob do
     it "has no quotation marks for single line strings" do
       person = people(:mitglied)
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
-      expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
       job.perform
 
       expect(contents).to match(/\$#{person.last_name}\$#{person.first_name}\$/)
@@ -54,7 +54,7 @@ describe Export::MitgliederCsvExportJob do
       person = people(:mitglied)
       person.update!(first_name: "Hello\nWorld")
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
-      expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
       job.perform
 
       expect(contents).to match(/\$#{person.last_name}\$"#{person.first_name}"\$/)
@@ -64,7 +64,7 @@ describe Export::MitgliederCsvExportJob do
       person = people(:mitglied)
       person.update!(first_name: "Hello$World")
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
-      expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
       job.perform
 
       expect(contents).to include %($#{person.last_name}$"Hello$World"$)

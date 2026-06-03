@@ -12,7 +12,7 @@ describe Export::JubilareExportJob do
   let(:group) { groups(:bluemlisalp_mitglieder) }
   let(:reference_date) { Date.new(2025, 10, 1) }
   let(:membership_years) { nil }
-  let(:file) { job.user_job_result }
+  let(:file) { job.job_observation }
 
   subject(:job) { described_class.new(user.id, group.id, "jubilare", reference_date, membership_years) }
 
@@ -22,7 +22,7 @@ describe Export::JubilareExportJob do
       .exactly(5).times
       .and_call_original
 
-    expect { job.enqueue! }.to change { UserJobResult.count }.by(1)
+    expect { job.enqueue! }.to change { JobObservation.count }.by(1)
     job.perform
 
     expect(file.filename).to eq("jubilare.xlsx")

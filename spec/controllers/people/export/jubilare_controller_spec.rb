@@ -30,7 +30,7 @@ describe People::Export::JubilareController do
       expect(job.handler).to match("reference_date: 2025-10-01")
       expect(job.handler).to match("membership_years: 20")
       expect(job.handler).to match("filename: 578575972_SAC Blüemlisalp_Jubilare_per_20251001-")
-      expect(UserJobResult.find_by!(delayed_job: job).filename)
+      expect(JobObservation.find_by!(delayed_job: job).filename)
         .to match("578575972_SAC-Blueemlisalp_Jubilare_per_20251001-")
     end
 

@@ -22,7 +22,7 @@ describe "people export", :js do
     expect(page).to have_content(
       /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
     )
-    expect(page).to have_css("#user-job-results-link-with-badge .badge", text: 1)
+    expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
   end
 
   it "starts recipient households export" do
@@ -34,6 +34,6 @@ describe "people export", :js do
     expect(page).to have_content(
       /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
     )
-    expect(page).to have_css("#user-job-results-link-with-badge .badge", text: 1)
+    expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
   end
 end

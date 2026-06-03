@@ -17,7 +17,7 @@ describe Export::EventParticipationsExportJob do
 
   let(:params) { {} }
 
-  let(:file) { subject.user_job_result }
+  let(:file) { subject.job_observation }
 
   before do
     SeedFu.quiet = true

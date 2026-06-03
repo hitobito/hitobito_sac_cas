@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::Export::MitgliederCsvController < ApplicationController
-  include UserManageableExportJob
+  include ExportableRedirect
 
   def create
     authorize!(:index_people, group)
@@ -17,7 +17,7 @@ class People::Export::MitgliederCsvController < ApplicationController
       filename: filename
     ).enqueue!
 
-    respond_to_export_job(redirection_target: group_people_path(group, returning: true))
+    redirect_after_enqueued_export(group_people_path(group, returning: true))
   end
 
   private
