@@ -1798,6 +1798,9 @@ de_CH:
     rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
     self_approval: Selbstfreigabe
 
+  export/sac_statistics:
+    filename: SAC_Statistik
+
   export/tabular/people/mitgliedschaft:
     attributes:
       id: Mitgliedernummer
@@ -1879,6 +1882,31 @@ de_CH:
     section_active: "Aktive Mitglieder am %{to}"
     section_eintritte: "Eintritte %{from} - %{to}"
     section_austritte: "Austritte %{from} - %{to}"
+
+  export/xlsx/sac_statistics:
+    mitglieder_statistics:
+      sheet_name: Mitgliederstatistik
+    monthly_mutations:
+      sheet_name: Finanzindikatoren Mitglieder
+      month: Monat
+      eintritte: SAC-Eintritte
+      austritte: SAC-Austritte
+      aktive: Total aktive Mitglieder
+    sektion_mitglieder:
+      sheet_name: Stammmitglieder
+      id: Id
+      name: Name
+      type: Typ
+      total: Total
+      adult: Einzel
+      youth: Jugend
+      family_main: Familie
+      family_adult: FreiFam
+      family_child: FreiKind
+    sektion_mitglieder_and_zusatzmitglieder:
+      sheet_name: Stamm- und Zusatzmitglieder
+    sektion_zusatzmitglieder:
+      sheet_name: Zusatzmitglieder
 
   external_trainings:
     form:
