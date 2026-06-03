@@ -4,7 +4,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class Event::Courses::LeaderSettlementPdfsController < ApplicationController
-  include AsyncDownload
+  include UserManageableExportJob
 
   before_action :authorize_class
 
@@ -23,13 +23,14 @@ class Event::Courses::LeaderSettlementPdfsController < ApplicationController
   private
 
   def render_pdf_in_background
-    with_async_download_cookie(:pdf, "Kurskaderabrechnung Kurs #{event.number}",
-      redirection_target: group_event_participation_path(group, event, participation)) do |filename|
-      Export::LeaderSettlementExportJob.new(current_person.id,
-        participation.id,
-        entry.iban,
-        filename: filename).enqueue!
-    end
+    Export::LeaderSettlementExportJob.new(
+      current_person.id,
+      participation.id,
+      entry.iban,
+      filename: "Kurskaderabrechnung Kurs #{event.number}"
+    ).enqueue!
+
+    respond_to_export_job(redirection_target: group_event_participation_path(group, event, participation))
   end
 
   def rerender_form(status)
