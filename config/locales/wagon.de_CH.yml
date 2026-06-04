@@ -1036,6 +1036,9 @@ de_CH:
       group/abo_magazin/gratisabonnent:
         one: Gratisabonnent
         description: Gratisabonnent
+      group/abo_magazin/gratisabonnent_digital:
+        one: Gratisabonnent (Digital)
+        description: Gratisabonnent (Digital)
       group/abo_magazin/andere:
         one: Andere
         description: Andere
@@ -1133,6 +1136,21 @@ de_CH:
       group/sektions_funktionaere/praesidium:
         one: Präsidium
         description: Präsidium
+      group/sektions_funktionaere/co_praesidium:
+        one: Co-Präsidium
+        description: Co-Präsidium
+      group/sektions_funktionaere/vize_praesidium:
+        one: Vize-Präsidium
+        description: Vize-Präsidium
+      group/sektions_funktionaere/praesidium_ortsgruppe:
+        one: Präsidium Ortsgruppe
+        description: Präsidium Ortsgruppe
+      group/sektions_funktionaere/co_praesidium_ortsgruppe:
+        one: Co-Präsidium Ortsgruppe
+        description: Co-Präsidium Ortsgruppe
+      group/sektions_funktionaere/vize_praesidium_ortsgruppe:
+        one: Vize-Präsidium Ortsgruppe
+        description: Vize-Präsidium Ortsgruppe
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Mitgliederverwaltung
         description: Mitgliederverwaltung Sektion
