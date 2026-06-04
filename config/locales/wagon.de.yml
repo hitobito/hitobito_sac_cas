@@ -1548,16 +1548,23 @@ de:
         title: Zusatzdaten
       cancel_application:
         caption: Abmelden
-      course_signup_aside:
-        summary_title: Kostenübersicht
-        summary_course_price: Kurskosten
-        summary_subsidy: "- Subvention"
-        summary_total: Total
-      contact_data_aside:
-        contact_title: Fragen zur Anmeldung
-        contact_text: |
-          Du erreichst uns zu unseren Geschäftszeiten
-          Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
+      courses:
+        signup_aside:
+          summary_title: Kostenübersicht
+          summary_course_price: Kurskosten
+          summary_subsidy: "- Subvention"
+          summary_total: Total
+        contact_data_aside:
+          contact_title: Fragen zur Anmeldung
+          contact_text: |
+            Du erreichst uns zu unseren Geschäftszeiten
+            Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
+      tours:
+        contact_data_aside:
+          contact_title: Kontakt
+        signup_aside:
+          summary_title: Kosten
+          price_total: Total
       popover_cancel_sac_cas:
         send_email: E-Mail an Teilnehmer/in senden
         invoice_option: Rechnung

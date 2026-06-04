@@ -53,7 +53,7 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
   end
 
   def new
-    @step = "answers" if event.course?
+    @step = "answers" if event.course? || event.tour?
     super
   end
 
@@ -73,7 +73,7 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
 
   def permitted_params
     super.tap do |permitted|
-      calculate_price(permitted) if @event.course? || @event.tour?
+      calculate_signup_price(permitted) if @event.course? || @event.tour?
     end
   end
 
@@ -83,44 +83,31 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
     @recent_tours = history.recent_tours(limit: 5)
   end
 
-  def calculate_price(permitted)
-    price_category = if entry.new_record? && !params[:for_someone_else]
+  def calculate_signup_price(permitted)
+    if entry.new_record? && !params[:for_someone_else]
       permitted[:subsidy] = false unless entry.subsidizable?
-      permitted[:price_category] = determine_price_category(permitted[:subsidy])
-    else
-      permitted[:price_category]
+      permitted[:price_category] = entry.signup_price_category(subsidy: permitted[:subsidy])
     end
-
-    price = determine_price_value(price_category)
-    permitted[:price] = price if price.present?
+    assign_price(permitted)
   end
 
-  # Only allow setting custom price on update of an entry for other people
-  # New records always get the price of the selected category
-  def determine_price_value(price_category)
-    if entry.new_record?
-      price_for_category(price_category)
+  def assign_price(permitted)
+    price = if entry.new_record?
+      event.send(permitted[:price_category]) if permitted[:price_category].present?
     elsif current_user != entry.participant
       params.dig(:event_participation, :price)
     end
+    permitted[:price] = price if price.present?
   end
 
-  def determine_price_category(subsidy)
-    if entry.person.sac_membership_active?
-      subsidy ? :price_subsidized : :price_member
-    else
-      :price_regular
-    end
-  end
-
-  def price_for_category(price_category)
-    price_category.blank? ? nil : @event.send(price_category)
-  end
-
-  def proceed_wizard # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  def proceed_wizard
     @step = params[:step]
-    return yield if @step.blank? || !event.course?
+    return yield if @step.blank? || (!event.course? && !event.tour?)
 
+    handle_wizard_step { yield }
+  end
+
+  def handle_wizard_step
     if params[:back]
       previous_step
       render_step

@@ -1,0 +1,12 @@
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+= render 'event/participations/step_wizard', step: step
+
+.row
+  %main.col-lg
+    = yield
+  .col-md
+    = render 'event/participations/tours/signup_aside', price: entry.signup_price

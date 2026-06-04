@@ -6,7 +6,11 @@
 - title t('.title')
 
 - if event.course?
-  = render 'event/participations/course_signup', step: 1 do
+  = render 'event/participations/courses/signup', step: 1 do
+    = render 'form', buttons_top: false
+
+- elsif event.tour?
+  = render 'event/participations/tours/signup', step: 1 do
     = render 'form', buttons_top: false
 
 - else
