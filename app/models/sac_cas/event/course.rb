@@ -91,7 +91,7 @@ module SacCas::Event::Course
   PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_special]
 
   prepended do # rubocop:disable Metrics/BlockLength
-    self::MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+    self.manually_sendable_participant_mails = [
       Event::CourseParticipationMailer::SUMMONED_PARTICIPATION,
       Event::CourseParticipationMailer::ASSIGNED,
       Event::CourseParticipationMailer::UNCONFIRMED,
@@ -106,7 +106,7 @@ module SacCas::Event::Course
       Event::CourseParticipationMailer::EVENT_CANCELED_WEATHER
     ]
 
-    self::MANUALLY_SENDABLE_LEADER_MAILS = [
+    self.manually_sendable_leader_mails = [
       Event::CourseMailer::PUBLISHED,
       Event::CourseParticipationMailer::LEADER_REMINDER_NEXT_WEEK,
       Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS

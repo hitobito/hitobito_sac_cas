@@ -9,7 +9,7 @@ class Event::Tour < Event
   include ::Events::Tours::State
   include I18nEnums
 
-  MANUALLY_SENDABLE_PARTICIPANT_MAILS = [
+  self.manually_sendable_participant_mails = [
     Event::TourParticipationMailer::APPLIED,
     Event::TourParticipationMailer::UNCONFIRMED,
     Event::TourParticipationMailer::ASSIGNED,
@@ -21,8 +21,7 @@ class Event::Tour < Event
     Event::TourParticipationMailer::CANCELED_WEATHER,
     Event::TourParticipationMailer::CANCELED_PARTICIPATION
   ]
-
-  MANUALLY_SENDABLE_LEADER_MAILS = MANUALLY_SENDABLE_PARTICIPANT_MAILS
+  self.manually_sendable_leader_mails = manually_sendable_participant_mails
 
   FREIGABE_PENDING_STATES = %w[draft review].freeze
   CANCELED_REASONS = %w[minimum_participants no_leader weather].freeze

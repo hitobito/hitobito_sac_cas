@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Event::Participations::MailDispatchesController do
+describe Event::Participations::SendMailsController do
   include ActiveJob::TestHelper
 
   let(:participation) { Event::Participation.create!(event: event, person: people(:mitglied)) }
@@ -108,14 +108,6 @@ describe Event::Participations::MailDispatchesController do
 
     context "tour" do
       let(:event) { events(:section_tour) }
-
-      before do
-        Fabricate(
-          "Group::SektionsTourenUndKurse::TourenchefSommer",
-          person: user,
-          group: groups(:bluemlisalp_touren_und_kurse)
-        )
-      end
 
       it_behaves_like "dispatches mail",
         :event_tour_application_confirmation_applied,
