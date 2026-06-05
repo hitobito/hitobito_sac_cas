@@ -6,19 +6,18 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::Export::MitgliederCsvController < ApplicationController
-  include AsyncDownload
+  include ExportableRedirect
 
   def create
     authorize!(:index_people, group)
 
-    with_async_download_cookie(:csv, filename,
-      redirection_target: group_people_path(group, returning: true)) do |filename|
-      Export::MitgliederCsvExportJob.new(
-        current_person.id,
-        group.layer_group_id,
-        filename: filename
-      ).enqueue!
-    end
+    Export::MitgliederCsvExportJob.new(
+      current_person.id,
+      group.layer_group_id,
+      filename: filename
+    ).enqueue!
+
+    redirect_after_enqueued_export(group_people_path(group, returning: true))
   end
 
   private

@@ -13,7 +13,7 @@ describe Export::BeitragskategorieWechselExportJob do
   let(:from) { Date.new(2015, 1, 1) }
   let(:to) { Date.new(2015, 12, 31) }
   let(:filename) { "Wechsel_Beitragskategorie" }
-  let(:file) { job.send(:async_download_file) }
+  let(:file) { job.job_observation }
 
   subject(:job) { described_class.new(user.id, group.id, filename, from, to) }
 
@@ -33,7 +33,10 @@ describe Export::BeitragskategorieWechselExportJob do
       .exactly(4).times
       .and_call_original
 
-    expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
-    expect(file.filename).to eq("Wechsel_Beitragskategorie.xlsx")
+    expect { job.enqueue! }.to change { JobObservation.count }.by(1)
+    job.perform
+
+    expect(file.filename).to eq("Wechsel_Beitragskategorie")
+    expect(file.filename_with_extension).to eq("Wechsel_Beitragskategorie.xlsx")
   end
 end

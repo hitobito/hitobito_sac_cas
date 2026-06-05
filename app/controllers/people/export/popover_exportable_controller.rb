@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::Export::PopoverExportableController < ApplicationController
-  include AsyncDownload
+  include ExportableRedirect
 
   def create
     authorize_export!
@@ -26,9 +26,9 @@ class People::Export::PopoverExportableController < ApplicationController
   end
 
   def export_in_background
-    with_async_download_cookie(:xlsx, filename, redirection_target: redirection_target) do |name|
-      enqueue_job(name)
-    end
+    enqueue_job(filename)
+
+    redirect_after_enqueued_export(redirection_target)
   end
 
   def redirection_target

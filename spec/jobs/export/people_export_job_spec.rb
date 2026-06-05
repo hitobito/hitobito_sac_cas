@@ -8,23 +8,23 @@
 require "spec_helper"
 
 describe Export::PeopleExportJob do
+  include JobObservationSpecHelper
+
   let(:user) { people(:root) }
   let(:group) { groups(:bluemlisalp_mitglieder) }
-
-  let(:filename) { AsyncDownloadFile.create_name("people_export", user.id) }
-  let(:file) { AsyncDownloadFile.from_filename(filename, :csv) }
-  let(:csv) { CSV.parse(file.read, col_sep: Settings.csv.separator.strip, headers: true) }
 
   it "works when including attribute membership_years" do
     job = Export::PeopleExportJob.new(
       :csv, user.id, group.id, {},
-      full: true, filename: filename
+      full: true, filename: "people_export"
     )
-
+    job.enqueue!
     job.perform
 
-    expect(file.generated_file).to be_attached
+    file = job.job_observation
+    csv = CSV.parse(read_data_from_generated_file(file), col_sep: Settings.csv.separator.strip, headers: true)
 
+    expect(file.generated_file).to be_attached
     expect(csv).to have(4).items
     expect(csv.first["﻿Mitglied-Nr"]).to eq "600001"
     expect(csv.first["Anzahl Mitglieder-Jahre"]).to eq((Date.current.year - 2015).to_s)
@@ -37,6 +37,8 @@ describe Export::PeopleExportJob do
 
     it "uses SacRecipients tabular export" do
       expect(Export::Tabular::People::SacRecipients).to receive(:export)
+
+      subject.enqueue!
       subject.perform
     end
   end

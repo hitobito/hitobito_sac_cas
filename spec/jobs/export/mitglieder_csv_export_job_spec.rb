@@ -12,14 +12,15 @@ describe Export::MitgliederCsvExportJob do
   let(:group) { groups(:bluemlisalp) }
   subject(:job) { described_class.new(user.id, group.id) }
 
-  let(:file) { job.send(:async_download_file) }
+  let(:file) { job.job_observation }
   let(:contents) { file.generated_file.download.force_encoding("ISO-8859-1") }
   let(:csv) { CSV.parse(contents.lines[0...-1].join, col_sep: "$") }
   let(:summary_line) { contents.lines.last }
 
   it "creates a CSV-Export" do
     freeze_time
-    expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+    expect { job.enqueue! }.to change { JobObservation.count }.by(1)
+    job.perform
 
     expect(csv).to have(4).items
     people_ids = csv.map(&:first).map { |entry| Integer(entry) }
@@ -43,7 +44,9 @@ describe Export::MitgliederCsvExportJob do
     it "has no quotation marks for single line strings" do
       person = people(:mitglied)
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
-      expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
+      job.perform
+
       expect(contents).to match(/\$#{person.last_name}\$#{person.first_name}\$/)
     end
 
@@ -51,7 +54,9 @@ describe Export::MitgliederCsvExportJob do
       person = people(:mitglied)
       person.update!(first_name: "Hello\nWorld")
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
-      expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
+      job.perform
+
       expect(contents).to match(/\$#{person.last_name}\$"#{person.first_name}"\$/)
     end
 
@@ -59,7 +64,9 @@ describe Export::MitgliederCsvExportJob do
       person = people(:mitglied)
       person.update!(first_name: "Hello$World")
       Person.where.not(id: people(:mitglied, :admin).map(&:id)).destroy_all
-      expect { job.perform }.to change { AsyncDownloadFile.count }.by(1)
+      expect { job.enqueue! }.to change { JobObservation.count }.by(1)
+      job.perform
+
       expect(contents).to include %($#{person.last_name}$"Hello$World"$)
     end
   end
@@ -69,12 +76,16 @@ describe Export::MitgliederCsvExportJob do
   it "does not prefix phone numbers with single quote" do
     person = people(:mitglied)
     person.create_phone_number_mobile!(number: "+41 79 123 45 67")
+    job.enqueue!
     job.perform
+
     expect(contents).to include "$+41 79 123 45 67$"
   end
 
   it "file name" do
-    job.perform
-    expect(file.filename).to eq("Adressen_#{group.id_padded}.csv")
+    job.enqueue!
+
+    expect(file.filename).to eq("Adressen_#{group.id_padded}")
+    expect(file.filename_with_extension).to eq("Adressen_#{group.id_padded}.csv")
   end
 end

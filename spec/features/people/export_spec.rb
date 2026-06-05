@@ -19,8 +19,10 @@ describe "people export", :js do
     find_link("CSV").hover
     click_link("Empfänger Einzelpersonen")
 
-    expect(page).to have_selector(".info-bar .alert-info",
-      text: "Die Downloads werden vorbereitet, bitte warten.")
+    expect(page).to have_content(
+      /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+    )
+    expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
   end
 
   it "starts recipient households export" do
@@ -29,7 +31,9 @@ describe "people export", :js do
     find_link("CSV").hover
     click_link("Empfänger Familien")
 
-    expect(page).to have_selector(".info-bar .alert-info",
-      text: "Die Downloads werden vorbereitet, bitte warten.")
+    expect(page).to have_content(
+      /Export wird im Hintergrund gestartet und kann nach Fertigstellung auf der Jobübersicht/
+    )
+    expect(page).to have_css("#job-observations-link-with-badge .badge", text: 1)
   end
 end

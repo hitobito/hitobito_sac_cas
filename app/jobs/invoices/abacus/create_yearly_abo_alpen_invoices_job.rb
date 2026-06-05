@@ -17,7 +17,7 @@ class Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob < RecurringJob
     Time.zone.tomorrow.at_beginning_of_day.change(hour: 2, minute: 18).in_time_zone
   end
 
-  def error(job, exception)
+  def error(job, exception, payload = parameters)
     create_error_log_entry("stapelverarbeitung",
       "Jahresrechnungen Abo Magazin Die Alpen konnten nicht an Abacus übermittelt werden. " \
       "Es erfolgt ein weiterer Versuch.",

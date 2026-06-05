@@ -8,6 +8,8 @@
 require "spec_helper"
 
 describe Export::BackupMitgliederExportJob do
+  include DelayedJobSpecHelper
+
   subject(:job) do
     described_class.new(group.id).tap do
       allow(_1).to receive(:sftp).and_return(sftp)
@@ -31,12 +33,6 @@ describe Export::BackupMitgliederExportJob do
       end
     end
 
-    def run_job(payload_object)
-      payload_object.enqueue!.tap do |job_instance|
-        Delayed::Worker.new.run(job_instance)
-      end
-    end
-
     it "logs any type of error raised and continues" do
       exporter = double
       allow(exporter).to receive(:call)
@@ -45,7 +41,7 @@ describe Export::BackupMitgliederExportJob do
 
       expect(sftp).to receive(:upload_file).and_raise(error)
 
-      job = subscribe { run_job(subject) }
+      job = subscribe { enqueue_and_run_job(subject) }
 
       expect(notifications.keys).to match_array [
         "job_started.background_job",

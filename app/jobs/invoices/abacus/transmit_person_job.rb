@@ -22,7 +22,7 @@ class Invoices::Abacus::TransmitPersonJob < BaseJob
     end
   end
 
-  def error(_job, exception)
+  def error(_job, exception, payload = parameters)
     create_log_error(exception.message)
     super
   end
