@@ -30,12 +30,9 @@ module HitobitoSacCas
       config.autoload_paths << "#{config.root}/lib"
     end
 
-    # We can't directly override the languages hash in a config file since the hashes are merged
     config.to_prepare do
       if Rails.env.test?
-        settings = Settings.to_hash
-        settings[:application][:languages] = {de: "Deutsch", fr: "Français", it: "Italiano"}
-        Settings.reload_from_files(settings)
+        Settings.application.languages.delete_field(:en)
       end
     end
 
