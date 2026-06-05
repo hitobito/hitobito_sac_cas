@@ -1874,7 +1874,7 @@ it:
       title: Creare il livello del corso
 
   event/courses/leader_settlement_pdfs:
-    export_enqueued: Il conteggio del quadro del corso viene generato in background.
+    export_enqueued: "Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
@@ -2763,3 +2763,13 @@ it:
         subscribe_fundraising_list: "Desidero continuare a ricevere la posta della capanna del SAC ed essere informato sulle campagne di raccolta fondi del SAC."
         inform_mitglied_via_email: "Informare i membri via e-mail?"
         submit_button: Fine dell'abbonato alpino
+
+  delayed_job:
+    export/austritte_export_job: Austritte-Export
+    export/beitragskategorie_wechsel_export_job: Beitragskategorie-Wechsel-Export
+    export/eintritte_export_job: Eintritte-Export
+    export/jubilare_export_job: Jubilare-Export
+    export/leader_settlement_export_job: Kurskaderabrechnungs-Export
+    export/mitglieder_csv_export_job: Mitglieder-CSV-Export
+    export/mitglieder_statistics_export_job: Mitgliederstatistik-Export
+    export/sac_statistics_export_job: SAC-Statistik-Export

@@ -1806,7 +1806,7 @@ de_CH:
       title: Kursstufe erstellen
 
   event/courses/leader_settlement_pdfs:
-    export_enqueued: Kurskaderabrechnung wird im Hintergund generiert.
+    export_enqueued: "Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
 
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
@@ -2687,3 +2687,13 @@ de_CH:
         subscribe_fundraising_list: "Ich möchte die SAC-Hüttenpost weiterhin erhalten und über Spendenaktionen vom SAC informiert werden."
         inform_mitglied_via_email: "Mitglied via E-Mail informieren?"
         submit_button: Die Alpen-Abonnent beenden
+
+  delayed_job:
+    export/austritte_export_job: Austritte-Export
+    export/beitragskategorie_wechsel_export_job: Beitragskategorie-Wechsel-Export
+    export/eintritte_export_job: Eintritte-Export
+    export/jubilare_export_job: Jubilare-Export
+    export/leader_settlement_export_job: Kurskaderabrechnungs-Export
+    export/mitglieder_csv_export_job: Mitglieder-CSV-Export
+    export/mitglieder_statistics_export_job: Mitgliederstatistik-Export
+    export/sac_statistics_export_job: SAC-Statistik-Export
