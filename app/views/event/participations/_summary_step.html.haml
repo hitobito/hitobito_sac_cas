@@ -30,11 +30,10 @@
     %dt= t('activerecord.attributes.event/participation.additional_information')
     %dd.multiline= entry.additional_information.presence || t('event.participations.no_answer_given')
 
-.alert.alert-info
-  = simple_format(t('.annulation_remarks'))
+- if @event.course?
+  .alert.alert-info
+    = simple_format(t('.annulation_remarks'))
 
-
-- if @group.root?
   = f.boolean_field(:adult_consent, caption: t('groups.self_registration.adult_consent_field.caption'))
 
   - link = link_to(t('.terms_and_conditions_link_label'), t('.terms_and_conditions_link_href'), target: :_blank)

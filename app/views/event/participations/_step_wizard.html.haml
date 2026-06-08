@@ -28,6 +28,7 @@
           .stepwizard-title
             = t('.subsidy_title')
 
+  - if @event.course? || @event.tour?
     .stepwizard-step{class: (step == 'summary' ? 'is-current' : 'is-disabled')}
       %a.stepwizard-link{href: '#summary', data: { bs_toggle: :tab }, role: :tab}
         .stepwizard-number

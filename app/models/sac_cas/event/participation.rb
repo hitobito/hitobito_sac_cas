@@ -21,6 +21,7 @@ module SacCas::Event::Participation
   prepended do # rubocop:todo Metrics/BlockLength
     include I18nEnums
     include CapitalizedDependentErrors
+    include Events::Participations::PriceCalculatable
 
     enum :price_category, [:price_member, :price_regular, :price_subsidized, :price_special]
 
@@ -40,10 +41,6 @@ module SacCas::Event::Participation
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
     validate :assert_actual_days_size, if: :actual_days_changed?
-  end
-
-  def subsidizable?
-    event.course? && event.price_subsidized.present? && sac_membership_active?
   end
 
   def participant_cancelable?

@@ -1600,16 +1600,17 @@ fr:
         title: Données supplémentaires
       cancel_application:
         caption: Se désinscrire
-      course_signup_aside:
-        summary_title: Aperçu des coûts
-        summary_course_price: Frais de cours
-        summary_subsidy: "- Subvention"
-        summary_total: Total
-      contact_data_aside:
-        contact_title: Questions sur l’inscription
-        contact_text: |
-          Tu peux nous joindre pendant nos heures de bureau
-          du lundi au vendredi de 9 h à 12 h et de 14 h à 17 h.
+      courses:
+        signup_aside:
+          summary_title: Aperçu des coûts
+          summary_course_price: Frais de cours
+          summary_subsidy: "- Subvention"
+          summary_total: Total
+        contact_data_aside:
+          contact_title: Questions sur l’inscription
+          contact_text: |
+            Tu peux nous joindre pendant nos heures de bureau
+            du lundi au vendredi de 9 h à 12 h et de 14 h à 17 h.
       popover_cancel_sac_cas:
         send_email: Envoyer un e-mail au ou à la participant·e
         invoice_option: Facture

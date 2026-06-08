@@ -17,7 +17,7 @@ module SacCas::Event::ParticipationContactData
       :phone_number_landline, :build_phone_number_landline,
       to: :person
 
-    delegate :subsidy?, :subsidizable?, to: :participation
+    include Events::Participations::PriceCalculatable
 
     class << self
       delegate :human_attribute_name, to: Wizards::Steps::Signup::PersonFields

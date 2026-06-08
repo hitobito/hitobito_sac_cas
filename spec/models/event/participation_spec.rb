@@ -73,27 +73,6 @@ describe Event::Participation do
     end
   end
 
-  describe "#subsidizable?" do
-    let(:course) {
-      Fabricate.build(:sac_course, applications_cancelable: true, price_subsidized: 10)
-    }
-
-    subject(:participation) { Fabricate.build(:event_participation, event: course) }
-
-    it "is false when price_subsidized is nil" do
-      expect(participation).not_to be_subsidizable
-    end
-
-    it "is false when person has no role" do
-      expect(participation).not_to be_subsidizable
-    end
-
-    it "is true if person is member" do
-      participation.person = people(:mitglied)
-      expect(participation).to be_subsidizable
-    end
-  end
-
   describe "validations" do
     let(:event) { events(:top_course) }
 
