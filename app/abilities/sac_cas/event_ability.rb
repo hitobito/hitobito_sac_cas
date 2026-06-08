@@ -9,8 +9,8 @@ module SacCas::EventAbility
   extend ActiveSupport::Concern
   include SacCas::AbilityDsl::Constraints::Event
 
-  prepended do
-    on(Event) do
+  prepended do # rubocop:todo Metrics/BlockLength
+    on(Event) do # rubocop:todo Metrics/BlockLength
       permission(:any)
         .may(:manage_attachments, :index_full_participations)
         .for_participations_full_events
@@ -26,16 +26,26 @@ module SacCas::EventAbility
         .may(:index_participations, :index_full_participations, :qualifications_read, :show)
         .in_same_layer_group
       permission(:layer_events_full)
-        .may(:create, :update, :destroy, :application_market, :qualify,
-          :create_tags, :assign_tags, :manage_attachments)
+        .may(:create,
+          :update,
+          :destroy,
+          :application_market,
+          :qualify,
+          :create_tags,
+          :assign_tags,
+          :manage_attachments)
         .in_same_layer_group_if_active
 
       permission(:layer_created_events_full)
         .may(:create)
         .in_tourenleiter_sektion
-
       permission(:layer_created_events_full)
-        .may(:update, :assign_tags, :manage_attachments)
+        .may(:update,
+          :assign_tags,
+          :manage_attachments,
+          :index_participations,
+          :index_full_participations,
+          :application_market)
         .in_tourenleiter_sektion_for_own
     end
 
@@ -53,19 +63,6 @@ module SacCas::EventAbility
       .where(type: Group::FreigabeKomitee::Pruefer.sti_name)
       .where(group_id: assigned_freigabe_komitee_ids)
       .exists?
-  end
-
-  def in_tourenleiter_sektion
-    tourenleiter_sektion_ids = user.roles.select do |r|
-      [Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
-        Group::SektionsTourenUndKurse::Tourenleiter].include?(r.class)
-    end.map { |r| r.group.layer_group_id }
-
-    tourenleiter_sektion_ids.include?(subject.groups.first.id)
-  end
-
-  def in_tourenleiter_sektion_for_own
-    in_tourenleiter_sektion && subject.creator_id == user.id
   end
 
   private
