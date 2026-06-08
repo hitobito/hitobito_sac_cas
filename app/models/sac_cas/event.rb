@@ -75,6 +75,9 @@ module SacCas::Event
   extend ActiveSupport::Concern
 
   prepended do
+    self.manually_sendable_participant_mails = []
+    self.manually_sendable_leader_mails = []
+
     self.possible_contact_attrs = [:first_name, :last_name, :email, :address_care_of, :street,
       :housenumber, :postbox, :zip_code, :town, :country, :gender, :birthday,
       :phone_number_mobile, :phone_number_landline]

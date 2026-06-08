@@ -221,9 +221,6 @@ module HitobitoSacCas
       MountedAttrs::EnumSelect.prepend SacCas::MountedAttrs::EnumSelect
       Dropdown::PeopleExport.prepend SacCas::Dropdown::PeopleExport
       Dropdown::GroupEdit.prepend SacCas::Dropdown::GroupEdit
-      Dropdown::Event::Participation::MailDispatch.prepend(
-        SacCas::Dropdown::Event::Participation::MailDispatch
-      )
       Event::ParticipationButtons.prepend SacCas::Event::ParticipationButtons
       Sheet::Group.prepend SacCas::Sheet::Group
       Sheet::Person.prepend SacCas::Sheet::Person
@@ -274,8 +271,8 @@ module HitobitoSacCas
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
       Event::ListsController.prepend SacCas::Event::ListsController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
-      Event::Participations::MailDispatchesController.prepend(
-        SacCas::Event::Participations::MailDispatchesController
+      Event::Participations::SendMailsController.prepend(
+        SacCas::Event::Participations::SendMailsController
       )
       Event::RegisterController.prepend SacCas::Event::RegisterController
       GroupsController.prepend SacCas::GroupsController

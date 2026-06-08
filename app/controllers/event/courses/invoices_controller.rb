@@ -69,7 +69,7 @@ class Event::Courses::InvoicesController < ApplicationController
   end
 
   def authorize_action
-    raise CanCan::AccessDenied if participation.roles.exists?(type: Event::Course::LEADER_ROLES)
+    raise CanCan::AccessDenied if participation.leader?
 
     authorize!(:summon, participation)
   end
