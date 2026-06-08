@@ -14,13 +14,16 @@ module SacCas::Event::ApplicationMarketController
     delegate :canceled?, to: :event, prefix: true
 
     before_action :set_canceled_flash, only: :index, if: :event_canceled?
-  end
 
-  def index
-    @participants = load_participants.reorder(SORT_EXPRESSION)
-    @applications = Event::ParticipationDecorator.decorate_collection(
-      load_applications.order(SORT_EXPRESSION)
-    )
+    private
+
+    def load_participants
+      super.reorder(SORT_EXPRESSION)
+    end
+
+    def sort_applications(applications)
+      applications.reorder(SORT_EXPRESSION)
+    end
   end
 
   private
