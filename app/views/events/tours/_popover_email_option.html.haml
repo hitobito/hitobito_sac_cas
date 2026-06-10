@@ -9,12 +9,12 @@
 - dependent_checkbox_data = { "#{stimulus_ctrl}-target": "dependent", action: "change->#{stimulus_ctrl}#toggleDependent" }
 
 = f.labeled(t(".send_email"), label_class: "col-3") do
-  .pt-2{ data: { controller: stimulus_ctrl, "#{stimulus_ctrl}-interaction-mode-value": "exclusive" } }
+  %div{ data: { controller: stimulus_ctrl, "#{stimulus_ctrl}-interaction-mode-value": "exclusive" } }
     - receiver_options.each do |option|
-      .form-check.p-0
-        = check_box_tag "receiver_options[]", option, !none_selected, data: dependent_checkbox_data, id: "receiver_option_#{option}"
+      .form-check
+        = check_box_tag "receiver_options[]", option, !none_selected, data: dependent_checkbox_data, id: "receiver_option_#{option}", class: "form-check-input"
         = label_tag "receiver_option_#{option}", t(".receiver_options.#{option}")
 
-    .form-check.p-0
-      = check_box_tag "receiver_options[]", "none", none_selected, data: main_checkbox_data, id: "receiver_option_none"
-      = label_tag "#receiver_option_none", t(".receiver_options.no_email")
+    .form-check
+      = check_box_tag "receiver_options[]", "none", none_selected, data: main_checkbox_data, id: "receiver_option_none", class: "form-check-input"
+      = label_tag "receiver_option_none", t(".receiver_options.no_email")
