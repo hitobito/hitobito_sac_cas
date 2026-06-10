@@ -83,10 +83,13 @@ class Memberships::TerminateAboMagazinAbonnent
   end
 
   def cancelable_invoices
+    now = Time.zone.now
+
     ExternalInvoice::AboMagazin
       .where(person_id: person.id)
       .where(link: role.group)
-      .where(year: Time.zone.now.next_year.year)
+      .where(state: :open)
+      .where(year: now.year..now.next_year.year)
       .select(&:cancellable?)
   end
 
