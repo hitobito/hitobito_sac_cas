@@ -205,12 +205,13 @@ describe Memberships::TerminateAboMagazinAbonnent do
         Delayed::Job.where("handler like '%CancelInvoiceJob%external_invoice_id: #{invoice&.id}%'").count
       end
 
-      it "does not cancel invoice for this year" do
+      it "cancels invoice for this year" do
         invoice = create_invoice(year: 2025)
         expect(invoice).to be_cancellable
         expect do
           expect(model.save).to eq true
-        end.not_to change { person.external_invoices.cancelled.count }
+        end.to change { person.external_invoices.cancelled.count }.by(1)
+          .and change { cancel_invoice_jobs(invoice) }.by(1)
       end
 
       it "cancels invoice for next year" do
@@ -220,6 +221,24 @@ describe Memberships::TerminateAboMagazinAbonnent do
           expect(model.save).to eq true
         end.to change { person.external_invoices.cancelled.count }.by(1)
           .and change { cancel_invoice_jobs(invoice) }.by(1)
+      end
+
+      it "does not cancel invoice in state draft" do
+        invoice = create_invoice(year: 2025, state: :draft)
+        expect(invoice).to be_cancellable
+        expect do
+          expect(model.save).to eq true
+        end.to not_change { person.external_invoices.cancelled.count }
+          .and not_change { cancel_invoice_jobs }
+      end
+
+      it "does not cancel invoice in state payed" do
+        invoice = create_invoice(year: 2025, state: :payed)
+        expect(invoice).to be_cancellable
+        expect do
+          expect(model.save).to eq true
+        end.to not_change { person.external_invoices.cancelled.count }
+          .and not_change { cancel_invoice_jobs }
       end
 
       it "does not cancel other type of invoice" do

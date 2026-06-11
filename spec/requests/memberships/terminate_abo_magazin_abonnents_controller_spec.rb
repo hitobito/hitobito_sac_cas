@@ -82,7 +82,7 @@ describe Memberships::TerminateAboMagazinAbonnentsController do
           .to not_change(Role, :count)
           .and change { person.roles.future.count }.by(1)
           .and change { role.terminated }.to(true)
-          .and change { person.external_invoices.cancelled.count }.by(1)
+          .and change { person.external_invoices.cancelled.count }.by(2)
           .and have_enqueued_mail(Memberships::TerminateAboMagazinAbonnentMailer, :terminate_abonnent)
           .with(person, role.end_on)
         expect(response).to redirect_to person_path(person, format: :html)
