@@ -26,6 +26,10 @@ module SacCas::PeopleController
 
   private
 
+  def filter_entries
+    super.includes(groups: :layer_group)
+  end
+
   def registrations_for_approval?
     group.is_a?(Group::SektionsNeuanmeldungenSektion)
   end

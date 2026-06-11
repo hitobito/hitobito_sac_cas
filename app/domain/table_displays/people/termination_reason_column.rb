@@ -7,6 +7,10 @@
 
 module TableDisplays::People
   class TerminationReasonColumn < TerminationColumn
+    def required_model_includes(attr)
+      super + [roles_unscoped: {termination_reason: :translations}]
+    end
+
     def value(terminated_role)
       terminated_role.termination_reason_text
     end

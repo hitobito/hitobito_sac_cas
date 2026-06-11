@@ -9,6 +9,10 @@ module TableDisplays::People
   class SelfRegistrationReasonColumn < TableDisplays::Column
     prepend TableDisplays::People::SektionMemberAdminVisible
 
+    def required_model_includes(_attr)
+      [self_registration_reason: :translations]
+    end
+
     def required_model_attrs(attr)
       [:self_registration_reason_id]
     end
