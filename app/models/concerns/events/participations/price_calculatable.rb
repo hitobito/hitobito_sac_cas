@@ -16,27 +16,19 @@ module Events::Participations::PriceCalculatable
     event.send(signup_price_category)
   end
 
-  def signup_price_category(subsidy: false)
-    event.course? ? course_price_category(subsidy) : tour_price_category
-  end
-
-  def signup_subsidy
-    (subsidizable? && subsidy?) ? event.price_subsidized : 0
+  def signup_price_category
+    event.course? ? course_price_category : tour_price_category
   end
 
   def subsidizable?
     event.course? && event.price_subsidized.present? && sac_membership_active?
   end
 
-  def subsidy?
-    is_a?(Event::Participation) ? subsidy.present? : participation.subsidy.present?
-  end
-
   private
 
-  def course_price_category(subsidy)
+  def course_price_category
     if sac_membership_active?
-      subsidy ? :price_subsidized : :price_member
+      :price_member
     else
       :price_regular
     end

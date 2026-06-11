@@ -9,7 +9,4 @@
   %main.col-lg
     = yield
   .col-md
-    = turbo_frame_tag :course_signup_aside do
-      = render 'event/participations/courses/signup_aside',
-        price: entry.signup_price,
-        subsidy: entry.signup_subsidy
+    = render 'event/participations/courses/signup_aside', price: entry.signup_price

@@ -21,10 +21,6 @@ describe Events::Participations::PriceCalculatable do
       context "for member" do
         let(:person) { people(:mitglied) }
 
-        it "returns price_subsidized when subsidy true" do
-          expect(participation.signup_price_category(subsidy: true)).to eq :price_subsidized
-        end
-
         it "returns price_member when no subsidy" do
           expect(participation.signup_price_category).to eq :price_member
         end
@@ -90,26 +86,6 @@ describe Events::Participations::PriceCalculatable do
         it "is not subsidizable" do
           expect(participation).not_to be_subsidizable
         end
-      end
-    end
-
-    describe "#signup_subsidy" do
-      let(:person) { people(:mitglied) }
-
-      before do
-        event.price_subsidized = 10
-      end
-
-      it "returns the subsidized price" do
-        participation.update!(subsidy: true)
-
-        expect(participation.signup_subsidy).to eq 10
-      end
-
-      it "returns zero if not subsidizable" do
-        allow(participation).to receive(:subsidizable?).and_return false
-
-        expect(participation.signup_subsidy).to be_zero
       end
     end
   end
@@ -178,14 +154,6 @@ describe Events::Participations::PriceCalculatable do
 
       it "is not subsidizable" do
         expect(participation).not_to be_subsidizable
-      end
-    end
-
-    describe "#signup_subsidy" do
-      let(:person) { people(:mitglied) }
-
-      it "returns zero" do
-        expect(participation.signup_subsidy).to be_zero
       end
     end
   end
