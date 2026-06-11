@@ -38,6 +38,8 @@ module SacCas::Person
     i18n_enum :correspondence, CORRESPONDENCES
     i18n_setter :correspondence, CORRESPONDENCES
 
+    i18n_enum :canton, Cantons.short_name_strings, i18n_prefix: "activerecord.attributes.cantons"
+
     enum :data_quality, [:ok, :info, :warning, :error], default: 0, prefix: :data_quality
 
     reflect_on_attachment(:picture).variant(:profile, resize_to_fill: [200, 200])
@@ -54,6 +56,7 @@ module SacCas::Person
       validates :zip_code, :town, presence: true
       validates_with Person::AddressValidator
     end
+    validates :canton, absence: true, unless: :swiss?
 
     before_save :set_digital_correspondence
 
@@ -157,6 +160,13 @@ module SacCas::Person
   def membership_pass
     @membership_pass ||= passes
       .find_by(pass_definition_id: Settings.passes.membership_pass_definition_id)
+  end
+
+  # This overrides canton of the PostalAddress contactable module
+  # The canton attribute only exists on person and all other contactables
+  # should still fall back to the usual canton logic via location
+  def canton
+    read_attribute(:canton)
   end
 
   protected
