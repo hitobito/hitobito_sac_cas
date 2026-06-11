@@ -16,9 +16,9 @@ describe TableDisplays::People::SacRemarkNationalOfficeColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
-    # rubocop:todo Layout/LineLength
-    allow_any_instance_of(ActionView::Base).to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
-    # rubocop:enable Layout/LineLength
+    allow_any_instance_of(ActionView::Base)
+      .to receive(:parent)
+      .and_return(groups(:bluemlisalp_mitglieder))
     people(:mitglied).update_column(:sac_remark_national_office, "Bemerkung von Geschäfststelle")
   end
 
@@ -28,4 +28,20 @@ describe TableDisplays::People::SacRemarkNationalOfficeColumn, type: :helper do
     value: "Bemerkung von Geschäfststelle",
     permission: :manage_national_office_remark
   }
+
+  context "as sektion admin" do
+    let(:sektion_admin) do
+      Fabricate(
+        Group::SektionsMitglieder::Schreibrecht.sti_name.to_sym,
+        group: groups(:bluemlisalp_mitglieder)
+      ).person
+    end
+
+    # Regression spec from this column previously inheriting from PublicColumn with SektionMemberAdminVisible
+    it "is not visible to a section admin without manage_national_office_remark" do
+      display = described_class.new(Ability.new(sektion_admin), table: table, model_class: Person)
+
+      expect(display.value_for(people(:mitglied), :sac_remark_national_office)).to eq "fehlende Berechtigung"
+    end
+  end
 end

@@ -60,4 +60,20 @@ describe TableDisplays::People::SacRemarkSectionColumn, type: :helper do
     value: "Bemerkung von Sektion 5",
     permission: :manage_section_remarks
   }
+
+  context "as sektion admin" do
+    let(:sektion_admin) do
+      Fabricate(
+        Group::SektionsMitglieder::Schreibrecht.sti_name.to_sym,
+        group: groups(:bluemlisalp_mitglieder)
+      ).person
+    end
+
+    # Regression spec from this column previously inheriting from PublicColumn with SektionMemberAdminVisible
+    it "is not visible to a section admin without manage_national_office_remark" do
+      display = described_class.new(Ability.new(sektion_admin), table: table, model_class: Person)
+
+      expect(display.value_for(people(:mitglied), :sac_remark_section_1)).to eq "fehlende Berechtigung"
+    end
+  end
 end
