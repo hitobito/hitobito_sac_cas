@@ -15,5 +15,18 @@ module SacCas::AbilityDsl::Constraints
     def in_same_layer_group_if_active
       in_same_layer_group && at_least_one_group_not_deleted
     end
+
+    def in_tourenleiter_sektion
+      tourenleiter_sektion_ids = user.roles.select do |r|
+        [Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
+          Group::SektionsTourenUndKurse::Tourenleiter].include?(r.class)
+      end.map { |r| r.group.layer_group_id }
+
+      tourenleiter_sektion_ids.include?(event.groups.first.id)
+    end
+
+    def in_tourenleiter_sektion_for_own
+      in_tourenleiter_sektion && event.creator_id == user.id
+    end
   end
 end
