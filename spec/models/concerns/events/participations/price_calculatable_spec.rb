@@ -112,6 +112,14 @@ describe Events::Participations::PriceCalculatable do
         expect(participation.signup_subsidy).to be_zero
       end
     end
+
+    describe "#price_category_may_apply?" do
+      let(:person) { people(:mitglied) }
+
+      it "is true" do
+        expect(participation.price_category_may_apply?).to be_truthy
+      end
+    end
   end
 
   context "tour" do
@@ -186,6 +194,22 @@ describe Events::Participations::PriceCalculatable do
 
       it "returns zero" do
         expect(participation.signup_subsidy).to be_zero
+      end
+    end
+
+    describe "#price_category_may_apply?" do
+      let(:person) { people(:mitglied) }
+
+      it "is false if price category may not apply for event" do
+        event.special_may_apply = false
+
+        expect(participation.price_category_may_apply?).to be_falsey
+      end
+
+      it "is true if price category may apply for event" do
+        event.special_may_apply = true
+
+        expect(participation.price_category_may_apply?).to be_truthy
       end
     end
   end

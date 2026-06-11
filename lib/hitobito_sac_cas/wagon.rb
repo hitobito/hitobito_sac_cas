@@ -269,6 +269,9 @@ module HitobitoSacCas
       Event::ApplicationMarketController.prepend SacCas::Event::ApplicationMarketController
       Event::KindsController.prepend SacCas::Event::KindsController
       Event::KindCategoriesController.prepend SacCas::Event::KindCategoriesController
+      Event::ParticipationContactDatasController.prepend(
+        SacCas::Event::ParticipationContactDatasController
+      )
       Event::ListsController.prepend SacCas::Event::ListsController
       Event::ParticipationsController.prepend SacCas::Event::ParticipationsController
       Event::Participations::SendMailsController.prepend(
