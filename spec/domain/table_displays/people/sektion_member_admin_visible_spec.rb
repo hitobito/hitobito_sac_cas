@@ -27,10 +27,7 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
     travel_to(Date.new(2025, 3, 10))
   end
 
-  [
-    [Person, [:roles_with_ended_readable, {roles_unscoped: :group}]],
-    [Event::Participation, [:roles_with_ended_readable, participant: [{roles_unscoped: :group}]]]
-  ].each do |model_class, expected_includes|
+  [Person, Event::Participation].each do |model_class|
     context "table display on #{model_class}" do
       subject(:column) {
         TableDisplays::People::TerminateOnColumn.new(ability, model_class: model_class)
@@ -90,10 +87,6 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
         end
       end
 
-      it "only includes needed associations" do
-        expect(column.required_model_includes(:terminated_on)).to eq expected_includes
-      end
-
       describe "columns including or excluding" do
         [
           "beitrittsdatum",
@@ -109,12 +102,6 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
           "language",
           "membership_years",
           "nationality_j_s",
-          "sac_remark_national_office",
-          "sac_remark_section_1",
-          "sac_remark_section_2",
-          "sac_remark_section_3",
-          "sac_remark_section_4",
-          "sac_remark_section_5",
           "self_registration_reason",
           "terminate_on",
           "termination_reason",

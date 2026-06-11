@@ -6,10 +6,21 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class SacRemarkSectionColumn < TableDisplays::PublicColumn
+  class SacRemarkSectionColumn < TableDisplays::Column
+    def render(attr)
+      super do |target, target_attr|
+        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+      end
+    end
+
     def required_model_attrs(attr)
-      [:sac_remark_section_1, :sac_remark_section_2, :sac_remark_section_3, :sac_remark_section_4,
-        :sac_remark_section_5]
+      [
+        :sac_remark_section_1,
+        :sac_remark_section_2,
+        :sac_remark_section_3,
+        :sac_remark_section_4,
+        :sac_remark_section_5
+      ]
     end
 
     def required_permission(attr)

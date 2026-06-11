@@ -6,7 +6,13 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module TableDisplays::People
-  class SacRemarkNationalOfficeColumn < TableDisplays::PublicColumn
+  class SacRemarkNationalOfficeColumn < TableDisplays::Column
+    def render(attr)
+      super do |target, target_attr|
+        template.format_attr(target, target_attr) if target.respond_to?(target_attr)
+      end
+    end
+
     def required_model_attrs(attr)
       [:sac_remark_national_office]
     end

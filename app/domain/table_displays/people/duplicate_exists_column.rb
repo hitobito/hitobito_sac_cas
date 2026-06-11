@@ -13,6 +13,10 @@ module TableDisplays::People
       end
     end
 
+    def required_model_includes(attr)
+      [:person_duplicates_as_p1, :person_duplicates_as_p2]
+    end
+
     def required_permission(attr)
       :show
     end
@@ -24,7 +28,8 @@ module TableDisplays::People
     end
 
     def duplicate_exists(person)
-      person.person_duplicates.reject(&:ignore).any? ? I18n.t(:"global.yes") : I18n.t(:"global.no")
+      (person.person_duplicates_as_p1 + person.person_duplicates_as_p2).reject(&:ignore).any? ?
+        I18n.t(:"global.yes") : I18n.t(:"global.no")
     end
   end
 end

@@ -18,7 +18,7 @@ module TableDisplays::People
     end
 
     def required_model_includes(attr)
-      [:roles_with_ended_readable]
+      [:groups, :roles_with_ended_readable]
     end
 
     def render(attr)
