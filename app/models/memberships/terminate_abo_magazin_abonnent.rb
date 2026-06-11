@@ -89,7 +89,7 @@ class Memberships::TerminateAboMagazinAbonnent
       .where(person_id: person.id)
       .where(link: role.group)
       .where(state: :open)
-      .where(year: now.year..now.next_year.year)
+      .where(year: now.year..)
       .select(&:cancellable?)
   end
 
