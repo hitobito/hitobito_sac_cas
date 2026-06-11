@@ -21,7 +21,7 @@ describe "group edit page" do
         fill_in "Festnetz", with: "0441234567"
         fill_in "Mobil", with: "0791234567"
         click_button "Speichern"
-        expect(page).to have_text(/Gruppe.*wurde erfolgreich aktualisiert./)
+        expect(page).to have_text(/Mitglieder.*wurde erfolgreich aktualisiert./)
       end.to change { PhoneNumber.count }.by(2)
         .and change { group.reload.phone_number_landline&.number }
         .from(nil).to("+41 44 123 45 67")
@@ -38,7 +38,7 @@ describe "group edit page" do
           with: "+41 44 123 45 67")
         fill_in "Festnetz", with: "+41 44 765 43 21"
         click_button "Speichern", match: :first
-        expect(page).to have_text(/Gruppe.*wurde erfolgreich aktualisiert./)
+        expect(page).to have_text(/Mitglieder.*wurde erfolgreich aktualisiert./)
       end.to change { PhoneNumber.count }.by(0)
         .and change { group.reload.phone_number_landline&.number }
         .from("+41 44 123 45 67").to("+41 44 765 43 21")
@@ -57,7 +57,7 @@ describe "group edit page" do
         fill_in "Festnetz", with: ""
         fill_in "Mobil", with: ""
         click_button "Speichern", match: :first
-        expect(page).to have_text(/Gruppe.*wurde erfolgreich aktualisiert./)
+        expect(page).to have_text(/Mitglieder.*wurde erfolgreich aktualisiert./)
       end.to change { PhoneNumber.count }.by(-2)
         .and change { group.reload.phone_number_landline&.number }
         .from("+41 44 123 45 67").to(nil)

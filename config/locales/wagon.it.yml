@@ -1600,16 +1600,21 @@ it:
         caption: Disconnettersi
       courses:
         signup_aside:
-          summary_title: Panoramica dei costi
-          summary_course_price: Costi del corso
-          summary_subsidy: "- Sovvenzione"
-          summary_total: Totale
+          summary_title: Kostenübersicht
+          summary_course_price: Kurskosten
+          summary_subsidy: "- Subvention"
+          summary_total: Total
         contact_data_aside:
-          contact_title: Domande sulla registrazione
+          contact_title: Fragen zur Anmeldung
           contact_text: |
-            Siamo raggiungibili durante i nostri orari di lavoro
-            Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
-
+            Du erreichst uns zu unseren Geschäftszeiten
+            Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
+      tours:
+        contact_data_aside:
+          contact_title: Kontakt
+        signup_aside:
+          summary_title: Kosten
+          price_total: Total
       popover_cancel_sac_cas:
         send_email: Inviare l’e-mail al/alla partecipante
         invoice_option: Fattura
