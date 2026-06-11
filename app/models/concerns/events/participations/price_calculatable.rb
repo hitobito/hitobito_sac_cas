@@ -32,6 +32,10 @@ module Events::Participations::PriceCalculatable
     is_a?(Event::Participation) ? subsidy.present? : participation.subsidy.present?
   end
 
+  def price_category_may_apply?
+    !event.tour? || event.possible_price_categories.include?(signup_price_category)
+  end
+
   private
 
   def course_price_category(subsidy)
