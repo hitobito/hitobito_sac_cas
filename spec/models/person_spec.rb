@@ -89,6 +89,27 @@ describe Person do
         expect(person).to be_valid
       end
     end
+
+    describe "canton" do
+      let(:person) { people(:mitglied) }
+
+      it "is valid if nil" do
+        person.canton = nil
+        expect(person).to be_valid
+      end
+
+      it "is valid if canton is present for swiss people" do
+        person.country = :ch
+        person.canton = :be
+        expect(person).to be_valid
+      end
+
+      it "invalid if canton is present for non swiss people" do
+        person.country = :de
+        person.canton = :be
+        expect(person).not_to be_valid
+      end
+    end
   end
 
   context "associations" do
