@@ -13,7 +13,7 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
   prepended do
     define_model_callbacks :summon
 
-    self.permitted_attrs += %i[subsidy adult_consent terms_and_conditions newsletter]
+    self.permitted_attrs += %i[adult_consent terms_and_conditions newsletter]
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter
@@ -85,8 +85,7 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
 
   def calculate_signup_price(permitted)
     if entry.new_record? && !params[:for_someone_else]
-      permitted[:subsidy] = false unless entry.subsidizable?
-      permitted[:price_category] = entry.signup_price_category(subsidy: permitted[:subsidy])
+      permitted[:price_category] = entry.signup_price_category
     end
     assign_price(permitted)
   end

@@ -470,22 +470,14 @@ describe Event::ParticipationsController do
       end
 
       context "pricing" do
-        before { event.update!(price_member: 30, price_regular: 50, price_subsidized: 10) }
+        before { event.update!(price_member: 30, price_regular: 50) }
 
         let(:participation) { assigns(:participation) }
 
         context "member" do
           let(:user) { people(:mitglied) }
 
-          it "sets subsidized price if requested" do
-            expect do
-              post :create, params: params.merge(event_participation: {subsidy: true})
-            end.to change { Event::Participation.count }.by(1)
-            expect(participation.price).to eq 10
-            expect(participation.price_category).to eq("price_subsidized")
-          end
-
-          it "sets member price if no subsidy requested" do
+          it "sets member price" do
             expect do
               post :create, params: params
             end.to change { Event::Participation.count }.by(1)

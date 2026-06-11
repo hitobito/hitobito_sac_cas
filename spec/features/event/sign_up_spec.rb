@@ -100,16 +100,7 @@ describe "Event Signup", :js do
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Subventionsbeitrag"
         expect(page).to have_no_text "- Subvention"
-        check "Subventionierten Preis von CHF 6.00 beantragen"
-        expect(page).to have_text "- Subvention"
         expect(page).to have_text "CHF 6"
-        first(:button, "Weiter").click
-        expect(page).to have_css ".stepwizard-step.is-current", text: "Zusammenfassung"
-        expect(page).to have_text "- Subvention"
-        first(:button, "Zurück").click
-        expect(page).to have_css ".stepwizard-step.is-current", text: "Subventionsbeitrag"
-        uncheck "Subventionierten Preis von CHF 6.00 beantragen"
-        expect(page).to have_no_text "- Subvention"
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Zusammenfassung"
         expect(page).to have_text admin.to_s

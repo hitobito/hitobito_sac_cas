@@ -6,18 +6,9 @@
 
 %p= t('.general_info')
 
-%div.mb-3{data: { controller: 'forwarder' }}
-
-  = f.input_field(:subsidy,
-      caption: t('.subsidy_field', amount: number_to_currency(entry.event.price_subsidized, unit: 'CHF', format: '%u %n')),
-      data: { action: 'forwarder#click' })
-
-  = button_tag(Event::Participation.human_attribute_name(:subsidy),
-      data: { forwarder_target: :click, turbo_frame: :course_signup_aside },
-      hidden: true)
-
 .well
   %h3= t('.detail_info_header')
 
   - link = link_to(t('.subsidy_link_label'), t('.subsidy_link_href'), target: :_blank)
-  %p= t('.detail_info_text', link: link).html_safe
+  - amount = number_to_currency(entry.event.price_subsidized, unit: 'CHF', format: '%u %n')
+  %p= t('.detail_info_text', link: link, amount: amount).html_safe
