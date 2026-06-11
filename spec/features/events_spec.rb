@@ -79,7 +79,7 @@ describe :events, js: true do
 
       expect do
         click_button("Speichern", match: :first)
-        expect(page).to have_content(/Anlass .* wurde erfolgreich aktualisiert./)
+        expect(page).to have_content(/Kurs .* wurde erfolgreich aktualisiert./)
         event.reload
       end
         .to change { event.price_member }.to(100.05)
