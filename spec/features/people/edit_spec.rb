@@ -7,15 +7,16 @@
 
 require "spec_helper"
 
-describe "person edit page" do
+describe "person edit page", js: true do
   let(:admin) { people(:admin) }
   let(:member) { people(:mitglied) }
+  let(:edit_path) { edit_group_person_path(group_id: member.group_ids.first, id: member.id) }
 
   before { sign_in(admin) }
 
   describe "required fields" do
     it "shows error that fields should be filled out" do
-      visit edit_group_person_path(group_id: member.group_ids.first, id: member.id)
+      visit edit_path
       fill_in "Nachname", with: ""
       fill_in "person[street]", with: ""
       click_button "Speichern", match: :first
@@ -24,10 +25,10 @@ describe "person edit page" do
     end
   end
 
-  describe "phone numbers", js: true do
+  describe "phone numbers" do
     it "can set phone numbers" do
       expect do
-        visit edit_group_person_path(group_id: member.group_ids.first, id: member.id)
+        visit edit_path
         fill_in "Festnetz", with: "0441234567"
         fill_in "Mobil", with: "0791234567"
         click_button "Speichern", match: :first
@@ -40,7 +41,7 @@ describe "person edit page" do
     it "can update phone numbers" do
       member.create_phone_number_landline!(number: "0441234567")
       expect do
-        visit edit_group_person_path(group_id: member.group_ids.first, id: member.id)
+        visit edit_path
         expect(page).to have_field("Festnetz",
           with: "+41 44 123 45 67")
         fill_in "Festnetz", with: "0447654321"
@@ -55,7 +56,7 @@ describe "person edit page" do
       member.create_phone_number_landline!(number: "0441234567")
       member.create_phone_number_mobile!(number: "0791234567")
       expect do
-        visit edit_group_person_path(group_id: member.group_ids.first, id: member.id)
+        visit edit_path
         expect(page).to have_field("Festnetz",
           with: "+41 44 123 45 67")
         expect(page).to have_field("Mobil",
@@ -69,6 +70,51 @@ describe "person edit page" do
         .from("+41 44 123 45 67").to(nil)
         .and change { member.reload.phone_number_mobile&.number }
         .from("+41 79 123 45 67").to(nil)
+    end
+  end
+
+  describe "canton" do
+    def select_country(name)
+      find("#person_country + .ts-wrapper .ts-control").click
+      find(".ts-dropdown-content .option", text: name).click
+    end
+
+    it "is visible on page load when country is switzerland" do
+      visit edit_path
+
+      expect(page).to have_css("[data-controller='conditional-visibility']")
+    end
+
+    it "is hidden on page load when country is not switzerland" do
+      member.update!(country: "DE", zip_code: 12345)
+
+      visit edit_path
+
+      expect(page).to have_css("[data-controller='conditional-visibility']", visible: false)
+    end
+
+    it "hides when country changes to non-swiss country and clears input values" do
+      member.update!(canton: "be")
+      visit edit_path
+
+      expect(find("#person_canton").value).to eq("be")
+      expect(page).to have_css("[data-controller='conditional-visibility']")
+
+      select_country("Deutschland")
+
+      expect(page).to have_css("[data-controller='conditional-visibility']", visible: false)
+      expect(find("#person_canton", visible: false).value).to eq("")
+    end
+
+    it "turns visible when country changes to switzerland" do
+      member.update!(country: "DE", zip_code: 12345)
+      visit edit_path
+
+      expect(page).to have_css("[data-controller='conditional-visibility']", visible: false)
+
+      select_country("Schweiz")
+
+      expect(page).to have_css("[data-controller='conditional-visibility']")
     end
   end
 end
