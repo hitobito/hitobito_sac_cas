@@ -80,6 +80,7 @@ Rails.application.routes.draw do
 
       namespace :export do
         post :sac_statistics, to: "sac_statistics#create"
+        post :sac_courses, to: "sac_courses#create"
       end
 
       resources :people, only: [] do

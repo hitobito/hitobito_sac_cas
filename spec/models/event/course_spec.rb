@@ -472,6 +472,13 @@ describe Event::Course do
         expect { course.update!(state: :ready) }
           .to_not change { participant.reload.state }
       end
+
+      it "resets closed_at date" do
+        course.update_columns(state: :closed, closed_at: 1.week.ago)
+
+        course.update!(state: :ready)
+        expect(course.closed_at).to be_nil
+      end
     end
   end
 
@@ -687,14 +694,15 @@ describe Event::Course do
     it "does not set participation state for assigned participations" do
       expect { course.update!(state: :closed) }
         .not_to change { course.participations.order(:state).pluck(:state) }
+      expect(course.closed_at).to be_within(10.seconds).of(Time.zone.now)
     end
 
     it "sets participation state to attended for summoned participations" do
       course.participations.update_all(state: :summoned)
       course.update!(state: :closed)
 
-      expect(course.participations.order(:state).pluck(:state)).to eq(["attended", "attended",
-        "attended", "attended"])
+      expect(course.participations.order(:state).pluck(:state))
+        .to eq(["attended", "attended", "attended", "attended"])
     end
 
     it "queues job for absent invoices for absent participants" do

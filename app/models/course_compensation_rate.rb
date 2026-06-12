@@ -30,10 +30,10 @@ class CourseCompensationRate < ApplicationRecord
   validate :assert_category_uniqueness_during_validity_period
 
   scope :list, -> {
-    # rubocop:todo Layout/LineLength
-    includes(course_compensation_category: [:translations]).order(valid_from: :DESC).order("course_compensation_categories.short_name ASC")
+    includes(course_compensation_category: [:translations])
+      .order(valid_from: :DESC)
+      .order("course_compensation_categories.short_name ASC")
   }
-  # rubocop:enable Layout/LineLength
   scope :at, ->(date) {
     where("(:date >= valid_from) AND (valid_to IS NULL OR valid_to >= :date)", date: date)
   }

@@ -6,7 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:sac_course, from: :course) do
-  kind_id { ActiveRecord::FixtureSet.identify(:ski_course) }
   number { sequence(:number, 10000) }
 end
 
@@ -45,4 +44,29 @@ end
 
 Fabricator(:sac_tour, from: :event, class_name: :"Event::Tour") do
   groups { [Group.all_types.detect { |t| t.event_types.include?(Event::Tour) }.first] }
+end
+
+Fabricator(:sac_published_tour, from: :sac_tour) do
+  transient :state
+
+  description { Faker::Lorem.words.join }
+  disciplines { [Event::Discipline.where.not(parent_id: nil).first] }
+  target_groups { [Event::TargetGroup.first] }
+  technical_requirements { [Event::TechnicalRequirement.where.not(parent_id: nil).first] }
+  fitness_requirement { Event::FitnessRequirement.first }
+  season { "summer" }
+  price_member { 10 }
+  price_regular { 20 }
+  price_special { 5 }
+  contact_id { ActiveRecord::FixtureSet.identify(:admin) }
+  application_opening_at { 18.months.ago }
+  application_closing_at { 16.months.ago }
+  maximum_participants { 20 }
+  minimum_participants { 5 }
+  before_create do |event|
+    event.dates.build(start_at: 12.months.ago) if event.dates.empty?
+  end
+  after_create do |event, transients|
+    event.update_column(:state, transients[:state] || :published)
+  end
 end
