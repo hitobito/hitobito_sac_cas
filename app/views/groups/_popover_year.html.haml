@@ -1,0 +1,20 @@
+-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
+#year_form
+  - if defined?(info) && info.present?
+    %p.alert.alert-info= info
+  - else
+    %p
+
+  = form_for(:export, url: url, method: :post, class: "form-horizontal") do |f|
+    .row.mb-2
+      = f.label :year, t(".year"), class: "col-3 col-form-label text-md-end pb-1 required"
+      .labeled.col-3
+        = f.number_field(:year,
+                          value: Date.current.year,
+                          class: "form-control form-control-sm col-2")
+
+    = form_buttons(f, submit_label: t('.download'), cancel_url: "#", toolbar_class: "offset-3")
