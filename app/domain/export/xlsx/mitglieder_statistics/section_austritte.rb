@@ -7,7 +7,8 @@
 
 class Export::Xlsx::MitgliederStatistics
   class SectionAustritte < Section
-    self.groupings = [:gender, :language, :age, :beitragskategorie, :termination_reason]
+    self.groupings = [:gender, :language, :age, :beitragskategorie, :termination_reason,
+      :membership_years]
 
     private
 

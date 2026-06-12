@@ -74,6 +74,12 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
     )
   end
 
+  it "groups by membership_years" do
+    expect(section.counts(:membership_years)).to eq(
+      {"0-1" => 0, "2-5" => 0, "6-25" => 7, "26-40" => 0, "41-49" => 0, "50+" => 0}
+    )
+  end
+
   context "in previous year" do
     let(:range) { Date.new(2022, 1, 1)..Date.new(2022, 12, 31) }
 
@@ -86,6 +92,12 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
     it "groups by beitragskategorie" do
       expect(section.counts(:beitragskategorie)).to eq(
         {"adult" => 1, "family_main" => 2, "family_adult" => 1, "family_child" => 3, "youth" => 0}
+      )
+    end
+
+    it "groups by membership_years" do
+      expect(section.counts(:membership_years)).to eq(
+        {"0-1" => 0, "2-5" => 3, "6-25" => 4, "26-40" => 0, "41-49" => 0, "50+" => 0}
       )
     end
   end
@@ -102,6 +114,12 @@ describe Export::Xlsx::MitgliederStatistics::SectionActive do
     it "groups by beitragskategorie" do
       expect(section.counts(:beitragskategorie)).to eq(
         {"adult" => 2, "family_main" => 1, "family_adult" => 1, "family_child" => 1, "youth" => 2}
+      )
+    end
+
+    it "groups by membership_years" do
+      expect(section.counts(:membership_years)).to eq(
+        {"0-1" => 0, "2-5" => 3, "6-25" => 4, "26-40" => 0, "41-49" => 0, "50+" => 0}
       )
     end
   end

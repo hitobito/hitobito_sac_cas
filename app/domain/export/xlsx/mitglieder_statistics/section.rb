@@ -15,6 +15,15 @@ class Export::Xlsx::MitgliederStatistics
       51..60,
       61..
     ]
+
+    MEMBERSHIP_YEARS_GROUPS = [
+      0..1,
+      2..5,
+      6..25,
+      26..40,
+      41..49,
+      50..
+    ]
     class_attribute :groupings
 
     attr_reader :group, :range, :relevant_role_types
@@ -70,6 +79,14 @@ class Export::Xlsx::MitgliederStatistics
       )
     end
 
+    def count_by_membership_years
+      counts = scope.group(membership_years_sql).count
+      MEMBERSHIP_YEARS_GROUPS.each_with_object({}) do |range, hash|
+        label = range.end ? "#{range.begin}-#{range.end}" : "#{range.begin}+"
+        hash[label] = counts.select { |k, v| range.include?(k) }.values.sum
+      end
+    end
+
     def count_by_group(column, values)
       counts = scope.group(column).count
       values.each_with_object({}) do |value, hash|
@@ -79,6 +96,14 @@ class Export::Xlsx::MitgliederStatistics
 
     def age_sql
       Person.sanitize_sql_array(["DATE_PART('YEAR', AGE(?, birthday))", reference_date])
+    end
+
+    def membership_years_sql
+      subquery = Person
+        .with_membership_years("people.membership_years", reference_date)
+        .where("people.id = roles.person_id")
+        .to_sql
+      "(#{subquery})"
     end
 
     def reference_date
