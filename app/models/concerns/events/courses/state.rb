@@ -44,6 +44,8 @@ module Events::Courses::State
     }
 
     before_save :adjust_application_state
+    before_save :set_closed_at, if: -> { state_changed?(to: :closed) }
+    before_save :clear_closed_at, if: -> { state_changed?(from: :closed) }
 
     after_update :summon_assigned_participants, if: -> {
       saved_change_to_state?(from: :assignment_closed, to: :ready)
@@ -194,6 +196,14 @@ module Events::Courses::State
     if application_closed? && application_closing_at && application_closing_at >= Time.zone.today
       self.state = "application_open"
     end
+  end
+
+  def set_closed_at
+    self.closed_at = Time.zone.now
+  end
+
+  def clear_closed_at
+    self.closed_at = nil
   end
 
   def inform_participants?

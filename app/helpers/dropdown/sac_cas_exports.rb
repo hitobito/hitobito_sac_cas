@@ -18,6 +18,7 @@ class Dropdown::SacCasExports < Dropdown::Base
 
   def init_items
     add_sac_statistics_item
+    add_sac_courses_item
     @items.sort_by!(&:label)
   end
 
@@ -29,6 +30,16 @@ class Dropdown::SacCasExports < Dropdown::Base
         model: People::Export::PeriodForm.new(group: group),
         url: template.group_export_sac_statistics_path(group),
         info: translate(:sac_statistics_info)
+      )
+    )
+  end
+
+  def add_sac_courses_item
+    add_item_with_popover(
+      translate(:sac_courses),
+      template.render(
+        "groups/popover_year",
+        url: template.group_export_sac_courses_path(group)
       )
     )
   end

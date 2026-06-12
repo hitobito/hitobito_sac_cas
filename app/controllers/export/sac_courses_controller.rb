@@ -6,15 +6,20 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Export
-  class SacStatisticsController < People::Export::PopoverExportableController
+  class SacCoursesController < People::Export::PopoverExportableController
+    def create
+      authorize_export!
+
+      export_in_background
+    end
+
     private
 
     def enqueue_job(filename)
-      Export::SacStatisticsExportJob.new(
+      Export::SacCoursesExportJob.new(
         current_person.id,
         filename,
-        entry.from,
-        entry.to
+        year
       ).enqueue!
     end
 
@@ -26,17 +31,16 @@ module Export
       group_path(group)
     end
 
-    def export_url
-      group_export_sac_statistics_path(group)
-    end
-
     def filename
       config = [
         translate("filename"),
-        entry.from.strftime("%Y%m%d"),
-        entry.to.strftime("%Y%m%d")
+        year
       ]
       "#{config.join("_")}-#{Date.current.strftime("%Y%m%d")}"
+    end
+
+    def year
+      params.require(:export).fetch(:year, Date.current.year).to_i
     end
   end
 end
