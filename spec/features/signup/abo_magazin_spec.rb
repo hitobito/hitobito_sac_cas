@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -33,6 +33,14 @@ describe "self_registration_abo_magazin", js: true do
     expect(page).to have_text "Preis pro Jahr"
   end
 
+  def visit_person_fields_step
+    visit group_self_registration_path(group_id: group.id)
+    expect_active_step "E-Mail"
+    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
+    click_on "Weiter"
+    expect_active_step "Personendaten"
+  end
+
   def complete_main_person_form
     choose "männlich"
     fill_in "Vorname", with: "Max"
@@ -57,6 +65,8 @@ describe "self_registration_abo_magazin", js: true do
     end
   end
 
+  def find_label(text) = find(:xpath, "//label[contains(text(), '#{text}')]")
+
   it "validates email address" do
     allow(Truemail).to receive(:valid?).with("max.muster@hitobito.example.com").and_return(false)
     visit group_self_registration_path(group_id: group.id)
@@ -67,13 +77,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "creates person" do
-    visit group_self_registration_path(group_id: group.id)
-    expect_active_step "E-Mail"
-    expect_shared_partial
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
-
-    expect_active_step "Personendaten"
+    visit_person_fields_step
     expect_shared_partial
     complete_main_person_form
     click_on "Weiter"
@@ -83,26 +87,42 @@ describe "self_registration_abo_magazin", js: true do
     end.to change { Person.count }.by(1)
   end
 
-  def find_label(text) = find(:xpath, "//label[contains(text(), '#{text}')]")
+  describe "company name visibility" do
+    it "hides company name field by default" do
+      visit_person_fields_step
+
+      expect(page).to have_field("Firmenname", visible: false)
+    end
+
+    it "shows company name field when company is checked" do
+      visit_person_fields_step
+
+      expect(find_label("Vorname")["class"]).to match "required"
+      expect(find_label("Nachname")["class"]).to match "required"
+      expect(find_label("Geburtsdatum")["class"]).to match "required"
+
+      check "Firma"
+
+      expect(page).to have_field("Firmenname")
+      expect(find_label("Firmenname")["class"]).to match "required"
+      expect(find_label("Vorname")["class"]).not_to match "required"
+      expect(find_label("Nachname")["class"]).not_to match "required"
+      expect(find_label("Geburtsdatum")["class"]).not_to match "required"
+
+      fill_in "Firmenname", with: "Acme Corp"
+      uncheck "Firma"
+
+      expect(page).to have_field("Firmenname", visible: false)
+      expect(page).to have_field("Firmenname", with: "", visible: false)
+    end
+  end
 
   it "creates person with company flag" do
-    visit group_self_registration_path(group_id: group.id)
-    expect_active_step "E-Mail"
-    expect_shared_partial
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    visit_person_fields_step
     complete_main_person_form
-
-    expect(find_label("Vorname")["class"]).to match "required"
-    expect(find_label("Nachname")["class"]).to match "required"
-    expect(find_label("Geburtsdatum")["class"]).to match "required"
 
     check "Firma"
 
-    expect(find_label("Firmenname")["class"]).to match "required"
-    expect(find_label("Vorname")["class"]).not_to match "required"
-    expect(find_label("Nachname")["class"]).not_to match "required"
-    expect(find_label("Geburtsdatum")["class"]).not_to match "required"
     fill_in "Vorname", with: ""
     fill_in "Nachname", with: ""
     fill_in "Geburtsdatum", with: ""
@@ -116,9 +136,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "subscribes to mailinglist" do
-    visit group_self_registration_path(group_id: group.id)
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    visit_person_fields_step
     complete_main_person_form
     click_on "Weiter"
 
@@ -131,9 +149,7 @@ describe "self_registration_abo_magazin", js: true do
   end
 
   it "opts out of mailinglist" do
-    visit group_self_registration_path(group_id: group.id)
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_on "Weiter"
+    visit_person_fields_step
     complete_main_person_form
     click_on "Weiter"
 
@@ -153,9 +169,7 @@ describe "self_registration_abo_magazin", js: true do
 
   shared_examples "birthday validation" do |description, birthday, expected_step|
     it "handles #{description} person" do
-      visit group_self_registration_path(group_id: group.id)
-      fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-      click_on "Weiter"
+      visit_person_fields_step
       complete_main_person_form
       fill_in "Geburtsdatum", with: birthday
       click_on "Weiter"
@@ -173,9 +187,7 @@ describe "self_registration_abo_magazin", js: true do
 
   it "selects birthday via date picker" do
     hundred_years_ago = Time.zone.today.year - 100
-    visit group_self_registration_path(group_id: group)
-    fill_in "E-Mail", with: "max.muster@hitobito.example.com"
-    click_button "Weiter"
+    visit_person_fields_step
     fill_in "Geburtsdatum", with: "01.01.2024"
     find("label", text: "Geburtsdatum").click
     expect(page).to have_css(".ui-datepicker-year option:nth-of-type(1)", text: hundred_years_ago)
@@ -203,8 +215,7 @@ describe "self_registration_abo_magazin", js: true do
     sign_in(people(:mitglied))
     Group::AboMagazin::Abonnent.create!(person: people(:mitglied), group: group)
     visit group_self_registration_path(group_id: group)
-    # rubocop:todo Layout/LineLength
-    expect(page).to have_content("Du bist bereits Empfänger von diesem Magazin. Daher kannst du das Magazin kein zweites mal bestellen.")
-    # rubocop:enable Layout/LineLength
+    expect(page).to have_content("Du bist bereits Empfänger von diesem Magazin. " \
+      "Daher kannst du das Magazin kein zweites mal bestellen.")
   end
 end

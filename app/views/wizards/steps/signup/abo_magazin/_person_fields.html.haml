@@ -4,12 +4,13 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for() do |form|
-  %div{data: { controller: 'form-field-toggle'}}
+  %div{data: { controller: 'field-visibility', "field-visibility-dependent-id-value": "company_checkbox_group", "field-visibility-show-when-value": "1", "field-visibility-clear-inputs-value": "true" }}
     = form.labeled_gender_inline_radio_buttons
     = form.labeled_input_field :first_name
     = form.labeled_input_field :last_name
-    = form.labeled_boolean_field :company, data: { action: 'form-field-toggle#toggle' }
-    %div{data: { 'form-field-toggle-target': 'toggle' }, class: form.object.company ? "" : "hidden"}
+    %div{id: "company_checkbox_group"}
+      = form.labeled_boolean_field :company
+    %div{data: { 'field-visibility-target': 'container' }, class: form.object.company ? "" : "hidden"}
       = form.labeled_input_field :company_name
     = form.labeled_date_field :birthday, placeholder: t('global.date_field_placeholder'), yearRange: '-100:+0', data: { action: 'focusout->forwarder#click' }
     = render 'contactable/address_fields', f: form, country_data: { action: 'forwarder#click' }

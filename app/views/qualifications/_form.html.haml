@@ -5,15 +5,17 @@
 
 = entry_form(buttons_bottom: false,
              cancel_url: group_person_path(@group, @person),
-             data: { controller: 'form-field-toggle' }) do |f|
+             data: { controller: 'field-visibility',
+                     "field-visibility-dependent-id-value": "qualification_qualification_kind_id",
+                     "field-visibility-show-when-data-value": "visibility" }) do |f|
 
   = f.labeled(:qualification_kind_id) do
     = select_tag("qualification[qualification_kind_id]",
                  options_for_select(@qualification_kinds.map { [_1.to_s, _1.id, { data: { visibility: _1.finish_at_manually_editable? } }] },
                                     entry.qualification_kind_id),
                  class: 'form-select form-select-sm mw-100 mw-md-60ch',
-                 prompt: ta(:please_select),
-                 data: { action: 'form-field-toggle#toggle', 'form-field-toggle-target': 'select' })
+                 prompt: ta(:please_select))
   = f.labeled_input_fields(:origin, :start_at)
-  %span.hidden{ data: { 'form-field-toggle-target': 'toggle' } }
+  %span{ class: entry.qualification_kind&.finish_at_manually_editable? ? "" : "hidden",
+         data: { 'field-visibility-target': 'container' } }
     = f.labeled_input_field(:finish_at)

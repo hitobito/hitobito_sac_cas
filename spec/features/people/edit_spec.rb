@@ -82,7 +82,7 @@ describe "person edit page", js: true do
     it "is visible on page load when country is switzerland" do
       visit edit_path
 
-      expect(page).to have_css("[data-controller='conditional-visibility']")
+      expect(page).to have_css("[data-field-visibility-target='container']")
     end
 
     it "is hidden on page load when country is not switzerland" do
@@ -90,7 +90,7 @@ describe "person edit page", js: true do
 
       visit edit_path
 
-      expect(page).to have_css("[data-controller='conditional-visibility']", visible: false)
+      expect(page).to have_css("[data-field-visibility-target='container']", visible: false)
     end
 
     it "hides when country changes to non-swiss country and clears input values" do
@@ -98,11 +98,11 @@ describe "person edit page", js: true do
       visit edit_path
 
       expect(find("#person_canton").value).to eq("be")
-      expect(page).to have_css("[data-controller='conditional-visibility']")
+      expect(page).to have_css("[data-field-visibility-target='container']")
 
       select_country("Deutschland")
 
-      expect(page).to have_css("[data-controller='conditional-visibility']", visible: false)
+      expect(page).to have_css("[data-field-visibility-target='container']", visible: false)
       expect(find("#person_canton", visible: false).value).to eq("")
     end
 
@@ -110,11 +110,11 @@ describe "person edit page", js: true do
       member.update!(country: "DE", zip_code: 12345)
       visit edit_path
 
-      expect(page).to have_css("[data-controller='conditional-visibility']", visible: false)
+      expect(page).to have_css("[data-field-visibility-target='container']", visible: false)
 
       select_country("Schweiz")
 
-      expect(page).to have_css("[data-controller='conditional-visibility']")
+      expect(page).to have_css("[data-field-visibility-target='container']")
     end
   end
 end

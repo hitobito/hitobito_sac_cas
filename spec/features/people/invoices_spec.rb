@@ -39,21 +39,15 @@ describe "people invoices page", js: true do
       it "shows an alert message" do
         visit new_group_person_membership_invoice_path(group_id: person.groups.first.id,
           person_id: person.id)
-        # rubocop:todo Layout/LineLength
-        # rubocop:todo Layout/LineLength
-        expect(page).to have_css(".alert-warning", text: "Diese Person verfügt über keine eigene Mitgliedschaftsrechnung. " \
-                                "Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.")
-        # rubocop:enable Layout/LineLength
-        # rubocop:enable Layout/LineLength
+        expect(page).to have_css(".alert-warning", text: "Diese Person verfügt über keine eigene" \
+          " Mitgliedschaftsrechnung. Die Gebühren werden allenfalls mit der Rechnung einer anderen Person verrechnet.")
       end
     end
 
     context "double submit" do
       let(:person) { people(:mitglied) }
 
-      # rubocop:todo Layout/LineLength
       it "submits invoice on second submit when first reference date was not in active membership range" do
-        # rubocop:enable Layout/LineLength
         person.sac_membership.stammsektion_role.update_columns(terminated: true,
           end_on: Time.zone.local(2024, 12, 31))
 
@@ -67,6 +61,35 @@ describe "people invoices page", js: true do
           click_button "Rechnung erstellen"
           expect(page).to have_text "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
         end
+      end
+    end
+
+    context "field visibility" do
+      let(:person) { people(:mitglied) }
+
+      before do
+        visit new_group_person_membership_invoice_path(group_id: person.groups.first.id,
+          person_id: person.id)
+      end
+
+      it "shows discount section and hides manual fee section by default" do
+        expect(page).to have_field("50%")
+        expect(page).not_to have_text("Manuelle Rechnungsposten")
+      end
+
+      it "shows manual fee section and hides discount when manual positions is selected" do
+        choose "Manuelle Differenzrechnung", allow_label_click: true
+
+        expect(page).not_to have_field("50%")
+        expect(page).to have_text("Manuelle Rechnungsposten")
+      end
+
+      it "restores discount section when switching back from manual positions" do
+        choose "Manuelle Differenzrechnung", allow_label_click: true
+        choose "MV-Jahresrechnung", allow_label_click: true
+
+        expect(page).to have_field("50%")
+        expect(page).not_to have_text("Manuelle Rechnungsposten")
       end
     end
   end
@@ -92,15 +115,11 @@ describe "people invoices page", js: true do
         expect(page).to have_text "Die Alpen Rechnung erstellen"
         choose "Les Alpes FR", allow_label_click: true
         click_button "Rechnung erstellen"
-        # rubocop:todo Layout/LineLength
         expect(page).to have_text "Rechnung Les Alpes FR #{abo_group_fr.roles.first.end_on.next_day.year}"
-        # rubocop:enable Layout/LineLength
         expect(ExternalInvoice.last.link).to eq abo_group_fr
       end
 
-      # rubocop:todo Layout/LineLength
-      it "updates issued_at from end_on + 1.day of abonnent role to start_on of neuanmeldungs role when selecting neuanmeldung" do
-        # rubocop:enable Layout/LineLength
+      it "updates issued_at of role to start_on of neuanmeldungs role when selecting neuanmeldung" do
         # create second abo role for french magazine
         abo_group_fr = Fabricate(Group::AboMagazin.sti_name, parent: groups(:abo_magazine),
           name: "Les Alpes FR")
@@ -136,10 +155,8 @@ describe "people invoices page", js: true do
 
       it "shows an alert message" do
         visit new_group_person_abo_magazin_invoice_path(group_id: group, person_id: person.id)
-        expect(page).to have_css(".alert-warning",
-          # rubocop:todo Layout/LineLength
-          text: "Diese Person ist kein/e Abonnent/in eines Magazin, daher kann keine Abo Rechnung erstellt werden.")
-        # rubocop:enable Layout/LineLength
+        expect(page).to have_css(".alert-warning", text: "Diese Person ist " \
+          "kein/e Abonnent/in eines Magazin, daher kann keine Abo Rechnung erstellt werden.")
       end
     end
   end

@@ -8,5 +8,6 @@
 class AddCantonToPerson < ActiveRecord::Migration[8.0]
   def change
     add_column :people, :canton, :string, null: true
+    Migrations::SetCantonFromZipCodeJob.new.enqueue!
   end
 end

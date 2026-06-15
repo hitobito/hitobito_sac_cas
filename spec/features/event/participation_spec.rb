@@ -157,6 +157,24 @@ describe Event::Participation, js: true do
           expect(page).to have_content "Edmund Hillary wurde abgemeldet."
         end.not_to have_enqueued_mail(Event::CourseParticipationMailer, :canceled)
       end
+
+      describe "invoice option visibility" do
+        it "hides custom price field by default" do
+          within(".popover") do
+            expect(page).to have_field("Betrag", visible: false)
+          end
+        end
+
+        it "shows custom price field when custom option is selected" do
+          within(".popover") do
+            choose "Annullationskostenrechnung mit einem benutzerdefinierten Betrag"
+            expect(page).to have_field("Betrag")
+
+            choose "Annullationskostenrechnung gem. Reglement"
+            expect(page).to have_field("Betrag", visible: false)
+          end
+        end
+      end
     end
 
     context "summon" do
