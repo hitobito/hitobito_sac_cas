@@ -26,12 +26,13 @@ class Event::Tour < Event
   FREIGABE_PENDING_STATES = %w[draft review].freeze
   CANCELED_REASONS = %w[minimum_participants no_leader weather].freeze
 
-  PRICE_ATTRIBUTES = %i[price_member price_regular price_special]
+  PRICE_ATTRIBUTES = %i[price_special price_member price_regular]
 
   self.used_attributes += [:state, :display_booking_info, :minimum_participants,
     :summit, :ascent, :descent, :duration, :maps, :season, :alternative_route,
     :additional_info, :price_description, :internal_comment, :minimum_age, :maximum_age,
-    :tourenportal_link, :subito, *PRICE_ATTRIBUTES]
+    :tourenportal_link, :subito, :special_may_apply, :member_may_apply, :regular_may_apply,
+    *PRICE_ATTRIBUTES]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
     :signature, :signature_confirmation, :signature_confirmation_text, :guest_limit, :cost]
 
@@ -117,7 +118,14 @@ class Event::Tour < Event
   validates :description, :disciplines, :target_groups, :technical_requirements,
     :fitness_requirement, :season,
     presence: {if: -> { state_reached?(:review) }}
-  validates :price_special, :price_member, :price_regular, :contact_id,
+
+  PRICE_ATTRIBUTES.each do |attribute|
+    validates attribute, presence: {if: -> {
+      state_reached?(:published) && !canceled? && possible_price_categories.include?(attribute)
+    }}
+  end
+
+  validates :contact_id,
     :application_opening_at, :application_closing_at,
     :maximum_participants, :minimum_participants,
     presence: {if: -> { state_reached?(:published) && !canceled? }}
@@ -171,6 +179,10 @@ class Event::Tour < Event
 
   def self_approved?
     approvals.any? && approvals.none? { |a| a.freigabe_komitee_id.present? }
+  end
+
+  def possible_price_categories
+    PRICE_ATTRIBUTES.select { public_send(:"#{_1.to_s.remove("price_")}_may_apply?") }
   end
 
   private
