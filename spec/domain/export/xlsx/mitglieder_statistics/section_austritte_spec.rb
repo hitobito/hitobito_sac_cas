@@ -59,6 +59,12 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
         end
       )
     end
+
+    it "groups by membership_years" do
+      expect(section.counts(:membership_years)).to eq(
+        {"0-1" => 0, "2-5" => 0, "6-25" => 3, "26-40" => 0, "41-49" => 0, "50+" => 0}
+      )
+    end
   end
 
   describe "#scope" do
@@ -79,7 +85,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       zusatzsektion_person = create_role(group: matterhorn, start_on: "3.2.2000").person
       zusatzsektion = create_role("MitgliedZusatzsektion", end_on: "30.6.2025", person: zusatzsektion_person)
 
-      stammsektions_wechsel = create_role(start_on: "3.2.2000", end_on: "30.6.2025")
+      stammsektions_wechsel = create_role(start_on: "3.2.1980", end_on: "30.6.2025")
       create_role(group: matterhorn, start_on: "1.7.2025", person: stammsektions_wechsel.person)
 
       bk_change_person = create_role(start_on: "1.1.2024", end_on: "31.12.2024").person
@@ -87,7 +93,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       bk_change = create_role(start_on: "1.1.2025", end_on: "30.12.2025", beitragskategorie: :family,
         person: bk_change_person)
 
-      sac_re_entry = create_role("Mitglied", start_on: "3.2.2000", end_on: "1.6.2025")
+      sac_re_entry = create_role("Mitglied", start_on: "3.2.1990", end_on: "1.6.2025")
       create_role(group: matterhorn, start_on: "1.9.2025", person: sac_re_entry.person)
 
       section_re_entry_person = create_role(group: matterhorn, start_on: "3.2.2000").person
@@ -143,6 +149,10 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
 
       expect(section.counts(:beitragskategorie)).to eq(
         {"adult" => 7, "family_main" => 0, "family_adult" => 0, "family_child" => 0, "youth" => 0}
+      )
+
+      expect(section.counts(:membership_years)).to eq(
+        {"0-1" => 0, "2-5" => 0, "6-25" => 5, "26-40" => 1, "41-49" => 1, "50+" => 0}
       )
 
       expect(scope_for("1.8.2025-30.12.2025")).to eq [bk_change]
@@ -316,6 +326,10 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
 
         expect(section.counts(:beitragskategorie)).to eq(
           {"adult" => 4, "family_main" => 0, "family_adult" => 0, "family_child" => 0, "youth" => 0}
+        )
+
+        expect(section.counts(:membership_years)).to eq(
+          {"0-1" => 0, "2-5" => 0, "6-25" => 4, "26-40" => 0, "41-49" => 0, "50+" => 0}
         )
 
         expect(scope_for("1.8.2025-30.12.2025")).to eq [bk_change]
