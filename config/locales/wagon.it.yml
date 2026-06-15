@@ -1602,7 +1602,6 @@ it:
         signup_aside:
           summary_title: Kostenübersicht
           summary_course_price: Kurskosten
-          summary_subsidy: "- Subvention"
           summary_total: Total
         contact_data_aside:
           contact_title: Fragen zur Anmeldung
@@ -1639,14 +1638,13 @@ it:
         summary_title: Riepilogo
       subsidy_step:
         title: Richiedere un contributo di sovvenzione
-        subsidy_field: "Richiedere un prezzo sovvenzionato di %{amount}"
         subsidy_link_label: Richiesta di sovvenzione
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
         general_info: >-
           In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
         detail_info_text: >-
-          La registrazione con la firma del responsabile delle escursioni conferma la tariffa per le guide CAS attiva o futura e ti dà diritto al prezzo sovvenzionato del corso. Ti preghiamo eventualmente di compilare il modulo %{link}e di restituircelo il prima possibile, ma <b>non più tardi di 5 settimane prima dell’inizio del corso</b>.
+          Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.
       summary_step:
         annulation_remarks: |
           Si consiglia di stipulare un’assicurazione contro l’annullamento. In caso di ritiro prima dell’inizio del corso, i clienti dovranno sostenere i seguenti costi di recesso:

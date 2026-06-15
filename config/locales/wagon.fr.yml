@@ -1604,7 +1604,6 @@ fr:
         signup_aside:
           summary_title: Kostenübersicht
           summary_course_price: Kurskosten
-          summary_subsidy: "- Subvention"
           summary_total: Total
         contact_data_aside:
           contact_title: Fragen zur Anmeldung
@@ -1641,14 +1640,13 @@ fr:
         summary_title: Résumé
       subsidy_step:
         title: Demander une subvention
-        subsidy_field: "Demander un prix subventionné de %{amount} "
         subsidy_link_label: Demande de subvention
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
         general_info: >-
           En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
         detail_info_text: >-
-          Une inscription signée par le·la préposé·e aux courses confirme le taux actif ou futur du moniteur ou de la monitrice CAS et donne droit au prix subventionné du cours. Nous te prions, le cas échéant, de remplir le formulaire %{link} et de nous le <b>retourner</b> le plus rapidement possible, mais <b>au plus tard 5 semaines avant le début du cours</b>.
+          Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.
       summary_step:
         annulation_remarks: |
           Il est recommandé de souscrire une assurance pour frais d’annulation. Les frais d’annulation suivants seraient assumés par le client/la cliente en cas d’annulation avant le début du cours:

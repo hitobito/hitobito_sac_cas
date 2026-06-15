@@ -1534,7 +1534,6 @@ en:
         signup_aside:
           summary_title: Kostenübersicht
           summary_course_price: Kurskosten
-          summary_subsidy: "- Subvention"
           summary_total: Total
         contact_data_aside:
           contact_title: Fragen zur Anmeldung
@@ -1571,14 +1570,13 @@ en:
         summary_title: Summary
       subsidy_step:
         title: Apply for a subsidy
-        subsidy_field: "Subventionierten Preis von %{amount} beantragen"
         subsidy_link_label: Subsidy application
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
           As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this.
         detail_info_header: "What do I have to do to apply for a subsidy?"
         detail_info_text: >-
-          Registration with the signature of the tour leader confirms that you are an active or future SAC leader and entitles you to the subsidized course price. If necessary, please complete the form %{link} and <b>return</b> it <b>to</b> us as soon as possible, but <b>no later than 5 weeks before the start of the course</b>.
+          Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.
       summary_step:
         annulation_remarks: |
           Cancellation insurance is recommended. The following cancellation costs would be borne by the customer if he/she cancels before the start of the course:
