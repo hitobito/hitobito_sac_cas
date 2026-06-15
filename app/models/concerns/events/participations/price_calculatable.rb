@@ -24,6 +24,10 @@ module Events::Participations::PriceCalculatable
     event.course? && event.price_subsidized.present? && sac_membership_active?
   end
 
+  def price_category_may_apply?
+    !event.tour? || event.possible_price_categories.include?(signup_price_category)
+  end
+
   private
 
   def course_price_category

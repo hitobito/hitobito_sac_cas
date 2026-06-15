@@ -83,25 +83,47 @@ describe Event::Tour do
       it_behaves_like "readonly for draft attributes", attribute: :technical_requirements
     end
 
-    describe "price_regular" do
-      it "may be empty in state approved" do
-        tour.state = :approved
-        tour.price_regular = nil
-        expect(tour).to be_valid
+    [:price_member, :price_regular, :price_special].each do |category|
+      describe category do
+        it "may be empty in state approved" do
+          tour.state = :approved
+          tour.send(:"#{category}=", nil)
+          expect(tour).to be_valid
+        end
+
+        it "may be empty in state canceled" do
+          tour.update!(state: :approved)
+          tour.state = :canceled
+          tour.send(:"#{category}=", nil)
+          expect(tour).to be_valid
+        end
+
+        it "may be empty in state canceled if it doesn't apply" do
+          tour.update!(state: :approved)
+          tour.state = :canceled
+          tour.send(:"#{category.to_s.remove("price_")}_may_apply=", false)
+          tour.send(:"#{category}=", nil)
+          expect(tour).to be_valid
+        end
+
+        it "must be present in state published if it applies" do
+          tour.state = :published
+          tour.send(:"#{category}=", nil)
+          expect(tour).not_to be_valid
+          expect(tour.errors[category]).to eq ["muss ausgefüllt werden"]
+        end
+      end
+    end
+
+    describe "possible_price_categories" do
+      it "returns all price categories that may apply" do
+        expect(tour.possible_price_categories).to match_array [:price_regular, :price_special, :price_member]
       end
 
-      it "may be empty in state canceled" do
-        tour.update!(state: :approved)
-        tour.state = :canceled
-        tour.price_regular = nil
-        expect(tour).to be_valid
-      end
+      it "does not return price category that may not apply" do
+        tour.member_may_apply = false
 
-      it "must be present in state published" do
-        tour.state = :published
-        tour.price_regular = nil
-        expect(tour).not_to be_valid
-        expect(tour.errors[:price_regular]).to eq ["muss ausgefüllt werden"]
+        expect(tour.possible_price_categories).to match_array [:price_regular, :price_special]
       end
     end
 

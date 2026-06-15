@@ -1,12 +1,23 @@
--#  Copyright (c) 2012-2015, Pfadibewegung Schweiz. This file is part of
+-#  Copyright (c) 2026, Hitobito AG. This file is part of
 -#  hitobito_pbs and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito_pbs.
+-#  https://github.com/hitobito/hitobito_sac_cas.
 
 #prices.tab-pane
-  - if course? || tour?
-    = field_set_tag do
+  = field_set_tag do
+    - if course?
       - entry.used_attributes(*entry.object.class::PRICE_ATTRIBUTES).each do |price_attribute|
-        = f.labeled_input_field(price_attribute, label: price_category_label(entry, price_attribute), addon: t('global.currency'), type: 'number', step: 0.01)
-  - if tour?
-    = f.labeled_input_field(:price_description)
+        = f.labeled_input_field(price_attribute, label: price_category_label(entry, price_attribute), addon: t("global.currency"), type: "number", step: 0.05)
+
+    - if tour?
+      - entry.object.class::PRICE_ATTRIBUTES.each do |price_category|
+        - may_apply_attr = :"#{price_category.to_s.remove("price_")}_may_apply"
+        = f.labeled(price_category, t("activerecord.attributes.event/tour.#{price_category}")) do
+          %div{data: { controller: "disable-toggle" }, class: "d-flex align-items-center gap-2"}
+            = f.with_addon(t("global.currency"),
+              f.input_field(price_category, type: "number", step: 0.05,
+                                            data: { "disable-toggle-target" => "toggled" },
+                                            disabled: !entry.possible_price_categories.include?(price_category)))
+            = f.input_field(may_apply_attr, caption: t("activerecord.attributes.event/tour.#{may_apply_attr}"), data: { action: "disable-toggle#toggle" })
+
+      = f.labeled_input_field(:price_description)
