@@ -17,7 +17,9 @@ describe Export::Tabular::People::Jubilare do
 
   describe "#data_rows" do
     it "does not do N+1 queries" do
-      expect_query_count { tabular.data_rows.to_a }.to eq 7
+      expect do
+        tabular.data_rows.to_a
+      end.to make(7).db_queries
     end
 
     it "contains all attributes" do

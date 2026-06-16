@@ -159,9 +159,9 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
       create_role("adult", person: people(:familienmitglied2), start_on: "1.1.2000", end_on: "31.12.2014")
       tabular = build("1.1.2015-31.12.2015")
 
-      expect_query_count do
+      expect do
         expect(tabular.data_rows).to have(3).items
-      end.to eq(5)
+      end.to make(5).db_queries
     end
 
     describe "common" do

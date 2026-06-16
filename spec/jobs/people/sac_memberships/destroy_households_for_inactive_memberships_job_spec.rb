@@ -23,7 +23,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
     let(:inactive_family_people) { subject.inactive_family_people(sac_family_main_person: true) }
 
     it "makes only 1 query" do
-      expect_query_count { inactive_family_people.to_a }.to eq 1
+      expect { inactive_family_people.to_a }.to make(1).db_queries
     end
 
     context "with ended stammsektion roles" do

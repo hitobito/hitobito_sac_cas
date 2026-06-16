@@ -49,8 +49,11 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
 
     it "only makes 5 database queries" do
-      # SELECT in batches (2x) and SELECT for beitragskategorie change (2x) and UPDATE all (1x)
-      expect_query_count { extend_roles }.to eq(5)
+      expect { extend_roles }.to make(5).db_queries.with(
+        SQL: 2, # SELECT in batches
+        "Role Pluck": 2, # SELECT for beitragskategorie change
+        "Role Update All": 1
+      )
     end
 
     context "with multiple batches and various roles" do
@@ -121,7 +124,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     let(:count) { (prolongation_date.year == Time.zone.today.year) ? 3 : 5 }
 
     it "doesnt extend the role" do
-      expect { expect_query_count { extend_roles }.to eq(count) }.not_to change {
+      expect { expect { extend_roles }.to make(count).db_queries }.not_to change {
         person_mitglied_role.reload.end_on
       }
     end

@@ -255,9 +255,9 @@ describe Export::Tabular::People::Eintritte do
     it "does not do N+1 queries" do
       tabular = build("1.1.2015-31.12.2015")
 
-      expect_query_count do
+      expect do
         expect(tabular.data_rows).to have(4).items
-      end.to eq 3
+      end.to make(3).db_queries
     end
 
     describe "common" do
