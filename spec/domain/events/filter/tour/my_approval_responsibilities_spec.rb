@@ -17,7 +17,7 @@ describe Events::Filter::Tour::MyApprovalResponsibilities do
 
   subject(:filter) { described_class.new(:my_approval_responsibilities, {active: "1"}) }
 
-  before { Auth.current_person = person }
+  before { allow(Auth).to receive(:current_person).and_return(person) }
 
   def filtered
     filter.apply(base_scope)
