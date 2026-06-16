@@ -64,14 +64,6 @@ class Export::Xlsx::MitgliederStatistics
       count_by_group(:language, Person::LANGUAGES.keys.map(&:to_s))
     end
 
-    def count_by_age
-      counts = scope.group(age_sql).count
-      AGE_GROUPS.each_with_object({}) do |range, hash|
-        label = range.end ? "#{range.begin}-#{range.end}" : "#{range.begin}+"
-        hash[label] = counts.select { |k, v| range.include?(k) }.values.sum
-      end
-    end
-
     def count_by_beitragskategorie
       count_by_group(
         BeitragskategorieValue.new(reference_date).sql,
@@ -79,11 +71,19 @@ class Export::Xlsx::MitgliederStatistics
       )
     end
 
+    def count_by_age
+      count_by_range(age_sql, AGE_GROUPS)
+    end
+
     def count_by_membership_years
-      counts = scope.group(membership_years_sql).count
-      MEMBERSHIP_YEARS_GROUPS.each_with_object({}) do |range, hash|
+      count_by_range(membership_years_sql, MEMBERSHIP_YEARS_GROUPS)
+    end
+
+    def count_by_range(sql, range_groups)
+      counts = scope.group(sql).count
+      range_groups.each_with_object({}) do |range, hash|
         label = range.end ? "#{range.begin}-#{range.end}" : "#{range.begin}+"
-        hash[label] = counts.select { |k, v| range.include?(k) }.values.sum
+        hash[label] = counts.sum { |k, v| range.include?(k) ? v : 0 }
       end
     end
 
