@@ -67,6 +67,10 @@ module Export::Tabular::People
       entry.phone_number_mobile&.number
     end
 
+    def canton
+      Cantons.full_name(entry.canton)
+    end
+
     private
 
     def roles(*role_classes)

@@ -22,7 +22,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
   end
 
   it "has expected attributes" do
-    expect(build.attributes).to eq [
+    attrs = [
       :id,
       :url,
       :sektion,
@@ -56,8 +56,12 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
       :address_care_of,
       :zip_code,
       :town,
+      :canton,
       :country
     ]
+
+    expect(build.attributes).to match_array(attrs)
+    expect(build.attributes).to eq(attrs)
   end
 
   it "has range in sheet name" do
@@ -179,7 +183,8 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
           address_care_of: "c/o Mami u Papi",
           postbox: "Postfach 1",
           gender: "m",
-          birthday: "21.04.1972"
+          birthday: "21.04.1972",
+          canton: "so"
         )
         mitglied.phone_numbers.create!(label: "landline", number: "031 333 44 55")
         mitglied.phone_numbers.create!(label: "mobile", number: "079 333 44 55")
@@ -215,6 +220,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
           address_care_of: "c/o Mami u Papi",
           zip_code: "2843",
           town: "Neu Carlscheid",
+          canton: "Solothurn",
           country: "CH"
         })
       end
