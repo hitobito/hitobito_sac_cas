@@ -515,8 +515,11 @@ de_CH:
         minimum_age: Mindestalter
         price_description: Hinweis
         price_member: Kosten SAC-Mitglied (extern)
+        member_may_apply: Anmeldung möglich
         price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        regular_may_apply: Anmeldung möglich
         price_special: Kosten SAC Sektionsmitglied
+        special_may_apply: Anmeldung möglich
         season: Saison
         seasons:
           winter: Winter
@@ -1618,6 +1621,8 @@ de_CH:
         cancel_info: >-
           Bist du sicher, dass du mit der Abmeldung fortfahren möchtest? Eine Abmeldung kann nicht rückgängig gemacht werden. Mit der Abmeldung werden Bearbeitungs- und Annullationsgebühren in der Höhe von CHF %{cancellation_cost} in Rechnung gestellt.
     participation_contact_datas:
+      flash:
+        price_category_not_possible: "Für diese Tour sind nur die folgenden Gruppen erlaubt: %{possible_categories}"
       fields:
         overrides_person_data_info: >-
           Bitte beachte, dass die hier eingegebenen Anpassungen in dein Profil übernommen werden.
@@ -1671,6 +1676,9 @@ de_CH:
     form_tabs:
       communication: Kommunikation
       prices: Preise
+
+    form_tab_pane_prices:
+      price: Kosten
 
     general_fields:
       kind_overrides_link_title: >-

@@ -517,8 +517,11 @@ it:
         minimum_age: Età minima
         price_description: Descrizione del
         price_member: Costi Membro del SAC (esterno)
+        member_may_apply: Anmeldung möglich
         price_regular: Costi non socio SAC (ospite)
+        regular_may_apply: Anmeldung möglich
         price_special: Costi Membro della sezione SAC
+        special_may_apply: Anmeldung möglich
         season: Stagione
         seasons:
           winter: Inverno
@@ -1686,6 +1689,8 @@ it:
         cancel_info: >-
           Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento del ritiro sarà addebitato un importo pari a CHF %{cancellation_cost} per le spese di elaborazione e cancellazione.
     participation_contact_datas:
+      flash:
+        price_category_not_possible: "Für diese Tour sind nur die folgenden Gruppen erlaubt: %{possible_categories}"
       fields:
         overrides_person_data_info: >-
           Si noti che le modifiche qui inserite saranno trasferite al proprio profilo.
@@ -1739,6 +1744,9 @@ it:
     form_tabs:
       communication: Comunicazione
       prices: Prezzi
+
+    form_tab_pane_prices:
+      price: Kosten
 
     general_fields:
       kind_overrides_link_title: >-

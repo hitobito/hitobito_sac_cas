@@ -519,8 +519,11 @@ fr:
         minimum_age: Âge minimum
         price_description: Description
         price_member: Coûts membre CAS (externe)
+        member_may_apply: Anmeldung möglich
         price_regular: Frais non membre du CAS (invité)
+        regular_may_apply: Anmeldung möglich
         price_special: Coût membre de la section CAS
+        special_may_apply: Anmeldung möglich
         season: Saison
         seasons:
           winter: Hiver
@@ -1688,6 +1691,8 @@ fr:
         cancel_info: >-
           Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Des frais de traitement et d’annulation d’un montant de CHF %{cancellation_cost} sont facturés avec l’annulation.
     participation_contact_datas:
+      flash:
+        price_category_not_possible: "Für diese Tour sind nur die folgenden Gruppen erlaubt: %{possible_categories}"
       fields:
         overrides_person_data_info: >-
           Merci de noter que les adaptations saisies ici seront reprises dans ton profil.
@@ -1741,6 +1746,9 @@ fr:
     form_tabs:
       communication: Communication
       prices: Prix
+
+    form_tab_pane_prices:
+      price: Kosten
 
     general_fields:
       kind_overrides_link_title: >-
