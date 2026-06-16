@@ -18,7 +18,7 @@ describe Events::Filter::Tour::MyPendingApprovals do
 
   subject(:filter) { described_class.new(:my_pending_approvals, {active: "1"}) }
 
-  before { Auth.current_person = person }
+  before { allow(Auth).to receive(:current_person).and_return(person) }
 
   def filtered
     filter.apply(base_scope)

@@ -31,7 +31,7 @@ module HitobitoSacCas
     end
 
     config.to_prepare do
-      if Rails.env.test?
+      if Rails.env.test? && Settings.application.languages.key?(:en)
         Settings.application.languages.delete_field(:en)
       end
     end
