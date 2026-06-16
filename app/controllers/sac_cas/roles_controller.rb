@@ -14,6 +14,21 @@ module SacCas::RolesController
 
   private
 
+  def assign_attributes
+    super
+    assign_send_onboarding_mail(entry)
+  end
+
+  def build_new_type
+    super.tap { |role| assign_send_onboarding_mail(role) }
+  end
+
+  def assign_send_onboarding_mail(role)
+    return unless role.respond_to?(:send_onboarding_mail)
+
+    role.send_onboarding_mail = params[:send_onboarding_mail]
+  end
+
   def resolve_household_for_neuanmeldung
     destroy_family_neuanmeldungen if family_neuanmeldungs_role?
     destroy_household if neuanmeldungs_stammsektion_role?

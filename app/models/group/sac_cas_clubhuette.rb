@@ -8,11 +8,13 @@
 class Group::SacCasClubhuette < ::Group
   ### ROLES
   class Huettenwart < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   class Huettenchef < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end

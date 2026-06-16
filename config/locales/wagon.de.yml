@@ -2542,6 +2542,8 @@ de:
       adult: Einzel
       youth: Jugend
       family: Familie
+    type_fields_sac_cas:
+      send_onboarding_mail: Willkommensnachricht schicken
 
   roles/change_zusatzsektion_to_family:
     link: Wechsel Familie
