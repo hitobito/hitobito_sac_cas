@@ -26,7 +26,9 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
         expect(data).to match({
           sub: user.id.to_s,
           first_name: user.first_name,
+          given_name: user.first_name,
           last_name: user.last_name,
+          family_name: user.last_name,
           nickname: user.nickname,
           address: user.address,
           address_care_of: user.address_care_of,
@@ -77,7 +79,10 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
         expect(data).to match({
           sub: user.id.to_s,
           first_name: user.first_name,
+          given_name: user.first_name,
           last_name: user.last_name,
+          family_name: user.last_name,
+          locale: user.language,
           nickname: user.nickname,
           company_name: user.company_name,
           company: user.company,
