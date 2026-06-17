@@ -19,7 +19,7 @@
 - else
   .alert.alert-info= t(".alert_info")
 
-  = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post, data: { controller: 'form-field-toggle' }) do |f|
+  = standard_form(@invoice_form, url: group_person_membership_invoices_path(@group, @person), method: :post) do |f|
     = f.error_messages
     = f.labeled(:reference_date) do
       = f.date_field(:reference_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_date)
@@ -29,19 +29,20 @@
       = f.date_field(:send_date, minDate: @invoice_form.min_date, maxDate: @invoice_form.max_send_date)
 
     = f.labeled(:section_id) do
-      = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true, data: { action: "form-field-toggle#untoggle" }
+      %div{id: "section_id_group"}
+        = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true, data: { "show-discount": true }
+
+        - @invoice_form.zusatzsektionen.each do |section|
+          %div
+            = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false, data: { "show-discount": true }
+
+        - if @person.sac_membership.active?
+          = f.inline_radio_button :section_id, 0, t(".manual_positions"), false, checked: false
 
       .nested-radio-group
         = f.labeled(:new_entry, nil, nil, label_class: "col-md-5 col-xl-4", class: "col-md-7 col-lg-8 col-xl-6 mw-63ch") do
           = f.inline_radio_button :new_entry, true, t("global.yes"), true
           = f.inline_radio_button :new_entry, false, t("global.no"), true, checked: true
-
-      - @invoice_form.zusatzsektionen.each do |section|
-        %div
-          = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false, data: { action: "form-field-toggle#untoggle" }
-
-      - if @person.sac_membership.active?
-        = f.inline_radio_button :section_id, 0, t(".manual_positions"), false, checked: false, data: { action: "form-field-toggle#toggle" }
 
     = f.labeled(:dont_send) do
       = f.inline_radio_button :dont_send, false, t("global.yes"), true, checked: true
@@ -51,15 +52,17 @@
       = f.inline_radio_button :update_membership, true, t("global.yes"), true, checked: true
       = f.inline_radio_button :update_membership, false, t("global.no"), true
 
-    %div{data: { 'form-field-toggle-target': "toggleOpposite" }}
-      = f.labeled(:discount) do
-        = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
-        = f.inline_radio_button :discount, 50, "50%", true
-        = f.inline_radio_button :discount, 100, "100%", true
+    %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "section_id_group", "field-visibility-show-when-data-value": "showDiscount" }}
+      %div{data: { 'field-visibility-target': 'container' }}
+        = f.labeled(:discount) do
+          = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
+          = f.inline_radio_button :discount, 50, "50%", true
+          = f.inline_radio_button :discount, 100, "100%", true
 
     - if @person.sac_membership.active?
-      .hidden{data: { 'form-field-toggle-target': "toggle" }}
-        = render "manual_fee_fields", f: f
+      %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "section_id_group", "field-visibility-show-when-value": "0" }}
+        .hidden{data: { 'field-visibility-target': 'container' }}
+          = render "manual_fee_fields", f: f
 
     = f.indented do
       = submit_button(f, t(".create_invoice"))

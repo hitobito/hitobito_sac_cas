@@ -560,6 +560,7 @@ de:
       person:
         id: Personennummer
         advertising: Werbesendungen
+        canton: Kanton
         address_care_of: Adresszusatz
         correspondence: Mitgliederausweis & Rechnungsstellung
         confirmed_at: E-Mail bestätigt

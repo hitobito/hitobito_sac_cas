@@ -41,8 +41,8 @@ describe People::MembershipInvoicesController do
 
     it "toggles via stimulus" do
       get :new, params: params.except(:people_membership_invoice_form)
-      expect(dom.find_field("Manuelle Differenzrechnung")["data-action"]).to eq "form-field-toggle#toggle"
-      expect(dom).to have_css(".hidden[data-form-field-toggle-target=toggle]")
+      expect(dom).to have_css("[data-controller~='field-visibility']")
+      expect(dom).to have_css(".hidden[data-field-visibility-target=container]")
     end
 
     context "only neuanmeldung for stammsektion" do
@@ -59,7 +59,7 @@ describe People::MembershipInvoicesController do
         get :new, params: params.except(:people_membership_invoice_form)
         expect(dom).not_to have_unchecked_field("Manuelle Differenzrechnung")
         expect(dom).not_to have_field "Zentralverbandsbeitrag", visible: false
-        expect(dom).not_to have_css(".hidden[data-form-field-toggle-target=toggle]")
+        expect(dom).not_to have_css(".hidden[data-field-visibility-target=container]")
       end
     end
   end
