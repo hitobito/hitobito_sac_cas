@@ -28,9 +28,7 @@ class Invoices::Abacus::TransmitAllMembersJob < BaseJob
   end
 
   def perform
-    handle_termination_signals do
-      process_members
-    end
+    process_members
   end
 
   def error(_job, exception, payload = parameters)
