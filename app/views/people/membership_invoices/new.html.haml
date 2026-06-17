@@ -52,7 +52,7 @@
       = f.inline_radio_button :update_membership, true, t("global.yes"), true, checked: true
       = f.inline_radio_button :update_membership, false, t("global.no"), true
 
-    %div{data: { controller: 'field-visibility', "field-visibility-dependent-id-value": "section_id_group", "field-visibility-show-when-data-value": "showDiscount" }}
+    %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "section_id_group", "field-visibility-show-when-data-value": "showDiscount" }}
       %div{data: { 'field-visibility-target': 'container' }}
         = f.labeled(:discount) do
           = f.inline_radio_button :discount, 0, t("global.no"), true, checked: true
@@ -60,7 +60,7 @@
           = f.inline_radio_button :discount, 100, "100%", true
 
     - if @person.sac_membership.active?
-      %div{data: { controller: 'field-visibility', "field-visibility-dependent-id-value": "section_id_group", "field-visibility-show-when-value": "0" }}
+      %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "section_id_group", "field-visibility-show-when-value": "0" }}
         .hidden{data: { 'field-visibility-target': 'container' }}
           = render "manual_fee_fields", f: f
 

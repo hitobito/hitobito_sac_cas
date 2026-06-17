@@ -4,7 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 = c.fields_for() do |form|
-  %div{data: { controller: 'field-visibility', "field-visibility-dependent-id-value": "company_checkbox_group", "field-visibility-show-when-value": "1", "field-visibility-clear-inputs-value": "true" }}
+  %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "company_checkbox_group", "field-visibility-show-when-value": "1", "field-visibility-clear-container-inputs-on-hide-value": "true" }}
     = form.labeled_gender_inline_radio_buttons
     = form.labeled_input_field :first_name
     = form.labeled_input_field :last_name

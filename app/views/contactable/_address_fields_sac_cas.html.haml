@@ -4,6 +4,6 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 - if entry.is_a?(Person)
-  %div{ data: { controller: "field-visibility", "field-visibility-dependent-id-value": "person_country", "field-visibility-show-when-value": "CH", "field-visibility-clear-inputs-value": "true" } }
+  %div{ data: { controller: "field-visibility", "field-visibility-observed-field-id-value": "person_country", "field-visibility-show-when-value": "CH", "field-visibility-clear-container-inputs-on-hide-value": "true" } }
     %div{ class: ("hidden" unless entry.country == "CH"), data: { "field-visibility-target": "container" } }
       = f.labeled_i18n_enum_field(:canton, Person.canton_labels.map { |k, v| [k.to_s, v] }, include_blank: true, data: { controller: "tom-select" })

@@ -6,7 +6,7 @@
 = f.labeled_input_field(:cancel_statement, label_class: 'col-md-3 col-xl-3 pb-1 required', required: true)
 
 - if @event.course? && @group.root? && entry.id != current_user.id
-  %div{data: { controller: 'field-visibility', "field-visibility-dependent-id-value": "invoice_option_group", "field-visibility-show-when-value": "custom" }}
+  %div{data: { controller: 'field-visibility', "field-visibility-observed-field-id-value": "invoice_option_group", "field-visibility-show-when-value": "custom" }}
     .row.mb-2
       = label_tag("invoice_option", class: "col-md-3 col-xl-3 pb-1 col-form-label text-md-end") do
         = t(".invoice_option")
