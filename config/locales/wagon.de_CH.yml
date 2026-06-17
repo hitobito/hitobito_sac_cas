@@ -1448,6 +1448,7 @@ de_CH:
 
   dropdown/sac_cas_exports:
     button: SAC Exporte
+    sac_courses: Finanzindikatoren Kurse
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
@@ -1829,8 +1830,47 @@ de_CH:
     rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
     self_approval: Selbstfreigabe
 
+  export/sac_courses:
+    filename: SAC_Finanzindikatoren_Kurse
+
   export/sac_statistics:
     filename: SAC_Statistik
+
+  export/tabular/event/sac_course_finances:
+    attributes:
+      event_kind_category_order: Kurskategorie
+      event_kind_category_label: Kurskategoriename
+      event_kind_short_name: Kursart Kurzname
+      event_kind_label: Kursart Verbandsbezeichnung
+      season: Saison
+      name: Kursname
+      start_on: Startdatum
+      finish_on: Enddatum
+      state: Kursstatus
+      closed_month: Kursabschluss Monat
+      total_revenue: Kursumsatz CHF
+      leader_count: Grösse Leitungsteam
+      leader_compensations: Honorare Leitungsteam Summe
+      minimum_participants: Minimale Teilnehmerzahl
+      maximum_participants: Maximale Teilnehmerzahl
+      attended_count: Anzahl effektive Teilnehmende
+      absent_count: Anzahl nicht erschienene Teilnehmende
+      price_member: Mitgliederpreis
+      price_member_count: Anzahl TN Mitgliederpreis
+      price_regular: Normalpreis
+      price_regular_count: Anzahl TN Normalpreis
+      price_subsidized: Subventionierter Preis
+      price_subsidized_count: Anzahl TN Subventionierter Preis
+      price_special: Spezialpreis
+      price_special_count: Anzahl TN Spezialpreis
+      age_0_17_count: Anzahl TN Altersgruppe 0-17 Jahre
+      age_18_22_count: Anzahl TN Altersgruppe 18-22 Jahre
+      age_23_35_count: Anzahl TN Altersgruppe 23-35 Jahre
+      age_36_50_count: Anzahl TN Altersgruppe 36-50 Jahre
+      age_51_60_count: Anzahl TN Altersgruppe 51-60 Jahre
+      age_61__count: Anzahl TN Altersgruppe 61+ Jahre
+      sac_member_count: Anzahl TN SAC Mitglieder
+      non_sac_member_count: Anzahl TN Nicht SAC Mitglieder
 
   export/tabular/people/mitgliedschaft:
     attributes:
@@ -1913,6 +1953,8 @@ de_CH:
     section_active: "Aktive Mitglieder am %{to}"
     section_eintritte: "Eintritte %{from} - %{to}"
     section_austritte: "Austritte %{from} - %{to}"
+    membership_years:
+      label: Anzahl Mitgliederjahre
 
   export/xlsx/sac_statistics:
     mitglieder_statistics:
@@ -1962,6 +2004,10 @@ de_CH:
       create_yearly_membership_invoice: MV Jahresinkasso
     sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
+
+    popover_year:
+      year: Jahr
+      download: Herunterladen
 
     self_registration:
       form:
@@ -2702,11 +2748,12 @@ de_CH:
         submit_button: Die Alpen-Abonnent beenden
 
   delayed_job:
-    export/austritte_export_job: Austritte-Export
-    export/beitragskategorie_wechsel_export_job: Beitragskategorie-Wechsel-Export
-    export/eintritte_export_job: Eintritte-Export
-    export/jubilare_export_job: Jubilare-Export
-    export/leader_settlement_export_job: Kurskaderabrechnungs-Export
-    export/mitglieder_csv_export_job: Mitglieder-CSV-Export
-    export/mitglieder_statistics_export_job: Mitgliederstatistik-Export
-    export/sac_statistics_export_job: SAC-Statistik-Export
+    export/austritte_export_job: "Export: Ausgetretene Mitglieder Sektion"
+    export/beitragskategorie_wechsel_export_job: "Export: Wechsel Beitragskategorie Sektion"
+    export/eintritte_export_job: "Export: Eingetretene Mitglieder Sektion"
+    export/jubilare_export_job: "Export: Jubilare Sektion"
+    export/leader_settlement_export_job: "Export: Kurskaderabrechnung"
+    export/mitglieder_csv_export_job: "Export: Mitglieder CSV Sektion"
+    export/mitglieder_statistics_export_job: "Export: Mitgliederstatistik Sektion"
+    export/sac_statistics_export_job: "Export: SAC Statistik"
+    export/sac_courses_export_job: "Export: Finanzindikatoren Kurse"
