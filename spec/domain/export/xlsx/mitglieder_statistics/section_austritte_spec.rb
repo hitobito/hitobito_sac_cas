@@ -127,7 +127,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
       non_terminated.person.update!(language: :fr, birthday: 55.years.ago)
       create_role_plain(end_on: "2025-12-31")
 
-      expect(scope).to match_array [
+      expect(scope.map(&:to_s)).to match_array [
         stammsektion,
         zusatzsektion,
         stammsektions_wechsel,
@@ -135,7 +135,7 @@ describe Export::Xlsx::MitgliederStatistics::SectionAustritte do
         section_re_entry,
         multi,
         non_terminated
-      ]
+      ].map(&:to_s)
 
       expect(section.total).to eq(7)
 
