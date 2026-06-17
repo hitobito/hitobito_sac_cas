@@ -10,9 +10,10 @@ module Migrations
     def perform
       ActiveRecord::Base.connection.execute(<<~SQL)
         UPDATE people
-        INNER JOIN locations ON locations.zip_code = people.zip_code
-        SET people.canton = locations.canton
-        WHERE people.canton IS NULL
+        SET canton = locations.canton
+        FROM locations
+        WHERE locations.zip_code = people.zip_code
+          AND people.canton IS NULL
           AND people.country = 'CH'
           AND people.zip_code IS NOT NULL
           AND people.zip_code != ''
