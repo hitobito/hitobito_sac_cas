@@ -136,18 +136,24 @@ module Memberships
         fundraising&.subscribe_if(person, subscribe_fundraising_list)
 
         person.update(data_retention_consent: data_retention_consent)
-        cancel_open_membership_invoices(person) if terminate_on.past?
+        cancel_open_membership_invoices(person)
       end
     end
 
     def cancel_open_membership_invoices(person)
-      person
-        .external_invoices.open.where(type: ExternalInvoice::SacMembership.sti_name,
-          year: Date.current.year)
-        .find_each do |invoice|
-          invoice.update!(state: "cancelled")
-          Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
-        end
+      cancelable_invoices.each do |invoice|
+        invoice.update!(state: "cancelled")
+        Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
+      end
+    end
+
+    def cancelable_invoices
+      cancel_from = terminate_on.past? ? Time.zone.now.year : Time.zone.now.next_year.year
+
+      ExternalInvoice::SacMembership
+        .where(person_id: person.id)
+        .where(state: :open)
+        .where(year: cancel_from..)
     end
 
     def basic_login_group
