@@ -173,9 +173,9 @@ describe Export::Tabular::People::Austritte do
       tabular = build("1.1.2014-31.12.2014")
 
       travel_to(Time.zone.local(2014, 6, 30)) do
-        expect_query_count do
+        expect do
           expect(tabular.data_rows).to have(5).items
-        end.to eq(5)
+        end.to make(5).db_queries
       end
     end
 
