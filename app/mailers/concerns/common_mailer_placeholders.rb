@@ -6,6 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module CommonMailerPlaceholders
+  def placeholder_person_id
+    @person.id
+  end
+
   def placeholder_first_name
     @person.first_name
   end

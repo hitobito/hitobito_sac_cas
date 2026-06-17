@@ -125,7 +125,70 @@ CustomContent.seed(:key,
    placeholders_required: "first-name, sektion-name",
    placeholders_optional: "profile-url, profile-links"},
   {key: People::NeuanmeldungenMailer::REJECTED,
-   placeholders_required: "first-name, sektion-name"})
+   placeholders_required: "first-name, sektion-name"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_PRAESIDIUM,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_MITGLIEDERVERWALTUNG,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_ADMINISTRATION,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_REDAKTION,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_KULTURBEAUFTRAGTER,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_UMWELTBEAUFTRAGTER,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_TOURENCHEF,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_TOURENLEITER,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_KIBE_CHEF,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_FABE_CHEF,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_JO_CHEF,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_HUETTENOBMANN,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_HUETTENCHEF,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"},
+  {key: People::SektionsfunktionaereMailer::ONBOARDING_HUETTENWART,
+   placeholders_optional: "person-id, first-name, last-name, profile-url, " \
+    "role-name, role-start, role-end, role-group, role-sektion"})
+
+sektionsfunktionaere_onboarding_body =
+  "Hallo {first-name} {last-name} ({person-id})<br><br>" \
+  "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
+  " bei {role-sektion} willkommen zu heissen." \
+  "<br><br>" \
+  "Wichtige Links: <br>" \
+  "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
+  "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
+  "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
+  "{profile-url} <br>" \
+  "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
+  "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
+  "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
+  "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
+  "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
+  "<br><br>" \
+  "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
+  " herzlichst für deine ehrenamtliche Arbeit!" \
+  "<br><br>" \
+  "Bergsportliche Grüsse"
 
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id:
@@ -604,4 +667,102 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
     "Somit empfehlen wir dir, deinen Antrag an eine andere Sektion deiner Wahl zu stellen." \
     "<br><br>" \
     "Vielen Dank für dein Verständnis.<br><br>" \
-    "Bergsportliche Grüsse"})
+    "Bergsportliche Grüsse"},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_PRAESIDIUM
+  ).id,
+   locale: "de",
+   label: "Onboarding: Präsidium",
+   subject: "Onboarding: Präsidium",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_MITGLIEDERVERWALTUNG
+  ).id,
+   locale: "de",
+   label: "Onboarding: Mitgliederverwaltung",
+   subject: "Onboarding: Mitgliederverwaltung",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_ADMINISTRATION
+  ).id,
+   locale: "de",
+   label: "Onboarding: Administration",
+   subject: "Onboarding: Administration",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_REDAKTION
+  ).id,
+   locale: "de",
+   label: "Onboarding: Redaktion",
+   subject: "Onboarding: Redaktion",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_KULTURBEAUFTRAGTER
+  ).id,
+   locale: "de",
+   label: "Onboarding: Kulturbeauftragter",
+   subject: "Onboarding: Kulturbeauftragter",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_UMWELTBEAUFTRAGTER
+  ).id,
+   locale: "de",
+   label: "Onboarding: Umweltbeauftragter",
+   subject: "Onboarding: Umweltbeauftragter",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_TOURENCHEF
+  ).id,
+   locale: "de",
+   label: "Onboarding: Tourenchef",
+   subject: "Onboarding: Tourenchef",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_TOURENLEITER
+  ).id,
+   locale: "de",
+   label: "Onboarding: Tourenleiter",
+   subject: "Onboarding: Tourenleiter",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_KIBE_CHEF
+  ).id,
+   locale: "de",
+   label: "Onboarding: KiBe-Chef",
+   subject: "Onboarding: KiBe-Chef",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_FABE_CHEF
+  ).id,
+   locale: "de",
+   label: "Onboarding: FaBe-Chef",
+   subject: "Onboarding: FaBe-Chef",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_JO_CHEF
+  ).id,
+   locale: "de",
+   label: "Onboarding: JO-Chef",
+   subject: "Onboarding: JO-Chef",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_HUETTENOBMANN
+  ).id,
+   locale: "de",
+   label: "Onboarding: Huettenobmann",
+   subject: "Onboarding: Huettenobmann",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_HUETTENCHEF
+  ).id,
+   locale: "de",
+   label: "Onboarding: Huettenchef",
+   subject: "Onboarding: Huettenchef",
+   body: sektionsfunktionaere_onboarding_body},
+  {custom_content_id: CustomContent.get(
+    People::SektionsfunktionaereMailer::ONBOARDING_HUETTENWART
+  ).id,
+   locale: "de",
+   label: "Onboarding: Huettenwart",
+   subject: "Onboarding: Huettenwart",
+   body: sektionsfunktionaere_onboarding_body})

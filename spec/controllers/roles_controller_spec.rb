@@ -10,7 +10,7 @@ describe RolesController do
 
   let(:person) { Fabricate(:person) }
 
-  describe "POST create" do
+  describe "POST#create" do
     context "FreigabeKomitee::Pruefer" do
       it "correctly assigns approval_kinds" do
         assigned_approval_kinds = [event_approval_kinds(:professional), event_approval_kinds(:security)]
@@ -32,9 +32,62 @@ describe RolesController do
         expect(role.approval_kinds).to match_array(assigned_approval_kinds)
       end
     end
+
+    context "Sektionsfuntionaere" do
+      let(:group) { groups(:bluemlisalp_funktionaere) }
+      let(:role_type) { Group::SektionsFunktionaere::Praesidium.sti_name }
+
+      it "send onboarding mail if send_onboarding_mail is true" do
+        expect {
+          post :create, params: {
+            group_id: group.id,
+            send_onboarding_mail: true,
+            role: {group_id: group.id, person_id: person.id, type: role_type}
+          }
+        }.to have_enqueued_mail(People::SektionsfunktionaereMailer, :praesidium_onboarding)
+      end
+
+      it "does not send onboarding mail if send_onboarding_mail is false" do
+        expect {
+          post :create, params: {
+            group_id: group.id,
+            role: {group_id: group.id, person_id: person.id, type: role_type}
+          }
+        }.not_to have_enqueued_mail
+      end
+    end
   end
 
-  describe "DELETE destroy" do
+  describe "PUT#update" do
+    context "Sektionsfuntionaere" do
+      let(:group) { groups(:bluemlisalp_funktionaere) }
+      let(:role_type) { Group::SektionsFunktionaere::Praesidium.sti_name }
+      let(:role) { Fabricate(role_type.to_sym, group:, person:) }
+
+      it "sends onboarding mail if send_onboarding_mail is true" do
+        expect {
+          patch :update, params: {
+            group_id: group.id,
+            id: role.id,
+            send_onboarding_mail: true,
+            role: {group_id: group.id, person_id: person.id, type: role_type}
+          }
+        }.to have_enqueued_mail(People::SektionsfunktionaereMailer, :praesidium_onboarding)
+      end
+
+      it "does not send onboarding mail if send_onboarding_mail is false" do
+        expect {
+          patch :update, params: {
+            group_id: group.id,
+            id: role.id,
+            role: {group_id: group.id, person_id: person.id, type: role_type}
+          }
+        }.not_to have_enqueued_mail
+      end
+    end
+  end
+
+  describe "DELETE#destroy" do
     let!(:household) do
       household = Household.new(person, maintain_sac_family: false, validate_members: false)
       household.set_family_main_person!

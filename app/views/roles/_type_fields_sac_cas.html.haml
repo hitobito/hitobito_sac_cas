@@ -13,3 +13,9 @@
                                 multiple: true,
                                 data: { chosen_no_results: t("global.chosen_no_results"),
                                         controller: "tom-select" } })
+
+%div{ data: { controller: "field-visibility", "field-visibility-observed-field-id-value": "role_type", "field-visibility-show-when-data-value": "showOnboardingMail" } }
+    .row.mb-2{ class: "hidden", data: { "field-visibility-target": "container" } }
+        .offset-2
+            = check_box_tag(:send_onboarding_mail, true, entry.new_record?, class: "form-check-input")
+            = label_tag :send_onboarding_mail, t(".send_onboarding_mail")

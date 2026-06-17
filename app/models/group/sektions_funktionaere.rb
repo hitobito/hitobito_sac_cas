@@ -23,33 +23,41 @@ class Group::SektionsFunktionaere < ::Group
 
   ### ROLES
   class Praesidium < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.basic_permissions_only = true
   end
 
   class CoPraesidium < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.basic_permissions_only = true
   end
 
   class VizePraesidium < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.basic_permissions_only = true
   end
 
   class PraesidiumOrtsgruppe < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.basic_permissions_only = true
   end
 
   class CoPraesidiumOrtsgruppe < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.basic_permissions_only = true
   end
 
   class VizePraesidiumOrtsgruppe < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.basic_permissions_only = true
   end
 
   class Mitgliederverwaltung < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
   end
 
   class Administration < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = [:layer_and_below_full]
     self.two_factor_authentication_enforced = true
   end
@@ -60,6 +68,7 @@ class Group::SektionsFunktionaere < ::Group
   end
 
   class Kulturbeauftragter < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -69,10 +78,12 @@ class Group::SektionsFunktionaere < ::Group
   end
 
   class Redaktion < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
   end
 
   class Huettenobmann < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end
@@ -88,6 +99,7 @@ class Group::SektionsFunktionaere < ::Group
   end
 
   class Umweltbeauftragter < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end

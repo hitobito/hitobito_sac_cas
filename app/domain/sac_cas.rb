@@ -129,6 +129,8 @@ module SacCas
   ###
 
   MV_EMAIL = "mv@sac-cas.ch"
+  JUGEND_EMAIL = "jugend@sac-cas.ch"
+  HUETTEN_EMAIL = "huetten@sac-cas.ch"
   MAILING_LIST_SAC_NEWSLETTER_INTERNAL_KEY = "sac_newsletter"
   MAILING_LIST_SAC_INSIDE_INTERNAL_KEY = "sac_inside"
   MAILING_LIST_TOURENLEITER_INTERNAL_KEY = "tourenleiter"

@@ -12,6 +12,7 @@ class Group::SektionsTourenUndKurse < Group
   ### ROLES
 
   class TourenleiterOhneQualifikation < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = [:layer_created_events_full]
   end
 
@@ -29,6 +30,7 @@ class Group::SektionsTourenUndKurse < Group
   end
 
   class TourenchefSommer < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.two_factor_authentication_enforced = true
     self.permissions = [
       :group_and_below_full,
@@ -39,6 +41,7 @@ class Group::SektionsTourenUndKurse < Group
   end
 
   class TourenchefWinter < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.two_factor_authentication_enforced = true
     self.permissions = [
       :group_and_below_full,
@@ -49,6 +52,7 @@ class Group::SektionsTourenUndKurse < Group
   end
 
   class Tourenchef < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.two_factor_authentication_enforced = true
     self.permissions = [
       :group_and_below_full,
@@ -59,16 +63,19 @@ class Group::SektionsTourenUndKurse < Group
   end
 
   class KibeChef < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   class FabeChef < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end
 
   class JoChef < ::Role
+    include Roles::SektionsfunktionaereOnboardingMails
     self.permissions = []
     self.basic_permissions_only = true
   end
