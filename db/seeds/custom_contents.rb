@@ -169,6 +169,27 @@ CustomContent.seed(:key,
    placeholders_optional: "person-id, first-name, last-name, profile-url, " \
     "role-name, role-start, role-end, role-group, role-sektion"})
 
+sektionsfunktionaere_onboarding_body =
+  "Hallo {first-name} {last-name} ({person-id})<br><br>" \
+  "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
+  " bei {role-sektion} willkommen zu heissen." \
+  "<br><br>" \
+  "Wichtige Links: <br>" \
+  "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
+  "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
+  "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
+  "{profile-url} <br>" \
+  "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
+  "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
+  "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
+  "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
+  "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
+  "<br><br>" \
+  "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
+  " herzlichst für deine ehrenamtliche Arbeit!" \
+  "<br><br>" \
+  "Bergsportliche Grüsse"
+
 CustomContent::Translation.seed_once(:custom_content_id, :locale,
   {custom_content_id:
      CustomContent.get(Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION).id,
@@ -653,347 +674,95 @@ CustomContent::Translation.seed_once(:custom_content_id, :locale,
    locale: "de",
    label: "Onboarding: Präsidium",
    subject: "Onboarding: Präsidium",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_MITGLIEDERVERWALTUNG
   ).id,
    locale: "de",
    label: "Onboarding: Mitgliederverwaltung",
    subject: "Onboarding: Mitgliederverwaltung",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_ADMINISTRATION
   ).id,
    locale: "de",
    label: "Onboarding: Administration",
    subject: "Onboarding: Administration",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_REDAKTION
   ).id,
    locale: "de",
    label: "Onboarding: Redaktion",
    subject: "Onboarding: Redaktion",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_KULTURBEAUFTRAGTER
   ).id,
    locale: "de",
    label: "Onboarding: Kulturbeauftragter",
    subject: "Onboarding: Kulturbeauftragter",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_UMWELTBEAUFTRAGTER
   ).id,
    locale: "de",
    label: "Onboarding: Umweltbeauftragter",
    subject: "Onboarding: Umweltbeauftragter",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_TOURENCHEF
   ).id,
    locale: "de",
    label: "Onboarding: Tourenchef",
    subject: "Onboarding: Tourenchef",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_TOURENLEITER
   ).id,
    locale: "de",
    label: "Onboarding: Tourenleiter",
    subject: "Onboarding: Tourenleiter",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_KIBE_CHEF
   ).id,
    locale: "de",
    label: "Onboarding: KiBe-Chef",
    subject: "Onboarding: KiBe-Chef",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_FABE_CHEF
   ).id,
    locale: "de",
    label: "Onboarding: FaBe-Chef",
    subject: "Onboarding: FaBe-Chef",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_JO_CHEF
   ).id,
    locale: "de",
    label: "Onboarding: JO-Chef",
    subject: "Onboarding: JO-Chef",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_HUETTENOBMANN
   ).id,
    locale: "de",
    label: "Onboarding: Huettenobmann",
    subject: "Onboarding: Huettenobmann",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_HUETTENCHEF
   ).id,
    locale: "de",
    label: "Onboarding: Huettenchef",
    subject: "Onboarding: Huettenchef",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"},
+   body: sektionsfunktionaere_onboarding_body},
   {custom_content_id: CustomContent.get(
     People::SektionsfunktionaereMailer::ONBOARDING_HUETTENWART
   ).id,
    locale: "de",
    label: "Onboarding: Huettenwart",
    subject: "Onboarding: Huettenwart",
-   body: "Hallo {first-name} {last-name} ({person-id})<br><br>" \
-    "Wir freuen uns sehr, dich in deiner neuen Rolle als {role-name} der {role-group}" \
-    " bei {role-sektion} willkommen zu heissen." \
-    "<br><br>" \
-    "Wichtige Links: <br>" \
-    "- Die Anleitungen zur Bedienung des SAC-Portals findest du hier: " \
-    "https://saccas.atlassian.net/wiki/spaces/DOC/pages/4343693318/SAC-Portal <br>" \
-    "- Dein Benutzerprofil im SAC-Portal kannst du hier einsehen und bearbeiten: " \
-    "{profile-url} <br>" \
-    "- Falls du in deiner Funktion Zugriff auf unser Extranet erhalten hast, " \
-    "kannst du über folgenden Link auf SAC-Inside zugreifen: " \
-    "https://www.sac-cas.ch/de/mein-sac/sac-inside/ <br>" \
-    "- Bei Fragen bitten wir dich über ein Ticket an uns zu wenden: " \
-    "https://service.portal.sac-cas.ch/servicedesk/customer/portal/4/group/-1" \
-    "<br><br>" \
-    "Wir wünschen dir viel Freude in deiner neuen Funktion und bedanken uns" \
-    " herzlichst für deine ehrenamtliche Arbeit!" \
-    "<br><br>" \
-    "Bergsportliche Grüsse"})
+   body: sektionsfunktionaere_onboarding_body})
