@@ -28,6 +28,8 @@ module SacCas::Person
 
     Person.used_attributes.delete(:nickname)
 
+    self.address_sync_relevant_fields += [:canton]
+
     delegate :active?, :active_in?, :anytime?, :family?, :stammsektion_role, :terminated?,
       to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
