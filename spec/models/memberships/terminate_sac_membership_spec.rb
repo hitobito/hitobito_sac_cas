@@ -275,11 +275,12 @@ describe Memberships::TerminateSacMembership do
             expect do
               expect(termination.save!).to eq true
             end.to change { Delayed::Job.count }.by(1)
-          end
+              .and change { person.external_invoices.cancelled.count }.by(1)
 
-          expect(invoice.reload).to be_cancelled
-          expect(other_status.reload).to be_payed
-          expect(other_type.reload).to be_open
+            expect(invoice.reload).to be_cancelled
+            expect(other_status.reload).to be_payed
+            expect(other_type.reload).to be_open
+          end
         end
 
         it "does not cancel open membership invoices in current year when terminating on end of year" do
@@ -289,10 +290,38 @@ describe Memberships::TerminateSacMembership do
           travel_to(Time.zone.local(2022, 1, 1)) do
             expect do
               expect(termination.save!).to eq true
-            end.not_to change { Delayed::Job.count }
-          end
+            end.to not_change { Delayed::Job.count }
+              .and not_change { person.external_invoices.cancelled.count }
 
-          expect(invoice.reload).not_to be_cancelled
+            expect(invoice.reload).not_to be_cancelled
+          end
+        end
+
+        it "cancels open membership invoice in next year when terminating now" do
+          invoice = create_invoice(state: "open", year: 2023)
+
+          travel_to(Time.zone.local(2022, 1, 1)) do
+            expect do
+              expect(termination.save!).to eq true
+            end.to change { Delayed::Job.count }.by(1)
+              .and change { person.external_invoices.cancelled.count }.by(1)
+
+            expect(invoice.reload).to be_cancelled
+          end
+        end
+
+        it "cancels open membership invoice in next year when terminating on end of year" do
+          invoice = create_invoice(state: "open", year: 2023)
+          termination.terminate_on = Time.zone.local(2022, 12, 31)
+
+          travel_to(Time.zone.local(2022, 1, 1)) do
+            expect do
+              expect(termination.save!).to eq true
+            end.to change { Delayed::Job.count }.by(1)
+              .and change { person.external_invoices.cancelled.count }.by(1)
+
+            expect(invoice.reload).to be_cancelled
+          end
         end
       end
 
