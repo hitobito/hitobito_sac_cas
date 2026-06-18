@@ -68,7 +68,7 @@ module Export::Tabular::People
     end
 
     def canton
-      Cantons.full_name(entry.canton)
+      entry.canton_label
     end
 
     private
