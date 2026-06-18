@@ -60,8 +60,7 @@ module SacCas::Dropdown::PeopleExport
     Dropdown::Item.new(
       translate(label_key),
       params.merge(additional_params).merge(format: :pdf),
-      data: {checkable: true},
-      target: :_blank
+      data: {checkable: true}
     )
   end
 
