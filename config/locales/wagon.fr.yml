@@ -557,6 +557,7 @@ fr:
       person:
         id: Numéro de personne
         advertising: Envoi de publicité
+        canton: Kanton
         address_care_of: Complément d’adresse
         correspondence: Facturation
         confirmed_at: E-mail confirmé
@@ -2541,6 +2542,8 @@ fr:
       adult: Individuelle
       youth: Jeunesse
       family: Famille
+    type_fields_sac_cas:
+      send_onboarding_mail: Willkommensnachricht schicken
 
   roles/change_zusatzsektion_to_family:
     link: Changement de famille

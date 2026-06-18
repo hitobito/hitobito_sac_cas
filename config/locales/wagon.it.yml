@@ -555,6 +555,7 @@ it:
       person:
         id: Numero personale
         advertising: Invio di pubblicità
+        canton: Kanton
         address_care_of: Complemento di indirizzo
         correspondence: Fatturazione
         confirmed_at: E-mail verificata
@@ -2539,6 +2540,8 @@ it:
       adult: Individuale
       youth: Giovani
       family: Famiglia
+    type_fields_sac_cas:
+      send_onboarding_mail: Willkommensnachricht schicken
 
   roles/change_zusatzsektion_to_family:
     link: Cambiare famiglia
