@@ -12,7 +12,7 @@ describe Export::Tabular::People::Austritte do
   let(:bluemlisalp) { groups(:bluemlisalp_mitglieder) }
   let(:matterhorn) { groups(:matterhorn_mitglieder) }
 
-  def create_role_plain(type, **attrs)
+  def create_role_plain(type = "Mitglied", **attrs)
     Fabricate("Group::SektionsMitglieder::#{type}", attrs.reverse_merge(group: bluemlisalp))
   end
 
@@ -75,31 +75,45 @@ describe Export::Tabular::People::Austritte do
     subject(:people_scope) { build.people_scope }
 
     it "testing most common cases" do
-      stammsektions_austritt = create_role("Mitglied", start_on: "10.7.2024", end_on: "31.12.2024").person
+      stammsektions_austritt = create_role(start_on: "10.7.2024", end_on: "31.12.2024").person
 
-      zusatzsektions_austritt = create_role("Mitglied", group: matterhorn, start_on: "10.7.2024").person
+      zusatzsektions_austritt = create_role(group: matterhorn, start_on: "10.7.2024").person
       create_role("MitgliedZusatzsektion", start_on: "10.7.2024", end_on: "30.06.2025", person: zusatzsektions_austritt)
 
-      stammsektions_wechsel = create_role("Mitglied", start_on: "3.2.2000", end_on: "31.12.2024").person
-      create_role("Mitglied", group: matterhorn, start_on: "1.1.2025", person: stammsektions_wechsel)
+      stammsektions_wechsel = create_role(start_on: "3.2.2000", end_on: "31.12.2024").person
+      create_role(group: matterhorn, start_on: "1.1.2025", person: stammsektions_wechsel)
 
-      stammsektions_swap = create_role("Mitglied", start_on: "3.2.2000", end_on: "31.12.2024").person
-      create_role("Mitglied", group: matterhorn, start_on: "1.1.2025", person: stammsektions_swap)
+      stammsektions_swap = create_role(start_on: "3.2.2000", end_on: "31.12.2024").person
+      create_role(group: matterhorn, start_on: "1.1.2025", person: stammsektions_swap)
       create_role("MitgliedZusatzsektion", start_on: "1.1.2025", person: stammsektions_swap)
 
+      youth2adult = create_role(start_on: "1.1.2024", end_on: "31.12.2024", beitragskategorie: "youth").person
+      create_role(start_on: "1.1.2025", beitragskategorie: "adult", person: youth2adult).reload
+
       # terminated=false (e.g. invoice not paid)
-      past_not_terminated = create_role_plain("Mitglied", start_on: "10.7.2024", end_on: "31.03.2025").person
+      past_not_terminated = create_role_plain(start_on: "10.7.2021", end_on: "31.03.2025").person
       # terminated=false because role was not prolonged yet
-      _future_not_terminated = create_role_plain("Mitglied", start_on: "10.7.2024", end_on: "30.06.2025").person
+      future_not_terminated = create_role_plain(start_on: "15.8.2021", end_on: "30.06.2025").person
+      future_not_terminated_with_change = create_role_plain(start_on: "10.7.2021", end_on: "31.01.2025",
+        beitragskategorie: "youth").person
+      create_role_plain(start_on: "1.2.2025", end_on: "30.06.2025", beitragskategorie: "adult",
+        person: future_not_terminated_with_change).person
+      multi_change = create_role_plain(start_on: "5.9.2022", end_on: "15.01.2025",
+        beitragskategorie: "youth").person
+      create_role_plain(start_on: "16.1.2025", end_on: "30.06.2025", beitragskategorie: "adult",
+        person: multi_change).person
+      create_role_plain(start_on: "1.7.2025", end_on: "31.12.2025", beitragskategorie: "adult",
+        person: multi_change).person
 
       # not part of scope
-      too_old = create_role("Mitglied", start_on: "1.1.2024", end_on: "30.6.2024").person # too old
-      too_new = create_role("Mitglied", start_on: "30.6.2024", end_on: "12.12.2025").person # too new
+      too_old = create_role(start_on: "1.1.2024", end_on: "30.6.2024").person # too old
+      too_new = create_role(start_on: "30.6.2024", end_on: "12.12.2025").person # too new
 
-      with_membership_later_on = create_role("Mitglied", start_on: "1.1.2024", end_on: "10.12.2024").person
-      create_role("Mitglied", person: with_membership_later_on, start_on: "1.1.2026", end_on: "31.12.2026")
+      with_membership_later_on = create_role(start_on: "1.1.2024", end_on: "10.12.2024").person
+      create_role(person: with_membership_later_on, start_on: "1.1.2026", end_on: "31.12.2026")
 
-      travel_to(Time.zone.local(2025, 6, 30)) do
+      # before end of range
+      travel_to(Time.zone.local(2025, 5, 30)) do
         expect(people_scope.map(&:to_s)).to match_array [
           stammsektions_austritt,
           zusatzsektions_austritt,
@@ -110,6 +124,19 @@ describe Export::Tabular::People::Austritte do
 
         expect(build("1.1.2024-30.6.2024").people_scope).to match_array [too_old]
         expect(build("1.7.2025-12.12.2025").people_scope).to match_array [too_new]
+      end
+
+      # after end of range - roles ended at end of range are considered as austritte as well
+      travel_to(Time.zone.local(2025, 10, 13)) do
+        expect(build.people_scope.map(&:to_s)).to match_array [
+          stammsektions_austritt,
+          zusatzsektions_austritt,
+          stammsektions_wechsel,
+          with_membership_later_on,
+          past_not_terminated,
+          future_not_terminated,
+          future_not_terminated_with_change
+        ].map(&:to_s)
       end
     end
 
