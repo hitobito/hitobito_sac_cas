@@ -27,7 +27,7 @@ module Export::Tabular::People
 
     def multiple_roles_in_range
       roles_scope
-        .joins("INNER JOIN roles other ON other.person_id = roles.person_id" +
+        .joins("INNER JOIN roles other ON other.person_id = roles.person_id" \
           " AND other.id != roles.id" +
           (group ? " AND other.group_id = roles.group_id" : ""))
         .where(other: {type: relevant_role_types})
