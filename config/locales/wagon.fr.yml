@@ -1661,7 +1661,7 @@ fr:
           9 - 0 jours: 100% du prix.
         terms_and_conditions_text: "Oui, je suis d’accord avec les %{link} "
         terms_and_conditions_link_label: CGV
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/CG_Cours_CAS.pdf"
+        terms_and_conditions_link_href: "https://www.sac-cas.ch/fr/meta/cg/formations/"
         subscribe_newsletter: "Oui, je souhaite être informé·e des nouveautés du Club Alpin Suisse CAS"
       fields_sac_cas:
         no_price_select: Pas de frais

@@ -1591,7 +1591,7 @@ en:
           9 - 0 days: 100 % of the price
         terms_and_conditions_text: "Yes, I agree to the terms and conditions of %{link} "
         terms_and_conditions_link_label: GTC
-        terms_and_conditions_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/AGB-Kurse/AGBs_Kurse_SAC.pdf"
+        terms_and_conditions_link_href: "https://www.sac-cas.ch/de/meta/agb/ausbildung/"
         subscribe_newsletter: "Yes, I would like to be informed about news from the Swiss Alpine Club SAC"
       fields_sac_cas:
         no_price_select: Keine Kosten
