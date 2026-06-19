@@ -198,6 +198,9 @@ module HitobitoSacCas
         Ort: :town
       }
       Synchronize::Addresses::SwissPost::ResultProcessor.remote_identifier = "KDNR"
+      Synchronize::Addresses::SwissPost::ResultProcessor.qstat_tag_prefix =
+        "SAC_Post_Adressenabgleich_QSTAT"
+      Synchronize::Addresses::SwissPost::ResultProcessor.fields[:canton] = "Canton"
 
       ## Resources
       GroupResource.include SacCas::GroupResource

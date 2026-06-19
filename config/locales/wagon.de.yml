@@ -2529,6 +2529,10 @@ de:
       index:
         my_subscriptions: Meine Abos
         available_subscriptions: Verfügbare Abos
+    tags:
+      tag:
+        category_validation:
+          post_address_check_invalid: SAC_Post_Adressenabgleich_fehlerhaft
 
   public_events:
     show:
