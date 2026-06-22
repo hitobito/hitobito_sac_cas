@@ -26,13 +26,11 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def perform
-    handle_termination_signals do
-      log_progress(0)
-      clear_spurious_draft_invoices!
-      extend_roles_for_invoicing
-      process_invoices
-      log_progress(100) if @current_logged_percent < 100
-    end
+    log_progress(0)
+    clear_spurious_draft_invoices!
+    extend_roles_for_invoicing
+    process_invoices
+    log_progress(100) if @current_logged_percent < 100
   end
 
   def enqueue
