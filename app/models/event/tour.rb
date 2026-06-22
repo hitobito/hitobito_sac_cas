@@ -78,6 +78,12 @@ class Event::Tour < Event
     inverse_of: :event,
     autosave: true
 
+  has_one :report,
+    dependent: :destroy,
+    class_name: "Event::Report",
+    foreign_key: :event_id,
+    inverse_of: :event
+
   has_and_belongs_to_many :disciplines,
     join_table: :events_disciplines,
     class_name: "Event::Discipline",
