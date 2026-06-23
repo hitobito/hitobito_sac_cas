@@ -516,10 +516,10 @@ de_CH:
         price_description: Hinweis
         price_member: Kosten SAC-Mitglied (extern)
         member_may_apply: Anmeldung möglich
-        price_regular: Kosten nicht-SAC-Mitglied (Gast)
         regular_may_apply: Anmeldung möglich
-        price_special: Kosten SAC Sektionsmitglied
         special_may_apply: Anmeldung möglich
+        price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        price_special: Kosten SAC Sektionsmitglied
         season: Saison
         seasons:
           winter: Winter
@@ -1085,29 +1085,29 @@ de_CH:
         huettenwartspartner: Hüttenwartspartner/in
         schluesseldepot: Schlüsseldepot
       group/sac_cas_kurskader/kursleitung_selbstaendig:
-        one: Kursleiter/in (selbständig)
-        description: Kursleiter/in (selbständig)
+        one: Kursleiter*in (selbständig)
+        description: Kursleiter*in (selbständig)
       group/sac_cas_kurskader/klassenlehrer_selbstaendig:
-        one: Klassenlehrer/in (selbständig)
-        description: Klassenlehrer/in (selbständig)
+        one: Klassenlehrer*in (selbständig)
+        description: Klassenlehrer*in (selbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
-        one: "Kursleiter/in (Aspirant, selbständig)"
-        description: "Kursleiter/in (Aspirant, selbständig)"
+        one: "Kursleiter*in (Aspirant, selbständig)"
+        description: "Kursleiter*in (Aspirant, selbständig)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Klassenlehrer/in (Aspirant, selbständig)"
-        description: "Klassenlehrer/in (Aspirant, selbständig)"
+        one: "Klassenlehrer*in (Aspirant, selbständig)"
+        description: "Klassenlehrer*in (Aspirant, selbständig)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
-        one: Kursleiter/in (unselbständig)
-        description: Kursleiter/in (unselbständig)
+        one: Kursleiter*in (unselbständig)
+        description: Kursleiter*in (unselbständig)
       group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
-        one: Klassenlehrer/in (unselbständig)
-        description: Klassenlehrer/in (unselbständig)
+        one: Klassenlehrer*in (unselbständig)
+        description: Klassenlehrer*in (unselbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
-        one: "Kursleiter/in (Aspirant, unselbständig)"
-        description: "Kursleiter/in (Aspirant, unselbständig)"
+        one: "Kursleiter*in (Aspirant, unselbständig)"
+        description: "Kursleiter*in (Aspirant, unselbständig)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
-        one: "Klassenlehrer/in (Aspirant, unselbständig)"
-        description: "Klassenlehrer/in (Aspirant, unselbständig)"
+        one: "Klassenlehrer*in (Aspirant, unselbständig)"
+        description: "Klassenlehrer*in (Aspirant, unselbständig)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
@@ -1453,6 +1453,7 @@ de_CH:
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
+
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1660,7 +1661,7 @@ de_CH:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unteraktivität(en)
+      sub_disciplines: Unterdisziplin(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1794,7 +1795,7 @@ de_CH:
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
-      disciplines: Aktivitäten
+      disciplines: Disziplinen
       target_groups: Zielgruppen
       technical_requirements: Technische Anforderungen
       traits: Merkmale
@@ -1981,6 +1982,13 @@ de_CH:
       sheet_name: Stamm- und Zusatzmitglieder
     sektion_zusatzmitglieder:
       sheet_name: Zusatzmitglieder
+
+  external_trainings:
+    form:
+      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
+    create:
+      flash:
+        success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
 
   external_trainings:
     form:

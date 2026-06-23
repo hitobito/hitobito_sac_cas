@@ -520,10 +520,10 @@ fr:
         price_description: Description
         price_member: Coûts membre CAS (externe)
         member_may_apply: Anmeldung möglich
-        price_regular: Frais non membre du CAS (invité)
         regular_may_apply: Anmeldung möglich
-        price_special: Coût membre de la section CAS
         special_may_apply: Anmeldung möglich
+        price_regular: Frais non membre du CAS (invité)
+        price_special: Coût membre de la section CAS
         season: Saison
         seasons:
           winter: Hiver
@@ -1163,7 +1163,7 @@ fr:
         one: "Responsable de cours (aspirant, indépendant)"
         description: "Responsable de cours (aspirant, indépendant)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Chef·fe de classe (aspirant, indépendant)"
+        one: "Chef de classe* (aspirant, indépendant)"
         description: "Chef·fe de classe (aspirant, indépendant)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
         one: Responsable de cours (salarié)
@@ -1522,6 +1522,7 @@ fr:
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
+
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1607,14 +1608,14 @@ fr:
         caption: Se désinscrire
       courses:
         signup_aside:
-          summary_title: Kostenübersicht
-          summary_course_price: Kurskosten
+          summary_title: Aperçu des coûts
+          summary_course_price: Frais de cours
           summary_total: Total
         contact_data_aside:
-          contact_title: Fragen zur Anmeldung
+          contact_title: Questions sur l’inscription
           contact_text: |
-            Du erreichst uns zu unseren Geschäftszeiten
-            Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
+            Tu peux nous joindre pendant nos heures de bureau
+            du lundi au vendredi de 9 h à 12 h et de 14 h à 17 h.
       tours:
         contact_data_aside:
           contact_title: Kontakt
@@ -1974,7 +1975,7 @@ fr:
         mitglied: Section de base
         mitglied_zusatzsektion: Section complémentaire
       beitragskategorie: Catégorie de contribution
-      ehrenmitglied: Est membre d’honneur
+      ehrenmitglied: Est membre honoraire
       beguenstigt: Est bénéficiaire
       last_name: Nom de famille
       first_name: Prénom
@@ -2051,6 +2052,13 @@ fr:
       sheet_name: Stamm- und Zusatzmitglieder
     sektion_zusatzmitglieder:
       sheet_name: Zusatzmitglieder
+
+  external_trainings:
+    form:
+      help_other_people: Personnes supplémentaires pour lesquelles la formation externe doit être saisie.
+    create:
+      flash:
+        success_multiple: "%{model} a été créé avec succès pour %{names} "
 
   external_trainings:
     form:
