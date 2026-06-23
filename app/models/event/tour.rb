@@ -191,6 +191,10 @@ class Event::Tour < Event
     PRICE_ATTRIBUTES.select { public_send(:"#{_1.to_s.remove("price_")}_may_apply?") }
   end
 
+  def reportable?
+    ["ready", "closed", "canceled"].include?(state)
+  end
+
   private
 
   def assert_duration_valid?

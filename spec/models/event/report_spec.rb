@@ -33,4 +33,10 @@ describe Event::Report do
       expect(report.status).to eq :closed
     end
   end
+
+  describe "#status_label" do
+    it "returns label for the current status" do
+      expect(report.status_label).to eq "Entwurf"
+    end
+  end
 end

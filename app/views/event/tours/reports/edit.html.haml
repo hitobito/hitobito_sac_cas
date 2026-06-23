@@ -1,0 +1,17 @@
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+= standard_form(entry, url: group_event_report_path(@group, @event), method: :put) do |f|
+  = render "form_tabs"
+
+  .tab-content
+    = tab_content(:status, default_active: true) do
+      = render "status_fields", f: f
+    = tab_content(:participations) do
+      = render "participation_fields", f: f
+    = tab_content(:price_summary) do
+      = render "price_summary_fields", f: f
+
+  = form_buttons(f, cancel_url: group_event_path(@group, @event))
