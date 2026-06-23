@@ -7,10 +7,6 @@ module SacCas::SearchStrategies
   module PersonSearch
     extend ActiveSupport::Concern
 
-    prepended do
-      self.searchable_identifiers = {id: /\A\d+\z/}
-    end
-
     private
 
     def accessible_scope
