@@ -18,6 +18,7 @@ describe Export::Tabular::Event::SacCourseFinances do
       :event_kind_label,
       :season,
       :name,
+      :number,
       :start_on,
       :finish_on,
       :state,
@@ -57,6 +58,7 @@ describe Export::Tabular::Event::SacCourseFinances do
       "Kursart Verbandsbezeichnung",
       "Saison",
       "Kursname",
+      "Kursnummer",
       "Startdatum",
       "Enddatum",
       "Kursstatus",
@@ -127,6 +129,7 @@ describe Export::Tabular::Event::SacCourseFinances do
 
       course1 = Fabricate(:sac_open_course,
         state: :closed,
+        number: "2025-0042",
         minimum_participants: 5,
         maximum_participants: 10,
         price_member: 125.20,
@@ -208,45 +211,44 @@ describe Export::Tabular::Event::SacCourseFinances do
       end.to make(13).db_queries
     end
 
-    describe "common" do
-      it "contains all attributes" do
-        expect(rows.first.to_h).to eq({
-          event_kind_category_order: nil,
-          event_kind_category_label: "Ski Technik Kurs",
-          event_kind_label: "Schneeleiterkurs",
-          event_kind_short_name: "SLK",
-          season: "Winter",
-          name: "Eventus",
-          start_on: "01.05.2025",
-          finish_on: "05.05.2025",
-          state: "Abgeschlossen",
-          language: "de",
-          closed_month: "2025-10",
-          total_revenue: 125.2,
-          leader_count: 1,
-          leader_compensations: 250.0,
-          minimum_participants: 5,
-          maximum_participants: 10,
-          attended_count: 2,
-          absent_count: 1,
-          price_member: 125.20,
-          price_member_count: 1,
-          price_regular: 158.0,
-          price_regular_count: 1,
-          price_subsidized: 80,
-          price_subsidized_count: 0,
-          price_special: nil,
-          price_special_count: 0,
-          age_0_17_count: 0,
-          age_18_22_count: 1,
-          age_23_35_count: 0,
-          age_36_50_count: 1,
-          age_51_60_count: 0,
-          age_61__count: 0,
-          sac_member_count: 0,
-          non_sac_member_count: 2
-        })
-      end
+    it "contains all attributes" do
+      expect(rows.first.to_h).to eq({
+        event_kind_category_order: nil,
+        event_kind_category_label: "Ski Technik Kurs",
+        event_kind_label: "Schneeleiterkurs",
+        event_kind_short_name: "SLK",
+        season: "Winter",
+        name: "Eventus",
+        number: "2025-0042",
+        start_on: "01.05.2025",
+        finish_on: "05.05.2025",
+        state: "Abgeschlossen",
+        language: "de",
+        closed_month: "2025-10",
+        total_revenue: 125.2,
+        leader_count: 1,
+        leader_compensations: 250.0,
+        minimum_participants: 5,
+        maximum_participants: 10,
+        attended_count: 2,
+        absent_count: 1,
+        price_member: 125.20,
+        price_member_count: 1,
+        price_regular: 158.0,
+        price_regular_count: 1,
+        price_subsidized: 80,
+        price_subsidized_count: 0,
+        price_special: nil,
+        price_special_count: 0,
+        age_0_17_count: 0,
+        age_18_22_count: 1,
+        age_23_35_count: 0,
+        age_36_50_count: 1,
+        age_51_60_count: 0,
+        age_61__count: 0,
+        sac_member_count: 0,
+        non_sac_member_count: 2
+      })
     end
   end
 end

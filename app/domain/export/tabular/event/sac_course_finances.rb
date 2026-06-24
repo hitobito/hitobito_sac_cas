@@ -9,6 +9,17 @@ module Export::Tabular::Event
   class SacCourseFinances < Export::Tabular::Base
     self.model_class = ::Event::Course
     self.row_class = Row
+    self.styled_attrs = {
+      date: [:start_on, :finish_on],
+      currency: [
+        :total_revenue,
+        :leader_compensations,
+        :price_member,
+        :price_regular,
+        :price_subsidized,
+        :price_special
+      ]
+    }
 
     class_attribute :attributes
     self.attributes = [
@@ -19,6 +30,7 @@ module Export::Tabular::Event
 
       :season,
       :name,
+      :number,
       :start_on,
       :finish_on,
       :state,

@@ -1891,6 +1891,7 @@ de:
       season: Saison
       language: Sprache
       name: Kursname
+      number: Kursnummer
       start_on: Startdatum
       finish_on: Enddatum
       state: Kursstatus
