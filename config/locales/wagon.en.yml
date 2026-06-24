@@ -516,10 +516,10 @@ en:
         price_description: Beschreibung
         price_member: Kosten SAC-Mitglied (extern)
         member_may_apply: Anmeldung möglich
-        regular_may_apply: Anmeldung möglich
-        special_may_apply: Anmeldung möglich
         price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        regular_may_apply: Anmeldung möglich
         price_special: Kosten SAC Sektionsmitglied
+        special_may_apply: Anmeldung möglich
         season: Saison
         seasons:
           winter: Winter
@@ -1453,7 +1453,6 @@ en:
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
-
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1982,13 +1981,6 @@ en:
       sheet_name: Stamm- und Zusatzmitglieder
     sektion_zusatzmitglieder:
       sheet_name: Zusatzmitglieder
-
-  external_trainings:
-    form:
-      help_other_people: Additional persons for whom the external training is to be recorded.
-    create:
-      flash:
-        success_multiple: "%{model} was successfully created for %{names}."
 
   external_trainings:
     form:

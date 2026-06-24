@@ -518,10 +518,10 @@ it:
         price_description: Descrizione del
         price_member: Costi Membro del SAC (esterno)
         member_may_apply: Anmeldung möglich
-        regular_may_apply: Anmeldung möglich
-        special_may_apply: Anmeldung möglich
         price_regular: Costi non socio SAC (ospite)
+        regular_may_apply: Anmeldung möglich
         price_special: Costi Membro della sezione SAC
+        special_may_apply: Anmeldung möglich
         season: Stagione
         seasons:
           winter: Inverno
@@ -1346,14 +1346,14 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_touren_und_kurse/tourenchef:
-        one: Tour manager
-        description: Tour manager
+        one: Responsabile gite
+        description: Responsabile gite
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Manager del tour estivo
-        description: Manager del tour estivo
+        one: Responsabile gite estivo
+        description: Responsabile gite estivo
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Tour Manager Inverno
-        description: Tour Manager Inverno
+        one: Responsabile gite Inverno
+        description: Responsabile gite Inverno
       group/sektions_clubhuetten/leserecht:
         one: Autorizzazione lettura
         description: Autorizzazione lettura
@@ -1520,7 +1520,6 @@ it:
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
-
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1606,14 +1605,14 @@ it:
         caption: Disconnettersi
       courses:
         signup_aside:
-          summary_title: Panoramica dei costi
-          summary_course_price: Costi del corso
-          summary_total: Totale
+          summary_title: Kostenübersicht
+          summary_course_price: Kurskosten
+          summary_total: Total
         contact_data_aside:
-          contact_title: Domande sulla registrazione
+          contact_title: Fragen zur Anmeldung
           contact_text: |
-            Siamo raggiungibili durante i nostri orari di lavoro
-            Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
+            Du erreichst uns zu unseren Geschäftszeiten
+            Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
       tours:
         contact_data_aside:
           contact_title: Kontakt
@@ -2050,13 +2049,6 @@ it:
       sheet_name: Stamm- und Zusatzmitglieder
     sektion_zusatzmitglieder:
       sheet_name: Zusatzmitglieder
-
-  external_trainings:
-    form:
-      help_other_people: Altre persone per le quali deve essere inclusa la formazione esterna.
-    create:
-      flash:
-        success_multiple: "%{model} è stato creato con successo per %{names}."
 
   external_trainings:
     form:
