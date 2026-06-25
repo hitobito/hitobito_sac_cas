@@ -720,3 +720,101 @@ event_tour_participation_canceled:
 
     Bergsportliche Grüsse,
     {section-name}
+
+event_tour_report_submitted:
+  label: "Tour: E-Mail Tourenrapport eingereicht"
+  subject: "Tourenrapport eingereicht: {event-name}"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat den Tourenrapport zur Tour "{event-name} ({event-id})" zur Freigabe eingereicht:
+    {event-link}
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_report_rejected:
+  label: "Tour: E-Mail Tourenrapport abgelehnt"
+  subject: "Tourenrapport abgelehnt: {event-name}"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, report-remarks, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat den Tourenrapport zur Tour "{event-name} ({event-id})" abgelehnt und zur Korrektur an dich zurückgewiesen:
+    {event-link}
+
+    Bemerkungen: {report-remarks}
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_report_approved:
+  label: "Tour: E-Mail Tourenrapport zur Auszahlung freigegeben"
+  subject: "Tourenrapport zur Auszahlung freigegeben: {event-name}"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat den Tourenrapport zur Tour "{event-name} ({event-id})" zur Auszahlung freigegeben:
+    {event-link}
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_report_payout_rejected:
+  label: "Tour: E-Mail Tourenrapport Auszahlung abgelehnt"
+  subject: "Tourenrapport Auszahlung abgelehnt: {event-name}"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, report-remarks, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {updater-phone}, {updater-email})
+    hat die Auszahlung des Tourenrapports zur Tour "{event-name} ({event-id})" abgelehnt und zur Korrektur an dich zurückgewiesen:
+    {event-link}
+
+    Bemerkungen: {report-remarks}
+
+    Bergsportliche Grüsse,
+    {section-name}
+
+event_tour_report_payout_recorded:
+  label: "Tour: E-Mail Tourenrapport Auszahlung erfasst"
+  subject: "Tourenrapport Auszahlung erfasst: {event-name}"
+  placeholders_optional:
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
+    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, section-name"
+  body: |
+    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
+
+    Dies ist eine interne Benachrichtigung.
+
+    {updater-first-name} {updater-last-name} ({updater-id}, {event-link})
+    hat den Tourenrapport zur Tour "{event-name} ({event-id})" zur Auszahlung freigegeben.
+
+    Bergsportliche Grüsse,
+    {section-name}
