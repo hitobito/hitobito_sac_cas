@@ -22,7 +22,7 @@ describe Export::Tabular::People::Eintritte do
   end
 
   it "has expected attributes" do
-    expect(build.attributes).to eq [
+    attrs = [
       :id,
       :url,
       :sektion,
@@ -53,12 +53,15 @@ describe Export::Tabular::People::Eintritte do
       :address_care_of,
       :zip_code,
       :town,
+      :canton,
       :country
     ]
+    expect(build.attributes).to match_array(attrs)
+    expect(build.attributes).to eq attrs
   end
 
   it "has expected labels" do
-    expect(build.labels).to eq [
+    labels = [
       "Mitgliedernummer",
       "Mitgliedschaften",
       "Sektion",
@@ -89,8 +92,11 @@ describe Export::Tabular::People::Eintritte do
       "Adresszusatz",
       "PLZ",
       "Ort",
+      "Kanton",
       "Land"
     ]
+    expect(build.labels).to match_array(labels)
+    expect(build.labels).to eq(labels)
   end
 
   it "has range in sheet name" do
@@ -269,7 +275,8 @@ describe Export::Tabular::People::Eintritte do
           address_care_of: "c/o Mami u Papi",
           postbox: "Postfach 1",
           gender: "m",
-          birthday: "21.04.1972"
+          birthday: "21.04.1972",
+          canton: "be"
         )
 
         mitglied.phone_numbers.create!(label: "landline", number: "031 333 44 55")
@@ -307,6 +314,7 @@ describe Export::Tabular::People::Eintritte do
           address_care_of: "c/o Mami u Papi",
           zip_code: "2843",
           town: "Neu Carlscheid",
+          canton: "Bern",
           country: "CH"
         })
       end

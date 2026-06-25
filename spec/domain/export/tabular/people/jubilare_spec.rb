@@ -27,7 +27,8 @@ describe Export::Tabular::People::Jubilare do
         address_care_of: "c/o Mami u Papi",
         postbox: "Postfach 1",
         gender: "m",
-        birthday: "21.04.1972"
+        birthday: "21.04.1972",
+        canton: "be"
       )
       people(:mitglied).phone_numbers.create!(label: "landline", number: "031 333 44 55")
       people(:mitglied).phone_numbers.create!(label: "mobile", number: "079 333 44 55")
@@ -73,6 +74,7 @@ describe Export::Tabular::People::Jubilare do
         "c/o Mami u Papi",
         "2843",
         "Neu Carlscheid",
+        "Bern",
         "CH"
       ])
 
@@ -102,6 +104,7 @@ describe Export::Tabular::People::Jubilare do
         nil,
         "2843",
         "Neu Carlscheid",
+        "",
         nil
       ])
     end

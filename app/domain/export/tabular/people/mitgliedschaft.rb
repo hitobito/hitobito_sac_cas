@@ -32,6 +32,7 @@ module Export::Tabular::People
       :address_care_of,
       :zip_code,
       :town,
+      :canton,
       :country
     ].freeze
 
