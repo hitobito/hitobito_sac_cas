@@ -844,6 +844,24 @@ describe Event::Tour do
     end
   end
 
+  describe "#reportable?" do
+    [:ready, :closed, :canceled].each do |state|
+      it "is reportable in state #{state}" do
+        tour.state = state
+
+        expect(tour).to be_reportable
+      end
+    end
+
+    [:draft, :review, :approved, :published].each do |state|
+      it "is not reportable in state #{state}" do
+        tour.state = state
+
+        expect(tour).not_to be_reportable
+      end
+    end
+  end
+
   context "paper trails", versioning: true do
     before do
       tour.update_column(:state, :draft)

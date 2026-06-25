@@ -485,6 +485,12 @@ de:
           canceled: Abgemeldet
           attended: Teilgenommen
           absent: Nicht erschienen
+      event/report:
+        statuses:
+          draft: Entwurf
+          review: In Freigabe
+          approved: Freigegeben
+          closed: Abgeschlossen
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -1696,6 +1702,13 @@ de:
           review: Deine Freigabe wurde gespeichert.
           approved: Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>.
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
+      reports:
+        title: Tourenrapport (%{status})
+        form_tabs:
+          status: Status
+          participations: Teilnehmende
+          cost_summary: Kostenübersicht
+        success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:
       application_window: Anmeldefenster
@@ -1715,6 +1728,7 @@ de:
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
+      report: Tourenrapport
 
     flash:
       dates_changed: Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast.

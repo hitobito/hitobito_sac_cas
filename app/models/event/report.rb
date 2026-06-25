@@ -28,4 +28,8 @@ class Event::Report < ApplicationRecord
     return :review if submitted_at?
     :draft
   end
+
+  def status_label
+    I18n.t("activerecord.attributes.event/report.statuses.#{status}")
+  end
 end
