@@ -847,7 +847,7 @@ describe Event::Tour do
   describe "#reportable?" do
     [:ready, :closed, :canceled].each do |state|
       it "is reportable in state #{state}" do
-        tour.update_column(:state, state)
+        tour.state = state
 
         expect(tour).to be_reportable
       end
@@ -855,7 +855,7 @@ describe Event::Tour do
 
     [:draft, :review, :approved, :published].each do |state|
       it "is not reportable in state #{state}" do
-        tour.update_column(:state, state)
+        tour.state = state
 
         expect(tour).not_to be_reportable
       end

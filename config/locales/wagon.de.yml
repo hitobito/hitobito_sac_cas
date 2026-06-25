@@ -1707,7 +1707,7 @@ de:
         form_tabs:
           status: Status
           participations: Teilnehmende
-          price_summary: Kostenübersicht
+          cost_summary: Kostenübersicht
         success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:

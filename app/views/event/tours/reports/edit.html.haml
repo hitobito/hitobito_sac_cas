@@ -11,7 +11,7 @@
       = render "status_fields", f: f
     = tab_content(:participations) do
       = render "participation_fields", f: f
-    = tab_content(:price_summary) do
-      = render "price_summary_fields", f: f
+    = tab_content(:cost_summary) do
+      = render "cost_summary_fields", f: f
 
   = form_buttons(f, cancel_url: group_event_path(@group, @event))
