@@ -18,7 +18,7 @@ module Export::Tabular::People
     def multiple_roles_in_range
       super.where(
         "(other.end_on > :end OR" \
-        " (other.end_on = :end AND NOT other.terminated AND other.end_on >= :today)) AND " \
+        "(NOT other.terminated AND other.end_on >= :today)) AND " \
         "(other.start_on <= :end OR (other.start_on = :day_after AND roles.end_on = :end))",
         end: @range.end,
         day_after: @range.end + 1.day,
