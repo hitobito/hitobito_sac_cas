@@ -155,6 +155,29 @@ describe Export::Tabular::People::Austritte do
       end
     end
 
+    # The Person switched Stammsektion sometime during the selected range
+    # As long as the new stammsektion role is still active, the previous role
+    # should not count as an austritt.
+    it "does not count as austritt when new stammsektion role ends before range end but is still active" do
+      create_role_plain(start_on: "1.1.2024", end_on: "10.1.2025")
+      new_role = create_role_plain(start_on: "11.1.2025", end_on: "2.6.2025")
+
+      # Exporting during the range before new role ends
+      travel_to(Time.zone.local(2025, 5, 30)) do
+        expect(build.people_scope).not_to include(new_role.person)
+      end
+
+      # Exporting during the range before after role ends
+      travel_to(Time.zone.local(2025, 6, 6)) do
+        expect(build.people_scope).to include(new_role.person)
+      end
+
+      # Exporting after the range
+      travel_to(Time.zone.local(2025, 10, 13)) do
+        expect(build.people_scope).to include(new_role.person)
+      end
+    end
+
     describe "range border" do
       it "includes if role ends on begin of range" do
         person = create_role("Mitglied", start_on: "1.1.2024", end_on: "1.7.2024").person
