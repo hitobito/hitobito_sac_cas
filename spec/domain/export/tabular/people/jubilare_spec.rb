@@ -104,7 +104,7 @@ describe Export::Tabular::People::Jubilare do
         nil,
         "2843",
         "Neu Carlscheid",
-        nil,
+        "",
         nil
       ])
     end
