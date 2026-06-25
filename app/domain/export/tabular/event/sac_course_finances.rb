@@ -22,6 +22,7 @@ module Export::Tabular::Event
       :start_on,
       :finish_on,
       :state,
+      :language,
       :closed_month,
 
       :total_revenue,

@@ -1889,6 +1889,7 @@ de:
       event_kind_short_name: Kursart Kurzname
       event_kind_label: Kursart Verbandsbezeichnung
       season: Saison
+      language: Sprache
       name: Kursname
       start_on: Startdatum
       finish_on: Enddatum
