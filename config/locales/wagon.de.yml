@@ -71,6 +71,16 @@ de:
         send_date: "Versand- und Rechnungsdatum"
         price_category: "Preiskategorie"
         price: "Preis"
+      event/tour/report_form:
+        tour_completed: Wurde die Tour durchgeführt
+        review: Tourenrückblick
+        remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
+        submitter_id: Eingereicht von
+        submitted_at: Eingereicht am
+        approver_id: Freigegeben von
+        approved_at: Freigegeben am
+        payer_id: Ausbezahlt von
+        paid_at: Ausbezahlt am
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
@@ -1708,6 +1718,8 @@ de:
           status: Status
           participations: Teilnehmende
           cost_summary: Kostenübersicht
+        status_fields:
+          editing_status: Bearbeitungsstatus
         success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:

@@ -2,3 +2,26 @@
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
+
+= f.labeled(:tour_completed) do
+    .col-form-label= format_attr(entry, :tour_completed?)
+- if entry.report.event.canceled?
+    = f.labeled(entry.report.event.class.human_attribute_name(:canceled_reason)) do
+        .col-form-label= format_attr(entry.report.event, :canceled_reason)
+
+= f.labeled_text_area(:review)
+= f.labeled_text_area(:remarks)
+
+= field_set_tag(t(".editing_status")) do
+    = f.labeled(:submitter_id) do
+        .col-form-label= format_attr(entry.report, :submitter_id)
+    = f.labeled(:submitted_at) do
+        .col-form-label= format_attr(entry.report, :submitted_at)
+    = f.labeled(:approver_id) do
+        .col-form-label= format_attr(entry.report, :approver_id)
+    = f.labeled(:approved_at) do
+        .col-form-label= format_attr(entry.report, :approved_at)
+    = f.labeled(:payer_id) do
+        .col-form-label= format_attr(entry.report, :payer_id)
+    = f.labeled(:paid_at) do
+        .col-form-label= format_attr(entry.report, :paid_at)

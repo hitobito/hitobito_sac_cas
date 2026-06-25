@@ -55,11 +55,20 @@ describe Event::Tours::ReportsController do
     context "as admin" do
       let(:person) { people(:admin) }
 
-      it "displays flash messages and redirects to event show" do
-        put :update, params: params
+      it "updates the report and redirects to event show" do
+        put :update, params: params.merge(
+          event_tour_report_form: {
+            remarks: "I have an opinion",
+            review: "My opinion is more important than yours"
+          }
+        )
+
+        report = event.report.reload
 
         expect(flash[:notice]).to eq "Tourenrapport wurde erfolgreich aktualisiert"
         expect(response).to redirect_to(group_event_path(group, event))
+        expect(report.remarks).to eq "I have an opinion"
+        expect(report.review).to eq "My opinion is more important than yours"
       end
 
       it "is unauthorized when event is not reportable" do
