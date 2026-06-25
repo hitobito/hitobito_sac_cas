@@ -10,6 +10,7 @@ top_mitglied:
   participant_type: Person
   active: true
   state: assigned
+  means_of_transport: public
 
 top_familienmitglied:
   event: top_course

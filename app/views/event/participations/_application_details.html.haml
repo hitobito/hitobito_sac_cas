@@ -4,31 +4,24 @@
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
 = render_attrs_group do
-  = labeled(Event::Participation.human_attribute_name(:membership_number)) do
-    = format_attr(entry, :membership_number)
-  = labeled(Event::Participation.human_attribute_name(:sac_membership_active?)) do
-    = format_attr(entry, :sac_membership_active?)
+  = labeled_attr(entry, :membership_number)
+  = labeled_attr(entry, :sac_membership_active?)
   - if entry.sac_membership_active?
-    = labeled(Person.human_attribute_name(:membership_years)) do
-      = format_attr(entry, :membership_years)
+    = labeled_attr(entry.person, :membership_years)
 
 = render_attrs_group do
-  = labeled(Event::Participation.human_attribute_name(:created_at)) do
-    = format_attr(entry, :created_at)
+  = labeled_attr(entry, :created_at)
   - if entry.states?
-    = labeled(Event::Participation.human_attribute_name(:state)) do
-      = format_attr(entry, :state)
+    = labeled_attr(entry, :state)
   - if @event.course?
-    = labeled(Event::Participation.human_attribute_name(:actual_days)) do
-      = format_attr(entry, :actual_days)
+    = labeled_attr(entry, :actual_days)
   - if @event.course? || @event.tour?
-    = labeled(Event::Participation.human_attribute_name(:price)) do
-      = format_attr(entry, :price)
+    = labeled_attr(entry, :price)
+  - if @event.tour?
+    = labeled_attr(entry, :means_of_transport)
   - if @event.course?
-    = labeled(Event::Participation.human_attribute_name(:invoice_state)) do
-      = format_attr(entry, :invoice_state)
-    = labeled(Event::Participation.human_attribute_name(:correspondence)) do
-      = format_attr(entry, :correspondence)
+    = labeled_attr(entry, :invoice_state)
+    = labeled_attr(entry, :correspondence)
 
 - if @event.course? && entry.state == 'canceled'
   = render_attrs(entry, :canceled_at, :cancel_statement)

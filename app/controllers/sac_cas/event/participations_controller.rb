@@ -13,7 +13,7 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
   prepended do
     define_model_callbacks :summon
 
-    self.permitted_attrs += %i[adult_consent terms_and_conditions newsletter]
+    self.permitted_attrs += %i[adult_consent terms_and_conditions newsletter means_of_transport]
 
     around_create :proceed_wizard
     after_create :subscribe_newsletter

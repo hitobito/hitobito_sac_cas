@@ -48,6 +48,7 @@ describe "event/participations/_application_details.html.haml" do
       expect_attribute_row(event_attrributes_container, 4, "Preis", "CHF 20.00 (Normalpreis)")
       expect_attribute_row(event_attrributes_container, 5, "Rechnung", "Bezahlt")
       expect_attribute_row(event_attrributes_container, 6, "Rechnungsstellung", "Digital")
+      expect(dom).to have_no_text "Anreisemittel"
     end
 
     it "does render relevant membership attributes for participation without mitglied role" do
@@ -55,7 +56,7 @@ describe "event/participations/_application_details.html.haml" do
 
       expect_attribute_row(membership_attributes_container, 1, "Personennummer", participation.participant_id)
       expect_attribute_row(membership_attributes_container, 2, "SAC-Mitglied", "nein")
-      expect(dom).not_to have_text "Anzahl Mitglieder-Jahre"
+      expect(dom).to have_no_text "Anzahl Mitglieder-Jahre"
     end
   end
 
@@ -75,9 +76,10 @@ describe "event/participations/_application_details.html.haml" do
       expect_attribute_row(event_attrributes_container, 1, "Anmeldedatum")
       expect_attribute_row(event_attrributes_container, 2, "Status", "Bestätigt")
       expect_attribute_row(event_attrributes_container, 3, "Preis", "CHF 20.00 (Normalpreis)")
-      expect(dom).not_to have_text "Effektive Tage"
-      expect(dom).not_to have_text "Rechnung"
-      expect(dom).not_to have_text "Rechnungsstellung"
+      expect_attribute_row(event_attrributes_container, 4, "Anreisemittel", "ÖV")
+      expect(dom).to have_no_text "Effektive Tage"
+      expect(dom).to have_no_text "Rechnung"
+      expect(dom).to have_no_text "Rechnungsstellung"
     end
   end
 
@@ -92,10 +94,11 @@ describe "event/participations/_application_details.html.haml" do
 
       expect_attribute_row(event_attrributes_container, 1, "Anmeldedatum")
       expect_attribute_row(event_attrributes_container, 2, "Status", "Bestätigt")
-      expect(dom).not_to have_text "Effektive Tage"
-      expect(dom).not_to have_text "Preis"
-      expect(dom).not_to have_text "Rechnung"
-      expect(dom).not_to have_text "Rechnungsstellung"
+      expect(dom).to have_no_text "Effektive Tage"
+      expect(dom).to have_no_text "Preis"
+      expect(dom).to have_no_text "Rechnung"
+      expect(dom).to have_no_text "Rechnungsstellung"
+      expect(dom).to have_no_text "Anreisemittel"
     end
   end
 end

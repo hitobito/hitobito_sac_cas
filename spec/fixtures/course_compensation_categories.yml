@@ -12,7 +12,7 @@ day:
 flat:
   short_name: KP-REISE/MATERIAL
   kind: flat
-  description: An- und Rückreise (unabhängig von Transportmittel und Strecke), Transportkosten während dem Kurs (Bergbahn, Alpentaxi etc.)
+  description: An- und Rückreise (unabhängig von Anreisemittel und Strecke), Transportkosten während dem Kurs (Bergbahn, Alpentaxi etc.)
 
 budget:
   short_name: UB-HUETTE

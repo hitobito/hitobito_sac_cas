@@ -20,7 +20,7 @@ describe EventKindsHelper do
         short_name: "KP-REISE/MATERIAL",
         kind: :flat,
         # rubocop:todo Layout/LineLength
-        description: "An- und Rückreise (unabhängig von Transportmittel und Strecke), Transportkosten während dem Kurs (Bergbahn, Alpentaxi etc.)"
+        description: "An- und Rückreise (unabhängig von Anreisemittel und Strecke), Transportkosten während dem Kurs (Bergbahn, Alpentaxi etc.)"
         # rubocop:enable Layout/LineLength
       )
     }

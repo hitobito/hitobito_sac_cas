@@ -8,6 +8,8 @@
 module SacCas::Event::Participation
   extend ActiveSupport::Concern
 
+  MEANS_OF_TRANSPORT = %w[public car legs].freeze
+
   SELF_EMPLOYED_LEADER_ROLES = [
     Group::SacCasKurskader::KursleitungSelbstaendig,
     Group::SacCasKurskader::KursleitungAspirantSelbstaendig,
@@ -26,6 +28,7 @@ module SacCas::Event::Participation
     enum :price_category, [:price_member, :price_regular, :price_subsidized, :price_special]
 
     i18n_enum :invoice_state, ExternalInvoice::STATES, scopes: true, queries: true
+    i18n_enum :means_of_transport, MEANS_OF_TRANSPORT
 
     paper_trail_options[:skip] |= ["previous_state"]
 

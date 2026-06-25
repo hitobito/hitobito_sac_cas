@@ -466,6 +466,12 @@ de:
           payed: Bezahlt
           cancelled: Storniert
           error: Fehler
+        means_of_transport: Anreisemittel
+        means_of_transports:
+          _nil: unbekannt
+          public: ÖV
+          car: Auto
+          legs: Zu Fuss/Velo
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
         sac_membership_active?: SAC-Mitglied
         states:
