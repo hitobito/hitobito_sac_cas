@@ -32,7 +32,7 @@ describe "event/participations/courses/_signup_aside.html.haml" do
   context "contact" do
     it "has static content" do
       expect(dom).to have_css "h2.card-title", text: "Fragen zur Anmeldung"
-      expect(dom).to have_css "i", count: 3
+      expect(dom).to have_css "i", count: 2
     end
   end
 end
