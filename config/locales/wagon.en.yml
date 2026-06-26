@@ -1821,7 +1821,7 @@ en:
       title: Create course level
 
   event/courses/leader_settlement_pdfs:
-    export_enqueued: "Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "Leader settlement report is generated in the background and can be downloaded from the job overview once complete: %{overview_link}"
 
   event/participations:
     pending: "Es wurde eine Voranmeldung erstellt. Diese ist noch nicht definitiv und muss von der Kursverwaltung bestätigt werden."
@@ -1844,7 +1844,9 @@ en:
       event_kind_short_name: Kursart Kurzname
       event_kind_label: Kursart Verbandsbezeichnung
       season: Saison
+      language: Sprache
       name: Kursname
+      number: Kursnummer
       start_on: Startdatum
       finish_on: Enddatum
       state: Kursstatus
@@ -2755,12 +2757,12 @@ en:
         submit_button: Die Alpen-Abonnent beenden
 
   delayed_job:
-    export/austritte_export_job: "Export: Ausgetretene Mitglieder Sektion"
-    export/beitragskategorie_wechsel_export_job: "Export: Wechsel Beitragskategorie Sektion"
-    export/eintritte_export_job: "Export: Eingetretene Mitglieder Sektion"
-    export/jubilare_export_job: "Export: Jubilare Sektion"
-    export/leader_settlement_export_job: "Export: Kurskaderabrechnung"
-    export/mitglieder_csv_export_job: "Export: Mitglieder CSV Sektion"
-    export/mitglieder_statistics_export_job: "Export: Mitgliederstatistik Sektion"
-    export/sac_statistics_export_job: "Export: SAC Statistik"
-    export/sac_courses_export_job: "Export: Finanzindikatoren Kurse"
+    export/austritte_export_job: "Export: Resigned Members Section"
+    export/beitragskategorie_wechsel_export_job: "Export: Section Fee Category Change"
+    export/eintritte_export_job: "Export: New Members Section"
+    export/jubilare_export_job: "Export: Section Jubilarians"
+    export/leader_settlement_export_job: "Export: Leader Settlement"
+    export/mitglieder_csv_export_job: "Export: Section Members CSV"
+    export/mitglieder_statistics_export_job: "Export: Section Member Statistics"
+    export/sac_statistics_export_job: "Export: SAC Statistics"
+    export/sac_courses_export_job: "Export: Course Financial Indicators"

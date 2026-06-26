@@ -1644,7 +1644,7 @@ it:
       subsidy_step:
         title: Richiedere un contributo di sovvenzione
         subsidy_link_label: Richiesta di sovvenzione
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
           In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
@@ -1889,7 +1889,7 @@ it:
       title: Creare il livello del corso
 
   event/courses/leader_settlement_pdfs:
-    export_enqueued: "Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "Il conteggio dei quadri del corso viene generato in background e potrà essere scaricato dalla panoramica dei processi una volta completato: %{overview_link}"
 
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
@@ -1912,7 +1912,9 @@ it:
       event_kind_short_name: Kursart Kurzname
       event_kind_label: Kursart Verbandsbezeichnung
       season: Saison
+      language: Sprache
       name: Kursname
+      number: Kursnummer
       start_on: Startdatum
       finish_on: Enddatum
       state: Kursstatus
@@ -2831,12 +2833,12 @@ it:
         submit_button: Fine dell'abbonato alpino
 
   delayed_job:
-    export/austritte_export_job: "Export: Ausgetretene Mitglieder Sektion"
-    export/beitragskategorie_wechsel_export_job: "Export: Wechsel Beitragskategorie Sektion"
-    export/eintritte_export_job: "Export: Eingetretene Mitglieder Sektion"
-    export/jubilare_export_job: "Export: Jubilare Sektion"
-    export/leader_settlement_export_job: "Export: Kurskaderabrechnung"
-    export/mitglieder_csv_export_job: "Export: Mitglieder CSV Sektion"
-    export/mitglieder_statistics_export_job: "Export: Mitgliederstatistik Sektion"
-    export/sac_statistics_export_job: "Export: SAC Statistik"
-    export/sac_courses_export_job: "Export: Finanzindikatoren Kurse"
+    export/austritte_export_job: "Export: Membri uscenti sezione"
+    export/beitragskategorie_wechsel_export_job: "Export: Cambio categoria contributiva sezione"
+    export/eintritte_export_job: "Export: Nuovi membri sezione"
+    export/jubilare_export_job: "Export: Giubilari sezione"
+    export/leader_settlement_export_job: "Export: Conteggio dei quadri del corso"
+    export/mitglieder_csv_export_job: "Export: CSV membri sezione"
+    export/mitglieder_statistics_export_job: "Export: Statistiche membri sezione"
+    export/sac_statistics_export_job: "Export: Statistiche CAS"
+    export/sac_courses_export_job: "Export: Indicatori finanziari dei corsi"
