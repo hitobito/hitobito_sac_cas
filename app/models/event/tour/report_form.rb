@@ -11,12 +11,19 @@ class Event::Tour::ReportForm
 
   attr_reader :report
 
+  attribute :review, :string
+  attribute :remarks, :string
+
   def initialize(report, attrs = {})
-    super(attrs)
     @report = report
+    super({review: report.review, remarks: report.remarks, **attrs})
   end
 
   def save
-    true
+    report.update(review:, remarks:)
+  end
+
+  def tour_completed?
+    [:ready, :closed].include?(report.event.state.to_sym)
   end
 end

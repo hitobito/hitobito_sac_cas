@@ -16,7 +16,7 @@ class Event::Tours::ReportsController < ApplicationController
   end
 
   def update
-    # form.attributes = permitted_attrs
+    form.attributes = permitted_attrs
     if form.save
       flash[:notice] ||= t("event.tours.reports.success_notice")
       redirect_to group_event_path(group, event)
@@ -28,9 +28,9 @@ class Event::Tours::ReportsController < ApplicationController
   private
 
   def permitted_attrs
-    # params
-    #   .require(:event_tour_report_form)
-    #   .permit()
+    params
+      .require(:event_tour_report_form)
+      .permit(:review, :remarks)
   end
 
   def form = @form ||= Event::Tour::ReportForm.new(event.report || event.build_report)
