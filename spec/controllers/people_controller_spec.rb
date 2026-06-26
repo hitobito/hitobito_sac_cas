@@ -182,14 +182,21 @@ describe PeopleController do
         expect(response.body).to include("Geburtsdatum darf nicht verändert werden")
       end
 
-      it "cannot update birthday to last 6 years" do
+      it "can update birthday to last 6 years by end of year" do
         expect do
           put :update, params: {id: member.id, group_id: member.groups.first.id,
-                                person: {birthday: 5.years.ago}}
+                                person: {birthday: 6.years.ago.end_of_year.to_date}}
+        end.to change { member.reload.birthday }
+      end
+
+      it "cannot update birthday to less than last 6 years by end of year" do
+        expect do
+          put :update, params: {id: member.id, group_id: member.groups.first.id,
+                                person: {birthday: (6.years.ago.end_of_year + 1.day).to_date}}
         end.not_to change { member.reload.birthday }
 
         # rubocop:todo Layout/LineLength
-        expect(response.body).to include("Geburtsdatum muss vor dem #{6.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
+        expect(response.body).to include("Geburtsdatum muss vor dem #{6.years.ago.end_of_year.to_date.strftime("%d.%m.%Y")} liegen.")
         # rubocop:enable Layout/LineLength
       end
 

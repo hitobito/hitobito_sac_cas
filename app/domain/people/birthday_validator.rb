@@ -44,7 +44,8 @@ class People::BirthdayValidator
   end
 
   def min_age_date
-    6.years.ago.to_date
+    SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
+      .years.ago.end_of_year.to_date
   end
 
   def max_age_date

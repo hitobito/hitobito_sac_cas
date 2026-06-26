@@ -16,16 +16,22 @@ describe People::BirthdayValidator do
     travel_to "06.06.2025"
   end
 
-  it "adds no error when exactly six years old" do
+  it "adds no error when born in middle of cutoff year" do
     person.update!(birthday: Date.parse("06.06.2019"))
     expect { validator.validate_birthday_range }.not_to throw_symbol(:abort)
     expect(person.errors[:birthday]).to be_empty
   end
 
-  it "adds error when 5 years and 364 days old" do
-    person.update!(birthday: Date.parse("07.06.2019"))
+  it "adds no error when born on last day of cutoff year" do
+    person.update!(birthday: Date.parse("31.12.2019"))
+    expect { validator.validate_birthday_range }.not_to throw_symbol(:abort)
+    expect(person.errors[:birthday]).to be_empty
+  end
+
+  it "adds error when born on first day after cutoff year" do
+    person.update!(birthday: Date.parse("01.01.2020"))
     expect { validator.validate_birthday_range }.to throw_symbol(:abort)
-    expect(person.errors[:birthday]).to eq ["muss vor dem 06.06.2019 liegen."]
+    expect(person.errors[:birthday]).to eq ["muss vor dem 31.12.2019 liegen."]
   end
 
   it "adds no error when exactly 119 years and 364 days old" do

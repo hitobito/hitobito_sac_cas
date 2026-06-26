@@ -84,6 +84,17 @@ describe Wizards::Steps::Signup::Sektion::FamilyFields::Member do
         expect(member.errors.full_messages).to eq ["Person muss 6 Jahre oder älter sein"]
       end
 
+      it "accepts birthday on last day of year 6 years ago" do
+        member.attributes = required_attrs.merge(birthday: 6.years.ago.end_of_year.to_date)
+        expect(member).to be_valid
+      end
+
+      it "rejects birthday on first day after end of year 6 years ago" do
+        member.attributes = required_attrs.merge(birthday: (6.years.ago.end_of_year + 1.day).to_date)
+        expect(member).not_to be_valid
+        expect(member.errors.full_messages).to eq ["Person muss 6 Jahre oder älter sein"]
+      end
+
       it "accepts birthday on last day 17 years ago but rejects on first day 18 years ago" do
         member.attributes = required_attrs.merge(birthday: 17.years.ago.end_of_year.to_date)
         expect(member).to be_valid

@@ -74,8 +74,13 @@ describe Wizards::Signup::AboMagazinWizard do
         expect(wizard).to be_valid
       end
 
-      it "is invalid if birthday is in the future" do
+      it "is valid if birthday is later this year" do
         required_attrs[:person_fields][:birthday] = 1.day.from_now.to_date
+        expect(wizard).to be_valid
+      end
+
+      it "is invalid if birthday is in a future year" do
+        required_attrs[:person_fields][:birthday] = 1.year.from_now.to_date
         expect(wizard).not_to be_valid
         # rubocop:todo Layout/LineLength
         expect(wizard.person_fields.errors.full_messages).to eq ["Person muss 0 Jahre oder älter sein"]

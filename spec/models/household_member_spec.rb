@@ -99,6 +99,21 @@ describe HouseholdMember do
         # rubocop:enable Layout/LineLength
       end
 
+      it "is valid when person turns 6 at end of the year" do
+        create_mitglied_role(person)
+        person.update_attribute(:birthday, Date.new(2018, 12, 31))
+        expect(household_member.valid?).to eq true
+      end
+
+      it "is invalid when person does not yet turn 6 by end of the year" do
+        create_mitglied_role(person)
+        person.update_attribute(:birthday, Date.new(2019, 1, 1))
+        expect(household_member.valid?).to eq false
+        # rubocop:todo Layout/LineLength
+        expect(household_member.errors[:base]).to match_array(["#{person.full_name} kann nicht hinzugefügt werden. Es sind nur Personen erlaubt im Alter von 6-17 oder ab 22 Jahren."])
+        # rubocop:enable Layout/LineLength
+      end
+
       it "is invalid if birthday is between 17 and 22 years old" do
         create_mitglied_role(person)
         person.update_attribute(:birthday, Date.new(2005, 7, 20))

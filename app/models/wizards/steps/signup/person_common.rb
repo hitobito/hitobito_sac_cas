@@ -63,7 +63,8 @@ module Wizards::Steps::Signup::PersonCommon
   end
 
   def assert_minimum_age
-    if minimum_age && birthday && Person.new(birthday: birthday).years < minimum_age
+    if minimum_age && birthday &&
+        Person.new(birthday: birthday).years(Time.zone.today.end_of_year) < minimum_age
       errors.add(:person, :too_young, minimum_years: minimum_age)
     end
   end

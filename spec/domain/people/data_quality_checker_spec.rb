@@ -67,6 +67,26 @@ describe People::DataQualityChecker do
     end.not_to change { person.data_quality_issues.count }
   end
 
+  describe "birthday minimum age check" do
+    let(:stammsektion_role) { roles(:mitglied) }
+
+    before do
+      stammsektion_role.update_columns(created_at: Time.zone.parse("2020-06-15"))
+    end
+
+    it "creates no issue when person was born at end of year 6 years ago" do
+      person.update_columns(birthday: Date.new(2014, 12, 31))
+      checker.check_data_quality
+      expect(person.data_quality_issues.map(&:key)).not_to include "less_than_6_years_before_entry"
+    end
+
+    it "creates issue when person was born on first day after end of year 6 years ago" do
+      person.update_columns(birthday: Date.new(2015, 1, 1))
+      checker.check_data_quality
+      expect(person.data_quality_issues.map(&:key)).to include "less_than_6_years_before_entry"
+    end
+  end
+
   it "destroys old issues and keeps existing" do
     person.data_quality_issues.create!(attr: :phone_numbers, key: :empty, severity: "warning")
     person.data_quality_issues.create!(attr: :last_name, key: :empty, severity: "error")

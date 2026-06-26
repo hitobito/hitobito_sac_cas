@@ -65,7 +65,9 @@ class People::DataQualityChecker
   def invalid_birthday?(stammsektion_role)
     stammsektion_role.present? &&
       person.birthday &&
-      person.birthday > stammsektion_role.created_at - 6.years
+      person.birthday > (stammsektion_role.created_at -
+        SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin.years)
+        .end_of_year.to_date
   end
 
   def check_blank(attr, precondition, severity = :error)

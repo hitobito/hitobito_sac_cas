@@ -23,6 +23,6 @@ module SacCas::Role::MitgliedMinimalAgeValidation
   end
 
   def too_young?
-    person.years < MINIMUM_YEARS
+    person.years(Time.zone.today.end_of_year) < MINIMUM_YEARS
   end
 end
