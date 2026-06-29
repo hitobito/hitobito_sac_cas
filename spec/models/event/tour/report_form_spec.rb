@@ -10,6 +10,10 @@ require "spec_helper"
 describe Event::Tour::ReportForm do
   let(:event) { events(:section_tour) }
   let(:report) { event_reports(:section_tour_report) }
+  let(:participation) do
+    Fabricate(Event::Role::Participant.name.to_sym,
+      participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)).participation
+  end
   let(:form) { described_class.new(report) }
 
   it "assigns attributes from report" do
@@ -25,6 +29,65 @@ describe Event::Tour::ReportForm do
       expect { form.save }
         .to change { report.reload.review }.to("Updated review")
         .and change { report.reload.remarks }.to("Some remarks")
+    end
+
+    it "perists changed attributes to the participations" do
+      form.participations_attributes = {
+        participation.id.to_s => {
+          state: "attended",
+          means_of_transport: "legs"
+        }
+      }
+
+      expect { form.save }
+        .to change { participation.reload.state }.from("assigned").to("attended")
+        .and change { participation.reload.means_of_transport }.from(nil).to("legs")
+    end
+  end
+
+  describe "#participations" do
+    [:rejected, :applied, :unconfirmed].each do |state|
+      it "does not include participations in state #{state}" do
+        participation.update_column(:state, state)
+
+        expect(form.participations).not_to include(participation)
+      end
+    end
+  end
+
+  describe "#editable_participation_state?" do
+    it "returns true for an editable state" do
+      participation.update_columns(state: "assigned")
+      expect(form.editable_participation_state?(participation)).to be true
+    end
+
+    it "returns false for a non editable state" do
+      participation.update_columns(state: "canceled")
+      expect(form.editable_participation_state?(participation)).to be false
+    end
+  end
+
+  describe "#assert_participation_states_editable" do
+    it "is valid when participation is in an editable state" do
+      participation.update_columns(state: "assigned")
+      form.participations_attributes = {
+        participation.id.to_s => {
+          state: "attended"
+        }
+      }
+
+      expect(form).to be_valid
+    end
+
+    it "is invalid when participation is in a non editable state" do
+      participation.update_columns(state: "canceled")
+      form.participations_attributes = {
+        participation.id.to_s => {
+          state: "attended"
+        }
+      }
+
+      expect(form).not_to be_valid
     end
   end
 

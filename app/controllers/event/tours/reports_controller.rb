@@ -21,7 +21,7 @@ class Event::Tours::ReportsController < ApplicationController
       flash[:notice] ||= t("event.tours.reports.success_notice")
       redirect_to group_event_path(group, event)
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -30,7 +30,14 @@ class Event::Tours::ReportsController < ApplicationController
   def permitted_attrs
     params
       .require(:event_tour_report_form)
-      .permit(:review, :remarks)
+      .permit(
+        :review,
+        :remarks,
+        participations_attributes: [
+          :state,
+          :means_of_transport
+        ]
+      )
   end
 
   def form = @form ||= Event::Tour::ReportForm.new(event.report || event.build_report)
