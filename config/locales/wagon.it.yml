@@ -1644,7 +1644,7 @@ it:
       subsidy_step:
         title: Richiedere un contributo di sovvenzione
         subsidy_link_label: Richiesta di sovvenzione
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
           In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"

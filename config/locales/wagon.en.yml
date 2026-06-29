@@ -1576,7 +1576,7 @@ en:
       subsidy_step:
         title: Apply for a subsidy
         subsidy_link_label: Subsidy application
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
           As an SAC member, you can apply for a subsidy for this course. Choose whether you would like to take advantage of this.
         detail_info_header: "What do I have to do to apply for a subsidy?"
