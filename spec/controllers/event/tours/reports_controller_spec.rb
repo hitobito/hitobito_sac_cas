@@ -12,8 +12,7 @@ describe Event::Tours::ReportsController do
   let(:event) { events(:section_tour) }
   let!(:participation) do
     Fabricate(Event::Role::Participant.name.to_sym,
-      participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)
-    ).participation
+      participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)).participation
   end
   let(:params) { {group_id: group.id, event_id: event.id} }
 

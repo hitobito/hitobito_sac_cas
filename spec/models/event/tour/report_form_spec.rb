@@ -12,8 +12,7 @@ describe Event::Tour::ReportForm do
   let(:report) { event_reports(:section_tour_report) }
   let(:participation) do
     Fabricate(Event::Role::Participant.name.to_sym,
-      participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)
-    ).participation
+      participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)).participation
   end
   let(:form) { described_class.new(report) }
 
