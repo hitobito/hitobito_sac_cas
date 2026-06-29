@@ -14,26 +14,26 @@
     = f.fields_for :participations_attributes, participation, index: participation.id do |ff|
         .border-bottom.row.py-2
             .col-12.col-xl-2
-                .labeled-grid.d-xl-block
+                .d-xl-block
                     .d-xl-none.muted= Person.human_attribute_name(:name)
                     .fw-bold= link_to(participation.to_s(:list), group_event_participation_path(@group, @event, participation))
             .col-12.col-xl-2
-                .labeled-grid.d-xl-block
+                .d-xl-block
                     .d-xl-none.muted= Role.model_name.human(count: 2)
                     = participation.decorate.list_roles
             .col-12.col-xl-2
-                .labeled-grid.d-xl-block
+                .d-xl-block
                     .d-xl-none.muted= Group::Sektion.model_name.human
                     = participation.tour_sektion || t("global.associations.no_entry")
             .col-12.col-xl-3
-                .labeled-grid.d-xl-block
+                .d-xl-block
                     .d-xl-none.muted= Event::Participation.human_attribute_name(:status)
                     - if entry.report.event.canceled? || !entry.editable_participation_state?(participation)
                         = participation.state_label
                     - else
                         = ff.i18n_enum_field :state, entry.participation_state_labels(participation)
             .col-12.col-xl-3
-                .labeled-grid.d-xl-block
+                .d-xl-block
                     .d-xl-none.muted= Event::Participation.human_attribute_name(:means_of_transport)
                     - if entry.report.event.canceled?
                         = participation.means_of_transport_label
