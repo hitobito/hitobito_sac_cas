@@ -110,12 +110,17 @@ describe PeopleController do
   context "PUT#update" do
     it "cannot update sac remarks" do
       expect do
-        put :update, params: {id: admin.id, group_id: admin.groups.first.id,
-                              # rubocop:todo Layout/LineLength
-                              person: {sac_remark_national_office: "example", sac_remark_section_1: "example"}}
-        # rubocop:enable Layout/LineLength
+        put :update, params: {id: admin.id,
+                              group_id: admin.groups.first.id,
+                              person: {
+                                sac_remark_national_office: "example",
+                                sac_remark_section_1: "example"
+                              }}
       end.not_to change {
-                   [admin.reload.sac_remark_national_office, admin.reload.sac_remark_section_1]
+                   [
+                     admin.reload.sac_remark_national_office,
+                     admin.reload.sac_remark_section_1
+                   ]
                  }
     end
 
@@ -195,9 +200,8 @@ describe PeopleController do
                                 person: {birthday: (6.years.ago.end_of_year + 1.day).to_date}}
         end.not_to change { member.reload.birthday }
 
-        # rubocop:todo Layout/LineLength
-        expect(response.body).to include("Geburtsdatum muss vor dem #{6.years.ago.end_of_year.to_date.strftime("%d.%m.%Y")} liegen.")
-        # rubocop:enable Layout/LineLength
+        expect(response.body).to include("Geburtsdatum muss vor dem " \
+          "#{6.years.ago.end_of_year.to_date.strftime("%d.%m.%Y")} liegen.")
       end
 
       it "cannot update birthday to before 120 years ago" do
@@ -206,9 +210,8 @@ describe PeopleController do
                                 person: {birthday: 121.years.ago}}
         end.not_to change { member.reload.birthday }
 
-        # rubocop:todo Layout/LineLength
-        expect(response.body).to include("Geburtsdatum muss nach dem #{120.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
-        # rubocop:enable Layout/LineLength
+        expect(response.body).to include("Geburtsdatum muss nach dem " \
+          "#{120.years.ago.to_date.strftime("%d.%m.%Y")} liegen.")
       end
 
       it "does not validate if birthday was not changed" do
@@ -222,9 +225,8 @@ describe PeopleController do
         member.reload
 
         expect(member.first_name).to eq("changed")
-        # rubocop:todo Layout/LineLength
-        expect(response.body).to_not include("Geburtsdatum muss nach dem 31.12.#{Date.current.year - 120} liegen.")
-        # rubocop:enable Layout/LineLength
+        expect(response.body).to_not include("Geburtsdatum muss nach dem " \
+          "31.12.#{Date.current.year - 120} liegen.")
       end
     end
 
