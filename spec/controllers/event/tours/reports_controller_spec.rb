@@ -10,6 +10,11 @@ require "spec_helper"
 describe Event::Tours::ReportsController do
   let(:group) { groups(:bluemlisalp) }
   let(:event) { events(:section_tour) }
+  let!(:participation) do
+    Fabricate(Event::Role::Participant.name.to_sym,
+      participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)
+    ).participation
+  end
   let(:params) { {group_id: group.id, event_id: event.id} }
 
   before do
@@ -69,6 +74,37 @@ describe Event::Tours::ReportsController do
         expect(response).to redirect_to(group_event_path(group, event))
         expect(report.remarks).to eq "I have an opinion"
         expect(report.review).to eq "My opinion is more important than yours"
+      end
+
+      it "updates participation states" do
+        put :update, params: params.merge(
+          event_tour_report_form: {
+            participations_attributes: {
+              "#{participation.id}": {
+                state: "attended"
+              }
+            }
+          }
+        )
+
+        expect(participation.reload.state).to eq "attended"
+      end
+
+      it "returns unprocessable_content when updating invalid state" do
+        participation.update_columns(state: "summoned")
+
+        put :update, params: params.merge(
+          event_tour_report_form: {
+            participations_attributes: {
+              "#{participation.id}": {
+                state: "attended"
+              }
+            }
+          }
+        )
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(participation.reload.state).to eq "summoned"
       end
 
       it "is unauthorized when event is not reportable" do

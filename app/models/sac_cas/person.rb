@@ -30,8 +30,8 @@ module SacCas::Person
 
     self.address_sync_relevant_fields += [:canton]
 
-    delegate :active?, :active_in?, :anytime?, :family?, :stammsektion_role, :terminated?,
-      to: :sac_membership, prefix: true
+    delegate :active?, :active_in?, :anytime?, :family?, :stammsektion, :stammsektion_role,
+      :zusatzsektionen, :terminated?, to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
 
     alias_attribute :membership_number, :id

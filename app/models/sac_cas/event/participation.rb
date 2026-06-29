@@ -63,6 +63,22 @@ module SacCas::Event::Participation
       (Event::Course.leader_types.map(&:sti_name) & roles.map(&:type)).first&.demodulize&.underscore
   end
 
+  # Returns the matching tour sektion if person has a stamm- or zusatzmitgliedschaft in it.
+  # Falls back to stammsektion if they have no membership in any of the tour sektionen.
+  # Returns nil if person has no active membership at all.
+  def tour_sektion
+    raise "Only use on tour participations" unless event.tour?
+
+    return nil unless person.sac_membership_active?
+
+    stammsektion = person.sac_membership_stammsektion
+    membership_in_tour_sektion = (
+      ([stammsektion] + person.sac_membership_zusatzsektionen) & event.groups
+    ).first
+
+    membership_in_tour_sektion || stammsektion
+  end
+
   private
 
   def round_actual_days

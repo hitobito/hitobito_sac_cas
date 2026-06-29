@@ -73,6 +73,41 @@ describe Event::Participation do
     end
   end
 
+  describe "#tour_sektion" do
+    let(:person) { people(:mitglied) }
+    let(:tour) { events(:section_tour) }
+    let(:participation) { Fabricate.build(:event_participation, event: tour, participant: person) }
+
+    it "raises when called on non tour event" do
+      participation.update!(event: events(:top_event))
+
+      expect { participation.tour_sektion }.to raise_error("Only use on tour participations")
+    end
+
+    it "returns nil when person has no active membership" do
+      person.roles.destroy_all
+
+      expect(participation.tour_sektion).to be_nil
+    end
+
+    it "returns stammsektion when tour belongs to stammsektion" do
+      expect(participation.tour_sektion).to eq(groups(:bluemlisalp))
+    end
+
+    it "returns zusatzsektion when tour belongs to zusatzsektion" do
+      tour.groups = [groups(:matterhorn)]
+
+      expect(participation.tour_sektion).to eq(groups(:matterhorn))
+    end
+
+    it "returns stammsektion if no stammsektion or zusatzsektion roles in tour sektion" do
+      tour.groups = [groups(:matterhorn)]
+      roles(:mitglied_zweitsektion).destroy!
+
+      expect(participation.tour_sektion).to eq(groups(:bluemlisalp))
+    end
+  end
+
   describe "validations" do
     let(:event) { events(:top_course) }
 

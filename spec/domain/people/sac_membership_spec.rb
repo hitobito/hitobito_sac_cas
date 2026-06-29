@@ -158,4 +158,32 @@ describe People::SacMembership do
       expect(membership.active_or_approvable_in?(groups(:bluemlisalp))).to eq false
     end
   end
+
+  describe "#zusatzsektion_roles" do
+    it "returns empty without zusatzsektion role" do
+      expect(membership.zusatzsektion_roles).to be_empty
+    end
+
+    context "with zusatzsektion role" do
+      let(:person) { people(:mitglied) }
+
+      it "returns the zusatzsektion roles" do
+        expect(membership.zusatzsektion_roles).to contain_exactly(roles(:mitglied_zweitsektion))
+      end
+    end
+  end
+
+  describe "#zusatzsektionen" do
+    it "returns empty without zusatzsektion role" do
+      expect(membership.zusatzsektionen).to be_empty
+    end
+
+    context "with zusatzsektion role" do
+      let(:person) { people(:mitglied) }
+
+      it "returns layer group of all zusatzsektion roles" do
+        expect(membership.zusatzsektionen).to contain_exactly(groups(:matterhorn))
+      end
+    end
+  end
 end

@@ -50,6 +50,10 @@ class People::SacMembership
       .first
   end
 
+  def zusatzsektionen
+    zusatzsektion_roles.map(&:layer_group)
+  end
+
   def zusatzsektion_roles
     active_roles_of_type(mitglied_zusatzsektion_types)
   end
