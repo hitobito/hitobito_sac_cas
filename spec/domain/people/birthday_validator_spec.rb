@@ -55,4 +55,48 @@ describe People::BirthdayValidator do
       expect(person.errors[:birthday]).to eq ["muss ausgefüllt werden"]
     end
   end
+
+  describe "#too_young?" do
+    subject(:validator) { described_class.new(person) }
+
+    it "returns false when birthday is blank" do
+      person.birthday = nil
+      expect(validator.too_young?).to be false
+    end
+
+    it "returns false when born on last day of cutoff year" do
+      person.birthday = Date.new(2019, 12, 31)
+      expect(validator.too_young?).to be false
+    end
+
+    it "returns true when born on first day after cutoff year" do
+      person.birthday = Date.new(2020, 1, 1)
+      expect(validator.too_young?).to be true
+    end
+
+    it "accepts a reference date and uses end of that year as cutoff" do
+      person.birthday = Date.new(2019, 1, 1)
+      expect(validator.too_young?(Date.new(2024, 1, 1))).to be true
+      expect(validator.too_young?(Date.new(2025, 1, 1))).to be false
+    end
+  end
+
+  describe "#too_old?" do
+    subject(:validator) { described_class.new(person) }
+
+    it "returns false when birthday is blank" do
+      person.birthday = nil
+      expect(validator.too_old?).to be false
+    end
+
+    it "returns false when born exactly 120 years ago today" do
+      person.birthday = Date.new(1905, 6, 6)
+      expect(validator.too_old?).to be false
+    end
+
+    it "returns true when born more than 120 years ago" do
+      person.birthday = Date.new(1905, 6, 5)
+      expect(validator.too_old?).to be true
+    end
+  end
 end
