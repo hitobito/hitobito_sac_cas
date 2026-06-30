@@ -111,6 +111,27 @@ describe Event::Tours::ReportsController do
 
         expect { put :update, params: params }.to raise_error(CanCan::AccessDenied)
       end
+
+      it "forwards report from draft by setting submitted_at and submitter_id" do
+        recipient = people(:mitglied)
+
+        put :update, params: params.merge(
+          event_tour_report_form: {status_action: "forward", mail_recipient_id: recipient.id}
+        )
+
+        report = event.report.reload
+        expect(report.submitted_at).to be_present
+        expect(report.submitter_id).to eq person.id
+      end
+
+      it "returns unprocessable_content when forwarding from draft without recipient" do
+        put :update, params: params.merge(
+          event_tour_report_form: {status_action: "forward", mail_recipient_id: ""}
+        )
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(event.report.reload.submitted_at).to be_nil
+      end
     end
   end
 end
