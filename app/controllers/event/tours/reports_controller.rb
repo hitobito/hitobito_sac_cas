@@ -33,6 +33,8 @@ class Event::Tours::ReportsController < ApplicationController
       .permit(
         :review,
         :remarks,
+        :status_action,
+        :recipient_id,
         participations_attributes: [
           :state,
           :means_of_transport
@@ -40,7 +42,7 @@ class Event::Tours::ReportsController < ApplicationController
       )
   end
 
-  def form = @form ||= Event::Tour::ReportForm.new(event.report || event.build_report)
+  def form = @form ||= Event::Tour::ReportForm.new(event.report || event.build_report, current_user)
   alias_method :entry, :form
 
   def event = @event ||= group.events.find(params[:event_id])

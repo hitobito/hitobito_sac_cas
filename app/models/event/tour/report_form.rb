@@ -10,29 +10,66 @@ class Event::Tour::ReportForm
   include ActiveModel::Attributes
 
   EDITABLE_PARTICIPATION_STATES = %w[assigned attended absent].freeze
+  RELEASE_ROLE_TYPES = [
+    Group::SektionsTourenUndKurse::Tourenchef,
+    Group::SektionsTourenUndKurse::TourenchefSommer,
+    Group::SektionsTourenUndKurse::TourenchefWinter,
+    Group::FreigabeKomitee::Pruefer,
+    Group::SektionsFunktionaere::Finanzen
+  ].map(&:sti_name).freeze
 
   attr_reader :report
+  attr_accessor :current_user
 
   delegate :event, to: :report
 
   attribute :review, :string
   attribute :remarks, :string
+  attribute :status_action, :string, default: "keep"
+  attribute :recipient_id, :integer
 
   validate :assert_participation_states_editable
+  validate :assert_recipient_present_when_forwarding
 
-  def initialize(report, attrs = {})
+  def initialize(report, current_user = nil, attrs = {})
     @report = report
+    @current_user = current_user
     super({review: report.review, remarks: report.remarks, **attrs})
   end
 
   def save
     return false unless valid?
 
-    report.update(review:, remarks:) && save_participations
+    original_status = report.status
+    captured_recipients = capture_email_recipients(original_status)
+
+    success = report.transaction do
+      unless report.update(review:,
+        remarks:) && save_participations && apply_status_change(original_status)
+        raise ActiveRecord::Rollback
+      end
+      true
+    end
+
+    deliver_status_emails(original_status, captured_recipients) if success
+    success
   end
 
   def tour_completed?
     [:ready, :closed].include?(event.state.to_sym)
+  end
+
+  def release_recipients
+    sektion = event.groups.first.layer_group
+    group_ids = Group.where(layer_group_id: sektion.id).select(:id)
+
+    Person
+      .joins(:roles)
+      .merge(Role.active)
+      .where(roles: {type: RELEASE_ROLE_TYPES, group_id: group_ids})
+      .distinct
+      .order_by_name
+      .select("*")
   end
 
   attr_writer :participations_attributes
@@ -70,6 +107,13 @@ class Event::Tour::ReportForm
     end
   end
 
+  def assert_recipient_present_when_forwarding
+    return unless status_action == "forward"
+    return if report.status == :approved
+
+    errors.add(:recipient_id, :blank) if recipient_id.blank?
+  end
+
   def save_participations
     return true unless @participations_attributes
 
@@ -81,5 +125,59 @@ class Event::Tour::ReportForm
 
   def participation_by_id
     @participation_by_id ||= participations.index_by(&:id)
+  end
+
+  def apply_status_change(original_status)
+    case status_action
+    when "forward" then apply_forward(original_status)
+    when "reject" then apply_reject(original_status)
+    else true
+    end
+  end
+
+  def apply_forward(original_status)
+    attrs = case original_status
+    when :draft then {submitted_at: Time.zone.now, submitter_id: recipient_id}
+    when :review then {approved_at: Time.zone.now, approver_id: recipient_id}
+    # payer is set to the current user (person recording the payment); no dropdown is shown for this step
+    when :approved then {paid_at: Time.zone.now, payer_id: current_user&.id}
+    else return true
+    end
+    report.update(attrs)
+  end
+
+  def apply_reject(original_status)
+    attrs = case original_status
+    when :review then {submitted_at: nil, submitter_id: nil}
+    when :approved then {approved_at: nil, approver_id: nil}
+    else return true
+    end
+    report.update(attrs)
+  end
+
+  def capture_email_recipients(original_status)
+    case [original_status, status_action]
+    when [:draft, "forward"] then Person.where(id: recipient_id).to_a
+    when [:review, "forward"] then Person.where(id: recipient_id).to_a
+    when [:approved, "forward"] then [report.submitter].compact
+    when [:review, "reject"] then [report.submitter].compact
+    when [:approved, "reject"] then [report.approver].compact
+    else []
+    end
+  end
+
+  def deliver_status_emails(original_status, recipients)
+    return if recipients.blank?
+
+    mailer_method = case [original_status, status_action]
+    when [:draft, "forward"] then :submitted
+    when [:review, "forward"] then :approved
+    when [:approved, "forward"] then :payout_recorded
+    when [:review, "reject"] then :rejected
+    when [:approved, "reject"] then :payout_rejected
+    else return
+    end
+
+    Event::TourReportMailer.public_send(mailer_method, report, recipients).deliver_later
   end
 end

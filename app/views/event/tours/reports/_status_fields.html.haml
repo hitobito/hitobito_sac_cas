@@ -4,24 +4,40 @@
 -#  https://github.com/hitobito/hitobito_sac_cas
 
 = f.labeled(:tour_completed) do
-    .col-form-label= format_attr(entry, :tour_completed?)
+  .col-form-label= format_attr(entry, :tour_completed?)
 - if entry.report.event.canceled?
-    = f.labeled(entry.report.event.class.human_attribute_name(:canceled_reason)) do
-        .col-form-label= format_attr(entry.report.event, :canceled_reason)
+  = f.labeled(entry.report.event.class.human_attribute_name(:canceled_reason)) do
+    .col-form-label= format_attr(entry.report.event, :canceled_reason)
 
 = f.labeled_text_area(:review)
 = f.labeled_text_area(:remarks)
 
 = field_set_tag(t(".editing_status")) do
-    = f.labeled(:submitter_id) do
-        .col-form-label= format_attr(entry.report, :submitter_id)
-    = f.labeled(:submitted_at) do
-        .col-form-label= format_attr(entry.report, :submitted_at)
-    = f.labeled(:approver_id) do
-        .col-form-label= format_attr(entry.report, :approver_id)
-    = f.labeled(:approved_at) do
-        .col-form-label= format_attr(entry.report, :approved_at)
-    = f.labeled(:payer_id) do
-        .col-form-label= format_attr(entry.report, :payer_id)
-    = f.labeled(:paid_at) do
-        .col-form-label= format_attr(entry.report, :paid_at)
+  = f.labeled(:submitter_id) do
+    .col-form-label= format_attr(entry.report, :submitter_id)
+  = f.labeled(:submitted_at) do
+    .col-form-label= format_attr(entry.report, :submitted_at)
+  = f.labeled(:approver_id) do
+    .col-form-label= format_attr(entry.report, :approver_id)
+  = f.labeled(:approved_at) do
+    .col-form-label= format_attr(entry.report, :approved_at)
+  = f.labeled(:payer_id) do
+    .col-form-label= format_attr(entry.report, :payer_id)
+  = f.labeled(:paid_at) do
+    .col-form-label= format_attr(entry.report, :paid_at)
+
+- unless entry.report.status == :closed
+  = field_set_tag(t(".status_change")) do
+    .form-check
+      = f.radio_button(:status_action, "keep", class: "form-check-input")
+      = f.label(:status_action, t(".keep"), value: "keep", class: "form-check-label")
+    .form-check
+      = f.radio_button(:status_action, "forward", class: "form-check-input")
+      = f.label(:status_action, t(".forward.#{entry.report.status}"), value: "forward", class: "form-check-label")
+    - unless entry.report.status == :draft
+      .form-check
+        = f.radio_button(:status_action, "reject", class: "form-check-input")
+        = f.label(:status_action, t(".reject"), value: "reject", class: "form-check-label")
+    - unless entry.report.status == :approved
+      = f.labeled(:recipient_id) do
+        = f.collection_select(:recipient_id, entry.release_recipients, :id, :full_name, {include_blank: true}, class: "form-select")

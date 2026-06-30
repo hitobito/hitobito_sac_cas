@@ -81,6 +81,8 @@ de:
         approved_at: Freigegeben am
         payer_id: Ausbezahlt von
         paid_at: Ausbezahlt am
+        status_action: Aktion
+        recipient_id: Empfänger/-in
       people/export/jubilare_form:
         reference_date: "Stichtag"
         membership_years: "Anzahl Mitgliedsjahre"
@@ -181,6 +183,10 @@ de:
           in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
       models:
+        event/tour/report_form:
+          attributes:
+            recipient_id:
+              blank: muss ausgefüllt werden
         event/approval_commission_responsibility_form:
           attributes:
             base:
@@ -766,6 +772,11 @@ de:
         has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
+        event/tour:
+          attributes:
+            base:
+              report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
+
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
@@ -1720,6 +1731,14 @@ de:
           cost_summary: Kostenübersicht
         status_fields:
           editing_status: Bearbeitungsstatus
+          status_change: Statuswechsel
+          keep: Status nicht ändern
+          reject: Ablehnen
+          forward:
+            draft: Zur Freigabe einreichen an
+            review: Zur Auszahlung freigeben an
+            approved: Auszahlung erfasst
+          recipient_id: Person
         success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:

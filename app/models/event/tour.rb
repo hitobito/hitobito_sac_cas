@@ -121,6 +121,7 @@ class Event::Tour < Event
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
+  validate :assert_report_closed_when_tour_closes
   validates :description, :disciplines, :target_groups, :technical_requirements,
     :fitness_requirement, :season,
     presence: {if: -> { state_reached?(:review) }}
@@ -196,6 +197,13 @@ class Event::Tour < Event
   end
 
   private
+
+  def assert_report_closed_when_tour_closes
+    return unless will_save_change_to_state? && state == "closed"
+    return if report.nil? || report.status == :closed
+
+    errors.add(:base, :report_must_be_closed)
+  end
 
   def assert_duration_valid?
     unless ::HoursDuration.new(duration).valid?

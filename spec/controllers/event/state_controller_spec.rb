@@ -267,7 +267,10 @@ describe Event::StateController do
         end
 
         context "close" do
-          before { event.update_column(:state, :ready) }
+          before do
+            event.update_column(:state, :ready)
+            event.report&.update_column(:paid_at, Time.zone.now)
+          end
 
           it "updates state and sets internal comment" do
             put :update, params: {
