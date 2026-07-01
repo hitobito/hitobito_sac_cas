@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       end
 
       namespace :export do
+        post :alps_recipients, to: "alps_recipients#create"
         post :sac_statistics, to: "sac_statistics#create"
         post :sac_courses, to: "sac_courses#create"
       end

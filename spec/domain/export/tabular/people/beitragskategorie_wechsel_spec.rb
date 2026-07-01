@@ -60,7 +60,6 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
       :country
     ]
 
-    expect(build.attributes).to match_array(attrs)
     expect(build.attributes).to eq(attrs)
   end
 
