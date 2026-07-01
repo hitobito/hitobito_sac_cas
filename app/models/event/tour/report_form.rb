@@ -28,6 +28,7 @@ class Event::Tour::ReportForm
 
   attr_reader :report
   attr_accessor :current_user
+  attr_writer :participations_attributes
 
   delegate :event, :submitter, :approver, to: :report
 
@@ -38,6 +39,7 @@ class Event::Tour::ReportForm
 
   validate :assert_participation_states_editable
   validate :assert_mail_recipient_present_when_forwarding
+  validate :assert_cost_records_valid
 
   def initialize(report, current_user = nil, attrs = {})
     @report = report
@@ -53,7 +55,7 @@ class Event::Tour::ReportForm
 
     success = report.transaction do
       unless report.update(review:, remarks:) &&
-          save_participations && apply_status_change(original_status)
+          save_participations && apply_status_change(original_status) && save_cost_records
         raise ActiveRecord::Rollback
       end
       true
@@ -80,14 +82,24 @@ class Event::Tour::ReportForm
       .select("people.*")
   end
 
-  attr_writer :participations_attributes
-
   def participations
     @participations ||= event
       .participations
       .includes(:event, :roles)
       .where.not(state: ["rejected", "applied", "unconfirmed"])
       .order_by_role(event)
+  end
+
+  def revenues
+    @revenues ||= report.costs.where(income: true).to_a
+  end
+
+  def expenditures
+    @expenditures ||= report.costs.where(income: false).to_a
+  end
+
+  def receipts
+    @receipts ||= report.cost_receipts.includes(:file_attachment).to_a
   end
 
   def editable_participation_state?(participation)
@@ -99,6 +111,19 @@ class Event::Tour::ReportForm
       .slice(*EDITABLE_PARTICIPATION_STATES
       .map(&:to_sym))
       .to_a
+  end
+
+  def revenues_attributes=(attrs)
+    @revenues = build_records(attrs, collection: report.costs, fixed_attributes: {income: true})
+  end
+
+  def expenditures_attributes=(attrs)
+    @expenditures = build_records(attrs, collection: report.costs,
+      fixed_attributes: {income: false})
+  end
+
+  def receipts_attributes=(attrs)
+    @receipts = build_records(attrs, collection: report.cost_receipts)
   end
 
   private
@@ -122,12 +147,24 @@ class Event::Tour::ReportForm
     errors.add(:mail_recipient_id, :blank) if mail_recipient_id.blank?
   end
 
+  def assert_cost_records_valid
+    cost_records.flat_map { _1.reject(&:valid?) }.each do |model|
+      model.errors.full_messages.each { errors.add(:base, _1) }
+    end
+  end
+
   def save_participations
     return true unless @participations_attributes
 
     @participations_attributes.all? do |id, attrs|
       participation = participation_by_id[id.to_i]
       participation.update(attrs)
+    end
+  end
+
+  def save_cost_records
+    cost_records.each do |collection|
+      collection.each { _1.marked_for_destruction? ? _1.destroy! : _1.save! }
     end
   end
 
@@ -182,4 +219,25 @@ class Event::Tour::ReportForm
 
   def mail_definition(original_status) = TRANSITION_MAIL_DEFINITIONS[[original_status,
     status_action]] || {}
+
+  def cost_records
+    [@revenues, @expenditures, @receipts].compact
+  end
+
+  def build_records(attrs, collection:, fixed_attributes: {})
+    attrs.values.map do |values|
+      record = if values[:id].present?
+        collection.index_by(&:id).transform_keys(&:to_s).fetch(values[:id].to_s)
+      else
+        collection.build
+      end
+
+      if ActiveRecord::Type::Boolean.new.cast(values[:_destroy])
+        record.mark_for_destruction
+      else
+        record.assign_attributes(values.except(:id, :_destroy).merge(fixed_attributes))
+      end
+      record
+    end
+  end
 end

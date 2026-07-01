@@ -22,6 +22,9 @@ class Event::Report < ApplicationRecord
     class_name: "Event::CostReceipt",
     inverse_of: :report
 
+  accepts_nested_attributes_for :costs, allow_destroy: true
+  accepts_nested_attributes_for :cost_receipts, allow_destroy: true
+
   def status
     return :closed if paid_at?
     return :approved if approved_at?

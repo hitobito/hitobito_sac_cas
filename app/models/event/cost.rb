@@ -10,4 +10,8 @@ class Event::Cost < ApplicationRecord
     inverse_of: :costs
 
   validates :description, :count, :amount, presence: true
+
+  def total
+    amount * count
+  end
 end
