@@ -12,6 +12,7 @@ class Event::Tour::ReportForm
   EDITABLE_PARTICIPATION_STATES = %w[assigned attended absent].freeze
 
   attr_reader :report
+  attr_writer :participations_attributes
 
   delegate :event, to: :report
 
@@ -19,6 +20,7 @@ class Event::Tour::ReportForm
   attribute :remarks, :string
 
   validate :assert_participation_states_editable
+  validate :assert_cost_records_valid
 
   def initialize(report, attrs = {})
     @report = report
@@ -28,14 +30,14 @@ class Event::Tour::ReportForm
   def save
     return false unless valid?
 
-    report.update(review:, remarks:) && save_participations
+    ActiveRecord::Base.transaction do
+      report.update!(review:, remarks:) && save_participations && save_cost_records
+    end
   end
 
   def tour_completed?
     [:ready, :closed].include?(event.state.to_sym)
   end
-
-  attr_writer :participations_attributes
 
   def participations
     @participations ||= event
@@ -43,6 +45,18 @@ class Event::Tour::ReportForm
       .includes(:event, :roles)
       .where.not(state: ["rejected", "applied", "unconfirmed"])
       .order_by_role(event)
+  end
+
+  def revenues
+    @revenues ||= report.costs.where(income: true).to_a
+  end
+
+  def expenditures
+    @expenditures ||= report.costs.where(income: false).to_a
+  end
+
+  def receipts
+    @receipts ||= report.cost_receipts.includes(:file_attachment).to_a
   end
 
   def editable_participation_state?(participation)
@@ -54,6 +68,19 @@ class Event::Tour::ReportForm
       .slice(*EDITABLE_PARTICIPATION_STATES
       .map(&:to_sym))
       .to_a
+  end
+
+  def revenues_attributes=(attrs)
+    @revenues = build_records(attrs, collection: report.costs, fixed_attributes: {income: true})
+  end
+
+  def expenditures_attributes=(attrs)
+    @expenditures = build_records(attrs, collection: report.costs,
+      fixed_attributes: {income: false})
+  end
+
+  def receipts_attributes=(attrs)
+    @receipts = build_records(attrs, collection: report.cost_receipts)
   end
 
   private
@@ -70,6 +97,12 @@ class Event::Tour::ReportForm
     end
   end
 
+  def assert_cost_records_valid
+    cost_records.flat_map { _1.reject(&:valid?) }.each do |model|
+      model.errors.full_messages.each { errors.add(:base, _1) }
+    end
+  end
+
   def save_participations
     return true unless @participations_attributes
 
@@ -79,7 +112,34 @@ class Event::Tour::ReportForm
     end
   end
 
+  def save_cost_records
+    cost_records.each do |collection|
+      collection.each { _1.marked_for_destruction? ? _1.destroy! : _1.save! }
+    end
+  end
+
   def participation_by_id
     @participation_by_id ||= participations.index_by(&:id)
+  end
+
+  def cost_records
+    [@revenues, @expenditures, @receipts].compact
+  end
+
+  def build_records(attrs, collection:, fixed_attributes: {})
+    attrs.values.map do |values|
+      record = if values[:id].present?
+        collection.index_by(&:id).transform_keys(&:to_s).fetch(values[:id].to_s)
+      else
+        collection.build
+      end
+
+      if ActiveRecord::Type::Boolean.new.cast(values[:_destroy])
+        record.mark_for_destruction
+      else
+        record.assign_attributes(values.except(:id, :_destroy).merge(fixed_attributes))
+      end
+      record
+    end
   end
 end

@@ -14,6 +14,9 @@ describe Event::Tour::ReportForm do
     Fabricate(Event::Role::Participant.name.to_sym,
       participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)).participation
   end
+  let(:revenue) { event_costs(:participation_fee) }
+  let(:expenditure) { event_costs(:transport) }
+  let(:receipt) { event_cost_receipts(:tankstelle) }
   let(:form) { described_class.new(report) }
 
   it "assigns attributes from report" do
@@ -43,6 +46,107 @@ describe Event::Tour::ReportForm do
         .to change { participation.reload.state }.from("assigned").to("attended")
         .and change { participation.reload.means_of_transport }.from(nil).to("legs")
     end
+
+    it "persists changes to existing revenue" do
+      form.revenues_attributes = {
+        "0" => {
+          id: revenue.id,
+          description: "something else"
+        }
+      }
+
+      expect { form.save }.to change { revenue.reload.description }.to("something else")
+    end
+
+    it "persists new revenue" do
+      form.revenues_attributes = {
+        "0" => {
+          description: "New revenue",
+          count: "3",
+          amount: "50"
+        }
+      }
+
+      expect { form.save }.to change { report.costs.where(income: true).count }.by(1)
+    end
+
+    it "destroys revenue marked for destruction" do
+      form.revenues_attributes = {
+        "0" => {
+          id: revenue.id,
+          _destroy: "1"
+        }
+      }
+
+      expect { form.save }.to change { report.costs.count }.by(-1)
+    end
+
+    it "persists changes to existing expenditure" do
+      form.expenditures_attributes = {
+        "0" => {
+          id: expenditure.id,
+          description: "something else"
+        }
+      }
+
+      expect { form.save }.to change { expenditure.reload.description }.to("something else")
+    end
+
+    it "persists new expenditure" do
+      form.expenditures_attributes = {
+        "0" => {
+          description: "New expenditure",
+          count: "2",
+          amount: "75"
+        }
+      }
+
+      expect { form.save }.to change { report.costs.where(income: false).count }.by(1)
+    end
+
+    it "destroys expenditure marked for destruction" do
+      form.expenditures_attributes = {
+        "0" => {
+          id: expenditure.id,
+          _destroy: "1"
+        }
+      }
+
+      expect { form.save }.to change { report.costs.count }.by(-1)
+    end
+
+    it "persists changes to existing receipt" do
+      form.receipts_attributes = {
+        "0" => {
+          id: receipt.id,
+          description: "new receipt name or something"
+        }
+      }
+
+      expect { form.save }.to change { receipt.reload.description }.to("new receipt name or something")
+    end
+
+    it "persists new receipt" do
+      form.receipts_attributes = {
+        "0" => {
+          description: "New receipt",
+          file: fixture_file_upload("icon.png", "image/png")
+        }
+      }
+
+      expect { form.save }.to change { report.cost_receipts.count }.by(1)
+    end
+
+    it "destroys receipt marked for destruction" do
+      form.receipts_attributes = {
+        "0" => {
+          id: receipt.id,
+          _destroy: "1"
+        }
+      }
+
+      expect { form.save }.to change { report.cost_receipts.count }.by(-1)
+    end
   end
 
   describe "#participations" do
@@ -52,6 +156,20 @@ describe Event::Tour::ReportForm do
 
         expect(form.participations).not_to include(participation)
       end
+    end
+  end
+
+  describe "#revenues" do
+    it "returns costs with income true" do
+      expect(form.revenues).to include(revenue)
+      expect(form.revenues).not_to include(expenditure)
+    end
+  end
+
+  describe "#expenditures" do
+    it "returns costs with income false" do
+      expect(form.expenditures).to include(expenditure)
+      expect(form.expenditures).not_to include(revenue)
     end
   end
 
@@ -88,6 +206,51 @@ describe Event::Tour::ReportForm do
       }
 
       expect(form).not_to be_valid
+    end
+  end
+
+  describe "#assert_cost_records_valid" do
+    it "is valid" do
+      expect(form).to be_valid
+    end
+
+    it "is not valid if revenue is invalid" do
+      form.revenues_attributes = {
+        "0" => {
+          id: revenue.id,
+          description: ""
+        }
+      }
+
+      expect(form).not_to be_valid
+      expect(form.errors.full_messages).to match_array ["Bezeichnung muss ausgefüllt werden"]
+      expect(form.revenues.first.errors.full_messages).to match_array ["Bezeichnung muss ausgefüllt werden"]
+    end
+
+    it "is not valid if expenditure is invalid" do
+      form.expenditures_attributes = {
+        "0" => {
+          id: expenditure.id,
+          description: ""
+        }
+      }
+
+      expect(form).not_to be_valid
+      expect(form.errors.full_messages).to match_array ["Bezeichnung muss ausgefüllt werden"]
+      expect(form.expenditures.first.errors.full_messages).to match_array ["Bezeichnung muss ausgefüllt werden"]
+    end
+
+    it "is not valid if receipt is invalid" do
+      form.receipts_attributes = {
+        "0" => {
+          id: receipt.id,
+          description: ""
+        }
+      }
+
+      expect(form).not_to be_valid
+      expect(form.errors.full_messages).to match_array ["Beschreibung muss ausgefüllt werden"]
+      expect(form.receipts.first.errors.full_messages).to match_array ["Beschreibung muss ausgefüllt werden"]
     end
   end
 

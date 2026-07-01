@@ -33,10 +33,10 @@ class Event::Tours::ReportsController < ApplicationController
       .permit(
         :review,
         :remarks,
-        participations_attributes: [
-          :state,
-          :means_of_transport
-        ]
+        participations_attributes: [:state, :means_of_transport],
+        revenues_attributes: [:id, :description, :count, :amount, :_destroy],
+        expenditures_attributes: [:id, :description, :count, :amount, :_destroy],
+        receipts_attributes: [:id, :description, :file, :_destroy]
       )
   end
 

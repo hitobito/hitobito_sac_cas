@@ -7,3 +7,4 @@
 
 sac_membership_logo_banner_de_blob: <%= ActiveStorage::FixtureSet.blob filename: "banner_de.png", service_name: "test_fixtures" %>
 sac_membership_logo_icon_de_blob: <%= ActiveStorage::FixtureSet.blob filename: "icon.png", service_name: "test_fixtures" %>
+tankstelle_file_blob: <%= ActiveStorage::FixtureSet.blob filename: "icon.png", service_name: "test_fixtures" %>

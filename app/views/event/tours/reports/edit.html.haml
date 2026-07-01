@@ -4,6 +4,7 @@
 -#  https://github.com/hitobito/hitobito_sac_cas
 
 = standard_form(entry, url: group_event_report_path(@group, @event), method: :put) do |f|
+  = f.error_messages
   = render "form_tabs"
 
   .tab-content

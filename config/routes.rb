@@ -58,7 +58,9 @@ Rails.application.routes.draw do
         end
         scope module: "event" do
           resource :approval, only: [:edit, :update], module: :tours
-          resource :report, only: [:edit, :update], module: :tours
+          resource :report, only: [:edit, :update], module: :tours do
+            get :prefill_revenues, to: "reports/prefill_revenues#show"
+          end
           resource :key_data_sheets, only: [:create], module: :courses
           resource :mail_dispatch, only: [:create], module: :courses
           resource :leader_settlement_pdfs, only: [:create], module: :courses

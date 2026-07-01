@@ -20,5 +20,27 @@ describe Event::CostReceipt do
 
       expect(receipt).not_to be_valid
     end
+
+    it "requires file" do
+      receipt.file.detach
+
+      expect(receipt).not_to be_valid
+    end
+
+    it "validates maximum file size" do
+      file = Tempfile.new(["x", ".png"])
+      File.write(file, "x" * 11.megabytes)
+      receipt.file.attach(io: file, filename: "foo.png")
+
+      expect(receipt).not_to be_valid
+    end
+
+    it "validates content type" do
+      file = Tempfile.new(["x", ".exe"])
+      File.write(file, "x")
+      receipt.file.attach(io: file, filename: "foo.exe", content_type: "application/x-msdownload")
+
+      expect(receipt).not_to be_valid
+    end
   end
 end
