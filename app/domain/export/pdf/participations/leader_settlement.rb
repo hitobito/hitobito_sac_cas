@@ -18,7 +18,7 @@ module Export::Pdf::Participations
     end
 
     def render
-      Export::Pdf::Invoice.render(invoice, options.merge(articles: true, payment_slip: true))
+      Export::Pdf::Invoice.render([invoice], options.merge(articles: true, payment_slip: true))
     end
 
     private
