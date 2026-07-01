@@ -6,9 +6,11 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::BirthdayValidator
+  MINIMUM_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_MINOR_FAMILY_MEMBER.begin
+
   attr_reader :entry, :current_user
 
-  def initialize(entry, current_user)
+  def initialize(entry, current_user = nil)
     @entry = entry
     @current_user = current_user
   end
@@ -25,11 +27,19 @@ class People::BirthdayValidator
     if entry.birthday.blank?
       entry.errors.add(:birthday, :blank)
       throw(:abort)
-    elsif entry.birthday > min_age_date
-      add_error(:must_be_before, min_age_date) # Error for too young
-    elsif entry.birthday < max_age_date
-      add_error(:must_be_after, max_age_date) # Error for too old
+    elsif too_young?
+      add_error(:must_be_before, min_age_date)
+    elsif too_old?
+      add_error(:must_be_after, max_age_date)
     end
+  end
+
+  def too_young?(reference_date = Time.zone.today)
+    entry.birthday.present? && entry.birthday > min_age_date(reference_date)
+  end
+
+  def too_old?
+    entry.birthday.present? && entry.birthday < max_age_date
   end
 
   def add_error(error_type, date = nil)
@@ -43,8 +53,10 @@ class People::BirthdayValidator
     throw(:abort) # Prevent saving the record
   end
 
-  def min_age_date
-    6.years.ago.to_date
+  private
+
+  def min_age_date(reference_date = Time.zone.today)
+    (reference_date - MINIMUM_YEARS.years).end_of_year.to_date
   end
 
   def max_age_date

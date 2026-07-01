@@ -64,8 +64,7 @@ class People::DataQualityChecker
 
   def invalid_birthday?(stammsektion_role)
     stammsektion_role.present? &&
-      person.birthday &&
-      person.birthday > stammsektion_role.created_at - 6.years
+      People::BirthdayValidator.new(person).too_young?(stammsektion_role.created_at)
   end
 
   def check_blank(attr, precondition, severity = :error)

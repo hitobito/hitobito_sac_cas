@@ -175,7 +175,7 @@ describe "self_registration_abo_magazin", js: true do
       click_on "Weiter"
 
       expect_active_step expected_step
-      if Time.zone.today < birthday
+      if expected_step == "Personendaten"
         expect_validation_error "Person muss 0 Jahre oder älter sein"
       end
     end
@@ -183,7 +183,8 @@ describe "self_registration_abo_magazin", js: true do
 
   it_behaves_like "birthday validation", "today", Time.zone.today, "Abo"
   it_behaves_like "birthday validation", "10 years ago", 10.years.ago, "Abo"
-  it_behaves_like "birthday validation", "1 day from now", 1.day.from_now, "Personendaten"
+  it_behaves_like "birthday validation", "1 day from now (same year)", 1.day.from_now, "Abo"
+  it_behaves_like "birthday validation", "1 year from now (future year)", 1.year.from_now, "Personendaten"
 
   it "selects birthday via date picker" do
     hundred_years_ago = Time.zone.today.year - 100

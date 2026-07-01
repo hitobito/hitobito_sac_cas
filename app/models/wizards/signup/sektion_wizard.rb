@@ -60,9 +60,8 @@ module Wizards::Signup
     private
 
     # As we might save multiple people we delegate validation to operations
-    # rubocop:todo Layout/LineLength
-    # person itself can be invalid as operation handles aspects (e.g role start_on and gender I18nEnum::NIL_KEY)
-    # rubocop:enable Layout/LineLength
+    # person itself can be invalid as operation handles aspects
+    # e.g role start_on and gender I18nEnum::NIL_KEY
     def person_valid? = operations_valid?
 
     def beitragskategorie
@@ -136,13 +135,15 @@ module Wizards::Signup
     def step_after(step_name_or_class)
       if step_name_or_class == :_start && current_user
         Wizards::Steps::Signup::Sektion::PersonFields.step_name
-      # rubocop:todo Layout/LineLength
-      elsif step_name_or_class == Wizards::Steps::Signup::Sektion::PersonFields && too_young_for_household?
-        # rubocop:enable Layout/LineLength
+      elsif person_fields?(step_name_or_class) && too_young_for_household?
         Wizards::Steps::Signup::Sektion::VariousFields.step_name
       else
         super
       end
+    end
+
+    def person_fields?(step_class)
+      step_class == Wizards::Steps::Signup::Sektion::PersonFields
     end
 
     def too_young_for_household?
