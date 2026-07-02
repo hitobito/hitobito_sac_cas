@@ -42,8 +42,8 @@ describe Event::Tour::ApprovalForm do
     expect(approval_kind_approval.approvable).to eq(approvable)
   end
 
-  def expect_disciplines_target_groups(komitee_approval, expected)
-    expect(komitee_approval.disciplines_target_groups.map { |tuple| tuple.map(&:to_s) }).to eq(expected)
+  def expect_activities_target_groups(komitee_approval, expected)
+    expect(komitee_approval.activities_target_groups.map { |tuple| tuple.map(&:to_s) }).to eq(expected)
   end
 
   context "draft" do
@@ -54,7 +54,7 @@ describe Event::Tour::ApprovalForm do
         expect(form.komitee_approvals.size).to eq(1)
         komitee_approval = form.komitee_approvals.first
         expect(komitee_approval.freigabe_komitee).to eq(komitee)
-        expect_disciplines_target_groups(komitee_approval, [
+        expect_activities_target_groups(komitee_approval, [
           ["Wandern", "Familien (FaBe)"],
           ["Wandern", "Kinder (KiBe)"]
         ])
@@ -69,7 +69,7 @@ describe Event::Tour::ApprovalForm do
         expect(form.komitee_approvals.size).to eq(1)
         komitee_approval = form.komitee_approvals.first
         expect(komitee_approval.freigabe_komitee).to eq(komitee)
-        expect_disciplines_target_groups(komitee_approval, [
+        expect_activities_target_groups(komitee_approval, [
           ["Wandern", "Familien (FaBe)"],
           ["Wandern", "Kinder (KiBe)"]
         ])
@@ -91,7 +91,7 @@ describe Event::Tour::ApprovalForm do
         expect(form.komitee_approvals.size).to eq(1)
         komitee_approval = form.komitee_approvals.first
         expect(komitee_approval.freigabe_komitee).to eq(komitee)
-        expect_disciplines_target_groups(komitee_approval, [
+        expect_activities_target_groups(komitee_approval, [
           ["Wandern", "Familien (FaBe)"],
           ["Wandern", "Kinder (KiBe)"]
         ])
@@ -109,7 +109,7 @@ describe Event::Tour::ApprovalForm do
         expect(form.komitee_approvals.size).to eq(1)
         komitee_approval = form.komitee_approvals.first
         expect(komitee_approval.freigabe_komitee).to eq(komitee)
-        expect_disciplines_target_groups(komitee_approval, [
+        expect_activities_target_groups(komitee_approval, [
           ["Wandern", "Familien (FaBe)"],
           ["Wandern", "Kinder (KiBe)"]
         ])
@@ -225,7 +225,7 @@ describe Event::Tour::ApprovalForm do
             expect(form.komitee_approvals.size).to eq(2)
             komitee_approval = form.komitee_approvals.first
             expect(komitee_approval.freigabe_komitee).to eq(komitee)
-            expect_disciplines_target_groups(komitee_approval, [
+            expect_activities_target_groups(komitee_approval, [
               ["Wandern", "Kinder (KiBe)"]
             ])
             expect(komitee_approval.approval_kind_approvals.size).to eq(3)
@@ -238,7 +238,7 @@ describe Event::Tour::ApprovalForm do
 
             komitee_approval = form.komitee_approvals.second
             expect(komitee_approval.freigabe_komitee).to eq(other_komitee)
-            expect_disciplines_target_groups(komitee_approval, [
+            expect_activities_target_groups(komitee_approval, [
               ["Wandern", "Familien (FaBe)"]
             ])
             expect(komitee_approval.approval_kind_approvals.size).to eq(3)
@@ -258,7 +258,7 @@ describe Event::Tour::ApprovalForm do
             expect(form.komitee_approvals.size).to eq(2)
             komitee_approval = form.komitee_approvals.first
             expect(komitee_approval.freigabe_komitee).to eq(komitee)
-            expect_disciplines_target_groups(komitee_approval, [
+            expect_activities_target_groups(komitee_approval, [
               ["Wandern", "Kinder (KiBe)"]
             ])
             expect(komitee_approval.approval_kind_approvals.size).to eq(3)
@@ -271,7 +271,7 @@ describe Event::Tour::ApprovalForm do
 
             komitee_approval = form.komitee_approvals.second
             expect(komitee_approval.freigabe_komitee).to eq(other_komitee)
-            expect_disciplines_target_groups(komitee_approval, [
+            expect_activities_target_groups(komitee_approval, [
               ["Wandern", "Familien (FaBe)"]
             ])
             expect(komitee_approval.approval_kind_approvals.size).to eq(3)
@@ -291,7 +291,7 @@ describe Event::Tour::ApprovalForm do
         expect(form.komitee_approvals.size).to eq(1)
         komitee_approval = form.komitee_approvals.first
         expect(komitee_approval.freigabe_komitee).to eq(komitee)
-        expect_disciplines_target_groups(komitee_approval, [
+        expect_activities_target_groups(komitee_approval, [
           ["Wandern", "Familien (FaBe)"],
           ["Wandern", "Kinder (KiBe)"]
         ])
@@ -317,7 +317,7 @@ describe Event::Tour::ApprovalForm do
           expect(form.komitee_approvals.size).to eq(1)
           komitee_approval = form.komitee_approvals.first
           expect(komitee_approval.freigabe_komitee).to eq(komitee)
-          expect_disciplines_target_groups(komitee_approval, [
+          expect_activities_target_groups(komitee_approval, [
             ["Wandern", "Familien (FaBe)"],
             ["Wandern", "Kinder (KiBe)"]
           ])

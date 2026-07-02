@@ -109,21 +109,21 @@ class Event::Tour::ApprovalForm
 
   def build_komitee_approvals
     komitees = composer.relevant_freigabe_komitees.list
-    disciplines_target_groups = composer.fetch_freigabe_komitee_disciplines_target_groups(komitees)
+    activities_target_groups = composer.fetch_freigabe_komitee_activities_target_groups(komitees)
     komitees.map do |freigabe_komitee|
       build_komitee_approval(
         freigabe_komitee,
-        disciplines_target_groups.fetch(freigabe_komitee.id, [])
+        activities_target_groups.fetch(freigabe_komitee.id, [])
       )
     end
   end
 
-  def build_komitee_approval(freigabe_komitee, disciplines_target_groups)
+  def build_komitee_approval(freigabe_komitee, activities_target_groups)
     Event::Tour::KomiteeApproval.new(
       freigabe_komitee:,
       approval_kinds:,
       approvals: find_komitee_approvals(freigabe_komitee),
-      disciplines_target_groups: sorted_disciplines_target_groups(disciplines_target_groups),
+      activities_target_groups: sorted_activities_target_groups(activities_target_groups),
       responsible_kinds: responsible_kinds(freigabe_komitee)
     )
   end
@@ -136,9 +136,9 @@ class Event::Tour::ApprovalForm
     event.approvals.select { |a| a.freigabe_komitee_id == freigabe_komitee.id }
   end
 
-  def sorted_disciplines_target_groups(disciplines_target_groups)
-    disciplines_target_groups.sort_by { |discipline, target_group|
-      [discipline.to_s, target_group.to_s]
+  def sorted_activities_target_groups(activities_target_groups)
+    activities_target_groups.sort_by { |activity, target_group|
+      [activity.to_s, target_group.to_s]
     }
   end
 

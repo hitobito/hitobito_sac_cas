@@ -57,7 +57,7 @@ class SacEventSeeder < EventSeeder
       external_applications: true,
       technical_requirements: [Event::TechnicalRequirement.assignable.sample],
       fitness_requirement: Event::FitnessRequirement.assignable.sample,
-      disciplines: [Event::Discipline.assignable.sample],
+      activities: [Event::Activity.assignable.sample],
       target_groups: [Event::TargetGroup.assignable.sample],
       subito: [true, false].sample,
       season: Event::Kind::SEASONS.sample
@@ -96,7 +96,7 @@ class SacEventSeeder < EventSeeder
   end
 
   def seed_essentials(event)
-    event.disciplines = disciplines.sample(rand(1..3))
+    event.activities = activities.sample(rand(1..3))
     event.target_groups = target_groups.sample(rand(1..2))
     event.fitness_requirement = fitness_requirements.sample
     event.technical_requirements = technical_requirements.sample(rand(1..2))
@@ -107,8 +107,8 @@ class SacEventSeeder < EventSeeder
     @current_year ||= Time.zone.today.year
   end
 
-  def disciplines
-    @disciplines ||= Event::Discipline.where.not(parent_id: nil).to_a
+  def activities
+    @activities ||= Event::Activity.where.not(parent_id: nil).to_a
   end
 
   def target_groups

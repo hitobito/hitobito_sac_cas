@@ -45,14 +45,14 @@ describe Event::ApprovalCommissionResponsibilitiesController do
           "1": {
             id: event_approval_commission_responsibilities(:bluemlisalp_wandern_kinder_subito).id,
             target_group_id: event_target_groups(:kinder),
-            discipline_id: event_disciplines(:wandern),
+            activity_id: event_activities(:wandern),
             freigabe_komitee_id: another_freigabe_komitee,
             subito: true
           },
           "2": {
             id: event_approval_commission_responsibilities(:bluemlisalp_wandern_kinder).id,
             target_group_id: event_target_groups(:kinder),
-            discipline_id: event_disciplines(:wandern),
+            activity_id: event_activities(:wandern),
             freigabe_komitee_id: another_freigabe_komitee,
             subito: false
           }
@@ -78,13 +78,13 @@ describe Event::ApprovalCommissionResponsibilitiesController do
           event_approval_commission_responsibilities_attributes: {
             "1": {
               target_group_id: event_target_groups(:kinder),
-              discipline_id: event_disciplines(:wandern),
+              activity_id: event_activities(:wandern),
               freigabe_komitee_id: another_freigabe_komitee,
               subito: true
             },
             "2": {
               target_group_id: event_target_groups(:kinder),
-              discipline_id: event_disciplines(:wandern),
+              activity_id: event_activities(:wandern),
               freigabe_komitee_id: another_freigabe_komitee,
               subito: false
             }

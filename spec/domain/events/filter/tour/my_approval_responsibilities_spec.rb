@@ -8,7 +8,7 @@
 require "spec_helper"
 
 describe Events::Filter::Tour::MyApprovalResponsibilities do
-  # section_tour: bluemlisalp group, subito: false, discipline: wanderweg (child of wandern),
+  # section_tour: bluemlisalp group, subito: false, activity: wanderweg (child of wandern),
   # target_groups: kinder + familien. All covered by bluemlisalp_wandern_* responsibilities.
   let(:tour) { events(:section_tour) }
   let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
@@ -62,7 +62,7 @@ describe Events::Filter::Tour::MyApprovalResponsibilities do
       expect(filtered).to include(tour)
     end
 
-    it "includes tour with child discipline normalized to parent" do
+    it "includes tour with child activity normalized to parent" do
       # wanderweg (child) maps to wandern (parent) via COALESCE; responsibility is for wandern
       expect(filtered).to include(tour)
     end
@@ -77,23 +77,23 @@ describe Events::Filter::Tour::MyApprovalResponsibilities do
     end
   end
 
-  context "when tour has no matching responsibility for its discipline" do
-    let!(:unknown_discipline) { Fabricate(:event_discipline) }
+  context "when tour has no matching responsibility for its activity" do
+    let!(:unknown_activity) { Fabricate(:event_activity) }
     let!(:unmatched_tour) do
       Fabricate(:sac_tour,
         groups: [groups(:bluemlisalp)],
-        disciplines: [unknown_discipline],
+        activities: [unknown_activity],
         target_groups: [event_target_groups(:kinder)])
     end
 
     before { create_pruefer }
 
-    it "excludes tour whose discipline has no responsibility" do
-      # bluemlisalp_freigabekomitee has no responsibility for unknown_discipline
+    it "excludes tour whose activity has no responsibility" do
+      # bluemlisalp_freigabekomitee has no responsibility for unknown_activity
       expect(filtered).not_to include(unmatched_tour)
     end
 
-    it "still includes tour whose discipline is covered" do
+    it "still includes tour whose activity is covered" do
       expect(filtered).to include(tour)
     end
   end

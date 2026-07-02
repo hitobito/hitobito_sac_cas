@@ -76,7 +76,7 @@ describe "events/_form.html.haml" do
 
     before do
       event.update!(state: :draft)
-      assign(:disciplines, [])
+      assign(:activities, [])
       assign(:target_groups, [])
       assign(:fitness_requirements, [])
       assign(:technical_requirements, [])

@@ -14,7 +14,7 @@ describe Events::Filter::TourEssentials do
   let!(:hochtour) do
     Fabricate(:sac_tour,
       groups: [section],
-      disciplines: event_disciplines(:felsklettern, :skihochtour),
+      activities: event_activities(:felsklettern, :skihochtour),
       target_groups: event_target_groups(:senioren_b, :familien),
       fitness_requirement: event_fitness_requirements(:b))
   end
@@ -22,7 +22,7 @@ describe Events::Filter::TourEssentials do
   let!(:wanderung) do
     Fabricate(:sac_tour,
       groups: [section],
-      disciplines: [event_disciplines(:wanderweg)],
+      activities: [event_activities(:wanderweg)],
       target_groups: [event_target_groups(:senioren)],
       fitness_requirement: event_fitness_requirements(:d))
   end
@@ -35,29 +35,29 @@ describe Events::Filter::TourEssentials do
     it "removes empty args" do
       filter = described_class.new(
         :tour_essentials,
-        discipline_id: "1",
+        activity_id: "1",
         target_group_id: [""],
         trait_id: [1, ""],
         technical_requirement_id: ""
       )
-      expect(filter.args).to eq(discipline_id: [1], trait_id: [1])
+      expect(filter.args).to eq(activity_id: [1], trait_id: [1])
     end
   end
 
-  context "with discipline filter" do
-    it "includes only wander tour for sub discipline" do
-      result = filter_entries(discipline_id: event_disciplines(:wanderweg).id)
+  context "with activity filter" do
+    it "includes only wander tour for sub activity" do
+      result = filter_entries(activity_id: event_activities(:wanderweg).id)
       expect(result).to match_array([wanderung])
     end
 
-    it "includes tour for main discipline" do
-      result = filter_entries(discipline_id: event_disciplines(:wandern).id)
+    it "includes tour for main activity" do
+      result = filter_entries(activity_id: event_activities(:wandern).id)
       expect(result).to match_array([wanderung])
     end
 
-    it "includes tour for discipline and target group" do
+    it "includes tour for activity and target group" do
       result = filter_entries(
-        discipline_id: event_disciplines(:eisklettern, :felsklettern).map(&:id),
+        activity_id: event_activities(:eisklettern, :felsklettern).map(&:id),
         target_group_id: event_target_groups(:senioren).id
       )
       expect(result).to match_array([hochtour])

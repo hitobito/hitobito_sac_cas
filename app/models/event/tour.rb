@@ -84,9 +84,9 @@ class Event::Tour < Event
     foreign_key: :event_id,
     inverse_of: :event
 
-  has_and_belongs_to_many :disciplines,
-    join_table: :events_disciplines,
-    class_name: "Event::Discipline",
+  has_and_belongs_to_many :activities,
+    join_table: :events_activities,
+    class_name: "Event::Activity",
     foreign_key: :event_id,
     before_add: :prevent_association_changes_after_draft,
     before_remove: :prevent_association_changes_after_draft,
@@ -121,7 +121,7 @@ class Event::Tour < Event
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
-  validates :description, :disciplines, :target_groups, :technical_requirements,
+  validates :description, :activities, :target_groups, :technical_requirements,
     :fitness_requirement, :season,
     presence: {if: -> { state_reached?(:review) }}
 
@@ -179,8 +179,8 @@ class Event::Tour < Event
     Event::TargetGroup.where(id: target_groups.select("COALESCE(parent_id, id)"))
   end
 
-  def main_disciplines
-    Event::Discipline.where(id: disciplines.select("COALESCE(parent_id, id)"))
+  def main_activities
+    Event::Activity.where(id: activities.select("COALESCE(parent_id, id)"))
   end
 
   def self_approved?

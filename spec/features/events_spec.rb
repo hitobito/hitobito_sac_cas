@@ -297,11 +297,11 @@ describe :events, js: true do
       it "shows options in tom select and sets them correctly" do
         event.update!(state: :draft)
         # assigned but soft deleted entries should still be available in dropdown
-        event.disciplines.first.update!(deleted_at: 1.month.ago)
-        event_disciplines(:bergtour).update!(short_description: "Über Stock und Stein")
+        event.activities.first.update!(deleted_at: 1.month.ago)
+        event_activities(:bergtour).update!(short_description: "Über Stock und Stein")
         visit edit_group_event_path(group_id: event.group_ids.first, id: event.id)
 
-        within("#event_discipline_ids + .ts-wrapper") do
+        within("#event_activity_ids + .ts-wrapper") do
           expect(page).to have_selector(".ts-control .item", count: 1)
           expect(page).to have_selector(".ts-control .item", text: "Wanderweg")
 
@@ -311,9 +311,9 @@ describe :events, js: true do
           expect(page).to have_selector(".ts-dropdown .option:nth-child(2) .muted", text: "Über Stock und Stein")
           expect(page).to have_selector(".ts-dropdown .option:nth-child(3)", text: "Schneeschuhwandern")
           expect(page).to have_no_selector(".ts-dropdown .option:nth-child(3) .muted")
-          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::Discipline.main.count)
+          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::Activity.main.count)
           expect(page).to have_selector(".ts-dropdown .option",
-            count: Event::Discipline.where.not(parent: nil).count - 1) # 1 already selected
+            count: Event::Activity.where.not(parent: nil).count - 1) # 1 already selected
 
           find(".ts-dropdown .option", text: "Fels").click
           expect(page).to have_selector(".ts-control .item", text: "Fels")
@@ -416,7 +416,7 @@ describe :events, js: true do
         expect(page).to have_css("dd", text: "Anreise mit ÖV, Arbeitseinsatz, Exkursion")
 
         event.reload
-        expect(event.disciplines).to match_array(event_disciplines(:wanderweg, :felsklettern))
+        expect(event.activities).to match_array(event_activities(:wanderweg, :felsklettern))
         expect(event.target_groups).to match_array(event_target_groups(:kinder, :senioren_b))
         expect(event.technical_requirements)
           .to match_array(event_technical_requirements(:wandern_t3, :wandern_t4, :skitouren_ws))

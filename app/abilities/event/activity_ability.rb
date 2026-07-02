@@ -5,8 +5,8 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Event::DisciplineAbility < AbilityDsl::Base
-  on(Event::Discipline) do
+class Event::ActivityAbility < AbilityDsl::Base
+  on(Event::Activity) do
     class_side(:index).if_admin
 
     permission(:admin).may(:manage).all

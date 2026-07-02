@@ -7,7 +7,7 @@
 
 # == Schema Information
 #
-# Table name: event_disciplines
+# Table name: event_activities
 #
 #  id                :bigint           not null, primary key
 #  order             :integer

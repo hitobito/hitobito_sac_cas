@@ -13,7 +13,7 @@ module Event::ApprovalCommissionResponsibilityHelper
       capture do
         concat ff.hidden_field :id
         concat ff.hidden_field :target_group_id
-        concat ff.hidden_field :discipline_id
+        concat ff.hidden_field :activity_id
         concat ff.hidden_field :subito
         concat ff.select :freigabe_komitee_id,
           freigabe_komitees.map { [_1.to_s, _1.id] },
