@@ -66,7 +66,6 @@ describe Export::Tabular::People::Austritte do
       :canton,
       :country
     ]
-    expect(build.attributes).to match_array(attrs)
     expect(build.attributes).to eq(attrs)
   end
 

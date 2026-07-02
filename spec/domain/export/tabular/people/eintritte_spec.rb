@@ -56,7 +56,6 @@ describe Export::Tabular::People::Eintritte do
       :canton,
       :country
     ]
-    expect(build.attributes).to match_array(attrs)
     expect(build.attributes).to eq attrs
   end
 
@@ -95,7 +94,6 @@ describe Export::Tabular::People::Eintritte do
       "Kanton",
       "Land"
     ]
-    expect(build.labels).to match_array(labels)
     expect(build.labels).to eq(labels)
   end
 
