@@ -134,7 +134,7 @@ describe EventsController do
         get :edit, params: params
 
         expect(dom).not_to have_text "Ist Subito-Tour"
-        expect(dom).not_to have_text "Disziplin(en)"
+        expect(dom).not_to have_text "Aktivität(en)"
         expect(dom).not_to have_text "Zielgruppe(n)"
         expect(dom).not_to have_text "Konditionelle Anforderung"
         expect(dom).not_to have_text "Technische Anforderung(en)"
@@ -147,7 +147,7 @@ describe EventsController do
         get :edit, params: params
 
         expect(dom).to have_text "Ist Subito-Tour"
-        expect(dom).to have_text "Disziplin(en)"
+        expect(dom).to have_text "Aktivität(en)"
         expect(dom).to have_text "Zielgruppe(n)"
         expect(dom).to have_text "Konditionelle Anforderung"
         expect(dom).to have_text "Technische Anforderung(en)"

@@ -22,15 +22,20 @@ class CreateEventDisciplines < ActiveRecord::Migration[8.0]
 
     reversible do |dir|
       dir.up do
-        Event::Discipline.create_translation_table!(
-          label: { type: :string, null: false },
-          short_description: { type: :string, null: true },
-          description: { type: :text, null: true },
-        )
+        create_table :event_discipline_translations do |t|
+          t.references :event_discipline, null: false, foreign_key: true, index: true
+          t.string :locale, null: false
+
+          t.string :label, null: false
+          t.string :short_description, null: true
+          t.text :description, null: true
+
+          t.timestamps
+        end
       end
 
       dir.down do
-        Event::Discipline.drop_translation_table!
+        drop_table :event_discipline_translations, if_exists: true
       end
     end
   end

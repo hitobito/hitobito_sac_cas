@@ -7,7 +7,7 @@
 
 # == Schema Information
 #
-# Table name: event_disciplines
+# Table name: event_activities
 #
 #  id                :bigint           not null, primary key
 #  order             :integer          not null, default 0
@@ -20,11 +20,11 @@
 #  deleted_at        :datetime
 #
 
-class Event::Discipline < ActiveRecord::Base
+class Event::Activity < ActiveRecord::Base
   include NestableTourEssential
   include Events::ApprovalCommissionResponsibilityComponents
 
-  has_and_belongs_to_many :events, join_table: "events_disciplines"
+  has_and_belongs_to_many :events, join_table: "events_activities"
 
   validates :description, presence: true
   validates :color, format: {with: /\A#[A-Fa-f0-9]{6}\Z/, message: :invalid_hex_color},
@@ -33,6 +33,6 @@ class Event::Discipline < ActiveRecord::Base
   after_commit :create_approval_commission_responsibilities, if: :main?, on: :create
 
   def create_approval_commission_responsibilities
-    Event::CreateApprovalCommissionResponsibilitiesJob.new(discipline: self).enqueue!
+    Event::CreateApprovalCommissionResponsibilitiesJob.new(activity: self).enqueue!
   end
 end

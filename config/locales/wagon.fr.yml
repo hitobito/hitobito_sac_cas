@@ -304,7 +304,7 @@ fr:
         maximum_age: Age maximal
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
-        disciplines: Discipline(s)
+        activities: Discipline(s)
         target_groups: Groupe(s) cible(s)
         fitness_requirement: Exigence en matière de condition physique
         fitness_requirement_id: Exigence en matière de condition physique
@@ -400,9 +400,9 @@ fr:
       event/approval_commission_responsibility:
         freigabe_komitee: Comité de libération
         target_group: Groupe cible
-        discipline: Discipline
+        activity: Discipline
         subito: Subito
-      event/discipline:
+      event/activity:
         color: Couleur
         label: Désignation
         short_description: Brève description
@@ -747,7 +747,7 @@ fr:
             course_compensation_category_id:
               uniqueness_during_validity_period: ne peut référencer qu’un seul taux de rémunération par période de validité.
 
-        event/discipline:
+        event/activity:
           attributes:
             color:
               invalid_hex_color: >-
@@ -760,7 +760,7 @@ fr:
         event/approval_commission_responsibility:
           not_in_layer: ne fait pas partie de la même section/du même groupe local.
           no_base_target_group: n'est pas un groupe cible principal.
-          no_base_discipline: n'est pas une discipline principale.
+          no_base_activity: n'est pas une discipline principale.
           combination_exists: a déjà défini une compétence correspondante.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -803,7 +803,7 @@ fr:
         one: Compétence de la commission de validation
         many: Compétences Commission de validation
         other: Compétences Commission de validation
-      event/discipline:
+      event/activity:
         one: Discipline
         many: Disciplines
         other: Disciplines
@@ -1557,7 +1557,7 @@ fr:
             many: '%{count} e-mails ont été envoyés.'
             other: '%{count} e-mails ont été envoyés.'
           warning: "Aucun e-mail n’a été envoyé, car aucun lien vers un sondage n’a été saisi."
-    disciplines:
+    activities:
       form:
         help_inline_color: "Valeur de couleur hexadécimale valide (par ex. #fcba03)"
     kinds:
@@ -1731,7 +1731,7 @@ fr:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unterdisziplin(en)
+      sub_activities: Unterdisziplin(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1865,7 +1865,7 @@ fr:
     tour_essentials:
       title: Faits essentiels
     tour_essential_field:
-      disciplines: Disciplines
+      activities: Disciplines
       target_groups: Groupes cibles
       technical_requirements: Exigences techniques
       traits: Caractéristiques

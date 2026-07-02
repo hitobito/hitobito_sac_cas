@@ -31,10 +31,10 @@ describe Event::ApprovalCommissionResponsibility do
       expect(subject.target_group).to eq event_target_groups(:kinder)
     end
 
-    it "discipline is readonly" do
-      subject.update!(discipline: nil)
+    it "activity is readonly" do
+      subject.update!(activity: nil)
       subject.reload
-      expect(subject.discipline).to eq event_disciplines(:wandern)
+      expect(subject.activity).to eq event_activities(:wandern)
     end
 
     it "subito is readonly" do
@@ -44,7 +44,7 @@ describe Event::ApprovalCommissionResponsibility do
     end
 
     it "validates uniqness of sektion_id in scope" do
-      clone = described_class.new(subject.attributes.slice(*%w[sektion_id target_group_id discipline_id
+      clone = described_class.new(subject.attributes.slice(*%w[sektion_id target_group_id activity_id
         freigabe_komitee_id subito]))
       expect(clone).not_to be_valid
       expect(clone.errors.full_messages).to eq ["Sektion hat bereits eine entsprechende Zuständigkeit definiert."]
@@ -70,11 +70,11 @@ describe Event::ApprovalCommissionResponsibility do
                                                      .full_messages).to include "Zielgruppe ist keine Hauptzielgruppe."
     end
 
-    it "validates that discipline is a parent" do
-      event_approval_commission_responsibility = described_class.new(discipline: event_disciplines(:eisklettern))
+    it "validates that activity is a parent" do
+      event_approval_commission_responsibility = described_class.new(activity: event_activities(:eisklettern))
       expect(event_approval_commission_responsibility).not_to be_valid
       expect(event_approval_commission_responsibility.errors
-                                                     .full_messages).to include "Disziplin ist keine Hauptdisziplin."
+                                                     .full_messages).to include "Aktivität ist keine Hauptaktivität."
     end
   end
 
@@ -87,18 +87,18 @@ describe Event::ApprovalCommissionResponsibility do
     let(:freigabe_komitee_b) do
       Fabricate(Group::FreigabeKomitee.sti_name.to_sym, parent: touren_und_kurse, layer_group_id: bluemlisalp.id)
     end
-    let(:klettern) { event_disciplines(:klettern) }
-    let(:hochtour) { event_disciplines(:hochtour) }
+    let(:klettern) { event_activities(:klettern) }
+    let(:hochtour) { event_activities(:hochtour) }
     let(:familien) { event_target_groups(:familien) }
     let(:senioren) { event_target_groups(:senioren) }
 
     subject do
-      assign_approval_commission_responsibility(discipline: hochtour, target_group: senioren,
+      assign_approval_commission_responsibility(activity: hochtour, target_group: senioren,
         freigabe_komitee: freigabe_komitee_b)
     end
 
-    it "removes approvals by old and new freigabe_komitee on tours where discipline and target_group are matching" do
-      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+    it "removes approvals by old and new freigabe_komitee on tours where activity and target_group are matching" do
+      assign_approval_commission_responsibility(activity: klettern, target_group: senioren,
         freigabe_komitee: freigabe_komitee_a)
 
       tour = create_tour
@@ -113,12 +113,12 @@ describe Event::ApprovalCommissionResponsibility do
       expect(Event::Approval.where(id: [to_delete_a, to_delete_b].map(&:id))).to be_empty
     end
 
-    it "removes approvals by old and new freigabe_komitee on tours where sub discipline is matching" do
-      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+    it "removes approvals by old and new freigabe_komitee on tours where sub activity is matching" do
+      assign_approval_commission_responsibility(activity: klettern, target_group: senioren,
         freigabe_komitee: freigabe_komitee_a)
 
-      disciplines = Event::Discipline.where(parent: [hochtour, klettern])
-      tour = create_tour(disciplines:)
+      activities = Event::Activity.where(parent: [hochtour, klettern])
+      tour = create_tour(activities:)
 
       to_delete_a = create_approval(tour, freigabe_komitee_a)
       to_delete_b = create_approval(tour, freigabe_komitee_b)
@@ -131,7 +131,7 @@ describe Event::ApprovalCommissionResponsibility do
     end
 
     it "removes approvals by old and new freigabe_komitee on tours where sub target group is matching" do
-      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+      assign_approval_commission_responsibility(activity: klettern, target_group: senioren,
         freigabe_komitee: freigabe_komitee_a)
 
       target_groups = Event::TargetGroup.where(parent: [familien, senioren])
@@ -148,7 +148,7 @@ describe Event::ApprovalCommissionResponsibility do
     end
 
     it "keeps approvals by old and new freigabe_komitee on tours with approval in progress states" do
-      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+      assign_approval_commission_responsibility(activity: klettern, target_group: senioren,
         freigabe_komitee: freigabe_komitee_a)
 
       tour = create_tour(state: :draft)
@@ -170,7 +170,7 @@ describe Event::ApprovalCommissionResponsibility do
     end
 
     it "keeps approvals by old and new freigabe_komitee on tours in different sektion" do
-      assign_approval_commission_responsibility(discipline: klettern, target_group: senioren,
+      assign_approval_commission_responsibility(activity: klettern, target_group: senioren,
         freigabe_komitee: freigabe_komitee_a)
 
       tour = create_tour(groups: [groups(:matterhorn)], state: :approved)
@@ -185,13 +185,13 @@ describe Event::ApprovalCommissionResponsibility do
       expect(Event::Approval.where(id: [to_keep_a, to_keep_b].map(&:id))).to be_present
     end
 
-    it "keeps approvals by old and new freigabe_komitee on tours where discipline and target_group are not matching" do
-      assign_approval_commission_responsibility(discipline: klettern, target_group: familien,
+    it "keeps approvals by old and new freigabe_komitee on tours where activity and target_group are not matching" do
+      assign_approval_commission_responsibility(activity: klettern, target_group: familien,
         freigabe_komitee: freigabe_komitee_a)
 
-      disciplines = [klettern]
+      activities = [klettern]
       target_groups = [familien]
-      tour = create_tour(disciplines:, target_groups:)
+      tour = create_tour(activities:, target_groups:)
 
       to_keep_a = create_approval(tour, freigabe_komitee_a)
       to_keep_b = create_approval(tour, freigabe_komitee_b)
@@ -204,8 +204,8 @@ describe Event::ApprovalCommissionResponsibility do
     end
   end
 
-  def assign_approval_commission_responsibility(discipline:, target_group:, freigabe_komitee:)
-    Event::ApprovalCommissionResponsibility.find_by(sektion: bluemlisalp, discipline:,
+  def assign_approval_commission_responsibility(activity:, target_group:, freigabe_komitee:)
+    Event::ApprovalCommissionResponsibility.find_by(sektion: bluemlisalp, activity:,
       target_group:, subito: false).tap do |responsibility|
       responsibility.update!(freigabe_komitee:)
     end
@@ -220,7 +220,7 @@ describe Event::ApprovalCommissionResponsibility do
 
   def create_tour(**attrs)
     Fabricate(:sac_tour, attrs.reverse_merge(
-      disciplines: [hochtour, klettern],
+      activities: [hochtour, klettern],
       target_groups: [familien, senioren],
       technical_requirements: [event_technical_requirements(:klettern)],
       fitness_requirement: event_fitness_requirements(:a),

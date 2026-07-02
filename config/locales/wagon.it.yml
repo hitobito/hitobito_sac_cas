@@ -302,7 +302,7 @@ it:
         maximum_age: Età massima
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
-        disciplines: Disciplina/e
+        activities: Disciplina/e
         target_groups: Gruppo/i di riferimento
         fitness_requirement: Requisito condizionale
         fitness_requirement_id: Requisito condizionale
@@ -398,9 +398,9 @@ it:
       event/approval_commission_responsibility:
         freigabe_komitee: Comitato di rilascio
         target_group: Gruppo target
-        discipline: Disciplina
+        activity: Disciplina
         subito: Subito
-      event/discipline:
+      event/activity:
         color: Colore
         label: Designazione
         short_description: Breve descrizione
@@ -745,7 +745,7 @@ it:
             course_compensation_category_id:
               uniqueness_during_validity_period: può referenziare solo un tasso di retribuzione per periodo di validità.
 
-        event/discipline:
+        event/activity:
           attributes:
             color:
               invalid_hex_color: >-
@@ -758,7 +758,7 @@ it:
         event/approval_commission_responsibility:
           not_in_layer: non è nella stessa sezione/gruppo locale.
           no_base_target_group: non è un gruppo target principale.
-          no_base_discipline: non è una disciplina principale.
+          no_base_activity: non è una disciplina principale.
           combination_exists: ha già definito una responsabilità corrispondente.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -801,7 +801,7 @@ it:
         one: Responsabilità Commissione di rilascio
         many: Responsabilità della Commissione di rilascio
         other: Responsabilità della Commissione di rilascio
-      event/discipline:
+      event/activity:
         one: Disciplina
         many: Discipline
         other: Discipline
@@ -1555,7 +1555,7 @@ it:
             many: Sono state inviate %{count} e-mail.
             other: Sono state inviate %{count} e-mail.
           warning: Nessuna e-mail è stata inviata poiché non è stato acquisito alcun link al sondaggio.
-    disciplines:
+    activities:
       form:
         help_inline_color: "Valore esadecimale valido del colore (ad es. #fcba03)"
     kinds:
@@ -1729,7 +1729,7 @@ it:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unterdisziplin(en)
+      sub_activities: Unterdisziplin(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1863,7 +1863,7 @@ it:
     tour_essentials:
       title: Fatti salienti
     tour_essential_field:
-      disciplines: Discipline
+      activities: Discipline
       target_groups: Gruppi target
       technical_requirements: Requisiti tecnici
       traits: Caratteristiche

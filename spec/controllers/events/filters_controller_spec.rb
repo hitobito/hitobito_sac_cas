@@ -26,7 +26,7 @@ describe Events::FiltersController do
         year: 2023,
         filters: {
           sac: {season: "summer"},
-          tour_essentials: {discipline_id: [event_disciplines(:wandern).id]},
+          tour_essentials: {activity_id: [event_activities(:wandern).id]},
           approval: {self_approved: "true", responsible_komitee_id: groups(:bluemlisalp_freigabekomitee).id}
         }
       }
@@ -56,7 +56,7 @@ describe Events::FiltersController do
           year: 2023,
           range: "group",
           filters: {sac: {subito: "false"},
-                    tour_essentials: {discipline_id: [event_disciplines(:wandern).id], target_group_id: [""]},
+                    tour_essentials: {activity_id: [event_activities(:wandern).id], target_group_id: [""]},
                     approval: {self_approved: "1", responsible_komitee_id: groups(:bluemlisalp_freigabekomitee).id}}
         }
 
@@ -65,7 +65,7 @@ describe Events::FiltersController do
         year: 2023,
         range: "group",
         filters: {sac: {subito: "false"},
-                  tour_essentials: {discipline_id: [event_disciplines(:wandern).id.to_s]},
+                  tour_essentials: {activity_id: [event_activities(:wandern).id.to_s]},
                   approval: {self_approved: "1", responsible_komitee_id: groups(:bluemlisalp_freigabekomitee).id.to_s}}
       ))
     end

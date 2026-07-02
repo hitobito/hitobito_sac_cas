@@ -12,7 +12,7 @@ module SacCas::EventsController
     self.permitted_attrs += [
       :fitness_requirement_id,
       :duration_in_hours,
-      discipline_ids: [],
+      activity_ids: [],
       target_group_ids: [],
       technical_requirement_ids: [],
       trait_ids: []
@@ -46,7 +46,7 @@ module SacCas::EventsController
   def preload_tour_essentials # rubocop:disable Metrics/AbcSize
     return unless tour?
 
-    @disciplines = Event::Discipline.assignable(entry.discipline_ids).list
+    @activities = Event::Activity.assignable(entry.activity_ids).list
     @target_groups = Event::TargetGroup.assignable(entry.target_group_ids).list
     @technical_requirements =
       Event::TechnicalRequirement.assignable(entry.technical_requirement_ids).list

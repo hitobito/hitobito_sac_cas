@@ -50,7 +50,7 @@ section_tour:
   type: Event::Tour
   state: review
   external_applications: true
-  disciplines:
+  activities:
     - wanderweg
   target_groups:
     - kinder

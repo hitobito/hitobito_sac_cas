@@ -148,12 +148,12 @@ module TourMailer
 
   def placeholder_event_essentials
     target_groups = load_essentials(:target_groups)
-    disciplines = load_essentials(:disciplines)
+    activities = load_essentials(:activities)
     join_lines([
       labeled_main_target_groups(target_groups),
       labeled_sub_target_groups(target_groups),
-      labeled_main_disciplines(disciplines),
-      labeled_sub_disciplines(disciplines),
+      labeled_main_activities(activities),
+      labeled_sub_activities(activities),
       labeled_traits
     ].compact, "\n")
   end
@@ -173,12 +173,12 @@ module TourMailer
     labeled_sub_essentials(target_groups, :sub_target_groups)
   end
 
-  def labeled_main_disciplines(disciplines)
-    labeled_main_essentials(disciplines, :disciplines)
+  def labeled_main_activities(activities)
+    labeled_main_essentials(activities, :activities)
   end
 
-  def labeled_sub_disciplines(disciplines)
-    labeled_sub_essentials(disciplines, :sub_disciplines)
+  def labeled_sub_activities(activities)
+    labeled_sub_essentials(activities, :sub_activities)
   end
 
   def labeled_traits

@@ -8,15 +8,15 @@
 class Event::Tour::KomiteeApproval
   include ActiveModel::Model
 
-  attr_reader :freigabe_komitee, :approval_kinds, :approvals, :disciplines_target_groups,
+  attr_reader :freigabe_komitee, :approval_kinds, :approvals, :activities_target_groups,
     :responsible_kinds, :approval_kind_approvals
 
-  def initialize(freigabe_komitee:, approval_kinds:, approvals:, disciplines_target_groups:,
+  def initialize(freigabe_komitee:, approval_kinds:, approvals:, activities_target_groups:,
     responsible_kinds:)
     @freigabe_komitee = freigabe_komitee
     @approval_kinds = approval_kinds
     @approvals = approvals
-    @disciplines_target_groups = disciplines_target_groups
+    @activities_target_groups = activities_target_groups
     @responsible_kinds = responsible_kinds
     @approval_kind_approvals = build_kind_approvals
   end
