@@ -7,18 +7,18 @@
 
 require "spec_helper"
 
-describe Event::DisciplinesController do
+describe Event::ActivitiesController do
   before { sign_in(current_user) }
 
   let(:current_user) { people(:admin) }
-  let(:entry) { event_disciplines(:wanderweg) }
+  let(:entry) { event_activities(:wanderweg) }
   let(:dom) { Capybara::Node::Simple.new(response.body) }
 
   render_views
 
   describe "GET#index" do
-    let(:wandern) { event_disciplines(:wandern) }
-    let(:hochtour) { event_disciplines(:hochtour) }
+    let(:wandern) { event_activities(:wandern) }
+    let(:hochtour) { event_activities(:hochtour) }
 
     it "lists entries" do
       get :index
@@ -27,7 +27,7 @@ describe Event::DisciplinesController do
       expect(dom).to have_css "th", text: "Sortierschlüssel"
       expect(dom).to have_css "th", text: "Kurzbeschreibung"
       expect(dom).to have_css "th", text: "Beschreibung"
-      expect(dom).to have_css "th", text: "Unterdisziplinen"
+      expect(dom).to have_css "th", text: "Unteraktivitäten"
       expect(dom).to have_css "th", text: "Geändert"
       expect(dom).to have_css "th", text: "Gelöscht"
       expect(dom).to have_css "td", text: "Wandern"
@@ -38,14 +38,14 @@ describe Event::DisciplinesController do
       wandern.update!(color: "#AABBCC")
       get :index
       expect(response).to be_ok
-      expect(dom).to have_css("#event_discipline_#{wandern.id} td i.fa-circle")
-      expect(dom).not_to have_css("#event_discipline_#{hochtour.id} td i.fa-circle")
-      expect(dom.find("#event_discipline_#{wandern.id} td i.fa-circle")["style"]).to eq "color: #AABBCC"
+      expect(dom).to have_css("#event_activity_#{wandern.id} td i.fa-circle")
+      expect(dom).not_to have_css("#event_activity_#{hochtour.id} td i.fa-circle")
+      expect(dom.find("#event_activity_#{wandern.id} td i.fa-circle")["style"]).to eq "color: #AABBCC"
     end
   end
 
   describe "GET#edit" do
-    let(:wandern) { event_disciplines(:wandern) }
+    let(:wandern) { event_activities(:wandern) }
 
     it "shows form" do
       get :edit, params: {id: entry.id}
@@ -64,27 +64,27 @@ describe Event::DisciplinesController do
 
   it "GET#show redirects to edit" do
     get :show, params: {id: entry.id}
-    expect(response).to redirect_to(edit_event_discipline_path(entry))
+    expect(response).to redirect_to(edit_event_activity_path(entry))
   end
 
   it "POST#create creates new entry" do
     expect do
       post :create, params: {
-        event_discipline: {
+        event_activity: {
           label: "Alpin",
           description: "Alpen",
-          parent_id: event_disciplines(:klettern).id,
+          parent_id: event_activities(:klettern).id,
           order: 6,
           color: "#AABBCC"
         }
       }
-    end.to change { Event::Discipline.count }.by(1)
+    end.to change { Event::Activity.count }.by(1)
 
-    entry = Event::Discipline.last
+    entry = Event::Activity.last
     expect(entry.label).to eq("Alpin")
     expect(entry.description).to eq("Alpen")
     expect(entry.order).to eq(6)
-    expect(entry.parent).to eq(event_disciplines(:klettern))
+    expect(entry.parent).to eq(event_activities(:klettern))
     expect(entry.color).to eq("#AABBCC")
   end
 
@@ -92,9 +92,9 @@ describe Event::DisciplinesController do
     entry.destroy
     patch :update, params: {
       id: entry.id,
-      event_discipline: {label: "Wanderwege"}
+      event_activity: {label: "Wanderwege"}
     }
-    expect(response).to redirect_to(event_disciplines_path(returning: true))
+    expect(response).to redirect_to(event_activities_path(returning: true))
 
     entry.reload
     expect(entry.label).to eq("Wanderwege")
@@ -103,7 +103,7 @@ describe Event::DisciplinesController do
 
   it "DELETE#destroy soft deletes referenced entry" do
     delete :destroy, params: {id: entry.id}
-    expect(response).to redirect_to(event_disciplines_path(returning: true))
+    expect(response).to redirect_to(event_activities_path(returning: true))
 
     entry.reload
     expect(entry.deleted_at).to be_present

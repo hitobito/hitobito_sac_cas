@@ -69,7 +69,7 @@ module SacCas::EventAbility
 
   def assigned_freigabe_komitee_ids
     Event::ApprovalCommissionResponsibility
-      .where(discipline_id: find_main(:disciplines))
+      .where(activity_id: find_main(:activities))
       .where(target_group_id: find_main(:target_groups))
       .where(sektion_id: relevant_group_ids)
       .where(subito: subject.subito)

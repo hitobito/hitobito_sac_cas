@@ -6,28 +6,28 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Event::CreateApprovalCommissionResponsibilitiesJob < BaseJob
-  self.parameters = [:discipline_id, :target_group_id, :freigabe_komitee_group_id]
+  self.parameters = [:activity_id, :target_group_id, :freigabe_komitee_group_id]
 
-  attr_reader :discipline_id, :target_group_id, :freigabe_komitee_group_id
+  attr_reader :activity_id, :target_group_id, :freigabe_komitee_group_id
 
-  def initialize(discipline: nil, target_group: nil, freigabe_komitee_group: nil)
-    @discipline_id = discipline&.id
+  def initialize(activity: nil, target_group: nil, freigabe_komitee_group: nil)
+    @activity_id = activity&.id
     @target_group_id = target_group&.id
     @freigabe_komitee_group_id = freigabe_komitee_group&.id
 
-    raise "must pass exactly one argument" unless [discipline, target_group,
+    raise "must pass exactly one argument" unless [activity, target_group,
       freigabe_komitee_group].compact.size == 1
   end
 
   def perform
     relevant_sektionen_and_ortsgruppen.find_each do |group|
       freigabe_komitee_id = freigabe_komitee_group_id || find_target_freigabe_komitee(group).id
-      relevant_disciplines.find_each do |discipline|
+      relevant_activities.find_each do |activity|
         relevant_target_groups.find_each do |target_group|
           [true, false].each do |subito|
             group.event_approval_commission_responsibilities
               .create_with(freigabe_komitee_id:)
-              .find_or_create_by!(discipline:, target_group:, subito:)
+              .find_or_create_by!(activity:, target_group:, subito:)
           end
         end
       end
@@ -44,10 +44,10 @@ class Event::CreateApprovalCommissionResponsibilitiesJob < BaseJob
       .first
   end
 
-  def relevant_disciplines
-    return Event::Discipline.where(id: discipline_id) if discipline_id.present?
+  def relevant_activities
+    return Event::Activity.where(id: activity_id) if activity_id.present?
 
-    Event::Discipline.main.list.without_deleted
+    Event::Activity.main.list.without_deleted
   end
 
   def relevant_target_groups

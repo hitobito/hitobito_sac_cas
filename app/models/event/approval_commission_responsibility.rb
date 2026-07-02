@@ -6,21 +6,21 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Event::ApprovalCommissionResponsibility < ActiveRecord::Base
-  attr_readonly :sektion_id, :target_group_id, :discipline_id, :subito
+  attr_readonly :sektion_id, :target_group_id, :activity_id, :subito
 
   belongs_to :sektion, class_name: "Group"
   belongs_to :freigabe_komitee, class_name: "Group"
   belongs_to :target_group
-  belongs_to :discipline
+  belongs_to :activity
 
   validates :freigabe_komitee, presence: true # rubocop:disable Rails/RedundantPresenceValidationOnBelongsTo
   validates :sektion_id, uniqueness: {
-    scope: [:target_group_id, :discipline_id, :subito],
+    scope: [:target_group_id, :activity_id, :subito],
     message: :combination_exists
   }, on: :create
   validate :validate_freigabe_komitee_inside_layer, if: :freigabe_komitee
   validate :validate_only_base_target_group, on: :create
-  validate :validate_only_base_discipline, on: :create
+  validate :validate_only_base_activity, on: :create
 
   after_update :reset_associated_approvals, if: :freigabe_komitee_previously_changed?
 
@@ -36,16 +36,16 @@ class Event::ApprovalCommissionResponsibility < ActiveRecord::Base
     errors.add(:target_group, :no_base_target_group) if target_group&.parent.present?
   end
 
-  def validate_only_base_discipline
-    errors.add(:discipline, :no_base_discipline) if discipline&.parent.present?
+  def validate_only_base_activity
+    errors.add(:activity, :no_base_activity) if activity&.parent.present?
   end
 
   def reset_associated_approvals
     tours = Event::Tour.joins(:groups).where(groups: {id: [sektion.id]})
       .where.not(state: Event::Tour::FREIGABE_PENDING_STATES)
-      .joins(:disciplines)
-      .where("event_disciplines.id = :id OR " \
-             "event_disciplines.parent_id = :id", id: discipline.id)
+      .joins(:activities)
+      .where("event_activities.id = :id OR " \
+             "event_activities.parent_id = :id", id: activity.id)
       .joins(:target_groups)
       .where("event_target_groups.id = :id OR " \
              "event_target_groups.parent_id = :id", id: target_group.id)

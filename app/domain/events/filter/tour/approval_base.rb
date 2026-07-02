@@ -21,7 +21,7 @@ module Events::Filter::Tour
 
     # Base scope for correlated EXISTS subqueries: matches responsibilities to the current event
     # by sektion, subito flag, target group (normalized to parent),
-    # and discipline (normalized to parent).
+    # and activity (normalized to parent).
     def base_responsibility_scope
       Event::ApprovalCommissionResponsibility
         .joins("JOIN events_groups ON events_groups.event_id = events.id")
@@ -29,7 +29,7 @@ module Events::Filter::Tour
         .where("event_approval_commission_responsibilities.sektion_id = groups.layer_group_id")
         .where("event_approval_commission_responsibilities.subito = events.subito")
         .where(target_group_id: main_target_groups_subquery)
-        .where(discipline_id: main_disciplines_subquery)
+        .where(activity_id: main_activities_subquery)
     end
 
     def main_target_groups_subquery
@@ -40,11 +40,11 @@ module Events::Filter::Tour
         .select("COALESCE(event_target_groups.parent_id, event_target_groups.id)")
     end
 
-    def main_disciplines_subquery
-      Event::Discipline
-        .joins("JOIN events_disciplines ON events_disciplines.discipline_id = event_disciplines.id")
-        .where("events_disciplines.event_id = events.id")
-        .select("COALESCE(event_disciplines.parent_id, event_disciplines.id)")
+    def main_activities_subquery
+      Event::Activity
+        .joins("JOIN events_activities ON events_activities.activity_id = event_activities.id")
+        .where("events_activities.event_id = events.id")
+        .select("COALESCE(event_activities.parent_id, event_activities.id)")
     end
 
     # Correlated subquery: the approval kind has not yet been approved for this event+komitee.

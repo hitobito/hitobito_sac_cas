@@ -7,24 +7,24 @@
 
 require "spec_helper"
 
-describe Event::Discipline do
-  let(:main_discipline) { event_disciplines(:wandern) }
-  let(:child_discipline) { event_disciplines(:wanderweg) }
+describe Event::Activity do
+  let(:main_activity) { event_activities(:wandern) }
+  let(:child_activity) { event_activities(:wanderweg) }
 
   it ".list orders entries" do
-    expect(main_discipline.children.list)
-      .to eq(event_disciplines(:wanderweg, :bergtour, :schneeschuh))
+    expect(main_activity.children.list)
+      .to eq(event_activities(:wanderweg, :bergtour, :schneeschuh))
   end
 
   it ".main only returns parents" do
     expect(described_class.main)
-      .to match_array(event_disciplines(:wandern, :hochtour, :klettern))
+      .to match_array(event_activities(:wandern, :hochtour, :klettern))
   end
 
   context "create" do
     it "enqueues CreateApprovalCommissionResponsibilitiesJob for main" do
       expect do
-        Fabricate(:event_discipline)
+        Fabricate(:event_activity)
       end.to change {
         Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
       }
@@ -32,7 +32,7 @@ describe Event::Discipline do
 
     it "does not enqueue CreateApprovalCommissionResponsibilitiesJob for sub" do
       expect do
-        Fabricate(:event_discipline, parent: event_disciplines(:wandern))
+        Fabricate(:event_activity, parent: event_activities(:wandern))
       end.to_not change {
         Delayed::Job.where("handler like '%Event::CreateApprovalCommissionResponsibilitiesJob%'").count
       }
@@ -50,7 +50,7 @@ describe Event::Discipline do
     end
 
     it "prevent children as parents" do
-      entry = Fabricate.build(:event_discipline, parent: child_discipline)
+      entry = Fabricate.build(:event_activity, parent: child_activity)
       expect(entry).not_to be_valid
       expect(entry.errors.details[:parent_id]).to eq [error: :parent_is_not_main]
     end
@@ -75,68 +75,68 @@ describe Event::Discipline do
 
   context ".assignable" do
     before do
-      main_discipline.children.update_all(deleted_at: Time.zone.now)
-      main_discipline.update(deleted_at: Time.zone.now)
+      main_activity.children.update_all(deleted_at: Time.zone.now)
+      main_activity.update(deleted_at: Time.zone.now)
     end
 
     it "contains no soft deleted entries" do
       expect(described_class.assignable.count).to eq(described_class.without_deleted.count)
-      expect(described_class.assignable).not_to include(child_discipline)
+      expect(described_class.assignable).not_to include(child_activity)
     end
 
     it "contains entries for passed ids even if they are not soft deleted" do
-      discipline = event_disciplines(:felsklettern)
-      expect(described_class.assignable(discipline.id)).to include(discipline)
+      activity = event_activities(:felsklettern)
+      expect(described_class.assignable(activity.id)).to include(activity)
       expect(described_class.assignable.count).to eq(described_class.without_deleted.count)
     end
 
     it "contains entries for passed ids even if they are soft deleted" do
-      expect(described_class.assignable(child_discipline.id)).to include(child_discipline)
-      expect(described_class.assignable(main_discipline.children.pluck(:id)).count).to eq(described_class.count)
-      expect(described_class.assignable(main_discipline.id)).to include(main_discipline)
+      expect(described_class.assignable(child_activity.id)).to include(child_activity)
+      expect(described_class.assignable(main_activity.children.pluck(:id)).count).to eq(described_class.count)
+      expect(described_class.assignable(main_activity.id)).to include(main_activity)
     end
 
     it "contains parents for passed ids even if they are soft deleted" do
-      expect(described_class.assignable(child_discipline.id)).to include(main_discipline)
+      expect(described_class.assignable(child_activity.id)).to include(main_activity)
     end
   end
 
   context "paranoia" do
     it "hard deletes if no associations exist" do
-      expect { event_disciplines(:indoorklettern).destroy }
+      expect { event_activities(:indoorklettern).destroy }
         .to change { described_class.unscoped.count }.by(-1)
-        .and change { Event::Discipline::Translation.count }.by(-1)
+        .and change { Event::Activity::Translation.count }.by(-1)
     end
 
     it "soft deletes if events exist" do
-      expect { child_discipline.destroy }
+      expect { child_activity.destroy }
         .to change { described_class.unscoped.count }.by(0)
-        .and change { Event::Discipline::Translation.count }.by(0)
-      expect(child_discipline.deleted_at).to be_present
-      expect(child_discipline.translations).to be_present
+        .and change { Event::Activity::Translation.count }.by(0)
+      expect(child_activity.deleted_at).to be_present
+      expect(child_activity.translations).to be_present
     end
 
     it "prevents delete if children exist" do
-      expect { main_discipline.destroy }.not_to change { described_class.unscoped.count }
-      expect(main_discipline.errors.details[:base]).to eq [error: :has_children]
-      expect(main_discipline.deleted_at).to be_nil
+      expect { main_activity.destroy }.not_to change { described_class.unscoped.count }
+      expect(main_activity.errors.details[:base]).to eq [error: :has_children]
+      expect(main_activity.deleted_at).to be_nil
     end
 
     it "soft deletes if children are all deleted" do
-      event_disciplines(:skihochtour).update!(deleted_at: Time.zone.now)
-      event_disciplines(:snowboardhochtour).update!(deleted_at: Time.zone.now)
-      expect { event_disciplines(:hochtour).destroy }
+      event_activities(:skihochtour).update!(deleted_at: Time.zone.now)
+      event_activities(:snowboardhochtour).update!(deleted_at: Time.zone.now)
+      expect { event_activities(:hochtour).destroy }
         .not_to change { described_class.unscoped.count }
-      expect(event_disciplines(:hochtour).deleted_at).to be_present
+      expect(event_activities(:hochtour).deleted_at).to be_present
     end
 
     it "deletes event_approval_commission_responsibilities on destroy" do
-      event_disciplines(:klettern).children.destroy_all
-      expect { event_disciplines(:klettern).destroy }.to change { Event::ApprovalCommissionResponsibility.count }
+      event_activities(:klettern).children.destroy_all
+      expect { event_activities(:klettern).destroy }.to change { Event::ApprovalCommissionResponsibility.count }
     end
 
     it "does not delete event_approval_commission_responsibilities on soft destroy" do
-      expect { event_disciplines(:klettern).destroy }.not_to change { Event::ApprovalCommissionResponsibility.count }
+      expect { event_activities(:klettern).destroy }.not_to change { Event::ApprovalCommissionResponsibility.count }
     end
   end
 end

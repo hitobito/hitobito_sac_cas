@@ -7,7 +7,7 @@
 
 # == Schema Information
 #
-# Table name: event_disciplines
+# Table name: event_activities
 #
 #  id                :bigint           not null, primary key
 #  order             :integer
@@ -21,7 +21,7 @@
 #
 
 wandern:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:wandern) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:wandern) %>
   locale: de
   label: Wandern
   description: Das Wandern ist des Müllers Lust
@@ -29,7 +29,7 @@ wandern:
   updated_at: <%= Time.zone.now %>
 
 wanderweg:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:wanderweg) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:wanderweg) %>
   locale: de
   label: Wanderweg
   description: Gemütlich dem Weg entlang.
@@ -37,7 +37,7 @@ wanderweg:
   updated_at: <%= Time.zone.now %>
 
 bergtour:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:bergtour) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:bergtour) %>
   locale: de
   label: Bergtour
   description: Über Stock und Stein
@@ -45,7 +45,7 @@ bergtour:
   updated_at: <%= Time.zone.now %>
 
 schneeschuh:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:schneeschuh) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:schneeschuh) %>
   locale: de
   label: Schneeschuhwandern
   description: Im Schnee läuft es sich besser mit grösserer Fläche
@@ -53,7 +53,7 @@ schneeschuh:
   updated_at: <%= Time.zone.now %>
 
 hochtour:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:hochtour) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:hochtour) %>
   locale: de
   label: Hochtouren
   description: Obeuse
@@ -61,7 +61,7 @@ hochtour:
   updated_at: <%= Time.zone.now %>
 
 skihochtour:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:skihochtour) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:skihochtour) %>
   locale: de
   label: Skihochtouren
   description: Zwei Latten
@@ -69,7 +69,7 @@ skihochtour:
   updated_at: <%= Time.zone.now %>
 
 snowboardhochtour:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:snowboardhochtour) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:snowboardhochtour) %>
   locale: de
   label: Snowboardhochtouren
   description: Ein Brett
@@ -77,7 +77,7 @@ snowboardhochtour:
   updated_at: <%= Time.zone.now %>
 
 klettern:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:klettern) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:klettern) %>
   locale: de
   label: Klettern
   description: Chräsmä u Stägärä
@@ -85,7 +85,7 @@ klettern:
   updated_at: <%= Time.zone.now %>
 
 felsklettern:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:felsklettern) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:felsklettern) %>
   locale: de
   label: Fels
   description: Im harten Stein
@@ -93,7 +93,7 @@ felsklettern:
   updated_at: <%= Time.zone.now %>
 
 eisklettern:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:eisklettern) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:eisklettern) %>
   locale: de
   label: Eis
   description: Schattig und kalt
@@ -101,7 +101,7 @@ eisklettern:
   updated_at: <%= Time.zone.now %>
 
 indoorklettern:
-  event_discipline_id: <%= ActiveRecord::FixtureSet.identify(:indoorklettern) %>
+  event_activity_id: <%= ActiveRecord::FixtureSet.identify(:indoorklettern) %>
   locale: de
   label: Indoor
   description: Immer trocken, immer warm

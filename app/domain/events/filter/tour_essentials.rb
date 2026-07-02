@@ -8,7 +8,7 @@
 module Events::Filter
   class TourEssentials < Base
     self.permitted_args = [
-      :discipline_id,
+      :activity_id,
       :target_group_id,
       :fitness_requirement_id,
       :technical_requirement_id,
@@ -21,7 +21,7 @@ module Events::Filter
     end
 
     def apply(scope)
-      scope = filter_disciplines(scope)
+      scope = filter_activities(scope)
       scope = filter_target_groups(scope)
       scope = filter_fitness_requirements(scope)
       scope = filter_technical_requirements(scope)
@@ -30,8 +30,8 @@ module Events::Filter
 
     private
 
-    def filter_disciplines(scope)
-      filter_essential_or_parent(scope, :discipline_id, :disciplines)
+    def filter_activities(scope)
+      filter_essential_or_parent(scope, :activity_id, :activities)
     end
 
     def filter_target_groups(scope)

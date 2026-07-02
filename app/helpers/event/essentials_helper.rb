@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module Event::EssentialsHelper
-  def format_event_discipline_children(entry)
+  def format_event_activity_children(entry)
     format_event_essentials_children(entry.children)
   end
 

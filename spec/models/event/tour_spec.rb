@@ -62,11 +62,11 @@ describe Event::Tour do
       it_behaves_like "readonly for draft attributes", attribute: :fitness_requirement
     end
 
-    describe "disciplines" do
-      let(:new_valid_value) { [event_disciplines(:indoorklettern)] }
+    describe "activities" do
+      let(:new_valid_value) { [event_activities(:indoorklettern)] }
 
-      it_behaves_like "presence validation for draft attributes", attribute: :disciplines, association: true
-      it_behaves_like "readonly for draft attributes", attribute: :disciplines
+      it_behaves_like "presence validation for draft attributes", attribute: :activities, association: true
+      it_behaves_like "readonly for draft attributes", attribute: :activities
     end
 
     describe "target_groups" do
@@ -867,9 +867,9 @@ describe Event::Tour do
       tour.update_column(:state, :draft)
     end
 
-    it "sets main to event on discipline create" do
+    it "sets main to event on activity create" do
       expect do
-        tour.disciplines << event_disciplines(:wandern)
+        tour.activities << event_activities(:wandern)
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last
@@ -877,9 +877,9 @@ describe Event::Tour do
       expect(version.main).to eq(tour)
     end
 
-    it "sets main to event on discipline remove" do
+    it "sets main to event on activity remove" do
       expect do
-        tour.disciplines.destroy_all
+        tour.activities.destroy_all
       end.to change { PaperTrail::Version.count }.by(1)
 
       version = PaperTrail::Version.order(:created_at, :id).last

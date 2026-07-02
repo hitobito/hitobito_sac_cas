@@ -24,17 +24,17 @@ describe Event::ApprovalCommissionResponsibilityForm do
 
       expect(subject.event_approval_commission_responsibilities).not_to match_array group_responsibilities.reload
       expect(new_record.target_group_id).to eq missing_respponsibility.target_group_id
-      expect(new_record.discipline_id).to eq missing_respponsibility.discipline_id
+      expect(new_record.activity_id).to eq missing_respponsibility.activity_id
       expect(new_record.subito).to eq missing_respponsibility.subito
       expect(new_record.sektion_id).to eq missing_respponsibility.sektion_id
     end
 
-    it "does not return responsibilities of soft deleted disciplines" do
-      event_disciplines(:wanderweg).destroy
-      expect(event_disciplines(:wanderweg).deleted?).to be_truthy
+    it "does not return responsibilities of soft deleted activities" do
+      event_activities(:wanderweg).destroy
+      expect(event_activities(:wanderweg).deleted?).to be_truthy
 
       expect(subject.event_approval_commission_responsibilities)
-        .not_to include(event_disciplines(:wanderweg))
+        .not_to include(event_activities(:wanderweg))
     end
 
     it "does not return responsibilities of soft deleted target groups" do
@@ -47,15 +47,15 @@ describe Event::ApprovalCommissionResponsibilityForm do
   end
 
   describe "#grouped_event_approval_commission_responsibilities" do
-    it "groups entries by target_group and discipline" do
+    it "groups entries by target_group and activity" do
       responsibility_1 = instance_double(
-        Event::ApprovalCommissionResponsibility, target_group: "Youth", discipline: "Eating"
+        Event::ApprovalCommissionResponsibility, target_group: "Youth", activity: "Eating"
       )
       responsibility_2 = instance_double(
-        Event::ApprovalCommissionResponsibility, target_group: "Youth", discipline: "Sleeping"
+        Event::ApprovalCommissionResponsibility, target_group: "Youth", activity: "Sleeping"
       )
       responsibility_3 = instance_double(
-        Event::ApprovalCommissionResponsibility, target_group: "Adult", discipline: "Sleeping"
+        Event::ApprovalCommissionResponsibility, target_group: "Adult", activity: "Sleeping"
       )
       allow(subject).to receive(:event_approval_commission_responsibilities).and_return([responsibility_1,
         responsibility_2, responsibility_3])

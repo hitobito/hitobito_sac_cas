@@ -49,10 +49,10 @@ describe EventsHelper do
       event.update!(state: :draft)
     end
 
-    it "returns list of children with parent for disciplines" do
-      event.disciplines = event_disciplines(:bergtour, :wanderweg, :felsklettern)
+    it "returns list of children with parent for activities" do
+      event.activities = event_activities(:bergtour, :wanderweg, :felsklettern)
 
-      html = format_event_disciplines(event)
+      html = format_event_activities(event)
       expect(html).to match(
         %r{
           <li>

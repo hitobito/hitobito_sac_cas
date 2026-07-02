@@ -50,7 +50,7 @@ Fabricator(:sac_published_tour, from: :sac_tour) do
   transient :state
 
   description { Faker::Lorem.words.join }
-  disciplines { [Event::Discipline.where.not(parent_id: nil).first] }
+  activities { [Event::Activity.where.not(parent_id: nil).first] }
   target_groups { [Event::TargetGroup.first] }
   technical_requirements { [Event::TechnicalRequirement.where.not(parent_id: nil).first] }
   fitness_requirement { Event::FitnessRequirement.first }

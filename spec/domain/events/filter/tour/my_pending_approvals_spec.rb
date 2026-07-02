@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Events::Filter::Tour::MyPendingApprovals do
   # section_tour: bluemlisalp group, state: review, subito: false,
-  # discipline: wanderweg (child of wandern), target_groups: kinder + familien.
+  # activity: wanderweg (child of wandern), target_groups: kinder + familien.
   # Approval kinds in order: professional (1), security (2), editorial (3).
   let(:tour) { events(:section_tour) }
   let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
@@ -75,7 +75,7 @@ describe Events::Filter::Tour::MyPendingApprovals do
       expect(filtered).to include(tour)
     end
 
-    it "includes tour with child discipline normalized to parent" do
+    it "includes tour with child activity normalized to parent" do
       # wanderweg (child) maps to wandern (parent) via COALESCE; responsibility is for wandern
       expect(filtered).to include(tour)
     end
