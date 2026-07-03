@@ -65,26 +65,39 @@ en:
         actual_days: Effektive Tage
         iban: IBAN
       event/participation/invoice_form:
-        reference_date: "Stichtag"
-        invoice_date: "Buchungsdatum"
-        send_date: "Versand- und Rechnungsdatum"
-        price_category: "Preiskategorie"
-        price: "Preis"
+        reference_date: Stichtag
+        invoice_date: Buchungsdatum
+        send_date: Versand- und Rechnungsdatum
+        price_category: Preiskategorie
+        price: Preis
+      event/tour/report_form:
+        tour_completed: Wurde die Tour durchgeführt
+        review: Tourenrückblick
+        remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
+        submitter_id: Eingereicht von
+        submitted_at: Eingereicht am
+        approver_id: Freigegeben von
+        approved_at: Freigegeben am
+        payer_id: Ausbezahlt von
+        paid_at: Ausbezahlt am
+      people/export/alps_recipients_form:
+        reference_date: Stichtag
+        new_entries_from: Neueintritte ab
       people/export/jubilare_form:
-        reference_date: "Stichtag"
-        membership_years: "Anzahl Mitgliedsjahre"
+        reference_date: Stichtag
+        membership_years: Anzahl Mitgliedsjahre
       people/export/period_form:
-        from: "Von"
-        to: "Bis"
+        from: Von
+        to: Bis
       people/membership/invoice_form:
-        reference_date: "Deadline"
-        invoice_date: "Buchungsdatum"
-        send_date: "Versand- und Rechnungsdatum"
-        discount: "Discount"
-        new_entry: "Entrance fee"
+        reference_date: Deadline
+        invoice_date: Buchungsdatum
+        send_date: Versand- und Rechnungsdatum
+        discount: Discount
+        new_entry: Entrance fee
         dont_send: Rechnung versenden
         update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
-        section_id: "Membership"
+        section_id: Membership
         sac_fee: Zentralverbandsbeitrag
         sac_entry_fee: Zentralverbandseintrittsgebühren
         hut_solidarity_fee: Hüttensolidaritätsbeitrag
@@ -94,10 +107,10 @@ en:
         section_fee: Sektionsbeitrag
         section_bulletin_postage_abroad: Porto Ausland Sektionsbulletin
       people/yearly_membership/invoice_form:
-        invoice_year: "Financial year"
-        invoice_date: "Buchungsdatum"
-        send_date: "Versand- und Rechnungsdatum"
-        role_finish_date: "Extend rollers to"
+        invoice_year: Financial year
+        invoice_date: Buchungsdatum
+        send_date: Versand- und Rechnungsdatum
+        role_finish_date: Extend rollers to
       wizards/steps/signup/main_email_field:
         email: e-mail
       wizards/steps/signup/person_fields:
@@ -1450,6 +1463,7 @@ en:
   dropdown/sac_cas_exports:
     button: SAC Exporte
     sac_courses: Finanzindikatoren Kurse
+    alps_recipients: "Die Alpen: Empfängerlisten"
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
@@ -1831,6 +1845,9 @@ en:
     rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
     self_approval: Selbstfreigabe
 
+  export/alps_recipients:
+    filename: Die_Alpen_Empfängerlisten
+
   export/sac_courses:
     filename: SAC_Finanzindikatoren_Kurse
 
@@ -2007,6 +2024,15 @@ en:
       create_yearly_membership_invoice: MV Annual collection
     sektion_primary: Core section
     sektion_secondary: Additional section
+
+    popover_alps_recipients:
+      info_html: >-
+        <p>Vor dem Export sollte geprüft werden, ob ein Adressabgleich durchgeführt werden soll, um Rücksendungen zu reduzieren.</p>
+
+        <p> <strong>Fall: Versand ohne Hüttenkarte => Feld „Neueintritte ab“ bleibt leer</strong><br/> Beispiel: "Stichtag = 15.09.2025" und "Neueintritte ab = leer"<br/> Ergebnis: Alle Abonnenten zum Stichtag erhalten ein Exemplar ohne Hüttenkarte </p>
+
+        <p> <strong>Fall: Versand mit Hüttenkarte => Beide Datumsfelder müssen gesetzt sein</strong><br/> Beispiel: "Stichtag = 15.01.2026" und "Neueintritte ab = 15.09.2025"</br> Ergebnis: Neu eingetretene Mitglieder sowie Abonnenten zwischen 15.09.2025 und 15.01.2026 erhalten eine Hüttenkarte; Mitglieder und Abonnenten mit einem Eintrittsdatum vor 15.09.2025 erhalten keine Hüttenkarte. </p>
+      download: Herunterladen
 
     popover_year:
       year: Jahr
@@ -2757,6 +2783,7 @@ en:
         submit_button: Die Alpen-Abonnent beenden
 
   delayed_job:
+    export/alps_recipients_export_job: "Export: Empfängerlisten Die Alpen"
     export/austritte_export_job: "Export: Resigned Members Section"
     export/beitragskategorie_wechsel_export_job: "Export: Section Fee Category Change"
     export/eintritte_export_job: "Export: New Members Section"

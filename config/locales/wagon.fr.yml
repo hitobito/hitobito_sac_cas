@@ -65,26 +65,39 @@ fr:
         actual_days: Jours effectifs
         iban: IBAN
       event/participation/invoice_form:
-        reference_date: "Date de référence"
-        invoice_date: "Date de réservation"
-        send_date: "Date d’envoi et de facturation"
-        price_category: "Catégorie de prix"
-        price: "Prix"
+        reference_date: Date de référence
+        invoice_date: Date de réservation
+        send_date: Date d’envoi et de facturation
+        price_category: Catégorie de prix
+        price: Prix
+      event/tour/report_form:
+        tour_completed: Wurde die Tour durchgeführt
+        review: Tourenrückblick
+        remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
+        submitter_id: Eingereicht von
+        submitted_at: Eingereicht am
+        approver_id: Freigegeben von
+        approved_at: Freigegeben am
+        payer_id: Ausbezahlt von
+        paid_at: Ausbezahlt am
+      people/export/alps_recipients_form:
+        reference_date: Stichtag
+        new_entries_from: Neueintritte ab
       people/export/jubilare_form:
-        reference_date: "Date de référence"
-        membership_years: "Nombre d'années d'adhésion"
+        reference_date: Date de référence
+        membership_years: Nombre d'années d'adhésion
       people/export/period_form:
-        from: "De"
-        to: "Jusqu'à"
+        from: De
+        to: Jusqu'à
       people/membership/invoice_form:
-        reference_date: "Date de référence"
-        invoice_date: "Date de réservation"
-        send_date: "Date d’envoi et de facturation"
-        discount: "Réduction"
-        new_entry: "Frais d’entrée"
+        reference_date: Date de référence
+        invoice_date: Date de réservation
+        send_date: Date d’envoi et de facturation
+        discount: Réduction
+        new_entry: Frais d’entrée
         dont_send: Envoyer une facture
         update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
-        section_id: "Adhésion"
+        section_id: Adhésion
         sac_fee: Cotisation à l'association centrale
         sac_entry_fee: Droits d'entrée de l'association centrale
         hut_solidarity_fee: Contribution de solidarité des cabanes
@@ -94,10 +107,10 @@ fr:
         section_fee: Cotisation à la section
         section_bulletin_postage_abroad: Port étranger Bulletin de la section
       people/yearly_membership/invoice_form:
-        invoice_year: "Exercice comptable"
-        invoice_date: "Date de réservation"
-        send_date: "Date d’envoi et de facturation"
-        role_finish_date: "Rallonger les rouleaux jusqu’à"
+        invoice_year: Exercice comptable
+        invoice_date: Date de réservation
+        send_date: Date d’envoi et de facturation
+        role_finish_date: Rallonger les rouleaux jusqu’à
       wizards/steps/signup/main_email_field:
         email: E-mail
       wizards/steps/signup/person_fields:
@@ -1519,6 +1532,7 @@ fr:
   dropdown/sac_cas_exports:
     button: SAC Exporte
     sac_courses: Finanzindikatoren Kurse
+    alps_recipients: "Die Alpen: Empfängerlisten"
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
@@ -1901,6 +1915,9 @@ fr:
     rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
     self_approval: Selbstfreigabe
 
+  export/alps_recipients:
+    filename: Die_Alpen_Empfängerlisten
+
   export/sac_courses:
     filename: SAC_Finanzindikatoren_Kurse
 
@@ -2077,6 +2094,15 @@ fr:
       create_yearly_membership_invoice: Encaissement annuel du service des membres
     sektion_primary: Section de base
     sektion_secondary: Section supplémentaire
+
+    popover_alps_recipients:
+      info_html: >-
+        <p>Vor dem Export sollte geprüft werden, ob ein Adressabgleich durchgeführt werden soll, um Rücksendungen zu reduzieren.</p>
+
+        <p> <strong>Fall: Versand ohne Hüttenkarte => Feld „Neueintritte ab“ bleibt leer</strong><br/> Beispiel: "Stichtag = 15.09.2025" und "Neueintritte ab = leer"<br/> Ergebnis: Alle Abonnenten zum Stichtag erhalten ein Exemplar ohne Hüttenkarte </p>
+
+        <p> <strong>Fall: Versand mit Hüttenkarte => Beide Datumsfelder müssen gesetzt sein</strong><br/> Beispiel: "Stichtag = 15.01.2026" und "Neueintritte ab = 15.09.2025"</br> Ergebnis: Neu eingetretene Mitglieder sowie Abonnenten zwischen 15.09.2025 und 15.01.2026 erhalten eine Hüttenkarte; Mitglieder und Abonnenten mit einem Eintrittsdatum vor 15.09.2025 erhalten keine Hüttenkarte. </p>
+      download: Herunterladen
 
     popover_year:
       year: Jahr
@@ -2835,6 +2861,7 @@ fr:
         submit_button: Mettre fin à l'abonnement alpin
 
   delayed_job:
+    export/alps_recipients_export_job: "Export: Empfängerlisten Die Alpen"
     export/austritte_export_job: "Export: Membres sortants section"
     export/beitragskategorie_wechsel_export_job: "Export: Changement catégorie de cotisation section"
     export/eintritte_export_job: "Export: Nouveaux membres section"
