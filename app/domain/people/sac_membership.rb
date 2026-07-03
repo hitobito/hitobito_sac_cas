@@ -206,6 +206,6 @@ class People::SacMembership
   end
 
   def abonnent_magazin_types
-    SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
+    SacCas::ABONNENT_MAGAZIN_PAYING_ROLES.map(&:sti_name)
   end
 end
