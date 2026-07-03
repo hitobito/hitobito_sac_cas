@@ -19,7 +19,7 @@ class Dropdown::SacCasExports < Dropdown::Base
   def init_items
     add_sac_statistics_item
     add_sac_courses_item
-    @items.sort_by!(&:label)
+    add_alps_recipients
   end
 
   def add_sac_statistics_item
@@ -40,6 +40,17 @@ class Dropdown::SacCasExports < Dropdown::Base
       template.render(
         "groups/popover_year",
         url: template.group_export_sac_courses_path(group)
+      )
+    )
+  end
+
+  def add_alps_recipients
+    add_item_with_popover(
+      translate(:alps_recipients),
+      template.render(
+        "groups/popover_alps_recipients",
+        model: People::Export::AlpsRecipientsForm.new,
+        group: group
       )
     )
   end

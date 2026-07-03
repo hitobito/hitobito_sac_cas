@@ -58,6 +58,10 @@ class People::Export::PopoverExportableController < ApplicationController
     raise NotImplementedError
   end
 
+  def enqueue_job(filename)
+    raise NotImplementedError
+  end
+
   def group
     @group ||= Group.find(params[:group_id])
   end

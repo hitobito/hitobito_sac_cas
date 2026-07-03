@@ -30,4 +30,23 @@ describe Dropdown::SacCasExports do
     expect(form).to have_field "Von"
     expect(form).to have_field "Bis"
   end
+
+  it "has alps recipients popover link" do
+    item = dom.find_link "Die Alpen: Empfängerlisten"
+    expect(item["data-anchor"]).to eq "#dropdown_sac_cas_exports"
+    expect(item["data-bs-toggle"]).to eq "popover"
+    expect(item["data-bs-title"]).to eq "Die Alpen: Empfängerlisten"
+    form = Capybara::Node::Simple.new(item["data-bs-content"])
+    expect(form).to have_field "Stichtag"
+    expect(form).to have_field "Neueintritte ab"
+  end
+
+  it "has sac courses popover link" do
+    item = dom.find_link "Finanzindikatoren Kurse"
+    expect(item["data-anchor"]).to eq "#dropdown_sac_cas_exports"
+    expect(item["data-bs-toggle"]).to eq "popover"
+    expect(item["data-bs-title"]).to eq "Finanzindikatoren Kurse"
+    form = Capybara::Node::Simple.new(item["data-bs-content"])
+    expect(form).to have_field "Jahr"
+  end
 end
