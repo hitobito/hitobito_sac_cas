@@ -10,8 +10,11 @@ module SacCas::Person
 
   CORRESPONDENCES = %w[digital print]
   DATA_QUALITIES = %w[ok info warning error]
-  REQUIRED_FIELDS_ROLES = [*SacCas::ABONNENT_MAGAZIN_ROLES, *SacCas::ABONNENT_TOUREN_PORTAL_ROLES,
-    *SacCas::MITGLIED_STAMMSEKTION_ROLES].map(&:sti_name)
+  REQUIRED_FIELDS_ROLES = [
+    *SacCas::ABONNENT_MAGAZIN_PAYING_ROLES,
+    *SacCas::ABONNENT_TOUREN_PORTAL_ROLES,
+    *SacCas::MITGLIED_STAMMSEKTION_ROLES
+  ].map(&:sti_name)
   PAPER_TRAIL_PASSWORD_OVERRIDE_EVENT = :password_override
 
   prepended do # rubocop:todo Metrics/BlockLength
