@@ -176,6 +176,10 @@ module HitobitoSacCas
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
       SearchStrategies::EventSearch.prepend SacCas::SearchStrategies::EventSearch
       Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
+      Synchronize::Addresses::SwissPost::ResultProcessor.prepend(
+        SacCas::Synchronize::Addresses::SwissPost::ResultProcessor
+      )
+
       Events::Filter::Chain.types <<
         Events::Filter::Sac <<
         Events::Filter::TourEssentials <<
@@ -200,7 +204,6 @@ module HitobitoSacCas
       Synchronize::Addresses::SwissPost::ResultProcessor.remote_identifier = "KDNR"
       Synchronize::Addresses::SwissPost::ResultProcessor.qstat_tag_prefix =
         "SAC_Post_Adressenabgleich_QSTAT"
-      Synchronize::Addresses::SwissPost::ResultProcessor.fields[:canton] = "Canton"
 
       ## Resources
       GroupResource.include SacCas::GroupResource
