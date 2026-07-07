@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -19,6 +19,23 @@ application:
       it: sac_logo_it.svg
     height: 85
     width: 200
+  footer:
+    links:
+      de:
+        "FAQ - Häufig gestellte Fragen": https://www.sac-cas.ch/de/meta/faq/
+        "Kontakt": https://www.sac-cas.ch/de/kontakt
+        "Anleitungen für Sektionsfunktionäre": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+        "Anleitungen fürs Kurskader": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+      fr:
+        "FAQ - Foire aux questions": https://www.sac-cas.ch/fr/meta/faq/
+        "Contact": https://www.sac-cas.ch/fr/contact/
+        "Manuel pour les responsables de section": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+        "Manuel pour les responsables de cours": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+      it:
+        "FAQ - Domande frequenti": https://www.sac-cas.ch/it/faq/
+        "Contatto": https://www.sac-cas.ch/it/contatto/
+        "Guide e supporto per i responsabili nella sezione": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+        "Guide e supporto per i responsabili dei corsi": https://saccas.atlassian.net/wiki/spaces/DOC/overview
 
 event:
   participations:
