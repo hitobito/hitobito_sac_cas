@@ -8,4 +8,9 @@
 Fabricator(:event_activity, class_name: "Event::Activity") do
   label { Faker::Sport.sport }
   description { Faker::Lorem.sentence }
+  after_build do |activity|
+    if activity.parent_id
+      activity.technical_requirement = Fabricate(:event_technical_requirement)
+    end
+  end
 end

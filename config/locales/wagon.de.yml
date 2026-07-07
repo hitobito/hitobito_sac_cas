@@ -426,6 +426,7 @@ de:
         order: Sortierschlüssel
         parent_id: Übergeordnete Aktivität
         children: Unteraktivitäten
+        technical_requirement_id: Technische Anforderung
         updated_at: Geändert
         deleted_at: Gelöscht
       event/approval:
@@ -779,10 +780,16 @@ de:
             color:
               invalid_hex_color: >-
                 muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
+            technical_requirement_id:
+              must_be_main: muss eine Hauptanforderung sein
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: darf nicht länger als geplante Kursdauer sein.
+        event/tour:
+          attributes:
+            technical_requirements:
+              not_matching_activities: müssen zu den ausgewählten Aktivitäten gehören
 
         event/approval_commission_responsibility:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.

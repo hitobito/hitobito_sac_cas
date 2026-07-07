@@ -46,6 +46,7 @@ class SacEventSeeder < EventSeeder
   # rubocop:disable Metrics/AbcSize
   def tour_attributes(values)
     state = Event::Tour.possible_states.sample
+    activities = [Event::Activity.assignable.sample]
 
     values.merge({
       name: Faker::Mountain.name,
@@ -55,9 +56,9 @@ class SacEventSeeder < EventSeeder
       priorization: false,
       requires_approval: false,
       external_applications: true,
-      technical_requirements: [Event::TechnicalRequirement.assignable.sample],
+      activities: activities,
+      technical_requirements: activities.map(&:technical_requirement).compact,
       fitness_requirement: Event::FitnessRequirement.assignable.sample,
-      activities: [Event::Activity.assignable.sample],
       target_groups: [Event::TargetGroup.assignable.sample],
       subito: [true, false].sample,
       season: Event::Kind::SEASONS.sample

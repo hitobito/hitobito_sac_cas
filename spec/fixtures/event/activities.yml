@@ -24,14 +24,17 @@ wandern:
   order: 1
 
 wanderweg:
+  technical_requirement: wandern
   parent: wandern
   order: 1
 
 bergtour:
+  technical_requirement: wandern
   parent: wandern
   order: 2
 
 schneeschuh:
+  technical_requirement: wandern
   parent: wandern
   order: 3
 
@@ -39,10 +42,12 @@ hochtour:
   order: 2
 
 skihochtour:
+  technical_requirement: wandern
   parent: hochtour
   order: 1
 
 snowboardhochtour:
+  technical_requirement: wandern
   parent: hochtour
   order: 2
 
@@ -50,13 +55,16 @@ klettern:
   order: 3
 
 felsklettern:
+  technical_requirement: klettern
   parent: klettern
   order: 1
 
 eisklettern:
+  technical_requirement: klettern
   parent: klettern
   order: 2
 
 indoorklettern:
+  technical_requirement: klettern
   parent: klettern
   order: 3

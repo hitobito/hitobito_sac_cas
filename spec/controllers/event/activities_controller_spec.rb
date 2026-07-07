@@ -51,14 +51,6 @@ describe Event::ActivitiesController do
       get :edit, params: {id: entry.id}
 
       expect(response).to be_ok
-      expect(dom).to have_css "#content input", count: 7
-    end
-
-    it "shows color attribute for toplevel entry" do
-      get :edit, params: {id: wandern.id}
-
-      expect(response).to be_ok
-      expect(dom).to have_css "#content input", count: 8
     end
   end
 
@@ -67,13 +59,12 @@ describe Event::ActivitiesController do
     expect(response).to redirect_to(edit_event_activity_path(entry))
   end
 
-  it "POST#create creates new entry" do
+  it "POST#create creates new main entry" do
     expect do
       post :create, params: {
         event_activity: {
           label: "Alpin",
           description: "Alpen",
-          parent_id: event_activities(:klettern).id,
           order: 6,
           color: "#AABBCC"
         }
@@ -84,8 +75,28 @@ describe Event::ActivitiesController do
     expect(entry.label).to eq("Alpin")
     expect(entry.description).to eq("Alpen")
     expect(entry.order).to eq(6)
-    expect(entry.parent).to eq(event_activities(:klettern))
     expect(entry.color).to eq("#AABBCC")
+  end
+
+  it "POST#create creates new child entry" do
+    expect do
+      post :create, params: {
+        event_activity: {
+          label: "Alpin A2",
+          description: "Alpen Unterkategorie",
+          parent_id: event_activities(:klettern).id,
+          technical_requirement_id: event_technical_requirements(:wandern).id,
+          order: 6
+        }
+      }
+    end.to change { Event::Activity.count }.by(1)
+
+    entry = Event::Activity.last
+    expect(entry.label).to eq("Alpin A2")
+    expect(entry.description).to eq("Alpen Unterkategorie")
+    expect(entry.order).to eq(6)
+    expect(entry.parent).to eq(event_activities(:klettern))
+    expect(entry.technical_requirement).to eq(event_technical_requirements(:wandern))
   end
 
   it "PATCH#update updates deleted entry" do

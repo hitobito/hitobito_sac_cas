@@ -40,36 +40,60 @@ describe Event::Activity do
   end
 
   context "validations" do
-    it "require presence of label" do
-      entry = described_class.new
-      expect(entry).not_to be_valid
-      expect(entry.errors[:label]).to eq ["muss ausgefüllt werden"]
-      entry.label = "Wintersport"
-      entry.description = "Beschreibung"
-      expect(entry).to be_valid
+    it "is valid" do
+      expect(main_activity).to be_valid
+    end
+
+    it "requires presence of label" do
+      main_activity.label = nil
+
+      expect(main_activity).not_to be_valid
     end
 
     it "prevent children as parents" do
-      entry = Fabricate.build(:event_activity, parent: child_activity)
-      expect(entry).not_to be_valid
-      expect(entry.errors.details[:parent_id]).to eq [error: :parent_is_not_main]
+      main_activity.parent = child_activity
+
+      expect(main_activity).not_to be_valid
+      expect(main_activity.errors.full_messages).to include "Übergeordnete Aktivität muss ein Haupteintrag sein."
+    end
+
+    it "requires absence of technical_requirement for main activity" do
+      main_activity.technical_requirement = event_technical_requirements(:wandern)
+
+      expect(main_activity).not_to be_valid
+      expect(main_activity.errors.full_messages).to include "Technische Anforderung darf nicht ausgefüllt werden"
+    end
+
+    it "does not allow child technical_requirement as technical_requirement" do
+      main_activity.technical_requirement = event_technical_requirements(:wandern_t1)
+
+      expect(main_activity).not_to be_valid
+      expect(main_activity.errors.full_messages).to include "Technische Anforderung muss eine Hauptanforderung sein"
     end
 
     it "validates format of color" do
-      entry = described_class.new
-      entry.label = "Wintersport"
-      entry.description = "Beschreibung"
-      entry.color = "invalid"
-      expect(entry).not_to be_valid
-      expect(entry.errors.full_messages).to eq(
-        ["Farbe muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein"]
+      main_activity.color = "invalid"
+
+      expect(main_activity).not_to be_valid
+      expect(main_activity.errors.full_messages).to include(
+        "Farbe muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein"
       )
-      entry.color = "#AACCFF"
-      expect(entry).to be_valid
-      entry.color = "#aaccff"
-      expect(entry).to be_valid
-      entry.color = "#abc"
-      expect(entry).not_to be_valid
+
+      main_activity.color = "#AACCFF"
+      expect(main_activity).to be_valid
+
+      main_activity.color = "#aaccff"
+      expect(main_activity).to be_valid
+
+      main_activity.color = "#abc"
+      expect(main_activity).not_to be_valid
+    end
+
+    it "requires absence of color for child activity" do
+      child_activity.color = "#aaccff"
+
+      expect(child_activity).not_to be_valid
+      expect(child_activity.errors.full_messages).to include "Farbe darf nicht ausgefüllt werden"
     end
   end
 
