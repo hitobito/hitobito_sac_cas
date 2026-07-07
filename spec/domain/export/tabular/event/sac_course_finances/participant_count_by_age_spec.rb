@@ -42,4 +42,14 @@ describe Export::Tabular::Event::SacCourseFinances::ParticipantCountByAge do
       @other_course.id => {age_0_17: 1, age_36_50: 1}
     )
   end
+
+  it "ignores participants without a birthday" do
+    p = create_participation(@course1, birthday: 20.years.ago)
+    p.person.update!(birthday: nil)
+
+    course_ids = [@course1.id]
+    expect(described_class.new.fetch(course_ids)).to eq(
+      @course1.id => {age_18_22: 3}
+    )
+  end
 end

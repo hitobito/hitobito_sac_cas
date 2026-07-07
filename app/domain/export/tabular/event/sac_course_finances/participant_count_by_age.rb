@@ -23,6 +23,8 @@ class Export::Tabular::Event::SacCourseFinances
     def transform_hash(counts)
       counts.each_with_object({}) do |((event_id, age), count), h|
         range = find_age_group(age)
+        next if range.nil?
+
         h[event_id] ||= Hash.new(0)
         h[event_id][AGE_GROUPS.fetch(range)] += count
       end
