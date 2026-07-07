@@ -5,7 +5,7 @@
 
 = standard_form(form, url: group_event_approval_commission_responsibilities_path(group), method: :put) do |f|
     = f.error_messages
-    - form.grouped_event_approval_commission_responsibilities.each do |target_group, disciplines|
+    - form.grouped_event_approval_commission_responsibilities.each do |target_group, activities|
         = field_set_tag do
             %h2= target_group.label
             .table-responsive
@@ -16,10 +16,10 @@
                         %th= t(".normal_tours")
                         %th= t(".subito_tours")
                     %tbody
-                        - disciplines.each do |discipline, entries|
+                        - activities.each do |activity, entries|
                             %tr
                                 %td
-                                    %strong= discipline.label
+                                    %strong= activity.label
                                 %td
                                     = render_commission_select(f, entries, subito: false, freigabe_komitees:)
                                 %td

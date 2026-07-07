@@ -111,7 +111,7 @@ describe EventAbility do
         freigabe_komitee.event_approval_commission_responsibilities.destroy_all
         freigabe_komitee.event_approval_commission_responsibilities.create!(
           sektion: groups(:bluemlisalp),
-          discipline: event_disciplines(:wandern),
+          activity: event_activities(:wandern),
           target_group: event_target_groups(:kinder),
           subito: false
         )
@@ -123,7 +123,7 @@ describe EventAbility do
         freigabe_komitee.event_approval_commission_responsibilities.destroy_all
         freigabe_komitee.event_approval_commission_responsibilities.create!(
           sektion: groups(:bluemlisalp),
-          discipline: event_disciplines(:wandern),
+          activity: event_activities(:wandern),
           target_group: event_target_groups(:kinder),
           subito: true
         )

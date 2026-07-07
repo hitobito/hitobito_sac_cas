@@ -44,14 +44,14 @@ module Events
         all_pruefers.where.not(id: next_relevant_pruefer.select(:id))
       end
 
-      def fetch_freigabe_komitee_disciplines_target_groups(komitees)
+      def fetch_freigabe_komitee_activities_target_groups(komitees)
         scope =
           Event::ApprovalCommissionResponsibility
             .where(freigabe_komitee: komitees.map(&:id))
-            .eager_load(target_group: :translations, discipline: :translations)
+            .eager_load(target_group: :translations, activity: :translations)
         with_event_responsibilities(scope)
           .group_by(&:freigabe_komitee_id)
-          .transform_values { |list| list.map { |resp| [resp.discipline, resp.target_group] } }
+          .transform_values { |list| list.map { |resp| [resp.activity, resp.target_group] } }
       end
 
       private
@@ -69,7 +69,7 @@ module Events
             sektion: sektion,
             subito: event.subito,
             target_group: event.main_target_groups.select(:id),
-            discipline: event.main_disciplines.select(:id)
+            activity: event.main_activities.select(:id)
           }
         )
       end

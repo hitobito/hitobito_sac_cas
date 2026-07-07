@@ -320,7 +320,7 @@ de:
         maximum_age: Maximalalter
         ideal_class_size: Ideale Klassengrösse
         maximum_class_size: Maximale Klassengrösse
-        disciplines: Disziplin(en)
+        activities: Aktivität(en)
         target_groups: Zielgruppe(n)
         fitness_requirement: Konditionelle Anforderung
         fitness_requirement_id: Konditionelle Anforderung
@@ -416,16 +416,16 @@ de:
       event/approval_commission_responsibility:
         freigabe_komitee: Freigabekomitee
         target_group: Zielgruppe
-        discipline: Disziplin
+        activity: Aktivität
         subito: Subito
-      event/discipline:
+      event/activity:
         color: Farbe
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
         order: Sortierschlüssel
-        parent_id: Übergeordnete Disziplin
-        children: Unterdisziplinen
+        parent_id: Übergeordnete Aktivität
+        children: Unteraktivitäten
         updated_at: Geändert
         deleted_at: Gelöscht
       event/approval:
@@ -774,7 +774,7 @@ de:
             course_compensation_category_id:
               uniqueness_during_validity_period: darf pro Validitätsperiode nur ein Vergütungsansatz referenzieren.
 
-        event/discipline:
+        event/activity:
           attributes:
             color:
               invalid_hex_color: >-
@@ -787,7 +787,7 @@ de:
         event/approval_commission_responsibility:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
           no_base_target_group: ist keine Hauptzielgruppe.
-          no_base_discipline: ist keine Hauptdisziplin.
+          no_base_activity: ist keine Hauptaktivität.
           combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -826,9 +826,9 @@ de:
       event/approval_commission_responsibility:
         one: Zuständigkeit Freigabe-Kommission
         other: Zuständigkeiten Freigabe-Kommission
-      event/discipline:
-        one: Disziplin
-        other: Disziplinen
+      event/activity:
+        one: Aktivität
+        other: Aktivitäten
       event/fitness_requirement:
         one: Konditionelle Anforderung
         other: Konditionelle Anforderungen
@@ -1523,7 +1523,7 @@ de:
             one: Es wurde eine E-Mail verschickt.
             other: Es wurden %{count} E-Mails verschickt.
           warning: Es wurden keine E-Mails versendet, da kein Umfrage Link erfasst wurde.
-    disciplines:
+    activities:
       form:
         help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
     kinds:
@@ -1733,7 +1733,7 @@ de:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unterdisziplin(en)
+      sub_activities: Unteraktivität(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1875,7 +1875,7 @@ de:
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
-      disciplines: Disziplinen
+      activities: Aktivitäten
       target_groups: Zielgruppen
       technical_requirements: Technische Anforderungen
       traits: Merkmale

@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Events::Filter::Tour::Approval do
   # section_tour: bluemlisalp group, state: review, subito: false,
-  # discipline: wanderweg (child of wandern), target_groups: kinder + familien.
+  # activity: wanderweg (child of wandern), target_groups: kinder + familien.
   # Approval kinds in order: professional (1), security (2), editorial (3).
   let(:tour) { events(:section_tour) }
   let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
@@ -172,11 +172,11 @@ describe Events::Filter::Tour::Approval do
       expect(filtered({responsible_komitee_id: other_komitee.id.to_s})).not_to include(tour)
     end
 
-    it "excludes tour whose discipline has no responsibility for the komitee" do
-      unknown_discipline = Fabricate(:event_discipline)
+    it "excludes tour whose activity has no responsibility for the komitee" do
+      unknown_activity = Fabricate(:event_activity)
       unmatched = Fabricate(:sac_tour,
         groups: [groups(:bluemlisalp)],
-        disciplines: [unknown_discipline],
+        activities: [unknown_activity],
         target_groups: [event_target_groups(:kinder)])
 
       expect(result).not_to include(unmatched)

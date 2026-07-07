@@ -41,7 +41,7 @@ class Event::ApprovalCommissionResponsibilityForm
   def grouped_event_approval_commission_responsibilities
     @grouped_entries ||= event_approval_commission_responsibilities.group_by(&:target_group)
       .transform_values {
-      _1.group_by(&:discipline)
+      _1.group_by(&:activity)
     }
   end
 
@@ -50,7 +50,7 @@ class Event::ApprovalCommissionResponsibilityForm
   def copy_errors(models)
     models.each do |model|
       model.errors.full_messages.each do |error|
-        errors.add(:base, "#{model.target_group} - #{model.discipline}: #{error}")
+        errors.add(:base, "#{model.target_group} - #{model.activity}: #{error}")
       end
     end
   end
@@ -62,28 +62,28 @@ class Event::ApprovalCommissionResponsibilityForm
   end
 
   def find_or_build_responsibilties
-    all_responsibility_combinations.map do |target_group, discipline, subito|
-      existing_responsibility_entries[[target_group.id, discipline.id, subito]] ||
-        build_responsibilty(group, target_group, discipline, subito)
+    all_responsibility_combinations.map do |target_group, activity, subito|
+      existing_responsibility_entries[[target_group.id, activity.id, subito]] ||
+        build_responsibilty(group, target_group, activity, subito)
     end
   end
 
   def existing_responsibility_entries
     @existing_responsibility_entries ||= group.event_approval_commission_responsibilities
-      .includes(:sektion, :freigabe_komitee, target_group: :translations, discipline: :translations)
-      .index_by { [_1.target_group_id, _1.discipline_id, _1.subito] }
+      .includes(:sektion, :freigabe_komitee, target_group: :translations, activity: :translations)
+      .index_by { [_1.target_group_id, _1.activity_id, _1.subito] }
   end
 
   def all_responsibility_combinations
     Event::TargetGroup.without_deleted.main.list.flat_map do |target_group|
-      Event::Discipline.without_deleted.main.list.flat_map do |discipline|
-        [true, false].map { |subito| [target_group, discipline, subito] }
+      Event::Activity.without_deleted.main.list.flat_map do |activity|
+        [true, false].map { |subito| [target_group, activity, subito] }
       end
     end
   end
 
-  def build_responsibilty(group, target_group, discipline, subito)
+  def build_responsibilty(group, target_group, activity, subito)
     group.event_approval_commission_responsibilities.build(target_group: target_group,
-      discipline: discipline, subito: subito)
+      activity: activity, subito: subito)
   end
 end

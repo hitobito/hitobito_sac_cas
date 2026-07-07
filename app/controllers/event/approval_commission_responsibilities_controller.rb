@@ -34,7 +34,7 @@ class Event::ApprovalCommissionResponsibilitiesController < ApplicationControlle
     params
       .require(:event_approval_commission_responsibility_form)
       .permit(event_approval_commission_responsibilities_attributes: [:id, :target_group_id,
-        :discipline_id, :subito, :freigabe_komitee_id])
+        :activity_id, :subito, :freigabe_komitee_id])
   end
 
   def success_message(action: action_name)

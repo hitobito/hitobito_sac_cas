@@ -10,9 +10,9 @@ require "spec_helper"
 describe Event::CreateApprovalCommissionResponsibilitiesJob do
   include ActiveJob::TestHelper
 
-  subject(:job) { described_class.new(discipline:, target_group:, freigabe_komitee_group:) }
+  subject(:job) { described_class.new(activity:, target_group:, freigabe_komitee_group:) }
 
-  let(:discipline) { nil }
+  let(:activity) { nil }
   let(:target_group) { nil }
   let(:freigabe_komitee_group) { nil }
 
@@ -26,7 +26,7 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
     Fabricate(Group::FreigabeKomitee.sti_name.to_sym, name: "FreigabeKomitee Matterhorn",
       parent: matterhorn_touren_und_kurse)
   }
-  let(:main_disciplines) { Event::Discipline.main.list }
+  let(:main_activities) { Event::Activity.main.list }
   let(:main_target_groups) { Event::TargetGroup.main.list }
 
   context "#initialize" do
@@ -37,14 +37,14 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
 
       expect do
         described_class.new(freigabe_komitee_group: first_matterhorn_freigabekomitee,
-          discipline: Fabricate(:event_discipline))
+          activity: Fabricate(:event_activity))
       end.to raise_error("must pass exactly one argument")
     end
   end
 
   context "first freigabe_komitee_group given" do
     let(:freigabe_komitee_group) { first_matterhorn_freigabekomitee }
-    let(:expected_count) { 36 } # 3 main disciplines * 6 main target_groups * 2 subito options * 1 freigabe_komitee
+    let(:expected_count) { 36 } # 3 main activities * 6 main target_groups * 2 subito options * 1 freigabe_komitee
 
     it "creates commission responsibilities for each combination" do
       expect do
@@ -60,9 +60,9 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
       described_class.new(freigabe_komitee_group: first_matterhorn_freigabekomitee).perform
     end
 
-    context "discipline given" do
-      let(:discipline) { Fabricate(:event_discipline) }
-      let(:expected_count) { 36 } # 1 main discipline * 6 main target_groups * 2 subito options * 3 freigabe_komitees
+    context "activity given" do
+      let(:activity) { Fabricate(:event_activity) }
+      let(:expected_count) { 36 } # 1 main activity * 6 main target_groups * 2 subito options * 3 freigabe_komitees
 
       it "creates commission responsibilities for each combination" do
         expect do
@@ -95,7 +95,7 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
 
     context "target_group given" do
       let(:target_group) { Fabricate(:event_target_group) }
-      let(:expected_count) { 18 } # 3 main disciplines * 1 main target_group * 2 subito options * 3 freigabe_komitees
+      let(:expected_count) { 18 } # 3 main activities * 1 main target_group * 2 subito options * 3 freigabe_komitees
 
       it "creates commission responsibilities for each combination" do
         expect do
@@ -130,12 +130,12 @@ describe Event::CreateApprovalCommissionResponsibilitiesJob do
   def expect_all_combinations_to_be_covered
     Group.where(type: [Group::Sektion, Group::Ortsgruppe].map(&:sti_name))
       .where(id: Group::FreigabeKomitee.select(:layer_group_id)).each do |sektion_or_ortsgruppe|
-        main_disciplines.each do |discipline|
+        main_activities.each do |activity|
           main_target_groups.each do |target_group|
             [true, false].each do |subito|
               approval_commission_responsibility = Event::ApprovalCommissionResponsibility.where(
                 sektion: sektion_or_ortsgruppe,
-                discipline:,
+                activity:,
                 target_group:,
                 subito:
               )

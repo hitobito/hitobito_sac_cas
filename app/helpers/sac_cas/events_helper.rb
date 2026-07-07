@@ -122,8 +122,8 @@ module SacCas::EventsHelper
     end
   end
 
-  def format_event_disciplines(event)
-    event_essentials_list(event.disciplines)
+  def format_event_activities(event)
+    event_essentials_list(event.activities)
   end
 
   def format_event_target_groups(event)

@@ -124,7 +124,7 @@ module HitobitoSacCas
       Ability.store.register CostUnitAbility
       Ability.store.register CourseCompensationCategoryAbility
       Ability.store.register CourseCompensationRateAbility
-      Ability.store.register Event::DisciplineAbility
+      Ability.store.register Event::ActivityAbility
       Ability.store.register Event::ApprovalKindAbility
       Ability.store.register Event::FitnessRequirementAbility
       Ability.store.register Event::LevelAbility
@@ -252,7 +252,7 @@ module HitobitoSacCas
         cost_centers
         cost_units
         event_approval_kinds
-        event_disciplines
+        event_activities
         event_levels
         event_target_groups
         event_technical_requirements

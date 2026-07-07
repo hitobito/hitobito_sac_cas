@@ -11,9 +11,9 @@
         = content_tag(:div, f.object.freigabe_komitee.id, class: "col-md-3 col-xl-2 col-form-label text-md-end pb-1") do
           = f.object.freigabe_komitee.to_s
           - if entry.komitee_approvals.size > 1
-            - f.object.disciplines_target_groups.each do |discipline, target_group|
+            - f.object.activities_target_groups.each do |activity, target_group|
               .text-muted
-                = discipline
+                = activity
                 = target_group
 
         .labeled.col-md-9.col-lg-8.col-xl-8.mw-90ch.mw-md-60ch.mw-lg-90ch{data: { controller: "sac--hierarchical-checkboxes" }}
