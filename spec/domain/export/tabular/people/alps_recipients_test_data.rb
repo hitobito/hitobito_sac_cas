@@ -28,11 +28,13 @@ shared_context "alps recipients test data" do
       start_on: "2020-03-24").person
   end
   let!(:mitglied_fr) do
-    Fabricate("Group::SektionsMitglieder::Mitglied",
+    p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, language: "fr"),
       group: sektion,
       start_on: "2020-03-25").person
+    mailing_lists(:newsletter).subscriptions.create!(subscriber: p) # other subscription
+    p
   end
   let!(:mitglied_france) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
@@ -47,6 +49,7 @@ shared_context "alps recipients test data" do
       group: sektion,
       start_on: "2020-03-27").person
     mailing_lists(:sac_magazine).subscriptions.create!(subscriber: p, excluded: true)
+    mailing_lists(:newsletter).subscriptions.create!(subscriber: p) # other subscription
     p
   end
   let!(:new_entry) do
