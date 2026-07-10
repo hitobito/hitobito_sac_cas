@@ -10,7 +10,6 @@ class Event::Tour < Event
   include I18nEnums
 
   self.manually_sendable_participant_mails = [
-    Event::TourParticipationMailer::APPLIED,
     Event::TourParticipationMailer::UNCONFIRMED,
     Event::TourParticipationMailer::ASSIGNED,
     Event::TourParticipationMailer::REJECT_PARTICIPATION,
@@ -56,11 +55,11 @@ class Event::Tour < Event
   self.supports_applications = true
   self.supports_invitations = false
 
-  self.possible_participation_states = %w[unconfirmed applied rejected assigned
+  self.possible_participation_states = %w[unconfirmed rejected assigned
     attended absent canceled annulled]
   self.active_participation_states = %w[assigned attended]
   self.revoked_participation_states = %w[rejected canceled absent annulled]
-  self.countable_participation_states = %w[unconfirmed applied assigned attended absent]
+  self.countable_participation_states = %w[unconfirmed assigned attended absent]
 
   # Used for Event::TourResource
   attr_accessor :leaders
@@ -153,10 +152,8 @@ class Event::Tour < Event
   def default_participation_state(participation, for_someone_else = false)
     if participation.application.blank? || for_someone_else
       "assigned"
-    elsif places_available? && !automatic_assignment?
-      "unconfirmed"
     else
-      "applied"
+      "unconfirmed"
     end
   end
 

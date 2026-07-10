@@ -18,19 +18,17 @@ describe Event::TourParticipationMailer do
     CustomContent.init_section_specific_contents(section)
   end
 
-  context "applied" do
-    let(:mail) { described_class.confirmation(participation, described_class::APPLIED) }
+  context "unconfirmed" do
+    let(:mail) { described_class.confirmation(participation, described_class::UNCONFIRMED) }
 
     it "sends email to participant" do
-      event.update!(application_opening_at: nil, application_closing_at: nil)
-
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq("Auf Warteliste zur Tour Bundstock")
+      expect(mail.subject).to eq("Anmeldung zur Tour Bundstock (unbestätigt)")
       expect(mail.body.to_s).to include(
         "Hallo Edmund Hillary (#{person.id})",
-        "Aktuell sind alle Plätze belegt, weshalb wir dich auf die Warteliste genommen haben.",
+        "Es handelt sich hierbei um keine definitive Zusage.",
         "Bei Fragen kannst du dich jederzeit an " \
-          "#{admin.first_name} #{admin.last_name} wenden (#{admin.id}, , #{admin.email}).",
+  "#{admin.first_name} #{admin.last_name} wenden (#{admin.id}, , #{admin.email}).",
         "Bergsportliche Grüsse,<br>SAC Blüemlisalp",
         "<dt>Kommentar</dt><dd>(keine)</dd>"
       )
@@ -72,19 +70,6 @@ describe Event::TourParticipationMailer do
 
       expect(mail.body.to_s).not_to include(
         "Zusatzinfo"
-      )
-    end
-  end
-
-  context "unconfirmed" do
-    let(:mail) { described_class.confirmation(participation, described_class::UNCONFIRMED) }
-
-    it "sends email to participant" do
-      expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.subject).to eq("Anmeldung zur Tour Bundstock (unbestätigt)")
-      expect(mail.body.to_s).to include(
-        "Hallo Edmund Hillary (#{person.id})",
-        "Es handelt sich hierbei um keine definitive Zusage."
       )
     end
   end

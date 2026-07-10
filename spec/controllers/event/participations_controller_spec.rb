@@ -665,10 +665,10 @@ describe Event::ParticipationsController do
             canceled_at: Date.current)
         }
 
-        it "PUT#reactivate sets participation to applied when maximum participants is reached" do
+        it "PUT#reactivate sets participation to unconfirmed when maximum participants is reached" do
           allow_any_instance_of(Event).to receive(:maximum_participants_reached?).and_return(true)
           put :reactivate, params: params
-          expect(participation.reload.state).to eq "applied"
+          expect(participation.reload.state).to eq "unconfirmed"
           expect(participation.reload.cancel_statement).to be_nil
           expect(participation.reload.canceled_at).to be_nil
         end

@@ -8,7 +8,6 @@
 class Event::TourParticipationMailer < ApplicationMailer
   include TourMailer
 
-  APPLIED = "event_tour_application_confirmation_applied"
   CLOSING = "event_tour_closing"
   UNCONFIRMED = "event_tour_application_confirmation_unconfirmed"
   ASSIGNED = "event_tour_application_confirmation_assigned"

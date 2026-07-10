@@ -44,7 +44,7 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
     entry.update!(
       cancel_statement: nil,
       canceled_at: nil,
-      state: event.maximum_participants_reached? ? :applied : :assigned
+      state: event.maximum_participants_reached? ? :unconfirmed : :assigned
     )
 
     refresh_participant_counts

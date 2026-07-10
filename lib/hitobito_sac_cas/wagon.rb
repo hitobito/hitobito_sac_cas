@@ -171,6 +171,7 @@ module HitobitoSacCas
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers["people.birthday"] =
         SearchStrategies::SqlConditionBuilder::BirthdayMatcher
+      Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::Qualifier::StartAtCalculator.prepend SacCas::Event::Qualifier::StartAtCalculator
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch

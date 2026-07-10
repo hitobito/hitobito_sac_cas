@@ -96,26 +96,18 @@ describe Event::ParticipationConfirmationJob do
       expect(Event::ParticipationMailer).not_to receive(:confirmation)
     end
 
-    it "sends course specific unconfirmed email" do
+    it "sends tour specific unconfirmed email" do
       expect { subject.perform }
         .to have_enqueued_mail(Event::TourParticipationMailer, :confirmation)
         .with(participation, "event_tour_application_confirmation_unconfirmed")
         .and not_change { ActionMailer::Base.deliveries.size }
     end
 
-    it "sends course specific assigned email" do
+    it "sends tour specific assigned email" do
       participation.update!(state: :assigned)
       expect { subject.perform }
         .to have_enqueued_mail(Event::TourParticipationMailer, :confirmation)
         .with(participation, "event_tour_application_confirmation_assigned")
-        .and not_change { ActionMailer::Base.deliveries.size }
-    end
-
-    it "sends course specific applied email" do
-      participation.update!(state: :applied)
-      expect { subject.perform }
-        .to have_enqueued_mail(Event::TourParticipationMailer, :confirmation)
-        .with(participation, "event_tour_application_confirmation_applied")
         .and not_change { ActionMailer::Base.deliveries.size }
     end
   end
