@@ -76,10 +76,6 @@ module SacCas::Event::Participations::SendMailsController
 
   # Tour participation mails
 
-  def dispatch_event_tour_application_confirmation_applied_mail
-    Event::TourParticipationMailer.confirmation(participation, mail_type).deliver_later
-  end
-
   def dispatch_event_tour_application_confirmation_unconfirmed_mail
     Event::TourParticipationMailer.confirmation(participation, mail_type).deliver_later
   end

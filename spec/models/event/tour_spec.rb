@@ -327,13 +327,6 @@ describe Event::Tour do
           .to change { participant.reload.state }.to(eq("rejected"))
       end
 
-      it "updates participation state from applied to rejected" do
-        participant.update!(state: :applied)
-
-        expect { tour.update!(state: :ready) }
-          .to change { participant.reload.state }.to(eq("rejected"))
-      end
-
       it "does not update participation state to previous state if not assigned, unconfirmed or applied" do
         participant.update_column(:state, :summoned)
 
@@ -824,10 +817,10 @@ describe Event::Tour do
         expect(state).to eq "unconfirmed"
       end
 
-      it "returns applied if course has no places available" do
+      it "returns unconfirmed if course has no places available" do
         tour.maximum_participants = 2
         tour.participant_count = 2
-        expect(state).to eq "applied"
+        expect(state).to eq "unconfirmed"
       end
 
       it "returns assigned for participation without application (=leader)" do
@@ -839,13 +832,13 @@ describe Event::Tour do
     context "with automatic_assignment" do
       before { tour.automatic_assignment = true }
 
-      it "returns applied if places are available" do
-        expect(state).to eq "applied"
+      it "returns unconfirmed if places are available" do
+        expect(state).to eq "unconfirmed"
       end
 
-      it "returns applied if course has no places available" do
+      it "returns unconfirmed if course has no places available" do
         tour.participant_count = 2
-        expect(state).to eq "applied"
+        expect(state).to eq "unconfirmed"
       end
     end
   end

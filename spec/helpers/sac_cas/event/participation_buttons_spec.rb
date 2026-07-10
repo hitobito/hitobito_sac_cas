@@ -92,7 +92,7 @@ describe Event::ParticipationButtons do
   end
 
   describe "Zugeteilt" do
-    it_behaves_like "conditional action", "Zugeteilt", states: %w[applied absent]
+    it_behaves_like "conditional action", "Zugeteilt", states: %w[unconfirmed applied absent]
     it_behaves_like "conditional action", "Zugeteilt", states: %w[] do
       before { event.state = "closed" }
     end

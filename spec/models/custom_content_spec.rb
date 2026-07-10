@@ -158,7 +158,7 @@ describe SacCas::CustomContent do
       )
 
       expect { CustomContent.init_section_specific_contents(group) }
-        .to change { group.custom_contents.count }.by(24)
+        .to change { group.custom_contents.count }.by(23)
 
       # updated values
       expect(existing.reload.label).to eq("Tour: E-Mail Publikation")

@@ -110,10 +110,6 @@ describe Event::Participations::SendMailsController do
       let(:event) { events(:section_tour) }
 
       it_behaves_like "dispatches mail",
-        :event_tour_application_confirmation_applied,
-        Event::TourParticipationMailer,
-        :confirmation, :participation, "event_tour_application_confirmation_applied"
-      it_behaves_like "dispatches mail",
         :event_tour_application_confirmation_unconfirmed,
         Event::TourParticipationMailer,
         :confirmation, :participation, "event_tour_application_confirmation_unconfirmed"

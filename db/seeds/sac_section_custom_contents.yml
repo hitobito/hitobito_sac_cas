@@ -547,52 +547,6 @@ event_tour_application_confirmation_unconfirmed:
     Bergsportliche Grüsse,
     {section-name}
 
-event_tour_application_confirmation_applied:
-  label: "Tour: E-Mail Unbestätigte Warteliste"
-  subject: "Auf Warteliste zur Tour {event-name}"
-  placeholders_optional:
-    "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
-    participation-link, participation-additional-information, participation-answers,
-    event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
-  body: |
-    Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
-
-    Vielen Dank für deine Anmeldung für die Tour "{event-name} ({event-id})":
-    {event-link}
-
-    Aktuell sind alle Plätze belegt, weshalb wir dich auf die Warteliste genommen haben.
-    Deine Anmeldung wird in den kommenden Tagen/Wochen bearbeitet. Du erhältst nochmals eine E-Mail von uns mit der definitiven Zusage oder Absage.
-
-    Nachfolgend findest du wichtigsten Eckdaten zur Tour.
-
-    {event-dates}
-
-    {event-essentials}
-
-    {event-requirements}
-
-    {event-details}
-
-    Nachfolgend findest du wichtigsten Angaben aus deiner Anmeldung.
-
-    {participation-answers}
-
-    {participation-additional-information}
-
-    Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
-    {participation-link}
-
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
-
-    Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
-    {recipient-link}
-
-    Wir freuen uns auf deine Anmeldung.
-
-    Bergsportliche Grüsse,
-    {section-name}
-
 event_tour_participation_summon:
   label: "Tour: E-Mail Aufgebot"
   subject: "Aufgebot zur Tour {event-name}"

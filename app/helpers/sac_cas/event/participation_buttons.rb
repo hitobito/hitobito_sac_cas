@@ -15,7 +15,7 @@ module SacCas::Event::ParticipationButtons
       summon: [:assigned, if: -> { @event.state == "ready" }],
       absent: [:assigned, :summoned, :attended],
       attend: [:absent, if: -> { @event.closed? }],
-      assign: [:applied, :absent, if: -> { !@event.closed? }]
+      assign: [:unconfirmed, :applied, :absent, if: -> { !@event.closed? }]
     }
   end
 
@@ -54,8 +54,7 @@ module SacCas::Event::ParticipationButtons
   end
 
   def her_own?
-    # rubocop:todo Layout/LineLength
-    @template.current_user.id == @participation.participant_id && @participation.participant_type == Person.sti_name
-    # rubocop:enable Layout/LineLength
+    @template.current_user.id == @participation.participant_id &&
+      @participation.participant_type == Person.sti_name
   end
 end

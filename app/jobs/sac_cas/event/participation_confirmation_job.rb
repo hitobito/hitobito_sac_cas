@@ -46,10 +46,8 @@ module SacCas::Event::ParticipationConfirmationJob
   def tour_confirmation_content_key
     if participation.state == "assigned"
       Event::TourParticipationMailer::ASSIGNED
-    elsif participation.state == "unconfirmed"
-      Event::TourParticipationMailer::UNCONFIRMED
     else
-      Event::TourParticipationMailer::APPLIED
+      Event::TourParticipationMailer::UNCONFIRMED
     end
   end
 end
