@@ -1,0 +1,53 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+.d-flex.flex-column.col-2
+  = f.fields_for(:tour_essentials) do |ff|
+    = ff.label(:target_group_id, Event::TargetGroup.model_name.human(count: 2), class: "form-label")
+    = ff.select(:target_group_id, [], {},
+      class: "form-select form-select-sm w-100",
+      multiple: true,
+      data: { controller: 'tom-select',
+      tom_select_options_value: tour_essentials_nested_select_options(@target_groups),
+      tom_select_selected_value: Array(event_filter.chain.dig(:tour_essentials, :target_group_id)).to_json,
+      tom_select_no_results_value: I18n.t('global.no_list_entries'),
+      })
+
+.d-flex.flex-column.col-2
+  = f.fields_for(:tour_essentials) do |ff|
+    = ff.label(:activity_id, Event::Activity.model_name.human(count: 2), class: "form-label")
+    = ff.select(:activity_id, [], {},
+      class: "form-select form-select-sm w-100",
+      multiple: true,
+      data: { controller: 'tom-select',
+      tom_select_options_value: tour_essentials_nested_select_options(@activities),
+      tom_select_selected_value: Array(event_filter.chain.dig(:tour_essentials, :activity_id)).to_json,
+      tom_select_render_option_function_value: SacCas::EventsHelper::TOM_SELECT_COLORED_OPTION,
+      tom_select_no_results_value: I18n.t('global.no_list_entries'),
+      })
+
+.d-flex.flex-column.col-2
+  = f.fields_for(:tour_essentials) do |ff|
+    = ff.label(:technical_requirement_id, Event::TechnicalRequirement.model_name.human(count: 2), class: "form-label")
+    = ff.select(:technical_requirement_id, [], {},
+      class: "form-select form-select-sm w-100",
+      multiple: true,
+      data: { controller: 'tom-select',
+      tom_select_options_value: tour_essentials_nested_select_options(@technical_requirements),
+      tom_select_selected_value: Array(event_filter.chain.dig(:tour_essentials, :technical_requirement_id)).to_json,
+      tom_select_no_results_value: I18n.t('global.no_list_entries'),
+      })
+
+.d-flex.flex-column.col-2
+  = f.fields_for(:tour_essentials) do |ff|
+    = ff.label(:fitness_requirement_id, Event::FitnessRequirement.model_name.human(count: 2), class: "form-label")
+    = ff.select(:fitness_requirement_id, [], {},
+      class: "form-select form-select-sm w-100",
+      multiple: true,
+      data: { controller: 'tom-select',
+      tom_select_options_value: fitness_requirements_select_options(@fitness_requirements),
+      tom_select_selected_value: Array(event_filter.chain.dig(:tour_essentials, :fitness_requirement_id)).to_json,
+      tom_select_no_results_value: I18n.t('global.no_list_entries'),
+      })

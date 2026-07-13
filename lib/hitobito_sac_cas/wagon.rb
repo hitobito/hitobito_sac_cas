@@ -186,7 +186,8 @@ module HitobitoSacCas
         Events::Filter::TourEssentials <<
         Events::Filter::Tour::MyPendingApprovals <<
         Events::Filter::Tour::MyApprovalResponsibilities <<
-        Events::Filter::Tour::Approval
+        Events::Filter::Tour::Approval <<
+        Events::Filter::ApplicationOpen
       Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
 
       Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8

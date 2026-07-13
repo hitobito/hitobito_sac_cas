@@ -1,0 +1,27 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+.d-flex.flex-column
+  = f.fields_for(:application_open) do |ff|
+    %span.form-label= t(".application_open")
+    .d-flex.gap-3
+      %label.form-check-label
+        = ff.radio_button(:value, 1, checked: event_filter.chain.dig(:application_open, :value) == "1", class: "form-check-input")
+        = t("global.yes")
+      %label.form-check-label
+        = ff.radio_button(:value, 0, checked: event_filter.chain.dig(:application_open, :value) != "1", class: "form-check-input")
+        = t("global.no")
+
+- if show_places_available_filter?(group)
+  .d-flex.flex-column
+    = f.fields_for(:places_available) do |ff|
+      %span.form-label= t(".places_available")
+      .d-flex.gap-3
+        %label.form-check-label
+          = ff.radio_button(:value, 1, checked: event_filter.chain.dig(:places_available, :value) == "1", class: "form-check-input")
+          = t("global.yes")
+        %label.form-check-label
+          = ff.radio_button(:value, 0, checked: event_filter.chain.dig(:places_available, :value) != "1", class: "form-check-input")
+          = t("global.no")
