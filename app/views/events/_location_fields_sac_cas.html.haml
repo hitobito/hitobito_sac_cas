@@ -17,7 +17,7 @@
 
   = f.labeled_input_fields(:tourenportal_link, :maps)
   - if entry.draft?
-    - filter_ctrl = 'sac--technical-requirement-filter'
+    - filter_ctrl = 'sac-cas--technical-requirement-filter'
     %div{ data: { controller: filter_ctrl,
       "#{filter_ctrl}-tom-select-outlet": '#event_activity_ids, #event_technical_requirement_ids' } }
       = f.labeled(:activities) do
