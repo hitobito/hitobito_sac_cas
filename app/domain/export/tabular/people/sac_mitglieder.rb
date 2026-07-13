@@ -69,7 +69,8 @@ module Export::Tabular::People
         })
         .joins(:roles)
         .includes(:phone_number_landline, :phone_number_mobile, :roles_unscoped, roles: :group)
-        .distinct
+        .distinct_on(:id)
+        .order(id: :asc)
     end
 
     def non_layer_children_ids
