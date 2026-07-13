@@ -4,8 +4,8 @@
 -#  https://github.com/hitobito/hitobito_sac_cas
 
 = field_set_tag(t(".revenues")) do
-  %div{data: {controller: "sac--prefill-revenues", "sac--prefill-revenues-url-value": prefill_revenues_group_event_report_path(@group, @event)}}
-    = f.button t(".add_tour_fees"), type: :button, data: {action: "click->sac--prefill-revenues#prefill"}, class: "btn btn-sm btn-outline-primary mb-3"
+  %div{data: {controller: "sac-cas--prefill-revenues", "sac-cas--prefill-revenues-url-value": prefill_revenues_group_event_report_path(@group, @event)}}
+    = f.button t(".add_tour_fees"), type: :button, data: {action: "click->sac-cas--prefill-revenues#prefill"}, class: "btn btn-sm btn-outline-primary mb-3"
     = render "event/tours/reports/cost_table_fields", f: f, entries: entry.revenues, cost_type: :revenues
 
 = field_set_tag(t(".expenses")) do

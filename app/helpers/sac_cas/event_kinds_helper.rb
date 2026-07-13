@@ -22,7 +22,7 @@ module SacCas::EventKindsHelper
 
   def field_push_down_link
     link_to(t("global.link.push_down"), "#",
-      data: {action: "sac--form-field-push-down#pushDown"}, role: :button)
+      data: {action: "sac-cas--form-field-push-down#pushDown"}, role: :button)
   end
 
   def labeled_compensation_categories_field(form, collection, title)

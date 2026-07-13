@@ -16,7 +16,7 @@
                 = activity
                 = target_group
 
-        .labeled.col-md-9.col-lg-8.col-xl-8.mw-90ch.mw-md-60ch.mw-lg-90ch{data: { controller: "sac--hierarchical-checkboxes" }}
+        .labeled.col-md-9.col-lg-8.col-xl-8.mw-90ch.mw-md-60ch.mw-lg-90ch{data: { controller: "sac-cas--hierarchical-checkboxes" }}
           = f.fields_for(:approval_kind_approvals) do |f|
             - approval = f.object.approval
             = f.hidden_field(:approval_kind_id)
@@ -28,8 +28,8 @@
                   = f.check_box(:checked,
                                 class: "form-check-input me-2",
                                 disabled: !f.object.approvable,
-                                data: { "sac--hierarchical-checkboxes-target": "checkbox",
-                                        action: "sac--hierarchical-checkboxes#toggle" })
+                                data: { "sac-cas--hierarchical-checkboxes-target": "checkbox",
+                                        action: "sac-cas--hierarchical-checkboxes#toggle" })
                 - elsif approval
                   %span.d-inline-block.me-2{style: "width: 14px;"} &nbsp;
 

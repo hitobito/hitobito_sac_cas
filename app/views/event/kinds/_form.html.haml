@@ -5,10 +5,10 @@
 
 - data = {}
 - if entry.persisted?
-  - data = { controller: 'sac--form-field-push-down',
-             'sac--form-field-push-down-url-value': push_down_event_kind_path(entry),
-             'sac--form-field-push-down-confirm-value': t('.field_push_down.confirm'),
-             'sac--form-field-push-down-alert-unsaved-value': t('.field_push_down.alert_unsaved') }
+  - data = { controller: 'sac-cas--form-field-push-down',
+             'sac-cas--form-field-push-down-url-value': push_down_event_kind_path(entry),
+             'sac-cas--form-field-push-down-confirm-value': t('.field_push_down.confirm'),
+             'sac-cas--form-field-push-down-alert-unsaved-value': t('.field_push_down.alert_unsaved') }
 = entry_form(data: data) do |f|
 
   = f.labeled_input_fields :label, :short_name
