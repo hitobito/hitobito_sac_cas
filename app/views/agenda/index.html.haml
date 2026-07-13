@@ -5,7 +5,23 @@
 
 - if group.present?
   = t(".title", group_name: group.name)
-  - events.each do |event|
-    = render "event_card", event: event
+
+  = form_with(url: agenda_index_path(group_id: group.id), method: :get, scope: :filters, data: { controller: "sac-cas--agenda-filters", turbo_frame: :agenda_events_list, turbo_action: "advance" }) do |f|
+    .d-flex.flex-column.gap-3.mb-3
+      .d-flex.gap-3
+        = render "agenda/date_filters", f: f
+      .d-flex.gap-3
+        = render "agenda/application_filters", f: f
+      .d-flex.gap-3
+        = render "agenda/tour_essentials_filters", f: f
+
+    .d-flex.gap-2
+      = submit_button(f, t("global.button.search"), name: nil)
+      %button.btn.btn-sm.btn-outline-primary.mt-2{type: "button", data: {action: "click->sac-cas--agenda-filters#reset"}}
+        = t(".reset_filter")
+
+  = turbo_frame_tag(:agenda_events_list, target: :_top) do
+    = render "agenda/list", events: events
+
 - else
   = t(".select_group_alert")

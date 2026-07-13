@@ -9,12 +9,20 @@ class AgendaController < ApplicationController
   skip_before_action :authenticate_person!
   skip_authorization_check
 
-  layout "agenda"
+  before_action :set_default_type_filter, only: :index
+  before_action :set_default_date_range_filter, only: :index, unless: :turbo_frame_request?
+  before_action :preload_filter_select_options, only: :index, unless: :turbo_frame_request?
 
-  helper_method :group, :events, :event
+  layout -> { turbo_frame_request? ? false : "agenda" }
+
+  helper_method :group, :events, :event, :event_filter
 
   def index
-    init_filter_values
+    if turbo_frame_request?
+      render partial: "agenda/list", locals: {events: events}
+    else
+      render :index
+    end
   end
 
   def show
@@ -22,28 +30,30 @@ class AgendaController < ApplicationController
 
   private
 
-  def init_filter_values
-    set_date_range
-    set_event_type
+  def set_default_type_filter
+    params[:filters] ||= {}
+    params[:filters][:type] ||= {types: [Event::Tour.sti_name]}
   end
 
-  def set_date_range
+  def set_default_date_range_filter
     params[:filters] ||= {}
-    params[:filters][:date_range] ||= {
-      since: I18n.l(Time.zone.today.to_date)
-    }
+    params[:filters][:date_range] ||= {since: I18n.l(Time.zone.today.to_date)}
   end
 
-  def set_event_type
-    params[:filters] ||= {}
-    params[:filters][:type] ||= {types: ["Event::Tour"]}
+  def preload_filter_select_options
+    @target_groups = Event::TargetGroup.list.without_deleted
+    @activities = Event::Activity.list.without_deleted
+    @technical_requirements = Event::TechnicalRequirement.list.without_deleted
+    @fitness_requirements = Event::FitnessRequirement.list.without_deleted
+  end
+
+  def event_filter
+    @event_filter ||= Events::Filter::AgendaList.new(nil, params)
   end
 
   def events = @events ||= event_filter.entries.joins(:dates).order(dates: {start_at: :asc})
 
-  def event_filter = @event_filter ||= Events::Filter::AgendaList.new(nil, params)
-
   def group = @group ||= params[:group_id].present? ? Group.find(params[:group_id]) : nil
 
-  def event = @event ||= events.find(params[:event_id])
+  def event = @event ||= event_filter.entries.find(params[:event_id])
 end

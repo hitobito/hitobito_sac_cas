@@ -1,0 +1,27 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+= turbo_frame_tag(:agenda_events_list, target: :_top) do
+  .alert.alert-info= t(".tours_found", count: events.count)
+
+  - events.each do |event|
+    %div
+      %div= event.id
+      %div= event.name
+      %div= I18n.l(event.start_at)
+      %div= event.total_duration_days
+
+      - if event.display_booking_info?
+        %div= "#{event.participant_count}/#{event.maximum_participants}"
+
+      %div= event.contact
+      %div= link_to t(".show_details"), agenda_show_path(group, event)
+
+      - if event.is_a?(Event::Tour)
+        %div= event.activities.join(", ")
+        %div= event.technical_requirements.join(", ")
+        %div= event.fitness_requirement
+        %div= event.target_groups.join(", ")
+        %div= "#{event.ascent} / #{event.descent} / #{event.duration_in_hours}"

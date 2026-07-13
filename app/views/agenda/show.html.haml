@@ -5,34 +5,20 @@
 
 = link_to t("global.button.back"), agenda_index_path(group, returning: true)
 
-.event-card
-  .event-card-text
-    = event.id
-
-  .event-card-text
-    = event.name
-
-  .event-card-text
-    = I18n.l(event.start_at)
-
-  .event-card-text
-    = event.total_duration_days
+%div
+  %div= event.id
+  %div= event.name
+  %div= I18n.l(event.start_at)
+  %div= event.total_duration_days
 
   - if event.display_booking_info?
-    .event-card-text
-      = "#{event.participant_count}/#{event.maximum_participants}"
+    %div= "#{event.participant_count}/#{event.maximum_participants}"
 
-  .event-card-text
-    = event.contact
+  %div= event.contact
 
   - if event.is_a?(Event::Tour)
-    .event-card-text
-      = event.activities.join(", ")
-    .event-card-text
-      = event.technical_requirements.join(", ")
-    .event-card-text
-      = event.fitness_requirement
-    .event-card-text
-      = event.target_groups.join(", ")
-    .event-card-text
-      = "#{event.ascent} / #{event.descent} / #{event.duration_in_hours}"
+    %div= event.activities.join(", ")
+    %div= event.technical_requirements.join(", ")
+    %div= event.fitness_requirement
+    %div= event.target_groups.join(", ")
+    %div= "#{event.ascent} / #{event.descent} / #{event.duration_in_hours}"

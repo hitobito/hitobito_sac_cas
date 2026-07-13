@@ -34,9 +34,16 @@ describe AgendaController do
       expect(dom).to have_content("Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen")
     end
 
-    it "renders without a layout" do
+    it "renders with agenda a layout" do
       get :index, params: {group_id: group.id}
       expect(response).to render_template(layout: "agenda")
+    end
+
+    it "renders without a layout for turbo frame requests" do
+      request.headers["Turbo-Frame"] = "agenda_events_list"
+      get :index, params: {group_id: group.id}
+
+      expect(response).to render_template(layout: false)
     end
 
     it "includes globally visible tours for the specific group" do
@@ -93,6 +100,68 @@ describe AgendaController do
 
       get :index, params: {group_id: group.id}
       expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "excludes tours after until filter" do
+      tour.dates.update_all(start_at: 1.month.from_now)
+
+      get :index, params: {group_id: group.id, filters: {date_range: {until: "01.01.2020"}}}
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "expcludes tours with applciation window closed with application window open filter" do
+      tour.update!(application_opening_at: 2.months.ago, application_closing_at: 1.month.ago)
+
+      get :index, params: {group_id: group.id, filters: {application_open: {value: 1}}}
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "excludes full tours with places available filter" do
+      tour.update!(maximum_participants: 10, participant_count: 10)
+
+      get :index, params: {group_id: group.id, filters: {places_available: {value: 1}}}
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "excludes tours not having target group from filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {tour_essentials: {target_group_id: event_target_groups(:senioren).id}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "excludes tours not having activity from filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {tour_essentials: {activity_id: event_activities(:hochtour).id}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "excludes tours not having technical requirement from filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {tour_essentials: {technical_requirement_id: event_technical_requirements(:klettern).id}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "excludes tours not having fitness requirement from filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {tour_essentials: {fitness_requirement_id: event_fitness_requirements(:e).id}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+  end
+
+  describe "GET #show" do
+    it "renders the tour" do
+      get :show, params: {group_id: group.id, event_id: tour.id}
+
+      expect(response).to render_template(layout: "agenda")
+      expect(dom).to have_content(tour.name)
     end
   end
 end
