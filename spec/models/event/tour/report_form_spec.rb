@@ -132,8 +132,7 @@ describe Event::Tour::ReportForm do
     end
 
     it "is valid when forwarding from approved without recipient (no dropdown)" do
-      report.update_column(:submitted_at, 1.day.ago)
-      report.update_column(:approved_at, 1.day.ago)
+      report.update_columns(submitted_at: 1.day.ago, approved_at: 1.day.ago)
       form.status_action = "forward"
       form.mail_recipient_id = nil
 
@@ -142,91 +141,89 @@ describe Event::Tour::ReportForm do
   end
 
   describe "#save with status_action" do
-    it "sets submitted_at and submitter_id when forwarding from draft" do
-      form.status_action = "forward"
-      form.mail_recipient_id = recipient.id
+    context "forwarding" do
+      before do
+        form.status_action = "forward"
+        form.mail_recipient_id = recipient.id
+      end
 
-      expect { form.save }
-        .to change { report.reload.submitted_at }.from(nil)
-        .and change { report.reload.submitter_id }.to(current_user.id)
+      context "from draft" do
+        it "sets submitted_at and submitter_id" do
+          expect { form.save }
+            .to change { report.reload.submitted_at }.from(nil)
+            .and change { report.reload.submitter_id }.to(current_user.id)
+        end
+
+        it "enqueues submitted email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :submitted)
+        end
+      end
+
+      context "from review" do
+        before { report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id) }
+
+        it "sets approved_at and approver_id" do
+          expect { form.save }
+            .to change { report.reload.approved_at }.from(nil)
+            .and change { report.reload.approver_id }.to(current_user.id)
+        end
+
+        it "enqueues approved email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :approved)
+        end
+      end
+
+      context "from approved" do
+        before do
+          report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
+            approved_at: 1.day.ago, approver_id: recipient.id)
+        end
+
+        it "sets paid_at and payer_id" do
+          expect { form.save }
+            .to change { report.reload.paid_at }.from(nil)
+            .and change { report.reload.payer_id }.to(current_user.id)
+        end
+
+        it "enqueues payout_recorded email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :payout_recorded)
+        end
+      end
     end
 
-    it "enqueues submitted email when forwarding from draft" do
-      form.status_action = "forward"
-      form.mail_recipient_id = recipient.id
+    context "rejecting" do
+      before { form.status_action = "reject" }
 
-      expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :submitted)
-    end
+      context "from review" do
+        before { report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id) }
 
-    it "sets approved_at and approver_id when forwarding from review" do
-      report.update_column(:submitted_at, 1.day.ago)
-      report.update_column(:submitter_id, recipient.id)
-      form.status_action = "forward"
-      form.mail_recipient_id = recipient.id
+        it "clears submitted_at and submitter_id" do
+          expect { form.save }
+            .to change { report.reload.submitted_at }.to(nil)
+            .and change { report.reload.submitter_id }.to(nil)
+        end
 
-      expect { form.save }
-        .to change { report.reload.approved_at }.from(nil)
-        .and change { report.reload.approver_id }.to(current_user.id)
-    end
+        it "enqueues rejected email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :rejected)
+        end
+      end
 
-    it "enqueues approved email when forwarding from review" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id)
-      form.status_action = "forward"
-      form.mail_recipient_id = recipient.id
+      context "from approved" do
+        before do
+          report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
+            approved_at: 1.day.ago, approver_id: recipient.id)
+        end
 
-      expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :approved)
-    end
+        it "clears approved_at and approver_id" do
+          expect { form.save }
+            .to change { report.reload.approved_at }.to(nil)
+            .and change { report.reload.approver_id }.to(nil)
+        end
 
-    it "sets paid_at and payer_id when forwarding from approved" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
-        approved_at: 1.day.ago, approver_id: recipient.id)
-      form.status_action = "forward"
-
-      expect { form.save }
-        .to change { report.reload.paid_at }.from(nil)
-        .and change { report.reload.payer_id }.to(current_user.id)
-    end
-
-    it "enqueues payout_recorded email when forwarding from approved" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
-        approved_at: 1.day.ago, approver_id: recipient.id)
-      form.status_action = "forward"
-
-      expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :payout_recorded)
-    end
-
-    it "clears submitted_at and submitter_id when rejecting from review" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id)
-      form.status_action = "reject"
-
-      expect { form.save }
-        .to change { report.reload.submitted_at }.to(nil)
-        .and change { report.reload.submitter_id }.to(nil)
-    end
-
-    it "enqueues rejected email when rejecting from review" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id)
-      form.status_action = "reject"
-
-      expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :rejected)
-    end
-
-    it "clears approved_at and approver_id when rejecting from approved" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
-        approved_at: 1.day.ago, approver_id: recipient.id)
-      form.status_action = "reject"
-
-      expect { form.save }
-        .to change { report.reload.approved_at }.to(nil)
-        .and change { report.reload.approver_id }.to(nil)
-    end
-
-    it "enqueues payout_rejected email when rejecting from approved" do
-      report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
-        approved_at: 1.day.ago, approver_id: recipient.id)
-      form.status_action = "reject"
-
-      expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :payout_rejected)
+        it "enqueues payout_rejected email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :payout_rejected)
+        end
+      end
     end
 
     it "does not enqueue email when keeping status" do

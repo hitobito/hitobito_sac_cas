@@ -35,23 +35,30 @@ describe "event/tours/reports", js: true do
   context "draft status" do
     before { visit_report }
 
-    it "shows forward option and recipient dropdown, but no reject option" do
+    it "shows forward option, but no reject option" do
       expect(page).to have_unchecked_field("Zur Freigabe einreichen an")
-      expect(page).to have_select("Empfänger/-in")
       expect(page).not_to have_unchecked_field("Ablehnen")
+    end
+
+    it "hides recipient dropdown until forwarding is chosen" do
+      expect(page).not_to have_select("E-Mail Empfänger/-in")
+
+      choose "Zur Freigabe einreichen an"
+
+      expect(page).to have_select("E-Mail Empfänger/-in")
     end
 
     it "shows validation error and marks field red when forwarding without recipient" do
       choose "Zur Freigabe einreichen an"
       click_button "Speichern"
 
-      expect(page).to have_selector("#error_explanation", text: "Empfänger/-in muss ausgefüllt werden")
+      expect(page).to have_selector("#error_explanation", text: "E-Mail Empfänger/-in muss ausgefüllt werden")
       expect(page).to have_css("select.is-invalid")
     end
 
     it "successfully forwards report to review status" do
       choose "Zur Freigabe einreichen an"
-      select recipient.full_name, from: "Empfänger/-in"
+      select recipient.full_name, from: "E-Mail Empfänger/-in"
       click_button "Speichern"
 
       expect(page).to have_current_path(group_event_path(group, event))
@@ -66,23 +73,38 @@ describe "event/tours/reports", js: true do
       visit_report
     end
 
-    it "shows forward and reject options with recipient dropdown" do
+    it "shows forward and reject options" do
       expect(page).to have_unchecked_field("Zur Auszahlung freigeben an")
       expect(page).to have_unchecked_field("Ablehnen")
-      expect(page).to have_select("Empfänger/-in")
+    end
+
+    it "hides recipient dropdown until forwarding is chosen" do
+      expect(page).not_to have_select("E-Mail Empfänger/-in")
+
+      choose "Zur Auszahlung freigeben an"
+
+      expect(page).to have_select("E-Mail Empfänger/-in")
+    end
+
+    it "shows recipient dropdown when rejecting" do
+      expect(page).not_to have_select("E-Mail Empfänger/-in")
+
+      choose "Ablehnen"
+
+      expect(page).to have_select("E-Mail Empfänger/-in")
     end
 
     it "shows validation error and marks field red when forwarding without recipient" do
       choose "Zur Auszahlung freigeben an"
       click_button "Speichern"
 
-      expect(page).to have_selector("#error_explanation", text: "Empfänger/-in muss ausgefüllt werden")
+      expect(page).to have_selector("#error_explanation", text: "E-Mail Empfänger/-in muss ausgefüllt werden")
       expect(page).to have_css("select.is-invalid")
     end
 
     it "successfully forwards report to approved status" do
       choose "Zur Auszahlung freigeben an"
-      select recipient.full_name, from: "Empfänger/-in"
+      select recipient.full_name, from: "E-Mail Empfänger/-in"
       click_button "Speichern"
 
       expect(page).to have_current_path(group_event_path(group, event))
@@ -111,7 +133,7 @@ describe "event/tours/reports", js: true do
     it "shows forward and reject options but no recipient dropdown" do
       expect(page).to have_unchecked_field("Auszahlung erfasst")
       expect(page).to have_unchecked_field("Ablehnen")
-      expect(page).not_to have_select("Empfänger/-in")
+      expect(page).not_to have_select("E-Mail Empfänger/-in")
     end
 
     it "successfully records payout and transitions to closed status" do

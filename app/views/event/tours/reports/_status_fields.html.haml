@@ -28,17 +28,20 @@
 
 - unless entry.report.status == :closed
   = field_set_tag(t(".status_change")) do
-    = f.labeled(t(".status_action")) do
-      .form-check
-        = f.radio_button(:status_action, "keep", class: "form-check-input")
-        = f.label(:status_action, t(".keep"), value: "keep", class: "form-check-label")
-      .form-check
-        = f.radio_button(:status_action, "forward", class: "form-check-input")
-        = f.label(:status_action, t(".forward.#{entry.report.status}"), value: "forward", class: "form-check-label")
-      - unless entry.report.status == :draft
-        .form-check
-          = f.radio_button(:status_action, "reject", class: "form-check-input")
-          = f.label(:status_action, t(".reject"), value: "reject", class: "form-check-label")
+    %div{data: { controller: "field-visibility", "field-visibility-observed-field-id-value": "status_action_group", "field-visibility-hide-when-value": "keep" }}
+      = f.labeled(t(".status_action")) do
+        #status_action_group
+          .form-check
+            = f.radio_button(:status_action, "keep", class: "form-check-input")
+            = f.label(:status_action, t(".keep"), value: "keep", class: "form-check-label")
+          .form-check
+            = f.radio_button(:status_action, "forward", class: "form-check-input")
+            = f.label(:status_action, t(".forward.#{entry.report.status}"), value: "forward", class: "form-check-label")
+          - unless entry.report.status == :draft
+            .form-check
+              = f.radio_button(:status_action, "reject", class: "form-check-input")
+              = f.label(:status_action, t(".reject"), value: "reject", class: "form-check-label")
 
-    - unless entry.report.status == :approved
-      = f.labeled_collection_select(:mail_recipient_id, entry.possible_mail_recipients, :id, :full_name, {include_blank: true}, class: "form-select#{" is-invalid" if entry.errors[:mail_recipient_id].any?}")
+      - unless entry.report.status == :approved
+        %div{class: "#{'hidden' if entry.status_action == 'keep'}", data: { "field-visibility-target": "container" }}
+          = f.labeled_collection_select(:mail_recipient_id, entry.possible_mail_recipients, :id, :full_name, {include_blank: true}, class: "form-select#{" is-invalid" if entry.errors[:mail_recipient_id].any?}")

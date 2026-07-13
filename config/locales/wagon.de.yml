@@ -82,7 +82,7 @@ de:
         payer_id: Ausbezahlt von
         paid_at: Ausbezahlt am
         status_action: Aktion
-        mail_recipient_id: Mail-Empfänger/-in
+        mail_recipient_id: E-Mail Empfänger/-in
       people/export/alps_recipients_form:
         reference_date: Stichtag
         new_entries_from: Neueintritte ab
@@ -186,10 +186,6 @@ de:
           in einer Familienmitgliedschaft aufgenommen werden.
         invalid_date_range: "muss zwischen %{start_on} und %{end_on} liegen"
       models:
-        event/tour/report_form:
-          attributes:
-            mail_recipient_id:
-              blank: muss ausgefüllt werden
         event/approval_commission_responsibility_form:
           attributes:
             base:

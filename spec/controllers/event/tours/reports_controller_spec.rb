@@ -112,7 +112,7 @@ describe Event::Tours::ReportsController do
         expect { put :update, params: params }.to raise_error(CanCan::AccessDenied)
       end
 
-      it "forwards report from draft by setting submitted_at and submitter_id" do
+      it "forwards report when sending status_action forward" do
         recipient = people(:mitglied)
 
         put :update, params: params.merge(

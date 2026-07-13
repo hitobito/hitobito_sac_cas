@@ -880,11 +880,11 @@ describe Event::Tour do
       expect(tour.update(state: :closed)).to be true
     end
 
-    it "allows closing when no report exists" do
+    it "blocks closing when no report exists" do
       tour.report.destroy
       tour.reload
 
-      expect(tour.update(state: :closed)).to be true
+      expect(tour.update(state: :closed)).to be false
     end
   end
 

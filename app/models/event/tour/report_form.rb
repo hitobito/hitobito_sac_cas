@@ -18,10 +18,18 @@ class Event::Tour::ReportForm
     Group::SektionsFunktionaere::Finanzen
   ].map(&:sti_name).freeze
 
+  TRANSITION_MAIL_DEFINITIONS = {
+    [:draft, "forward"] => {mailer: :submitted, recipients: :mail_recipient},
+    [:review, "forward"] => {mailer: :approved, recipients: :mail_recipient},
+    [:approved, "forward"] => {mailer: :payout_recorded, recipients: :submitter},
+    [:review, "reject"] => {mailer: :rejected, recipients: :submitter},
+    [:approved, "reject"] => {mailer: :payout_rejected, recipients: :approver}
+  }.freeze
+
   attr_reader :report
   attr_accessor :current_user
 
-  delegate :event, to: :report
+  delegate :event, :submitter, :approver, to: :report
 
   attribute :review, :string
   attribute :remarks, :string
@@ -61,7 +69,7 @@ class Event::Tour::ReportForm
 
   def possible_mail_recipients
     sektion = event.groups.first.layer_group
-    group_ids = Group.where(layer_group_id: sektion.id).select(:id)
+    group_ids = sektion.groups_in_same_layer.select(:id)
 
     Person
       .joins(:roles)
@@ -155,28 +163,23 @@ class Event::Tour::ReportForm
   end
 
   def capture_mail_recipients(original_status)
-    case [original_status, status_action]
-    when [:draft, "forward"] then Person.where(id: mail_recipient_id).to_a
-    when [:review, "forward"] then Person.where(id: mail_recipient_id).to_a
-    when [:review, "reject"] then [report.submitter].compact
-    when [:approved, "forward"] then [report.submitter].compact
-    when [:approved, "reject"] then [report.approver].compact
-    else []
-    end
+    recipients_method = mail_definition(original_status)[:recipients]
+
+    return unless recipients_method
+
+    [send(recipients_method)].compact
   end
 
   def deliver_status_emails(original_status, recipients) # rubocop:disable Metrics/CyclomaticComplexity
-    return if recipients.blank?
+    mailer_method = mail_definition(original_status)[:mailer]
 
-    mailer_method = case [original_status, status_action]
-    when [:draft, "forward"] then :submitted
-    when [:review, "forward"] then :approved
-    when [:approved, "forward"] then :payout_recorded
-    when [:review, "reject"] then :rejected
-    when [:approved, "reject"] then :payout_rejected
-    else return
-    end
+    return if recipients.blank? || mailer_method.nil?
 
     Event::TourReportMailer.public_send(mailer_method, report, recipients).deliver_later
   end
+
+  def mail_recipient = Person.where(id: mail_recipient_id).first
+
+  def mail_definition(original_status) = TRANSITION_MAIL_DEFINITIONS[[original_status,
+    status_action]] || {}
 end
