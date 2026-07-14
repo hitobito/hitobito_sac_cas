@@ -170,7 +170,7 @@ class Event::Tour::ReportForm
     [send(recipients_method)].compact
   end
 
-  def deliver_status_emails(original_status, recipients) # rubocop:disable Metrics/CyclomaticComplexity
+  def deliver_status_emails(original_status, recipients)
     mailer_method = mail_definition(original_status)[:mailer]
 
     return if recipients.blank? || mailer_method.nil?
