@@ -94,8 +94,8 @@ class Event::Tour::ReportForm
     @revenues ||= report.costs.where(income: true).to_a
   end
 
-  def expenditures
-    @expenditures ||= report.costs.where(income: false).to_a
+  def expenses
+    @expenses ||= report.costs.where(income: false).to_a
   end
 
   def receipts
@@ -117,8 +117,8 @@ class Event::Tour::ReportForm
     @revenues = build_records(attrs, collection: report.costs, fixed_attributes: {income: true})
   end
 
-  def expenditures_attributes=(attrs)
-    @expenditures = build_records(attrs, collection: report.costs,
+  def expenses_attributes=(attrs)
+    @expenses = build_records(attrs, collection: report.costs,
       fixed_attributes: {income: false})
   end
 
@@ -148,7 +148,7 @@ class Event::Tour::ReportForm
   end
 
   def assert_cost_records_valid
-    cost_records.flat_map { _1.reject(&:valid?) }.each do |model|
+    cost_records.flat_map { _1.reject(&:marked_for_destruction?).reject(&:valid?) }.each do |model|
       model.errors.full_messages.each { errors.add(:base, _1) }
     end
   end
@@ -221,7 +221,7 @@ class Event::Tour::ReportForm
     status_action]] || {}
 
   def cost_records
-    [@revenues, @expenditures, @receipts].compact
+    [@revenues, @expenses, @receipts].compact
   end
 
   def build_records(attrs, collection:, fixed_attributes: {})

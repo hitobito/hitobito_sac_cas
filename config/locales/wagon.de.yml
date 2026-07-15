@@ -1741,7 +1741,7 @@ de:
         cost_summary_fields:
           revenues: Einnahmen
           add_tour_fees: Tourengebühren hinzufügen
-          expenditures: Ausgaben
+          expenses: Ausgaben
           receipts: Belege
         form_tabs:
           status: Status

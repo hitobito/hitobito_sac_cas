@@ -12,7 +12,7 @@ describe "event/tours/reports", js: true do
   let(:event) { events(:section_tour) }
   let(:report) { event_reports(:section_tour_report) }
   let(:revenue) { event_costs(:participation_fee) }
-  let(:expenditure) { event_costs(:transport) }
+  let(:expense) { event_costs(:transport) }
   let(:receipt) { event_cost_receipts(:tankstelle) }
 
   def create_participation(price_category:, price:)
@@ -89,7 +89,7 @@ describe "event/tours/reports", js: true do
       end
 
       it "updates the section total when a row is removed" do
-        table_total = find("#expenditures_total")
+        table_total = find("#expenses_total")
 
         within("fieldset", text: "Einnahmen") do
           click_link "Entfernen"
@@ -155,10 +155,32 @@ describe "event/tours/reports", js: true do
 
         expect(page).not_to have_field(name: /\[description\]/, with: "Kosten SAC-Mitglied (extern)")
       end
+
+      it "does not add duplicate dom rows when clicking add tour prices twice" do
+        create_participation(price_category: "price_member", price: 10)
+
+        click_button "Tourengebühren hinzufügen"
+
+        expect(all(".fields", visible: :all).size).to eq 3
+
+        click_button "Tourengebühren hinzufügen"
+
+        expect(all(".fields", visible: :all).size).to eq 3
+      end
+
+      it "assigns unique field names to rows added in the same click" do
+        create_participation(price_category: "price_member", price: 10)
+        create_participation(price_category: "price_special", price: 40)
+
+        click_button "Tourengebühren hinzufügen"
+
+        field_names = all(".fields[data-new-record] input[name*='[description]']").pluck(:name)
+        expect(field_names).to match_array(field_names.uniq)
+      end
     end
 
-    describe "expenditures" do
-      it "can add an expenditure" do
+    describe "expenses" do
+      it "can add an expense" do
         within("fieldset", text: "Ausgaben") do
           click_link "Eintrag hinzufügen"
           within(".fields[data-new-record]") do
@@ -175,7 +197,7 @@ describe "event/tours/reports", js: true do
       end
 
       it "updates the row total and section total when count and amount change" do
-        table_total = find("#expenditures_total")
+        table_total = find("#expenses_total")
 
         within("fieldset", text: "Ausgaben") do
           click_link "Eintrag hinzufügen"
@@ -209,7 +231,7 @@ describe "event/tours/reports", js: true do
       end
 
       it "updates the section total when a row is removed" do
-        table_total = find("#expenditures_total")
+        table_total = find("#expenses_total")
 
         within("fieldset", text: "Ausgaben") do
           click_link "Entfernen"

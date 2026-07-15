@@ -12,6 +12,8 @@ class Event::Cost < ApplicationRecord
   validates :description, :count, :amount, presence: true
 
   def total
+    return 0 if amount.nil? || count.nil?
+
     amount * count
   end
 end

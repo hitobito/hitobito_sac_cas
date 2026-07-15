@@ -106,10 +106,10 @@ describe Event::Tours::ReportsController do
         expect(event_costs(:participation_fee).reload.description).to eq "We made moneyyyyyyy"
       end
 
-      it "updates expenditures" do
+      it "updates expenses" do
         put :update, params: params.merge(
           event_tour_report_form: {
-            expenditures_attributes: {
+            expenses_attributes: {
               "0" => {
                 id: event_costs(:transport).id,
                 description: "Spent it all again sadly...",

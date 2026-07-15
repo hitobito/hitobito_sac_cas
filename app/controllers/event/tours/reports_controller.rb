@@ -37,7 +37,7 @@ class Event::Tours::ReportsController < ApplicationController
         :mail_recipient_id,
         participations_attributes: [:state, :means_of_transport],
         revenues_attributes: [:id, :description, :count, :amount, :_destroy],
-        expenditures_attributes: [:id, :description, :count, :amount, :_destroy],
+        expenses_attributes: [:id, :description, :count, :amount, :_destroy],
         receipts_attributes: [:id, :description, :file, :_destroy]
       )
   end

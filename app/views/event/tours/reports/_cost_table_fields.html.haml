@@ -20,7 +20,7 @@
               = ff.input_field :description
             .col-xl-3
               .d-xl-none.muted= Event::Cost.human_attribute_name(:count)
-              = ff.input_field :count, step: 1, data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}
+              = ff.input_field :count, step: 1, value: format("%g", ff.object.count), data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}
             .col-xl-3
               .d-xl-none.muted= Event::Cost.human_attribute_name(:amount)
               = ff.input_field :amount, step: 0.05, data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}

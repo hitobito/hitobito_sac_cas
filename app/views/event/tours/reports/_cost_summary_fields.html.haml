@@ -8,8 +8,8 @@
     = f.button t(".add_tour_fees"), type: :button, data: {action: "click->sac--prefill-revenues#prefill"}, class: "btn btn-sm btn-outline-primary mb-3"
     = render "event/tours/reports/cost_table_fields", f: f, entries: entry.revenues, cost_type: :revenues
 
-= field_set_tag(t(".expenditures")) do
-  = render "event/tours/reports/cost_table_fields", f: f, entries: entry.expenditures, cost_type: :expenditures
+= field_set_tag(t(".expenses")) do
+  = render "event/tours/reports/cost_table_fields", f: f, entries: entry.expenses, cost_type: :expenses
 
 = field_set_tag(t(".receipts")) do
   = render "event/tours/reports/receipt_table_fields", f: f, entries: entry.receipts
