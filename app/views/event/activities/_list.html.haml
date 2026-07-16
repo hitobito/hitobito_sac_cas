@@ -8,6 +8,5 @@
     = icon(:circle, style: "color: #{d.color}") if d.color
     = d.label
   - t.sortable_attrs(:order, :short_description, :description, :children)
-  - t.attr(:technical_requirement_id)
   - t.sortable_attrs(:updated_at, :deleted_at)
   - add_table_actions(t)
