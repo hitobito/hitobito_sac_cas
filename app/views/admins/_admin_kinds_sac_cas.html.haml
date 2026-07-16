@@ -1,0 +1,6 @@
+- if can?(:index, Event::Level)
+  %li= link_to Event::Level.model_name.human(count: 2), event_levels_path
+- if can?(:index, CourseCompensationRate)
+  %li= link_to CourseCompensationRate.model_name.human(count: 2), course_compensation_rates_path
+- if can?(:index, CourseCompensationCategory)
+  %li= link_to CourseCompensationCategory.model_name.human(count: 2), course_compensation_categories_path
