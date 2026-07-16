@@ -65,26 +65,39 @@ de_CH:
         actual_days: Effektive Tage
         iban: IBAN
       event/participation/invoice_form:
-        reference_date: "Stichtag"
-        invoice_date: "Buchungsdatum"
-        send_date: "Versand- und Rechnungsdatum"
-        price_category: "Preiskategorie"
-        price: "Preis"
+        reference_date: Stichtag
+        invoice_date: Buchungsdatum
+        send_date: Versand- und Rechnungsdatum
+        price_category: Preiskategorie
+        price: Preis
+      event/tour/report_form:
+        tour_completed: Wurde die Tour durchgeführt
+        review: Tourenrückblick
+        remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
+        submitter_id: Eingereicht von
+        submitted_at: Eingereicht am
+        approver_id: Freigegeben von
+        approved_at: Freigegeben am
+        payer_id: Ausbezahlt von
+        paid_at: Ausbezahlt am
+      people/export/alps_recipients_form:
+        reference_date: Stichtag
+        new_entries_from: Neueintritte ab
       people/export/jubilare_form:
-        reference_date: "Stichtag"
-        membership_years: "Anzahl Mitgliedsjahre"
+        reference_date: Stichtag
+        membership_years: Anzahl Mitgliedsjahre
       people/export/period_form:
-        from: "Von"
-        to: "Bis"
+        from: Von
+        to: Bis
       people/membership/invoice_form:
-        reference_date: "Stichtag"
-        invoice_date: "Buchungsdatum"
-        send_date: "Versand- und Rechnungsdatum"
-        discount: "Rabatt"
-        new_entry: "Eintrittsgebühr"
+        reference_date: Stichtag
+        invoice_date: Buchungsdatum
+        send_date: Versand- und Rechnungsdatum
+        discount: Rabatt
+        new_entry: Eintrittsgebühr
         dont_send: Rechnung versenden
         update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
-        section_id: "Mitgliedschaft"
+        section_id: Mitgliedschaft
         sac_fee: Zentralverbandsbeitrag
         sac_entry_fee: Zentralverbandseintrittsgebühren
         hut_solidarity_fee: Hüttensolidaritätsbeitrag
@@ -94,10 +107,10 @@ de_CH:
         section_fee: Sektionsbeitrag
         section_bulletin_postage_abroad: Porto Ausland Sektionsbulletin
       people/yearly_membership/invoice_form:
-        invoice_year: "Rechnungsjahr"
-        invoice_date: "Buchungsdatum"
-        send_date: "Versand- und Rechnungsdatum"
-        role_finish_date: "Rollen verlängern bis"
+        invoice_year: Rechnungsjahr
+        invoice_date: Buchungsdatum
+        send_date: Versand- und Rechnungsdatum
+        role_finish_date: Rollen verlängern bis
       wizards/steps/signup/main_email_field:
         email: E-Mail
       wizards/steps/signup/person_fields:
@@ -516,10 +529,10 @@ de_CH:
         price_description: Hinweis
         price_member: Kosten SAC-Mitglied (extern)
         member_may_apply: Anmeldung möglich
-        regular_may_apply: Anmeldung möglich
-        special_may_apply: Anmeldung möglich
         price_regular: Kosten nicht-SAC-Mitglied (Gast)
+        regular_may_apply: Anmeldung möglich
         price_special: Kosten SAC Sektionsmitglied
+        special_may_apply: Anmeldung möglich
         season: Saison
         seasons:
           winter: Winter
@@ -1085,29 +1098,29 @@ de_CH:
         huettenwartspartner: Hüttenwartspartner/in
         schluesseldepot: Schlüsseldepot
       group/sac_cas_kurskader/kursleitung_selbstaendig:
-        one: Kursleiter*in (selbständig)
-        description: Kursleiter*in (selbständig)
+        one: Kursleiter/in (selbständig)
+        description: Kursleiter/in (selbständig)
       group/sac_cas_kurskader/klassenlehrer_selbstaendig:
-        one: Klassenlehrer*in (selbständig)
-        description: Klassenlehrer*in (selbständig)
+        one: Klassenlehrer/in (selbständig)
+        description: Klassenlehrer/in (selbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_selbstaendig:
-        one: "Kursleiter*in (Aspirant, selbständig)"
-        description: "Kursleiter*in (Aspirant, selbständig)"
+        one: "Kursleiter/in (Aspirant, selbständig)"
+        description: "Kursleiter/in (Aspirant, selbständig)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_selbstaendig:
-        one: "Klassenlehrer*in (Aspirant, selbständig)"
-        description: "Klassenlehrer*in (Aspirant, selbständig)"
+        one: "Klassenlehrer/in (Aspirant, selbständig)"
+        description: "Klassenlehrer/in (Aspirant, selbständig)"
       group/sac_cas_kurskader/kursleitung_unselbstaendig:
-        one: Kursleiter*in (unselbständig)
-        description: Kursleiter*in (unselbständig)
+        one: Kursleiter/in (unselbständig)
+        description: Kursleiter/in (unselbständig)
       group/sac_cas_kurskader/klassenlehrer_unselbstaendig:
-        one: Klassenlehrer*in (unselbständig)
-        description: Klassenlehrer*in (unselbständig)
+        one: Klassenlehrer/in (unselbständig)
+        description: Klassenlehrer/in (unselbständig)
       group/sac_cas_kurskader/kursleitung_aspirant_unselbstaendig:
-        one: "Kursleiter*in (Aspirant, unselbständig)"
-        description: "Kursleiter*in (Aspirant, unselbständig)"
+        one: "Kursleiter/in (Aspirant, unselbständig)"
+        description: "Kursleiter/in (Aspirant, unselbständig)"
       group/sac_cas_kurskader/klassenlehrer_aspirant_unselbstaendig:
-        one: "Klassenlehrer*in (Aspirant, unselbständig)"
-        description: "Klassenlehrer*in (Aspirant, unselbständig)"
+        one: "Klassenlehrer/in (Aspirant, unselbständig)"
+        description: "Klassenlehrer/in (Aspirant, unselbständig)"
       group/sac_cas_privathuetten/schreibrecht:
         one: Schreibrecht
         description: Schreibrecht
@@ -1450,10 +1463,10 @@ de_CH:
   dropdown/sac_cas_exports:
     button: SAC Exporte
     sac_courses: Finanzindikatoren Kurse
+    alps_recipients: "Die Alpen: Empfängerlisten"
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
-
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1577,7 +1590,7 @@ de_CH:
       subsidy_step:
         title: Subventionsbeitrag beantragen
         subsidy_link_label: Subventionsantrag
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
           Für diesen Kurs gibt es die Möglichkeit, als SAC-Mitglied einen Subventionsbeitrag zu beantragen. Wähle aus, ob du diesen in Anspruch nehmen möchtest.
         detail_info_header: "Was muss ich tun um einen Subventionsantrag zu stellen?"
@@ -1661,7 +1674,7 @@ de_CH:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_activities: Unterdisziplin(en)
+      sub_activities: Unteraktivität(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1795,7 +1808,7 @@ de_CH:
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
-      activities: Disziplinen
+      activities: Aktivitäten
       target_groups: Zielgruppen
       technical_requirements: Technische Anforderungen
       traits: Merkmale
@@ -1832,6 +1845,9 @@ de_CH:
     rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
     self_approval: Selbstfreigabe
 
+  export/alps_recipients:
+    filename: Die_Alpen_Empfängerlisten
+
   export/sac_courses:
     filename: SAC_Finanzindikatoren_Kurse
 
@@ -1845,7 +1861,9 @@ de_CH:
       event_kind_short_name: Kursart Kurzname
       event_kind_label: Kursart Verbandsbezeichnung
       season: Saison
+      language: Sprache
       name: Kursname
+      number: Kursnummer
       start_on: Startdatum
       finish_on: Enddatum
       state: Kursstatus
@@ -1990,13 +2008,6 @@ de_CH:
       flash:
         success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
 
-  external_trainings:
-    form:
-      help_other_people: Zusätzliche Personen für welche die Externe Ausbildung erfasst werden soll.
-    create:
-      flash:
-        success_multiple: "%{model} wurde erfolgreich für %{names} erstellt."
-
   filter_navigation/people:
     tour_guides_none: Keine Tourenleiter
     tour_guides_active: Aktive Tourenleiter
@@ -2013,6 +2024,15 @@ de_CH:
       create_yearly_membership_invoice: MV Jahresinkasso
     sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
+
+    popover_alps_recipients:
+      info_html: >-
+        <p>Vor dem Export sollte geprüft werden, ob ein Adressabgleich durchgeführt werden soll, um Rücksendungen zu reduzieren.</p>
+
+        <p> <strong>Fall: Versand ohne Hüttenkarte => Feld „Neueintritte ab“ bleibt leer</strong><br/> Beispiel: "Stichtag = 15.09.2025" und "Neueintritte ab = leer"<br/> Ergebnis: Alle Abonnenten zum Stichtag erhalten ein Exemplar ohne Hüttenkarte </p>
+
+        <p> <strong>Fall: Versand mit Hüttenkarte => Beide Datumsfelder müssen gesetzt sein</strong><br/> Beispiel: "Stichtag = 15.01.2026" und "Neueintritte ab = 15.09.2025"</br> Ergebnis: Neu eingetretene Mitglieder sowie Abonnenten zwischen 15.09.2025 und 15.01.2026 erhalten eine Hüttenkarte; Mitglieder und Abonnenten mit einem Eintrittsdatum vor 15.09.2025 erhalten keine Hüttenkarte. </p>
+      download: Herunterladen
 
     popover_year:
       year: Jahr
@@ -2763,6 +2783,7 @@ de_CH:
         submit_button: Die Alpen-Abonnent beenden
 
   delayed_job:
+    export/alps_recipients_export_job: "Export: Empfängerlisten Die Alpen"
     export/austritte_export_job: "Export: Ausgetretene Mitglieder Sektion"
     export/beitragskategorie_wechsel_export_job: "Export: Wechsel Beitragskategorie Sektion"
     export/eintritte_export_job: "Export: Eingetretene Mitglieder Sektion"

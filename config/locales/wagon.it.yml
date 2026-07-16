@@ -65,26 +65,39 @@ it:
         actual_days: Giorni effettivi
         iban: IBAN
       event/participation/invoice_form:
-        reference_date: "Data di riferimento"
-        invoice_date: "Data di prenotazione"
-        send_date: "Data di spedizione e fatturazione"
-        price_category: "Categoria di prezzo"
-        price: "Prezzo"
+        reference_date: Data di riferimento
+        invoice_date: Data di prenotazione
+        send_date: Data di spedizione e fatturazione
+        price_category: Categoria di prezzo
+        price: Prezzo
+      event/tour/report_form:
+        tour_completed: Wurde die Tour durchgeführt
+        review: Tourenrückblick
+        remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
+        submitter_id: Eingereicht von
+        submitted_at: Eingereicht am
+        approver_id: Freigegeben von
+        approved_at: Freigegeben am
+        payer_id: Ausbezahlt von
+        paid_at: Ausbezahlt am
+      people/export/alps_recipients_form:
+        reference_date: Stichtag
+        new_entries_from: Neueintritte ab
       people/export/jubilare_form:
-        reference_date: "Scadenza"
-        membership_years: "Numero di anni di appartenenza"
+        reference_date: Scadenza
+        membership_years: Numero di anni di appartenenza
       people/export/period_form:
-        from: "Da"
-        to: "Fino a"
+        from: Da
+        to: Fino a
       people/membership/invoice_form:
-        reference_date: "Scadenza"
-        invoice_date: "Data di prenotazione"
-        send_date: "Data di spedizione e fatturazione"
-        discount: "Sconto"
-        new_entry: "Quota di adesione"
+        reference_date: Scadenza
+        invoice_date: Data di prenotazione
+        send_date: Data di spedizione e fatturazione
+        discount: Sconto
+        new_entry: Quota di adesione
         dont_send: Inviare la fattura
         update_membership: Mitgliedschaft bei Zahlungseingang aktualisieren
-        section_id: "Affiliazione"
+        section_id: Affiliazione
         sac_fee: Contributo dell'organizzazione centrale
         sac_entry_fee: Quote di iscrizione all'organizzazione centrale
         hut_solidarity_fee: Contributo di solidarietà della capanna
@@ -94,10 +107,10 @@ it:
         section_fee: Contributo di sezione
         section_bulletin_postage_abroad: Bollettino postale della sezione estero
       people/yearly_membership/invoice_form:
-        invoice_year: "Esercizio finanziario"
-        invoice_date: "Data di prenotazione"
-        send_date: "Data di spedizione e fatturazione"
-        role_finish_date: "Estendere i ruoli fino al"
+        invoice_year: Esercizio finanziario
+        invoice_date: Data di prenotazione
+        send_date: Data di spedizione e fatturazione
+        role_finish_date: Estendere i ruoli fino al
       wizards/steps/signup/main_email_field:
         email: E-mail
       wizards/steps/signup/person_fields:
@@ -518,10 +531,10 @@ it:
         price_description: Descrizione del
         price_member: Costi Membro del SAC (esterno)
         member_may_apply: Anmeldung möglich
-        regular_may_apply: Anmeldung möglich
-        special_may_apply: Anmeldung möglich
         price_regular: Costi non socio SAC (ospite)
+        regular_may_apply: Anmeldung möglich
         price_special: Costi Membro della sezione SAC
+        special_may_apply: Anmeldung möglich
         season: Stagione
         seasons:
           winter: Inverno
@@ -1346,14 +1359,14 @@ it:
         one: Autorizzazione scrittura
         description: Autorizzazione scrittura
       group/sektions_touren_und_kurse/tourenchef:
-        one: Tour manager
-        description: Tour manager
+        one: Responsabile gite
+        description: Responsabile gite
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Manager del tour estivo
-        description: Manager del tour estivo
+        one: Responsabile gite estivo
+        description: Responsabile gite estivo
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Tour Manager Inverno
-        description: Tour Manager Inverno
+        one: Responsabile gite Inverno
+        description: Responsabile gite Inverno
       group/sektions_clubhuetten/leserecht:
         one: Autorizzazione lettura
         description: Autorizzazione lettura
@@ -1517,10 +1530,10 @@ it:
   dropdown/sac_cas_exports:
     button: SAC Exporte
     sac_courses: Finanzindikatoren Kurse
+    alps_recipients: "Die Alpen: Empfängerlisten"
     sac_statistics: SAC Statistik
     sac_statistics_info: >
       Wichtiges zum Export
-
   agenda:
     index:
       title: "Agenda %{group_name}"
@@ -1606,14 +1619,14 @@ it:
         caption: Disconnettersi
       courses:
         signup_aside:
-          summary_title: Panoramica dei costi
-          summary_course_price: Costi del corso
-          summary_total: Totale
+          summary_title: Kostenübersicht
+          summary_course_price: Kurskosten
+          summary_total: Total
         contact_data_aside:
-          contact_title: Domande sulla registrazione
+          contact_title: Fragen zur Anmeldung
           contact_text: |
-            Siamo raggiungibili durante i nostri orari di lavoro
-            Dal lunedì al venerdì, 09:00 – 12:00 e 14:00 – 17:00.
+            Du erreichst uns zu unseren Geschäftszeiten
+            Mo bis Fr 09:00 - 12:00 & 14:00 - 17:00 Uhr.
       tours:
         contact_data_aside:
           contact_title: Kontakt
@@ -1645,7 +1658,7 @@ it:
       subsidy_step:
         title: Richiedere un contributo di sovvenzione
         subsidy_link_label: Richiesta di sovvenzione
-        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Wissen/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
+        subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
           In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
@@ -1890,7 +1903,7 @@ it:
       title: Creare il livello del corso
 
   event/courses/leader_settlement_pdfs:
-    export_enqueued: "Kurskaderabrechnung wird im Hintergrund generiert und kann nach Fertigstellung auf der Jobübersicht heruntergeladen werden: %{overview_link}"
+    export_enqueued: "Il conteggio dei quadri del corso viene generato in background e potrà essere scaricato dalla panoramica dei processi una volta completato: %{overview_link}"
 
   event/participations:
     pending: "È stata generata una pre-iscrizione. Non è quella definitiva e deve essere confermata dall’amministrazione del corso."
@@ -1899,6 +1912,9 @@ it:
     approved: "Freigabe %{approval_kind} durch %{freigabe_komitee}"
     rejected: "Ablehnung %{approval_kind} durch %{freigabe_komitee}"
     self_approval: Selbstfreigabe
+
+  export/alps_recipients:
+    filename: Die_Alpen_Empfängerlisten
 
   export/sac_courses:
     filename: SAC_Finanzindikatoren_Kurse
@@ -1913,7 +1929,9 @@ it:
       event_kind_short_name: Kursart Kurzname
       event_kind_label: Kursart Verbandsbezeichnung
       season: Saison
+      language: Sprache
       name: Kursname
+      number: Kursnummer
       start_on: Startdatum
       finish_on: Enddatum
       state: Kursstatus
@@ -2058,13 +2076,6 @@ it:
       flash:
         success_multiple: "%{model} è stato creato con successo per %{names}."
 
-  external_trainings:
-    form:
-      help_other_people: Altre persone per le quali deve essere inclusa la formazione esterna.
-    create:
-      flash:
-        success_multiple: "%{model} è stato creato con successo per %{names}."
-
   filter_navigation/people:
     tour_guides_none: Nessuna guida escursionistica
     tour_guides_active: Guide escursionistiche attive
@@ -2081,6 +2092,15 @@ it:
       create_yearly_membership_invoice: Incasso annuale AS
     sektion_primary: Sezione base
     sektion_secondary: Sezione aggiuntiva
+
+    popover_alps_recipients:
+      info_html: >-
+        <p>Vor dem Export sollte geprüft werden, ob ein Adressabgleich durchgeführt werden soll, um Rücksendungen zu reduzieren.</p>
+
+        <p> <strong>Fall: Versand ohne Hüttenkarte => Feld „Neueintritte ab“ bleibt leer</strong><br/> Beispiel: "Stichtag = 15.09.2025" und "Neueintritte ab = leer"<br/> Ergebnis: Alle Abonnenten zum Stichtag erhalten ein Exemplar ohne Hüttenkarte </p>
+
+        <p> <strong>Fall: Versand mit Hüttenkarte => Beide Datumsfelder müssen gesetzt sein</strong><br/> Beispiel: "Stichtag = 15.01.2026" und "Neueintritte ab = 15.09.2025"</br> Ergebnis: Neu eingetretene Mitglieder sowie Abonnenten zwischen 15.09.2025 und 15.01.2026 erhalten eine Hüttenkarte; Mitglieder und Abonnenten mit einem Eintrittsdatum vor 15.09.2025 erhalten keine Hüttenkarte. </p>
+      download: Herunterladen
 
     popover_year:
       year: Jahr
@@ -2839,12 +2859,13 @@ it:
         submit_button: Fine dell'abbonato alpino
 
   delayed_job:
-    export/austritte_export_job: "Export: Ausgetretene Mitglieder Sektion"
-    export/beitragskategorie_wechsel_export_job: "Export: Wechsel Beitragskategorie Sektion"
-    export/eintritte_export_job: "Export: Eingetretene Mitglieder Sektion"
-    export/jubilare_export_job: "Export: Jubilare Sektion"
-    export/leader_settlement_export_job: "Export: Kurskaderabrechnung"
-    export/mitglieder_csv_export_job: "Export: Mitglieder CSV Sektion"
-    export/mitglieder_statistics_export_job: "Export: Mitgliederstatistik Sektion"
-    export/sac_statistics_export_job: "Export: SAC Statistik"
-    export/sac_courses_export_job: "Export: Finanzindikatoren Kurse"
+    export/alps_recipients_export_job: "Export: Empfängerlisten Die Alpen"
+    export/austritte_export_job: "Export: Membri uscenti sezione"
+    export/beitragskategorie_wechsel_export_job: "Export: Cambio categoria contributiva sezione"
+    export/eintritte_export_job: "Export: Nuovi membri sezione"
+    export/jubilare_export_job: "Export: Giubilari sezione"
+    export/leader_settlement_export_job: "Export: Conteggio dei quadri del corso"
+    export/mitglieder_csv_export_job: "Export: CSV membri sezione"
+    export/mitglieder_statistics_export_job: "Export: Statistiche membri sezione"
+    export/sac_statistics_export_job: "Export: Statistiche CAS"
+    export/sac_courses_export_job: "Export: Indicatori finanziari dei corsi"
