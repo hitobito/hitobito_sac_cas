@@ -10,6 +10,13 @@ module SacCas::Event::Participation
 
   MEANS_OF_TRANSPORT = %w[public car legs].freeze
 
+  SELF_EMPLOYED_LEADER_ROLES = [
+    Group::SacCasKurskader::KursleitungSelbstaendig,
+    Group::SacCasKurskader::KursleitungAspirantSelbstaendig,
+    Group::SacCasKurskader::KlassenlehrerSelbstaendig,
+    Group::SacCasKurskader::KlassenlehrerAspirantSelbstaendig
+  ]
+
   delegate :sac_membership_active?, :membership_years, :membership_number, :correspondence,
     to: :person
 
