@@ -313,7 +313,7 @@ en:
         maximum_age: Maximum age
         ideal_class_size: Ideal class size
         maximum_class_size: Maximum class size
-        activities: Disziplin(en)
+        activities: Aktivität(en)
         target_groups: Zielgruppe(n)
         fitness_requirement: Konditionelle Anforderung
         fitness_requirement_id: Konditionelle Anforderung
@@ -409,7 +409,7 @@ en:
       event/approval_commission_responsibility:
         freigabe_komitee: Freigabekomitee
         target_group: Zielgruppe
-        activity: Disziplin
+        activity: Aktivität
         subito: Subito
       event/activity:
         color: Farbe
@@ -417,8 +417,8 @@ en:
         short_description: Kurzbeschreibung
         description: Beschreibung
         order: Sortierschlüssel
-        parent_id: Übergeordnete Disziplin
-        children: Unterdisziplinen
+        parent_id: Übergeordnete Aktivität
+        children: Unteraktivitäten
         updated_at: Geändert
         deleted_at: Gelöscht
       event/approval:
@@ -472,6 +472,12 @@ en:
           payed: Bezahlt
           cancelled: Storniert
           error: Fehler
+        means_of_transport: Anreisemittel
+        means_of_transports:
+          _nil: unbekannt
+          public: ÖV
+          car: Auto
+          legs: Zu Fuss/Velo
         external_invoices: Rechnungen # uses include CapitalizedDependentErrors
         sac_membership_active?: SAC-Mitglied
         states:
@@ -485,6 +491,12 @@ en:
           canceled: Abgemeldet
           attended: Teilgenommen
           absent: Nicht erschienen
+      event/report:
+        statuses:
+          draft: Entwurf
+          review: In Freigabe
+          approved: Freigegeben
+          closed: Abgeschlossen
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -768,7 +780,7 @@ en:
         event/approval_commission_responsibility:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
           no_base_target_group: ist keine Hauptzielgruppe.
-          no_base_activity: ist keine Hauptdisziplin.
+          no_base_activity: ist keine Hauptaktivität.
           combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -807,8 +819,8 @@ en:
         one: Zuständigkeit Freigabe-Kommission
         other: Zuständigkeiten Freigabe-Kommission
       event/activity:
-        one: Disziplin
-        other: Disziplinen
+        one: Aktivität
+        other: Aktivitäten
       event/fitness_requirement:
         one: Konditionelle Anforderung
         other: Konditionelle Anforderungen
@@ -1666,6 +1678,15 @@ en:
           review: Deine Freigabe wurde gespeichert.
           approved: "Deine Freigabe wurde gespeichert, die Tour ist nun im Status <i>Freigegeben</i>."
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
+      reports:
+        title: "Tourenrapport (%{status})"
+        form_tabs:
+          status: Status
+          participations: Teilnehmende
+          cost_summary: Kostenübersicht
+        status_fields:
+          editing_status: Bearbeitungsstatus
+        success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:
       application_window: Anmeldefenster
@@ -1674,7 +1695,7 @@ en:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_activities: Unterdisziplin(en)
+      sub_activities: Unteraktivität(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1685,6 +1706,7 @@ en:
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
+      report: Tourenrapport
 
     flash:
       dates_changed: "Tour %{event_name} wurde erfolgreich aktualisiert. Stelle bitte sicher, dass du die geänderten von- und bis-Daten mit deiner Tourenkommission abgestimmt hast."
@@ -1808,7 +1830,7 @@ en:
     tour_essentials:
       title: Wesentliche Fakten
     tour_essential_field:
-      activities: Disziplinen
+      activities: Aktivitäten
       target_groups: Zielgruppen
       technical_requirements: Technische Anforderungen
       traits: Merkmale
@@ -1939,6 +1961,7 @@ en:
       address_care_of: Adresszusatz
       zip_code: PLZ
       town: Ort
+      canton: Kanton
       country: Land
 
   export/tabular/people/jubilare:
