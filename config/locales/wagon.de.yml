@@ -772,10 +772,6 @@ de:
         has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
-        event/tour:
-          attributes:
-            base:
-              report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
 
         course_compensation_rate:
           attributes:
@@ -797,6 +793,8 @@ de:
           attributes:
             technical_requirements:
               not_matching_activities: müssen zu den ausgewählten Aktivitäten gehören
+            base:
+              report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
 
         event/approval_commission_responsibility:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
