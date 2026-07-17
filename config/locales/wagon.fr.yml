@@ -317,7 +317,7 @@ fr:
         maximum_age: Age maximal
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
-        disciplines: Discipline(s)
+        activities: Aktivität(en)
         target_groups: Groupe(s) cible(s)
         fitness_requirement: Exigence en matière de condition physique
         fitness_requirement_id: Exigence en matière de condition physique
@@ -413,18 +413,18 @@ fr:
       event/approval_commission_responsibility:
         freigabe_komitee: Comité de libération
         target_group: Groupe cible
-        discipline: Discipline
+        activity: Aktivität
         subito: Subito
-      event/discipline:
-        color: Couleur
-        label: Désignation
-        short_description: Brève description
-        description: Description
-        order: Clé de tri
-        parent_id: Discipline supérieure
-        children: Sous-disciplines
-        updated_at: Modifié
-        deleted_at: Supprimé
+      event/activity:
+        color: Farbe
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Aktivität
+        children: Unteraktivitäten
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/approval:
         freigabe_komitee: Comité de libération
         approval_kind: Niveau d'autorisation
@@ -476,6 +476,12 @@ fr:
           payed: Payé
           cancelled: Annulé
           error: Erreur
+        means_of_transport: Anreisemittel
+        means_of_transports:
+          _nil: unbekannt
+          public: ÖV
+          car: Auto
+          legs: Zu Fuss/Velo
         external_invoices: Factures # uses include CapitalizedDependentErrors
         sac_membership_active?: Membre du CAS
         states:
@@ -489,6 +495,12 @@ fr:
           canceled: Déconnecté
           attended: Participé
           absent: Non paru
+      event/report:
+        statuses:
+          draft: Entwurf
+          review: In Freigabe
+          approved: Freigegeben
+          closed: Abgeschlossen
       event/target_group:
         label: Désignation
         short_description: Brève description
@@ -760,11 +772,11 @@ fr:
             course_compensation_category_id:
               uniqueness_during_validity_period: ne peut référencer qu’un seul taux de rémunération par période de validité.
 
-        event/discipline:
+        event/activity:
           attributes:
             color:
               invalid_hex_color: >-
-                doit être une valeur hexadécimale admissible de 6 caractères commençant par #.
+                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
         event/participation:
           attributes:
             actual_days:
@@ -773,7 +785,7 @@ fr:
         event/approval_commission_responsibility:
           not_in_layer: ne fait pas partie de la même section/du même groupe local.
           no_base_target_group: n'est pas un groupe cible principal.
-          no_base_discipline: n'est pas une discipline principale.
+          no_base_activity: ist keine Hauptaktivität.
           combination_exists: a déjà défini une compétence correspondante.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -816,10 +828,9 @@ fr:
         one: Compétence de la commission de validation
         many: Compétences Commission de validation
         other: Compétences Commission de validation
-      event/discipline:
-        one: Discipline
-        many: Disciplines
-        other: Disciplines
+      event/activity:
+        one: Aktivität
+        other: Aktivitäten
       event/fitness_requirement:
         one: Exigence en matière de condition physique
         many: Exigences en matière de condition physique
@@ -1570,9 +1581,9 @@ fr:
             many: '%{count} e-mails ont été envoyés.'
             other: '%{count} e-mails ont été envoyés.'
           warning: "Aucun e-mail n’a été envoyé, car aucun lien vers un sondage n’a été saisi."
-    disciplines:
+    activities:
       form:
-        help_inline_color: "Valeur de couleur hexadécimale valide (par ex. #fcba03)"
+        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Transférer les valeurs aux cours
@@ -1736,6 +1747,15 @@ fr:
           review: Ton partage a été enregistré.
           approved: "Ta validation a été enregistrée, la tournée a maintenant le statut <i>Validé</i>."
           draft: Ton refus a été enregistré et la visite est revenue à l'état de <i>projet</i>.
+      reports:
+        title: "Tourenrapport (%{status})"
+        form_tabs:
+          status: Status
+          participations: Teilnehmende
+          cost_summary: Kostenübersicht
+        status_fields:
+          editing_status: Bearbeitungsstatus
+        success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:
       application_window: Anmeldefenster
@@ -1744,7 +1764,7 @@ fr:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unterdisziplin(en)
+      sub_activities: Unteraktivität(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1755,6 +1775,7 @@ fr:
     actions_show_sac_cas:
       attach_key_data_sheets: Créer toutes les fiches techniques
       approval: Validation
+      report: Tourenrapport
 
     flash:
       dates_changed: "Tour %{event_name} a été mis à jour avec succès. Assure-toi que les dates de départ et d'arrivée modifiées ont été approuvées par ta commission des tours."
@@ -1878,7 +1899,7 @@ fr:
     tour_essentials:
       title: Faits essentiels
     tour_essential_field:
-      disciplines: Disciplines
+      activities: Aktivitäten
       target_groups: Groupes cibles
       technical_requirements: Exigences techniques
       traits: Caractéristiques
@@ -2009,6 +2030,7 @@ fr:
       address_care_of: Complément d'adresse
       zip_code: CODE POSTAL
       town: Lieu
+      canton: Kanton
       country: Pays
 
   export/tabular/people/jubilare:

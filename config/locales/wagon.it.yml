@@ -315,7 +315,7 @@ it:
         maximum_age: Età massima
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
-        disciplines: Disciplina/e
+        activities: Aktivität(en)
         target_groups: Gruppo/i di riferimento
         fitness_requirement: Requisito condizionale
         fitness_requirement_id: Requisito condizionale
@@ -411,18 +411,18 @@ it:
       event/approval_commission_responsibility:
         freigabe_komitee: Comitato di rilascio
         target_group: Gruppo target
-        discipline: Disciplina
+        activity: Aktivität
         subito: Subito
-      event/discipline:
-        color: Colore
-        label: Designazione
-        short_description: Breve descrizione
-        description: Descrizione del
-        order: Chiave di ordinamento
-        parent_id: Disciplina sovraordinata
-        children: Sottodiscipline
-        updated_at: Modificato
-        deleted_at: Soppresso
+      event/activity:
+        color: Farbe
+        label: Bezeichnung
+        short_description: Kurzbeschreibung
+        description: Beschreibung
+        order: Sortierschlüssel
+        parent_id: Übergeordnete Aktivität
+        children: Unteraktivitäten
+        updated_at: Geändert
+        deleted_at: Gelöscht
       event/approval:
         freigabe_komitee: Comitato di rilascio
         approval_kind: Livello di rilascio
@@ -474,6 +474,12 @@ it:
           payed: Saldata
           cancelled: Stornata
           error: Errore
+        means_of_transport: Anreisemittel
+        means_of_transports:
+          _nil: unbekannt
+          public: ÖV
+          car: Auto
+          legs: Zu Fuss/Velo
         external_invoices: Fatture # uses include CapitalizedDependentErrors
         sac_membership_active?: Membro del SAC
         states:
@@ -487,6 +493,12 @@ it:
           canceled: Annullato
           attended: Partecipato
           absent: Non pubblicato
+      event/report:
+        statuses:
+          draft: Entwurf
+          review: In Freigabe
+          approved: Freigegeben
+          closed: Abgeschlossen
       event/target_group:
         label: Designazione
         short_description: Breve descrizione
@@ -758,11 +770,11 @@ it:
             course_compensation_category_id:
               uniqueness_during_validity_period: può referenziare solo un tasso di retribuzione per periodo di validità.
 
-        event/discipline:
+        event/activity:
           attributes:
             color:
               invalid_hex_color: >-
-                deve essere un valore esadecimale a 6 cifre ammesso che inizia con #
+                muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
         event/participation:
           attributes:
             actual_days:
@@ -771,7 +783,7 @@ it:
         event/approval_commission_responsibility:
           not_in_layer: non è nella stessa sezione/gruppo locale.
           no_base_target_group: non è un gruppo target principale.
-          no_base_discipline: non è una disciplina principale.
+          no_base_activity: ist keine Hauptaktivität.
           combination_exists: ha già definito una responsabilità corrispondente.
 
         group/sektions_touren_und_kurse/tourenleiter:
@@ -814,10 +826,9 @@ it:
         one: Responsabilità Commissione di rilascio
         many: Responsabilità della Commissione di rilascio
         other: Responsabilità della Commissione di rilascio
-      event/discipline:
-        one: Disciplina
-        many: Discipline
-        other: Discipline
+      event/activity:
+        one: Aktivität
+        other: Aktivitäten
       event/fitness_requirement:
         one: Requisito condizionale
         many: Requisiti condizionali
@@ -1568,9 +1579,9 @@ it:
             many: Sono state inviate %{count} e-mail.
             other: Sono state inviate %{count} e-mail.
           warning: Nessuna e-mail è stata inviata poiché non è stato acquisito alcun link al sondaggio.
-    disciplines:
+    activities:
       form:
-        help_inline_color: "Valore esadecimale valido del colore (ad es. #fcba03)"
+        help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
     kinds:
       actions_edit:
         push_down_button: Valori di trasferimento ai corsi
@@ -1734,6 +1745,15 @@ it:
           review: La vostra approvazione è stata salvata.
           approved: "La liberazione è stata salvata, il tour ha ora lo stato <i>Rilasciato</i>."
           draft: Il vostro rifiuto è stato salvato e il tour è stato riportato allo stato di <i>bozza</i>.
+      reports:
+        title: "Tourenrapport (%{status})"
+        form_tabs:
+          status: Status
+          participations: Teilnehmende
+          cost_summary: Kostenübersicht
+        status_fields:
+          editing_status: Bearbeitungsstatus
+        success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:
       application_window: Anmeldefenster
@@ -1742,7 +1762,7 @@ it:
       ics_link: Kalendereintrag (ics)
       application_link: Anmeldelink
       sub_target_groups: Unterzielgruppe(n)
-      sub_disciplines: Unterdisziplin(en)
+      sub_activities: Unteraktivität(en)
       traits: Merkmal(e)
       technical_requirements: Technische Anforderung(en)
       attachments: Anhänge
@@ -1753,6 +1773,7 @@ it:
     actions_show_sac_cas:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
       approval: Rilascio
+      report: Tourenrapport
 
     flash:
       dates_changed: "Il tour %{event_name} è stato aggiornato con successo. Assicuratevi di aver concordato le date di partenza e di arrivo con il vostro comitato del tour."
@@ -1876,7 +1897,7 @@ it:
     tour_essentials:
       title: Fatti salienti
     tour_essential_field:
-      disciplines: Discipline
+      activities: Aktivitäten
       target_groups: Gruppi target
       technical_requirements: Requisiti tecnici
       traits: Caratteristiche
@@ -2007,6 +2028,7 @@ it:
       address_care_of: Suffisso dell'indirizzo
       zip_code: CAP
       town: Posizione
+      canton: Kanton
       country: Paese
 
   export/tabular/people/jubilare:
