@@ -31,7 +31,8 @@ describe Event::ActivitiesController do
       expect(dom).to have_css "th", text: "Geändert"
       expect(dom).to have_css "th", text: "Gelöscht"
       expect(dom).to have_css "td", text: "Wandern"
-      expect(dom).to have_css "td", text: "Wanderweg (Wanderskala)Bergtour (Wanderskala)Schneeschuhwandern (Wanderskala)"
+      expect(dom).to have_css "td",
+        text: "Wanderweg (Wanderskala)Bergtour (Wanderskala)Schneeschuhwandern (Wanderskala)"
     end
 
     it "renders colored circle if color is set" do
