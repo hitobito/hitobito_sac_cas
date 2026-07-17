@@ -17,6 +17,10 @@ describe Export::Xlsx::MitgliederStatistics::SectionEintritte do
     SelfRegistrationReason.all.sort_by(&:text)
   end
 
+  before do
+    travel_to(Time.zone.local(2026, 6, 30))
+  end
+
   def create_role(type = "Mitglied", **attrs)
     Fabricate(
       "Group::SektionsMitglieder::#{type}",

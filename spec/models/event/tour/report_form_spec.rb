@@ -14,7 +14,13 @@ describe Event::Tour::ReportForm do
     Fabricate(Event::Role::Participant.name.to_sym,
       participation: Fabricate(:event_participation, participant: people(:mitglied), event: event)).participation
   end
-  let(:form) { described_class.new(report) }
+  let(:current_user) { people(:admin) }
+  let(:form) { described_class.new(report, current_user) }
+  let(:recipient) { people(:mitglied) }
+
+  it "assigns attributes from report, defaulting status_action to keep" do
+    expect(form.status_action).to eq "keep"
+  end
 
   it "assigns attributes from report" do
     expect(form.review).to eq(report.review)
@@ -88,6 +94,142 @@ describe Event::Tour::ReportForm do
       }
 
       expect(form).not_to be_valid
+    end
+  end
+
+  describe "#possible_mail_recipients" do
+    let(:touren_und_kurse) { groups(:bluemlisalp_touren_und_kurse) }
+    let(:role_attrs) { {start_on: 1.year.ago, end_on: 1.year.from_now} }
+
+    it "includes people with Tourenchef role in the tour's section" do
+      Fabricate(Group::SektionsTourenUndKurse::Tourenchef.name.to_sym,
+        group: touren_und_kurse, person: recipient, **role_attrs)
+
+      expect(form.possible_mail_recipients).to include(recipient)
+    end
+
+    it "excludes people from a different section" do
+      Fabricate(Group::SektionsTourenUndKurse::Tourenchef.name.to_sym,
+        group: groups(:matterhorn_touren_und_kurse), person: recipient, **role_attrs)
+
+      expect(form.possible_mail_recipients).not_to include(recipient)
+    end
+  end
+
+  describe "#assert_mail_recipient_present_when_forwarding" do
+    it "is valid when status_action is keep" do
+      form.status_action = "keep"
+
+      expect(form).to be_valid
+    end
+
+    it "is invalid when forwarding from draft without recipient" do
+      form.status_action = "forward"
+      form.mail_recipient_id = nil
+
+      expect(form).not_to be_valid
+      expect(form.errors[:mail_recipient_id]).to include("muss ausgefüllt werden")
+    end
+
+    it "is valid when forwarding from approved without recipient (no dropdown)" do
+      report.update_columns(submitted_at: 1.day.ago, approved_at: 1.day.ago)
+      form.status_action = "forward"
+      form.mail_recipient_id = nil
+
+      expect(form).to be_valid
+    end
+  end
+
+  describe "#save with status_action" do
+    context "forwarding" do
+      before do
+        form.status_action = "forward"
+        form.mail_recipient_id = recipient.id
+      end
+
+      context "from draft" do
+        it "sets submitted_at and submitter_id" do
+          expect { form.save }
+            .to change { report.reload.submitted_at }.from(nil)
+            .and change { report.reload.submitter_id }.to(current_user.id)
+        end
+
+        it "enqueues submitted email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :submitted)
+        end
+      end
+
+      context "from review" do
+        before { report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id) }
+
+        it "sets approved_at and approver_id" do
+          expect { form.save }
+            .to change { report.reload.approved_at }.from(nil)
+            .and change { report.reload.approver_id }.to(current_user.id)
+        end
+
+        it "enqueues approved email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :approved)
+        end
+      end
+
+      context "from approved" do
+        before do
+          report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
+            approved_at: 1.day.ago, approver_id: recipient.id)
+        end
+
+        it "sets paid_at and payer_id" do
+          expect { form.save }
+            .to change { report.reload.paid_at }.from(nil)
+            .and change { report.reload.payer_id }.to(current_user.id)
+        end
+
+        it "enqueues payout_recorded email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :payout_recorded)
+        end
+      end
+    end
+
+    context "rejecting" do
+      before { form.status_action = "reject" }
+
+      context "from review" do
+        before { report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id) }
+
+        it "clears submitted_at and submitter_id" do
+          expect { form.save }
+            .to change { report.reload.submitted_at }.to(nil)
+            .and change { report.reload.submitter_id }.to(nil)
+        end
+
+        it "enqueues rejected email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :rejected)
+        end
+      end
+
+      context "from approved" do
+        before do
+          report.update_columns(submitted_at: 1.day.ago, submitter_id: recipient.id,
+            approved_at: 1.day.ago, approver_id: recipient.id)
+        end
+
+        it "clears approved_at and approver_id" do
+          expect { form.save }
+            .to change { report.reload.approved_at }.to(nil)
+            .and change { report.reload.approver_id }.to(nil)
+        end
+
+        it "enqueues payout_rejected email" do
+          expect { form.save }.to have_enqueued_mail(Event::TourReportMailer, :payout_rejected)
+        end
+      end
+    end
+
+    it "does not enqueue email when keeping status" do
+      form.status_action = "keep"
+
+      expect { form.save }.not_to have_enqueued_mail(Event::TourReportMailer)
     end
   end
 

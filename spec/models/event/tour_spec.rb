@@ -462,6 +462,7 @@ describe Event::Tour do
 
     before do
       tour.update_column(:state, :ready)
+      tour.report&.update_column(:paid_at, Time.zone.now)
     end
 
     it "updates participation state from summoned to attended" do
@@ -862,6 +863,28 @@ describe Event::Tour do
     it "is false when any approval has a freigabe_komitee" do
       tour.approvals.build(freigabe_komitee_id: 42)
       expect(tour).not_to be_self_approved
+    end
+  end
+
+  describe "#assert_report_closed_when_tour_closes" do
+    before { tour.update_column(:state, :ready) }
+
+    it "blocks closing when report exists but is not closed" do
+      expect(tour.update(state: :closed)).to be false
+      expect(tour.errors[:base]).to include("Tourenrapport muss vorgängig abgeschlossen werden")
+    end
+
+    it "allows closing when report is closed" do
+      tour.report.update_column(:paid_at, Time.zone.now)
+
+      expect(tour.update(state: :closed)).to be true
+    end
+
+    it "blocks closing when no report exists" do
+      tour.report.destroy
+      tour.reload
+
+      expect(tour.update(state: :closed)).to be false
     end
   end
 

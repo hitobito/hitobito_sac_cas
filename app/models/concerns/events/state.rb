@@ -77,4 +77,8 @@ module Events::State
   def state_changed_to?(new_state)
     saved_change_to_state?(to: new_state.to_s)
   end
+
+  def will_change_state_to?(new_state)
+    will_save_change_to_state? && state == new_state.to_s
+  end
 end
