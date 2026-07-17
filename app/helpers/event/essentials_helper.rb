@@ -7,7 +7,11 @@
 
 module Event::EssentialsHelper
   def format_event_activity_children(entry)
-    format_event_essentials_children(entry.children)
+    format_event_essentials_children(entry.children) do |val|
+      item = assoc_link(val)
+      item += " (#{val.technical_requirement})" if val.technical_requirement
+      item
+    end
   end
 
   def format_event_target_group_children(entry)
@@ -26,7 +30,7 @@ module Event::EssentialsHelper
     return ta(:no_entry) if children.blank?
 
     simple_list(children) do |val|
-      item = assoc_link(val)
+      item = block_given? ? yield(val) : assoc_link(val)
       if val.deleted_at
         item += " (#{t("global.deleted_at", date: format_column(:datetime, val.deleted_at))})"
       end

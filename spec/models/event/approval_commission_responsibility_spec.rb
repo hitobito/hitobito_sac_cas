@@ -88,7 +88,9 @@ describe Event::ApprovalCommissionResponsibility do
       Fabricate(Group::FreigabeKomitee.sti_name.to_sym, parent: touren_und_kurse, layer_group_id: bluemlisalp.id)
     end
     let(:klettern) { event_activities(:klettern) }
+    let(:felsklettern) { event_activities(:felsklettern) }
     let(:hochtour) { event_activities(:hochtour) }
+    let(:skihochtour) { event_activities(:skihochtour) }
     let(:familien) { event_target_groups(:familien) }
     let(:senioren) { event_target_groups(:senioren) }
 
@@ -189,7 +191,7 @@ describe Event::ApprovalCommissionResponsibility do
       assign_approval_commission_responsibility(activity: klettern, target_group: familien,
         freigabe_komitee: freigabe_komitee_a)
 
-      activities = [klettern]
+      activities = [felsklettern]
       target_groups = [familien]
       tour = create_tour(activities:, target_groups:)
 
@@ -220,7 +222,7 @@ describe Event::ApprovalCommissionResponsibility do
 
   def create_tour(**attrs)
     Fabricate(:sac_tour, attrs.reverse_merge(
-      activities: [hochtour, klettern],
+      activities: [skihochtour, felsklettern],
       target_groups: [familien, senioren],
       technical_requirements: [event_technical_requirements(:klettern)],
       fitness_requirement: event_fitness_requirements(:a),

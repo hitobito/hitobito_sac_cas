@@ -137,6 +137,7 @@ class Event::Tour < Event
     presence: {if: -> { state_reached?(:published) && !canceled? }}
 
   validate :assert_duration_valid?
+  validate :assert_technical_requirements_match_activities
 
   ### CALLBACKS
 
@@ -200,6 +201,17 @@ class Event::Tour < Event
   def assert_duration_valid?
     unless ::HoursDuration.new(duration).valid?
       errors.add(:duration_in_hours, :invalid)
+    end
+  end
+
+  def assert_technical_requirements_match_activities
+    main_ids = activities.map(&:technical_requirement_id).compact
+    allowed_technical_requirement_ids = Event::TechnicalRequirement.where(id: main_ids)
+      .or(Event::TechnicalRequirement.where(parent_id: main_ids))
+      .pluck(:id)
+
+    unless (technical_requirement_ids - allowed_technical_requirement_ids).empty?
+      errors.add(:technical_requirements, :not_matching_activities)
     end
   end
 

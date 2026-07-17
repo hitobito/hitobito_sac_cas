@@ -24,4 +24,5 @@ class Event::TechnicalRequirement < ActiveRecord::Base
   include NestableTourEssential
 
   has_and_belongs_to_many :events, join_table: "events_technical_requirements"
+  has_many :activities, dependent: :nullify
 end

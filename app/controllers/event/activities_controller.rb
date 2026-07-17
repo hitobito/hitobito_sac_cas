@@ -10,7 +10,7 @@ class Event::ActivitiesController < Event::NestableTourEssentialsController
     label: "event_activity_translations.label"
   }
 
-  self.permitted_attrs += [:color]
+  self.permitted_attrs += [:color, :technical_requirement_id]
 
   def show
     redirect_to edit_event_activity_path(entry)

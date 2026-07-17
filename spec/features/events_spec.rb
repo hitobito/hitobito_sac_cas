@@ -361,12 +361,11 @@ describe :events, js: true do
           expect(page).to have_selector(".ts-control .item", text: "T4")
 
           find(".ts-control input").click
-          expect(page).to have_selector(".ts-dropdown .optgroup", count: Event::TechnicalRequirement.main.count)
-          expect(page).to have_selector(".ts-dropdown .option",
-            count: Event::TechnicalRequirement.where.not(parent: nil).count - 2) # 2 already selected
+          expect(page).to have_selector(".ts-dropdown .optgroup", count: 2)
+          expect(page).to have_selector(".ts-dropdown .option", count: 35)
 
-          find(".ts-dropdown .option", text: "WS").click
-          expect(page).to have_selector(".ts-control .item", text: "WS")
+          find(".ts-dropdown .option", text: "4c").click
+          expect(page).to have_selector(".ts-control .item", text: "4c")
 
           # close dropdown again
           find(".ts-control input").click
@@ -411,7 +410,7 @@ describe :events, js: true do
         expect(page).to have_content("A - nicht anstrengend")
 
         expect(page).to have_css("li", text: "Wanderskala: T3, T4")
-        expect(page).to have_css("li", text: "Skitourenskala: WS")
+        expect(page).to have_css("li", text: "Kletterskala: 4c")
 
         expect(page).to have_css("dd", text: "Anreise mit ÖV, Arbeitseinsatz, Exkursion")
 
@@ -419,9 +418,68 @@ describe :events, js: true do
         expect(event.activities).to match_array(event_activities(:wanderweg, :felsklettern))
         expect(event.target_groups).to match_array(event_target_groups(:kinder, :senioren_b))
         expect(event.technical_requirements)
-          .to match_array(event_technical_requirements(:wandern_t3, :wandern_t4, :skitouren_ws))
+          .to match_array(event_technical_requirements(:wandern_t3, :wandern_t4, :klettern_4c))
         expect(event.fitness_requirement).to eq(event_fitness_requirements(:a))
         expect(event.traits).to match_array(event_traits(:public_transport, :excursion, :work))
+      end
+
+      it "adds options to technical requirment tom select if activity is added" do
+        event.update!(state: :draft)
+        visit edit_group_event_path(group_id: event.group_ids.first, id: event.id)
+
+        within("#event_technical_requirement_ids + .ts-wrapper") do
+          find(".ts-control input").click
+          expect(page).to have_no_selector(".optgroup-header", text: "Französische Kletterskala")
+          page.send_keys(:escape)
+        end
+
+        within("#event_activity_ids + .ts-wrapper") do
+          find(".ts-control input").click
+          expect(page).to have_selector(".option", text: "Fels")
+          find(".ts-dropdown .option", text: "Fels").click
+          page.send_keys(:escape)
+        end
+
+        within("#event_technical_requirement_ids + .ts-wrapper") do
+          find(".ts-control input").click
+          expect(page).to have_selector(".optgroup-header", text: "Französische Kletterskala")
+          expect(page).to have_selector(".option", text: "9a")
+        end
+      end
+
+      it "removes options from technical requirment tom select if activity is removed" do
+        event.update!(state: :draft)
+        event.activities << event_activities(:felsklettern)
+        event.technical_requirements << event_technical_requirements(:klettern_9a)
+        visit edit_group_event_path(group_id: event.group_ids.first, id: event.id)
+
+        within("#event_technical_requirement_ids + .ts-wrapper") do
+          expect(page).to have_selector(".item", count: 3)
+          expect(page).to have_selector(".item", text: "T3")
+          expect(page).to have_selector(".item", text: "T4")
+          expect(page).to have_selector(".item", text: "9a")
+        end
+
+        # remove felsklettern activity
+        within("#event_activity_ids + .ts-wrapper") do
+          find(".ts-control .item:nth-child(2) .remove").click
+        end
+
+        within("#event_technical_requirement_ids + .ts-wrapper") do
+          find(".ts-control input").click
+
+          expect(page).to have_no_selector(".item", text: "9a")
+
+          expect(page).to have_no_selector(".optgroup-header", text: "Französische Kletterskala")
+          expect(page).to have_no_selector(".option", text: "9a")
+
+          # other options from other activity
+          expect(page).to have_selector(".item", text: "T3")
+          expect(page).to have_selector(".item", text: "T4")
+
+          expect(page).to have_selector(".optgroup-header", text: "Wanderskala")
+          expect(page).to have_selector(".option", text: "T1")
+        end
       end
     end
   end

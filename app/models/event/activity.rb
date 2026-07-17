@@ -25,14 +25,26 @@ class Event::Activity < ActiveRecord::Base
   include Events::ApprovalCommissionResponsibilityComponents
 
   has_and_belongs_to_many :events, join_table: "events_activities"
+  belongs_to :technical_requirement
 
   validates :description, presence: true
   validates :color, format: {with: /\A#[A-Fa-f0-9]{6}\Z/, message: :invalid_hex_color},
     allow_blank: true
+  validates :color, absence: true, unless: :main?
+  validates :technical_requirement_id, absence: true, if: :main?
+  validate :assert_technical_requirement_is_main
 
   after_commit :create_approval_commission_responsibilities, if: :main?, on: :create
 
   def create_approval_commission_responsibilities
     Event::CreateApprovalCommissionResponsibilitiesJob.new(activity: self).enqueue!
+  end
+
+  private
+
+  def assert_technical_requirement_is_main
+    return unless technical_requirement
+
+    errors.add(:technical_requirement_id, :must_be_main) unless technical_requirement.main?
   end
 end

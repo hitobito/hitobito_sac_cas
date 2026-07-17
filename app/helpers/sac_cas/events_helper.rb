@@ -74,6 +74,15 @@ module SacCas::EventsHelper
     end.to_json
   end
 
+  def activity_select_options(activities)
+    activities.select(&:main?).flat_map do |main|
+      activities.select { |d| d.parent_id == main.id }.map do |child|
+        {id: child.id, label: child.to_s, description: child.short_description, group: main.id,
+         technicalRequirementId: child.technical_requirement_id}
+      end
+    end.to_json
+  end
+
   def tour_essentials_grouped_select_optgroups(entries)
     entries.select(&:main?).flat_map do |main|
       color = main.color if main.respond_to?(:color)
