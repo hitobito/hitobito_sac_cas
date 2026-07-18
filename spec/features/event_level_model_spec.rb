@@ -16,8 +16,10 @@ describe "event_level model", js: true do
     sign_in(admin)
     visit root_path
 
-    click_on "Einstellungen"
-    click_on "Kursstufen"
+    within("nav.nav-left") do
+      click_on "Einstellungen"
+      click_on "Kursstufen"
+    end
     click_on "Erstellen"
 
     fill_in "Code", with: "1"
