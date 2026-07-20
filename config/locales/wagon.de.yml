@@ -507,6 +507,14 @@ de:
           review: In Freigabe
           approved: Freigegeben
           closed: Abgeschlossen
+      event/cost:
+        description: Bezeichnung
+        count: Anzahl
+        amount: Betrag
+        total: Total
+      event/cost_receipt:
+        description: Beschreibung
+        file: Datei
       event/target_group:
         label: Bezeichnung
         short_description: Kurzbeschreibung
@@ -1730,6 +1738,11 @@ de:
           draft: Deine Ablehnung wurde gespeichert und die Tour zurück in den Status <i>Entwurf</i> gesetzt.
       reports:
         title: Tourenrapport (%{status})
+        cost_summary_fields:
+          revenues: Einnahmen
+          add_tour_fees: Tourengebühren hinzufügen
+          expenses: Ausgaben
+          receipts: Belege
         form_tabs:
           status: Status
           participations: Teilnehmende

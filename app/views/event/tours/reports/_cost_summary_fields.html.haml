@@ -2,3 +2,14 @@
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
+
+= field_set_tag(t(".revenues")) do
+  %div{data: {controller: "sac--prefill-revenues", "sac--prefill-revenues-url-value": prefill_revenues_group_event_report_path(@group, @event)}}
+    = f.button t(".add_tour_fees"), type: :button, data: {action: "click->sac--prefill-revenues#prefill"}, class: "btn btn-sm btn-outline-primary mb-3"
+    = render "event/tours/reports/cost_table_fields", f: f, entries: entry.revenues, cost_type: :revenues
+
+= field_set_tag(t(".expenses")) do
+  = render "event/tours/reports/cost_table_fields", f: f, entries: entry.expenses, cost_type: :expenses
+
+= field_set_tag(t(".receipts")) do
+  = render "event/tours/reports/receipt_table_fields", f: f, entries: entry.receipts

@@ -14,3 +14,8 @@ sac_membership_logo_icon_de:
   name: logo_icon_de
   record: sac_membership (PassDefinition)
   blob: sac_membership_logo_icon_de_blob
+
+tankstelle_file:
+  name: file
+  record: tankstelle (Event::CostReceipt)
+  blob: tankstelle_file_blob

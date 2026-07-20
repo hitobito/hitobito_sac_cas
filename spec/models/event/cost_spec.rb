@@ -33,4 +33,22 @@ describe Event::Cost do
       expect(event_cost).not_to be_valid
     end
   end
+
+  describe "#total" do
+    it "calculates total of amount and count" do
+      expect(event_cost.total).to eq 300
+    end
+
+    it "is zero when amount is nil" do
+      event_cost.amount = nil
+
+      expect(event_cost.total).to be_zero
+    end
+
+    it "is zero when count is nil" do
+      event_cost.count = nil
+
+      expect(event_cost.total).to be_zero
+    end
+  end
 end

@@ -1,0 +1,62 @@
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas
+
+.d-none.d-xl-flex.border-bottom.row.fw-bold
+  .col-xl-4= Event::Cost.human_attribute_name(:description)
+  .col-xl-3= Event::Cost.human_attribute_name(:count)
+  .col-xl-3= Event::Cost.human_attribute_name(:amount)
+  .col-xl-1= Event::Cost.human_attribute_name(:total)
+
+.nested-form{data: {controller: "nested-form field-addition", nested_form_assoc_value: cost_type, action: "field-multiplication:recalculated->field-addition#recalculate nested-form:remove->field-addition#recalculate"}}
+  %div{id: "#{cost_type}_fields"}
+    - entries.each do |record|
+      .fields{data: {controller: "field-multiplication"}}
+        = f.fields_for :"#{cost_type}_attributes", record, index: record.id do |ff|
+          .border-bottom.row.py-2
+            .col-xl-4
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:description)
+              = ff.input_field :description
+            .col-xl-3
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:count)
+              - formatted_count = format("%g", ff.object.count) if ff.object.count
+              = ff.input_field :count, step: 1, value: formatted_count, data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}
+            .col-xl-3
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:amount)
+              = ff.input_field :amount, step: 0.05, data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}
+            .col-xl-1
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:total)
+              %span{data: {field_multiplication_target: "result", field_addition_target: "source"}}= format("%.2f", record.total)
+            .col-xl-1
+              = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove" })
+
+          = ff.hidden_field :id
+          = ff.hidden_field :_destroy
+    %div{data: {nested_form_target: "target"}}
+
+  .controls.mt-3
+    .row
+      .col-xl-2= link_to t("global.associations.add"), "javascript:void(0)", data: {action: "nested-form#add"}
+      .col-xl-8.text-xl-end.fw-bold= Event::Cost.human_attribute_name(:total)
+      .col-xl-1.fw-bold{id: "#{cost_type}_total", data: {field_addition_target: "result"}}= entries.sum(&:total)
+    %template{data: {nested_form_target: "template"}}
+      .fields{data: {new_record: true, controller: "field-multiplication"}}
+        = f.fields_for :"#{cost_type}_attributes", Event::Cost.new, index: "NEW_#{cost_type.to_s.upcase}_RECORD" do |ff|
+          .border-bottom.row.py-2
+            .col-xl-4
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:description)
+              = ff.input_field :description
+            .col-xl-3
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:count)
+              = ff.input_field :count, step: 1, data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}
+            .col-xl-3
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:amount)
+              = ff.input_field :amount, step: 0.05, data: {field_multiplication_target: "source", action: "input->field-multiplication#recalculate"}
+            .col-xl-1
+              .d-xl-none.muted= Event::Cost.human_attribute_name(:total)
+              %span{data: {field_multiplication_target: "result", field_addition_target: "source"}} 0.00
+            .col-xl-1
+              = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: { action: "nested-form#remove" })
+          = ff.hidden_field :id
+          = ff.hidden_field :_destroy

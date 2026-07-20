@@ -89,6 +89,55 @@ describe Event::Tours::ReportsController do
         expect(participation.reload.state).to eq "attended"
       end
 
+      it "updates revenues" do
+        put :update, params: params.merge(
+          event_tour_report_form: {
+            revenues_attributes: {
+              "0" => {
+                id: event_costs(:participation_fee).id,
+                description: "We made moneyyyyyyy",
+                count: "5",
+                amount: "100"
+              }
+            }
+          }
+        )
+
+        expect(event_costs(:participation_fee).reload.description).to eq "We made moneyyyyyyy"
+      end
+
+      it "updates expenses" do
+        put :update, params: params.merge(
+          event_tour_report_form: {
+            expenses_attributes: {
+              "0" => {
+                id: event_costs(:transport).id,
+                description: "Spent it all again sadly...",
+                count: "3",
+                amount: "200"
+              }
+            }
+          }
+        )
+
+        expect(event_costs(:transport).reload.description).to eq "Spent it all again sadly..."
+      end
+
+      it "updates receipts" do
+        put :update, params: params.merge(
+          event_tour_report_form: {
+            receipts_attributes: {
+              "0" => {
+                id: event_cost_receipts(:tankstelle).id,
+                description: "At least we have a receipt for it"
+              }
+            }
+          }
+        )
+
+        expect(event_cost_receipts(:tankstelle).reload.description).to eq "At least we have a receipt for it"
+      end
+
       it "returns unprocessable_content when updating invalid state" do
         participation.update_columns(state: "summoned")
 
