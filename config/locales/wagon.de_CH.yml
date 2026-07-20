@@ -80,6 +80,8 @@ de_CH:
         approved_at: Freigegeben am
         payer_id: Ausbezahlt von
         paid_at: Ausbezahlt am
+        status_action: Aktion
+        mail_recipient_id: E-Mail Empfänger/-in
       people/export/alps_recipients_form:
         reference_date: Stichtag
         new_entries_from: Neueintritte ab
@@ -419,6 +421,7 @@ de_CH:
         order: Sortierschlüssel
         parent_id: Übergeordnete Aktivität
         children: Unteraktivitäten
+        technical_requirement_id: Technische Anforderung
         updated_at: Geändert
         deleted_at: Gelöscht
       event/approval:
@@ -762,6 +765,7 @@ de_CH:
         has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
+
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
@@ -772,10 +776,18 @@ de_CH:
             color:
               invalid_hex_color: >-
                 muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
+            technical_requirement_id:
+              must_be_main: muss eine Hauptanforderung sein
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: darf nicht länger als geplante Kursdauer sein.
+        event/tour:
+          attributes:
+            technical_requirements:
+              not_matching_activities: müssen zu den ausgewählten Aktivitäten gehören
+            base:
+              report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
 
         event/approval_commission_responsibility:
           not_in_layer: ist nicht in der gleichen Sektion/Ortsgruppe.
@@ -1686,6 +1698,15 @@ de_CH:
           cost_summary: Kostenübersicht
         status_fields:
           editing_status: Bearbeitungsstatus
+          status_change: Statuswechsel
+          status_action: Aktion
+          keep: Status nicht ändern
+          reject: Ablehnen
+          forward:
+            draft: Zur Freigabe einreichen an
+            review: Zur Auszahlung freigeben an
+            approved: Auszahlung erfasst
+          recipient_id: Person
         success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:
