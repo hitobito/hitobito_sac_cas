@@ -54,15 +54,20 @@ class Event::Tour::ReportForm
     captured_recipients = capture_mail_recipients(original_status)
 
     success = report.transaction do
-      unless report.update(review:, remarks:) &&
-          save_participations && apply_status_change(original_status) && save_cost_records
-        raise ActiveRecord::Rollback
-      end
+      raise ActiveRecord::Rollback unless save_entry(original_status)
+
       true
     end
 
     deliver_status_emails(original_status, captured_recipients) if success
     success
+  end
+
+  def save_entry(original_status)
+    report.update(review:, remarks:) &&
+      save_participations &&
+      apply_status_change(original_status) &&
+      save_cost_records
   end
 
   def tour_completed?
