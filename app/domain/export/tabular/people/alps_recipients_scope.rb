@@ -95,16 +95,24 @@ module Export::Tabular::People
         <<-SQL.squish,
           (roles.type = :mitglied_type AND
            (roles.beitragskategorie <> :beitragskategorie OR people.sac_family_main_person) AND
-           (subscriptions.mailing_list_id IS NULL OR
-             subscriptions.mailing_list_id <> :mailing_list_id OR
-             NOT subscriptions.excluded)) OR
+           NOT people.id IN (:excluded_from_mailing_list)) OR
           roles.type IN (:abonnent_types)
         SQL
         mitglied_type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name),
         beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY,
-        mailing_list_id: sac_magazine_mailing_list_id,
+        excluded_from_mailing_list:,
         abonnent_types: SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
       ]
+    end
+
+    def excluded_from_mailing_list
+      Subscription
+        .where(
+          mailing_list_id: sac_magazine_mailing_list_id,
+          excluded: true,
+          subscriber_type: "Person"
+        )
+        .select(:subscriber_id)
     end
 
     def language_condition(lang, abo_group_ids)
