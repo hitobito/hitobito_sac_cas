@@ -45,6 +45,30 @@ describe People::MembershipInvoicesController do
       expect(dom).to have_css(".hidden[data-field-visibility-target=container]")
     end
 
+    context "for family member with individual zusatzsektion neuanmeldung" do
+      let(:person) { people(:familienmitglied2) }
+
+      before do
+        roles(:familienmitglied2_zweitsektion).destroy
+        Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
+          person: person,
+          group: groups(:matterhorn_neuanmeldungen_nv),
+          beitragskategorie: :adult,
+          start_on: Date.current.beginning_of_year,
+          end_on: Date.current.end_of_year)
+      end
+
+      it "renders without error when stammsektion is nil due to select_paying filter" do
+        get :new, params: params.except(:people_membership_invoice_form)
+
+        expect(response).to have_http_status(200)
+
+        expect(dom).not_to have_text("MV-Jahresrechnung")
+        expect(dom).to have_checked_field("Zusatzsektions-Eintrittsrechnung Sektion")
+        expect(dom).to have_unchecked_field("Manuelle Differenzrechnung")
+      end
+    end
+
     context "only neuanmeldung for stammsektion" do
       let(:person) do
         person = Fabricate(:person, birthday: 42.years.ago)
