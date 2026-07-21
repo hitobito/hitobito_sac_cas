@@ -76,6 +76,14 @@ class People::Membership::InvoiceForm
     select_paying(neuanmeldung_nv_zusatzsektion_roles + zusatzsektion_roles).map(&:layer_group)
   end
 
+  def preselected_sektion
+    ([stammsektion] + zusatzsektionen).compact.first
+  end
+
+  def preselect_sektion?(section)
+    preselected_sektion.id == section.id
+  end
+
   def select_paying(roles)
     roles.compact.select { |role| sac_membership.paying_person?(role.beitragskategorie) }
   end

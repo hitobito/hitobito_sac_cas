@@ -30,11 +30,12 @@
 
     = f.labeled(:section_id) do
       %div{id: "section_id_group"}
-        = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true, data: { "show-discount": true }
+        - if @invoice_form.stammsektion
+          = f.inline_radio_button :section_id, @invoice_form.stammsektion.id, t(".mv_yearly_invoice"), true, checked: true, data: { "show-discount": true }
 
         - @invoice_form.zusatzsektionen.each do |section|
           %div
-            = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: false, data: { "show-discount": true }
+            = f.inline_radio_button :section_id, section.id, "#{t(".zusatzsektion_eintrittsrechnung")} #{section.name}", false, checked: @invoice_form.preselect_sektion?(section), data: { "show-discount": true }
 
         - if @person.sac_membership.active?
           = f.inline_radio_button :section_id, 0, t(".manual_positions"), false, checked: false
