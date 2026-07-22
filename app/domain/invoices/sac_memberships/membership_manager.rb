@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 # Creates/extends sac memberships after membership invoice has been paid.
+# rubocop:disable Metrics/ClassLength
 class Invoices::SacMemberships::MembershipManager
   attr_reader :person, :group, :year, :member, :today, :end_of_year
 
@@ -40,9 +41,62 @@ class Invoices::SacMemberships::MembershipManager
   private
 
   def extend_membership_duration
+    if person.sac_family_main_person?
+      extend_main_person_roles
+      extend_paid_family_member_zusatzsektion_roles
+    elsif non_main_family_member?
+      extend_non_main_family_member_roles
+    else
+      extend_main_person_roles
+    end
+  end
+
+  def non_main_family_member?
+    membership = People::SacMembership.new(
+      person,
+      date: reference_date(person.sac_membership.stammsektion_role)
+    )
+
+    membership.family? && !person.sac_family_main_person?
+  end
+
+  def extend_non_main_family_member_roles
+    capped_end_on = [
+      end_of_year,
+      person.sac_membership.stammsektion_role.end_on
+    ].compact.min
+
+    extend_non_family_roles(person, capped_end_on)
+  end
+
+  def extend_paid_family_member_zusatzsektion_roles
+    person.household_people
+      .reject { |family_member| family_member == person }
+      .reject { |family_member| !paid_membership_invoice?(family_member) }
+      .each do |family_member|
+        extend_non_family_roles(family_member, end_of_year)
+      end
+  end
+
+  def extend_main_person_roles
     relevant_roles_for(person.sac_membership.stammsektion_role).each do |role|
       role.update!(end_on: [end_of_year, role.end_on].compact.max)
     end
+  end
+
+  def extend_non_family_roles(member, new_end)
+    member.sac_membership.zusatzsektion_roles
+      .reject(&:terminated?)
+      .reject { |r| r.beitragskategorie.family? }
+      .each do |role|
+        role.update!(end_on: [new_end, role.end_on].compact.max)
+      end
+  end
+
+  def paid_membership_invoice?(person)
+    ExternalInvoice::SacMembership.payed
+      .where(person: person, year: year)
+      .exists?
   end
 
   def create_new_membership_roles
@@ -261,3 +315,4 @@ class Invoices::SacMemberships::MembershipManager
     )
   end
 end
+# rubocop:enable Metrics/ClassLength
