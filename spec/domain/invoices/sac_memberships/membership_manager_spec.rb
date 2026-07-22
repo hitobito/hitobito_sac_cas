@@ -152,7 +152,129 @@ describe Invoices::SacMemberships::MembershipManager do
 
       it "only updates own roles when no family main person" do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
-        expect(updated_roles_count).to eq(5)
+        # Non-main person with only family-type roles has no non-family zusatzsektion
+        # to extend, so no roles are updated (main person handles family role extension)
+        expect(updated_roles_count).to eq(0)
+      end
+
+      context "family member with einzel zusatzsektion pays before stammsektion" do
+        before do
+          # Give familienmitglied2 an individual (adult) zusatzsektion instead of family.
+          # Use update_all to bypass attr_readonly on beitragskategorie.
+          Group::SektionsMitglieder::MitgliedZusatzsektion
+            .where(id: familienmitglied2_zweitsektion.id)
+            .update_all(beitragskategorie: "adult")
+          familienmitglied2_zweitsektion.reload
+        end
+
+        context "non-main family member pays invoice first" do
+          subject { described_class.new(familienmitglied2_person, bluemlisalp, next_year) }
+
+          it "caps zusatzsektion (Einzel) at stammsektion end_on, does not extend to end_of_year" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            einzel_role = familienmitglied2_person.sac_membership.zusatzsektion_roles.first
+            expect(einzel_role.end_on).to eq prolongation_date
+            expect(einzel_role.end_on).not_to eq end_of_next_year
+          end
+
+          it "does not extend stammsektion (Familie) role" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            expect(familienmitglied2_person.sac_membership.stammsektion_role.end_on)
+              .to eq prolongation_date
+          end
+
+          it "does not extend prolongable roles (capped at stammsektion end_on)" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            familienmitglied2_person.sac_membership.membership_prolongable_roles.each do |role|
+              expect(role.end_on).to eq prolongation_date
+            end
+          end
+        end
+
+        context "main person pays stammsektion after family member already paid" do
+          subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
+
+          before do
+            # Create paid external invoice for the family member
+            Fabricate(:sac_membership_invoice,
+              person: familienmitglied2_person,
+              link: bluemlisalp,
+              year: next_year,
+              state: :payed,
+              total: 100)
+
+            # Simulate zusatzsektion was capped at stammsektion end_on
+            familienmitglied2_zweitsektion.update!(end_on: prolongation_date)
+          end
+
+          it "extends family member's zusatzsektion (Einzel) to end_of_year" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            einzel_role = familienmitglied2_person.sac_membership.zusatzsektion_roles.first
+            expect(einzel_role.end_on).to eq end_of_next_year
+          end
+        end
+
+        context "multiple family members with einzel, some paid some not" do
+          subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
+
+          before do
+            # familienmitglied2 has paid Einzel (from outer before)
+            Fabricate(:sac_membership_invoice,
+              person: familienmitglied2_person,
+              link: bluemlisalp,
+              year: next_year,
+              state: :payed,
+              total: 100)
+            familienmitglied2_zweitsektion.update!(end_on: prolongation_date)
+
+            # familienmitglied_kind has Einzel but no paid invoice
+            # Use update_all to bypass attr_readonly on beitragskategorie
+            Group::SektionsMitglieder::MitgliedZusatzsektion
+              .where(id: familienmitglied_kind_zweitsektion.id)
+              .update_all(beitragskategorie: "adult", end_on: prolongation_date)
+            familienmitglied_kind_zweitsektion.reload
+          end
+
+          it "extends paid family member's zusatzsektion to end_of_year" do
+            subject.update_membership_status
+
+            expect(familienmitglied2_person.reload.sac_membership
+              .zusatzsektion_roles.first.end_on).to eq end_of_next_year
+          end
+
+          it "does not extend unpaid family member's zusatzsektion" do
+            subject.update_membership_status
+
+            expect(familienmitglied_kind_person.reload.sac_membership
+              .zusatzsektion_roles.first.end_on).to eq prolongation_date
+          end
+        end
+
+        context "family member pays after stammsektion already renewed" do
+          subject { described_class.new(familienmitglied2_person, bluemlisalp, next_year) }
+
+          before do
+            # Simulate stammsektion was already renewed
+            familienmitglied2.update!(end_on: end_of_next_year)
+            familienmitglied2_person.reload
+          end
+
+          it "extends zusatzsektion (Einzel) normally to end_of_year" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            einzel_role = familienmitglied2_person.sac_membership.zusatzsektion_roles.first
+            expect(einzel_role.end_on).to eq end_of_next_year
+          end
+        end
       end
 
       context "running in the previous role period (household still exists)" do
