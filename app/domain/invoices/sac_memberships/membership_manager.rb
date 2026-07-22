@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -49,7 +49,12 @@ class Invoices::SacMemberships::MembershipManager
     restore_household if restore_household?
 
     relevant_roles_for(expired_stammsektion_role).each do |previous_role|
-      create_new_role(previous_role.person, previous_role.type.constantize, previous_role.group)
+      create_new_role(
+        previous_role.person,
+        previous_role.type.constantize,
+        previous_role.group,
+        beitragskategorie: previous_role.beitragskategorie
+      )
     end
   end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -346,7 +346,7 @@ describe Invoices::SacMemberships::MembershipManager do
           .and change { familienmitglied_kind_person.reload.sac_membership.zusatzsektion_roles.count }.by(0)
       end
 
-      it "only creates zusatzsektions role of family member when beitragskategorie is family" do
+      it "only creates zusatzsektion role of family member when beitragskategorie is family" do
         # add role with adult beitragskategorie to family mitglied2
         People::SacMembership.new(familienmitglied2_person, date: Date.new(next_year, 1, 1))
           .zusatzsektion_roles
@@ -361,6 +361,24 @@ describe Invoices::SacMemberships::MembershipManager do
           subject.update_membership_status
         end.to change { Role.count }.by(14)
           .and change { familienmitglied2_person.sac_membership.zusatzsektion_roles.count }.by(0)
+      end
+
+      it "preserves individual beitragskategorie for main person's zusatzsektion role" do
+        familienmitglied_zweitsektion.really_destroy!
+        Group::SektionsMitglieder::MitgliedZusatzsektion.create!(
+          person: familienmitglied_person,
+          group: groups(:matterhorn_mitglieder),
+          beitragskategorie: :adult, # not: family
+          start_on: Date.new(next_year, 1, 1),
+          end_on: prolongation_date
+        )
+
+        expect do
+          subject.update_membership_status
+
+          new_role = familienmitglied_person.reload.sac_membership.zusatzsektion_roles.first
+          expect(new_role.beitragskategorie).to eq "adult"
+        end.to change { Role.count }.by(15)
       end
 
       it "restores the household" do
