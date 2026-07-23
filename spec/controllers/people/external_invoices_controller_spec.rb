@@ -125,9 +125,12 @@ describe People::ExternalInvoicesController do
           invoice.update!(state: "open", abacus_sales_order_key: "1234")
         end
 
-        it "does not show the cancellation button" do
-          invoice
-          expect(ExternalInvoice.where(person_id: person.id).count).to eq(1)
+        let(:section_admin) do
+          Fabricate(
+            Group::SektionsFunktionaere::Administration.sti_name,
+            group: groups(:bluemlisalp_funktionaere)
+          ).person
+        end
 
         let(:cancel_path) { cancel_external_invoices_group_people_group_person_path(group_id, person.id, invoice.id) }
 
@@ -138,8 +141,11 @@ describe People::ExternalInvoicesController do
           end
         end
 
-        it "shows the cancellation button" do
-          invoice.update(state: "open", abacus_sales_order_key: "1234")
+        it "is missing if not authorized" do
+          sign_in(section_admin)
+          get :index, params: {group_id: group_id, id: person.id}
+          expect(response.body).not_to have_text "Stornieren"
+        end
 
         it "is missing if invoice is cancelleded" do
           invoice.update!(state: "cancelled")

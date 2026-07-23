@@ -13,7 +13,7 @@
     %strong= invoice.title
   - t.sortable_attrs(:state, :abacus_sales_order_key, :total, :issued_at, :created_at, :updated_at)
   - t.col('') do |invoice|
-    - if invoice.cancellable?
+    - if invoice.cancellable? && can?(:cancel_external_invoice, invoice)
       = action_button(t('.cancel_invoice'),
                   cancel_external_invoices_group_people_group_person_path(@group, @person, invoice),
                   :ban,
