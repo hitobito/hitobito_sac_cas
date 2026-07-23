@@ -1,0 +1,23 @@
+.col
+  %h2= t("admins.show.cost_accounting")
+  %ul.container
+    - if can?(:index, CostCenter)
+      %li= link_to CostCenter.model_name.human(count: 2), cost_centers_path
+    - if can?(:index, CostUnit)
+      %li= link_to CostUnit.model_name.human(count: 2), cost_units_path
+
+.col
+  %h2= t("admins.show.tours")
+  %ul.container
+    - if can?(:index, Event::Activity)
+      %li= link_to Event::Activity.model_name.human(count: 2), event_activities_path
+    - if can?(:index, Event::TargetGroup)
+      %li= link_to Event::TargetGroup.model_name.human(count: 2), event_target_groups_path
+    - if can?(:index, Event::FitnessRequirement)
+      %li= link_to Event::FitnessRequirement.model_name.human(count: 2), event_fitness_requirements_path
+    - if can?(:index, Event::TechnicalRequirement)
+      %li= link_to Event::TechnicalRequirement.model_name.human(count: 2), event_technical_requirements_path
+    - if can?(:index, Event::Trait)
+      %li= link_to Event::Trait.model_name.human(count: 2), event_traits_path
+    - if can?(:index, Event::ApprovalKind)
+      %li= link_to Event::ApprovalKind.model_name.human(count: 2), event_approval_kinds_path

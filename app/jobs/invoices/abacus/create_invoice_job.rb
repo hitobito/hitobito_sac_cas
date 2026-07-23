@@ -15,9 +15,9 @@ class Invoices::Abacus::CreateInvoiceJob < BaseJob
   end
 
   def perform
-    if invoice_data.invoice? && person.data_quality != "error" && transmit_subject
+    if invoice_data.invoice? && person.data_quality != "error"
       external_invoice.update!(total: invoice_data.total)
-      transmit_sales_order
+      # transmit_sales_order
     else
       assign_error
     end

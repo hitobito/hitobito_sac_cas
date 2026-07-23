@@ -1430,6 +1430,11 @@ de:
       flash:
         success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
 
+  admins:
+    show:
+      cost_accounting: Fakturierung
+      tours: Touren
+
   contactable:
     address_fields:
       updates_household_address: Adresse wird für alle Familienmitglieder aktualisiert

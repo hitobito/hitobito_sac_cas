@@ -16,8 +16,10 @@ describe "code models", js: true do
     it "can create edit and destroy #{model_name}" do
       sign_in(admin)
       visit root_path
-      click_on "Einstellungen"
-      click_on model_name
+      within("nav.nav-left") do
+        click_on "Einstellungen"
+        click_on model_name
+      end
       click_on "Erstellen"
       fill_in "Code", with: "code"
       fill_in "Bezeichnung", with: "dummy"
