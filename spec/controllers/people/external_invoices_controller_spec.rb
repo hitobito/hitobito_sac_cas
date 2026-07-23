@@ -121,31 +121,42 @@ describe People::ExternalInvoicesController do
       context "cancellation button" do
         render_views
 
-        def check_presence_of_cancel_button_after
-          yield
-          get :index, params: {group_id: group_id, id: person.id}
-          invoice.update(state: "open", abacus_sales_order_key: "1234")
-          expect(response.body).not_to have_text("Stornieren")
+        before do
+          invoice.update!(state: "open", abacus_sales_order_key: "1234")
         end
 
         it "does not show the cancellation button" do
           invoice
           expect(ExternalInvoice.where(person_id: person.id).count).to eq(1)
 
-          check_presence_of_cancel_button_after { invoice.update!(state: "cancelled") }
-          check_presence_of_cancel_button_after { invoice.update!(state: "error") }
-          check_presence_of_cancel_button_after { invoice.update!(abacus_sales_order_key: nil) }
+        let(:cancel_path) { cancel_external_invoices_group_people_group_person_path(group_id, person.id, invoice.id) }
+
+        it "is rendered" do
+          get :index, params: {group_id: group_id, id: person.id}
+          expect(response.body).to have_selector("a[data-method='post'][href='#{cancel_path}']") do |link|
+            expect(link).to have_text("Stornieren")
+          end
         end
 
         it "shows the cancellation button" do
           invoice.update(state: "open", abacus_sales_order_key: "1234")
 
+        it "is missing if invoice is cancelleded" do
+          invoice.update!(state: "cancelled")
           get :index, params: {group_id: group_id, id: person.id}
+          expect(response.body).not_to have_text "Stornieren"
+        end
 
-          url = "/de/groups/#{group_id}/people/#{person.id}/external_invoices/#{invoice.id}/cancel"
-          expect(response.body).to have_selector("a[data-method='post'][href='#{url}']") do |button|
-            expect(button).to have_text("Stornieren")
-          end
+        it "is missing if invoice is in state error" do
+          invoice.update!(state: "error")
+          get :index, params: {group_id: group_id, id: person.id}
+          expect(response.body).not_to have_text "Stornieren"
+        end
+
+        it "is missing if invoice has no abacus_sales_order_key" do
+          invoice.update!(abacus_sales_order_key: nil)
+          get :index, params: {group_id: group_id, id: person.id}
+          expect(response.body).not_to have_text "Stornieren"
         end
       end
     end
