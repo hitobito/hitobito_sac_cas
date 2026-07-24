@@ -147,7 +147,7 @@ describe People::ExternalInvoicesController do
           expect(response.body).not_to have_text "Stornieren"
         end
 
-        it "is missing if invoice is cancelleded" do
+        it "is missing if invoice is cancelled" do
           invoice.update!(state: "cancelled")
           get :index, params: {group_id: group_id, id: person.id}
           expect(response.body).not_to have_text "Stornieren"
