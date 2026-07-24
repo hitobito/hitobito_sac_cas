@@ -1568,11 +1568,22 @@ fr:
     sac_statistics_info: >
       Wichtiges zum Export
   agenda:
+    date_filters:
+      since: Von
+      until: Bis
+    application_filters:
+      application_open: "Anmeldefenster offen?"
+      places_available: "Freie Plätze verfügbar?"
     index:
       title: "Agenda %{group_name}"
       select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
-    event_card:
+      apply_filter: Filtern
+      reset_filter: Filter zurücksetzen
+    list:
       show_details: Details anzeigen
+      tours_found:
+        one: "%{count} Tour gefunden"
+        other: "%{count} Touren gefunden"
 
   event:
     application_market:
