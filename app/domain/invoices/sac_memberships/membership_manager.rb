@@ -41,7 +41,7 @@ class Invoices::SacMemberships::MembershipManager
   private
 
   def extend_membership_duration
-    if person.sac_family_main_person?
+    if family_main_person?
       extend_main_person_roles
       extend_paid_family_member_zusatzsektion_roles
     elsif non_main_family_member?
