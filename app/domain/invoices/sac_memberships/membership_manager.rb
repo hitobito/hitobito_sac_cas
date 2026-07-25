@@ -42,12 +42,12 @@ class Invoices::SacMemberships::MembershipManager
 
   def extend_membership_duration
     if family_main_person?
-      extend_main_person_roles
+      extend_stammsektion_derived_roles
       extend_paid_family_member_zusatzsektion_roles
     elsif non_main_family_member?
       extend_non_main_family_member_roles
     else
-      extend_main_person_roles
+      extend_stammsektion_derived_roles
     end
   end
 
@@ -78,7 +78,7 @@ class Invoices::SacMemberships::MembershipManager
       end
   end
 
-  def extend_main_person_roles
+  def extend_stammsektion_derived_roles
     relevant_roles_for(person.sac_membership.stammsektion_role).each do |role|
       role.update!(end_on: [end_of_year, role.end_on].compact.max)
     end
