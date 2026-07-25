@@ -150,10 +150,8 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(updated_roles_count).to eq(14)
       end
 
-      it "only updates own roles when no family main person" do
+      it "has nothing to update for family only roles as not family main person" do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
-        # Non-main person with only family-type roles has no non-family zusatzsektion
-        # to extend, so no roles are updated (main person handles family role extension)
         expect(updated_roles_count).to eq(0)
       end
 
