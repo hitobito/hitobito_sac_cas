@@ -72,7 +72,7 @@ class Invoices::SacMemberships::MembershipManager
   def extend_paid_family_member_zusatzsektion_roles
     person.household_people
       .reject { |family_member| family_member == person }
-      .reject { |family_member| !paid_membership_invoice?(family_member) }
+      .select { |family_member| paid_membership_invoice?(family_member) }
       .each do |family_member|
         extend_non_family_roles(family_member, end_of_year)
       end
