@@ -170,17 +170,15 @@ describe Invoices::SacMemberships::MembershipManager do
             subject.update_membership_status
             familienmitglied2_person.reload
 
-            einzel_role = familienmitglied2_person.sac_membership.zusatzsektion_roles.first
-            expect(einzel_role.end_on).to eq prolongation_date
-            expect(einzel_role.end_on).not_to eq end_of_next_year
+            expect(familienmitglied2_zweitsektion.end_on).to eq prolongation_date
+            expect(familienmitglied2_zweitsektion.end_on).not_to eq end_of_next_year
           end
 
           it "does not extend stammsektion (Familie) role" do
             subject.update_membership_status
             familienmitglied2_person.reload
 
-            expect(familienmitglied2_person.sac_membership.stammsektion_role.end_on)
-              .to eq prolongation_date
+            expect(familienmitglied2.end_on).to eq prolongation_date
           end
 
           it "does not extend prolongable roles (capped at stammsektion end_on)" do
