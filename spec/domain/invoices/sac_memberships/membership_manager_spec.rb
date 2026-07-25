@@ -157,8 +157,6 @@ describe Invoices::SacMemberships::MembershipManager do
 
       context "family member with einzel zusatzsektion pays before stammsektion" do
         before do
-          # Give familienmitglied2 an individual (adult) zusatzsektion instead of family.
-          # Use update_all to bypass attr_readonly on beitragskategorie.
           Group::SektionsMitglieder::MitgliedZusatzsektion
             .where(id: familienmitglied2_zweitsektion.id)
             .update_all(beitragskategorie: "adult")
