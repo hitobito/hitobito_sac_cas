@@ -150,9 +150,121 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(updated_roles_count).to eq(14)
       end
 
-      it "only updates own roles when no family main person" do
+      it "has nothing to update for family only roles as not family main person" do
         allow(familienmitglied_person).to receive(:sac_family_main_person?).and_return(false)
-        expect(updated_roles_count).to eq(5)
+        expect(updated_roles_count).to eq(0)
+      end
+
+      context "family member with einzel zusatzsektion pays before stammsektion" do
+        let(:familienmitglied2_ehrenmitglied) do
+          ehrenmitglieder_group.roles.find_by(person: familienmitglied2_person)
+        end
+        let(:familienmitglied_kind_ehrenmitglied) do
+          ehrenmitglieder_group.roles.find_by(person: familienmitglied_kind_person)
+        end
+
+        before do
+          Group::SektionsMitglieder::MitgliedZusatzsektion
+            .where(id: familienmitglied2_zweitsektion.id)
+            .update_all(beitragskategorie: "adult")
+          familienmitglied2_zweitsektion.reload
+        end
+
+        context "non-main family member pays invoice first" do
+          subject { described_class.new(familienmitglied2_person, bluemlisalp, next_year) }
+
+          it "caps all relevant roles at stammsektion end_on, does not extend to end_of_year" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            expect(familienmitglied2.end_on).to eq prolongation_date
+            expect(familienmitglied2_zweitsektion.end_on).to eq prolongation_date
+            expect(familienmitglied2_ehrenmitglied.end_on).not_to eq end_of_next_year
+          end
+        end
+
+        context "main person pays stammsektion after family member already paid" do
+          subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
+
+          before do
+            Fabricate(:sac_membership_invoice,
+              person: familienmitglied2_person,
+              link: bluemlisalp,
+              year: next_year,
+              state: :payed,
+              total: 100)
+
+            familienmitglied2_zweitsektion.update!(end_on: prolongation_date)
+          end
+
+          it "extends familienmitglied2 roles to end_of_year" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            expect(familienmitglied2_zweitsektion.reload.end_on).to eq end_of_next_year
+            expect(familienmitglied2.end_on).to eq end_of_next_year
+            expect(familienmitglied2_ehrenmitglied.end_on).to eq end_of_next_year
+          end
+        end
+
+        context "multiple family members with einzel, some paid some not" do
+          subject { described_class.new(familienmitglied_person, bluemlisalp, next_year) }
+
+          before do
+            # familienmitglied2 has paid Einzel (from outer before)
+            Fabricate(:sac_membership_invoice,
+              person: familienmitglied2_person,
+              link: bluemlisalp,
+              year: next_year,
+              state: :payed,
+              total: 100)
+            familienmitglied2_zweitsektion.update!(end_on: prolongation_date)
+
+            # familienmitglied_kind has Einzel but no paid invoice
+            Group::SektionsMitglieder::MitgliedZusatzsektion
+              .where(id: familienmitglied_kind_zweitsektion.id)
+              .update_all(beitragskategorie: "adult", end_on: prolongation_date)
+            familienmitglied_kind_zweitsektion.reload
+          end
+
+          it "extends stammsektion and ehremitglied roles" do
+            subject.update_membership_status
+
+            expect(familienmitglied2.end_on).to eq end_of_next_year
+            expect(familienmitglied_kind.end_on).to eq end_of_next_year
+            expect(familienmitglied2_ehrenmitglied.end_on).to eq end_of_next_year
+            expect(familienmitglied_kind_ehrenmitglied.end_on).to eq end_of_next_year
+          end
+
+          it "extends paid familienmitglied2 zusatzsektion to end_of_year" do
+            subject.update_membership_status
+
+            expect(familienmitglied2_zweitsektion.reload.end_on).to eq end_of_next_year
+          end
+
+          it "does not extend unpaid familienmitglied_kind zusatzsektion" do
+            subject.update_membership_status
+
+            expect(familienmitglied_kind_zweitsektion.reload.end_on).to eq prolongation_date
+          end
+        end
+
+        context "family member pays after stammsektion already renewed" do
+          subject { described_class.new(familienmitglied2_person, bluemlisalp, next_year) }
+
+          before do
+            # Simulate stammsektion was already renewed
+            familienmitglied2.update!(end_on: end_of_next_year)
+            familienmitglied2_person.reload
+          end
+
+          it "extends zusatzsektion (Einzel) normally to end_of_year" do
+            subject.update_membership_status
+            familienmitglied2_person.reload
+
+            expect(familienmitglied2_zweitsektion.reload.end_on).to eq end_of_next_year
+          end
+        end
       end
 
       context "running in the previous role period (household still exists)" do
