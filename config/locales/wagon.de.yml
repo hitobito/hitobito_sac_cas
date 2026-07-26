@@ -2553,8 +2553,15 @@ de:
         cancel_invoice_confirmation: >-
           Wollen Sie diese Rechnung wirklich stornieren?
           Diese Aktion kann nicht rückgängig gemacht werden.
+        record_payment: Zahlungseingang auslösen
+        record_payment_confirmation: >-
+          Wollen Sie den Zahlungseingang für diese Rechnung wirklich auslösen?
+          Die Mitgliedschaft wird dadurch verlängert.
       cancel:
         flash: "Die Rechnung %{invoice} (Auftrags-Nr. %{abacus_sales_order_key}) wird storniert"
+      record_payment:
+        flash_payment_recorded: "Der Zahlungseingang für die Rechnung %{invoice} wurde ausgelöst"
+        flash_already_payed: "Die Rechnung %{invoice} ist bereits als bezahlt markiert"
       actions_index:
         create_abo_magazin_invoice: Die Alpen Rechnung erstellen
         create_membership_invoice: Mitgliedschaftsrechnung erstellen

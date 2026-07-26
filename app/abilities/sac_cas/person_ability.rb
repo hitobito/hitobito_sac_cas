@@ -32,6 +32,7 @@ module SacCas::PersonAbility
           :create_membership_invoice,
           :create_abo_magazin_invoice,
           :cancel_external_invoice,
+          :record_payment,
           :security
         )
         .if_backoffice

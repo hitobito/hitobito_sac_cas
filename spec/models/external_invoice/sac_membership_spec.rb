@@ -21,6 +21,33 @@ describe ExternalInvoice::SacMembership do
       type: "ExternalInvoice::SacMembership")
   end
 
+  describe "#payable?" do
+    it "is false when state is draft" do
+      invoice = Fabricate(:sac_membership_invoice, state: "draft")
+      expect(invoice).to_not be_payable
+    end
+
+    it "is true when state is open" do
+      invoice = Fabricate(:sac_membership_invoice, state: "open")
+      expect(invoice).to be_payable
+    end
+
+    it "is false when state is payed" do
+      invoice = Fabricate(:sac_membership_invoice, state: "payed")
+      expect(invoice).to_not be_payable
+    end
+
+    it "is false when state is cancelled" do
+      invoice = Fabricate(:sac_membership_invoice, state: "cancelled")
+      expect(invoice).to_not be_payable
+    end
+
+    it "is false when state is error" do
+      invoice = Fabricate(:sac_membership_invoice, state: "error")
+      expect(invoice).to_not be_payable
+    end
+  end
+
   describe "after_update callback" do
     let(:external_invoice) do
       ExternalInvoice::SacMembership.create!(
@@ -63,10 +90,16 @@ describe ExternalInvoice::SacMembership do
         )
       end
 
-      it "does not queue the job" do
+      it "does not queue the job when unrelated attributes change" do
         expect_no_enqueued_job do
           payed_external_invoice.update!(person: people(:familienmitglied))
           payed_external_invoice.update!(state: :open)
+        end
+      end
+
+      it "does not queue the job when state is set to payed again" do
+        expect_no_enqueued_job do
+          payed_external_invoice.update!(state: :payed)
         end
       end
     end
