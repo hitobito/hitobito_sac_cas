@@ -1,8 +1,0 @@
-- if can?(:index, TerminationReason)
-  = nav TerminationReason.model_name.human(count: 2), termination_reasons_path, %w(termination_reasons)
-- if can?(:index, CostCenter)
-  = nav CostCenter.model_name.human(count: 2), cost_centers_path, %w(cost_centers)
-- if can?(:index, CostUnit)
-  = nav CostUnit.model_name.human(count: 2), cost_units_path, %w(cost_units)
-- if can?(:index, SectionOffering)
-  = nav SectionOffering.model_name.human(count: 2), section_offerings_path, %w(section_offerings)
