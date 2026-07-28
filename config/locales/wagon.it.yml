@@ -80,6 +80,8 @@ it:
         approved_at: Freigegeben am
         payer_id: Ausbezahlt von
         paid_at: Ausbezahlt am
+        status_action: Aktion
+        mail_recipient_id: E-Mail Empfänger/-in
       people/export/alps_recipients_form:
         reference_date: Stichtag
         new_entries_from: Neueintritte ab
@@ -421,6 +423,7 @@ it:
         order: Sortierschlüssel
         parent_id: Übergeordnete Aktivität
         children: Unteraktivitäten
+        technical_requirement_id: Technische Anforderung
         updated_at: Geändert
         deleted_at: Gelöscht
       event/approval:
@@ -499,6 +502,14 @@ it:
           review: In Freigabe
           approved: Freigegeben
           closed: Abgeschlossen
+      event/cost:
+        description: Bezeichnung
+        count: Anzahl
+        amount: Betrag
+        total: Total
+      event/cost_receipt:
+        description: Beschreibung
+        file: Datei
       event/target_group:
         label: Designazione
         short_description: Breve descrizione
@@ -765,6 +776,7 @@ it:
         has_children: "Non è possibile eliminare una voce con sottovoci."
 
       models:
+
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
@@ -775,10 +787,18 @@ it:
             color:
               invalid_hex_color: >-
                 muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
+            technical_requirement_id:
+              must_be_main: muss eine Hauptanforderung sein
         event/participation:
           attributes:
             actual_days:
               longer_than_event_duration: non deve essere superiore alla durata del corso prevista.
+        event/tour:
+          attributes:
+            technical_requirements:
+              not_matching_activities: müssen zu den ausgewählten Aktivitäten gehören
+            base:
+              report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
 
         event/approval_commission_responsibility:
           not_in_layer: non è nella stessa sezione/gruppo locale.
@@ -1546,11 +1566,22 @@ it:
     sac_statistics_info: >
       Wichtiges zum Export
   agenda:
+    date_filters:
+      since: Von
+      until: Bis
+    application_filters:
+      application_open: "Anmeldefenster offen?"
+      places_available: "Freie Plätze verfügbar?"
     index:
       title: "Agenda %{group_name}"
       select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
-    event_card:
+      apply_filter: Filtern
+      reset_filter: Filter zurücksetzen
+    list:
       show_details: Details anzeigen
+      tours_found:
+        one: "%{count} Tour gefunden"
+        other: "%{count} Touren gefunden"
 
   event:
     application_market:
@@ -1747,12 +1778,26 @@ it:
           draft: Il vostro rifiuto è stato salvato e il tour è stato riportato allo stato di <i>bozza</i>.
       reports:
         title: "Tourenrapport (%{status})"
+        cost_summary_fields:
+          revenues: Einnahmen
+          add_tour_fees: Tourengebühren hinzufügen
+          expenses: Ausgaben
+          receipts: Belege
         form_tabs:
           status: Status
           participations: Teilnehmende
           cost_summary: Kostenübersicht
         status_fields:
           editing_status: Bearbeitungsstatus
+          status_change: Statuswechsel
+          status_action: Aktion
+          keep: Status nicht ändern
+          reject: Ablehnen
+          forward:
+            draft: Zur Freigabe einreichen an
+            review: Zur Auszahlung freigeben an
+            approved: Auszahlung erfasst
+          recipient_id: Person
         success_notice: Tourenrapport wurde erfolgreich aktualisiert
 
     tour_mailer:
