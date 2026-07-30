@@ -1925,6 +1925,9 @@ fr:
         closed: Fermer
         closed_confirm_text: >-
           La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
+
+
+          Saisis les qualifications avant de clôturer le cours !
         canceled: annuler
       event/tour:
         draft: Retour à la conception
