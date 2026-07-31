@@ -9,13 +9,14 @@ module SacCas::PersonResource
   extend ActiveSupport::Concern
 
   included do
-    extra_attribute :membership_years, :integer, sortable: true, filterable: true do
+    extra_attribute :membership_years, :integer, sortable: true, filterable: true,
+      readable: :show_details_on_person? do
       @object.membership_years if @object.sac_membership_anytime?
     end
 
     with_options writable: false, sortable: false, filterable: false do
-      attribute :family_id, :string
-      attribute :membership_number, :integer do
+      attribute :family_id, :string, readable: :show_details_on_person?
+      attribute :membership_number, :integer, readable: :show_details_on_person? do
         @object.membership_number if @object.sac_membership_anytime?
       end
       attribute :sac_remark_national_office, :string do
@@ -28,5 +29,10 @@ module SacCas::PersonResource
         end
       end
     end
+  end
+
+  # For attributes that are not viewable in the UI on an event participation of this person
+  def show_details_on_person?(model_instance)
+    can?(:show_details, model_instance)
   end
 end
