@@ -1923,6 +1923,9 @@ it:
         closed: Finalizzare
         closed_confirm_text: >-
           Il completamento imposta tutte le registrazioni con lo stato Offerto allo stato Partecipato. Per tutte le registrazioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
+
+
+          Attenzione: inserisci le qualifiche prima della conclusione del corso!
         canceled: Cancellazioni
       event/tour:
         draft: Torna al design

@@ -1856,6 +1856,9 @@ de_CH:
         closed: Abschliessen
         closed_confirm_text: >-
           Das Abschliessen versetzt alle Anmeldungen mit Status Aufgeboten in den Status Teilgenommen. Für alle Anmeldungen im Status Nicht erschienen wird eine Annullationskostenrechnung 100% erzeugt.
+
+
+          Achtung: Erfasse die Qualifikationen vor Kursabschluss!
         canceled: Absagen
       event/tour:
         draft: Zurück zu Entwurf
