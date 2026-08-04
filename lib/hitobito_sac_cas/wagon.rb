@@ -249,23 +249,43 @@ module HitobitoSacCas
         end
       )
 
-      admin_item = NavigationHelper::MAIN.find { |item| item[:label] == :admin }
-      admin_item[:active_for] += %w[
-        cost_centers
-        cost_units
-        event_approval_kinds
-        event_activities
-        event_levels
-        event_target_groups
-        event_technical_requirements
-        event_fitness_requirements
-        event_traits
-        event_approval_kinds
-        termination_reasons
-        section_offerings
-        course_compensation_categories
-        course_compensation_rates
+      NavigationHelper::ADMIN_GROUPS[:main][:items] <<
+        NavigationHelper::Item.new(model: SectionOffering, path: :section_offerings_path)
+
+      NavigationHelper::ADMIN_GROUPS[:events][:items] += [
+        NavigationHelper::Item.new(model: Event::Level, path: :event_levels_path),
+        NavigationHelper::Item.new(model: CourseCompensationRate,
+          path: :course_compensation_rates_path),
+        NavigationHelper::Item.new(model: CourseCompensationCategory,
+          path: :course_compensation_categories_path)
       ]
+
+      NavigationHelper::ADMIN_GROUPS[:people][:items] <<
+        NavigationHelper::Item.new(model: TerminationReason, path: :termination_reasons_path)
+
+      NavigationHelper::ADMIN_GROUPS[:cost_accounting] = {
+        heading: "admins.show.cost_accounting",
+        items: [
+          NavigationHelper::Item.new(model: CostCenter, path: :cost_centers_path),
+          NavigationHelper::Item.new(model: CostUnit, path: :cost_units_path)
+        ]
+      }
+
+      NavigationHelper::ADMIN_GROUPS[:tours] = {
+        heading: "admins.show.tours",
+        items: [
+          NavigationHelper::Item.new(model: Event::Activity, path: :event_activities_path),
+          NavigationHelper::Item.new(model: Event::TargetGroup,
+            path: :event_target_groups_path),
+          NavigationHelper::Item.new(model: Event::FitnessRequirement,
+            path: :event_fitness_requirements_path),
+          NavigationHelper::Item.new(model: Event::TechnicalRequirement,
+            path: :event_technical_requirements_path),
+          NavigationHelper::Item.new(model: Event::Trait, path: :event_traits_path),
+          NavigationHelper::Item.new(model: Event::ApprovalKind,
+            path: :event_approval_kinds_path)
+        ]
+      }
 
       ## Controllers
       ApplicationController.include BasicAuth if Settings.basic_auth
