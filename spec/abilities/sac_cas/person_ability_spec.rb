@@ -150,7 +150,13 @@ describe PersonAbility do
     end
   end
 
-  [:create_membership_invoice, :create_abo_magazin_invoice, :cancel_external_invoice, :security].each do |action|
+  [
+    :create_membership_invoice,
+    :create_abo_magazin_invoice,
+    :cancel_external_invoice,
+    :record_payment,
+    :security
+  ].each do |action|
     describe action do
       let(:person) { people(:mitglied) }
 

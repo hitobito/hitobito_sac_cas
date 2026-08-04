@@ -8,6 +8,13 @@
 require "spec_helper"
 
 describe ExternalInvoice do
+  describe "#payable?" do
+    it "is false" do
+      invoice = Fabricate(:external_invoice)
+      expect(invoice).not_to be_payable
+    end
+  end
+
   describe "#destroy" do
     let!(:participation) { Fabricate(:event_participation) }
 

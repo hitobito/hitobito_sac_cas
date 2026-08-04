@@ -22,7 +22,30 @@ class People::ExternalInvoicesController < ListController
     redirect_to external_invoices_group_person_path(group_id, person_id)
   end
 
+  def record_payment
+    flash_key, message_key = update_membership_invoice(invoice)
+
+    flash[flash_key] = t(message_key, invoice: invoice.title)
+    redirect_to external_invoices_group_person_path(group, person)
+  end
+
   private
+
+  def update_membership_invoice(invoice)
+    return [:warning, ".flash_already_payed"] if invoice.payed?
+
+    ActiveRecord::Base.transaction do
+      invoice.update_columns(state: :payed)
+
+      if invoice.update_membership?
+        Invoices::SacMemberships::MembershipManager.new(
+          invoice.person, invoice.link, invoice.year
+        ).update_membership_status
+      end
+    end
+
+    [:notice, ".flash_payment_recorded"]
+  end
 
   def list_entries
     super.list

@@ -48,6 +48,10 @@ class ExternalInvoice::SacMembership < ExternalInvoice
     @invoice_kind || :sac_membership
   end
 
+  def payable?
+    open?
+  end
+
   def set_beitragskategorie
     return if year.blank?
 

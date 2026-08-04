@@ -246,4 +246,62 @@ describe People::ExternalInvoicesController do
       end
     end
   end
+
+  context "#record_payment" do
+    let(:section) { groups(:bluemlisalp) }
+    let(:invoice) { Fabricate(:sac_membership_invoice, person_id: person.id, state: "open", link: section) }
+
+    context "as member" do
+      let(:user) { person }
+
+      it "is unauthorized" do
+        expect do
+          post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as admin" do
+      it "records the payment" do
+        expect(invoice.reload).to be_open
+
+        post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+
+        expect(invoice.reload).to be_payed
+
+        expect(flash[:notice]).to eq("Der Zahlungseingang für die Rechnung #{invoice.title} wurde ausgelöst")
+        expect(response).to redirect_to(external_invoices_group_person_path(group_id, person.id))
+      end
+
+      it "is idempotent when already payed" do
+        invoice.update!(state: "payed")
+        expect do
+          post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+        end.not_to change { invoice.reload.state }
+        expect(flash[:warning])
+          .to eq("Die Rechnung #{invoice.title} ist bereits als bezahlt markiert")
+        expect(response).to redirect_to(external_invoices_group_person_path(group_id, person.id))
+      end
+
+      it "does not extend membership when update_membership is false" do
+        invoice.update!(update_membership: false)
+        expect_any_instance_of(Invoices::SacMemberships::MembershipManager).not_to receive(:update_membership_status)
+        post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+        expect(invoice.reload.state).to eq("payed")
+      end
+    end
+
+    context "as functionary" do
+      let(:user) do
+        Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name,
+          group: groups(:matterhorn_funktionaere)).person
+      end
+
+      it "is not authorized" do
+        expect do
+          post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end
