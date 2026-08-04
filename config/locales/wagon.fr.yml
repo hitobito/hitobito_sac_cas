@@ -1490,6 +1490,11 @@ fr:
       flash:
         success: "La facture souhaitée est générée et transmise à Abacus"
 
+  admins:
+    show:
+      cost_accounting: Fakturierung
+      tours: Touren
+
   contactable:
     address_fields:
       updates_household_address: L’adresse est mise à jour pour tous·tes les membres de la famille
@@ -2550,8 +2555,14 @@ fr:
         cancel_invoice: Annuler
         cancel_invoice_confirmation: >-
           Voulez-vous vraiment annuler cette facture? Cette action ne peut pas être annulée.
+        record_payment: Zahlungseingang auslösen
+        record_payment_confirmation: >-
+          Wollen Sie den Zahlungseingang für diese Rechnung wirklich auslösen? Die Mitgliedschaft wird dadurch verlängert.
       cancel:
         flash: "La facture %{invoice} (n° de commande %{abacus_sales_order_key}) est annulée"
+      record_payment:
+        flash_payment_recorded: "Der Zahlungseingang für die Rechnung %{invoice} wurde ausgelöst"
+        flash_already_payed: "Die Rechnung %{invoice} ist bereits als bezahlt markiert"
       actions_index:
         create_abo_magazin_invoice: Créer une facture Les Alpes
         create_membership_invoice: Créer une facture d’adhésion

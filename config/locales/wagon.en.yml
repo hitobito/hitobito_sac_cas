@@ -1422,6 +1422,11 @@ en:
       flash:
         success: "Die gewünschte Rechnung wird erzeugt und an Abacus übermittelt"
 
+  admins:
+    show:
+      cost_accounting: Fakturierung
+      tours: Touren
+
   contactable:
     address_fields:
       updates_household_address: Address is updated for all family members
@@ -2474,8 +2479,14 @@ en:
         cancel_invoice: Stornieren
         cancel_invoice_confirmation: >-
           Wollen Sie diese Rechnung wirklich stornieren? Diese Aktion kann nicht rückgängig gemacht werden.
+        record_payment: Zahlungseingang auslösen
+        record_payment_confirmation: >-
+          Wollen Sie den Zahlungseingang für diese Rechnung wirklich auslösen? Die Mitgliedschaft wird dadurch verlängert.
       cancel:
         flash: "The invoice %{invoice} (order no. %{abacus_sales_order_key}) is canceled"
+      record_payment:
+        flash_payment_recorded: "Der Zahlungseingang für die Rechnung %{invoice} wurde ausgelöst"
+        flash_already_payed: "Die Rechnung %{invoice} ist bereits als bezahlt markiert"
       actions_index:
         create_abo_magazin_invoice: Die Alpen Rechnung erstellen
         create_membership_invoice: Mitgliedschaftsrechnung erstellen

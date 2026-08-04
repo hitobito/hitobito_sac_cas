@@ -1488,6 +1488,11 @@ it:
       flash:
         success: "La fattura desiderata viene creata e inviata ad Abacus"
 
+  admins:
+    show:
+      cost_accounting: Fakturierung
+      tours: Touren
+
   contactable:
     address_fields:
       updates_household_address: Indirizzo aggiornato per tutti i membri della famiglia
@@ -2548,8 +2553,14 @@ it:
         cancel_invoice: Stornare
         cancel_invoice_confirmation: >-
           Desidera davvero stornare questa fattura? Questa azione non può essere annullata.
+        record_payment: Zahlungseingang auslösen
+        record_payment_confirmation: >-
+          Wollen Sie den Zahlungseingang für diese Rechnung wirklich auslösen? Die Mitgliedschaft wird dadurch verlängert.
       cancel:
         flash: "La fattura %{invoice} (n. d’ordine %{abacus_sales_order_key}) viene stornata"
+      record_payment:
+        flash_payment_recorded: "Der Zahlungseingang für die Rechnung %{invoice} wurde ausgelöst"
+        flash_already_payed: "Die Rechnung %{invoice} ist bereits als bezahlt markiert"
       actions_index:
         create_abo_magazin_invoice: Creare la fattura per Le Alpi
         create_membership_invoice: Creare la fattura di affiliazione
