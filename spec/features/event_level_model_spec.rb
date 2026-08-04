@@ -18,6 +18,7 @@ describe "event_level model", js: true do
 
     within("nav.nav-left") do
       click_on "Einstellungen"
+      click_on "Anlässe und Kurse"
       click_on "Kursstufen"
     end
     click_on "Erstellen"

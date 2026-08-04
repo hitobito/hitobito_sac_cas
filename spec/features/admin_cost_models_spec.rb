@@ -18,6 +18,7 @@ describe "code models", js: true do
       visit root_path
       within("nav.nav-left") do
         click_on "Einstellungen"
+        click_on "Fakturierung"
         click_on model_name
       end
       click_on "Erstellen"
