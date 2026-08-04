@@ -23,16 +23,16 @@ class People::ExternalInvoicesController < ListController
   end
 
   def record_payment
-    notice_key = update_membership_invoice(invoice)
+    flash_key, message_key = update_membership_invoice(invoice)
 
-    flash[:notice] = t(notice_key, invoice: invoice.title)
+    flash[flash_key] = t(message_key, invoice: invoice.title)
     redirect_to external_invoices_group_person_path(group, person)
   end
 
   private
 
   def update_membership_invoice(invoice)
-    return ".flash_already_payed" if invoice.payed?
+    return [:warning, ".flash_already_payed"] if invoice.payed?
 
     ActiveRecord::Base.transaction do
       invoice.update_columns(state: :payed)
@@ -44,7 +44,7 @@ class People::ExternalInvoicesController < ListController
       end
     end
 
-    ".flash_payment_recorded"
+    [:notice, ".flash_payment_recorded"]
   end
 
   def list_entries

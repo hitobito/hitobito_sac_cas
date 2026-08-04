@@ -278,7 +278,7 @@ describe People::ExternalInvoicesController do
         expect do
           post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
         end.not_to change { invoice.reload.state }
-        expect(flash[:notice])
+        expect(flash[:warning])
           .to eq("Die Rechnung #{invoice.title} ist bereits als bezahlt markiert")
         expect(response).to redirect_to(external_invoices_group_person_path(group_id, person.id))
       end
