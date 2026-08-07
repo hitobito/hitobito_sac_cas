@@ -8,23 +8,22 @@
   .col-xl-5= Event::CostReceipt.human_attribute_name(:file)
 .nested-form{data: {controller: "nested-form", nested_form_assoc_value: "receipts"}}
   %div{id: "receipts_fields"}
-    - entry.receipts.each do |record|
+    = f.fields_for :receipts, entry.receipts do |ff|
       .fields
-        = f.fields_for :receipts_attributes, record, index: record.id do |ff|
-          .border-bottom.row.py-2
-            .col-xl-6
-              .d-xl-none.muted= Event::CostReceipt.human_attribute_name(:description)
-              = ff.string_field :description
-            .col-xl-5
-              .d-xl-none.muted= Event::CostReceipt.human_attribute_name(:file)
-              - if record.file.attached?
-                = link_to(record.file.filename, rails_blob_path(record.file, disposition: :inline), target: "_blank")
-              - else
-                = ff.file_field :file, class: "form-control form-control-sm"
-            .col-xl-1
-              = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: {action: "nested-form#remove"})
-          = ff.hidden_field :id
-          = ff.hidden_field :_destroy
+        .border-bottom.row.py-2
+          .col-xl-6
+            .d-xl-none.muted= Event::CostReceipt.human_attribute_name(:description)
+            = ff.string_field :description
+          .col-xl-5
+            .d-xl-none.muted= Event::CostReceipt.human_attribute_name(:file)
+            - if ff.object.persisted? && ff.object.file.attached?
+              = link_to(ff.object.file.filename, rails_blob_path(ff.object.file, disposition: :inline), target: "_blank")
+            - else
+              = ff.file_field :file, class: "form-control form-control-sm"
+          .col-xl-1
+            = link_to(ta(:remove), "javascript:void(0)", class: "remove_nested_fields", data: {action: "nested-form#remove"})
+        = ff.hidden_field :id
+        = ff.hidden_field :_destroy
     %div{data: {nested_form_target: "target"}}
   .controls.mt-3
     = link_to t("global.associations.add"), "javascript:void(0)", data: {action: "nested-form#add"}

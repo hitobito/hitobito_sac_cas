@@ -373,6 +373,41 @@ describe "event/tours/reports", js: true do
 
         expect(page).to have_css("input.is-invalid")
       end
+
+      it "keeps multiple newly added rows intact after a validation error" do
+        within("fieldset", text: "Einnahmen") do
+          click_link "Eintrag hinzufügen"
+          within(all(".fields[data-new-record]").last) do
+            set_field("description", "Kursgebühr 1")
+            set_field("count", "2")
+            set_field("amount", "50")
+          end
+
+          click_link "Eintrag hinzufügen"
+          within(all(".fields[data-new-record]").last) do
+            set_field("description", "Kursgebühr 2")
+            set_field("amount", "30")
+          end
+        end
+
+        click_button "Speichern"
+
+        expect(page).to have_selector("#error_explanation", text: "Anzahl muss ausgefüllt werden")
+
+        click_link "Kostenübersicht"
+
+        expect(page).to have_field(name: /\[description\]/, with: "Kursgebühr 1")
+        expect(page).to have_field(name: /\[description\]/, with: "Kursgebühr 2")
+
+        row = all(".fields").find { _1.has_field?(name: /\[description\]/, with: "Kursgebühr 2") }
+        within(row) { set_field("count", "3") }
+
+        click_button "Speichern"
+
+        expect(page).to have_text "Tourenrapport wurde erfolgreich aktualisiert"
+        expect(report.reload.costs.where(income: true).pluck(:description))
+          .to include("Kursgebühr 1", "Kursgebühr 2")
+      end
     end
 
     describe "expenses" do
