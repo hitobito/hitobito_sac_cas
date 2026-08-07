@@ -56,7 +56,7 @@ class Event::Tour < Event
   self.supports_invitations = false
 
   self.possible_participation_states = %w[unconfirmed rejected assigned
-    attended absent canceled annulled]
+    attended absent canceled annulled summoned]
   self.active_participation_states = %w[assigned attended]
   self.revoked_participation_states = %w[rejected canceled absent annulled]
   self.countable_participation_states = %w[unconfirmed assigned attended absent]
