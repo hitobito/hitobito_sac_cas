@@ -1252,19 +1252,19 @@ it:
         one: Presidenza
         description: Presidenza
       group/sektions_funktionaere/co_praesidium:
-        one: Co-Präsidium
-        description: Co-Präsidium
+        one: Copresidenza
+        description: Copresidenza
       group/sektions_funktionaere/vize_praesidium:
-        one: Vize-Präsidium
-        description: Vize-Präsidium
+        one: Vicepresidenza
+        description: Vicepresidenza
       group/sektions_funktionaere/praesidium_ortsgruppe:
         one: Präsidium Ortsgruppe
         description: Präsidium Ortsgruppe
       group/sektions_funktionaere/co_praesidium_ortsgruppe:
-        one: Co-Präsidium Ortsgruppe
+        one: Copresidenza del gruppo locale
         description: Co-Präsidium Ortsgruppe
       group/sektions_funktionaere/vize_praesidium_ortsgruppe:
-        one: Vize-Präsidium Ortsgruppe
+        one: Vice-presidenza del gruppo locale
         description: Vize-Präsidium Ortsgruppe
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Amministrazione soci

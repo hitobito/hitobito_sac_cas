@@ -1254,20 +1254,20 @@ fr:
         one: Présidence
         description: Présidence
       group/sektions_funktionaere/co_praesidium:
-        one: Co-Präsidium
-        description: Co-Präsidium
+        one: Coprésidence
+        description: Coprésidence
       group/sektions_funktionaere/vize_praesidium:
-        one: Vize-Präsidium
+        one: Vice-présidence
         description: Vize-Präsidium
       group/sektions_funktionaere/praesidium_ortsgruppe:
         one: Präsidium Ortsgruppe
         description: Präsidium Ortsgruppe
       group/sektions_funktionaere/co_praesidium_ortsgruppe:
-        one: Co-Präsidium Ortsgruppe
-        description: Co-Präsidium Ortsgruppe
+        one: Coprésidence de la section locale
+        description: Coprésidence de la section locale
       group/sektions_funktionaere/vize_praesidium_ortsgruppe:
         one: Vize-Präsidium Ortsgruppe
-        description: Vize-Präsidium Ortsgruppe
+        description: Vice-présidence de la section locale
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Gestion des membres
         description: Gestion des membres de la section
