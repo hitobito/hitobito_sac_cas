@@ -126,17 +126,25 @@ describe Events::AnnualCourseDuplicateBuilder do
       end
 
       expect(duplicate.participations.size).to eq(2)
-      source_leader_participations = source_course.participations.select do |source_participation|
-        source_participation.leader? && source_participation.state == :assigned
-      end
+      source_leader, source_leader_aspirant = source_course.participations.joins(:roles).where(
+        state: :assigned,
+        roles: {type: %w[Event::Course::Role::Leader Event::Course::Role::LeaderAspirant]}
+      ).order("roles.type")
 
-      source_leader_participations.each do |source_participation|
-        duplicate_participation = duplicate.participations.find {
-          _1.participant_id == source_participation.participant_id
-        }
+      expect(source_leader.answers).to be_present
+      expect(source_leader_aspirant.answers).to be_present
 
-        expect(duplicate_participation).to be_leader
-      end
+      duplicate_participations_by_participant_id = duplicate.participations.index_by(&:participant_id)
+      duplicate_leader = duplicate_participations_by_participant_id[source_leader.participant_id]
+      duplicate_leader_aspirant = duplicate_participations_by_participant_id[source_leader_aspirant.participant_id]
+
+      expect(duplicate_leader).to be_leader
+      expect(duplicate_leader.answers).to be_empty
+      expect(duplicate_leader.roles.first.type).to eq "Event::Course::Role::Leader"
+
+      expect(duplicate_leader_aspirant).to be_leader
+      expect(duplicate_leader_aspirant.answers).to be_empty
+      expect(duplicate_leader_aspirant.roles.first.type).to eq "Event::Course::Role::LeaderAspirant"
 
       expect(duplicate).to be_valid
     end
@@ -146,16 +154,19 @@ describe Events::AnnualCourseDuplicateBuilder do
     it "creates course, dates, questions and translations" do
       source_course # create source before expect block
       duplicate = nil
-      expect { duplicate = builder.create! }.to \
-        change { Event::Course.count }.by(1).and \
-          change { Event::Date.count }.by(1).and \
-            change { Event::Translation.count }.by(3).and \
-              change { Event::Question.count }.by(5).and \
-                change { Event::Question::Translation.count }.by(15).and \
-                  change { Event::Participation.count }.by(2).and \
-                    change { Event::Role.count }.by(2)
+      expect do
+        duplicate = builder.create!
+      end.to change { Event::Course.count }.by(1)
+        .and change { Event::Date.count }.by(1)
+        .and change { Event::Translation.count }.by(3)
+        .and change { Event::Question.count }.by(5)
+        .and change { Event::Question::Translation.count }.by(15)
+        .and change { Event::Participation.count }.by(2)
+        .and change { Event::Role.count }.by(2)
+        .and change { Event::Answer.where.not(participation_id: nil).count }.by(0)
 
       expect(duplicate.created_at).to be_present
+      expect(duplicate.participations.find(&:leader?).answers).to be_empty
     end
   end
 end

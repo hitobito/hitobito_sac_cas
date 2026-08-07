@@ -80,7 +80,7 @@ class Events::AnnualCourseDuplicateBuilder
     end
   end
 
-  def build_leaders(course)
+  def build_leaders(course) # rubocop:disable Metrics/MethodLength
     @source_course.participations
       .joins(:roles)
       .where(state: :assigned,
@@ -95,7 +95,10 @@ class Events::AnnualCourseDuplicateBuilder
             )
           end
         end
-    course.participations.each { _1.event = course }
+    course.participations.each do
+      _1.event = course
+      _1.skip_init_answers = true
+    end
   end
 
   def build_translations(course)
@@ -106,7 +109,8 @@ class Events::AnnualCourseDuplicateBuilder
 
   def build_questions(course)
     @source_course.questions.each do |source_question|
-      course.questions.build(source_question.attributes.except("id"))
+      question = course.questions.build(source_question.attributes.except("id"))
+      question.skip_add_answer_to_participations = true
     end
   end
 

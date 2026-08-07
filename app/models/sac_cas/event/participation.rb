@@ -20,6 +20,8 @@ module SacCas::Event::Participation
   delegate :sac_membership_active?, :membership_years, :membership_number, :correspondence,
     to: :person
 
+  attr_accessor :skip_init_answers
+
   prepended do # rubocop:todo Metrics/BlockLength
     include I18nEnums
     include CapitalizedDependentErrors
@@ -77,6 +79,10 @@ module SacCas::Event::Participation
     ).first
 
     membership_in_tour_sektion || stammsektion
+  end
+
+  def init_answers
+    super unless skip_init_answers
   end
 
   private
