@@ -686,7 +686,7 @@ de_CH:
               layer_mitglieder_full: Verwalten von Personen in der Mitglieder Gruppe der Sektion/Ortsgruppe.
               layer_created_events_full: "Erstellen und Editieren eigener Anlässe, Kurse und Touren in der Sektion"
       qualification_kind:
-        tourenchef_may_edit: Von Tourenchef bearbeitbar
+        tourenchef_may_edit: Von Tourenchef/in bearbeitbar
       qualification:
         finish_at: Bis
       sac_membership_config:

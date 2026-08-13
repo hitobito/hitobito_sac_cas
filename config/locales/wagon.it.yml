@@ -1258,14 +1258,14 @@ it:
         one: Vicepresidenza
         description: Vicepresidenza
       group/sektions_funktionaere/praesidium_ortsgruppe:
-        one: Präsidium Ortsgruppe
-        description: Präsidium Ortsgruppe
+        one: Presidenza del gruppo locale
+        description: Presidenza del gruppo locale
       group/sektions_funktionaere/co_praesidium_ortsgruppe:
         one: Copresidenza del gruppo locale
-        description: Co-Präsidium Ortsgruppe
+        description: Copresidenza del gruppo locale
       group/sektions_funktionaere/vize_praesidium_ortsgruppe:
-        one: Vice-presidenza del gruppo locale
-        description: Vize-Präsidium Ortsgruppe
+        one: Vicepresidenza del gruppo locale
+        description: Vicepresidenza del gruppo locale
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Amministrazione soci
         description: Amministrazione soci di sezione

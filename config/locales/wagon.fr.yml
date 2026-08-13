@@ -691,7 +691,7 @@ fr:
               layer_mitglieder_full: Gérer les personnes dans le groupe de membres de la section/du groupe local.
               layer_created_events_full: "Créer et éditer ses propres événements, cours et randonnées dans la section"
       qualification_kind:
-        tourenchef_may_edit: Editable par le·la préposé·e aux courses
+        tourenchef_may_edit: Editable par le/la préposé·e aux courses
       qualification:
         finish_at: Jusqu’à
       sac_membership_config:
@@ -1258,16 +1258,16 @@ fr:
         description: Coprésidence
       group/sektions_funktionaere/vize_praesidium:
         one: Vice-présidence
-        description: Vize-Präsidium
+        description: Vice-présidence
       group/sektions_funktionaere/praesidium_ortsgruppe:
-        one: Präsidium Ortsgruppe
-        description: Präsidium Ortsgruppe
+        one: Présidence du groupe local
+        description: Présidence du groupe local
       group/sektions_funktionaere/co_praesidium_ortsgruppe:
-        one: Coprésidence de la section locale
-        description: Coprésidence de la section locale
+        one: Coprésidence du groupe local
+        description: Coprésidence du groupe local
       group/sektions_funktionaere/vize_praesidium_ortsgruppe:
-        one: Vize-Präsidium Ortsgruppe
-        description: Vice-présidence de la section locale
+        one: Vice-présidence du groupe local
+        description: Vice-présidence du groupe local
       group/sektions_funktionaere/mitgliederverwaltung:
         one: Gestion des membres
         description: Gestion des membres de la section
@@ -1392,14 +1392,14 @@ fr:
         one: Droit d’écriture
         description: Droit d’écriture
       group/sektions_touren_und_kurse/tourenchef:
-        one: Responsable de tournée
-        description: Responsable de tournée
+        one: Préposé·e aux courses
+        description: Préposé·e aux courses
       group/sektions_touren_und_kurse/tourenchef_sommer:
-        one: Chef de tour* été
-        description: Chef de tour* été
+        one: Préposé·e aux courses été
+        description: Préposé·e aux courses été
       group/sektions_touren_und_kurse/tourenchef_winter:
-        one: Chef de tour* hiver
-        description: Chef de tour* hiver
+        one: Préposé·e aux courses hiver
+        description: Préposé·e aux courses hiver
       group/sektions_clubhuetten/leserecht:
         one: Droit de lecture
         description: Droit de lecture
@@ -1712,7 +1712,7 @@ fr:
           En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
         detail_info_text: >-
-          Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.
+          Une inscription portant la signature du/de la préposé·e aux course confirme le statut de moniteur ou de monitrice actif(ve) ou futur(e) du CAS et donne droit au tarif subventionné du cours (%{amount}). Nous te prions, le cas échéant, de remplir le formulaire %{link} et <b>de</b> nous le <b>renvoyer</b> dès que possible, au <b>plus tard 5 semaines avant le début du cours</b>.
       summary_step:
         annulation_remarks: |
           Il est recommandé de souscrire une assurance pour frais d’annulation. Les frais d’annulation suivants seraient assumés par le client/la cliente en cas d’annulation avant le début du cours:
