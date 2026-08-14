@@ -2452,7 +2452,7 @@ fr:
     sac_membership:
       section: Sektion
       additional_sections: Zusatzsektionen
-      tour_guide: Tourenleiter/in
+      tour_guide: Chef·fe de course
       tour_guide_active: Aktiv
     templates:
       sac_membership:
@@ -2461,7 +2461,7 @@ fr:
             membership_number: "Mitglied: %{membership_number}"
             membership_years: "Anzahl Mitgliedsjahre: %{membership_years}"
           additional_infos:
-            tour_guide: Aktive/r Tourenleiter/in
+            tour_guide: Chef·fe de course actif·ves
           states:
             valid: Mitgliedschaft gültig
             invalid: Mitgliedschaft ungültig
