@@ -7,8 +7,6 @@
 
 module Events::Filter
   class MyAssistantLeader < Leader
-    KINDS = %i[leader helper]
-
     private
 
     def leader_ids = [Auth.current_person&.id].compact_blank
