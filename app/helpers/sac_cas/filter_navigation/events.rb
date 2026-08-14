@@ -12,16 +12,23 @@ module SacCas
 
       def init_dropdown_links
         add_tour_approval_filter_links if tour_list? && user_is_pruefer_in_layer?
+        add_leader_filter_links
         super
       end
 
       def add_tour_approval_filter_links
-        add_approval_filter_item(:my_pending_approvals)
-        add_approval_filter_item(:my_approval_responsibilities)
+        add_dropdown_filter_item(:my_pending_approvals)
+        add_dropdown_filter_item(:my_approval_responsibilities)
       end
 
-      def add_approval_filter_item(key)
-        name = translate(key)
+      def add_leader_filter_links
+        event_type = (params[:type]&.constantize || ::Event).model_name.human(count: 2)
+        add_dropdown_filter_item(:my_main_leader, event_type:)
+        add_dropdown_filter_item(:my_assistant_leader, event_type:)
+      end
+
+      def add_dropdown_filter_item(key, options = {})
+        name = translate(key, options)
         dropdown.add_item(name, tour_approval_filter_path(key, name))
       end
 

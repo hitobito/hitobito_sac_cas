@@ -2136,6 +2136,8 @@ de:
   filter_navigation/events:
     my_pending_approvals: Meine ausstehenden Freigaben
     my_approval_responsibilities: Meine Freigabe-Zuständigkeiten
+    my_main_leader: Meine %{event_type} als Hauptleitung
+    my_assistant_leader: Meine %{event_type} als Hilfsleitung
 
   groups:
     actions_show_sac_cas:

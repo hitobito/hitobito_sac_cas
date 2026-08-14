@@ -187,6 +187,8 @@ module HitobitoSacCas
         Events::Filter::Tour::MyPendingApprovals <<
         Events::Filter::Tour::MyApprovalResponsibilities <<
         Events::Filter::Tour::Approval <<
+        Events::Filter::MyMainLeader <<
+        Events::Filter::MyAssistantLeader <<
         Events::Filter::ApplicationOpen
       Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
 
