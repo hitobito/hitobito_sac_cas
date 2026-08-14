@@ -44,6 +44,18 @@ module Events
         all_pruefers.where.not(id: next_relevant_pruefer.select(:id))
       end
 
+      def pending_approval_levels
+        komitees = responsible_freigabe_komitees.list
+        show_komitee_name = komitees.size > 1
+
+        komitees.filter_map do |komitee|
+          approval_kind = first_unapproved_kind_for(komitee)
+          komitee_name = show_komitee_name ? "(#{komitee.name})" : ""
+
+          "#{approval_kind} #{komitee_name}".strip if approval_kind
+        end
+      end
+
       def fetch_freigabe_komitee_activities_target_groups(komitees)
         scope =
           Event::ApprovalCommissionResponsibility

@@ -85,5 +85,62 @@ describe "events/_attrs.html.haml" do
       expect(dom).to have_css "dt", text: "Mindestalter"
       expect(dom).to have_css "dt", text: "Maximalalter"
     end
+
+    context "Freigabestufe" do
+      let(:komitee) { groups(:bluemlisalp_freigabekomitee) }
+
+      def approve(kind)
+        event.approvals.create!(
+          approval_kind: event_approval_kinds(kind),
+          approved: true,
+          freigabe_komitee: komitee,
+          creator: people(:admin)
+        )
+      end
+
+      it "shows the next pending approval level below the status" do
+        expect(dom).to have_css "dt", text: "Freigabestufe"
+        expect(dom).to have_css "dd", text: /\AFachlich\z/
+      end
+
+      it "hides the line when the tour is not in review" do
+        event.update!(state: :draft)
+        expect(dom).not_to have_css "dt", text: "Freigabestufe"
+      end
+
+      it "hides the line when all approval levels are approved" do
+        approve(:professional)
+        approve(:security)
+        approve(:editorial)
+        expect(dom).not_to have_css "dt", text: "Freigabestufe"
+      end
+
+      context "with multiple responsible komitees" do
+        let!(:second_komitee) do
+          Group::FreigabeKomitee.create!(
+            name: "Zweitkomitee",
+            parent: groups(:bluemlisalp_touren_und_kurse)
+          )
+        end
+
+        before do
+          event_approval_commission_responsibilities(:bluemlisalp_wandern_familien_subito)
+            .update!(freigabe_komitee: second_komitee)
+        end
+
+        it "shows the komitee name in parentheses per komitee" do
+          expect(dom).to have_css "dd", text: /\AFachlich \(Zweitkomitee\)\z/
+          expect(dom).to have_css "dd", text: /\AFachlich \(Freigabekomitee\)\z/
+        end
+
+        it "keeps the komitee name when only one komitee still has a pending level" do
+          approve(:professional)
+          approve(:security)
+          approve(:editorial)
+          expect(dom).to have_css "dd", text: /\AFachlich \(Zweitkomitee\)\z/
+          expect(dom).not_to have_css "dd", text: /\AFachlich \(Freigabekomitee\)\z/
+        end
+      end
+    end
   end
 end

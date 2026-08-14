@@ -77,7 +77,7 @@ describe Events::Tours::ApprovalComposer do
     context "with multiple relevant komitees" do
       let!(:second_komitee) do
         Group::FreigabeKomitee.create!(
-          name: "Komitee 2",
+          name: "Zweitkomitee",
           parent: groups(:bluemlisalp_touren_und_kurse)
         )
       end
@@ -141,6 +141,65 @@ describe Events::Tours::ApprovalComposer do
       approve(:editorial)
       create_pruefer(approval_kinds: [event_approval_kinds(:professional)], person:)
       expect(composer.remaining_pruefers).to match_array [person]
+    end
+  end
+
+  describe "#pending_approval_levels" do
+    it "returns the first unapproved kind for each responsible komitee" do
+      expect(composer.pending_approval_levels).to contain_exactly(
+        event_approval_kinds(:professional).name
+      )
+    end
+
+    it "advances to the next kind after the first one is approved" do
+      approve(:professional)
+      expect(composer.pending_approval_levels).to contain_exactly(
+        event_approval_kinds(:security).name
+      )
+    end
+
+    it "returns empty when all kinds are approved for the komitee" do
+      approve(:professional)
+      approve(:security)
+      approve(:editorial)
+      expect(composer.pending_approval_levels).to be_empty
+    end
+
+    context "with multiple responsible komitees" do
+      let!(:second_komitee) do
+        Group::FreigabeKomitee.create!(
+          name: "Zweitkomitee",
+          parent: groups(:bluemlisalp_touren_und_kurse)
+        )
+      end
+
+      before do
+        event_approval_commission_responsibilities(:bluemlisalp_wandern_familien)
+          .update!(freigabe_komitee: second_komitee)
+      end
+
+      it "sets show_komitee_name for every komitee" do
+        expect(composer.pending_approval_levels).to match_array([
+          event_approval_kinds(:professional).name + " (#{komitee.name})",
+          event_approval_kinds(:professional).name + " (#{second_komitee.name})"
+        ])
+
+        expect(composer.pending_approval_levels).to match_array([
+          "Fachlich (Freigabekomitee)",
+          "Fachlich (Zweitkomitee)"
+        ])
+      end
+
+      it "keeps show_komitee_name when only one komitee still has a pending level" do
+        approve(:professional)
+        approve(:security)
+        approve(:editorial)
+        expect(composer.pending_approval_levels).to contain_exactly(
+          event_approval_kinds(:professional).name + " (#{second_komitee.name})"
+        )
+
+        expect(composer.pending_approval_levels).to contain_exactly("Fachlich (Zweitkomitee)")
+      end
     end
   end
 end
