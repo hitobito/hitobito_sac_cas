@@ -100,7 +100,7 @@ describe "events/_attrs.html.haml" do
 
       it "shows the next pending approval level below the status" do
         expect(dom).to have_css "dt", text: "Freigabestufe"
-        expect(dom).to have_css "dd", text: /\AFachlich\z/
+        expect(dom).to have_css "dd div", text: /\AFachlich\z/
       end
 
       it "hides the line when the tour is not in review" do
@@ -129,16 +129,16 @@ describe "events/_attrs.html.haml" do
         end
 
         it "shows the komitee name in parentheses per komitee" do
-          expect(dom).to have_css "dd", text: /\AFachlich \(Zweitkomitee\)\z/
-          expect(dom).to have_css "dd", text: /\AFachlich \(Freigabekomitee\)\z/
+          expect(dom).to have_css "dd div", text: /\AFachlich \(Zweitkomitee\)\z/
+          expect(dom).to have_css "dd div", text: /\AFachlich \(Freigabekomitee\)\z/
         end
 
         it "keeps the komitee name when only one komitee still has a pending level" do
           approve(:professional)
           approve(:security)
           approve(:editorial)
-          expect(dom).to have_css "dd", text: /\AFachlich \(Zweitkomitee\)\z/
-          expect(dom).not_to have_css "dd", text: /\AFachlich \(Freigabekomitee\)\z/
+          expect(dom).to have_css "dd div", text: /\AFachlich \(Zweitkomitee\)\z/
+          expect(dom).not_to have_css "dd div", text: /\AFachlich \(Freigabekomitee\)\z/
         end
       end
     end

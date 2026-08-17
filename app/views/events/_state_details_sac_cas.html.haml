@@ -4,5 +4,8 @@
 - #  https://github.com/hitobito/hitobito_sac_cas
 
 - if entry.tour? && entry.review?
-  - Events::Tours::ApprovalComposer.new(entry, nil).pending_approval_levels.each do |approval_level|
-    = labeled(t(".approval_level"), approval_level)
+  - pending_levels = Events::Tours::ApprovalComposer.new(entry, nil).pending_approval_levels
+  - if pending_levels.present?
+    = labeled(t(".approval_level")) do
+      - pending_levels.each do |approval_level|
+        %div= approval_level
