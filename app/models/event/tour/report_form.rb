@@ -9,7 +9,7 @@ class Event::Tour::ReportForm
   include ActiveModel::Model
   include ActiveModel::Attributes
 
-  EDITABLE_PARTICIPATION_STATES = %w[assigned attended absent].freeze
+  EDITABLE_PARTICIPATION_STATES = %w[assigned summoned attended absent].freeze
   RELEASE_ROLE_TYPES = [
     Group::SektionsTourenUndKurse::Tourenchef,
     Group::SektionsTourenUndKurse::TourenchefSommer,

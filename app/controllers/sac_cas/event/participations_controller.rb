@@ -195,7 +195,12 @@ module SacCas::Event::ParticipationsController # rubocop:disable Metrics/ModuleL
   end
 
   def send_application_summoned_email
-    Event::CourseParticipationMailer.summon(entry).deliver_later
+    case event
+    when Event::Course
+      Event::CourseParticipationMailer.summon(entry).deliver_later
+    when Event::Tour
+      Event::TourParticipationMailer.summon(entry).deliver_later
+    end
   end
 
   def enqueue_invoice_job

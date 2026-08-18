@@ -75,12 +75,9 @@ de:
         tour_completed: Wurde die Tour durchgeführt
         review: Tourenrückblick
         remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
-        submitter_id: Eingereicht von
-        submitted_at: Eingereicht am
-        approver_id: Freigegeben von
-        approved_at: Freigegeben am
-        payer_id: Ausbezahlt von
-        paid_at: Ausbezahlt am
+        submitter_id: Eingereicht
+        approver_id: Freigegeben
+        payer_id: Ausbezahlt
         status_action: Aktion
         mail_recipient_id: E-Mail Empfänger/-in
       people/export/alps_recipients_form:
@@ -780,7 +777,6 @@ de:
         has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
-
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
@@ -1769,6 +1765,7 @@ de:
           status_action: Aktion
           keep: Status nicht ändern
           reject: Ablehnen
+          by: von
           forward:
             draft: Zur Freigabe einreichen an
             review: Zur Auszahlung freigeben an

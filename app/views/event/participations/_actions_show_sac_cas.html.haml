@@ -25,6 +25,7 @@
                             bs_content: render('popover_create_course_leader_settlement',
                             entry: Event::Courses::LeaderSettlementForm.new(actual_days: entry.actual_days)).to_str })
 
+- if @event.course? || @event.tour?
   - confirmation = render(partial: 'shared/email_confirmation_modal',
                           locals: { method: :put,
                                     modal_title: t('.modal_title'),

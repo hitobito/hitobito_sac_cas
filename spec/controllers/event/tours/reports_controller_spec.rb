@@ -139,7 +139,7 @@ describe Event::Tours::ReportsController do
       end
 
       it "returns unprocessable_content when updating invalid state" do
-        participation.update_columns(state: "summoned")
+        participation.update_columns(state: "canceled")
 
         put :update, params: params.merge(
           event_tour_report_form: {
@@ -152,7 +152,7 @@ describe Event::Tours::ReportsController do
         )
 
         expect(response).to have_http_status(:unprocessable_content)
-        expect(participation.reload.state).to eq "summoned"
+        expect(participation.reload.state).to eq "canceled"
       end
 
       it "is unauthorized when event is not reportable" do
