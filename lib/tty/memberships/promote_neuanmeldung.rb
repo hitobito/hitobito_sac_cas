@@ -38,7 +38,7 @@ module TTY
           end
 
           neuanmeldung = SacCas::NEUANMELDUNG_ROLES.lazy.map do |role_type|
-            role_type.find_by(id: neuanmeldung_role_id)
+            role_type.with_inactive.find_by(id: neuanmeldung_role_id)
           end.find(&:itself)
 
           unless neuanmeldung
@@ -108,7 +108,7 @@ module TTY
         start_on = [Date.current, end_on].min
 
         # Clear the Neuanmeldung role first
-        person.roles.where(type: neuanmeldung.class.sti_name, group_id: neuanmeldung.group_id).destroy_all
+        person.roles.with_inactive.where(type: neuanmeldung.class.sti_name, group_id: neuanmeldung.group_id, start_on: neuanmeldung.start_on..).destroy_all
 
         # Create the new Mitglied role
         mitglied_role_type.create!(
