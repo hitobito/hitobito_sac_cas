@@ -144,6 +144,10 @@ class Event::Tour < Event
 
   ### INSTANCE METHODS
 
+  def places_or_waiting_list_available?
+    true # people may always apply, even if there are no available places
+  end
+
   def tentative_application_possible?
     tentative_applications?
   end
