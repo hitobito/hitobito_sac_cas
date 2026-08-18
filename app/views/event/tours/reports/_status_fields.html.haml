@@ -14,17 +14,29 @@
 
 = field_set_tag(t(".editing_status")) do
   = f.labeled(:submitter_id) do
-    .col-form-label= format_attr(entry.report, :submitter_id)
-  = f.labeled(:submitted_at) do
-    .col-form-label= format_attr(entry.report, :submitted_at)
+    .col-form-label
+      - if entry.report.submitter_id
+        = format_attr(entry.report, :submitted_at)
+        = t(".by")
+        = format_attr(entry.report, :submitter_id)
+      - else
+        = "-"
   = f.labeled(:approver_id) do
-    .col-form-label= format_attr(entry.report, :approver_id)
-  = f.labeled(:approved_at) do
-    .col-form-label= format_attr(entry.report, :approved_at)
+    .col-form-label
+      - if entry.report.approver_id
+        = format_attr(entry.report, :approved_at)
+        = t(".by")
+        = format_attr(entry.report, :approver_id)
+      - else
+        = "-"
   = f.labeled(:payer_id) do
-    .col-form-label= format_attr(entry.report, :payer_id)
-  = f.labeled(:paid_at) do
-    .col-form-label= format_attr(entry.report, :paid_at)
+    .col-form-label
+      - if entry.report.payer_id
+        = format_attr(entry.report, :paid_at)
+        = t(".by")
+        = format_attr(entry.report, :payer_id)
+      - else
+        = "-"
 
 - unless entry.report.status == :closed
   = field_set_tag(t(".status_change")) do

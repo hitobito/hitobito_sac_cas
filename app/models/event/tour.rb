@@ -55,11 +55,11 @@ class Event::Tour < Event
   self.supports_applications = true
   self.supports_invitations = false
 
-  self.possible_participation_states = %w[unconfirmed rejected assigned
-    attended absent canceled annulled summoned]
-  self.active_participation_states = %w[assigned attended]
+  self.possible_participation_states = %w[unconfirmed rejected assigned summoned
+    attended absent canceled annulled]
+  self.active_participation_states = %w[assigned summoned attended]
   self.revoked_participation_states = %w[rejected canceled absent annulled]
-  self.countable_participation_states = %w[unconfirmed assigned attended absent]
+  self.countable_participation_states = %w[unconfirmed assigned summoned attended absent]
 
   # Used for Event::TourResource
   attr_accessor :leaders
@@ -120,7 +120,6 @@ class Event::Tour < Event
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
-  validate :assert_report_closed_when_tour_closes, if: -> { will_change_state_to?(:closed) }
   validates :description, :activities, :target_groups, :technical_requirements,
     :fitness_requirement, :season,
     presence: {if: -> { state_reached?(:review) }}
@@ -131,13 +130,13 @@ class Event::Tour < Event
     }}
   end
 
-  validates :contact_id,
-    :application_opening_at, :application_closing_at,
+  validates :contact_id, :application_opening_at, :application_closing_at,
     :maximum_participants, :minimum_participants,
     presence: {if: -> { state_reached?(:published) && !canceled? }}
 
+  validate :assert_report_closed_when_tour_closes, if: -> { will_change_state_to?(:closed) }
   validate :assert_duration_valid?
-  validate :assert_technical_requirements_match_activities
+  validate :assert_technical_requirements_match_activities, if: :draft?
 
   ### CALLBACKS
 

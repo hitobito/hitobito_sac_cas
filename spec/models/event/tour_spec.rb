@@ -82,25 +82,29 @@ describe Event::Tour do
       it_behaves_like "presence validation for draft attributes", attribute: :technical_requirements, association: true
       it_behaves_like "readonly for draft attributes", attribute: :technical_requirements
 
-      it "is valid if matching a discplines technical requirment" do
-        tour.association(:technical_requirements).target = [event_technical_requirements(:wandern)]
+      context "associated to activites" do
+        before { tour.update!(state: :draft) }
 
-        expect(tour).to be_valid
-      end
+        it "is valid if matching a discplines technical requirment" do
+          tour.association(:technical_requirements).target = [event_technical_requirements(:wandern)]
 
-      it "is valid if parent is matching activities technical requirment" do
-        tour.association(:technical_requirements).target = [event_technical_requirements(:wandern_t2)]
+          expect(tour).to be_valid
+        end
 
-        expect(tour).to be_valid
-      end
+        it "is valid if parent is matching activities technical requirment" do
+          tour.association(:technical_requirements).target = [event_technical_requirements(:wandern_t2)]
 
-      it "is invalid if not matching a technical requirement of the tours activities" do
-        tour.association(:technical_requirements).target = [event_technical_requirements(:klettern_9a)]
+          expect(tour).to be_valid
+        end
 
-        expect(tour).not_to be_valid
-        expect(tour.errors.full_messages).to eq [
-          "Technische Anforderung(en) müssen zu den ausgewählten Aktivitäten gehören"
-        ]
+        it "is invalid if not matching a technical requirement of the tours activities" do
+          tour.association(:technical_requirements).target = [event_technical_requirements(:klettern_9a)]
+
+          expect(tour).not_to be_valid
+          expect(tour.errors.full_messages).to eq [
+            "Technische Anforderung(en) müssen zu den ausgewählten Aktivitäten gehören"
+          ]
+        end
       end
     end
 
