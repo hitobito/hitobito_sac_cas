@@ -74,12 +74,9 @@ de_CH:
         tour_completed: Wurde die Tour durchgeführt
         review: Tourenrückblick
         remarks: Bemerkungen (z.B. zur Auszahlung oder zur Ablehnung)
-        submitter_id: Eingereicht von
-        submitted_at: Eingereicht am
-        approver_id: Freigegeben von
-        approved_at: Freigegeben am
-        payer_id: Ausbezahlt von
-        paid_at: Ausbezahlt am
+        submitter_id: Eingereicht
+        approver_id: Freigegeben
+        payer_id: Ausbezahlt
         status_action: Aktion
         mail_recipient_id: E-Mail Empfänger/-in
       people/export/alps_recipients_form:
@@ -773,7 +770,6 @@ de_CH:
         has_children: "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
 
       models:
-
         course_compensation_rate:
           attributes:
             course_compensation_category_id:
@@ -1731,6 +1727,7 @@ de_CH:
           status_action: Aktion
           keep: Status nicht ändern
           reject: Ablehnen
+          by: von
           forward:
             draft: Zur Freigabe einreichen an
             review: Zur Auszahlung freigeben an
@@ -1791,6 +1788,10 @@ de_CH:
         Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
+
+    state_details_sac_cas:
+      approval_level: Freigabestufe
+
     tours:
       popover_review:
         alert_info: "Du startest den Freigabeprozess für die Tour “%{event_name} (%{event_id})”."
