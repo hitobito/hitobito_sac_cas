@@ -13,9 +13,9 @@ describe ExternalTraining do
   let(:today) { Date.new(2024, 3, 26) }
 
   describe "validations" do
-    def build(start_at:, finish_at:)
+    def build(start_at: today, finish_at: today, training_days: 1)
       Fabricate.build(:external_training, person: people(:mitglied), start_at: start_at,
-        finish_at: finish_at)
+        finish_at: finish_at, training_days: training_days)
     end
 
     it "is invalid when finish_at is before start_at" do
@@ -49,6 +49,22 @@ describe ExternalTraining do
     it "is valid when finish_at is before today" do
       external_training = build(start_at: 10.days.ago, finish_at: 5.days.ago)
       expect(external_training).to be_valid
+    end
+
+    [2, 4.5, 0.5, 10.0].each do |training_days|
+      it "is valid when training_days is #{training_days}" do
+        expect(build(training_days: training_days)).to be_valid
+      end
+    end
+
+    [2.2, 4.3, 0.1, 1.75].each do |training_days|
+      it "is invalid when training_days is #{training_days}" do
+        external_training = build(training_days: training_days)
+        expect(external_training).to_not be_valid
+        expect(external_training.errors.full_messages).to include(
+          "Ausbildungstage muss eine ganze oder halbe Zahl sein"
+        )
+      end
     end
   end
 
