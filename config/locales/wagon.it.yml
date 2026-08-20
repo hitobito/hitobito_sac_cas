@@ -1703,7 +1703,10 @@ it:
         subsidy_link_label: Richiesta di sovvenzione
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
-          In qualità di socio CAS, puoi richiedere una sovvenzione per questo corso. Scegli se desideri usufruirne.
+          Per questo corso, i membri del CAS possono richiedere un contributo di sovvenzione.
+
+
+          <b>Importante:</b> la tariffa ridotta del corso verrà applicata solo dopo il ricevimento del modulo di richiesta della sovvenzione, debitamente compilato e firmato dalla tua sezione.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
         detail_info_text: >-
           Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.

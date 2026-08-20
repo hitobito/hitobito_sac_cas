@@ -1705,7 +1705,10 @@ fr:
         subsidy_link_label: Demande de subvention
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag_fr.pdf"
         general_info: >-
-          En tant que membre du CAS, il est possible de demander une subvention pour ce cours. Choisis si tu veux en bénéficier.
+          Pour ce cours, les membres du CAS peuvent demander une contribution de subvention.
+
+
+          <b>Important :</b> Le tarif réduit du cours ne sera appliqué qu'après réception du formulaire de demande de subvention dûment rempli et signé par ta section.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
         detail_info_text: >-
           Une inscription portant la signature du/de la préposé·e aux course confirme le statut de moniteur ou de monitrice actif(ve) ou futur(e) du CAS et donne droit au tarif subventionné du cours (%{amount}). Nous te prions, le cas échéant, de remplir le formulaire %{link} et <b>de</b> nous le <b>renvoyer</b> dès que possible, au <b>plus tard 5 semaines avant le début du cours</b>.

@@ -1636,7 +1636,10 @@ de_CH:
         subsidy_link_label: Subventionsantrag
         subsidy_link_href: "https://www.sac-cas.ch/fileadmin/Ausbildung_und_Sicherheit/Kurse/Subventionsantrag/Subventionsantrag.pdf"
         general_info: >-
-          Für diesen Kurs gibt es die Möglichkeit, als SAC-Mitglied einen Subventionsbeitrag zu beantragen. Wähle aus, ob du diesen in Anspruch nehmen möchtest.
+          Für diesen Kurs können SAC-Mitglieder einen Subventionsbeitrag beantragen.
+
+
+          <b>Wichtig:</b> Der reduzierte Kurspreis wird erst nach Erhalt des vollständig ausgefüllten und von deiner SAC-Sektion unterzeichneten Subventionsantrags freigeschaltet.
         detail_info_header: "Was muss ich tun um einen Subventionsantrag zu stellen?"
         detail_info_text: >-
           Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.
