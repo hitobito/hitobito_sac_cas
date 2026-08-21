@@ -1,21 +1,13 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
--# Visual-only stubs for the prototype's full-text search, leader search and
--# saved-filters popover - none have a backing filter yet. Disabled inputs,
--# no field name, so nothing is ever submitted.
-.d-flex.flex-column
-  %label.form-label{for: "agenda_search_stub"}= t("agenda.filters.search")
-  %input#agenda_search_stub.form-control.form-control-sm{type: "search", disabled: true,
-      placeholder: t("agenda.filters.search_placeholder")}
-
-.d-flex.flex-column
-  %label.form-label{for: "agenda_leader_search_stub"}= t("agenda.filters.leader_search")
-  %input#agenda_leader_search_stub.form-control.form-control-sm{type: "search", disabled: true,
-      placeholder: t("agenda.filters.leader_search_placeholder")}
-
-%button.btn.btn-outline-secondary{type: "button", disabled: true}
-  = icon(:bookmark)
-  = t("agenda.filters.saved_filters")
+-# Visual-only stub for the prototype's full-text search. Disabled input,
+-# no field name, so nothing is ever submitted. Matches SearchInput.tsx: no
+-# visible label (aria-label only), a gray search icon on the left, and its
+-# exact placeholder text.
+.position-relative.flex-grow-1.agenda-search-field
+  = agenda_icon(:search, css_class: "agenda-search-field-icon")
+  %input#agenda_search_stub.form-control.agenda-search-field-input{type: "search",
+      placeholder: t("agenda.filters.search_placeholder"), "aria-label": t("agenda.filters.search")}

@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2026, Hitobito AG. This file is part of
-#  hitobito and licensed under the Affero General Public License version 3
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito.
+#  https://github.com/hitobito/hitobito_sac_cas.
 
 class AgendaController < ApplicationController
   skip_before_action :authenticate_person!
@@ -22,7 +22,7 @@ class AgendaController < ApplicationController
 
   def index
     if turbo_frame_request?
-      render partial: "agenda/list", locals: {events: events}
+      render partial: "list", locals: {events: events}
     else
       render :index
     end
@@ -54,7 +54,8 @@ class AgendaController < ApplicationController
     @event_filter ||= Events::Filter::AgendaList.new(nil, params)
   end
 
-  def events = @events ||= event_filter.entries.joins(:dates).order(dates: {start_at: :asc})
+  def events = @events ||= event_filter.entries.joins(:dates).includes(:dates)
+    .order(dates: {start_at: :asc})
 
   def group = @group ||= params[:group_id].present? ? Group.find(params[:group_id]) : nil
 

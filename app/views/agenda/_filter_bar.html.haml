@@ -1,23 +1,23 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
 -# locals: f: (the agenda index form builder)
-.agenda-filter-bar.bg-white.border.rounded.shadow-sm.p-3.mb-3
+.agenda-filter-bar.bg-white.border.rounded.shadow-sm.mb-3
   .d-flex.flex-wrap.gap-3.align-items-end.mb-3
-    = render "agenda/date_filters", f: f
-    = render "agenda/search_filter_stub"
+    = render "date_filters", f: f
+    = render "search_filter_stub"
 
   .d-flex.flex-wrap.gap-2.align-items-center
-    = render "agenda/target_group_filter", target_groups: @target_groups
-    = render "agenda/activities_filter", activities: @activities
-    = render "agenda/fitness_requirement_filter", fitness_requirements: @fitness_requirements
-    = render "agenda/application_filters", f: f
-    = render "agenda/stub_filters"
+    = render "target_group_filter", target_groups: @target_groups
+    = render "activities_filter", activities: @activities
+    = render "fitness_requirement_filter", fitness_requirements: @fitness_requirements
+    = render "stub_filters"
 
     .ms-auto.d-flex.gap-2
       = submit_button(f, t("global.button.search"), name: nil)
-      %button.btn.btn-sm.btn-outline-primary.mt-2{type: "button",
+      %button.btn.btn-sm.agenda-btn-ghost.mt-2.d-inline-flex.align-items-center.gap-1{type: "button",
           data: {action: "click->sac-cas--agenda-filters#reset"}}
+        = agenda_icon(:"rotate-ccw")
         = t("agenda.index.reset_filter")

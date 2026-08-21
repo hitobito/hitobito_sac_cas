@@ -1,16 +1,19 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
 - if group.present?
-  = t(".title", group_name: group.name)
+  -# Wraps the filter form and the turbo frame together only so the active
+  -# filter chips (loaded inside the frame, alongside the results list) can
+  -# be styled as a visual continuation of the filter bar's card below it -
+  -# see .agenda-filter-bar-wrapper in agenda.scss.
+  .agenda-filter-bar-wrapper
+    = form_with(url: agenda_index_path(group_id: group.id), method: :get, scope: :filters, data: { controller: "sac-cas--agenda-filters", turbo_frame: :agenda_events_list, turbo_action: "advance" }) do |f|
+      = render "filter_bar", f: f
 
-  = form_with(url: agenda_index_path(group_id: group.id), method: :get, scope: :filters, data: { controller: "sac-cas--agenda-filters", turbo_frame: :agenda_events_list, turbo_action: "advance" }) do |f|
-    = render "agenda/filter_bar", f: f
-
-  = turbo_frame_tag(:agenda_events_list, target: :_top) do
-    = render "agenda/list", events: events
+    = turbo_frame_tag(:agenda_events_list, target: :_top) do
+      = render "list", events: events
 
 - else
   = t(".select_group_alert")

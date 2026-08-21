@@ -1,7 +1,7 @@
--#  Copyright (c) 2026, Hitobito AG. This file is part of
--#  hitobito and licensed under the Affero General Public License version 3
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito.
+-#  https://github.com/hitobito/hitobito_sac_cas.
 
 !!! 5
 
@@ -20,9 +20,21 @@
 
     = yield(:head)
 
-  %body
+  %body.agenda-body
+    .agenda-header
+      .agenda-container.d-flex.justify-content-between.align-items-end.flex-wrap.gap-2
+        .agenda-header-title
+          %h1= t("agenda.header.title")
+          - if group.present?
+            %p.text-muted.mb-0= group.name
+        -# Dummy placeholder for the section's branding, until a real group
+           logo is wired up here.
+        .agenda-header-brand.text-end.small.text-muted
+          = t("agenda.header.brand")
+
     #flash
       = render partial: 'layouts/flash', collection: [:notice, :warning, :alert], as: :level
 
-    %main#main-content
-      = yield
+    .agenda-container
+      %main#main-content
+        = yield

@@ -1,11 +1,11 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
 = turbo_frame_tag(:agenda_events_list, target: :_top) do
-  = render "agenda/results_summary", count: events.count
-  = render "agenda/active_filter_chips", event_filter: event_filter, group: group
+  = render "active_filter_chips", event_filter: event_filter, group: group
+  = render "results_summary", count: events.count
 
   - events.each do |event|
-    = render "agenda/tour_card", event: event
+    = render "tour_card", event: event

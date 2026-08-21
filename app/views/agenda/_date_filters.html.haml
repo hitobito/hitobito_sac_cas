@@ -1,15 +1,21 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
+-# Matches DateInputField.tsx: a floating bold label inside the input box
+-# itself (not above it), with a red calendar icon on the right - not a
+-# Bootstrap input-group, which the prototype doesn't use here.
 .d-flex.gap-3
   = f.fields_for(:date_range) do |ff|
-    .d-flex.flex-column
-      = ff.label(:since, t(".since"), class: "form-label")
+    .position-relative.agenda-date-field
+      = ff.label(:since, t(".since"), class: "agenda-date-field-label")
       = ff.text_field(:since, value: event_filter.chain.dig(:date_range, :since),
-        class: "date form-control form-control-sm", data: {reset_value: I18n.l(Time.zone.today.to_date)})
-    .d-flex.flex-column
-      = ff.label(:until, t(".until"), class: "form-label")
+        class: "date form-control agenda-date-field-input", placeholder: "TT.MM.JJJJ",
+        data: {reset_value: I18n.l(Time.zone.today.to_date)})
+      = agenda_icon(:calendar, css_class: "agenda-date-field-icon")
+    .position-relative.agenda-date-field
+      = ff.label(:until, t(".until"), class: "agenda-date-field-label")
       = ff.text_field(:until, value: event_filter.chain.dig(:date_range, :until),
-        class: "date form-control form-control-sm")
+        class: "date form-control agenda-date-field-input", placeholder: "TT.MM.JJJJ")
+      = agenda_icon(:calendar, css_class: "agenda-date-field-icon")

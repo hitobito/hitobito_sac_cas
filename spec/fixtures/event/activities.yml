@@ -22,6 +22,7 @@
 
 wandern:
   order: 1
+  color: "#237100"
 
 wanderweg:
   technical_requirement: wandern
@@ -40,6 +41,7 @@ schneeschuh:
 
 hochtour:
   order: 2
+  color: "#662d91"
 
 skihochtour:
   technical_requirement: wandern
@@ -53,6 +55,7 @@ snowboardhochtour:
 
 klettern:
   order: 3
+  color: "#ff3d12"
 
 felsklettern:
   technical_requirement: klettern

@@ -1,7 +1,7 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
 -# Generic flat dropdown filter: one checkbox per option, no nesting.
 -# Used for filters without a parent/child hierarchy (e.g. Kondition), and
@@ -14,7 +14,7 @@
 - count = disabled ? 0 : selected.size
 - dom_prefix = field_name&.parameterize || label.parameterize
 
-= render layout: "agenda/filter_dropdown_shell",
+= render layout: "filter_dropdown_shell",
     locals: {label: label, icon_name: local_assigns[:icon_name], count: count, disabled: disabled} do
   - options.each do |id, option_label|
     - option_id = "#{dom_prefix}_#{id}"

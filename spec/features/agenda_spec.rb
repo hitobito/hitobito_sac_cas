@@ -34,41 +34,22 @@ describe "agenda page", js: true do
 
     expect(find_field("filters_date_range_since").value).to eq "01.01.2026"
     expect(find_field("filters_date_range_until").value).to be_blank
-    expect(page).to have_checked_field("filters_application_open_value_0")
-    expect(page).to have_checked_field("filters_places_available_value_0")
   end
 
   describe "filtering" do
     it "keeps the tour when the filters still match" do
       fill_in "filters_date_range_until", with: "01.01.2027"
-      choose "filters_application_open_value_1"
-      choose "filters_places_available_value_1"
 
       click_button "Suchen"
 
       expect(page).to have_text(tour.name)
       expect(page).to have_text("1 Tour gefunden")
     end
-
-    it "excludes the tour once the application window filter no longer matches" do
-      tour.update!(
-        application_opening_at: Date.new(2025, 11, 1),
-        application_closing_at: Date.new(2025, 12, 1)
-      )
-
-      choose "filters_application_open_value_1"
-      click_button "Suchen"
-
-      expect(page).not_to have_text(tour.name)
-      expect(page).to have_text("0 Touren gefunden")
-    end
   end
 
   describe "resetting filters" do
     before do
       fill_in "filters_date_range_until", with: "01.01.2027"
-      choose "filters_application_open_value_1"
-      choose "filters_places_available_value_1"
       click_button "Suchen"
 
       click_button "Filter zurücksetzen"
@@ -77,8 +58,6 @@ describe "agenda page", js: true do
     it "restores the default filter values" do
       expect(find_field("filters_date_range_since").value).to eq "01.01.2026"
       expect(find_field("filters_date_range_until").value).to be_blank
-      expect(page).to have_checked_field("filters_application_open_value_0")
-      expect(page).to have_checked_field("filters_places_available_value_0")
     end
   end
 
@@ -153,11 +132,11 @@ describe "agenda page", js: true do
       check "Kinder (KiBe)"
       click_button "Suchen"
 
-      expect(page).to have_css(".agenda-chip", text: "Kinder (KiBe)")
+      expect(page).to have_css(".agenda-filter-chip", text: "Kinder (KiBe)")
 
-      find(".agenda-chip", text: "Kinder (KiBe)").click
+      find(".agenda-filter-chip", text: "Kinder (KiBe)").click
 
-      expect(page).not_to have_css(".agenda-chip", text: "Kinder (KiBe)")
+      expect(page).not_to have_css(".agenda-filter-chip", text: "Kinder (KiBe)")
       expect(page).not_to have_checked_field("Kinder (KiBe)")
     end
   end

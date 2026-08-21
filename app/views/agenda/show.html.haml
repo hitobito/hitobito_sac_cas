@@ -1,7 +1,7 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
 = link_to t("global.button.back"), agenda_index_path(group, returning: true), class: "btn btn-sm btn-outline-secondary mb-3"
 
@@ -18,7 +18,9 @@
 
     - if event.display_booking_info?
       %dt.col-sm-3= t("agenda.list.tour_card.participants_label")
-      %dd.col-sm-9= t("agenda.list.tour_card.participants", count: event.participant_count, max: event.maximum_participants)
+      %dd.col-sm-9
+        = t("agenda.list.tour_card.participants_value", count: event.participant_count, max: event.maximum_participants)
+        = t("agenda.list.tour_card.participants_suffix")
 
     - if event.contact
       %dt.col-sm-3= t("agenda.list.tour_card.contact")
