@@ -1,0 +1,19 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Full-text search, wired to the core Events::Filter::FullText filter (key
+-# :full_text, arg :q). Matches SearchInput.tsx: no visible label (aria-label
+-# only), a gray search icon on the left, and its exact placeholder text.
+-#
+-# Submits on input->autosubmit#submit rather than the form's delegated
+-# change (see index.html.haml), so search-as-you-type debounces instead of
+-# waiting for blur - a query below FullText::MIN_QUERY_LENGTH is simply a
+-# no-op filter server-side, so short in-progress queries are harmless.
+.position-relative.flex-grow-1.agenda-search-field
+  = agenda_icon(:search, css_class: "agenda-search-field-icon")
+  %input#filters_full_text_q.form-control.agenda-search-field-input{type: "search",
+      name: "filters[full_text][q]", value: event_filter.chain.dig(:full_text, :q),
+      placeholder: t("agenda.filters.search_placeholder"), "aria-label": t("agenda.filters.search"),
+      data: {action: "input->autosubmit#submit"}}

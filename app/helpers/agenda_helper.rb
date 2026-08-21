@@ -69,6 +69,7 @@ module AgendaHelper
         t("agenda.application_filters.application_open")),
       boolean_chip(params, group, :places_available,
         t("agenda.application_filters.places_available")),
+      full_text_chip(params, group),
       *essential_chips(params, group, :target_group_id, @target_groups),
       *essential_chips(params, group, :activity_id, @activities),
       *essential_chips(params, group, :technical_requirement_id, @technical_requirements),
@@ -112,6 +113,15 @@ module AgendaHelper
     without = params.deep_dup
     without.delete(key)
     {label: label, path: agenda_index_path(group_id: group.id, filters: without)}
+  end
+
+  def full_text_chip(params, group)
+    value = params.dig(:full_text, :q)
+    return if value.blank?
+
+    without = params.deep_dup
+    without.delete(:full_text)
+    {label: "\"#{value}\"", path: agenda_index_path(group_id: group.id, filters: without)}
   end
 
   def essential_chips(params, group, key, entries)

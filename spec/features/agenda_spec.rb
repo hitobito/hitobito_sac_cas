@@ -178,6 +178,40 @@ describe "agenda page", js: true do
     end
   end
 
+  describe "full-text search" do
+    it "keeps the tour when the search term matches its name" do
+      find("#filters_full_text_q").set("Bundstock")
+
+      expect(page).to have_text(tour.name)
+      expect(page).to have_text("1 Tour gefunden")
+    end
+
+    it "excludes the tour once the search term matches nothing" do
+      find("#filters_full_text_q").set("Matterhorn")
+
+      expect(page).not_to have_text(tour.name)
+      expect(page).to have_text("0 Touren gefunden")
+    end
+
+    it "ignores a query shorter than the minimum search length" do
+      find("#filters_full_text_q").set("Bu")
+
+      expect(page).to have_text(tour.name)
+      expect(page).to have_text("1 Tour gefunden")
+    end
+
+    it "shows the term in quotes as a removable chip, and removing it clears the search" do
+      find("#filters_full_text_q").set("Bundstock")
+
+      expect(page).to have_css(".agenda-filter-chip", text: '"Bundstock"')
+
+      find(".agenda-filter-chip", text: '"Bundstock"').click
+
+      expect(page).not_to have_css(".agenda-filter-chip", text: '"Bundstock"')
+      expect(find("#filters_full_text_q").value).to be_blank
+    end
+  end
+
   describe "active filter chips" do
     it "shows a removable chip for an applied filter, and removing it drops that filter" do
       click_button "Zielgruppe"
