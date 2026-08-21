@@ -1,0 +1,16 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+-# Kondition filter: flat checkbox list, no nesting.
+-#
+-# locals: fitness_requirements: [Event::FitnessRequirement, ...]
+- selected = Array(event_filter.chain.dig(:tour_essentials, :fitness_requirement_id))
+
+= render "agenda/checkbox_dropdown_filter",
+    field_name: "filters[tour_essentials][fitness_requirement_id]",
+    label: t("agenda.filters.fitness_requirements"),
+    icon_name: "battery-three-quarters",
+    options: fitness_requirements.map { |requirement| [requirement.id, requirement.label] },
+    selected: selected

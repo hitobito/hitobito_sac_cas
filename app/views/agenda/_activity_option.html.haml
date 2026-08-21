@@ -1,0 +1,33 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+-# One activity checkbox row, plus - while it's checked - its linked
+-# technical requirement shown as a toggleable chip. Nested under its
+-# discipline's fieldset, or rendered standalone for single-activity
+-# disciplines.
+-#
+-# locals: activity:, selected: []
+- checked = selected.include?(activity.id)
+- option_id = "activity_#{activity.id}"
+
+.form-check.agenda-filter-option
+  = check_box_tag("filters[tour_essentials][activity_id][]", activity.id, checked,
+      id: option_id, class: "form-check-input",
+      data: {action: "change->sac-cas--checkbox-filter#toggleOption change->sac-cas--activity-chips#toggleActivity",
+             "sac-cas--checkbox-filter-target": "option", "sac-cas--activity-chips-target": "activity"})
+  = label_tag(option_id, activity.label, class: "form-check-label")
+
+- if activity.technical_requirement
+  - requirement = activity.technical_requirement
+  - requirement_selected = Array(event_filter.chain.dig(:tour_essentials, :technical_requirement_id)).include?(requirement.id)
+  .ms-4.mb-2{hidden: !checked,
+      data: {"sac-cas--activity-chips-target": "chipRow", activity_id: activity.id}}
+    %button.agenda-chip{type: "button", class: ("active" if requirement_selected),
+        "aria-pressed": requirement_selected.to_s,
+        data: {action: "click->sac-cas--activity-chips#toggleChip",
+               "sac-cas--activity-chips-target": "chip"}}
+      = requirement.label
+      = check_box_tag("filters[tour_essentials][technical_requirement_id][]", requirement.id,
+          requirement_selected, class: "d-none")

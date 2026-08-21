@@ -1,0 +1,26 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+-# Generic flat dropdown filter: one checkbox per option, no nesting.
+-# Used for filters without a parent/child hierarchy (e.g. Kondition), and
+-# for the visual-only stub filters (pass `disabled: true`, `field_name: nil`).
+-#
+-# locals: field_name, label, icon_name: nil, options: [[id, label], ...],
+-#         selected: [], disabled: false
+- selected ||= []
+- disabled ||= false
+- count = disabled ? 0 : selected.size
+- dom_prefix = field_name&.parameterize || label.parameterize
+
+= render layout: "agenda/filter_dropdown_shell",
+    locals: {label: label, icon_name: local_assigns[:icon_name], count: count, disabled: disabled} do
+  - options.each do |id, option_label|
+    - option_id = "#{dom_prefix}_#{id}"
+    .form-check.agenda-filter-option
+      = check_box_tag(disabled ? nil : "#{field_name}[]", id, selected.include?(id),
+          id: option_id, class: "form-check-input", disabled: disabled,
+          data: (disabled ? {} : {action: "change->sac-cas--checkbox-filter#toggleOption",
+                                   "sac-cas--checkbox-filter-target": "option"}))
+      = label_tag(option_id, option_label, class: "form-check-label")

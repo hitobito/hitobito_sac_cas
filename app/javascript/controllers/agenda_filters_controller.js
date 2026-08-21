@@ -23,8 +23,9 @@ export default class extends Controller {
     this.element.querySelectorAll('input[type="radio"]').forEach((radio) => {
       radio.checked = radio.value === "0";
     });
-    this.element.querySelectorAll("select[data-controller~='tom-select']").forEach((select) => {
-      if (select.tomselect) select.tomselect.clear();
+    this.element.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+      checkbox.checked = false;
+      checkbox.indeterminate = false;
     });
     this.element.requestSubmit();
   }

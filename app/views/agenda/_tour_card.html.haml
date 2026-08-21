@@ -1,0 +1,45 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+-# One tour/event row in the agenda results list.
+-#
+-# locals: event:
+- color = tour_accent_color(event)
+
+%article.agenda-tour-card.border.rounded.bg-white.shadow-sm.p-3.mb-3{style: ("--tour-color: #{color}" if color.present?)}
+  .d-flex.flex-column.flex-lg-row.gap-3
+    .flex-grow-1
+      %h3.h5.mb-1
+        = link_to event.name, agenda_show_path(group, event)
+
+      .d-flex.flex-wrap.gap-1.mb-2
+        - event.groups.each do |event_group|
+          %span.badge.text-bg-light.border= event_group.name
+
+      - if event.is_a?(Event::Tour)
+        %p.small.text-muted.mb-0= format_event_activities(event)
+        %p.small.text-muted.mb-0= format_event_target_groups(event)
+
+    .d-flex.flex-column.gap-1.border-start.ps-3.text-muted.small.agenda-tour-card-meta
+      %span= safe_join([icon(:calendar), I18n.l(event.start_at, format: :long)], " ")
+      - if event.total_duration_days
+        %span= safe_join([icon(:clock), t("agenda.list.tour_card.duration", count: event.total_duration_days)], " ")
+      - if event.is_a?(Event::Tour)
+        - if event.fitness_requirement
+          %span= safe_join([icon(:"battery-three-quarters"), format_event_fitness_requirement(event)], " ")
+        - if event.technical_requirements.any?
+          %span= safe_join([icon(:gauge), format_event_technical_requirements(event)], " ")
+        - if event.ascent || event.descent
+          %span= safe_join([icon(:"arrow-trend-up"), "#{event.ascent} m / #{event.descent} m"], " ")
+
+    .d-flex.flex-column.gap-2.border-start.ps-3.agenda-tour-card-meta
+      - if event.display_booking_info?
+        %span.text-muted.small
+          = safe_join([icon(:users),
+              t("agenda.list.tour_card.participants", count: event.participant_count, max: event.maximum_participants)], " ")
+      - if event.contact
+        %span.text-muted.small= safe_join([icon(:user), event.contact.to_s], " ")
+      .mt-auto
+        = link_to t("agenda.list.show_details"), agenda_show_path(group, event), class: "btn btn-sm btn-outline-secondary"

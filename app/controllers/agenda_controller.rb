@@ -11,7 +11,10 @@ class AgendaController < ApplicationController
 
   before_action :set_default_type_filter, only: :index
   before_action :set_default_date_range_filter, only: :index, unless: :turbo_frame_request?
-  before_action :preload_filter_select_options, only: :index, unless: :turbo_frame_request?
+  # Needed on every request, not just full page loads: the results partial
+  # (rendered for turbo-frame requests too) uses these to label activity/
+  # target-group/... filter chips and technical-requirement chips.
+  before_action :preload_filter_select_options, only: :index
 
   layout -> { turbo_frame_request? ? false : "agenda" }
 

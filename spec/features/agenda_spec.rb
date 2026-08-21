@@ -81,4 +81,84 @@ describe "agenda page", js: true do
       expect(page).to have_checked_field("filters_places_available_value_0")
     end
   end
+
+  describe "target group filter" do
+    it "shows a selected-count badge and filters tours by the checked target group" do
+      click_button "Zielgruppe"
+      check "Kinder (KiBe)"
+
+      expect(page).to have_button("Zielgruppe", text: "1")
+
+      click_button "Suchen"
+
+      expect(page).to have_text(tour.name)
+    end
+
+    it "excludes the tour once no checked target group matches" do
+      click_button "Zielgruppe"
+      check "Jugend (JO)"
+      click_button "Suchen"
+
+      expect(page).not_to have_text(tour.name)
+      expect(page).to have_text("0 Touren gefunden")
+    end
+  end
+
+  describe "fitness requirement filter" do
+    it "filters tours by the checked fitness requirement" do
+      click_button "Kondition"
+      check "B - wenig anstrengend"
+      click_button "Suchen"
+
+      expect(page).to have_text(tour.name)
+    end
+  end
+
+  describe "activities filter" do
+    it "reveals the checked activity's technical requirement as a chip and filters by it" do
+      click_button "Aktivitäten"
+      check "Wanderweg"
+
+      expect(page).to have_button("Wanderskala")
+
+      click_button "Wanderskala"
+      click_button "Suchen"
+
+      expect(page).to have_text(tour.name)
+    end
+
+    it "hides the chip again once the activity is unchecked" do
+      click_button "Aktivitäten"
+      check "Wanderweg"
+      expect(page).to have_button("Wanderskala", visible: true)
+
+      uncheck "Wanderweg"
+
+      expect(page).to have_button("Wanderskala", visible: false)
+    end
+
+    it "selecting the discipline checkbox selects all of its activities" do
+      click_button "Aktivitäten"
+      check "Wandern"
+
+      expect(page).to have_checked_field("Wanderweg")
+      expect(page).to have_checked_field("Bergtour")
+      expect(page).to have_checked_field("Schneeschuhwandern")
+    end
+  end
+
+  describe "active filter chips" do
+    it "shows a removable chip for an applied filter, and removing it drops that filter" do
+      click_button "Zielgruppe"
+      check "Kinder (KiBe)"
+      click_button "Suchen"
+
+      expect(page).to have_css(".agenda-chip", text: "Kinder (KiBe)")
+
+      find(".agenda-chip", text: "Kinder (KiBe)").click
+
+      expect(page).not_to have_css(".agenda-chip", text: "Kinder (KiBe)")
+      expect(page).not_to have_checked_field("Kinder (KiBe)")
+    end
+  end
 end

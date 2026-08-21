@@ -1,0 +1,29 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+-# Aktivitäten filter: one fieldset per discipline (main activity), its
+-# activities (children) nested underneath with tri-state parent selection.
+-# Checking an activity reveals its linked technical requirement as a
+-# toggleable chip - see sac-cas--activity-chips and _activity_option.
+-#
+-# locals: activities: [Event::Activity, ...] (mains and children, unsorted)
+- selected = Array(event_filter.chain.dig(:tour_essentials, :activity_id))
+
+= render layout: "agenda/filter_dropdown_shell",
+    locals: {label: t("agenda.filters.activities"), icon_name: "mountain",
+             count: selected.size, extra_controller: "sac-cas--activity-chips"} do
+  - activities.select(&:main?).each_with_index do |main, index|
+    - children = activities.select { |activity| activity.parent_id == main.id }
+    - if children.empty?
+      = render "agenda/activity_option", activity: main, selected: selected
+    - elsif children.one? && children.first.label == main.label
+      = render "agenda/activity_option", activity: children.first, selected: selected
+    - else
+      %fieldset.agenda-filter-group{class: ("mt-2 pt-2 border-top" if index.positive?)}
+        %legend.visually-hidden= main.label
+        = render "agenda/nested_group_header", dom_id: "activity_group_#{main.id}", label: main.label, color: main.color
+        .ms-4
+          - children.each do |child|
+            = render "agenda/activity_option", activity: child, selected: selected

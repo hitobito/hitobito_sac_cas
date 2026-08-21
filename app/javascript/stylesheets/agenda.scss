@@ -2,3 +2,77 @@
 // hitobito and licensed under the Affero General Public License version 3
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito.
+
+// Component-level styling for the Agenda (Tourenportal) pages, matching
+// https://chrusu.github.io/Tourenportal-Prototype/. Everything that can be
+// expressed with stock Bootstrap utility classes is done directly in the
+// views; only what Bootstrap has no utility for lives here.
+
+// Dropdown filter: constrain long checkbox lists to a scrollable menu.
+.agenda-filter-dropdown .dropdown-menu {
+  min-width: 18rem;
+  max-height: 26rem;
+  overflow-y: auto;
+}
+
+// Full-row hover highlight for a filter's checkbox rows (a plain
+// .form-check only highlights the checkbox/label themselves).
+.agenda-filter-option {
+  border-radius: $border-radius-sm;
+
+  &:hover {
+    background-color: $agenda-snow;
+  }
+}
+
+// Nested discipline/target-group groups inside a filter dropdown.
+.agenda-filter-group + .agenda-filter-group {
+  margin-top: 0.375rem;
+  padding-top: 0.375rem;
+  border-top: 1px solid $agenda-gray;
+}
+
+// Small colour swatch identifying a discipline (Event::Activity#color).
+.agenda-discipline-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 2px;
+}
+
+// Toggle-button chip, used both for an activity's technical-requirement
+// chip and for active-filter-value chips.
+.agenda-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid $agenda-gray-dark;
+  border-radius: 50rem;
+  background-color: $white;
+  color: $agenda-black;
+  font-size: 0.8125rem;
+  text-decoration: none;
+
+  &.active,
+  &:hover {
+    border-color: $agenda-red;
+    background-color: $agenda-red;
+    color: $white;
+  }
+
+  &.active {
+    font-weight: bold;
+  }
+}
+
+// Tour card in the results list: a coloured bar on the left identifies the
+// tour's main discipline (--tour-color is set inline from
+// Event::Activity#color, since it's per-row data, not a design token).
+.agenda-tour-card {
+  border-left: 4px solid var(--tour-color, transparent);
+}
+
+.agenda-tour-card-meta {
+  min-width: 12rem;
+}

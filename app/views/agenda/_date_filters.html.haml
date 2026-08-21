@@ -3,14 +3,13 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito.
 
-.d-flex.flex-column
+.d-flex.gap-3
   = f.fields_for(:date_range) do |ff|
-    = ff.label(:since, t(".since"), class: "form-label")
-    = ff.text_field(:since, value: event_filter.chain.dig(:date_range, :since),
-      class: "date form-control form-control-sm",
-      data: {reset_value: I18n.l(Time.zone.today.to_date)})
-
-.d-flex.flex-column
-  = f.fields_for(:date_range) do |ff|
-    = ff.label(:until, t(".until"), class: "form-label")
-    = ff.text_field(:until, value: event_filter.chain.dig(:date_range, :until), class: "date form-control form-control-sm")
+    .d-flex.flex-column
+      = ff.label(:since, t(".since"), class: "form-label")
+      = ff.text_field(:since, value: event_filter.chain.dig(:date_range, :since),
+        class: "date form-control form-control-sm", data: {reset_value: I18n.l(Time.zone.today.to_date)})
+    .d-flex.flex-column
+      = ff.label(:until, t(".until"), class: "form-label")
+      = ff.text_field(:until, value: event_filter.chain.dig(:date_range, :until),
+        class: "date form-control form-control-sm")

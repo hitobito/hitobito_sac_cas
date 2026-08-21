@@ -5,6 +5,11 @@
 
 // Bootstrap
 @import "bootstrap/scss/functions";
+
+// Agenda-only color tokens, must come before bootstrap/scss/variables so
+// they can override Bootstrap's defaults for these pages only.
+@import "../stylesheets/agenda/variables";
+
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/utilities";
@@ -13,7 +18,6 @@
 
 // Dependencies
 @import "~@fortawesome/fontawesome-free/css/all";
-@import "~tom-select/dist/css/tom-select.bootstrap5.css";
 
 // Custom Stylesheets
 @import "../stylesheets/agenda";

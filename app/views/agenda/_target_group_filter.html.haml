@@ -1,0 +1,29 @@
+-# Copyright (c) 2026, Hitobito AG. This file is part of
+-# hitobito and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito.
+
+-# Zielgruppe filter: one fieldset per main target group, its children
+-# nested underneath with tri-state parent selection (see
+-# _nested_group_header). A main with no children (most target groups) or
+-# with a single, identically-labelled child renders as a single flat
+-# checkbox instead.
+-#
+-# locals: target_groups: [Event::TargetGroup, ...] (mains and children, unsorted)
+- selected = Array(event_filter.chain.dig(:tour_essentials, :target_group_id))
+
+= render layout: "agenda/filter_dropdown_shell",
+    locals: {label: t("agenda.filters.target_groups"), icon_name: "users", count: selected.size} do
+  - target_groups.select(&:main?).each_with_index do |main, index|
+    - children = target_groups.select { |group| group.parent_id == main.id }
+    - if children.empty?
+      = render "agenda/target_group_option", target_group: main, selected: selected
+    - elsif children.one? && children.first.label == main.label
+      = render "agenda/target_group_option", target_group: children.first, selected: selected
+    - else
+      %fieldset.agenda-filter-group{class: ("mt-2 pt-2 border-top" if index.positive?)}
+        %legend.visually-hidden= main.label
+        = render "agenda/nested_group_header", dom_id: "target_group_group_#{main.id}", label: main.label
+        .ms-4
+          - children.each do |child|
+            = render "agenda/target_group_option", target_group: child, selected: selected
