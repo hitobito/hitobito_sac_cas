@@ -1,0 +1,40 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Shared shell for a filter rendered as a Bootstrap dropdown, matching the
+-# prototype's FilterPopover: an icon/label button showing a selected-count
+-# badge, opening a menu that stays open while checkboxes inside are toggled
+-# (data-bs-auto-close="outside"). The menu itself repeats the label as a
+-# title, with a "Zurücksetzen" link beside it shown only once something is
+-# selected. Counting/reset behaviour comes from the sac-cas--checkbox-filter
+-# Stimulus controller; pass `extra_controller` to layer on filter-specific
+-# behaviour (e.g. the Aktivitäten chip logic). Yields the checkbox list.
+-#
+-# locals: label:, icon_name: nil, count: 0, disabled: false, extra_controller: nil
+- controllers = ["sac-cas--checkbox-filter", local_assigns[:extra_controller]].compact.join(" ")
+- disabled ||= false
+- count ||= 0
+
+.dropdown.agenda-filter-dropdown{data: (disabled ? {} : {controller: controllers})}
+  %button.btn.agenda-dropdown-toggle{type: "button", disabled: disabled,
+      data: (disabled ? {} : {bs_toggle: "dropdown", bs_auto_close: "outside"})}
+    - if icon_name
+      = agenda_icon(icon_name)
+    = label
+    %span.badge.rounded-pill.text-bg-primary.agenda-count-badge{class: ("d-none" if count.zero?),
+        data: {"sac-cas--checkbox-filter-target": "counter"}}
+      = count
+    = agenda_icon(:"chevron-down", css_class: "agenda-dropdown-caret")
+  - unless disabled
+    .dropdown-menu.p-3
+      .d-flex.align-items-center.justify-content-between.mb-3
+        %span.agenda-dropdown-title= label
+        %a.agenda-reset-link.d-inline-flex.align-items-center.gap-1{href: "#",
+            class: ("d-none" unless count.positive?),
+            data: {action: "click->sac-cas--checkbox-filter#reset",
+                   "sac-cas--checkbox-filter-target": "resetLink"}}
+          = agenda_icon(:"rotate-ccw", css_class: "agenda-icon-sm")
+          = t("agenda.filters.reset")
+      = yield

@@ -1,0 +1,21 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Parent (Hauptkategorie) row for a nested checkbox filter group: a
+-# tri-state checkbox that selects/clears all of this group's children (see
+-# sac-cas--checkbox-filter#toggleParent), plus an optional colour swatch
+-# and the group's label.
+-#
+-# locals: dom_id:, label:, color: nil
+- color = local_assigns[:color]
+- regular = local_assigns[:regular] || false
+
+.form-check.agenda-filter-option
+  = check_box_tag(nil, "1", false, id: dom_id, class: "form-check-input",
+      data: {action: "change->sac-cas--checkbox-filter#toggleParent",
+             "sac-cas--checkbox-filter-target": "parent"})
+  - if color.present?
+    %span.agenda-discipline-swatch{style: "background-color: #{color}", "aria-hidden": "true"}
+  = label_tag(dom_id, label, class: "form-check-label #{'fw-bold' unless regular}")

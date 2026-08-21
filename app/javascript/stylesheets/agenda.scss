@@ -1,4 +1,595 @@
-// Copyright (c) 2026, Hitobito AG. This file is part of
-// hitobito and licensed under the Affero General Public License version 3
+// Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+// hitobito_sac_cas and licensed under the Affero General Public License version 3
 // or later. See the COPYING file at the top-level directory or at
-// https://github.com/hitobito/hitobito.
+// https://github.com/hitobito/hitobito_sac_cas.
+
+// Component-level styling for the Agenda (Tourenportal) pages, matching
+// https://chrusu.github.io/Tourenportal-Prototype/ (component source read
+// directly from github.com/chrusu/Tourenportal-Prototype for exact
+// font-size/weight/color, not guessed). Everything expressible with stock
+// Bootstrap utility classes is done directly in the views; only what
+// Bootstrap has no utility for lives here.
+
+.agenda-body {
+  background-color: $agenda-snow;
+}
+// Every icon on the agenda pages is one of AgendaHelper#agenda_icon's
+// inline SVGs (copied from Lucide, matching the prototype) - sized here
+// since Lucide ships them at a fixed 24x24 viewBox. Default matches the
+// prototype's most common h-4 w-4; .agenda-icon-sm matches its h-3 w-3.
+.agenda-icon {
+  width: 1rem; // 16px
+  height: 1rem;
+  flex-shrink: 0;
+  vertical-align: -0.125em;
+}
+
+.agenda-icon-sm {
+  width: 0.75rem; // 12px
+  height: 0.75rem;
+}
+
+// Centers the page content and caps its width, like the prototype's page
+// shell - both the branded header and the main content share it.
+.agenda-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+// Header.tsx: h1 is text-sac-h3 leading-none, subline is mt-1 text-sm
+// text-muted-foreground.
+.agenda-header {
+  background-color: $white;
+  border-bottom: 2px solid $agenda-red;
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-size: 1.375rem; // 22px
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0;
+  }
+
+  p {
+    font-size: 0.875rem; // 14px
+    margin-top: 0.25rem;
+  }
+}
+
+.agenda-header-brand {
+  display: block;
+  position: relative;
+
+  width: 160px;
+  height: 68px;
+  object-fit: contain;
+  object-position: center center;
+  text-align: center;
+
+  img {
+    max-width: 160px;
+    max-height: 68px;
+  }
+}
+
+// FilterPopover.tsx trigger: h-10, border-sac-gray, bg-white, text-sm;
+// hover:border-sac-gray-dark; focus-visible:border-sac-red + ring;
+// data-[state=open]:border-sac-red. Deliberately not .btn-outline-secondary
+// - Bootstrap's outline-button mixin always inverts to a filled background
+// on hover/active/open (baked into bootstrap/scss/mixins/_buttons.scss, not
+// something a variable can turn off), where the prototype only ever changes
+// the border colour and keeps a plain white background throughout.
+.agenda-dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.5rem; // 40px
+  padding: 0 0.75rem;
+  font-size: 0.875rem; // 14px
+  color: $agenda-black;
+  background-color: #fff;
+  border: 1px solid $agenda-gray;
+
+  &:hover {
+    color: $agenda-black;
+    background-color: #fff;
+    border-color: $agenda-gray-dark;
+  }
+
+  // Same tokens as the date/search inputs (see $input-focus-border-color/
+  // $input-focus-box-shadow in _variables.scss) so every input on the page
+  // shares one focus outline.
+  &:focus-visible {
+    outline: none;
+    border-color: $input-focus-border-color;
+    box-shadow: $input-focus-box-shadow;
+  }
+
+  &.show {
+    color: $agenda-black;
+    background-color: #fff;
+    border-color: $agenda-red;
+  }
+}
+
+// FilterPopover.tsx: <ChevronDown className="h-4 w-4 text-muted-foreground" />
+.agenda-dropdown-caret {
+  color: $agenda-gray-dark;
+  margin-left: 0.125rem;
+}
+
+// FilterPopover.tsx count badge: h-5 min-w-5 px-1.5 text-xs font-bold.
+.agenda-count-badge {
+  font-size: 0.75rem; // 12px
+  font-weight: 700;
+  height: 1.25rem; // 20px
+  min-width: 1.25rem;
+  padding: 0 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// FilterPopover.tsx menu header: <p className="text-sac-h4">{label}</p>
+.agenda-dropdown-title {
+  font-size: 0.9375rem; // 15px
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+// FilterPopover.tsx reset button: text-xs text-muted-foreground, hover:text-foreground.
+.agenda-reset-link {
+  font-size: 0.75rem; // 12px
+  color: $agenda-gray-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $agenda-black;
+  }
+}
+
+// DateInputField.tsx: a floating bold label inside the input box itself
+// (absolutely positioned, not a separate .form-label above it), with a red
+// calendar icon on the right - both sit over the input, not beside it in
+// an input-group.
+.agenda-date-field {
+  .agenda-date-field-label {
+    position: absolute;
+    left: 0.875rem; // 14px
+    top: 0.4375rem; // 7px
+    z-index: 2;
+    font-size: 0.75rem; // 12px
+    font-weight: 600;
+    color: $agenda-black;
+    pointer-events: none;
+    margin-bottom: 0;
+  }
+
+  .agenda-date-field-input {
+    height: 3.125rem; // 50px
+    padding: 1.125rem 2.5rem 0 0.875rem; // pt-[18px] pr-10 pl-[14px]
+    font-size: 0.75rem; // 12px
+    font-weight: 300;
+
+    &::placeholder {
+      color: $agenda-placeholder;
+      font-weight: 300;
+    }
+  }
+
+  .agenda-date-field-icon {
+    position: absolute;
+    right: 1rem; // 16px
+    top: 50%;
+    transform: translateY(-50%);
+    color: $agenda-red;
+    pointer-events: none;
+  }
+}
+
+// SearchInput.tsx: no visible label (aria-label only), a gray-medium search
+// icon on the left sitting over the input, not beside it in an input-group.
+.agenda-search-field {
+  min-width: 16rem;
+
+  .agenda-search-field-icon {
+    position: absolute;
+    left: 0.75rem; // 12px
+    top: 50%;
+    transform: translateY(-50%);
+    color: $agenda-gray-medium;
+    pointer-events: none;
+  }
+
+  .agenda-search-field-input {
+    height: 3.125rem; // 50px
+    padding-left: 2.25rem; // 36px
+    font-size: 0.9375rem; // 15px
+    font-weight: 300;
+
+    &::placeholder {
+      color: $agenda-placeholder;
+      font-weight: 300;
+    }
+  }
+}
+
+// Dropdown filter: constrain long checkbox lists to a scrollable menu.
+.agenda-filter-dropdown .dropdown-menu {
+  min-width: 20rem;
+  max-height: 26rem;
+  overflow-y: auto;
+}
+
+// CheckboxOption.tsx: text-sm text-sac-gray-dark, hover:text-sac-red.
+// The nested-group header's own main/parent label is bold and black
+// instead (TourTypeFilter.tsx: text-sm font-bold text-sac-black).
+.agenda-filter-option {
+  border-radius: $border-radius-sm;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-bottom: 0;
+
+  &:hover {
+    background-color: $agenda-snow;
+  }
+
+  .form-check-label {
+    font-size: 0.875rem; // 14px
+    color: $agenda-gray-dark;
+
+    &.fw-bold {
+      color: $agenda-black;
+    }
+  }
+
+  &:hover .form-check-label {
+    color: $agenda-red;
+  }
+
+  &:hover .form-check-label.fw-bold {
+    color: $agenda-black;
+  }
+}
+
+// Nested discipline/target-group groups inside a filter dropdown.
+.agenda-filter-group + .agenda-filter-group {
+  margin-top: 0.375rem;
+  padding-top: 0.375rem;
+  border-top: 1px solid $agenda-gray;
+}
+
+// TourTypeFilter.tsx swatch: plain h-3 w-3 square, no rounding.
+.agenda-discipline-swatch {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  margin-right: 0.25rem;
+}
+
+// DifficultyRangeSelect.tsx toggle chip (activity's technical-requirement
+// chip): border border-input bg-background text-xs font-light, hover:bg-accent;
+// aria-pressed: border-primary bg-primary font-bold text-primary-foreground.
+.agenda-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid $agenda-gray;
+  border-radius: 50rem;
+  background-color: $agenda-snow;
+  color: $agenda-black;
+  font-size: 0.75rem; // 12px
+  font-weight: 300;
+  text-decoration: none;
+
+  &:hover:not(.active) {
+    background-color: $agenda-gray-light;
+  }
+
+  &.active {
+    border-color: $agenda-red;
+    background-color: $agenda-red;
+    color: $white;
+    font-weight: 700;
+  }
+}
+
+// ActiveFilterChips.tsx removable chip: rounded-full bg-sac-gray-light
+// px-3 py-1 text-xs text-foreground, hover:bg-sac-gray. A plain flat pill,
+// unlike .agenda-chip above - no border, and never shows an "active" fill.
+.agenda-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50rem;
+  background-color: $agenda-gray-light;
+  color: $agenda-black;
+  font-size: 0.75rem; // 12px
+  text-decoration: none;
+
+  &:hover {
+    background-color: $agenda-gray;
+  }
+}
+
+// FilterBar.tsx renders the active-filter-chips row inside the SAME
+// bordered card as the filter controls, separated only by an internal
+// border-top. Ours are loaded in the turbo frame together with the results
+// list instead (so they refresh alongside it, not the filter <form> -
+// see _list.html.haml), so `.agenda-active-filter-chips` is a separate,
+// sibling box; this reattaches it visually to the filter bar directly
+// above it by dropping the filter bar's own bottom border/shadow/spacing
+// whenever a chips row follows - the chips box's own border/shadow then
+// reads as the bottom edge of one continuous card.
+.agenda-filter-bar-wrapper:has(.agenda-active-filter-chips) .agenda-filter-bar {
+  margin-bottom: 0 !important;
+  border-bottom: 0 !important;
+  box-shadow: none !important;
+}
+
+// FilterBar.tsx: p-4 sm:p-5 - Bootstrap's own .p-4/.p-5 steps (1.5rem/3rem)
+// don't hit Tailwind's spacing scale (1rem/1.25rem), so both halves of this
+// card (see .agenda-filter-bar-wrapper above for why the chips row is a
+// separate box) get their padding set explicitly instead.
+.agenda-filter-bar,
+.agenda-active-filter-chips {
+  padding: 1rem;
+
+  @include media-breakpoint-up(sm) {
+    padding: 1.25rem;
+  }
+}
+
+// Tour card in the results list. TourCard.tsx keeps the card itself
+// unpadded (overflow-hidden) and puts the padding on the inner content
+// wrapper instead (see .agenda-tour-card-body) so the coloured accent bar
+// below can span the card's full, unindented width.
+.agenda-tour-card {
+  overflow: hidden;
+}
+
+// Padding is set explicitly rather than via a Bootstrap .p-* utility -
+// TourCard.tsx's p-5 (1.25rem) falls between Bootstrap's own p-3 (1rem)
+// and p-4 (1.5rem) steps.
+.agenda-tour-card-body {
+  padding: 1.25rem;
+}
+
+// TourCard.tsx: a plain `<div className="h-0.5 w-full" style={{backgroundColor: color}} />`
+// after the card content, not a border - a border-bottom would meet the
+// card's other (differently-coloured) borders at a mitred 45° corner
+// instead of a clean flat edge (--tour-color is set inline on .agenda-tour-card
+// from Event::Activity#color, since it's per-row data, not a design token).
+.agenda-tour-card-accent {
+  height: 0.125rem; // 2px
+  background-color: var(--tour-color, transparent);
+}
+
+// TourCard.tsx title: text-lg font-bold leading-snug text-foreground,
+// hover:underline hover:text-sac-red.
+.agenda-tour-card h3 {
+  font-size: 1.125rem; // 18px
+  font-weight: 700;
+  line-height: 1.375;
+
+  a {
+    color: $agenda-black;
+    text-decoration: none;
+
+    &:hover {
+      color: $agenda-red;
+      text-decoration: underline;
+    }
+  }
+}
+
+.agenda-tour-card-meta {
+  font-size: 0.875rem; // 14px
+  color: $agenda-gray-dark;
+
+  // TourCard.tsx: sm:w-52 sm:shrink-0 - once the card switches to the row
+  // layout (.flex-sm-row above), each meta column gets a fixed width
+  // instead of growing/shrinking with its own text; full-width while
+  // stacked below that breakpoint.
+  @include media-breakpoint-up(sm) {
+    width: 13rem;
+    flex-shrink: 0;
+  }
+
+  // TourCard.tsx: each row is `inline-flex items-start gap-2` with exactly
+  // two flex items - the icon and a single span carrying the rest of the
+  // row's text. That keeps a wrapped second line inside the text span's own
+  // box, so it starts under the text rather than under the icon.
+  .agenda-tour-card-meta-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+
+    .agenda-icon {
+      margin-top: 0.125rem; // TourCard.tsx: mt-0.5, aligns the icon with the text's cap-height
+    }
+  }
+
+  // TourCard.tsx: values are plain text-foreground by default (see date,
+  // leader name); only some are additionally font-bold (condition,
+  // participants). Bold is added per-element with .fw-bold in the view
+  // instead of baked in here.
+  .agenda-tour-card-value {
+    color: $agenda-black;
+  }
+}
+
+// format_event_target_groups (SacCas::EventsHelper, shared) renders a plain
+// <ul>/<li> list - restyled here as a flat row of tag-like pills instead,
+// matching Badge's "outline" variant (rounded-full border px-2.5 py-0.5
+// text-xs font-light text-foreground), without touching that shared helper.
+.agenda-tag-list ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+
+  li {
+    padding: 0.125rem 0.625rem;
+    border: 1px solid $agenda-gray;
+    border-radius: 50rem;
+    font-size: 0.75rem; // 12px
+    font-weight: 300;
+    color: $agenda-black;
+  }
+}
+
+// format_event_* (SacCas::EventsHelper, shared) wraps an entry in a plain
+// <a href="#"> when it has a tooltip - undo the default link styling
+// wherever those helpers are reused here, whether inside a tag, a badge,
+// or a plain value span.
+// :not(.btn) excludes the "Details" button below - it sits inside the same
+// .agenda-tour-card-meta column but needs its own .agenda-btn-details color,
+// not the meta text's inherited gray.
+.agenda-tag-list a,
+.agenda-tour-card-meta a:not(.btn) {
+  color: inherit;
+  text-decoration: none;
+}
+
+// format_event_fitness_requirement/format_event_technical_requirements
+// (SacCas::EventsHelper, shared) always render a <ul>/<li>, even for a
+// single entry - flatten that back into plain inline text when reused
+// inside a badge pill here, instead of showing a bulleted list.
+.agenda-tour-card-meta .badge {
+  font-size: 0.75rem; // 12px
+  font-weight: 700;
+
+  ul {
+    display: inline;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+  }
+
+  li {
+    display: inline;
+  }
+}
+
+// TourActivityTypes.tsx label: text-xs font-bold uppercase tracking-wider.
+// DisciplineIcon.tsx badge: h-9 w-9 rounded-full border-2 bg-white; icon h-4 w-4.
+.agenda-discipline-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem; // 12px
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--discipline-color, $agenda-gray-dark);
+
+  .agenda-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem; // 36px
+    height: 2.25rem;
+    padding: 0.625rem;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    background-color: $white;
+  }
+}
+
+// button.tsx "outline"/"default" variants (c-button): rounded-none, text-xs
+// font-semibold uppercase tracking-wide - used for the primary/secondary
+// call-to-action buttons (Details anzeigen, Suchen), unlike the filter
+// dropdown triggers or ghost-style reset links, which stay body-sized.
+.agenda-btn-cta,
+// "Suchen" comes from the shared submit_button helper (layout_helper.rb),
+// which always renders class="btn btn-sm btn-primary" - restyled here by
+// selector instead of passing a class the helper can't merge (its options
+// hash overwrites, not appends, on that key).
+.agenda-filter-bar .btn-primary {
+  font-size: 0.75rem; // 12px
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+// TourCard.tsx "Details" button: outline variant with red instead of the
+// default gray, hover inverts to a solid red fill.
+.agenda-btn-details {
+  border-color: $agenda-red;
+  background-color: $white;
+  color: $agenda-red;
+
+  &:hover {
+    border-color: $agenda-red-hover;
+    background-color: $agenda-red;
+    color: $white;
+  }
+}
+
+// button.tsx "ghost" variant (c-button-text): no border/background, body
+// text size, hover turns red - used for the whole-form reset actions.
+.agenda-btn-ghost {
+  background-color: transparent;
+  border-color: transparent;
+  color: $agenda-gray-dark;
+  text-decoration: none;
+
+  &:hover {
+    color: $agenda-red;
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: none;
+  }
+}
+
+// Restyle jQuery UI's datepicker popup (hitobito/modules/_ui-datepicker.scss,
+// shared, imported before this file - see agenda.scss.erb) to match this
+// page's own look instead of its dated stock gray/blue theme.
+.ui-datepicker {
+  background-color: $white;
+  border: 1px solid $agenda-gray;
+  box-shadow: $box-shadow-sm;
+  font-family: $font-family-sans-serif;
+}
+
+.ui-datepicker .ui-datepicker-header {
+  color: $agenda-black;
+}
+
+.ui-datepicker .ui-datepicker-month,
+.ui-datepicker .ui-datepicker-year {
+  color: $agenda-black;
+}
+
+.ui-datepicker td .ui-state-default {
+  color: $agenda-black;
+}
+
+.ui-datepicker td .ui-state-default:hover {
+  background-color: $agenda-red;
+  color: $white;
+}
+
+.ui-datepicker td .ui-state-active {
+  background-color: $agenda-red;
+  color: $white;
+}
+
+.ui-datepicker-today a {
+  background-color: $agenda-gray;
+}
+
+.ui-datepicker-today a:hover {
+  background-color: $agenda-red;
+  color: $white;
+}
+
+.d-flex[hidden] {
+  display: none !important;
+}

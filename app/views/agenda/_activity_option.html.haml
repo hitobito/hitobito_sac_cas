@@ -1,0 +1,41 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# One activity checkbox row, plus - while it's checked - its linked
+-# technical requirement's grades shown as toggleable chips. Nested under
+-# its discipline's fieldset, or rendered standalone for single-activity
+-# disciplines.
+-#
+-# Passing a `color` renders it looking like _nested_group_header (colour
+-# swatch, bold label) while still behaving like a plain activity checkbox -
+-# for a discipline whose single activity shares its label, where a real
+-# nested group would just be visual noise.
+-#
+-# locals: activity:, selected: [], color: nil
+- checked = selected.include?(activity.id)
+- option_id = "activity_#{activity.id}"
+- color = local_assigns[:color]
+
+.form-check.agenda-filter-option
+  = check_box_tag("filters[tour_essentials][activity_id][]", activity.id, checked,
+      id: option_id, class: "form-check-input",
+      data: {action: "change->sac-cas--checkbox-filter#toggleOption change->sac-cas--activity-chips#toggleActivity",
+             "sac-cas--checkbox-filter-target": "option", "sac-cas--activity-chips-target": "activity"})
+  - if color.present?
+    %span.agenda-discipline-swatch{style: "background-color: #{color}", "aria-hidden": "true"}
+  = label_tag(option_id, activity.label, class: class_names("form-check-label", "fw-bold" => color.present?))
+
+- if activity.technical_requirement
+  .ms-4.mb-2.d-flex.flex-wrap.gap-1{hidden: !checked,
+      data: {"sac-cas--activity-chips-target": "chipRow", activity_id: activity.id}}
+    - activity.technical_requirement.children.list.without_deleted.each do |requirement|
+      - requirement_selected = Array(event_filter.chain.dig(:tour_essentials, :technical_requirement_id)).include?(requirement.id)
+      %button.agenda-chip{type: "button", class: ("active" if requirement_selected),
+          "aria-pressed": requirement_selected.to_s,
+          data: {action: "click->sac-cas--activity-chips#toggleChip click->autosubmit#submit",
+                "sac-cas--activity-chips-target": "chip"}}
+        = requirement.label
+        = check_box_tag("filters[tour_essentials][technical_requirement_id][]", requirement.id,
+            requirement_selected, class: "d-none")

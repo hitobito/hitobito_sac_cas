@@ -1,0 +1,26 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# locals: f: (the agenda index form builder)
+.agenda-filter-bar.bg-white.border.rounded.shadow-sm.mb-3
+  .d-flex.flex-wrap.gap-3.align-items-end.mb-3
+    = render "date_filters", f: f
+    = render "search_filter"
+
+  .d-flex.flex-wrap.gap-2.align-items-center
+    = render "target_group_filter", target_groups: @target_groups
+    = render "activities_filter", activities: @activities
+    = render "fitness_requirement_filter", fitness_requirements: @fitness_requirements
+    = render "stub_filters"
+
+    .ms-auto.d-flex.gap-2
+      -# The form auto-submits on every filter change (see autosubmit on the
+      -# form in index.html.haml) - kept visually hidden rather than removed
+      -# so it's still reachable/usable via keyboard and screen readers, and
+      -# still works if JS is unavailable. submit_button's own class: option
+      -# is always overridden by its default classes (layout_helper.rb), so
+      -# it's wrapped instead of classed directly.
+      .visually-hidden
+        = submit_button(f, t("global.button.search"), name: nil)

@@ -6,10 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 Event::Activity.seed_once(:id,
-  {id: 1, order: 1},
-  {id: 2, order: 2},
-  {id: 3, order: 3},
-  {id: 4, order: 4},
+  {id: 1, order: 1, color: "#237100"},
+  {id: 2, order: 2, color: "#662d91"},
+  {id: 3, order: 3, color: "#ff3d12"},
+  {id: 4, order: 4, color: "#706f6f"},
   {id: 11, order: 1, parent_id: 1},
   {id: 12, order: 2, parent_id: 1},
   {id: 13, order: 3, parent_id: 1},

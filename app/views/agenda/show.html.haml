@@ -1,24 +1,45 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
-= link_to t("global.button.back"), agenda_index_path(group, returning: true)
+= link_to t("global.button.back"), agenda_index_path(group, returning: true), class: "btn btn-sm btn-outline-secondary mb-3"
 
-%div
-  %div= event.id
-  %div= event.name
-  %div= I18n.l(event.start_at)
-  %div= event.total_duration_days
+.agenda-tour-card.border.rounded.bg-white.shadow-sm.p-4
+  %h2= event.name
 
-  - if event.display_booking_info?
-    %div= "#{event.participant_count}/#{event.maximum_participants}"
+  %dl.row.mb-0
+    %dt.col-sm-3= t("agenda.list.tour_card.date")
+    %dd.col-sm-9= I18n.l(event.start_at)
 
-  %div= event.contact
+    - if event.total_duration_days
+      %dt.col-sm-3= t("agenda.list.tour_card.duration_label")
+      %dd.col-sm-9= t("agenda.list.tour_card.duration", count: event.total_duration_days)
 
-  - if event.is_a?(Event::Tour)
-    %div= event.activities.join(", ")
-    %div= event.technical_requirements.join(", ")
-    %div= event.fitness_requirement
-    %div= event.target_groups.join(", ")
-    %div= "#{event.ascent} / #{event.descent} / #{event.duration_in_hours}"
+    - if event.display_booking_info?
+      %dt.col-sm-3= t("agenda.list.tour_card.participants_label")
+      %dd.col-sm-9
+        = t("agenda.list.tour_card.participants_value", count: event.participant_count, max: event.maximum_participants)
+        = t("agenda.list.tour_card.participants_suffix")
+
+    - if event.contact
+      %dt.col-sm-3= t("agenda.list.tour_card.contact")
+      %dd.col-sm-9= event.contact.to_s
+
+    - if event.is_a?(Event::Tour)
+      %dt.col-sm-3= Event::Activity.model_name.human(count: 2)
+      %dd.col-sm-9= format_event_activities(event)
+
+      %dt.col-sm-3= Event::TechnicalRequirement.model_name.human(count: 2)
+      %dd.col-sm-9= format_event_technical_requirements(event)
+
+      - if event.fitness_requirement
+        %dt.col-sm-3= Event::FitnessRequirement.model_name.human
+        %dd.col-sm-9= format_event_fitness_requirement(event)
+
+      %dt.col-sm-3= Event::TargetGroup.model_name.human(count: 2)
+      %dd.col-sm-9= format_event_target_groups(event)
+
+      - if event.ascent || event.descent
+        %dt.col-sm-3= t("agenda.list.tour_card.elevation")
+        %dd.col-sm-9= "#{event.ascent} m / #{event.descent} m / #{event.duration_in_hours} h"

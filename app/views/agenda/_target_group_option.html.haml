@@ -1,0 +1,16 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# One target-group checkbox row, nested under its main group's fieldset.
+-#
+-# locals: target_group:, selected: []
+- option_id = "target_group_#{target_group.id}"
+
+.form-check.agenda-filter-option
+  = check_box_tag("filters[tour_essentials][target_group_id][]", target_group.id,
+      selected.include?(target_group.id), id: option_id, class: "form-check-input",
+      data: {action: "change->sac-cas--checkbox-filter#toggleOption",
+             "sac-cas--checkbox-filter-target": "option"})
+  = label_tag(option_id, target_group.label, class: "form-check-label")

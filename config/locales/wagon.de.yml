@@ -1512,22 +1512,49 @@ de:
       Wichtiges zum Export
 
   agenda:
+    header:
+      title: Tourenprogramm
+      brand: Schweizer Alpen-Club SAC
     date_filters:
       since: Von
       until: Bis
     application_filters:
       application_open: Anmeldefenster offen?
       places_available: Freie Plätze verfügbar?
+    filters:
+      reset: Zurücksetzen
+      target_groups: Zielgruppe
+      activities: Aktivitäten
+      fitness_requirements: Kondition
+      tags: Merkmale
+      status: Status
+      search: Suche
+      search_placeholder: Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen
     index:
       title: Agenda %{group_name}
       select_group_alert: Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen
       apply_filter: Filtern
       reset_filter: Filter zurücksetzen
+      reset_all_filters: Alle Filter zurücksetzen
     list:
-      show_details: Details anzeigen
+      show_details: Details
+      view_list: Liste
+      view_table: Tabelle
+      export_csv: CSV exportieren
       tours_found:
         one: "%{count} Tour gefunden"
         other: "%{count} Touren gefunden"
+      tour_card:
+        date: Datum
+        duration_label: Dauer
+        duration:
+          one: "%{count} Tag"
+          other: "%{count} Tage"
+        participants_label: Plätze
+        participants_value: "%{count}/%{max}"
+        participants_suffix: Teilnehmende
+        contact: Kontakt
+        elevation: Höhenmeter / Gehzeit
 
   event:
     application_market:

@@ -1,5 +1,5 @@
-// Copyright (c) 2026, Hitobito AG. This file is part of
-// hitobito and licensed under the Affero General Public License version 3
+// Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+// hitobito_sac_cas and licensed under the Affero General Public License version 3
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito_sac_cas.
 
@@ -23,8 +23,9 @@ export default class extends Controller {
     this.element.querySelectorAll('input[type="radio"]').forEach((radio) => {
       radio.checked = radio.value === "0";
     });
-    this.element.querySelectorAll("select[data-controller~='tom-select']").forEach((select) => {
-      if (select.tomselect) select.tomselect.clear();
+    this.element.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+      checkbox.checked = false;
+      checkbox.indeterminate = false;
     });
     this.element.requestSubmit();
   }

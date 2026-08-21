@@ -1,0 +1,69 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# One tour/event row in the agenda results list.
+-#
+-# locals: event:
+- disciplines = tour_disciplines(event)
+- color = disciplines.first&.fetch(:color)
+
+%article.agenda-tour-card.border.rounded.bg-white.shadow-sm.mb-3{style: ("--tour-color: #{color}" if color.present?)}
+  .agenda-tour-card-body.d-flex.flex-column.flex-sm-row.gap-3
+    .flex-grow-1
+      - if disciplines.any?
+        .d-flex.flex-wrap.gap-3.mb-2
+          - disciplines.each do |discipline|
+            %span.agenda-discipline-badge{style: ("--discipline-color: #{discipline[:color]}" if discipline[:color].present?)}
+              = agenda_icon(:mountain)
+              = discipline[:label].upcase
+
+      %h3.mb-2
+        = link_to event.name, agenda_show_path(group, event)
+
+      - if event.is_a?(Event::Tour)
+        .agenda-tag-list
+          = format_event_target_groups(event)
+
+    .d-flex.flex-column.gap-1.border-start.ps-3.agenda-tour-card-meta
+      - event.dates.each do |date|
+        %span.agenda-tour-card-meta-row
+          = agenda_icon(:calendar)
+          %span.agenda-tour-card-value= date.duration.to_s(:short)
+      - if event.total_duration_days
+        %span.agenda-tour-card-meta-row
+          = agenda_icon(:clock)
+          = t("agenda.list.tour_card.duration", count: event.total_duration_days)
+      - if event.is_a?(Event::Tour)
+        - if event.fitness_requirement
+          %span.agenda-tour-card-meta-row
+            = agenda_icon(:activity)
+            %span
+              = t("agenda.filters.fitness_requirements")
+              %span.agenda-tour-card-value.fw-bold= event.fitness_requirement.label
+        - if event.technical_requirements.any?
+          %span.agenda-tour-card-meta-row
+            = agenda_icon(:gauge)
+            %span.badge.rounded-pill.text-bg-light= event.technical_requirements.map(&:label).join(", ")
+        - if event.ascent || event.descent
+          %span.agenda-tour-card-meta-row
+            = agenda_icon(:"trending-up")
+            = "#{event.ascent} m / #{event.descent} m"
+
+    .d-flex.flex-column.gap-2.border-start.ps-3.agenda-tour-card-meta
+      - if event.display_booking_info?
+        %span.agenda-tour-card-meta-row
+          = agenda_icon(:users)
+          %span
+            %span.agenda-tour-card-value.fw-bold
+              = t("agenda.list.tour_card.participants_value", count: event.participant_count, max: event.maximum_participants)
+            = t("agenda.list.tour_card.participants_suffix")
+      - if event.contact
+        %span.agenda-tour-card-meta-row
+          = agenda_icon(:user)
+          %span.agenda-tour-card-value= event.contact.to_s
+      .mt-auto
+        = link_to t("agenda.list.show_details"), agenda_show_path(group, event),
+            class: "btn btn-sm agenda-btn-cta agenda-btn-details"
+  .agenda-tour-card-accent

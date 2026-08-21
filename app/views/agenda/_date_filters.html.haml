@@ -1,16 +1,32 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
-.d-flex.flex-column
+-# Matches DateInputField.tsx: a floating bold label inside the input box
+-# itself (not above it), with a red calendar icon on the right - not a
+-# Bootstrap input-group, which the prototype doesn't use here.
+-#
+-# The autosubmit action is wired directly on each field rather than relying
+-# on the form-level delegated change->autosubmit#submit (see index.html.haml):
+-# picking a date from the jQuery UI datepicker (hitobito/javascripts/modules/
+-# datepicker.js, shared, not ours to change) only fires a real, bubbling
+-# change event when the picked date differs from the value the widget had
+-# last tracked - otherwise it falls back to a plain `new Event("change")`
+-# with no {bubbles: true}, which never reaches a form-level listener.
+-# Binding the action on the input itself catches that non-bubbling event
+-# too, since bubbling only matters for reaching an ancestor's listener.
+.d-flex.gap-3
   = f.fields_for(:date_range) do |ff|
-    = ff.label(:since, t(".since"), class: "form-label")
-    = ff.text_field(:since, value: event_filter.chain.dig(:date_range, :since),
-      class: "date form-control form-control-sm",
-      data: {reset_value: I18n.l(Time.zone.today.to_date)})
-
-.d-flex.flex-column
-  = f.fields_for(:date_range) do |ff|
-    = ff.label(:until, t(".until"), class: "form-label")
-    = ff.text_field(:until, value: event_filter.chain.dig(:date_range, :until), class: "date form-control form-control-sm")
+    .position-relative.agenda-date-field
+      = ff.label(:since, t(".since"), class: "agenda-date-field-label")
+      = ff.text_field(:since, value: event_filter.chain.dig(:date_range, :since),
+        class: "date form-control agenda-date-field-input", placeholder: "TT.MM.JJJJ",
+        data: {reset_value: I18n.l(Time.zone.today.to_date), action: "change->autosubmit#submit"})
+      = agenda_icon(:calendar, css_class: "agenda-date-field-icon")
+    .position-relative.agenda-date-field
+      = ff.label(:until, t(".until"), class: "agenda-date-field-label")
+      = ff.text_field(:until, value: event_filter.chain.dig(:date_range, :until),
+        class: "date form-control agenda-date-field-input", placeholder: "TT.MM.JJJJ",
+        data: {action: "change->autosubmit#submit"})
+      = agenda_icon(:calendar, css_class: "agenda-date-field-icon")

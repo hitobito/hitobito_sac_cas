@@ -1,0 +1,35 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Aktivitäten filter: one fieldset per discipline (main activity), its
+-# activities (children) nested underneath with tri-state parent selection.
+-# A discipline whose single activity shares its label skips that
+-# redundant nesting - the fieldset still gets the discipline's swatch and
+-# bold label, but the checkbox itself is the activity's, see
+-# _activity_option's `color` local. A discipline without any activities at
+-# all isn't rendered as a group either. Checking an activity reveals its
+-# linked technical requirement as a toggleable chip - see
+-# sac-cas--activity-chips and _activity_option.
+-#
+-# locals: activities: [Event::Activity, ...] (mains and children, unsorted)
+- selected = Array(event_filter.chain.dig(:tour_essentials, :activity_id))
+
+= render layout: "filter_dropdown_shell",
+    locals: {label: t("agenda.filters.activities"), icon_name: "mountain",
+             count: selected.size, extra_controller: "sac-cas--activity-chips"} do
+  - activities.select(&:main?).each_with_index do |main, index|
+    - children = activities.select { |activity| activity.parent_id == main.id }
+    - if children.empty?
+      = render "activity_option", activity: main, selected: selected
+    - else
+      %fieldset.agenda-filter-group{class: ("mt-2 pt-2 border-top" if index.positive?)}
+        %legend.visually-hidden= main.label
+        - if children.one? && children.first.label == main.label
+          = render "activity_option", activity: children.first, selected: selected, color: main.color
+        - else
+          = render "nested_group_header", dom_id: "activity_group_#{main.id}", label: main.label, color: main.color
+          .ms-4
+            - children.each do |child|
+              = render "activity_option", activity: child, selected: selected

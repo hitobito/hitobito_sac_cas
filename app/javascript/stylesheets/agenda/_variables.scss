@@ -1,0 +1,112 @@
+//  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+//  hitobito_sac_cas and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito_sac_cas.
+
+// Color tokens for the public Agenda pages (Tourenportal), matching the
+// SAC Tourenportal prototype (https://chrusu.github.io/Tourenportal-Prototype/).
+//
+// This is intentionally self-contained: the Agenda pages are visually
+// independent from the rest of the application, so these are plain Sass
+// variables local to the agenda pack, not imported from or shared with
+// `hitobito/customizable/_variables.scss`. Imported before
+// `bootstrap/scss/variables` (see agenda.scss.erb) so it can override
+// Bootstrap's defaults for this page only.
+
+$agenda-red: #e30613;
+$agenda-red-hover: #b00511;
+$agenda-green: #84be41;
+$agenda-black: #333333;
+$agenda-gray-dark: #706f6f;
+$agenda-gray-medium: #999999;
+$agenda-gray: #e9e9e9;
+$agenda-gray-light: #f4f4f4;
+$agenda-snow: #f9f9f9;
+$agenda-placeholder: #bfbfbf;
+
+$primary: $agenda-red;
+$secondary: $agenda-gray-dark;
+$body-color: $agenda-black;
+$body-bg: $agenda-snow;
+$border-color: $agenda-gray;
+$link-color: $agenda-red;
+$link-hover-color: $agenda-red-hover;
+// Bootstrap defaults $input-bg to $body-bg, which would otherwise tint
+// every date/search field the same snow-gray as the page background
+// instead of the prototype's plain white (bg-white). $dropdown-bg/$card-bg
+// already default to Bootstrap's own $white, unaffected by $body-bg, which
+// is why only form fields (not dropdowns/cards/the datepicker) looked off -
+// #fff, not $white, since $white isn't defined yet at this point in the
+// import chain (see agenda.scss.erb).
+$input-bg: #fff;
+// Bootstrap defaults $input-border-color to its own $gray-400, a darker/
+// bluer gray than the border on the filter dropdown triggers
+// (.agenda-dropdown-toggle, $agenda-gray) - match it so every input (date
+// fields, search) shares the same border colour as the dropdown buttons.
+$input-border-color: $agenda-gray;
+// Prototype's --muted-foreground (hsl(0 0% 44%)) is this same gray - make
+// Bootstrap's own .text-muted match it exactly rather than Bootstrap's own
+// $gray-600 default.
+$text-muted: $agenda-gray-dark;
+
+// button.tsx: every variant is rounded-none. $border-radius alone only
+// covers Bootstrap's default-sized components (e.g. plain .btn) -
+// .btn-sm/.btn-lg (the "Details" button, size sm) derive their own radius
+// from $border-radius-sm/-lg, which otherwise keep Bootstrap's own rounded
+// defaults regardless of $border-radius.
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+// Tailwind's default shadow-sm (no custom shadow tokens in the prototype's
+// tailwind.config.ts) - not a guess, it's Tailwind's literal default value.
+$box-shadow-sm: 0 1px 2px 0 rgba(#000, 0.05);
+
+$focus-ring-color: rgba($agenda-red, 0.25);
+
+// FilterPopover.tsx's trigger button hand-rolls its own focus-visible
+// border/ring (see .agenda-dropdown-toggle in agenda.scss, since Bootstrap
+// has no variable for a button's own border/shadow pairing) - point the
+// form-control/form-check equivalents at the same tokens so every input on
+// the page shares one focus outline instead of Bootstrap's own tinted-primary
+// default.
+$input-focus-border-color: $agenda-red;
+$input-focus-box-shadow: 0 0 0 2px rgba($agenda-red, 0.4);
+
+// Checkbox.tsx: 16x16 white square, border-sac-gray-dark; checked/
+// indeterminate stay white and only turn the border (and the check/dash
+// glyph, via -color) red - never a filled background, and no focus glow.
+
+$form-check-padding-start: 1.75em;
+$form-check-input-border: 1px solid $agenda-gray-dark;
+$form-check-input-border-radius: 0;
+$form-check-input-focus-box-shadow: none;
+$form-check-input-width: 1.16667em;
+$form-check-input-height: 1.16667em;
+$form-check-input-checked-bg-color: #fff; // not $white - undefined this early in the import chain, see $input-bg above
+$form-check-input-checked-border-color: $agenda-red;
+$form-check-input-checked-color: $agenda-red;
+$form-check-input-checked-bg-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e30613" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>');
+$form-check-input-indeterminate-bg-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e30613" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>');
+$form-check-input-indeterminate-bg-color: #fff; // not $white, see above
+$form-check-input-indeterminate-border-color: $agenda-red;
+$form-check-input-indeterminate-color: $agenda-red;
+
+// Typography: same stack and scale as the prototype (styleguide.md /
+// tailwind.config.ts) - Frutiger with the same system-font fallbacks it
+// falls back to itself (Frutiger isn't a licensable web font, so every
+// browser - the prototype's included - actually renders these fallbacks).
+$font-family-sans-serif:
+  Frutiger,
+  "Frutiger LT Std",
+  ui-sans-serif,
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
+$font-size-base: 0.875rem; // 14px
+$line-height-base: 1.5;
+$font-weight-base: 300; // prototype's body copy is "light", not regular
+$headings-font-weight: 700;

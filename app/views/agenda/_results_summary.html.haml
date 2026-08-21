@@ -3,9 +3,7 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito_sac_cas.
 
-= turbo_frame_tag(:agenda_events_list, target: :_top) do
-  = render "active_filter_chips", event_filter: event_filter, group: group
-  = render "results_summary", count: events.count
-
-  - events.each do |event|
-    = render "tour_card", event: event
+-# locals: count:
+.d-flex.flex-wrap.align-items-center.justify-content-between.gap-2.mb-3.mt-4
+  %p.h6.mb-0
+    = t("agenda.list.tours_found", count: count)
