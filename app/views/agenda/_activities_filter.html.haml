@@ -5,8 +5,13 @@
 
 -# Aktivitäten filter: one fieldset per discipline (main activity), its
 -# activities (children) nested underneath with tri-state parent selection.
--# Checking an activity reveals its linked technical requirement as a
--# toggleable chip - see sac-cas--activity-chips and _activity_option.
+-# A discipline whose single activity shares its label skips that
+-# redundant nesting - the fieldset still gets the discipline's swatch and
+-# bold label, but the checkbox itself is the activity's, see
+-# _activity_option's `color` local. A discipline without any activities at
+-# all isn't rendered as a group either. Checking an activity reveals its
+-# linked technical requirement as a toggleable chip - see
+-# sac-cas--activity-chips and _activity_option.
 -#
 -# locals: activities: [Event::Activity, ...] (mains and children, unsorted)
 - selected = Array(event_filter.chain.dig(:tour_essentials, :activity_id))
@@ -18,12 +23,13 @@
     - children = activities.select { |activity| activity.parent_id == main.id }
     - if children.empty?
       = render "activity_option", activity: main, selected: selected
-    - elsif children.one? && children.first.label == main.label
-      = render "activity_option", activity: children.first, selected: selected
     - else
       %fieldset.agenda-filter-group{class: ("mt-2 pt-2 border-top" if index.positive?)}
         %legend.visually-hidden= main.label
-        = render "nested_group_header", dom_id: "activity_group_#{main.id}", label: main.label, color: main.color
-        .ms-4
-          - children.each do |child|
-            = render "activity_option", activity: child, selected: selected
+        - if children.one? && children.first.label == main.label
+          = render "activity_option", activity: children.first, selected: selected, color: main.color
+        - else
+          = render "nested_group_header", dom_id: "activity_group_#{main.id}", label: main.label, color: main.color
+          .ms-4
+            - children.each do |child|
+              = render "activity_option", activity: child, selected: selected

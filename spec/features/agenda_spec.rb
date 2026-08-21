@@ -126,25 +126,28 @@ describe "agenda page", js: true do
   end
 
   describe "activities filter" do
-    it "reveals the checked activity's technical requirement as a chip and filters by it" do
+    it "reveals the checked activity's technical requirement grades as chips and filters by one" do
       click_button "Aktivitäten"
       check "Wanderweg"
 
-      expect(page).to have_button("Wanderskala")
+      expect(page).to have_button("T3")
 
-      click_button "Wanderskala"
+      # Scoped: skihochtour/snowboardhochtour reuse the same fixture technical
+      # requirement, so their (unchecked, hidden) chips also render a "T3" -
+      # click within Wanderweg's own chip row to stay unambiguous.
+      within("div[data-activity-id='#{event_activities(:wanderweg).id}']") { click_button "T3" }
 
       expect(page).to have_text(tour.name)
     end
 
-    it "hides the chip again once the activity is unchecked" do
+    it "hides the chips again once the activity is unchecked" do
       click_button "Aktivitäten"
       check "Wanderweg"
-      expect(page).to have_button("Wanderskala", visible: true)
+      expect(page).to have_button("T3", visible: true)
 
       uncheck "Wanderweg"
 
-      expect(page).to have_button("Wanderskala", visible: false)
+      expect(page).to have_button("T3", visible: false)
     end
 
     it "selecting the discipline checkbox selects all of its activities" do
@@ -154,6 +157,24 @@ describe "agenda page", js: true do
       expect(page).to have_checked_field("Wanderweg")
       expect(page).to have_checked_field("Bergtour")
       expect(page).to have_checked_field("Schneeschuhwandern")
+    end
+
+    it "still shows the swatch and bold label for a discipline whose only " \
+      "activity shares its label, but keeps the checkbox and chips wired to that activity" do
+      solo = Fabricate(:event_activity, label: "Sololauf", color: "#123456")
+      child = Fabricate(:event_activity, label: "Sololauf", parent: solo)
+      child.update!(technical_requirement: event_technical_requirements(:wandern))
+
+      visit agenda_index_path(group_id: group.id)
+      click_button "Aktivitäten"
+
+      group_fieldset = find(".agenda-filter-group", text: "Sololauf")
+      expect(group_fieldset).to have_css(".agenda-discipline-swatch")
+      expect(group_fieldset).to have_css(".form-check-label.fw-bold", text: "Sololauf")
+
+      check "Sololauf"
+
+      expect(page).to have_button("T1", visible: true)
     end
   end
 

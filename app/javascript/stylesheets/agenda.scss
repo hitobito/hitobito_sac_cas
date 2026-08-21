@@ -228,6 +228,9 @@
 // instead (TourTypeFilter.tsx: text-sm font-bold text-sac-black).
 .agenda-filter-option {
   border-radius: $border-radius-sm;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  margin-bottom: 0;
 
   &:hover {
     background-color: $agenda-snow;
@@ -263,6 +266,7 @@
   display: inline-block;
   width: 0.75rem;
   height: 0.75rem;
+  margin-right: 0.25rem;
 }
 
 // DifficultyRangeSelect.tsx toggle chip (activity's technical-requirement
@@ -275,7 +279,7 @@
   padding: 0.25rem 0.75rem;
   border: 1px solid $agenda-gray;
   border-radius: 50rem;
-  background-color: $white;
+  background-color: $agenda-snow;
   color: $agenda-black;
   font-size: 0.75rem; // 12px
   font-weight: 300;
@@ -584,4 +588,8 @@
 .ui-datepicker-today a:hover {
   background-color: $agenda-red;
   color: $white;
+}
+
+.d-flex[hidden] {
+  display: none !important;
 }

@@ -21,9 +21,9 @@
     - elsif children.one? && children.first.label == main.label
       = render "target_group_option", target_group: children.first, selected: selected
     - else
-      %fieldset.agenda-filter-group{class: ("mt-2 pt-2 border-top" if index.positive?)}
+      %fieldset.agenda-filter-group
         %legend.visually-hidden= main.label
-        = render "nested_group_header", dom_id: "target_group_group_#{main.id}", label: main.label
+        = render "nested_group_header", dom_id: "target_group_group_#{main.id}", label: main.label, regular: true
         .ms-4
           - children.each do |child|
             = render "target_group_option", target_group: child, selected: selected

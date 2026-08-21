@@ -10,6 +10,7 @@
 -#
 -# locals: dom_id:, label:, color: nil
 - color = local_assigns[:color]
+- regular = local_assigns[:regular] || false
 
 .form-check.agenda-filter-option
   = check_box_tag(nil, "1", false, id: dom_id, class: "form-check-input",
@@ -17,4 +18,4 @@
              "sac-cas--checkbox-filter-target": "parent"})
   - if color.present?
     %span.agenda-discipline-swatch{style: "background-color: #{color}", "aria-hidden": "true"}
-  = label_tag(dom_id, label, class: "form-check-label fw-bold")
+  = label_tag(dom_id, label, class: "form-check-label #{'fw-bold' unless regular}")
