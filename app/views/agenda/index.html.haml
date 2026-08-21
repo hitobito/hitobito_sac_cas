@@ -9,7 +9,13 @@
   -# be styled as a visual continuation of the filter bar's card below it -
   -# see .agenda-filter-bar-wrapper in agenda.scss.
   .agenda-filter-bar-wrapper
-    = form_with(url: agenda_index_path(group_id: group.id), method: :get, scope: :filters, data: { controller: "sac-cas--agenda-filters", turbo_frame: :agenda_events_list, turbo_action: "advance" }) do |f|
+    -# autosubmit (core controller): re-submits the form on any change event
+    -# bubbling up from an input inside it - covers every checkbox and the
+    -# date fields without wiring each one individually. The one exception is
+    -# the Aktivitäten chip toggle, which flips its hidden checkbox
+    -# programmatically without dispatching a change event - see its own
+    -# click->autosubmit#submit in _activity_option.html.haml.
+    = form_with(url: agenda_index_path(group_id: group.id), method: :get, scope: :filters, data: { controller: "sac-cas--agenda-filters autosubmit", action: "change->autosubmit#submit", turbo_frame: :agenda_events_list, turbo_action: "advance" }) do |f|
       = render "filter_bar", f: f
 
     = turbo_frame_tag(:agenda_events_list, target: :_top) do

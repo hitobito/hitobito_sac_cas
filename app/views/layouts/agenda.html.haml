@@ -22,15 +22,19 @@
 
   %body.agenda-body
     .agenda-header
-      .agenda-container.d-flex.justify-content-between.align-items-end.flex-wrap.gap-2
+      .agenda-container.d-flex.justify-content-between.align-items-center.flex-wrap.gap-2
         .agenda-header-title
           %h1= t("agenda.header.title")
           - if group.present?
             %p.text-muted.mb-0= group.name
-        -# Dummy placeholder for the section's branding, until a real group
-           logo is wired up here.
-        .agenda-header-brand.text-end.small.text-muted
-          = t("agenda.header.brand")
+        .agenda-header-brand.text-end
+          - if group && group.logo.attached?
+            = image_tag(group.logo, alt: group.name)
+          - else
+            - logo = Settings.application.logo
+            - path = logo&.dig(:multilanguage_image, I18n.locale) || logo&.image
+            - url = url_to_asset(current_webpacker_instance.manifest.lookup!("media/images/#{path}"))
+            = image_tag(url, alt: Settings.application.name)
 
     #flash
       = render partial: 'layouts/flash', collection: [:notice, :warning, :alert], as: :level

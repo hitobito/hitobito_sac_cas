@@ -26,7 +26,7 @@
       data: {"sac-cas--activity-chips-target": "chipRow", activity_id: activity.id}}
     %button.agenda-chip{type: "button", class: ("active" if requirement_selected),
         "aria-pressed": requirement_selected.to_s,
-        data: {action: "click->sac-cas--activity-chips#toggleChip",
+        data: {action: "click->sac-cas--activity-chips#toggleChip click->autosubmit#submit",
                "sac-cas--activity-chips-target": "chip"}}
       = requirement.label
       = check_box_tag("filters[tour_essentials][technical_requirement_id][]", requirement.id,

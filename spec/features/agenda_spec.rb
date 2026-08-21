@@ -36,28 +36,65 @@ describe "agenda page", js: true do
     expect(find_field("filters_date_range_until").value).to be_blank
   end
 
+  it "auto-submits on every filter change, with the search button kept but visually hidden" do
+    expect(page).to have_button("Suchen", visible: :all)
+    expect(page).not_to have_button("Suchen", visible: true)
+
+    click_button "Zielgruppe"
+    check "Kinder (KiBe)"
+
+    expect(page).to have_text(tour.name)
+  end
+
   describe "filtering" do
     it "keeps the tour when the filters still match" do
-      fill_in "filters_date_range_until", with: "01.01.2027"
-
-      click_button "Suchen"
+      find_field("filters_date_range_until").set("01.01.2027").send_keys(:tab)
 
       expect(page).to have_text(tour.name)
       expect(page).to have_text("1 Tour gefunden")
     end
+
+    it "auto-submits when a date is picked from the calendar, without an explicit submit" do
+      # Starts from "since"'s server-rendered value (today = 01.01.2026, from
+      # the travel_to above) rather than the browser's own real wall-clock
+      # date, which jQuery UI's datepicker would otherwise default to on an
+      # empty field - so this stays deterministic regardless of when the
+      # spec actually runs.
+      find_field("filters_date_range_since").click
+      within(".ui-datepicker") do
+        find(".ui-datepicker-next").click
+        click_on "5"
+      end
+
+      expect(find_field("filters_date_range_since").value).to eq "05.02.2026"
+      expect(page).not_to have_text(tour.name)
+      expect(page).to have_text("0 Touren gefunden")
+    end
   end
 
   describe "resetting filters" do
-    before do
-      fill_in "filters_date_range_until", with: "01.01.2027"
-      click_button "Suchen"
+    it "restores the full result list via the active-filter-chips reset link" do
+      click_button "Zielgruppe"
+      check "Jugend (JO)"
 
-      click_button "Filter zurücksetzen"
+      expect(page).not_to have_text(tour.name)
+
+      click_link "Alle Filter zurücksetzen"
+
+      expect(page).to have_text(tour.name)
+      expect(page).to have_text("1 Tour gefunden")
     end
 
-    it "restores the default filter values" do
-      expect(find_field("filters_date_range_since").value).to eq "01.01.2026"
-      expect(find_field("filters_date_range_until").value).to be_blank
+    it "does a full page reload, so the filter checkbox itself is unchecked too" do
+      click_button "Zielgruppe"
+      check "Jugend (JO)"
+      click_button "Zielgruppe" # close
+      expect(page).to have_text("0 Touren gefunden")
+
+      click_link "Alle Filter zurücksetzen"
+      expect(page).to have_text("1 Tour gefunden")
+
+      expect(find_field("Jugend (JO)", visible: :all)).not_to be_checked
     end
   end
 
@@ -67,16 +104,12 @@ describe "agenda page", js: true do
       check "Kinder (KiBe)"
 
       expect(page).to have_button("Zielgruppe", text: "1")
-
-      click_button "Suchen"
-
       expect(page).to have_text(tour.name)
     end
 
     it "excludes the tour once no checked target group matches" do
       click_button "Zielgruppe"
       check "Jugend (JO)"
-      click_button "Suchen"
 
       expect(page).not_to have_text(tour.name)
       expect(page).to have_text("0 Touren gefunden")
@@ -87,7 +120,6 @@ describe "agenda page", js: true do
     it "filters tours by the checked fitness requirement" do
       click_button "Kondition"
       check "B - wenig anstrengend"
-      click_button "Suchen"
 
       expect(page).to have_text(tour.name)
     end
@@ -101,7 +133,6 @@ describe "agenda page", js: true do
       expect(page).to have_button("Wanderskala")
 
       click_button "Wanderskala"
-      click_button "Suchen"
 
       expect(page).to have_text(tour.name)
     end
@@ -130,7 +161,7 @@ describe "agenda page", js: true do
     it "shows a removable chip for an applied filter, and removing it drops that filter" do
       click_button "Zielgruppe"
       check "Kinder (KiBe)"
-      click_button "Suchen"
+      click_button "Zielgruppe" # close the dropdown so it doesn't overlap the chip below
 
       expect(page).to have_css(".agenda-filter-chip", text: "Kinder (KiBe)")
 
@@ -138,6 +169,26 @@ describe "agenda page", js: true do
 
       expect(page).not_to have_css(".agenda-filter-chip", text: "Kinder (KiBe)")
       expect(page).not_to have_checked_field("Kinder (KiBe)")
+    end
+
+    it "does a full page reload, so the filter checkbox itself is unchecked too" do
+      # Kept as a separate check from the one above: with the dropdown
+      # closed (as it has to be, to click the chip), Capybara's default
+      # "visible" field matcher can't see the checkbox at all, checked or
+      # not - so `visible: :all` is needed to actually assert on it, and
+      # "Jugend (JO)" (which excludes the tour) rather than "Kinder (KiBe)"
+      # (which doesn't) gives a reliable "wait for the reload" signal via
+      # the result count, instead of racing a text that's already true
+      # beforehand.
+      click_button "Zielgruppe"
+      check "Jugend (JO)"
+      click_button "Zielgruppe" # close
+      expect(page).to have_text("0 Touren gefunden")
+
+      find(".agenda-filter-chip", text: "Jugend (JO)").click
+      expect(page).to have_text("1 Tour gefunden")
+
+      expect(find_field("Jugend (JO)", visible: :all)).not_to be_checked
     end
   end
 end

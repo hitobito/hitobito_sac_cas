@@ -39,6 +39,11 @@ $link-hover-color: $agenda-red-hover;
 // #fff, not $white, since $white isn't defined yet at this point in the
 // import chain (see agenda.scss.erb).
 $input-bg: #fff;
+// Bootstrap defaults $input-border-color to its own $gray-400, a darker/
+// bluer gray than the border on the filter dropdown triggers
+// (.agenda-dropdown-toggle, $agenda-gray) - match it so every input (date
+// fields, search) shares the same border colour as the dropdown buttons.
+$input-border-color: $agenda-gray;
 // Prototype's --muted-foreground (hsl(0 0% 44%)) is this same gray - make
 // Bootstrap's own .text-muted match it exactly rather than Bootstrap's own
 // $gray-600 default.
@@ -84,9 +89,18 @@ $form-check-input-indeterminate-color: $agenda-red;
 // tailwind.config.ts) - Frutiger with the same system-font fallbacks it
 // falls back to itself (Frutiger isn't a licensable web font, so every
 // browser - the prototype's included - actually renders these fallbacks).
-$font-family-sans-serif: Frutiger, "Frutiger LT Std", ui-sans-serif, system-ui, -apple-system,
-  "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-$font-size-base: 0.9375rem; // 15px
+$font-family-sans-serif:
+  Frutiger,
+  "Frutiger LT Std",
+  ui-sans-serif,
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
+$font-size-base: 0.875rem; // 14px
 $line-height-base: 1.5;
 $font-weight-base: 300; // prototype's body copy is "light", not regular
 $headings-font-weight: 700;

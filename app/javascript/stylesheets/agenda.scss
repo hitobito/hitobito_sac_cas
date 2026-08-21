@@ -13,7 +13,6 @@
 .agenda-body {
   background-color: $agenda-snow;
 }
-
 // Every icon on the agenda pages is one of AgendaHelper#agenda_icon's
 // inline SVGs (copied from Lucide, matching the prototype) - sized here
 // since Lucide ships them at a fixed 24x24 viewBox. Default matches the
@@ -43,7 +42,7 @@
 .agenda-header {
   background-color: $white;
   border-bottom: 2px solid $agenda-red;
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   margin-bottom: 1.5rem;
 
   h1 {
@@ -56,6 +55,22 @@
   p {
     font-size: 0.875rem; // 14px
     margin-top: 0.25rem;
+  }
+}
+
+.agenda-header-brand {
+  display: block;
+  position: relative;
+
+  width: 160px;
+  height: 68px;
+  object-fit: contain;
+  object-position: center center;
+  text-align: center;
+
+  img {
+    max-width: 160px;
+    max-height: 68px;
   }
 }
 

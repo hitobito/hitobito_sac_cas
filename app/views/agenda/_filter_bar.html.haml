@@ -16,8 +16,11 @@
     = render "stub_filters"
 
     .ms-auto.d-flex.gap-2
-      = submit_button(f, t("global.button.search"), name: nil)
-      %button.btn.btn-sm.agenda-btn-ghost.mt-2.d-inline-flex.align-items-center.gap-1{type: "button",
-          data: {action: "click->sac-cas--agenda-filters#reset"}}
-        = agenda_icon(:"rotate-ccw")
-        = t("agenda.index.reset_filter")
+      -# The form auto-submits on every filter change (see autosubmit on the
+      -# form in index.html.haml) - kept visually hidden rather than removed
+      -# so it's still reachable/usable via keyboard and screen readers, and
+      -# still works if JS is unavailable. submit_button's own class: option
+      -# is always overridden by its default classes (layout_helper.rb), so
+      -# it's wrapped instead of classed directly.
+      .visually-hidden
+        = submit_button(f, t("global.button.search"), name: nil)
