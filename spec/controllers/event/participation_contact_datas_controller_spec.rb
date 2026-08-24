@@ -69,6 +69,8 @@ describe Event::ParticipationContactDatasController do
             town: "Zürich",
             country: "CH",
             last_name: "NewName",
+            emergency_contact_1_name: "Xanthippe #{person.last_name}",
+            emergency_contact_1_phone: "+41 79 123 45 67",
             phone_number_mobile_attributes: {
               id: number.id,
               number: "+41791111111"

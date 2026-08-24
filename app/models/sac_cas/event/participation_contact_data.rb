@@ -9,6 +9,8 @@ module SacCas::Event::ParticipationContactData
   extend ActiveSupport::Concern
   include AssignsSacPhoneNumbers
 
+  EMERGENCY_CONTACT_REQUIRED_ATTRS = %i[emergency_contact_1_name emergency_contact_1_phone]
+
   prepended do
     attr_reader :event
 
@@ -19,6 +21,8 @@ module SacCas::Event::ParticipationContactData
     delegate :emergency_contact_1_name, :emergency_contact_1_phone,
       :emergency_contact_2_name, :emergency_contact_2_phone,
       to: :person
+
+    validate :assert_emergency_contact_present
 
     include Events::Participations::PriceCalculatable
 
@@ -37,10 +41,23 @@ module SacCas::Event::ParticipationContactData
     # Adding the phone_numbers attribute to mandatory_contact_attrs doesnt work, because that also
     # affects the backend validation, participation_contact_data doesnt have a phone_numbers
     # attribute, just multiple different phone_number types
-    attr == :phone_numbers
+    attr == :phone_numbers ||
+      (emergency_contacts_required? && EMERGENCY_CONTACT_REQUIRED_ATTRS.include?(attr.to_sym))
   end
 
   private
+
+  def emergency_contacts_required?
+    event.course? || event.tour?
+  end
+
+  def assert_emergency_contact_present
+    return unless emergency_contacts_required?
+
+    EMERGENCY_CONTACT_REQUIRED_ATTRS.each do |attr|
+      errors.add(attr, :blank) if person.send(attr).blank?
+    end
+  end
 
   def participation
     @participation ||= Event::Participation.new(event: @event, person: @person)

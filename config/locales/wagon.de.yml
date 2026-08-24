@@ -118,6 +118,10 @@ de:
         gender: Geschlecht
         phone_number: Telefon
         address: Strasse und Nr.
+        emergency_contact_1_name: Notfallkontakt 1 Name
+        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
+        emergency_contact_2_name: Notfallkontakt 2 Name
+        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
         contribution_regulations: Beitragsreglement
         data_protection: Datenschutzerklärung
