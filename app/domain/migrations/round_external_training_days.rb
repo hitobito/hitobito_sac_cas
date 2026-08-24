@@ -6,8 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module Migrations
-  class RoundExternalTrainingDaysToHalfDaysJob < BaseJob
-    def perform
+  class RoundExternalTrainingDays
+    def migrate
       affected_trainings = ExternalTraining.where("(training_days * 2) % 1 <> 0")
 
       # DISTINCT ON, ordered by finish_at, picks the earliest adjusted training per
@@ -20,8 +20,20 @@ module Migrations
 
       affected_trainings.update_all("training_days = CEIL(training_days * 2) / 2")
 
-      ExternalTraining.where(id: training_ids_to_reissue_qualifications).find_each do |training|
-        ExternalTrainings::Qualifier.new(training.person, training, "participant").issue
+      training_ids_to_reissue_qualifications.each do |id|
+        ExternalTraining::QualifierIssueJob.new(id).enqueue!
+      end
+    end
+
+    def list_affected_people
+      person_ids = ExternalTraining.where("(training_days * 2) % 1 <> 0")
+        .distinct
+        .order(:person_id)
+        .pluck(:person_id)
+
+      CSV.generate do |csv|
+        csv << ["Mitgliedernummer"]
+        person_ids.each { |id| csv << [id] }
       end
     end
   end
