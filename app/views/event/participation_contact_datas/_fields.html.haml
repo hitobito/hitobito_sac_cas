@@ -11,6 +11,13 @@
 = f.labeled_date_field :birthday
 = render 'contactable/address_fields', f: f
 = render 'contactable/phone_numbers_fields', f: f
+- if event.course? || event.tour?
+  = field_set_tag do
+    = f.labeled_input_field(:emergency_contact_1_name)
+    = f.labeled_input_field(:emergency_contact_1_phone)
+    = f.labeled_input_field(:emergency_contact_2_name)
+    = f.labeled_input_field(:emergency_contact_2_phone)
+    %p.form-text= t('activerecord.attributes.person.emergency_contacts_privacy_notice_html').html_safe
 = render('people/privacy_policy_acceptance_field', policy_finder: @policy_finder, f: f)
 
 .well.align-with-form=t('.overrides_person_data_info')
