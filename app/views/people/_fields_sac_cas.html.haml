@@ -11,3 +11,10 @@
         true,
         (key == "digital" && (entry.email.blank? || !entry.confirmed?) ? {disabled: :disabled} : {}))
 = f.labeled_input_field(:advertising)
+
+= field_set_tag do
+  = f.labeled_input_field(:emergency_contact_1_name)
+  = f.labeled_input_field(:emergency_contact_1_phone)
+  = f.labeled_input_field(:emergency_contact_2_name)
+  = f.labeled_input_field(:emergency_contact_2_phone)
+  %p.form-text= t('activerecord.attributes.person.emergency_contacts_privacy_notice_html').html_safe

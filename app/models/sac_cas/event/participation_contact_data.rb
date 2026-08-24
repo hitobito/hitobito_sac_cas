@@ -16,6 +16,9 @@ module SacCas::Event::ParticipationContactData
     delegate :phone_number_mobile, :build_phone_number_mobile,
       :phone_number_landline, :build_phone_number_landline,
       to: :person
+    delegate :emergency_contact_1_name, :emergency_contact_1_phone,
+      :emergency_contact_2_name, :emergency_contact_2_phone,
+      to: :person
 
     include Events::Participations::PriceCalculatable
 

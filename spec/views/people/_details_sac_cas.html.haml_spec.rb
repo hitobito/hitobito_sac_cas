@@ -9,14 +9,17 @@ describe "people/_details_sac_cas.html.haml" do
   include FormatHelper
 
   let(:dom) do
-    render
+    render partial: "people/details_sac_cas", locals: {show_full: show_full}
     Capybara::Node::Simple.new(@rendered)
   end
+
+  let(:show_full) { true }
 
   before do
     allow(view).to receive_messages(current_user: person)
     allow(view).to receive_messages(entry: PersonDecorator.decorate(person))
     allow(controller).to receive_messages(current_user: Person.new)
+    assign(:event, nil)
   end
 
   context "family member" do
@@ -91,6 +94,40 @@ describe "people/_details_sac_cas.html.haml" do
       )
       expect(dom).to have_css "dl dt", text: "Anzahl Mitglieder-Jahre"
       expect(dom).to have_css "dl dt", text: "Mitglied-Nr"
+    end
+  end
+
+  context "emergency contacts" do
+    let(:person) { people(:mitglied) }
+
+    it "renders heading and values when show_full" do
+      person.update!(emergency_contact_1_name: "Tina Tester", emergency_contact_1_phone: "079 123 45 67")
+      expect(dom).to have_text "Tina Tester"
+      expect(dom).to have_link "079 123 45 67", href: "tel:0791234567"
+    end
+  end
+
+  context "without show_full" do
+    let(:person) { people(:mitglied) }
+    let(:show_full) { false }
+
+    it "hides emergency contacts" do
+      person.update!(emergency_contact_1_name: "Tina Tester")
+      expect(dom).not_to have_text "Tina Tester"
+    end
+  end
+
+  context "participation (TN card)" do
+    let(:person) { people(:mitglied) }
+    let(:participation) { event_participations(:top_mitglied) }
+
+    before { assign(:event, events(:top_course)) }
+
+    it "renders emergency contacts when update allowed" do
+      person.update!(emergency_contact_1_name: "Tina Tester")
+      assign(:participation, participation)
+      allow(view).to receive(:can?).with(:update, participation).and_return(true)
+      expect(dom).to have_text "Tina Tester"
     end
   end
 

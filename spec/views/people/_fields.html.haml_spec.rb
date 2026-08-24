@@ -41,4 +41,29 @@ describe "people/_fields.html.haml" do
       expect(digital_input.attributes).not_to have_key("disabled")
     end
   end
+
+  describe "emergency contacts" do
+    it "renders the four fields" do
+      expect(dom).to have_field "person[emergency_contact_1_name]"
+      expect(dom).to have_field "person[emergency_contact_1_phone]"
+      expect(dom).to have_field "person[emergency_contact_2_name]"
+      expect(dom).to have_field "person[emergency_contact_2_phone]"
+    end
+
+    it "renders privacy notice" do
+      expect(dom).to have_text "ausschliesslich für Notfälle"
+      expect(dom).to have_link "AGB Ausbildung | Schweizer Alpen-Club SAC",
+        href: "https://www.sac-cas.ch/de/meta/agb/ausbildung/"
+    end
+
+    it "fills fields with stored values" do
+      person.update!(
+        emergency_contact_1_name: "Tina Tester",
+        emergency_contact_1_phone: "079 123 45 67"
+      )
+
+      expect(dom).to have_field "person[emergency_contact_1_name]", with: "Tina Tester"
+      expect(dom).to have_field "person[emergency_contact_1_phone]", with: "079 123 45 67"
+    end
+  end
 end

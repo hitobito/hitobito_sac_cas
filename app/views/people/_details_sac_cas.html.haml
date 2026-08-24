@@ -4,10 +4,15 @@
 -#  https://github.com/hitobito/hitobito_sac_cas.
 
 -# The core renders this extension on people/_attrs and participations/_attrs
--# In the case of SAC we only want to display these information on people/_attrs
-- unless @event
+-# In the case of SAC we mostly want to display these information on people/_attrs
+- if @event
+  - if can?(:update, @participation)
+    = render 'people/emergency_contacts', entry: entry
+- else
   = render_attrs(entry, :correspondence, :advertising, :confirmed_at)
   - if entry.family_id.present?
     = render_attrs(entry, :family_id, :sac_family_main_person)
   - if entry.sac_membership_anytime?
     = render_present_attrs(Person.with_membership_years.find(entry.id), :membership_number, :membership_years)
+  - if show_full
+    = render 'people/emergency_contacts', entry: entry
