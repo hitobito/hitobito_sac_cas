@@ -36,6 +36,7 @@ class ExternalTraining < ActiveRecord::Base
   validates_by_schema
   validates_date :finish_at, on_or_after: :start_at, allow_blank: true
   validates_date :finish_at, on_or_before: lambda { Date.current }
+  validate :assert_training_days_is_half_day_multiple
 
   scope :list, -> { order(finish_at: :desc) }
 
@@ -63,6 +64,12 @@ class ExternalTraining < ActiveRecord::Base
   alias_method :kind, :event_kind
 
   private
+
+  def assert_training_days_is_half_day_multiple
+    return if training_days.nil?
+
+    errors.add(:training_days, :half_or_full_number) unless (training_days * 2) % 1 == 0
+  end
 
   def qualifier
     ExternalTrainings::Qualifier.new(person, self, "participant")
