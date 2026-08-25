@@ -12,19 +12,12 @@ module SacCas::PhoneNumber
     after_create :check_data_quality
     after_destroy :check_data_quality
 
-    validates :label,
-      inclusion: {in: PhoneNumber.predefined_labels},
-      uniqueness: {scope: [:contactable_type, :contactable_id]},
-      allow_blank: false
+    validates :category,
+      inclusion: {in: -> { ContactAccountCategory.where(key: SacPhoneNumbers::FIXED_SLOT_KEYS) }}
+    validates :category_id, uniqueness: {scope: [:contactable_type, :contactable_id]}
   end
 
   private
-
-  def normalize_label
-    # NOOP
-    # We do not normalize phone number labels as they are predefined and the user
-    # cannot enter arbitrary labels.
-  end
 
   def check_data_quality
     # prevent running the check twice

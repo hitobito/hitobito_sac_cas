@@ -77,23 +77,6 @@ people:
     enabled: false
   ended_roles_readable_for: <%= 1.year %>
 
-social_account:
-  predefined_labels:
-    - Facebook
-    - MSN
-    - Skype
-    - Twitter
-    - Webseite
-    - Webseite Jugend
-    - Andere
-
-
-phone_number:
-  predefined_labels:
-    - --
-    - landline
-    - mobile
-
 impersonate:
   notify: false
 

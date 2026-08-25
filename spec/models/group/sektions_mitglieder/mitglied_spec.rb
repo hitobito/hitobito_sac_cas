@@ -85,7 +85,8 @@ describe Group::SektionsMitglieder::Mitglied do
   describe "#transmit_data_to_abacus" do
     let(:person) do
       people(:mitglied).tap do |person|
-        person.phone_numbers.create!(number: "+41791234567", label: "mobile")
+        person.phone_numbers.create!(number: "+41791234567",
+          category: contact_account_categories(:phone_number_person_mobile))
         person.roles.destroy_all
       end
     end

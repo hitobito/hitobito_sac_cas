@@ -39,7 +39,8 @@ describe Event::TourParticipationMailer do
 
     it "contains placeholder values" do
       contact = people(:familienmitglied)
-      contact.phone_numbers.create!(number: "079 123 45 67", label: "mobile")
+      contact.phone_numbers.create!(number: "079 123 45 67",
+        category: contact_account_categories(:phone_number_person_mobile))
       event.update!(
         state: "draft", # required to set other values
         contact: contact,

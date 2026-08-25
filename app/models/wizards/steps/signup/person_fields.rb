@@ -47,9 +47,7 @@ class Wizards::Steps::Signup::PersonFields < Wizards::Step
       self.zip_code ||= current_user.zip_code
       self.town ||= current_user.town
       self.country ||= current_user.country
-      # rubocop:todo Layout/LineLength
-      self.phone_number ||= current_user.phone_numbers.find_by(label: Wizards::Steps::Signup::PersonCommon::PHONE_NUMBER_LABEL)&.number
-      # rubocop:enable Layout/LineLength
+      self.phone_number ||= current_user.phone_number_mobile&.number
     else
       self.country ||= Settings.addresses.imported_countries.to_a.first
     end

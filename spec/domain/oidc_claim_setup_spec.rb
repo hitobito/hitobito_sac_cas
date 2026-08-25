@@ -29,8 +29,10 @@ describe OidcClaimSetup, :outside_language_scope do
       end
 
       it "returns number with matching label" do
-        owner.phone_numbers.create!(label: "mobile", number: "0791234560")
-        owner.phone_numbers.create!(label: "landline", number: "0311234560")
+        owner.phone_numbers.create!(category: contact_account_categories(:phone_number_person_mobile),
+          number: "0791234560")
+        owner.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+          number: "0311234560")
 
         expect(claims[:phone_number_mobile]).to eq "+41 79 123 45 60"
         expect(claims[:phone_number_landline]).to eq "+41 31 123 45 60"

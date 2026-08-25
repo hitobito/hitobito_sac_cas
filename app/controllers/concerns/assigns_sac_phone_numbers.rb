@@ -18,8 +18,8 @@ module AssignsSacPhoneNumbers
   # Mark phone numbers for destruction if they have an empty number field.
   # This allows removing phone numbers by clearing the number field in the form.
   def mark_phone_numbers_for_destroy(contactable)
-    PhoneNumber.predefined_labels.each do |label|
-      phone_number_assoc = :"phone_number_#{label}"
+    SacPhoneNumbers::FIXED_SLOT_KEYS.each do |key|
+      phone_number_assoc = :"phone_number_#{key}"
       phone_number_params = model_params[:"#{phone_number_assoc}_attributes"]
 
       if phone_number_params && phone_number_params[:number].blank?

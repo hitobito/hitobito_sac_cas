@@ -101,10 +101,21 @@ module HitobitoSacCas
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
-      PhoneNumber.predefined_labels.each do |label|
-        PeopleController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
-        GroupsController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
+      SacPhoneNumbers::FIXED_SLOT_KEYS.each do |key|
+        PeopleController.permitted_attrs << {"phone_number_#{key}_attributes": [:id, :number]}
+        GroupsController.permitted_attrs << {"phone_number_#{key}_attributes": [:id, :number]}
       end
+
+      # contact account categories (#4359): SacPhoneNumbers builds a fixed
+      # has_one slot per FIXED_SLOT_KEYS for both Person and Group. Core only
+      # seeds a "landline" PhoneNumber category for Person, not Group.
+      require Rails.root.join("db", "seeds", "support", "contact_account_category_seeder.rb")
+
+      categories = ContactAccountCategorySeeder::CATEGORIES
+      categories["PhoneNumber"]["Group"].prepend(
+        {key: "landline",
+         name: {de: "Festnetz", fr: "Ligne fixe", it: "Telefono fisso", en: "Landline"}}
+      )
 
       Wizards::Base.prepend SacCas::Wizards::Base
       Wizards::Steps::NewUserForm.support_company = false

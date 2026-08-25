@@ -113,11 +113,12 @@ describe Person do
   end
 
   context "associations" do
-    %w[landline mobile].each do |label|
-      it "#phone_number_#{label} returns the number with label #{label.inspect}" do
+    %w[landline mobile].each do |key|
+      it "#phone_number_#{key} returns the number with category #{key.inspect}" do
         person = people(:mitglied)
-        phone_number = person.phone_numbers.create!(number: "+41791234567", label: label)
-        expect(person.send(:"phone_number_#{label}")).to eq(phone_number)
+        category = contact_account_categories(:"phone_number_person_#{key}")
+        phone_number = person.phone_numbers.create!(number: "+41791234567", category:)
+        expect(person.send(:"phone_number_#{key}")).to eq(phone_number)
       end
     end
   end
@@ -638,7 +639,8 @@ describe Person do
 
       describe "member" do
         before do
-          person.phone_numbers.create!(number: "+41791234567", label: "mobile")
+          person.phone_numbers.create!(number: "+41791234567",
+            category: contact_account_categories(:phone_number_person_mobile))
           person.roles.create!(
             type: Group::SektionsMitglieder::Mitglied.sti_name,
             group: groups(:bluemlisalp_mitglieder),
@@ -684,7 +686,7 @@ describe Person do
         def phone_quality_issue_count(person) = [person.reload.data_quality_issues, :count]
 
         def add_phone_number(person) = person.phone_numbers.create!(number: "+41791234567",
-          label: "mobile")
+          category: contact_account_categories(:phone_number_person_mobile))
       end
     end
 
@@ -704,7 +706,8 @@ describe Person do
     let(:person) {
       people(:mitglied).tap { |p|
      # rubocop:todo Layout/IndentationWidth
-     p.phone_numbers.create!(number: "+41791234567", label: "mobile")
+     p.phone_numbers.create!(number: "+41791234567",
+       category: contact_account_categories(:phone_number_person_mobile))
         # rubocop:enable Layout/IndentationWidth
       }
     }

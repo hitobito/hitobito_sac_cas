@@ -50,8 +50,8 @@ module SacCas::Event::ParticipationContactData
     super
 
     # Ensure that at least one phone number is present
-    return if PhoneNumber.predefined_labels
-      .map { |label| person.send(:"phone_number_#{label}") }
+    return if SacPhoneNumbers::FIXED_SLOT_KEYS
+      .map { |key| person.send(:"phone_number_#{key}") }
       .select { |phone_number| !phone_number&.marked_for_destruction? }
       .any?
 
@@ -63,8 +63,8 @@ module SacCas::Event::ParticipationContactData
         model_name: PhoneNumber.model_name.human))
 
     # We add an active record error on the phone number objects, to mark the form fields as invalid
-    PhoneNumber.predefined_labels.map { |label|
-      person.send(:"phone_number_#{label}")
+    SacPhoneNumbers::FIXED_SLOT_KEYS.map { |key|
+      person.send(:"phone_number_#{key}")
     }.each do |object|
       next if object.nil?
 

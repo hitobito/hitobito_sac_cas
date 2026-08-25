@@ -46,7 +46,7 @@ describe "Event Signup", :js do
       expect(admin.birthday).to eq Date.new(1980, 1, 1)
       expect(admin.phone_numbers).to have(1).item
       expect(admin.phone_numbers.first.number).to eq "+41 79 123 45 56"
-      expect(admin.phone_numbers.first.label).to eq "mobile"
+      expect(admin.phone_numbers.first.category.key).to eq "mobile"
     end
   end
 

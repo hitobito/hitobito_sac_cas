@@ -49,7 +49,8 @@ module Wizards::Steps::Signup::PersonCommon
 
   def phone_number_id
     if id
-      PhoneNumber.find_by(label: PHONE_NUMBER_LABEL, contactable_id: id,
+      category_id = SacPhoneNumbers.category_id(Person.sti_name, PHONE_NUMBER_LABEL)
+      PhoneNumber.find_by(category_id:, contactable_id: id,
         contactable_type: Person.sti_name)&.id
     end
   end

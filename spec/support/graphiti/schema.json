@@ -24,6 +24,12 @@
           "writable": true,
           "description": null
         },
+        "category_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "contactable_id": {
           "type": "integer",
           "readable": true,
@@ -108,6 +114,7 @@
         "id": {},
         "label": {},
         "public": {},
+        "category_id": {},
         "contactable_id": {},
         "contactable_type": {},
         "first_name": {},
@@ -155,6 +162,17 @@
             "eq"
           ],
           "single": true
+        },
+        "category_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
         },
         "contactable_id": {
           "type": "integer",
@@ -371,6 +389,12 @@
           "writable": true,
           "description": null
         },
+        "category_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "contactable_id": {
           "type": "integer",
           "readable": true,
@@ -407,6 +431,7 @@
         "id": {},
         "label": {},
         "public": {},
+        "category_id": {},
         "contactable_id": {},
         "contactable_type": {},
         "email": {},
@@ -446,6 +471,17 @@
             "eq"
           ],
           "single": true
+        },
+        "category_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
         },
         "contactable_id": {
           "type": "integer",
@@ -4564,6 +4600,12 @@
           "writable": true,
           "description": null
         },
+        "category_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "contactable_id": {
           "type": "integer",
           "readable": true,
@@ -4588,6 +4630,7 @@
         "id": {},
         "label": {},
         "public": {},
+        "category_id": {},
         "contactable_id": {},
         "contactable_type": {},
         "number": {}
@@ -4625,6 +4668,17 @@
             "eq"
           ],
           "single": true
+        },
+        "category_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
         },
         "contactable_id": {
           "type": "integer",
@@ -5185,6 +5239,12 @@
           "writable": true,
           "description": null
         },
+        "category_id": {
+          "type": "integer",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
         "contactable_id": {
           "type": "integer",
           "readable": true,
@@ -5209,6 +5269,7 @@
         "id": {},
         "label": {},
         "public": {},
+        "category_id": {},
         "contactable_id": {},
         "contactable_type": {},
         "name": {}
@@ -5246,6 +5307,17 @@
             "eq"
           ],
           "single": true
+        },
+        "category_id": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
         },
         "contactable_id": {
           "type": "integer",

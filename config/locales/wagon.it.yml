@@ -266,10 +266,6 @@ it:
         password: password
         email_confirmation: Conferma via e-mail
         password_confirmation: Conferma della password
-      contact_account:
-        predefined_labels:
-          landline: Linea fissa
-          mobile: Mobile
       cost_center:
         label: Denominazione
         event_kind_categories: Categorie di corsi
