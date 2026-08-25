@@ -11,7 +11,7 @@
 = f.labeled_date_field :birthday
 = render 'contactable/address_fields', f: f
 = render 'contactable/phone_numbers_fields', f: f
-- if event.course? || event.tour?
+- if event.needs_emergency_contact?
   = field_set_tag do
     = f.labeled_input_field(:emergency_contact_1_name)
     = f.labeled_input_field(:emergency_contact_1_phone)

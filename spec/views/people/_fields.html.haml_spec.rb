@@ -58,11 +58,11 @@ describe "people/_fields.html.haml" do
 
     it "fills fields with stored values" do
       person.update!(
-        emergency_contact_1_name: "Tina Tester",
+        emergency_contact_1_name: "Tina #{person.last_name}",
         emergency_contact_1_phone: "079 123 45 67"
       )
 
-      expect(dom).to have_field "person[emergency_contact_1_name]", with: "Tina Tester"
+      expect(dom).to have_field "person[emergency_contact_1_name]", with: "Tina #{person.last_name}"
       expect(dom).to have_field "person[emergency_contact_1_phone]", with: "079 123 45 67"
     end
   end

@@ -49,4 +49,18 @@ describe Event do
       expect(event.reload.application_questions.map(&:question)).to eq ["A", "B"]
     end
   end
+
+  describe "#needs_emergency_contact?" do
+    it "is true for courses" do
+      expect(Fabricate.build(:course)).to be_needs_emergency_contact
+    end
+
+    it "is true for tours" do
+      expect(Fabricate.build(:sac_tour)).to be_needs_emergency_contact
+    end
+
+    it "is false for other events" do
+      expect(event).not_to be_needs_emergency_contact
+    end
+  end
 end

@@ -122,4 +122,8 @@ module SacCas::Event
   def agenda_status
     nil
   end
+
+  def needs_emergency_contact?
+    course? || tour?
+  end
 end

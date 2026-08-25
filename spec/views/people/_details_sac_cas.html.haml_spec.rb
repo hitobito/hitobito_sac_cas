@@ -101,8 +101,8 @@ describe "people/_details_sac_cas.html.haml" do
     let(:person) { people(:mitglied) }
 
     it "renders heading and values when show_full" do
-      person.update!(emergency_contact_1_name: "Tina Tester", emergency_contact_1_phone: "079 123 45 67")
-      expect(dom).to have_text "Tina Tester"
+      person.update!(emergency_contact_1_name: "Tina #{person.last_name}", emergency_contact_1_phone: "079 123 45 67")
+      expect(dom).to have_text "Tina #{person.last_name}"
       expect(dom).to have_link "079 123 45 67", href: "tel:0791234567"
     end
   end
@@ -112,8 +112,8 @@ describe "people/_details_sac_cas.html.haml" do
     let(:show_full) { false }
 
     it "hides emergency contacts" do
-      person.update!(emergency_contact_1_name: "Tina Tester")
-      expect(dom).not_to have_text "Tina Tester"
+      person.update!(emergency_contact_1_name: "Tina #{person.last_name}")
+      expect(dom).not_to have_text "Tina #{person.last_name}"
     end
   end
 
@@ -124,10 +124,10 @@ describe "people/_details_sac_cas.html.haml" do
     before { assign(:event, events(:top_course)) }
 
     it "renders emergency contacts when update allowed" do
-      person.update!(emergency_contact_1_name: "Tina Tester")
+      person.update!(emergency_contact_1_name: "Tina #{person.last_name}")
       assign(:participation, participation)
       allow(view).to receive(:can?).with(:update, participation).and_return(true)
-      expect(dom).to have_text "Tina Tester"
+      expect(dom).to have_text "Tina #{person.last_name}"
     end
   end
 

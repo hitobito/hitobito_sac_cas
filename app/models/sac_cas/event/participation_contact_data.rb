@@ -48,7 +48,7 @@ module SacCas::Event::ParticipationContactData
   private
 
   def emergency_contacts_required?
-    event.course? || event.tour?
+    event.needs_emergency_contact?
   end
 
   def assert_emergency_contact_present
