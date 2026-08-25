@@ -340,6 +340,7 @@ module HitobitoSacCas
       Export::PeopleExportJob.prepend SacCas::Export::PeopleExportJob
       Export::SubscriptionsJob.prepend SacCas::Export::SubscriptionsJob
       Export::EventParticipationsExportJob.prepend SacCas::Export::EventParticipationsExportJob
+      Export::EventsExportJob.prepend SacCas::Export::EventsExportJob
 
       ## Tabulars
       Export::Tabular::People::PeopleFull.prepend SacCas::Export::Tabular::People::PeopleFull

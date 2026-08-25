@@ -403,11 +403,13 @@ de:
           evening: Abend
         states:
           created: Entwurf
+          draft: Entwurf
           application_open: Publiziert
           application_paused: Anmeldung pausiert
           application_closed: Anmeldung abgeschlossen
           assignment_closed: Zuteilung abgeschlossen
           ready: Bereit zur Durchführung
+          published: Publiziert
           closed: Abgeschlossen
           canceled: Abgesagt
         price_member: "Mitgliederpreis"
@@ -2072,6 +2074,21 @@ de:
       age_61__count: Anzahl TN Altersgruppe 61+ Jahre
       sac_member_count: Anzahl TN SAC Mitglieder
       non_sac_member_count: Anzahl TN Nicht SAC Mitglieder
+
+  export/tabular/events/tours/list:
+    leaders: Leitungsteam
+    price_description: Kosten Hinweis
+
+    group_names: "Organisatoren"
+    duration: Zeitraum
+    date: "Datum %{index}"
+    male_count: Anzahl Teilnehmende Männer
+    female_count: Anzahl Teilnehmende Frauen
+    absent_count: Anzahl Nicht erschienene
+    canceled_count: Anzahl Abgemeldete
+    rejected_count: Anzahl Abgelehnte
+
+
 
   export/tabular/people/mitgliedschaft:
     attributes:
