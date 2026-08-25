@@ -25,6 +25,7 @@ event:
     manual_sensitive_option: true
     delete_answers_after_months: 6
     delete_additional_information_after_months: 6
+    delete_emergency_contacts_after_months: 6
   questions:
     list_alphabetically: true
 
