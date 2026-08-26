@@ -38,6 +38,7 @@ describe Groups::SelfRegistrationController do
           phone_number: "+41 79 123 45 67"
         },
         various_fields: {},
+        cornercard_fields: {},
         summary_fields: {
           statutes: true,
           contribution_regulations: true,
@@ -48,7 +49,7 @@ describe Groups::SelfRegistrationController do
 
     context "anonymous" do
       it "redirects to login" do
-        post :create, params: required_params.merge(step: 4)
+        post :create, params: required_params.merge(step: 5)
         expect(response).to redirect_to new_person_session_path
         expect(flash[:notice]).to eq "Du hast Dich erfolgreich registriert. " \
         "Du erhältst in Kürze eine E-Mail mit der Anleitung, " \
@@ -65,7 +66,7 @@ describe Groups::SelfRegistrationController do
         it "redirects to history_group_person_path" do
           user.roles.update_all(end_on: 1.week.ago)
 
-          post :create, params: required_params.merge(step: 3)
+          post :create, params: required_params.merge(step: 4)
 
           expect(response).to redirect_to history_group_person_path(user.primary_group, user)
           expect(flash[:notice]).to eq "Deine Anmeldung wurde erfolgreich gespeichert."
@@ -73,7 +74,7 @@ describe Groups::SelfRegistrationController do
 
         it "redirects to completion_redirect_path param if present" do
           completion_redirect_path = "/wizard-completed-redirect"
-          post :create, params: required_params.merge(step: 3, completion_redirect_path:)
+          post :create, params: required_params.merge(step: 4, completion_redirect_path:)
 
           expect(response).to redirect_to completion_redirect_path
         end

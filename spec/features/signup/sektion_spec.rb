@@ -106,6 +106,10 @@ describe "signup/sektion", :js do
     end
   end
 
+  def complete_cornercard_step
+    click_button "Weiter", match: :first
+  end
+
   def format_date(time_or_date)
     time_or_date.strftime("%d.%m.%Y")
   end
@@ -148,6 +152,8 @@ describe "signup/sektion", :js do
       complete_main_person_form
       click_button "Weiter als Einzelmitglied"
       click_button "Weiter"
+
+      complete_cornercard_step
 
       expect do
         complete_last_page
@@ -298,6 +304,8 @@ describe "signup/sektion", :js do
       click_button "Weiter als Familienmitgliedschaft", match: :first
       click_button "Weiter", match: :first
 
+      complete_cornercard_step
+
       expect do
         complete_last_page
         # rubocop:todo Layout/LineLength
@@ -379,6 +387,9 @@ describe "signup/sektion", :js do
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
       click_button "Weiter", match: :first
+
+      complete_cornercard_step
+
       expect(page).to have_button "Mitgliedschaft beantragen"
       expect(page).to have_no_selector "#error_explanation"
     end
@@ -412,6 +423,8 @@ describe "signup/sektion", :js do
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
       click_button "Weiter", match: :first
+
+      complete_cornercard_step
 
       expect do
         complete_last_page
@@ -497,6 +510,9 @@ describe "signup/sektion", :js do
       end
       click_button "Weiter als Einzelmitglied"
       click_button "Weiter"
+
+      complete_cornercard_step
+
       expect(page).to have_button "Mitgliedschaft beantragen"
     end
 
@@ -580,6 +596,9 @@ describe "signup/sektion", :js do
       click_button "Weiter"
       assert_aside(beitragskategorie: :youth)
       click_button "Weiter"
+
+      complete_cornercard_step
+
       expect do
         complete_last_page
         # rubocop:todo Layout/LineLength
@@ -601,7 +620,11 @@ describe "signup/sektion", :js do
 
     it "creates including subscription if newsletter is checked" do
       click_button "Weiter"
+
+      complete_cornercard_step
+
       check "Ich möchte den SAC-Newsletter abonnieren."
+
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
@@ -615,6 +638,9 @@ describe "signup/sektion", :js do
       expect(page).to have_css("label", text: "Eintrittsgrund")
       choose "soso"
       click_button "Weiter"
+
+      complete_cornercard_step
+
       complete_last_page
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
@@ -633,6 +659,8 @@ describe "signup/sektion", :js do
       complete_main_person_form
       click_button "Weiter als Einzelmitglied"
       click_button "Weiter"
+
+      complete_cornercard_step
     end
 
     it "fails if section policy is not accepted" do
@@ -679,6 +707,8 @@ describe "signup/sektion", :js do
       click_button "Weiter als Einzelmitglied"
       click_button "Weiter"
 
+      complete_cornercard_step
+
       expect(find_all(".well").count).to eq(1)
       expect(page).to have_css(".well", text: "Kontaktperson")
       expect(page).not_to have_css("h2", text: "Familienmitglieder")
@@ -706,6 +736,9 @@ describe "signup/sektion", :js do
       force_rerender
       click_button "Weiter als Familienmitgliedschaft", match: :first
       click_button "Weiter", match: :first
+
+      complete_cornercard_step
+
       assert_step "Zusammenfassung"
 
       expect(find_all(".well").count).to eq(3)
@@ -868,6 +901,9 @@ describe "signup/sektion", :js do
         click_button "Weiter"
         click_button "Weiter als Einzelmitglied"
         click_button "Weiter"
+
+        complete_cornercard_step
+
         complete_last_page
         expect(page).to have_content "Deine Anmeldung wurde erfolgreich gespeichert"
         expect(person.reload.first_name).to eq "Test"
