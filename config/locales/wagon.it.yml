@@ -802,6 +802,11 @@ it:
           no_base_activity: non è un'attività principale.
           combination_exists: ha già definito una responsabilità corrispondente.
 
+        external_training:
+          attributes:
+            training_days:
+              half_or_full_number: muss eine ganze oder halbe Zahl sein
+
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La persona deve avere almeno una qualifica attiva.
 

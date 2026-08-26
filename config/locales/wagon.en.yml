@@ -799,6 +799,11 @@ en:
           no_base_activity: ist keine Hauptaktivität.
           combination_exists: hat bereits eine entsprechende Zuständigkeit definiert.
 
+        external_training:
+          attributes:
+            training_days:
+              half_or_full_number: muss eine ganze oder halbe Zahl sein
+
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: person must have at least one active qualification.
 

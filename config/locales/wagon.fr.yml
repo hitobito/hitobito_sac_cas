@@ -804,6 +804,11 @@ fr:
           no_base_activity: ce n'est pas une activité principale.
           combination_exists: a déjà défini une compétence correspondante.
 
+        external_training:
+          attributes:
+            training_days:
+              half_or_full_number: muss eine ganze oder halbe Zahl sein
+
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La personne doit posséder au moins une qualification active.
 
