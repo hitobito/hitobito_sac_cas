@@ -52,6 +52,7 @@ module SacCas::Person
     has_many :data_quality_issues, dependent: :destroy
     has_many :external_invoices, dependent: :destroy
     has_many :external_trainings, dependent: :destroy
+    has_one :cornercard_upload, dependent: :destroy
 
     before_validation :reset_confirmed_at_and_correspondence, if: -> { email.blank? }
 
