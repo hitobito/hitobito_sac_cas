@@ -12,6 +12,7 @@ module Wizards::Signup
       Wizards::Steps::Signup::Sektion::PersonFields,
       Wizards::Steps::Signup::Sektion::FamilyFields,
       Wizards::Steps::Signup::Sektion::VariousFields,
+      Wizards::Steps::Signup::Sektion::CornercardFields,
       Wizards::Steps::Signup::Sektion::SummaryFields
     ]
 
@@ -22,6 +23,7 @@ module Wizards::Signup
 
     delegate :person_attributes, :birthday, to: :person_fields
     delegate :self_registration_reason_id, to: :various_fields
+    delegate :card_application, :consent_given, to: :cornercard_fields
     delegate :newsletter, :privacy_policy_accepted_at, to: :summary_fields
 
     delegate :unknown?, :adult?, :youth?, :family?, to: :beitragskategorie, prefix: true
@@ -133,25 +135,48 @@ module Wizards::Signup
     end
 
     def step_after(step_name_or_class)
-      if step_name_or_class == :_start && current_user
-        Wizards::Steps::Signup::Sektion::PersonFields.step_name
-      elsif person_fields?(step_name_or_class) && too_young_for_household?
-        Wizards::Steps::Signup::Sektion::VariousFields.step_name
-      else
-        super
-      end
+      return person_fields_step if step_name_or_class == :_start && current_user
+      return various_fields_step if skip_family_fields?(step_name_or_class)
+      return summary_fields_step if skip_cornercard?(step_name_or_class)
+
+      super
+    end
+
+    def various_fields_step = Wizards::Steps::Signup::Sektion::VariousFields.step_name
+
+    def summary_fields_step = Wizards::Steps::Signup::Sektion::SummaryFields.step_name
+
+    def person_fields_step = Wizards::Steps::Signup::Sektion::PersonFields.step_name
+
+    def skip_family_fields?(step_class)
+      person_fields?(step_class) && too_young_for_household?
     end
 
     def person_fields?(step_class)
       step_class == Wizards::Steps::Signup::Sektion::PersonFields
     end
 
-    def too_young_for_household?
-      birthday = params.with_indifferent_access.dig(:person_fields,
-        :birthday) || current_user&.birthday
+    def skip_cornercard?(step_class)
+      various_fields?(step_class) && too_young_for_cornercard?
+    end
+
+    def various_fields?(step_class)
+      step_class == Wizards::Steps::Signup::Sektion::VariousFields
+    end
+
+    def too_young_for_household? = needed_age(MIN_ADULT_YEARS)
+
+    def too_young_for_cornercard? = needed_age(18)
+
+    def needed_age(age)
+      birthday = params.with_indifferent_access.dig(:person_fields, :birthday) ||
+        current_user&.birthday
+
       if birthday
         years = ::Person.new(birthday: birthday).years
-        years && years < MIN_ADULT_YEARS
+        years && years < age
+      else
+        false
       end
     end
   end
