@@ -15,6 +15,6 @@ class Export::CornercardApplicationsScheduleJob < RecurringJob
   private
 
   def next_run
-    interval.from_now.midnight + 5.minutes
+    interval.from_now.midnight + 10.minutes
   end
 end

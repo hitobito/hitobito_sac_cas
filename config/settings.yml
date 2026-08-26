@@ -47,6 +47,12 @@ sftp:
       <%= "{ #{ENV['RAILS_SFTP_CONFIG']} }" %>
     <% end %>
 
+cornercard:
+  config:
+    <% if ENV['RAILS_CORNERCARD_CONFIG'].present? %>
+      <%= "{ #{ENV['RAILS_CORNERCARD_CONFIG']} }" %>
+    <% end %>
+
 oidc:
   use_refresh_token: true
   use_jwt_access_token: true

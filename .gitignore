@@ -26,6 +26,7 @@ config/environment.rb
 
 config/abacus.yml
 config/settings.local.yml
+config/cornercard.yml
 
 # reports
 /coverage

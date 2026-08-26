@@ -26,7 +26,7 @@ class Export::CornercardApplicationsJob < BaseJob
   end
 
   def sftp_config
-    Settings.cornercard
+    Settings.cornercard.config
   end
 
   def remote_file_path

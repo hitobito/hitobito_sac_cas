@@ -62,7 +62,7 @@ module HitobitoSacCas
       end
 
       # only schedule CornercardApplicationsScheduleJob if cornercard config is present
-      if Settings.respond_to?(:cornercard) && Settings.cornercard.present?
+      if Settings.cornercard.config.present?
         JobManager.wagon_jobs += [Export::CornercardApplicationsScheduleJob]
       end
 
