@@ -16,6 +16,21 @@ module Wizards::Steps::Signup::Sektion
       card_application && consent_given
     end
 
+    def data_processing_url
+      "#"
+    end
+
+    def agb_url
+      case I18n.locale.to_s
+      when "fr"
+        "https://www.cornercard.ch/downloads/documents/terms_credit_pers_fr.pdf"
+      when "it"
+        "https://www.cornercard.ch/downloads/documents/terms_credit_pers_it.pdf"
+      else
+        "https://www.cornercard.ch/downloads/documents/terms_credit_pers_de.pdf"
+      end
+    end
+
     private
 
     def assert_consent_given_with_card_application

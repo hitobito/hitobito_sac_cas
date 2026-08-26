@@ -1,3 +1,32 @@
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
+-#  or later. See the COPYING file at the top-level directory or at
+-#  https://github.com/hitobito/hitobito_sac_cas.
+
 = c.fields_for do |form|
-  = form.check_box :card_application
-  = form.check_box :consent_given
+  .align-with-form
+    %h4.fw-bold= t('.benefit_heading')
+    = image_tag('cornercard-sac.png', alt: 'SAC-Cornèrcard', class: 'img-fluid mb-3', style: 'max-width: 230px')
+
+  .align-with-form
+    %h4.fw-bold= t('.order_heading')
+    %p= t('.order_description')
+
+    %h5.fw-bold= t('.benefits_heading')
+    %ul
+      %li= t('.benefit_1')
+      %li= t('.benefit_2')
+      %li= t('.benefit_3')
+
+    %p= t('.support_text')
+
+  .align-with-form.mt-3
+    = form.label(:card_application, class: 'd-block mt-2') do
+      = form.check_box :card_application
+      = t('.card_application_label')
+
+    - data_link = link_to(t('.data_processing_link_text'), form.object.data_processing_url, target: :_blank)
+    - agb_link = link_to(t('.agb_link_text'), form.object.agb_url, target: :_blank)
+    = form.label(:consent_given, class: 'd-block mt-2') do
+      = form.check_box :consent_given
+      = t('.consent_label', data_processing_link: data_link, agb_link: agb_link).html_safe
