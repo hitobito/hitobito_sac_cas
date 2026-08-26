@@ -40,7 +40,7 @@ module Wizards::Signup
     end
 
     def save!
-      valid? && operations.all?(&:save!) && create_people_managers
+      valid? && operations.all?(&:save!) && create_people_managers && create_cornercard_upload
     end
 
     def birthdays
@@ -100,6 +100,13 @@ module Wizards::Signup
       main_person = operations.find { |o| o.person.sac_family_main_person }.person
       main_person.household.create_missing_people_managers(main_person)
       true
+    end
+
+    def create_cornercard_upload
+      return unless card_application
+
+      main_person = operations.first.person
+      main_person.create_cornercard_upload!
     end
 
     def people_attrs

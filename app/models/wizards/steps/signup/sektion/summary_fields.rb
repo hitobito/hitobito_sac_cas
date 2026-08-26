@@ -46,6 +46,11 @@ module Wizards::Steps::Signup::Sektion
               name: wizard.group.layer_group.name)
     end
 
+    def cornercard_ordered?
+      cornercard_step = wizard.step(:cornercard_fields)
+      cornercard_step&.card_application == true
+    end
+
     private
 
     def privacy_policy

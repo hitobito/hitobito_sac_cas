@@ -14,4 +14,9 @@
 
     = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?
 
+    - if form.object.cornercard_ordered?
+      .align-with-form.mt-3
+        %span.fw-bold= t("wizards.steps.signup.sektion.cornercard_fields.card_application")
+        = ": #{t('.cornercard_ordered_yes')}"
+
     = content_tag(:div, form.object.info_alert_text, class: "alert alert-info mt-3")
