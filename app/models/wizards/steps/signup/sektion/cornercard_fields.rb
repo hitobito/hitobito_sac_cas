@@ -17,7 +17,14 @@ module Wizards::Steps::Signup::Sektion
     end
 
     def data_processing_url
-      "#"
+      case I18n.locale.to_s
+      when "fr"
+        "https://www.cornercard.ch/downloads/documents/terms_sac_fr.pdf"
+      when "it"
+        "https://www.cornercard.ch/downloads/documents/terms_sac_it.pdf"
+      else
+        "https://www.cornercard.ch/downloads/documents/terms_sac.pdf"
+      end
     end
 
     def agb_url
