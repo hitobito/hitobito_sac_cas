@@ -17,6 +17,6 @@
     - if form.object.cornercard_ordered?
       .align-with-form.mt-3
         %span.fw-bold= t("wizards.steps.signup.sektion.cornercard_fields.card_application")
-        = ": #{t('.cornercard_ordered_yes')}"
+        = ": #{t('.cornercard_will_be_ordered')}"
 
     = content_tag(:div, form.object.info_alert_text, class: "alert alert-info mt-3")

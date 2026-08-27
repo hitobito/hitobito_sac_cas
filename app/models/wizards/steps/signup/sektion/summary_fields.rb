@@ -47,8 +47,7 @@ module Wizards::Steps::Signup::Sektion
     end
 
     def cornercard_ordered?
-      cornercard_step = wizard.step(:cornercard_fields)
-      cornercard_step&.card_application == true
+      wizard.step(:cornercard_fields)&.card_application == true
     end
 
     private

@@ -2914,7 +2914,7 @@ de:
             child: "Kind"
           summary_entry_fee_card:
             immediate_entry_date: "Eintrittsdatum: per sofort"
-          cornercard_ordered_yes: "SAC-Cornèrcard wird bestellt"
+          cornercard_will_be_ordered: "SAC-Cornèrcard wird bestellt"
 
         various_fields:
           newsletter: Ich möchte den SAC-Newsletter abonnieren.
