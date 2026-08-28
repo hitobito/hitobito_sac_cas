@@ -187,8 +187,8 @@ describe :events, js: true do
       expect(page).to have_select "Kursbegin", selected: "(keine)"
 
       click_tab "Anmeldung"
-      expect(page).to have_field "Maximale Teilnehmerzahl", with: ""
-      expect(page).to have_field "Minimale Teilnehmerzahl", with: ""
+      expect(page).to have_field "Maximale Teilnehmendenzahl", with: ""
+      expect(page).to have_field "Minimale Teilnehmendenzahl", with: ""
       expect(page).to have_field "Mindestalter", with: ""
       expect(page).to have_field "Aufnahmebedingungen", with: ""
 
@@ -205,8 +205,8 @@ describe :events, js: true do
       click_tab "Daten"
       expect(page).to have_select "Saison", selected: "Sommer"
       click_tab "Anmeldung"
-      expect(page).to have_field "Maximale Teilnehmerzahl", with: "10"
-      expect(page).to have_field "Minimale Teilnehmerzahl", with: "3"
+      expect(page).to have_field "Maximale Teilnehmendenzahl", with: "10"
+      expect(page).to have_field "Minimale Teilnehmendenzahl", with: "3"
       expect(page).to have_field "Mindestalter", with: "18"
       expect(page).to have_field "Aufnahmebedingungen", with: "Vorraussetzungen sind .."
     end
@@ -225,8 +225,8 @@ describe :events, js: true do
       select "Winter"
 
       click_tab "Anmeldung"
-      fill_in "Maximale Teilnehmerzahl", with: "10"
-      fill_in "Minimale Teilnehmerzahl", with: "5"
+      fill_in "Maximale Teilnehmendenzahl", with: "10"
+      fill_in "Minimale Teilnehmendenzahl", with: "5"
       fill_in "Mindestalter", with: "12"
       fill_in "Aufnahmebedingungen", with: "keine Vorraussetzungen"
 
@@ -244,8 +244,8 @@ describe :events, js: true do
       expect(page).to have_select "Saison", selected: "Winter"
 
       click_tab "Anmeldung"
-      expect(page).to have_field "Maximale Teilnehmerzahl", with: "10"
-      expect(page).to have_field "Minimale Teilnehmerzahl", with: "5"
+      expect(page).to have_field "Maximale Teilnehmendenzahl", with: "10"
+      expect(page).to have_field "Minimale Teilnehmendenzahl", with: "5"
       expect(page).to have_field "Mindestalter", with: "12"
       expect(page).to have_field "Aufnahmebedingungen", with: "keine Vorraussetzungen"
     end
@@ -264,8 +264,8 @@ describe :events, js: true do
       select "Winter"
 
       click_on "Anmeldung"
-      fill_in "Maximale Teilnehmerzahl", with: "5"
-      fill_in "Maximale Teilnehmerzahl", with: "1"
+      fill_in "Maximale Teilnehmendenzahl", with: "5"
+      fill_in "Maximale Teilnehmendenzahl", with: "1"
       fill_in "Mindestalter", with: "12"
       fill_in "Aufnahmebedingungen", with: "keine Vorraussetzungen"
 
@@ -283,8 +283,8 @@ describe :events, js: true do
       expect(page).to have_select "Saison", selected: "Sommer"
 
       click_on "Anmeldung"
-      expect(page).to have_field "Maximale Teilnehmerzahl", with: "10"
-      expect(page).to have_field "Minimale Teilnehmerzahl", with: "3"
+      expect(page).to have_field "Maximale Teilnehmendenzahl", with: "10"
+      expect(page).to have_field "Minimale Teilnehmendenzahl", with: "3"
       expect(page).to have_field "Mindestalter", with: "18"
       fill_in "Aufnahmebedingungen", with: "Vorraussetzungen sind .."
     end
