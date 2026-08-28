@@ -807,7 +807,7 @@ fr:
         external_training:
           attributes:
             training_days:
-              half_or_full_number: muss eine ganze oder halbe Zahl sein
+              half_or_full_number: doit être un nombre entier ou un demi-nombre
 
         group/sektions_touren_und_kurse/tourenleiter:
           requires_active_qualification: La personne doit posséder au moins une qualification active.
