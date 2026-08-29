@@ -23,7 +23,6 @@ module Wizards::Signup
 
     delegate :person_attributes, :birthday, to: :person_fields
     delegate :self_registration_reason_id, to: :various_fields
-    delegate :card_application, :consent_given, to: :cornercard_fields
     delegate :newsletter, :privacy_policy_accepted_at, to: :summary_fields
 
     delegate :unknown?, :adult?, :youth?, :family?, to: :beitragskategorie, prefix: true
@@ -88,14 +87,17 @@ module Wizards::Signup
 
       operations.all? do |operation|
         next true if operation.valid?
+
         operation.errors.full_messages.each do |msg|
           errors.add(:base, msg)
         end
+
+        false
       end
     end
 
     def create_people_managers
-      return unless household_key
+      return true unless household_key
 
       main_person = operations.find { |o| o.person.sac_family_main_person }.person
       main_person.household.create_missing_people_managers(main_person)
@@ -103,7 +105,7 @@ module Wizards::Signup
     end
 
     def create_cornercard_upload
-      return unless card_application
+      return true unless step(:cornercard_fields)&.card_application
 
       main_person = operations.first.person
       main_person.create_cornercard_upload!
@@ -141,10 +143,10 @@ module Wizards::Signup
       }.shuffle
     end
 
-    def step_after(step_name_or_class)
+    def step_after(step_name_or_class) # rubocop:todo Metrics/CyclomaticComplexity
       return person_fields_step if step_name_or_class == :_start && current_user
-      return various_fields_step if skip_family_fields?(step_name_or_class)
-      return summary_fields_step if skip_cornercard?(step_name_or_class)
+      return various_fields_step if at_person_fields?(step_name_or_class) && too_young_for_household?
+      return summary_fields_step if at_various_fields?(step_name_or_class) && too_young_for_cornercard?
 
       super
     end
@@ -155,36 +157,22 @@ module Wizards::Signup
 
     def person_fields_step = Wizards::Steps::Signup::Sektion::PersonFields.step_name
 
-    def skip_family_fields?(step_class)
-      person_fields?(step_class) && too_young_for_household?
-    end
+    def at_person_fields?(step) = step == Wizards::Steps::Signup::Sektion::PersonFields
 
-    def person_fields?(step_class)
-      step_class == Wizards::Steps::Signup::Sektion::PersonFields
-    end
+    def at_various_fields?(step) = step == Wizards::Steps::Signup::Sektion::VariousFields
 
-    def skip_cornercard?(step_class)
-      various_fields?(step_class) && too_young_for_cornercard?
-    end
+    def too_young_for_household? = has_needed_age(MIN_ADULT_YEARS)
 
-    def various_fields?(step_class)
-      step_class == Wizards::Steps::Signup::Sektion::VariousFields
-    end
+    def too_young_for_cornercard? = has_needed_age(18)
 
-    def too_young_for_household? = needed_age(MIN_ADULT_YEARS)
-
-    def too_young_for_cornercard? = needed_age(18)
-
-    def needed_age(age)
-      birthday = params.with_indifferent_access.dig(:person_fields, :birthday) ||
+    def has_needed_age(age)
+      birthday =
+        params.with_indifferent_access.dig(:person_fields, :birthday) ||
         current_user&.birthday
 
-      if birthday
-        years = ::Person.new(birthday: birthday).years
-        years && years < age
-      else
-        false
-      end
+      return false unless birthday
+
+      ::Person.new(birthday:).years.to_i < age
     end
   end
 end

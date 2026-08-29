@@ -9,7 +9,7 @@ require "spec_helper"
 
 describe Export::CornercardApplicationsJob do
   let(:sftp) { double(:sftp) }
-  let(:config) { double(:config, folder: "/outbox/sac") }
+  let(:config) { double(:config) }
   let(:person) do
     Person.create!(
       first_name: "Max",
@@ -21,7 +21,7 @@ describe Export::CornercardApplicationsJob do
   end
 
   before do
-    allow(Settings).to receive(:cornercard).and_return(config)
+    allow(Settings.cornercard).to receive(:config).and_return(config)
     allow(Sftp).to receive(:new).and_return(sftp)
     allow(sftp).to receive(:upload_file)
   end
@@ -37,6 +37,15 @@ describe Export::CornercardApplicationsJob do
     end
 
     it "does nothing when no pending uploads exist" do
+      described_class.new.perform
+
+      expect(sftp).not_to have_received(:upload_file)
+    end
+
+    it "does nothing when config is missing" do
+      allow(Settings.cornercard).to receive(:config).and_return(nil)
+      person.create_cornercard_upload!
+
       described_class.new.perform
 
       expect(sftp).not_to have_received(:upload_file)
@@ -59,8 +68,7 @@ describe Export::CornercardApplicationsJob do
 
       described_class.new.perform
 
-      expect(sftp).to have_received(:upload_file)
-        .with(anything, "/outbox/sac/sac-cornercard-#{date}.xlsx")
+      expect(sftp).to have_received(:upload_file).with(anything, "sac-cornercard-#{date}.xlsx")
     end
   end
 end

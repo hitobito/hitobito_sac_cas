@@ -9,6 +9,8 @@ class Export::CornercardApplicationsJob < BaseJob
   self.use_background_job_logging = true
 
   def perform
+    return if sftp_config.blank?
+
     uploads = CornercardUpload.pending
     return if uploads.empty?
 
@@ -31,7 +33,7 @@ class Export::CornercardApplicationsJob < BaseJob
 
   def remote_file_path
     date = Date.current.strftime("%Y-%m-%d")
-    "#{sftp_config.folder}/sac-cornercard-#{date}.xlsx"
+    "sac-cornercard-#{date}.xlsx"
   end
 
   def log_entry(uploads, file_path)
