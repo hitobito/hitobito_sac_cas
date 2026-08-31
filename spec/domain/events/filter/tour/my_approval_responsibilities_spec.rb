@@ -78,7 +78,7 @@ describe Events::Filter::Tour::MyApprovalResponsibilities do
   end
 
   context "when tour has no matching responsibility for its activity" do
-    let!(:unknown_activity) { Fabricate(:event_activity) }
+    let!(:unknown_activity) { Fabricate(:event_activity, parent: Fabricate(:event_activity)) }
     let!(:unmatched_tour) do
       Fabricate(:sac_tour,
         groups: [groups(:bluemlisalp)],

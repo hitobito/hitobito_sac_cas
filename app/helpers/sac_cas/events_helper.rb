@@ -109,7 +109,7 @@ module SacCas::EventsHelper
 
   def fitness_requirements_select_options(requirements)
     requirements.map do |entry|
-      {id: entry.id, label: entry.to_s, description: entry.short_description}
+      {id: entry.id, label: entry.label, description: entry.short_description}
     end.to_json
   end
 
@@ -181,7 +181,7 @@ module SacCas::EventsHelper
         content_tag(:span, entry.label, class: "ms-1")
       ])
     else
-      entry.label
+      entry.to_s(:long)
     end
 
     if entry.description.present?

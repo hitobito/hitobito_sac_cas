@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-class Event::Tour < Event
+class Event::Tour < Event # rubocop:disable Metrics/ClassLength
   include ::Events::Tours::State
   include I18nEnums
 
@@ -120,9 +120,12 @@ class Event::Tour < Event
   ### VALIDATIONS
 
   validates :state, inclusion: possible_states
-  validates :description, :activities, :target_groups, :technical_requirements,
+  validates :description, :activities, :target_groups,
     :fitness_requirement, :season,
     presence: {if: -> { state_reached?(:review) }}
+  validates :technical_requirements, presence: {
+    if: -> { state_reached?(:review) && activities.any?(&:technical_requirement_id) }
+  }
 
   PRICE_ATTRIBUTES.each do |attribute|
     validates attribute, presence: {if: -> {
@@ -136,6 +139,9 @@ class Event::Tour < Event
 
   validate :assert_report_closed_when_tour_closes, if: -> { will_change_state_to?(:closed) }
   validate :assert_duration_valid?
+  validate :assert_only_child_activities, if: :draft?
+  validate :assert_only_child_technical_requirements, if: :draft?
+  validate :assert_only_child_traits, if: :draft?
   validate :assert_technical_requirements_match_activities, if: :draft?
 
   ### CALLBACKS
@@ -219,6 +225,24 @@ class Event::Tour < Event
 
     unless (technical_requirement_ids - allowed_technical_requirement_ids).empty?
       errors.add(:technical_requirements, :not_matching_activities)
+    end
+  end
+
+  def assert_only_child_activities
+    if activities.any?(&:main?)
+      errors.add(:activities, :must_be_child)
+    end
+  end
+
+  def assert_only_child_technical_requirements
+    if technical_requirements.any?(&:main?)
+      errors.add(:technical_requirements, :must_be_child)
+    end
+  end
+
+  def assert_only_child_traits
+    if traits.any?(&:main?)
+      errors.add(:traits, :must_be_child)
     end
   end
 

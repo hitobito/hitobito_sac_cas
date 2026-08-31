@@ -173,7 +173,7 @@ describe Events::Filter::Tour::Approval do
     end
 
     it "excludes tour whose activity has no responsibility for the komitee" do
-      unknown_activity = Fabricate(:event_activity)
+      unknown_activity = Fabricate(:event_activity, parent: Fabricate(:event_activity))
       unmatched = Fabricate(:sac_tour,
         groups: [groups(:bluemlisalp)],
         activities: [unknown_activity],

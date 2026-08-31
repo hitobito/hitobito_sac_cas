@@ -224,7 +224,7 @@ describe Event::ApprovalCommissionResponsibility do
     Fabricate(:sac_tour, attrs.reverse_merge(
       activities: [skihochtour, felsklettern],
       target_groups: [familien, senioren],
-      technical_requirements: [event_technical_requirements(:klettern)],
+      technical_requirements: [event_technical_requirements(:klettern_3a)],
       fitness_requirement: event_fitness_requirements(:a),
       season: :winter,
       state: :approved,

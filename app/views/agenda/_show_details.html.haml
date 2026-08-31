@@ -1,0 +1,47 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+.agenda-tour-detail-columns.border-top.pt-3
+  .d-flex.flex-column.gap-3
+    - if event.description.present?
+      %div
+        %h4.agenda-section-title= Event.human_attribute_name(:description)
+        .agenda-section-text= agenda_info_block(event.description)
+
+    - if event.location.present?
+      %div
+        %h4.agenda-section-title= Event.human_attribute_name(:location)
+        .agenda-section-text= event.location
+
+    - if event.tour?
+      -if event.additional_info.present?
+        %div
+          %h4.agenda-section-title= Event::Tour.human_attribute_name(:additional_info)
+          .agenda-section-text= agenda_info_block(event.additional_info)
+
+      - if event.alternative_route.present?
+        %div
+          %h4.agenda-section-title= Event::Tour.human_attribute_name(:alternative_route)
+          .agenda-section-text= agenda_info_block(event.alternative_route)
+
+    - if event.attr_used?(:application_conditions) && event.application_conditions.present?
+      %div
+        %h4.agenda-section-title= Event::Tour.human_attribute_name(:application_conditions)
+        .agenda-section-text
+          = agenda_info_block(event.application_conditions)
+          - if event.minimum_age?
+            = "#{Event::Tour.human_attribute_name(:minimum_age)}: #{event.minimum_age}"
+            %br
+          - if event.maximum_age?
+            = "#{Event.human_attribute_name(:maximum_age)}: #{event.maximum_age}"
+
+    - if event.tour? && (tour_price_categories(event).any? || event.price_description.present?)
+      %div
+        %h4.agenda-section-title= Event.human_attribute_name(:cost)
+        .agenda-section-text
+          = agenda_lines(tour_price_categories(event))
+          = agenda_info_block(event.price_description) if event.price_description.present?
+
+  = render "show_contact"

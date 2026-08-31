@@ -46,6 +46,26 @@ module Events::Tours::State
     after_update :handle_state_transition, if: :saved_change_to_state?
   end
 
+  def agenda_status # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
+    if published?
+      if application_opening_at.present? && Time.zone.today < application_opening_at
+        :published
+      elsif application_period_open?
+        if places_available? || !display_booking_info?
+          :application_open
+        else
+          :application_waiting
+        end
+      else
+        :application_closed
+      end
+    elsif ready?
+      :application_closed
+    else
+      state
+    end
+  end
+
   private
 
   def handle_state_transition
