@@ -2071,6 +2071,22 @@ de:
       canton: Kanton
       country: Land
 
+  export/tabular/people/cornercard_applications:
+    attributes:
+      id: Mitgliedernummer
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      email: Hauptemail
+      mobile: Mobile
+      street: Strasse
+      housenumber: Hausnummer
+      postbox: Postfach
+      zip_code: PLZ
+      town: Ort
+      country: Land
+
   export/tabular/people/jubilare:
     sheet_name: Mitglieder per %{reference_date}
 

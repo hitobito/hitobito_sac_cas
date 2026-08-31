@@ -51,7 +51,7 @@ describe Export::CornercardApplicationsJob do
       expect(sftp).not_to have_received(:upload_file)
     end
 
-    it "creates a log entry" do
+    it "creates a log entry with person IDs" do
       person.create_cornercard_upload!
 
       described_class.new.perform
@@ -60,15 +60,16 @@ describe Export::CornercardApplicationsJob do
       expect(log.category).to eq("cornercard")
       expect(log.level).to eq("info")
       expect(log.message).to include("1 Anträge")
+      expect(JSON.parse(log.payload)).to include(person.id)
     end
 
-    it "uses correct file path with date" do
+    it "uses correct file path with timestamp" do
       person.create_cornercard_upload!
-      date = Date.current.strftime("%Y-%m-%d")
 
       described_class.new.perform
 
-      expect(sftp).to have_received(:upload_file).with(anything, "sac-cornercard-#{date}.xlsx")
+      expected = "cornercard_antraege_#{Time.current.strftime("%Y%m%d_%H%M")}.xlsx"
+      expect(sftp).to have_received(:upload_file).with(anything, expected)
     end
   end
 end

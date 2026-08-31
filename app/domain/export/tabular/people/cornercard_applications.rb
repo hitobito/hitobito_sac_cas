@@ -3,74 +3,45 @@
 #  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
-#  https://github.com/hitobito/hitobito_sac_cas.
+#  https://github.com/hitobito/hitobito_sac_cas
 
 module Export::Tabular::People
-  class CornercardApplications
-    def initialize(cornercard_uploads)
-      @uploads = cornercard_uploads.includes(:person)
+  class CornercardApplications < Export::Tabular::Base
+    self.model_class = Person
+
+    ATTRIBUTES = [
+      :id,
+      :last_name,
+      :first_name,
+      :gender,
+      :birthday,
+      :email,
+      :mobile,
+      :street,
+      :housenumber,
+      :postbox,
+      :zip_code,
+      :town,
+      :country
+    ].freeze
+
+    self.row_class = CornercardApplicationsRow
+
+    class_attribute :attributes
+    self.attributes = ATTRIBUTES
+
+    def initialize(uploads)
+      scope = uploads.includes(person: :phone_number_mobile)
+        .order("cornercard_uploads.created_at ASC")
+      super(scope)
     end
 
-    def to_xlsx
-      package = Axlsx::Package.new
-      workbook = package.workbook
-      workbook.add_worksheet(name: "Cornèrcard Anträge") do |sheet|
-        sheet.add_row(headers)
-        @uploads.each do |upload|
-          sheet.add_row(row_for(upload))
-        end
-      end
-      package.to_stream
+    def attribute_label(attr)
+      I18n.t("export/tabular/people/cornercard_applications.attributes.#{attr}")
     end
 
-    private
-
-    def headers
-      [
-        "Anrede",
-        "Vorname",
-        "Nachname",
-        "Strasse",
-        "Hausnummer",
-        "PLZ",
-        "Ort",
-        "Land",
-        "E-Mail",
-        "Telefon",
-        "Geburtsdatum",
-        "Geschlecht",
-        "Antragsdatum"
-      ]
-    end
-
-    def row_for(upload)
-      p = upload.person
-      row_data(p) + [I18n.l(upload.created_at.to_date)]
-    end
-
-    def row_data(person)
-      [
-        gender_label(person),
-        person.first_name,
-        person.last_name,
-        person.street,
-        person.housenumber,
-        person.zip_code,
-        person.town,
-        person.country,
-        person.email,
-        person.phone_numbers.first&.number,
-        person.birthday ? I18n.l(person.birthday) : nil,
-        person.gender
-      ]
-    end
-
-    def gender_label(person)
-      if person.gender == "m"
-        "Herr"
-      else
-        "Frau"
-      end
+    def row_for(entry, format = nil)
+      row_class.new(entry, format)
     end
   end
 end

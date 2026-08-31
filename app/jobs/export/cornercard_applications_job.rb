@@ -14,10 +14,10 @@ class Export::CornercardApplicationsJob < BaseJob
     uploads = CornercardUpload.pending
     return if uploads.empty?
 
-    xlsx_data = Export::Tabular::People::CornercardApplications.new(uploads).to_xlsx
+    xlsx_data = Export::Tabular::People::CornercardApplications.xlsx(uploads)
     file_path = remote_file_path
     sftp.upload_file(xlsx_data, file_path)
-    log_entry(uploads, file_path)
+    log_entry(uploads)
     uploads.update_all(uploaded_at: Time.current)
   end
 
@@ -32,15 +32,16 @@ class Export::CornercardApplicationsJob < BaseJob
   end
 
   def remote_file_path
-    date = Date.current.strftime("%Y-%m-%d")
-    "sac-cornercard-#{date}.xlsx"
+    "cornercard_antraege_#{Time.current.strftime("%Y%m%d_%H%M")}.xlsx"
   end
 
-  def log_entry(uploads, file_path)
+  def log_entry(uploads)
+    person_ids = uploads.joins(:person).pluck(:person_id)
     HitobitoLogEntry.create!(
       category: "cornercard",
       level: "info",
-      message: "Cornèrcard export: #{uploads.count} Anträge nach #{file_path} hochgeladen"
+      message: "Cornèrcard export: #{uploads.count} Anträge hochgeladen",
+      payload: person_ids.to_json
     )
   end
 end
