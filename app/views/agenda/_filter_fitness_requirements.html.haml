@@ -1,0 +1,23 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Kondition filter: flat checkbox list, no nesting.
+-#
+-# locals: fitness_requirements: [Event::FitnessRequirement, ...]
+- selected = Array(event_filter.chain.dig(:tour_essentials, :fitness_requirement_id))
+
+= render layout: "filter_dropdown_shell",
+    locals: {label: t("agenda.filters.fitness_requirements"), icon_name: :activity, count: selected.size} do
+  - fitness_requirements.each do |requirement|
+    - option_id = "filters-tour_essentials-fitness_requirement_id_#{requirement.id}"
+    .form-check.agenda-filter-option
+      = check_box_tag("filters[tour_essentials][fitness_requirement_id][]",
+          requirement.id,
+          selected.include?(requirement.id),
+          id: option_id,
+          class: "form-check-input",
+          data: {action: "change->sac-cas--checkbox-filter#toggleOption",
+                 "sac-cas--checkbox-filter-target": "option"})
+      = label_tag(option_id, requirement.label_long, class: "form-check-label")

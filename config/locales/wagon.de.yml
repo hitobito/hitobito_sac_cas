@@ -801,8 +801,13 @@ de:
               longer_than_event_duration: darf nicht länger als geplante Kursdauer sein.
         event/tour:
           attributes:
+            activities:
+              must_be_child: müssen untergeordnete Aktivitäten sein
+            traits:
+              must_be_child: müssen untergeordnete Merkmale sein
             technical_requirements:
               not_matching_activities: müssen zu den ausgewählten Aktivitäten gehören
+              must_be_child: müssen untergeordnete Anforderungen sein
             base:
               report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
 
@@ -1523,22 +1528,68 @@ de:
       Wichtiges zum Export
 
   agenda:
-    date_filters:
+    header:
+      title: Tourenprogramm
+      brand: Schweizer Alpen-Club SAC
+    filters:
+      reset: Zurücksetzen
       since: Von
       until: Bis
-    application_filters:
-      application_open: Anmeldefenster offen?
-      places_available: Freie Plätze verfügbar?
+      date_placeholder: "TT.MM.JJJJ"
+      target_groups: Zielgruppe
+      activities: Aktivitäten
+      fitness_requirements: Kondition
+      tags: Merkmale
+      status: Status
+      search: Suche
+      search_placeholder: Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen
     index:
       title: Agenda %{group_name}
       select_group_alert: Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen
       apply_filter: Filtern
       reset_filter: Filter zurücksetzen
+      reset_all_filters: Alle Filter zurücksetzen
     list:
-      show_details: Details anzeigen
+      view_list: Liste
+      view_table: Tabelle
+      export_csv: CSV exportieren
       tours_found:
         one: "%{count} Tour gefunden"
         other: "%{count} Touren gefunden"
+      no_results:
+        title: Keine Anlässe gefunden
+        subtitle: Passe deine Filter an oder setze sie zurück.
+      tour_card:
+        date: Datum
+        duration_label: Dauer
+        duration:
+          one: "%{count} Tag"
+          other: "%{count} Tage"
+        participants_label: Teilnehmende
+        participants_suffix: Teilnehmende
+        max_participants: "Max. %{max} Teilnehmende"
+        contact: Kontakt
+    show:
+      back_to_overview: Zurück zur Übersicht
+      leaders: Tourenleitung
+      elevation: Höhenmeter
+      hours_abbreviation: h
+      meters_abbreviation: m
+      price:
+        price_special: Sektionsmitglieder
+        price_member: SAC-Mitglieder
+        price_regular: Nicht-Mitglieder
+    buttons:
+      show_details: Details
+      apply: Anmelden
+      waiting_list: Warteliste
+    status:
+      published: Veröffentlicht
+      application_open: Anmeldung offen
+      application_waiting: Anmeldung offen (Warteliste)
+      application_closed: Anmeldung geschlossen
+      closed: Durchgeführt
+      canceled: Abgesagt
 
   event:
     application_market:

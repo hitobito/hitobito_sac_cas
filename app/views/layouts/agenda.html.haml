@@ -1,14 +1,16 @@
--#  Copyright (c) 2026, Hitobito AG. This file is part of
--#  hitobito and licensed under the Affero General Public License version 3
+-#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
--#  https://github.com/hitobito/hitobito.
+-#  https://github.com/hitobito/hitobito_sac_cas.
 
 !!! 5
 
 %html{lang: I18n.locale}
   %head
     %meta{charset: 'utf-8'}
-    %title= "#{Settings.application.name} - #{title}"
+    %title
+      = t("agenda.header.title")
+      = group&.name
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
 
     = csrf_meta_tags
@@ -20,9 +22,25 @@
 
     = yield(:head)
 
-  %body
+  %body.agenda-body
+    .agenda-header
+      .agenda-container.d-flex.justify-content-between.align-items-center.flex-wrap.gap-2
+        .agenda-header-title
+          %h1= t("agenda.header.title")
+          - if group.present?
+            %p.text-muted.mb-0= group.name
+        .agenda-header-brand.text-end
+          - if group && group.logo.attached?
+            = image_tag(group.logo, alt: group.name)
+          - else
+            - logo = Settings.application.logo
+            - path = logo&.dig(:multilanguage_image, I18n.locale) || logo&.image
+            - url = url_to_asset(current_webpacker_instance.manifest.lookup!("media/images/#{path}"))
+            = image_tag(url, alt: Settings.application.name)
+
     #flash
       = render partial: 'layouts/flash', collection: [:notice, :warning, :alert], as: :level
 
-    %main#main-content
-      = yield
+    .agenda-container
+      %main#main-content
+        = yield

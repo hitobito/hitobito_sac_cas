@@ -37,6 +37,7 @@ describe Event::ActivitiesController do
 
     it "renders colored circle if color is set" do
       wandern.update!(color: "#AABBCC")
+      event_activities(:hochtour).update!(color: nil)
       get :index
       expect(response).to be_ok
       expect(dom).to have_css("#event_activity_#{wandern.id} td i.fa-circle")

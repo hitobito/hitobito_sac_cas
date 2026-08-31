@@ -189,7 +189,7 @@ module TourMailer
     return unless @event.fitness_requirement
 
     label = Event::Tour.human_attribute_name(:fitness_requirement)
-    labeled(label, @event.fitness_requirement.to_s)
+    labeled(label, @event.fitness_requirement.label_long)
   end
 
   def labeled_technical_requirements

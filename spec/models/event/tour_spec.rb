@@ -67,6 +67,13 @@ describe Event::Tour do
 
       it_behaves_like "presence validation for draft attributes", attribute: :activities, association: true
       it_behaves_like "readonly for draft attributes", attribute: :activities
+
+      it "is invalid if main activity is assigned" do
+        tour.update!(state: :draft)
+        tour.activities << event_activities(:wandern)
+        expect(tour).not_to be_valid
+        expect(tour.errors[:activities]).to include("müssen untergeordnete Aktivitäten sein")
+      end
     end
 
     describe "target_groups" do
@@ -74,6 +81,12 @@ describe Event::Tour do
 
       it_behaves_like "presence validation for draft attributes", attribute: :target_groups, association: true
       it_behaves_like "readonly for draft attributes", attribute: :target_groups
+
+      it "is valid if main target group is assigned" do
+        tour.update!(state: :draft)
+        expect(tour.target_groups).to match_array(event_target_groups(:familien, :kinder))
+        expect(tour).to be_valid
+      end
     end
 
     describe "technical_requirements" do
@@ -82,16 +95,17 @@ describe Event::Tour do
       it_behaves_like "presence validation for draft attributes", attribute: :technical_requirements, association: true
       it_behaves_like "readonly for draft attributes", attribute: :technical_requirements
 
+      it "is invalid if main technical requirement is assigned" do
+        tour.update!(state: :draft)
+        tour.technical_requirements << event_technical_requirements(:wandern)
+        expect(tour).not_to be_valid
+        expect(tour.errors[:technical_requirements]).to include("müssen untergeordnete Anforderungen sein")
+      end
+
       context "associated to activites" do
         before { tour.update!(state: :draft) }
 
-        it "is valid if matching a discplines technical requirment" do
-          tour.association(:technical_requirements).target = [event_technical_requirements(:wandern)]
-
-          expect(tour).to be_valid
-        end
-
-        it "is valid if parent is matching activities technical requirment" do
+        it "is valid if matching activities technical requirment" do
           tour.association(:technical_requirements).target = [event_technical_requirements(:wandern_t2)]
 
           expect(tour).to be_valid
@@ -105,6 +119,15 @@ describe Event::Tour do
             "Technische Anforderung(en) müssen zu den ausgewählten Aktivitäten gehören"
           ]
         end
+      end
+    end
+
+    describe "traits" do
+      it "is invalid if main trait is assigned" do
+        tour.update!(state: :draft)
+        tour.traits << event_traits(:travel)
+        expect(tour).not_to be_valid
+        expect(tour.errors[:traits]).to include("müssen untergeordnete Merkmale sein")
       end
     end
 

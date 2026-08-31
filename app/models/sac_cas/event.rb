@@ -118,4 +118,8 @@ module SacCas::Event
   def tour?
     is_a?(Event::Tour)
   end
+
+  def agenda_status
+    nil
+  end
 end

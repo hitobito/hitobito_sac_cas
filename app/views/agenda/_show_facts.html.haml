@@ -1,0 +1,51 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+.agenda-fact-grid
+  = agenda_fact(:calendar, t("agenda.list.tour_card.date")) do
+    = agenda_lines(agenda_date_labels(event))
+
+  - if event.total_duration_days
+    = agenda_fact(:clock, t("agenda.list.tour_card.duration_label")) do
+      = t("agenda.list.tour_card.duration", count: event.total_duration_days)
+      - if event.tour? && event.duration_in_hours
+        = "/ #{event.duration_in_hours} #{t("agenda.show.hours_abbreviation")}"
+
+  - if event.tour? && event.summit.present?
+    = agenda_fact(:mountain, Event::Tour.human_attribute_name(:summit)) do
+      - if event.tourenportal_link?
+        = link_to(event.tourenportal_link, target: :blank, class: 'd-inline-flex align-items-center gap-2') do
+          = event.summit
+          = agenda_icon(:link, class: "agenda-icon-sm")
+      - else
+        = event.summit
+
+  - if event.tour? && (event.ascent || event.descent)
+    = agenda_fact(:trending_up, t("agenda.show.elevation")) do
+      = tour_altitude_difference(event)
+
+  - if event.tour? && event.technical_requirements.any?
+    = agenda_fact(:gauge, Event::TechnicalRequirement.model_name.human(count: 2)) do
+      - tour_activity_requirements(event).each do |activity, requirements|
+        - requirements.each do |requirement|
+          %span.agenda-requirement-badge{style: ("--bs-badge-color: #{activity.parent.color}; --bs-badge-bg-color: #{activity.parent.color}33;" if activity.parent&.color.present?)}<
+            = requirement.label
+
+  - if event.tour? && event.fitness_requirement
+    = agenda_fact(:activity, Event::FitnessRequirement.model_name.human) do
+      = event.fitness_requirement.label_long
+
+  - participants = agenda_participant_count(event) || agenda_max_participants_label(event)
+  - if participants
+    = agenda_fact(:users, t("agenda.list.tour_card.participants_label")) do
+      = participants
+
+  - if event.contact
+    = agenda_fact(:user,  Event.human_attribute_name(:contact)) do
+      = event.contact.to_s
+
+  - if tour_price_categories(event).any?
+    = agenda_fact(:wallet, Event.human_attribute_name(:cost)) do
+      = agenda_lines(tour_price_categories(event))

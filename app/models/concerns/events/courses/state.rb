@@ -67,6 +67,13 @@ module Events::Courses::State
         state_changed_to?(:canceled) && inform_participants?
       }
     end
+
+    # Define methods to query if a course is in the given state.
+    possible_states.each do |state|
+      define_method :"#{state}?" do
+        self.state == state
+      end
+    end
   end
 
   def send_canceled_email
@@ -91,6 +98,24 @@ module Events::Courses::State
 
   def any_email_possible?
     EMAIL_DISPATCH_CONDITIONS.values.flatten.any?(state.to_sym)
+  end
+
+  def agenda_status # rubocop:disable Metrics/CyclomaticComplexity
+    if created?
+      :published
+    elsif application_open?
+      if places_available?
+        :application_open
+      else
+        :application_waiting
+      end
+    elsif application_paused?
+      :published
+    elsif ready? || assignment_closed?
+      :application_closed
+    else
+      state
+    end
   end
 
   private
