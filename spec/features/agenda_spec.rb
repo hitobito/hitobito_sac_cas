@@ -121,6 +121,7 @@ describe "agenda page", js: true do
       click_button "Zielgruppe"
       check "Kinder (KiBe)"
 
+      expect(page).to have_css(".agenda-filter-chip", text: "Kinder (KiBe)")
       expect(page).to have_button("Zielgruppe", text: "1")
       expect(page).to have_text(tour.name)
     end
@@ -129,6 +130,7 @@ describe "agenda page", js: true do
       click_button "Zielgruppe"
       check "Jugend (JO)"
 
+      expect(page).to have_css(".agenda-filter-chip", text: "Jugend (JO)")
       expect(page).not_to have_text(tour.name)
       expect(page).to have_text("0 Touren gefunden")
     end
@@ -139,6 +141,17 @@ describe "agenda page", js: true do
       click_button "Kondition"
       check "B - wenig anstrengend"
 
+      expect(page).to have_css(".agenda-filter-chip", text: "B - wenig anstrengend")
+      expect(page).to have_text(tour.name)
+    end
+  end
+
+  describe "traits filter" do
+    it "filters tours by the checked traits" do
+      click_button "Merkmal"
+      check "Anreise mit ÖV"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Anreise mit ÖV")
       expect(page).to have_text(tour.name)
     end
   end
@@ -155,6 +168,8 @@ describe "agenda page", js: true do
       # click within Wanderweg's own chip row to stay unambiguous.
       within("div[data-activity-id='#{event_activities(:wanderweg).id}']") { click_button "T3" }
 
+      expect(page).to have_css(".agenda-filter-chip", text: "Wanderweg")
+      expect(page).to have_css(".agenda-filter-chip", text: "T3")
       expect(page).to have_text(tour.name)
     end
 
