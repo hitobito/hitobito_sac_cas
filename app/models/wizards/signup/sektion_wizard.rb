@@ -144,9 +144,11 @@ module Wizards::Signup
     end
 
     def step_after(step_name_or_class) # rubocop:todo Metrics/CyclomaticComplexity
-      return person_fields_step if step_name_or_class == :_start && current_user
-      return various_fields_step if at_person_fields?(step_name_or_class) && too_young_for_household?
-      return summary_fields_step if at_various_fields?(step_name_or_class) && too_young_for_cornercard?
+      step = step_name_or_class # shorten name here, but keep documenting quality
+
+      return person_fields_step if step == :_start && current_user
+      return various_fields_step if at_person_fields?(step) && too_young_for_household?
+      return summary_fields_step if at_various_fields?(step) && too_young_for_cornercard?
 
       super
     end

@@ -2888,6 +2888,7 @@ de:
           various_fields_title: Zusatzdaten
           cornercard_fields_title: Cornèrcard
           cornercard_fields:
+            card_application: Cornèrcard beantragen
             benefit_heading: Mitgliedervorteil
             order_heading: SAC-Cornèrcard bestellen
             order_description: >-
@@ -2923,6 +2924,7 @@ de:
               per E-Mail zugestellt.
             entry_per: "Eintritt per:"
             next_button: Mitgliedschaft beantragen
+            cornercard_will_be_ordered: "SAC-Cornèrcard wird bestellt"
           summary_person_card:
             contact_person: "Kontaktperson"
           summary_family_member_card:
@@ -2930,7 +2932,6 @@ de:
             child: "Kind"
           summary_entry_fee_card:
             immediate_entry_date: "Eintrittsdatum: per sofort"
-          cornercard_will_be_ordered: "SAC-Cornèrcard wird bestellt"
 
         various_fields:
           newsletter: Ich möchte den SAC-Newsletter abonnieren.
