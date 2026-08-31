@@ -7,9 +7,6 @@
 -# yet (Merkmale, Status). Styled to match, but inert - disabled checkboxes
 -# and no field name, so nothing is ever submitted. Wire up for real once
 -# the underlying data model exists.
-= render "filter_checkbox_dropdown", disabled: true, field_name: nil,
-    label: t("agenda.filters.tags"), icon_name: "tag",
-    options: [[1, "Sponsored"], [2, "Ausbildung"], [3, "Kurs"]], selected: []
 
 = render "filter_checkbox_dropdown", disabled: true, field_name: nil,
     label: t("agenda.filters.status"), icon_name: "calendar_check",

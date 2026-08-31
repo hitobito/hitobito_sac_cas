@@ -29,7 +29,7 @@
         - if children.one? && children.first.label == main.label
           = render "filter_activity_option", activity: children.first, selected: selected, color: main.color
         - else
-          = render "filter_nested_group_header", dom_id: "activity_group_#{main.id}", label: main.label, color: main.color
+          = render "filter_nested_checkbox_header", dom_id: "activity_group_#{main.id}", label: main.label, color: main.color
           .ms-4
             - children.each do |child|
               = render "filter_activity_option", activity: child, selected: selected

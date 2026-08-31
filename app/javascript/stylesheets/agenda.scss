@@ -236,6 +236,16 @@ a {
   border-top: 1px solid $agenda-gray;
 }
 
+.agenda-filter-group legend {
+  font-size: 0.75rem;
+  color: $agenda-gray-dark;
+  text-transform: uppercase;
+  font-weight: $headings-font-weight;
+  letter-spacing: 0.025em;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
 .agenda-activity-swatch {
   display: inline-block;
   width: 0.75rem;
@@ -372,7 +382,8 @@ a {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  border-left: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+  border-left: var(--bs-border-width) var(--bs-border-style)
+    var(--bs-border-color);
 
   @include media-breakpoint-up(md) {
     width: 13rem;

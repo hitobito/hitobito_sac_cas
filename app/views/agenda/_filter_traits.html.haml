@@ -1,0 +1,19 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+- selected = Array(event_filter.chain.dig(:tour_essentials, :trait_id))
+
+= render layout: "filter_dropdown_shell",
+    locals: {label: t("agenda.filters.traits"), icon_name: "tag", count: selected.size} do
+  - traits.select(&:main?).each_with_index do |main, index|
+    - children = traits.select { |group| group.parent_id == main.id }
+    - if children.present?
+      %fieldset.agenda-filter-group
+        %legend= main.label
+        - children.each do |child|
+          = render "filter_checkbox_option",
+              value: child,
+              selected: selected,
+              field_name: 'filters[tour_essentials][trait_id][]'

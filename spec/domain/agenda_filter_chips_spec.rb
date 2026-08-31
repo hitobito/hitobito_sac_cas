@@ -11,17 +11,20 @@ describe AgendaFilterChips do
   include Rails.application.routes.url_helpers
 
   let(:group) { groups(:bluemlisalp) }
-  let(:target_groups) { Event::TargetGroup.list.without_deleted }
-  let(:activities) { Event::Activity.list.without_deleted }
-  let(:technical_requirements) { Event::TechnicalRequirement.list.without_deleted }
-  let(:fitness_requirements) { Event::FitnessRequirement.list.without_deleted }
+  let(:target_groups) { Event::TargetGroup.list.without_deleted.includes(:translations) }
+  let(:activities) { Event::Activity.list.without_deleted.includes(:translations) }
+  let(:technical_requirements) { Event::TechnicalRequirement.list.without_deleted.includes(:translations) }
+  let(:fitness_requirements) { Event::FitnessRequirement.list.without_deleted.includes(:translations) }
+  let(:traits) { Event::Trait.list.without_deleted.includes(:translations) }
 
   def chips_for(filters)
     event_filter = Events::Filter::AgendaList.new(nil, filters: filters)
     described_class.new(event_filter, group,
-      target_groups: target_groups, activities: activities,
+      target_groups: target_groups,
+      activities: activities,
       technical_requirements: technical_requirements,
-      fitness_requirements: fitness_requirements).chips
+      fitness_requirements: fitness_requirements,
+      traits: traits).chips
   end
 
   it "is empty without any active filter" do

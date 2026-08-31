@@ -21,7 +21,7 @@
   %button.btn.agenda-dropdown-toggle{type: "button", disabled: disabled,
       data: (disabled ? {} : {bs_toggle: "dropdown", bs_auto_close: "outside"})}
     - if icon_name
-      = agenda_icon(icon_name)
+      = agenda_icon(icon_name, class: 'text-muted')
     = label
     %span.badge.rounded-pill.text-bg-primary.agenda-count-badge{class: ("d-none" if count.zero?),
         data: {"sac-cas--checkbox-filter-target": "counter"}}

@@ -1539,7 +1539,7 @@ de:
       target_groups: Zielgruppe
       activities: Aktivitäten
       fitness_requirements: Kondition
-      tags: Merkmale
+      traits: Merkmale
       status: Status
       search: Suche
       search_placeholder: Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen

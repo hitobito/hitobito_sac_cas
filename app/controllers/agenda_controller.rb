@@ -51,6 +51,8 @@ class AgendaController < ApplicationController
       .includes(:translations)
     @fitness_requirements = Event::FitnessRequirement.list.without_deleted
       .includes(:translations)
+    @traits = Event::Trait.list.without_deleted
+      .includes(:translations)
   end
 
   def event_filter

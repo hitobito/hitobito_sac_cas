@@ -15,13 +15,14 @@ class AgendaFilterChips
   delegate :agenda_index_path, to: "Rails.application.routes.url_helpers"
 
   def initialize(event_filter, group, target_groups:, activities:,
-    technical_requirements:, fitness_requirements:)
+    technical_requirements:, fitness_requirements:, traits:)
     @event_filter = event_filter
     @group = group
     @target_groups = target_groups
     @activities = activities
     @technical_requirements = technical_requirements
     @fitness_requirements = fitness_requirements
+    @traits = traits
   end
 
   def chips
@@ -34,7 +35,8 @@ class AgendaFilterChips
       *essential_chips(params, :target_group_id, @target_groups),
       *essential_chips(params, :activity_id, @activities),
       *essential_chips(params, :technical_requirement_id, @technical_requirements),
-      *essential_chips(params, :fitness_requirement_id, @fitness_requirements)
+      *essential_chips(params, :fitness_requirement_id, @fitness_requirements),
+      *essential_chips(params, :trait_id, @traits)
     ].compact
   end
 
