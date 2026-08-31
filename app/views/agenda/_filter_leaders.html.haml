@@ -1,0 +1,17 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# locals: leaders: [Person, ...]
+- selected = Array(event_filter.chain.dig(:leader, :ids)).map(&:to_i)
+
+= render layout: "filter_dropdown_shell",
+    locals: {label: t("agenda.filters.leader"), icon_name: :user, count: selected.size} do
+  - leaders.each do |person|
+    = render "filter_checkbox_option",
+        value: person,
+        selected: selected,
+        field_name: 'filters[leader][ids][]',
+        string_format: :list
+

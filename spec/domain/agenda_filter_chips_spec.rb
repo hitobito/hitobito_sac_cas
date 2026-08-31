@@ -16,6 +16,7 @@ describe AgendaFilterChips do
   let(:technical_requirements) { Event::TechnicalRequirement.list.without_deleted.includes(:translations) }
   let(:fitness_requirements) { Event::FitnessRequirement.list.without_deleted.includes(:translations) }
   let(:traits) { Event::Trait.list.without_deleted.includes(:translations) }
+  let(:leaders) { Person.limit(5) }
 
   def chips_for(filters)
     event_filter = Events::Filter::AgendaList.new(nil, filters: filters)
@@ -24,7 +25,8 @@ describe AgendaFilterChips do
       activities: activities,
       technical_requirements: technical_requirements,
       fitness_requirements: fitness_requirements,
-      traits: traits).chips
+      traits: traits,
+      leaders: leaders).chips
   end
 
   it "is empty without any active filter" do

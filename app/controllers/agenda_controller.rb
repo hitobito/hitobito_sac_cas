@@ -17,7 +17,7 @@ class AgendaController < ApplicationController
   # Needed on every request, not just full page loads: the results partial
   # (rendered for turbo-frame requests too) uses these to label activity/
   # target-group/... filter chips and technical-requirement chips.
-  before_action :preload_filter_select_options, only: :index
+  before_action :preload_filter_options, only: :index
 
   layout -> { turbo_frame_request? ? false : "agenda" }
 
@@ -42,28 +42,47 @@ class AgendaController < ApplicationController
     params[:filters][:date_range] ||= {since: I18n.l(Time.zone.today.to_date)}
   end
 
-  def preload_filter_select_options
-    @target_groups = Event::TargetGroup.list.without_deleted
-      .includes(:translations)
-    @activities = Event::Activity.list.without_deleted
-      .includes(:translations, :technical_requirement)
-    @technical_requirements = Event::TechnicalRequirement.list.without_deleted
-      .includes(:translations)
-    @fitness_requirements = Event::FitnessRequirement.list.without_deleted
-      .includes(:translations)
-    @traits = Event::Trait.list.without_deleted
-      .includes(:translations)
+  def preload_filter_options
+    return unless group
+
+    @target_groups = preload_essentials(Event::TargetGroup)
+    @activities = preload_essentials(Event::Activity).includes(:technical_requirement)
+    @technical_requirements = preload_essentials(Event::TechnicalRequirement)
+    @fitness_requirements = preload_essentials(Event::FitnessRequirement)
+    @traits = preload_essentials(Event::Trait)
+    @leaders = preload_leaders
   end
 
-  def event_filter
-    @event_filter ||= Events::Filter::AgendaList.new(nil, params)
+  def preload_essentials(klass)
+    klass.list.without_deleted.includes(:translations)
   end
 
-  def events
-    @events ||= event_filter.entries.preload(:contact)
+  def preload_leaders
+    Person
+      .select(:id, :first_name, :last_name, :nickname, :company, :company_name)
+      .joins(event_participations: [:roles, event: [:dates, :groups]])
+      .where(
+        event_participations: {active: true},
+        event_roles: {type: leader_roles.map(&:sti_name)},
+        groups: {id: group.id},
+        event_dates: {start_at: leader_date_range}
+      )
+      .distinct
+      .order_by_name
+  end
+
+  def leader_roles
+    Events::Filter::Leader.new(:leader, {}).leader_roles
+  end
+
+  def leader_date_range
+    today = Time.zone.today
+    Date.new(today.year, 1, 1)..Date.new(today.year + 1, 12, 31)
   end
 
   def preload_assocs
+    return unless group
+
     preload_event_assocs
     preload_tour_assocs
   end
@@ -83,6 +102,14 @@ class AgendaController < ApplicationController
         {traits: :translations}
       ]
     ).call
+  end
+
+  def event_filter
+    @event_filter ||= Events::Filter::AgendaList.new(nil, params)
+  end
+
+  def events
+    @events ||= event_filter.entries.preload(:contact)
   end
 
   def group
