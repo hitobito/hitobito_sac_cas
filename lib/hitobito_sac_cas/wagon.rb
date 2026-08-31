@@ -437,10 +437,6 @@ module HitobitoSacCas
       end
     end
 
-    initializer "sac_cas.precompile_assets" do |_app|
-      Rails.application.config.assets.precompile += %w[cornercard-sac.png]
-    end
-
     initializer "sac_cas.append_doorkeeper_scope" do |_app|
       Doorkeeper.configuration.scopes.add "user_groups"
     end
