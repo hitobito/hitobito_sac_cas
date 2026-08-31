@@ -163,6 +163,14 @@ describe AgendaController do
       expect(controller.send(:events)).not_to include(tour)
     end
 
+    it "excludes tours not having leader from filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {leader: {ids: people(:familienmitglied2).id}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
     context "with remembered filters" do
       it "restores filters from a previous request when returning" do
         get :index, params: {group_id: group.id, filters: {type: {types: ["Event::Course"]}}}

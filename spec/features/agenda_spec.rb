@@ -24,6 +24,8 @@ describe "agenda page", js: true do
       application_closing_at: Date.new(2026, 2, 1)
     )
     tour.dates.update_all(start_at: Date.new(2026, 2, 1))
+    Event::Role::Leader.create!(participation:
+     tour.participations.create!(person: people(:tourenchef), active: true))
 
     visit agenda_index_path(group_id: group.id)
   end
@@ -152,6 +154,16 @@ describe "agenda page", js: true do
       check "Anreise mit ÖV"
 
       expect(page).to have_css(".agenda-filter-chip", text: "Anreise mit ÖV")
+      expect(page).to have_text(tour.name)
+    end
+  end
+
+  describe "leader filter" do
+    it "filters tours by the checked leaders" do
+      click_button "Leitung"
+      check "Paschke Ida"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Paschke Ida")
       expect(page).to have_text(tour.name)
     end
   end

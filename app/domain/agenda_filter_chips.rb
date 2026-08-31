@@ -15,7 +15,7 @@ class AgendaFilterChips
   delegate :agenda_index_path, to: "Rails.application.routes.url_helpers"
 
   def initialize(event_filter, group, target_groups:, activities:,
-    technical_requirements:, fitness_requirements:, traits:)
+    technical_requirements:, fitness_requirements:, traits:, leaders:)
     @event_filter = event_filter
     @group = group
     @target_groups = target_groups
@@ -23,6 +23,7 @@ class AgendaFilterChips
     @technical_requirements = technical_requirements
     @fitness_requirements = fitness_requirements
     @traits = traits
+    @leaders = leaders
   end
 
   def chips
@@ -36,7 +37,8 @@ class AgendaFilterChips
       *essential_chips(params, :activity_id, @activities),
       *essential_chips(params, :technical_requirement_id, @technical_requirements),
       *essential_chips(params, :fitness_requirement_id, @fitness_requirements),
-      *essential_chips(params, :trait_id, @traits)
+      *essential_chips(params, :trait_id, @traits),
+      *leader_chips(params)
     ].compact
   end
 
@@ -49,7 +51,7 @@ class AgendaFilterChips
 
     without = params.deep_dup
     without[:date_range] = without[:date_range].except(key)
-    {label: "#{label}: #{value}", path: agenda_index_path(group_id: @group.id, filters: without)}
+    chip("#{label}: #{value}", without)
   end
 
   def boolean_chip(params, key, label)
@@ -57,7 +59,7 @@ class AgendaFilterChips
 
     without = params.deep_dup
     without.delete(key)
-    {label: label, path: agenda_index_path(group_id: @group.id, filters: without)}
+    chip(label, without)
   end
 
   def full_text_chip(params)
@@ -66,7 +68,7 @@ class AgendaFilterChips
 
     without = params.deep_dup
     without.delete(:full_text)
-    {label: "\"#{value}\"", path: agenda_index_path(group_id: @group.id, filters: without)}
+    chip("\"#{value}\"", without)
   end
 
   def essential_chips(params, key, entries)
@@ -76,7 +78,23 @@ class AgendaFilterChips
 
       without = params.deep_dup
       without[:tour_essentials][key] = without[:tour_essentials][key] - [id]
-      {label: entry.to_s(:long), path: agenda_index_path(group_id: @group.id, filters: without)}
+      chip(entry.to_s(:long), without)
     end
+  end
+
+  def leader_chips(params)
+    Array(params.dig(:leader, :ids)).filter_map do |id|
+      int_id = id.to_i
+      entry = @leaders.find { |p| p.id == int_id }
+      next unless entry
+
+      without = params.deep_dup
+      without[:leader][:ids] = without[:leader][:ids] - [id]
+      chip(entry.to_s(:list), without)
+    end
+  end
+
+  def chip(label, filters)
+    {label:, path: agenda_index_path(group_id: @group.id, filters:)}
   end
 end
