@@ -183,6 +183,29 @@ describe AgendaController do
       expect(dom).to have_css(".agenda-tour-card-meta-row", text: "Frieda Norgay")
     end
 
+    it "includes tours matching the agenda status filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {agenda_status: {values: ["application_open"]}}
+      }
+      expect(controller.send(:events)).to include(tour)
+    end
+
+    it "excludes tours not matching the agenda status filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {agenda_status: {values: ["canceled"]}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "renders one status checkbox per agenda status" do
+      get :index, params: {group_id: group.id}
+
+      checkboxes = dom.all("input[name='filters[agenda_status][values][]']", visible: :all)
+      expect(checkboxes.pluck(:value)).to eq Events::Filter::AgendaStatus::STATUSES
+    end
+
     context "with remembered filters" do
       it "restores filters from a previous request when returning" do
         get :index, params: {group_id: group.id, filters: {type: {types: ["Event::Course"]}}}
@@ -324,21 +347,21 @@ describe AgendaController do
       end
 
       it "renders the activity, target group and trait badges" do
-        expect(card).to have_css(".agenda-activity-badge", text: "WANDERWEG")
+        expect(card).to have_css(".agenda-activity-label", text: "Wanderweg")
         expect(card.all(".agenda-badge-outline").map(&:text))
           .to eq ["Kinder (KiBe)", "Familien (FaBe)", "Anreise mit ÖV", "Exkursion"]
       end
 
       it "badges the activity without an icon as long as none is uploaded" do
-        expect(card).to have_css(".agenda-activity-badge", text: "WANDERWEG")
-        expect(card).to have_no_css(".agenda-activity-badge .agenda-activity-icon")
+        expect(card).to have_css(".agenda-activity-label", text: "Wanderweg")
+        expect(card).to have_no_css(".agenda-activity-label .agenda-activity-icon")
       end
 
       it "badges the activity with the main activity's own icon once uploaded" do
         event_activities(:wandern).icon
           .attach(fixture_file_upload("icon.svg", "image/svg+xml"))
 
-        icon = card.find(".agenda-activity-badge .agenda-activity-icon svg.agenda-icon")
+        icon = card.find(".agenda-activity-label .agenda-activity-icon svg.agenda-icon")
         expect(icon[:stroke]).to eq "currentColor"
         expect(icon).to have_css("path[d='m8 3 4 8 5-5 5 15H2L8 3z']", visible: :all)
       end

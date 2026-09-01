@@ -168,6 +168,25 @@ describe "agenda page", js: true do
     end
   end
 
+  describe "status filter" do
+    it "filters tours by the checked status" do
+      click_button "Status"
+      check "Anmeldung offen", exact: true
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Anmeldung offen")
+      expect(page).to have_text(tour.name)
+    end
+
+    it "excludes the tour once no checked status matches" do
+      click_button "Status"
+      check "Abgesagt"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Abgesagt")
+      expect(page).not_to have_text(tour.name)
+      expect(page).to have_text("0 Touren gefunden")
+    end
+  end
+
   describe "activities filter" do
     it "reveals the checked activity's technical requirement grades as chips and filters by one" do
       click_button "Aktivitäten"
