@@ -669,26 +669,30 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
   }
 }
 
-.agenda-tour-detail-leaders {
+.agenda-tour-detail-contact {
   @include media-breakpoint-up(lg) {
     border-left: 1px solid $agenda-gray;
     padding-left: 1.5rem;
   }
 }
 
-.agenda-leader-profile {
+.agenda-contact-profile {
   display: flex;
   gap: 1rem;
   padding: 1rem;
   border-radius: 0.75rem;
-  background-color: rgba($agenda-gray, 0.3);
-
-  &.agenda-leader-profile-highlight {
-    background-color: $agenda-snow;
-  }
+  background-color: $agenda-snow;
 }
 
-.agenda-leader-avatar {
+.agenda-contact-body {
+  min-width: 0;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.agenda-contact-avatar {
   width: 4rem; // 64px
   height: 4rem;
   border-radius: 50%;
@@ -696,7 +700,7 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
   object-fit: cover;
   flex-shrink: 0;
 
-  &.agenda-leader-avatar-initials {
+  &.agenda-contact-avatar-initials {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -707,24 +711,29 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
   }
 }
 
-.agenda-leader-role {
-  font-size: 0.75rem; // 12px
-  color: $agenda-gray-dark;
-}
-
-.agenda-leader-contact {
-  display: inline-flex;
-  align-items: center;
+.agenda-contact-detail {
+  display: flex;
+  align-items: flex-start;
   gap: 0.375rem;
   font-size: 0.875rem; // 14px
   color: $agenda-gray-dark;
   text-decoration: none;
+  overflow-wrap: anywhere;
 
-  &:hover {
-    color: $agenda-black;
+  .agenda-icon {
+    flex-shrink: 0;
+    margin-top: 0.15rem;
   }
 
-  &.agenda-leader-contact-email {
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  &.agenda-contact-detail-email {
     color: $agenda-red;
 
     &:hover {

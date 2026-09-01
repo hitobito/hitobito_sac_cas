@@ -21,7 +21,7 @@ class AgendaController < ApplicationController
 
   layout -> { turbo_frame_request? ? false : "agenda" }
 
-  helper_method :group, :events, :event, :event_filter
+  helper_method :group, :events, :event, :event_filter, :event_leaders
 
   def index
     preload_assocs
@@ -50,44 +50,29 @@ class AgendaController < ApplicationController
     @technical_requirements = preload_essentials(Event::TechnicalRequirement)
     @fitness_requirements = preload_essentials(Event::FitnessRequirement)
     @traits = preload_essentials(Event::Trait)
-    @leaders = preload_leaders
+    @leaders = AgendaLeaders.filter_leaders(group)
   end
 
   def preload_essentials(klass)
     klass.list.without_deleted.includes(:translations)
   end
 
-  def preload_leaders
-    Person
-      .select(:id, :first_name, :last_name, :nickname, :company, :company_name)
-      .joins(event_participations: [:roles, event: [:dates, :groups]])
-      .where(
-        event_participations: {active: true},
-        event_roles: {type: leader_roles.map(&:sti_name)},
-        groups: {id: group.id},
-        event_dates: {start_at: leader_date_range}
-      )
-      .distinct
-      .order_by_name
-  end
-
-  def leader_roles
-    Events::Filter::Leader.new(:leader, {}).leader_roles
-  end
-
-  def leader_date_range
-    today = Time.zone.today
-    Date.new(today.year, 1, 1)..Date.new(today.year + 1, 12, 31)
-  end
-
   def preload_assocs
     return unless group
 
-    preload_event_assocs
+    load_event_leaders(events)
     preload_tour_assocs
   end
 
-  def preload_event_assocs
+  def load_event_leaders(events)
+    @event_leaders = (@event_leaders || {}).merge(AgendaLeaders.new(events).to_h)
+  end
+
+  # used for index and for show
+  def event_leaders(event)
+    load_event_leaders([event]) unless @event_leaders&.key?(event.id)
+
+    @event_leaders[event.id]
   end
 
   def preload_tour_assocs
@@ -109,7 +94,7 @@ class AgendaController < ApplicationController
   end
 
   def events
-    @events ||= event_filter.entries.preload(:contact)
+    @events ||= event_filter.entries.to_a
   end
 
   def group
