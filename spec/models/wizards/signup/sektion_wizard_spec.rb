@@ -114,7 +114,7 @@ describe Wizards::Signup::SektionWizard do
     end
 
     it "is invalid when on summary_fields step and data_protection is blank" do
-      @current_step = 4
+      @current_step = 5
       required_attrs[:summary_fields] = {data_protection: nil}
       expect(wizard).not_to be_valid
       expect(wizard.errors).to be_empty
@@ -128,14 +128,30 @@ describe Wizards::Signup::SektionWizard do
     it "third step defaults to family_fields" do
       expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
       expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
-      expect(wizard.step_at(4)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
+      expect(wizard.step_at(4)).to be_instance_of(Wizards::Steps::Signup::Sektion::CornercardFields)
+      expect(wizard.step_at(5)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
     end
 
     it "skips family_fields when person is not old enough" do
       required_attrs[:person_fields][:birthday] = 20.years.ago.to_date
       expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
+      expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::CornercardFields)
+      expect(wizard.step_at(4)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
+      expect(wizard.step_at(5)).to be_nil
+    end
+
+    it "skips cornercard when person is under 18" do
+      required_attrs[:person_fields][:birthday] = 17.years.ago.to_date
+      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
       expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
       expect(wizard.step_at(4)).to be_nil
+    end
+
+    it "shows cornercard when person is 18 or older" do
+      required_attrs[:person_fields][:birthday] = 18.years.ago.to_date
+      expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
+      expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::CornercardFields)
+      expect(wizard.step_at(4)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
     end
   end
 
@@ -242,6 +258,26 @@ describe Wizards::Signup::SektionWizard do
         expect(max.subscriptions).to be_empty
         expect(maxi.subscriptions).to be_empty
         expect(mailing_lists(:newsletter).people).to be_empty
+      end
+    end
+
+    context "cornercard upload" do
+      it "creates CornercardUpload for main person when ordered" do
+        required_attrs[:cornercard_fields] = {card_application: true, consent_given: true}
+        expect { wizard.save! }.to change { CornercardUpload.count }.by(1)
+        expect(max.cornercard_upload).to be_present
+      end
+
+      it "does not create CornercardUpload when not ordered" do
+        required_attrs[:cornercard_fields] = {card_application: false, consent_given: false}
+        expect { wizard.save! }.not_to change { CornercardUpload.count }
+      end
+
+      it "does not create CornercardUpload when cornercard step is skipped (under 18)" do
+        required_attrs[:person_fields][:birthday] = 17.years.ago.to_date
+        @current_step = 3
+        expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
+        expect { wizard.save! }.not_to change { CornercardUpload.count }
       end
     end
 

@@ -43,8 +43,16 @@ google_tag_manager:
 
 sftp:
   config:
+    # host: ftp.example.com, user: 'username', password: 'password', port: 22
     <% if ENV['RAILS_SFTP_CONFIG'].present? %>
       <%= "{ #{ENV['RAILS_SFTP_CONFIG']} }" %>
+    <% end %>
+
+cornercard:
+  config:
+    # host: ftp.example.com, user: 'username', password: 'password', port: 22
+    <% if ENV['RAILS_CORNERCARD_CONFIG'].present? %>
+      <%= "{ #{ENV['RAILS_CORNERCARD_CONFIG']} }" %>
     <% end %>
 
 oidc:

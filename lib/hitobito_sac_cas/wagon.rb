@@ -61,9 +61,14 @@ module HitobitoSacCas
         JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob]
       end
 
+      # only schedule CornercardApplicationsUploadJob if cornercard config is present
+      if Settings.cornercard.config.present?
+        JobManager.wagon_jobs += [Export::CornercardApplicationsUploadJob]
+      end
+
       Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController
 
-      HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung]
+      HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung cornercard]
 
       MailingLists::Filter::Chain.types << Person::Filter::InvoiceReceiver
 
