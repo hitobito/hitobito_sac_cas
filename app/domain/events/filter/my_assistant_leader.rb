@@ -7,13 +7,13 @@
 
 module Events::Filter
   class MyAssistantLeader < Leader
-    private
-
-    def leader_ids = [Auth.current_person&.id].compact_blank
-
     def leader_roles
       event_types.flat_map(&:role_types).select { |t| role_type_applies?(t) }
     end
+
+    private
+
+    def leader_ids = [Auth.current_person&.id].compact_blank
 
     def role_type_applies?(role_type)
       role_type.helper? ||

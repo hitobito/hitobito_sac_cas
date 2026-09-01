@@ -12,12 +12,12 @@ module Events::Filter
       Event::Course::Role::Leader
     ]
 
-    private
-
-    def leader_ids = [Auth.current_person&.id].compact_blank
-
     def leader_roles
       super & MAIN_LEADER_ROLES
     end
+
+    private
+
+    def leader_ids = [Auth.current_person&.id].compact_blank
   end
 end
