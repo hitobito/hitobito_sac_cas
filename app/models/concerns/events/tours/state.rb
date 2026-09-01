@@ -48,17 +48,7 @@ module Events::Tours::State
 
   def agenda_status # rubocop:disable Metrics/MethodLength, Metrics/CyclomaticComplexity
     if published?
-      if application_opening_at.present? && Time.zone.today < application_opening_at
-        :published
-      elsif application_period_open?
-        if places_available? || !display_booking_info?
-          :application_open
-        else
-          :application_waiting
-        end
-      else
-        :application_closed
-      end
+      super
     elsif ready?
       :application_closed
     else

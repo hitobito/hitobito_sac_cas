@@ -38,7 +38,8 @@ class AgendaFilterChips
       *essential_chips(params, :technical_requirement_id, @technical_requirements),
       *essential_chips(params, :fitness_requirement_id, @fitness_requirements),
       *essential_chips(params, :trait_id, @traits),
-      *leader_chips(params)
+      *leader_chips(params),
+      *status_chips(params)
     ].compact
   end
 
@@ -91,6 +92,14 @@ class AgendaFilterChips
       without = params.deep_dup
       without[:leader][:ids] = without[:leader][:ids] - [id]
       chip(entry.to_s(:list), without)
+    end
+  end
+
+  def status_chips(params)
+    Array(params.dig(:agenda_status, :values)).map do |status|
+      without = params.deep_dup
+      without[:agenda_status][:values] = without[:agenda_status][:values] - [status]
+      chip(I18n.t("agenda.status.#{status}"), without)
     end
   end
 

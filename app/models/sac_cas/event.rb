@@ -119,7 +119,21 @@ module SacCas::Event
     is_a?(Event::Tour)
   end
 
-  def agenda_status
-    nil
+  def agenda_status # rubocop:disable Metrics/CyclomaticComplexity
+    if application_opening_at.present? && Time.zone.today < application_opening_at
+      :published
+    elsif application_period_open?
+      agenda_application_status
+    else
+      :application_closed
+    end
+  end
+
+  def agenda_application_status
+    if places_available? || !display_booking_info?
+      :application_open
+    else
+      :application_waiting
+    end
   end
 end

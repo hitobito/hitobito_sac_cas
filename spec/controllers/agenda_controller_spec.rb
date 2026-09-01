@@ -171,6 +171,29 @@ describe AgendaController do
       expect(controller.send(:events)).not_to include(tour)
     end
 
+    it "includes tours matching the agenda status filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {agenda_status: {values: ["application_open"]}}
+      }
+      expect(controller.send(:events)).to include(tour)
+    end
+
+    it "excludes tours not matching the agenda status filter" do
+      get :index, params: {
+        group_id: group.id,
+        filters: {agenda_status: {values: ["canceled"]}}
+      }
+      expect(controller.send(:events)).not_to include(tour)
+    end
+
+    it "renders one status checkbox per agenda status" do
+      get :index, params: {group_id: group.id}
+
+      checkboxes = dom.all("input[name='filters[agenda_status][values][]']", visible: :all)
+      expect(checkboxes.pluck(:value)).to eq Events::Filter::AgendaStatus::STATUSES
+    end
+
     context "with remembered filters" do
       it "restores filters from a previous request when returning" do
         get :index, params: {group_id: group.id, filters: {type: {types: ["Event::Course"]}}}
@@ -246,7 +269,7 @@ describe AgendaController do
       end
 
       it "renders the activity, target group and trait badges" do
-        expect(card).to have_css(".agenda-activity-badge", text: "WANDERWEG")
+        expect(card).to have_css(".agenda-activity-label", text: "Wanderweg")
         expect(card.all(".agenda-badge-outline").map(&:text))
           .to eq ["Kinder (KiBe)", "Familien (FaBe)", "Anreise mit ÖV", "Exkursion"]
       end

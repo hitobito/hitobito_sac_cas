@@ -119,8 +119,9 @@ describe AgendaHelper do
         .to eq '<span class="agenda-status-badge agenda-status-canceled">Abgesagt</span>'
     end
 
-    it "is nil for an event type without an agenda status" do
-      expect(helper.agenda_status_badge(events(:top_event))).to be_nil
+    it "derives the status from the application window for an event without a state" do
+      expect(helper.agenda_status_badge(events(:top_event)))
+        .to eq '<span class="agenda-status-badge agenda-status-application_open">Anmeldung offen</span>'
     end
   end
 

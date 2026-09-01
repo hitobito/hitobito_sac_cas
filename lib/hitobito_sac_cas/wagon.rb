@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023-2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -189,7 +189,8 @@ module HitobitoSacCas
         Events::Filter::Tour::Approval <<
         Events::Filter::MyMainLeader <<
         Events::Filter::MyAssistantLeader <<
-        Events::Filter::ApplicationOpen
+        Events::Filter::ApplicationOpen <<
+        Events::Filter::AgendaStatus
       Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
 
       Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8
