@@ -20,10 +20,25 @@ describe Event::FitnessRequirement do
       entry = described_class.new
       expect(entry).not_to be_valid
       expect(entry.errors[:label]).to eq ["muss ausgefüllt werden"]
+      expect(entry.errors[:short_label]).to eq ["muss ausgefüllt werden"]
       entry.label = "Hart"
+      entry.short_label = "H"
       entry.description = "Steinhart"
       expect(entry).to be_valid
     end
+
+    it "limits short_label to 5 characters" do
+      entry.short_label = "ABCDE"
+      expect(entry).to be_valid
+      entry.short_label = "ABCDEF"
+      expect(entry).not_to be_valid
+      expect(entry.errors[:short_label]).to eq ["ist zu lang (mehr als 5 Zeichen)"]
+    end
+  end
+
+  it "#to_s returns the label" do
+    expect(entry.to_s).to eq "C - ziemlich anstrengend"
+    expect(entry.short_label).to eq "C"
   end
 
   context "paranoia" do

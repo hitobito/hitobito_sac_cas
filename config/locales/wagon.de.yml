@@ -1,4 +1,4 @@
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -451,6 +451,7 @@ de:
         short_description: Kurzbeschrieb
         order: Reihenfolge
       event/fitness_requirement:
+        short_label: Kürzel
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung

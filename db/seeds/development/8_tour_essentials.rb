@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -206,26 +206,31 @@ Event::FitnessRequirement.seed_once(:id,
 Event::FitnessRequirement::Translation.seed_once(:event_fitness_requirement_id, :locale,
   {event_fitness_requirement_id: 1,
    locale: "de",
+   short_label: "A",
    label: "A - nicht anstrengend",
    short_description: "0-3h Totalzeit",
    description: "0-3h Totalzeit"},
   {event_fitness_requirement_id: 2,
    locale: "de",
+   short_label: "B",
    label: "B - wenig anstrengend",
    short_description: "3-5h Totalzeit; bis ca. 800HM Aufstieg",
    description: "3-5h Totalzeit; bis ca. 800HM Aufstieg"},
   {event_fitness_requirement_id: 3,
    locale: "de",
+   short_label: "C",
    label: "C - ziemlich anstrengend",
    short_description: "4-7h Totalzeit; ca. 800-1300HM Aufstieg",
    description: "5-7h Totalzeit; ca. 800-1300HM Aufstieg"},
   {event_fitness_requirement_id: 4,
    locale: "de",
+   short_label: "D",
    label: "D - anstrengend",
    short_description: "6-10h Totalzeit; ca. 1300-1600HM Aufstieg",
    description: "6-10h Totalzeit; ca. 1300-1600HM Aufstieg"},
   {event_fitness_requirement_id: 5,
    locale: "de",
+   short_label: "E",
    label: "E - sehr anstrengend",
    short_description: "über 10h Totalzeit; Aufstieg mehr als 1600HM",
    description: "über 10h Totalzeit; Aufstieg mehr als 1600HM"})

@@ -181,7 +181,7 @@ module SacCas::EventsHelper
         content_tag(:span, entry.label, class: "ms-1")
       ])
     else
-      entry.to_s(:long)
+      entry.to_s
     end
 
     if entry.description.present?

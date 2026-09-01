@@ -11,6 +11,7 @@
 #
 #  id                :bigint           not null, primary key
 #  order             :integer          not null, default 0
+#  short_label       :string(5)
 #  label             :string(255)
 #  short_description :string(255)
 #  description       :text(65535)
@@ -22,27 +23,21 @@
 class Event::FitnessRequirement < ActiveRecord::Base
   include Paranoia::Globalized
 
-  translates :label, :description, :short_description
+  translates :short_label, :label, :description, :short_description
 
   has_many :events, dependent: :nullify
 
   validates_by_schema
-  validates :label, :description, presence: true
-  validates :label, uniqueness: true
+  validates :short_label, :label, :description, presence: true
+  validates :short_label, :label, uniqueness: true
+  # validates_by_schema does not work on translated attributes
+  validates :short_label, length: {maximum: 5}
 
   scope :list, -> { includes(:translations).order(:order) }
   scope :assignable, ->(ids = []) { without_deleted.or(where(id: ids)) }
 
-  def to_s(format = :default)
-    if format == :long
-      label_long
-    else
-      label
-    end
-  end
-
-  def label_long
-    [label, short_description].compact_blank.join(" - ")
+  def to_s(_format = :default)
+    label
   end
 
   # Soft destroy if events exist, otherwise hard destroy

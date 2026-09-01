@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -344,14 +344,14 @@ describe :events, js: true do
 
         within("#event_fitness_requirement_id + .ts-wrapper") do
           expect(page).to have_selector(".ts-control .item", count: 1)
-          expect(page).to have_selector(".ts-control .item", text: "B")
+          expect(page).to have_selector(".ts-control .item", text: "B - wenig anstrengend")
 
           find(".ts-control").click
           expect(page).to have_selector(".ts-dropdown .option",
             count: Event::FitnessRequirement.count)
 
-          find(".ts-dropdown .option", text: "A").click
-          expect(page).to have_selector(".ts-control .item", text: "A")
+          find(".ts-dropdown .option", text: "A - nicht anstrengend").click
+          expect(page).to have_selector(".ts-control .item", text: "A - nicht anstrengend")
           expect(page).to have_no_selector(".ts-dropdown")
         end
 

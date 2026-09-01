@@ -6,9 +6,10 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class Event::FitnessRequirementsController < SimpleCrudController
-  self.permitted_attrs = [:label, :short_description, :description, :order]
+  self.permitted_attrs = [:short_label, :label, :short_description, :description, :order]
 
   self.sort_mappings = {
+    short_label: "event_fitness_requirement_translations.short_label",
     label: "event_fitness_requirement_translations.label"
   }
 

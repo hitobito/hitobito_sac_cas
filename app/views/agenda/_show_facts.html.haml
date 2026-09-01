@@ -35,7 +35,7 @@
 
   - if event.tour? && event.fitness_requirement
     = agenda_fact(:activity, Event::FitnessRequirement.model_name.human) do
-      = event.fitness_requirement.label_long
+      = event.fitness_requirement.label
 
   - participants = agenda_participant_count(event) || agenda_max_participants_label(event)
   - if participants
