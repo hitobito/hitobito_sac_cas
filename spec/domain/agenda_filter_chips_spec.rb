@@ -68,6 +68,19 @@ describe AgendaFilterChips do
     )
   end
 
+  it "builds one chip per selected agenda status, each dropping only its own value" do
+    chips = chips_for(agenda_status: {values: %w[application_open canceled]})
+
+    expect(chips.pluck(:label)).to eq ["Anmeldung offen", "Abgesagt"]
+    expect(chips.first[:path]).to eq(
+      agenda_index_path(group_id: group.id, filters: {agenda_status: {values: ["canceled"]}})
+    )
+  end
+
+  it "skips an agenda status that is not a known one" do
+    expect(chips_for(agenda_status: {values: ["bogus"]})).to eq([])
+  end
+
   it "skips an essential id that matches none of the given entries" do
     chips = chips_for(tour_essentials: {target_group_id: [-1]})
 
