@@ -67,9 +67,10 @@
               - else
                 = max_participants
 
-      - if event.contact
+      - leaders = event_leaders(event)
+      - if leaders.any?
         = agenda_meta_row(:user) do
-          %span.agenda-tour-card-value= event.contact.to_s
+          %span.agenda-tour-card-value= agenda_lines(leaders.map(&:to_s))
 
       .mt-auto
         .d-flex.align-items-center.gap-2.mt-1

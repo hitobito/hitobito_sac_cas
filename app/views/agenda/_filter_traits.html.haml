@@ -7,8 +7,8 @@
 
 = render layout: "filter_dropdown_shell",
     locals: {label: t("agenda.filters.traits"), icon_name: "tag", count: selected.size} do
-  - traits.select(&:main?).each_with_index do |main, index|
-    - children = traits.select { |group| group.parent_id == main.id }
+  - @traits.select(&:main?).each_with_index do |main, index|
+    - children = @traits.select { |group| group.parent_id == main.id }
     - if children.present?
       %fieldset.agenda-filter-group
         %legend= main.label

@@ -3,33 +3,42 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito_sac_cas.
 
-- leader_participations = event_leader_participations(event)
-- if leader_participations.any?
-  .agenda-tour-detail-leaders.d-flex.flex-column.gap-2
-    %h4.agenda-section-title= t("agenda.show.leaders")
-    - leader_participations.each_with_index do |participation, index|
-      - person = participation.person
-      .agenda-leader-profile{class: ("agenda-leader-profile-highlight" if index.zero?)}
-        - if person.picture.attached?
-          = image_tag person.picture.variant(resize_to_fill: [128, 128]),
-            class: "agenda-leader-avatar", alt: person.to_s
-        - else
-          .agenda-leader-avatar.agenda-leader-avatar-initials= person_initials(person)
 
-        .min-w-0.flex-grow-1
-          .fw-bold= person.to_s
-          - leader_role = participation.roles.find { |role| event.class.leader_types.include?(role.class) }
-          - if leader_role
-            .agenda-leader-role= leader_role.to_s
+- if event.contact && event.visible_contact_attributes.present?
+  - contact = event.contact
+  .agenda-tour-detail-contact.d-flex.flex-column.gap-2
+    %h4.agenda-section-title= t("agenda.show.contact")
+    .agenda-contact-profile
+      - if agenda_contact_attr_visible?(event, :picture) && contact.picture.attached?
+        = image_tag contact.picture.variant(resize_to_fill: [128, 128]),
+          class: "agenda-contact-avatar", alt: contact.to_s
+      - else
+        .agenda-contact-avatar.agenda-contact-avatar-initials= person_initials(contact)
 
-          - phone = person.phone_numbers.first&.number
-          - if phone.present? || person.email.present?
-            .d-flex.flex-column.gap-1.mt-2
-              - if phone.present?
-                %a.agenda-leader-contact{href: "tel:#{phone.gsub(/\s/, '')}"}
-                  = agenda_icon(:phone)
-                  = phone
-              - if person.email.present?
-                %a.agenda-leader-contact.agenda-leader-contact-email{href: "mailto:#{person.email}"}
-                  = agenda_icon(:mail)
-                  = person.email
+      .agenda-contact-body
+        - if agenda_contact_attr_visible?(event, :name)
+          .fw-bold= contact.to_s
+
+        - if agenda_contact_attr_visible?(event, :address)
+          .agenda-contact-detail
+            = agenda_icon(:map_pin)
+            %span= event.decorate.contact_address
+
+        - if agenda_contact_attr_visible?(event, :phone_number)
+          - agenda_contact_phone_numbers(contact).each do |number|
+            %a.agenda-contact-detail{href: "tel:#{number.gsub(/\s/, "")}"}
+              = agenda_icon(:phone)
+              = number
+
+        - if agenda_contact_attr_visible?(event, :email)
+          - agenda_contact_emails(contact).each do |email|
+            %a.agenda-contact-detail.agenda-contact-detail-email{href: "mailto:#{email}"}
+              = agenda_icon(:mail)
+              = email
+
+        - if agenda_contact_attr_visible?(event, :social_account)
+          - agenda_contact_social_accounts(contact).each do |account|
+            .agenda-contact-detail
+              = agenda_icon(:link)
+              = muted(account.translated_label)
+              %span= auto_link_value(account.value)

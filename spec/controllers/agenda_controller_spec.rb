@@ -171,6 +171,18 @@ describe AgendaController do
       expect(controller.send(:events)).not_to include(tour)
     end
 
+    it "loads the leaders of every rendered event in one go, avoiding an N+1" do
+      add_leader(tour, people(:admin), Event::Role::Leader)
+      add_leader(course, people(:familienmitglied2), Event::Course::Role::Leader)
+
+      expect(AgendaLeaders).to receive(:new).once.and_call_original
+
+      get :index, params: {group_id: group.id}
+
+      expect(dom).to have_css(".agenda-tour-card-meta-row", text: "Anna Admin")
+      expect(dom).to have_css(".agenda-tour-card-meta-row", text: "Frieda Norgay")
+    end
+
     context "with remembered filters" do
       it "restores filters from a previous request when returning" do
         get :index, params: {group_id: group.id, filters: {type: {types: ["Event::Course"]}}}
@@ -208,17 +220,78 @@ describe AgendaController do
       expect(dom).to have_content(course.name)
     end
 
-    it "renders the leader profile of a person with a role marked as a leader" do
-      leader = Fabricate(:person, first_name: "Viviane", last_name: "Fischer",
-        email: "viviane.fischer@example.com")
-      participation = Fabricate(:event_participation, event: tour, participant: leader)
-      Fabricate(Event::Role::Leader.name.to_sym, participation: participation)
+    describe "the contact block" do
+      subject(:profile) do
+        get :show, params: {group_id: group.id, event_id: tour.id}
+        dom.find(".agenda-contact-profile")
+      end
 
-      get :show, params: {group_id: group.id, event_id: tour.id}
+      let(:contact) { people(:admin) }
 
-      expect(dom).to have_content("Viviane Fischer")
-      expect(dom).to have_content("viviane.fischer@example.com")
-      expect(dom).to have_css(".agenda-leader-profile")
+      before do
+        contact.phone_numbers.create!(label: "landline", number: "+41 79 123 45 67", public: true)
+        contact.social_accounts.create!(label: "Webseite", name: "sac-cas.example.com",
+          public: true)
+      end
+
+      it "renders every contact attribute the event publishes" do
+        expect(profile).to have_content("Anna Admin")
+        expect(profile).to have_content("Ophovenerstrasse 79a")
+        expect(profile).to have_content("2843 Neu Carlscheid")
+        expect(profile).to have_link("+41 79 123 45 67", href: "tel:+41791234567")
+        expect(profile).to have_link("support@hitobito.example.com",
+          href: "mailto:support@hitobito.example.com")
+        expect(profile).to have_content("sac-cas.example.com")
+      end
+
+      it "renders the contact picture" do
+        contact.picture.attach(
+          io: Rails.root.join("spec", "fixtures", "person", "test_picture.jpg").open,
+          filename: "test_picture.jpg"
+        )
+        tour.update!(visible_contact_attributes: Event::ALLOWED_VISIBLE_CONTACT_ATTRIBUTES)
+
+        expect(profile).to have_css("img.agenda-contact-avatar")
+        expect(profile).not_to have_css(".agenda-contact-avatar-initials", text: "AA")
+      end
+
+      it "renders initials when the picture is not published" do
+        contact.picture.attach(
+          io: Rails.root.join("spec", "fixtures", "person", "test_picture.jpg").open,
+          filename: "test_picture.jpg"
+        )
+
+        expect(profile).to have_css(".agenda-contact-avatar-initials", text: "AA")
+      end
+
+      it "renders only the attributes listed in visible_contact_attributes" do
+        tour.update!(visible_contact_attributes: %w[name email])
+
+        expect(profile).to have_content("Anna Admin")
+        expect(profile).to have_link("support@hitobito.example.com")
+        expect(profile).not_to have_content("Ophovenerstrasse")
+        expect(profile).not_to have_link("+41 79 123 45 67")
+        expect(profile).not_to have_content("sac-cas.example.com")
+        expect(profile).to have_css(".agenda-contact-avatar-initials")
+      end
+
+      it "renders no contact block when the event publishes nothing" do
+        tour.update!(visible_contact_attributes: [])
+
+        get :show, params: {group_id: group.id, event_id: tour.id}
+
+        expect(dom).not_to have_css(".agenda-contact-profile")
+      end
+
+      it "renders no contact block for an event without a contact" do
+        # A tour insists on a contact, so this has to go around the validation
+        # - the agenda still renders event types that allow none.
+        tour.update_column(:contact_id, nil)
+
+        get :show, params: {group_id: group.id, event_id: tour.id}
+
+        expect(dom).not_to have_css(".agenda-contact-profile")
+      end
     end
   end
 
@@ -229,6 +302,10 @@ describe AgendaController do
     around { |example| travel_to(Time.zone.local(2026, 1, 15)) { example.run } }
 
     before do
+      # Before the participant_count below: activating a role recounts it.
+      add_leader(tour, people(:admin), Event::Role::Leader)
+      add_leader(tour, people(:mitglied), Event::Role::AssistantLeader)
+
       tour.update!(
         display_booking_info: true,
         maximum_participants: 30,
@@ -269,10 +346,12 @@ describe AgendaController do
         expect(card).to have_text "↑ 2872 m / ↓ 911 m"
       end
 
-      it "renders the participant count with its suffix and the contact" do
+      it "renders the participant count with its suffix and the leaders" do
         expect(card.find(".agenda-tour-card-value", text: "Teilnehmende").text.squish)
           .to eq "3/30 Teilnehmende"
-        expect(card).to have_css(".agenda-tour-card-value", text: "Anna Admin")
+        expect(card.find(".agenda-tour-card-value", text: "Admin").text.squish)
+          .to eq "Anna Admin Edmund Hillary"
+        expect(card).not_to have_content("Kontaktperson")
       end
 
       it "links to the application and to the detail page" do
@@ -359,7 +438,7 @@ describe AgendaController do
           "Technische Anforderungen" => "T3 T4",
           "Konditionelle Anforderung" => "B - wenig anstrengend",
           "Teilnehmende" => "3/30",
-          "Kontaktperson" => "Anna Admin",
+          "Tourenleitung" => "Anna Admin Edmund Hillary",
           "Kosten" => "Sektionsmitglieder CHF 50 SAC-Mitglieder CHF 60 Nicht-Mitglieder CHF 80"
         )
       end
@@ -409,6 +488,11 @@ describe AgendaController do
     end
   end
 
+  def add_leader(event, person, role_type)
+    participation = Fabricate(:event_participation, event: event, participant: person)
+    role_type.create!(participation: participation)
+  end
+
   # label => value of every fact in the detail page's fact grid
   def facts(node)
     node.all(".agenda-fact").to_h do |fact|
@@ -418,7 +502,7 @@ describe AgendaController do
 
   # title => text of every text section in the detail page's lower half
   def sections(node)
-    node.all(".agenda-tour-detail-columns .agenda-section-title").to_h do |title|
+    node.all(".agenda-tour-detail-columns :not(.agenda-tour-detail-contact) .agenda-section-title").to_h do |title|
       [title.text, title.find(:xpath, "following-sibling::*[1]").text.squish]
     end
   end
