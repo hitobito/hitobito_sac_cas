@@ -313,10 +313,8 @@ describe "signup/sektion", :js do
 
       expect do
         complete_last_page
-        # rubocop:todo Layout/LineLength
         expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
           "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        # rubocop:enable Layout/LineLength
       end.to change { Person.count }.by(3)
         .and change { Role.count }.by(3)
         .and change { ActionMailer::Base.deliveries.count }.by(3)
@@ -354,9 +352,7 @@ describe "signup/sektion", :js do
       click_button "Weiter als Familienmitgliedschaft", match: :first
 
       within("#error_explanation") do
-        # rubocop:todo Layout/LineLength
         expect(page).to have_content "In einer Familienmitgliedschaft sind maximal 2 Erwachsene inbegriffen."
-        # rubocop:enable Layout/LineLength
       end
     end
 
@@ -372,9 +368,8 @@ describe "signup/sektion", :js do
       click_button "Weiter als Familienmitgliedschaft", match: :first
 
       within("#error_explanation") do
-        # rubocop:todo Layout/LineLength
-        expect(page).to have_content "Jugendliche im Alter von 18 bis 22 Jahren können nicht in einer Familienmitgliedschaft aufgenommen werden"
-        # rubocop:enable Layout/LineLength
+        expect(page).to have_content "Jugendliche im Alter von 18 bis 22 Jahren können " \
+          "nicht in einer Familienmitgliedschaft aufgenommen werden"
       end
     end
 
@@ -433,10 +428,8 @@ describe "signup/sektion", :js do
 
       expect do
         complete_last_page
-        # rubocop:todo Layout/LineLength
         expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
           "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        # rubocop:enable Layout/LineLength
       end.to change { Person.count }.by(2)
       people = Person.where(last_name: "Muster")
       expect(people).to have(2).items
@@ -450,13 +443,9 @@ describe "signup/sektion", :js do
       field = find_field("E-Mail")
       expect(page).to have_css(".is-invalid")
       expect(page).to have_css "##{field[:id]}.is-invalid"
-      # rubocop:todo Layout/LineLength
-      # rubocop:todo Layout/LineLength
       expect(page).to have_css ".invalid-feedback", text: "Die E-Mail Adresse ist bereits registriert " \
         "und somit kann diese Person der Familie nicht hinzugefügt werden. Bitte wende dich an den Mitgliederdienst, " \
         "um deine Familie zu erfassen: 031 370 18 18, mv@sac-cas.ch"
-      # rubocop:enable Layout/LineLength
-      # rubocop:enable Layout/LineLength
       fill_in "E-Mail", with: "eddy.hillary@hitobito.example.com"
       fill_in "Vorname", with: "Maxi"
       expect(page).not_to have_css ".invalid-feedback"
@@ -606,10 +595,8 @@ describe "signup/sektion", :js do
 
       expect do
         complete_last_page
-        # rubocop:todo Layout/LineLength
         expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
           "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        # rubocop:enable Layout/LineLength
       end.to change { Person.count }.by(1)
     end
   end
@@ -705,10 +692,8 @@ describe "signup/sektion", :js do
         complete_last_page do
           check "Ich habe die Sektionsstatuten gelesen und stimme diesen zu"
         end
-        # rubocop:todo Layout/LineLength
         expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
           "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
-        # rubocop:enable Layout/LineLength
       end.to change { Person.count }.by(1)
       person = Person.find_by(email: "max.muster@hitobito.example.com")
       expect(person.privacy_policy_accepted).to eq true
@@ -910,9 +895,10 @@ describe "signup/sektion", :js do
 
       it "redirects to memberships tab with a flash message" do
         visit group_self_registration_path(group_id: group)
-        # rubocop:todo Layout/LineLength
-        expect(page).to have_content("Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen möchtest, kontaktiere bitte die SAC-Geschäftsstelle.")
-        # rubocop:enable Layout/LineLength
+        expect(page).to have_content(
+          "Du besitzt bereits eine SAC-Mitgliedschaft. Wenn du diese anpassen " \
+          "möchtest, kontaktiere bitte die SAC-Geschäftsstelle."
+        )
       end
     end
 
