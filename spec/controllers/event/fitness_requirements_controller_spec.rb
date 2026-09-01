@@ -19,13 +19,14 @@ describe Event::FitnessRequirementsController do
   it "GET#index lists entries" do
     get :index
     expect(response).to be_ok
+    expect(dom).to have_css "th", text: "Kürzel"
     expect(dom).to have_css "th", text: "Bezeichnung"
     expect(dom).to have_css "th", text: "Sortierschlüssel"
     expect(dom).to have_css "th", text: "Kurzbeschreibung"
     expect(dom).to have_css "th", text: "Beschreibung"
     expect(dom).to have_css "th", text: "Geändert"
     expect(dom).to have_css "th", text: "Gelöscht"
-    expect(dom).to have_css "th", count: 8
+    expect(dom).to have_css "th", count: 9
     expect(dom).to have_css "tbody tr", count: 5
   end
 
@@ -33,7 +34,7 @@ describe Event::FitnessRequirementsController do
     get :edit, params: {id: entry.id}
 
     expect(response).to be_ok
-    expect(dom).to have_css "#content input", count: 7
+    expect(dom).to have_css "#content input", count: 10
   end
 
   it "GET#show redirects to edit" do
@@ -45,6 +46,7 @@ describe Event::FitnessRequirementsController do
     expect do
       post :create, params: {
         event_fitness_requirement: {
+          short_label: "F",
           label: "F - Hyper anstrengend",
           description: "24 Stunden und mehr",
           order: 6
@@ -53,6 +55,7 @@ describe Event::FitnessRequirementsController do
     end.to change { Event::FitnessRequirement.count }.by(1)
 
     entry = Event::FitnessRequirement.last
+    expect(entry.short_label).to eq("F")
     expect(entry.label).to eq("F - Hyper anstrengend")
     expect(entry.description).to eq("24 Stunden und mehr")
     expect(entry.order).to eq(6)

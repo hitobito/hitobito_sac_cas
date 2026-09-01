@@ -11,6 +11,7 @@
 #
 #  id                :bigint           not null, primary key
 #  order             :integer
+#  short_label       :string(5)
 #  label             :string(255)
 #  short_description :string(255)
 #  description       :text(65535)
@@ -22,44 +23,49 @@
 a:
   event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:a) %>
   locale: de
-  label: A
+  short_label: A
+  label: A - nicht anstrengend
   description: 0-3h Totalzeit
-  short_description: nicht anstrengend
+  short_description: 0-3h Totalzeit
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 b:
   event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:b) %>
   locale: de
-  label: B
+  short_label: B
+  label: B - wenig anstrengend
   description: 3-5h Totalzeit; bis ca. 800HM Aufstieg
-  short_description: wenig anstrengend
+  short_description: 3-5h Totalzeit; bis ca. 800HM Aufstieg
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 c:
   event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:c) %>
   locale: de
-  label: C
+  short_label: C
+  label: C - ziemlich anstrengend
   description: 4-7h Totalzeit; ca. 800-1300HM Aufstieg
-  short_description: ziemlich anstrengend
+  short_description: 4-7h Totalzeit; ca. 800-1300HM Aufstieg
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 d:
   event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:d) %>
   locale: de
-  label: D
+  short_label: D
+  label: D - anstrengend
   description: 6-10h Totalzeit; ca. 1300-1600HM Aufstieg
-  short_description: anstrengend
+  short_description: 6-10h Totalzeit; ca. 1300-1600HM Aufstieg
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>
 
 e:
   event_fitness_requirement_id: <%= ActiveRecord::FixtureSet.identify(:e) %>
   locale: de
-  label: E
+  short_label: E
+  label: E - sehr anstrengend
   description: über 10h Totalzeit; Aufstieg mehr als 1600HM
-  short_description: sehr anstrengend
+  short_description: über 10h Totalzeit; Aufstieg mehr als 1600HM
   created_at: <%= Time.zone.now %>
   updated_at: <%= Time.zone.now %>

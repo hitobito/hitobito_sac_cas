@@ -42,7 +42,7 @@
           = agenda_meta_row(:activity) do
             %span
               = t("agenda.filters.fitness_requirements")
-              %span.agenda-tour-card-value.fw-bold= event.fitness_requirement.label
+              %span.agenda-tour-card-value.fw-bold= event.fitness_requirement.short_label
 
         - if event.technical_requirements.any?
           - tour_activity_requirements(event).each do |activity, requirements|

@@ -78,7 +78,7 @@ class AgendaFilterChips
 
       without = params.deep_dup
       without[:tour_essentials][key] = without[:tour_essentials][key] - [id]
-      chip(entry.to_s(:long), without)
+      chip(entry.to_s, without)
     end
   end
 

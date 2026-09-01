@@ -11,6 +11,7 @@
 #
 #  id                :bigint           not null, primary key
 #  order             :integer
+#  short_label       :string(5)
 #  label             :string(255)
 #  short_description :string(255)
 #  description       :text(65535)
