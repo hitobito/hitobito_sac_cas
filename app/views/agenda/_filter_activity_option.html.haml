@@ -30,7 +30,8 @@
 - if activity.technical_requirement
   .ms-4.mb-2.d-flex.flex-wrap.gap-1{hidden: !checked,
       data: {"sac-cas--activity-chips-target": "chipRow", activity_id: activity.id}}
-    - activity.technical_requirement.children.list.without_deleted.each do |requirement|
+    - requirements = @technical_requirements.filter { |r| r.parent_id == activity.technical_requirement_id }
+    - requirements.each do |requirement|
       - requirement_selected = Array(event_filter.chain.dig(:tour_essentials, :technical_requirement_id)).include?(requirement.id)
       %button.agenda-chip{type: "button", class: ("active" if requirement_selected),
           "aria-pressed": requirement_selected.to_s,

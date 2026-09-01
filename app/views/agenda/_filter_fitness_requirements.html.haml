@@ -3,12 +3,11 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito_sac_cas.
 
--# locals: fitness_requirements: [Event::FitnessRequirement, ...]
 - selected = Array(event_filter.chain.dig(:tour_essentials, :fitness_requirement_id))
 
 = render layout: "filter_dropdown_shell",
     locals: {label: t("agenda.filters.fitness_requirements"), icon_name: :activity, count: selected.size} do
-  - fitness_requirements.each do |requirement|
+  - @fitness_requirements.each do |requirement|
     = render "filter_checkbox_option",
         value: requirement,
         selected: selected,

@@ -42,10 +42,11 @@
     = agenda_fact(:users, t("agenda.list.tour_card.participants_label")) do
       = participants
 
-  - if event.contact
-    = agenda_fact(:user,  Event.human_attribute_name(:contact)) do
-      = event.contact.to_s
-
   - if tour_price_categories(event).any?
     = agenda_fact(:wallet, Event.human_attribute_name(:cost)) do
       = agenda_lines(tour_price_categories(event))
+
+  - leaders = event_leaders(event)
+  - if leaders.any?
+    = agenda_fact(:user, t("agenda.show.leaders")) do
+      = agenda_lines(leaders.map(&:to_s))
