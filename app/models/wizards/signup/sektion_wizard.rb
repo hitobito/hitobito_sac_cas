@@ -19,6 +19,7 @@ module Wizards::Signup
     self.asides = ["aside_sektion"]
 
     MIN_ADULT_YEARS = SacCas::Beitragskategorie::Calculator::AGE_RANGE_ADULT.begin
+    MIN_CORNERCARD_YEARS = 18
     ADDRESS_KEYS = %i[address_care_of street housenumber postbox zip_code town country]
 
     delegate :person_attributes, :birthday, to: :person_fields
@@ -165,7 +166,7 @@ module Wizards::Signup
 
     def too_young_for_household? = has_needed_age(MIN_ADULT_YEARS)
 
-    def too_young_for_cornercard? = has_needed_age(18)
+    def too_young_for_cornercard? = has_needed_age(MIN_CORNERCARD_YEARS)
 
     def has_needed_age(age)
       birthday =

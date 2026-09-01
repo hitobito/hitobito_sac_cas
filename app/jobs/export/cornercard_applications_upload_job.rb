@@ -5,8 +5,10 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-class Export::CornercardApplicationsJob < BaseJob
+class Export::CornercardApplicationsUploadJob < RecurringJob
   self.use_background_job_logging = true
+
+  run_every 1.week
 
   def perform
     return if sftp_config.blank?
@@ -44,4 +46,6 @@ class Export::CornercardApplicationsJob < BaseJob
       payload: person_ids.to_json
     )
   end
+
+  def next_run = interval.from_now.midnight + 10.minutes
 end

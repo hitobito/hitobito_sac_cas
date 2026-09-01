@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe Export::CornercardApplicationsJob do
+describe Export::CornercardApplicationsUploadJob do
   let(:sftp) { double(:sftp) }
   let(:config) { double(:config) }
   let(:person) do
@@ -70,6 +70,36 @@ describe Export::CornercardApplicationsJob do
 
       expected = "cornercard_antraege_#{Time.current.strftime("%Y%m%d_%H%M")}.xlsx"
       expect(sftp).to have_received(:upload_file).with(anything, expected)
+    end
+  end
+
+  describe "is a recurring job and" do
+    it "has the proper superclass" do
+      expect(described_class.new).to be_a(RecurringJob)
+    end
+
+    it "runs weekly" do
+      expect(described_class.interval).to eq 1.week
+    end
+
+    it "schedules at 00:10 after the next weekly boundary" do
+      travel_to(Time.zone.local(2026, 3, 18, 14, 30)) do
+        job = described_class.new
+        next_run = job.send(:next_run)
+
+        expect(next_run).to eq 1.week.from_now.midnight + 10.minutes
+        expect(next_run).to eq Time.zone.parse("2026-03-25 00:10:00")
+      end
+    end
+
+    it "always lands on 00:10" do
+      travel_to(Time.zone.local(2026, 6, 1, 23, 59)) do
+        job = described_class.new
+        next_run = job.send(:next_run)
+
+        expect(next_run.hour).to eq 0
+        expect(next_run.min).to eq 10
+      end
     end
   end
 end

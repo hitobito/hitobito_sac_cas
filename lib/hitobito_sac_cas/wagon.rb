@@ -61,9 +61,9 @@ module HitobitoSacCas
         JobManager.wagon_jobs += [Export::BackupMitgliederScheduleJob]
       end
 
-      # only schedule CornercardApplicationsScheduleJob if cornercard config is present
+      # only schedule CornercardApplicationsUploadJob if cornercard config is present
       if Settings.cornercard.config.present?
-        JobManager.wagon_jobs += [Export::CornercardApplicationsScheduleJob]
+        JobManager.wagon_jobs += [Export::CornercardApplicationsUploadJob]
       end
 
       Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController

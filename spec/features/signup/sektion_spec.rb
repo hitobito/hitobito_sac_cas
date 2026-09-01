@@ -106,7 +106,12 @@ describe "signup/sektion", :js do
     end
   end
 
-  def complete_cornercard_step
+  def complete_cornercard_step(apply: false)
+    if apply
+      check "Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC Cornèrcard beantragen."
+      check "Ich stimme der Verarbeitung meiner Daten zu und habe die Allgemeinen " \
+        "Geschäftsbedingungen gelesen und akzeptiere diese."
+    end
     click_button "Weiter", match: :first
   end
 
@@ -645,6 +650,31 @@ describe "signup/sektion", :js do
       expect(page).to have_text("Du hast Dich erfolgreich registriert. Du erhältst in Kürze eine " \
         "E-Mail mit der Anleitung, wie Du Deinen Account freischalten kannst.")
       expect(person.self_registration_reason).to eq reason
+    end
+  end
+
+  describe "cornercard" do
+    before do
+      visit group_self_registration_path(group_id: group)
+      complete_main_person_form
+      click_button "Weiter als Einzelmitglied"
+      click_button "Weiter"
+    end
+
+    it "creates cornercard upload when applying" do
+      expect do
+        complete_cornercard_step(apply: true)
+        complete_last_page
+      end.to change { CornercardUpload.count }.by(1)
+
+      expect(person.cornercard_upload).to be_present
+    end
+
+    it "does not create cornercard upload when skipping" do
+      expect do
+        complete_cornercard_step(apply: false)
+        complete_last_page
+      end.not_to change { CornercardUpload.count }
     end
   end
 
