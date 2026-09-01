@@ -144,17 +144,24 @@ module AgendaHelper
     end
   end
 
-  # The leader/co-leader people for an event (never participants/helpers),
-  # in role order - there's no ready-made "leaders" association (the
-  # `leaders` attr_accessor on Event::Tour is for Event::TourResource, not
-  # a DB relation), so this goes through the same Participatable API the
-  # rest of the app uses to look up people by role kind.
-  def event_leader_participations(event)
-    event.participations_for(*event.class.leader_types)
+  def agenda_contact_attr_visible?(event, attribute)
+    event.visible_contact_attributes.map(&:to_s).include?(attribute.to_s)
+  end
+
+  def agenda_contact_phone_numbers(contact)
+    contact.phone_numbers.select(&:public?).map(&:value)
+  end
+
+  def agenda_contact_emails(contact)
+    [contact.email, *contact.additional_emails.select(&:public?).map(&:value)].compact_blank
+  end
+
+  def agenda_contact_social_accounts(contact)
+    contact.social_accounts.select(&:public?)
   end
 
   # "Viviane Fischer" -> "VF", matching the prototype's fallback avatar for
-  # a leader with no picture.
+  # a contact with no picture.
   def person_initials(person)
     person.to_s.split.filter_map { |word| word[0] }.first(2).join.upcase
   end

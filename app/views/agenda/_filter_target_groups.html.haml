@@ -8,14 +8,13 @@
 -# _nested_group_header). A main with no children (most target groups) or
 -# with a single, identically-labelled child renders as a single flat
 -# checkbox instead.
--#
--# locals: target_groups: [Event::TargetGroup, ...] (mains and children, unsorted)
+
 - selected = Array(event_filter.chain.dig(:tour_essentials, :target_group_id))
 
 = render layout: "filter_dropdown_shell",
     locals: {label: t("agenda.filters.target_groups"), icon_name: "users", count: selected.size} do
-  - target_groups.select(&:main?).each_with_index do |main, index|
-    - children = target_groups.select { |group| group.parent_id == main.id }
+  - @target_groups.select(&:main?).each_with_index do |main, index|
+    - children = @target_groups.select { |group| group.parent_id == main.id }
     - field_name = 'filters[tour_essentials][target_group_id][]'
     - if children.empty?
       = render "filter_checkbox_option", value: main, selected:, field_name:

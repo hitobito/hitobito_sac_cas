@@ -221,14 +221,53 @@ describe AgendaHelper do
     end
   end
 
-  describe "#event_leader_participations" do
-    it "includes leaders but not plain participants" do
-      leader = Fabricate(:event_participation, event: tour, participant: people(:mitglied))
-      Fabricate(Event::Role::Leader.name.to_sym, participation: leader)
-      participant = Fabricate(:event_participation, event: tour, participant: people(:admin))
-      Fabricate(Event::Role::Participant.name.to_sym, participation: participant)
+  describe "#agenda_contact_attr_visible?" do
+    it "is true only for a published attribute" do
+      tour.update!(visible_contact_attributes: %w[name])
 
-      expect(helper.event_leader_participations(tour)).to eq [leader]
+      expect(helper.agenda_contact_attr_visible?(tour, :name)).to be true
+      expect(helper.agenda_contact_attr_visible?(tour, :email)).to be false
+    end
+  end
+
+  describe "#agenda_contact_phone_numbers" do
+    let(:contact) { people(:admin) }
+
+    it "omits the numbers that are not public" do
+      contact.phone_numbers.create!(label: "landline", number: "+41 79 123 45 67", public: true)
+      contact.phone_numbers.create!(label: "mobile", number: "+41 79 765 43 21", public: false)
+
+      expect(helper.agenda_contact_phone_numbers(contact)).to eq ["+41 79 123 45 67"]
+    end
+  end
+
+  describe "#agenda_contact_emails" do
+    let(:contact) { people(:admin) }
+
+    it "combines the primary email with the public additional ones" do
+      contact.additional_emails.create!(label: "Arbeit", email: "work@example.com", public: true)
+      contact.additional_emails.create!(label: "Privat", email: "private@example.com",
+        public: false)
+
+      expect(helper.agenda_contact_emails(contact))
+        .to eq ["support@hitobito.example.com", "work@example.com"]
+    end
+
+    it "is empty for a contact without any email" do
+      contact.update_column(:email, nil)
+
+      expect(helper.agenda_contact_emails(contact)).to be_empty
+    end
+  end
+
+  describe "#agenda_contact_social_accounts" do
+    let(:contact) { people(:admin) }
+
+    it "omits the accounts that are not public" do
+      contact.social_accounts.create!(label: "Webseite", name: "example.com", public: true)
+      contact.social_accounts.create!(label: "Skype", name: "anna.admin", public: false)
+
+      expect(helper.agenda_contact_social_accounts(contact).map(&:value)).to eq ["example.com"]
     end
   end
 end

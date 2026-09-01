@@ -12,15 +12,14 @@
 -# all isn't rendered as a group either. Checking an activity reveals its
 -# linked technical requirement as a toggleable chip - see
 -# sac-cas--activity-chips and _filter_activity_option.
--#
--# locals: activities: [Event::Activity, ...] (mains and children, unsorted)
+
 - selected = Array(event_filter.chain.dig(:tour_essentials, :activity_id))
 
 = render layout: "filter_dropdown_shell",
     locals: {label: t("agenda.filters.activities"), icon_name: "mountain",
              count: selected.size, extra_controller: "sac-cas--activity-chips"} do
-  - activities.select(&:main?).each_with_index do |main, index|
-    - children = activities.select { |activity| activity.parent_id == main.id }
+  - @activities.select(&:main?).each_with_index do |main, index|
+    - children = @activities.select { |activity| activity.parent_id == main.id }
     - if children.empty?
       = render "filter_activity_option", activity: main, selected: selected
     - else
