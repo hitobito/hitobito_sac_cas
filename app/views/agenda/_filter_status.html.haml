@@ -1,0 +1,18 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Status filter: a flat checkbox per status the agenda can display on an
+-# event badge - see Events::Filter::AgendaStatus, which turns the selection
+-# back into the derived status the badges show.
+- selected = Array(event_filter.chain.dig(:agenda_status, :values))
+
+= render layout: "filter_dropdown_shell",
+    locals: {label: t("agenda.filters.status"), icon_name: :calendar_check, count: selected.size} do
+  - Events::Filter::AgendaStatus::OPTIONS.each do |option|
+    = render "filter_checkbox_option",
+        value: option,
+        selected: selected,
+        field_name: 'filters[agenda_status][values][]'
+

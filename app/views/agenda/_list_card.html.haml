@@ -9,13 +9,17 @@
 %article.agenda-tour-card.border.bg-white.shadow-sm.mb-3{style: ("--tour-color: #{color}" if color.present?)}
   .agenda-tour-card-body.flex-md-row
     .flex-grow-1
-      - if event.tour?
-        .d-flex.flex-wrap.gap-3.mb-2
+      .d-flex.flex-wrap.gap-3.mb-2
+        - if event.tour?
           - event.activities.each do |activity|
-            %span.agenda-activity-badge{style: ("--activity-color: #{activity.parent.color}" if activity.parent&.color.present?)}
+            %span.agenda-activity-label{style: ("--activity-color: #{activity.parent.color}" if activity.parent&.color.present?)}
               %span.agenda-activity-icon
                 = agenda_icon(:mountain)
-              = activity.label.upcase
+              = activity.label
+        - else
+          %span.agenda-activity-label
+            = event.class.model_name.human
+
 
       %h3.mb-2
         = link_to event.name, agenda_show_path(group, event)

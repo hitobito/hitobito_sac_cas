@@ -104,11 +104,7 @@ module Events::Courses::State
     if created?
       :published
     elsif application_open?
-      if places_available?
-        :application_open
-      else
-        :application_waiting
-      end
+      agenda_application_status
     elsif application_paused?
       :published
     elsif ready? || assignment_closed?
