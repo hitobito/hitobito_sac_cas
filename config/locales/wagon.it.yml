@@ -129,6 +129,9 @@ it:
       wizards/steps/signup/sektion/various_fields:
         register_on: Data di adesione dal
         self_registration_reason_id: Motivo dell'ingresso
+      wizards/steps/signup/sektion/cornercard_fields:
+        card_application: Cornèrcard beantragen
+        consent_given: Datenschutz und AGB
       wizards/steps/signup/sektion/summary_fields:
         sektion_statuten: Statuto della sezione
         adult_consent: Dichiarazione di consenso del tutore legale
@@ -177,6 +180,8 @@ it:
 
     errors:
       messages:
+        cornercard_consent_missing: >-
+          Bitte bestätige die Verarbeitung deiner Daten und die AGB, wenn du die Cornèrcard bestellen möchtest
         youth_not_allowed_in_family: >-
           I giovani di età compresa tra %{from_age} e %{to_age} anni non possono essere inseriti in un’affiliazione famigliare.
         invalid_date_range: "deve essere compreso tra il %{start_on} e il  %{end_on} "
@@ -2095,6 +2100,22 @@ it:
       canton: Cantone
       country: Paese
 
+  export/tabular/people/cornercard_applications:
+    attributes:
+      id: Mitgliedernummer
+      last_name: Nachname
+      first_name: Vorname
+      gender: Geschlecht
+      birthday: Geburtsdatum
+      email: Hauptemail
+      mobile: Mobile
+      street: Strasse
+      housenumber: Hausnummer
+      postbox: Postfach
+      zip_code: PLZ
+      town: Ort
+      country: Land
+
   export/tabular/people/jubilare:
     sheet_name: "Membri per %{reference_date}"
 
@@ -2852,6 +2873,25 @@ it:
             next_as_household_link: Continuare come affiliazione famigliare
 
           various_fields_title: Dati aggiuntivi
+          cornercard_fields_title: Cornèrcard
+          cornercard_fields:
+            card_application: Cornèrcard beantragen
+            benefit_heading: Mitgliedervorteil
+            order_heading: SAC-Cornèrcard bestellen
+            order_description: >-
+              Ergänze deine Mitgliedschaft mit der kostenlosen SAC-Cornèrcard und profitiere von exklusiven Vorteilen bei deinen SAC-Aktivitäten und im Alltag.
+            benefits_heading: "Deine Vorteile auf einen Blick:"
+            benefit_1: Keine Jahresgebühr
+            benefit_2: 20-faches Cashback im SAC-Shop (entspricht zusätzlichen 6% Preisvorteil)
+            benefit_3: Exklusives SAC-Kartendesign
+            support_text: >-
+              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+            card_application_label: >-
+              Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC Cornèrcard beantragen.
+            consent_label: >-
+              Ich stimme der %{data_processing_link} zu und habe die %{agb_link} gelesen und akzeptiere diese.
+            data_processing_link_text: Verarbeitung meiner Daten
+            agb_link_text: Allgemeinen Geschäftsbedingungen
           summary_fields_title: Riepilogo
           summary_fields:
             my_membership: "La mia affiliazione"
@@ -2862,6 +2902,7 @@ it:
               Dopo aver fatto richiesta ufficiale di affiliazione riceverai la fattura tramite e-mail.
             entry_per: "Adesione dal:"
             next_button: Richiedere affiliazione
+            cornercard_will_be_ordered: "SAC-Cornèrcard wird bestellt"
           summary_person_card:
             contact_person: "Persona di contatto"
           summary_family_member_card:
