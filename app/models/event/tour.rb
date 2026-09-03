@@ -203,6 +203,14 @@ class Event::Tour < Event # rubocop:disable Metrics/ClassLength
     ["ready", "closed", "canceled"].include?(state)
   end
 
+  def elevation
+    parts = []
+    parts << "#{ascent}#{I18n.t("global.meters_abbreviation")} ↗" if ascent?
+    parts << "#{descent}#{I18n.t("global.meters_abbreviation")} ↘" if descent?
+
+    parts.join(" / ")
+  end
+
   private
 
   def assert_report_closed_when_tour_closes

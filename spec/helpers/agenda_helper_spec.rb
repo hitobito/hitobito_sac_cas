@@ -30,28 +30,6 @@ describe AgendaHelper do
     end
   end
 
-  describe "#tour_altitude_difference" do
-    it "combines ascent and descent" do
-      expect(helper.tour_altitude_difference(tour)).to eq "↑ 2872 m / ↓ 911 m"
-    end
-
-    it "omits the ascent when there is none" do
-      tour.ascent = nil
-      expect(helper.tour_altitude_difference(tour)).to eq "↓ 911 m"
-    end
-
-    it "omits the descent when there is none" do
-      tour.descent = nil
-      expect(helper.tour_altitude_difference(tour)).to eq "↑ 2872 m"
-    end
-
-    it "treats a zero descent like a missing one, same as a zero ascent" do
-      tour.ascent = 0
-      tour.descent = 0
-      expect(helper.tour_altitude_difference(tour)).to eq ""
-    end
-  end
-
   describe "#tour_price_categories" do
     it "labels every price the tour charges" do
       expect(helper.tour_price_categories(tour)).to eq [

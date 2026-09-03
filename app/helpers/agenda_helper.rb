@@ -28,14 +28,6 @@ module AgendaHelper
     end.reject { |_, requirements| requirements.empty? }
   end
 
-  def tour_altitude_difference(event)
-    labels = []
-    labels << "↑ #{event.ascent} #{t("agenda.show.meters_abbreviation")}" if event.ascent?
-    labels << "↓ #{event.descent} #{t("agenda.show.meters_abbreviation")}" if event.descent?
-
-    safe_join(labels, " / ")
-  end
-
   def agenda_info_block(content)
     html = safe_auto_link(content, html: {target: "_blank"})
     simple_format(html, {}, sanitize_options: {attributes: %w[href target]})

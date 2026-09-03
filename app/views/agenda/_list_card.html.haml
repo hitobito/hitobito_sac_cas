@@ -52,7 +52,7 @@
 
         - if event.ascent || event.descent
           = agenda_meta_row(:trending_up) do
-            = tour_altitude_difference(event)
+            = event.elevation
 
     .agenda-tour-card-meta
       - participant_count = agenda_participant_count(event)

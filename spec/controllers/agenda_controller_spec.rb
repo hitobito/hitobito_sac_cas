@@ -266,7 +266,7 @@ describe AgendaController do
         expect(card).to have_text "Kondition"
         expect(card).to have_css(".agenda-tour-card-value.fw-bold", text: "B")
         expect(card).to have_css(".agenda-requirement-badge", text: "T3, T4")
-        expect(card).to have_text "↑ 2872 m / ↓ 911 m"
+        expect(card).to have_text "2872m ↗ / 911m ↘"
       end
 
       it "renders the participant count with its suffix and the contact" do
@@ -355,7 +355,7 @@ describe AgendaController do
           "Datum" => "Mo 02.03.2026",
           "Dauer" => "1 Tag / 12:30 h",
           "Gipfel" => "Bettmerhorn",
-          "Höhenmeter" => "↑ 2872 m / ↓ 911 m",
+          "Höhenmeter" => "2872m ↗ / 911m ↘",
           "Technische Anforderungen" => "T3 T4",
           "Konditionelle Anforderung" => "B - wenig anstrengend",
           "Teilnehmende" => "3/30",

@@ -1012,6 +1012,28 @@ describe Event::Tour do
     end
   end
 
+  describe "#elevation" do
+    it "combines ascent and descent" do
+      expect(tour.elevation).to eq "2872m ↗ / 911m ↘"
+    end
+
+    it "omits the ascent when there is none" do
+      tour.ascent = nil
+      expect(tour.elevation).to eq "911m ↘"
+    end
+
+    it "omits the descent when there is none" do
+      tour.descent = nil
+      expect(tour.elevation).to eq "2872m ↗"
+    end
+
+    it "treats a zero descent like a missing one, same as a zero ascent" do
+      tour.ascent = 0
+      tour.descent = 0
+      expect(tour.elevation).to eq ""
+    end
+  end
+
   def enqueued_job_for(job_class, receiver_option)
     Delayed::Job.where("handler LIKE '%#{job_class}%' AND handler LIKE '%#{receiver_option}%'")
   end
