@@ -1915,6 +1915,9 @@ de:
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
 
+    show:
+      application_link: Direkte Anmeldung
+
     state_details_sac_cas:
       approval_level: Freigabestufe
 
