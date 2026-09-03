@@ -3,6 +3,7 @@ require "spec_helper"
 describe EventsHelper do
   include UtilityHelper
   include FormatHelper
+  include LayoutHelper
 
   let(:kind_category) { Fabricate.build(:event_kind_category) }
   let(:kind) {
@@ -56,16 +57,15 @@ describe EventsHelper do
       expect(html).to match(
         %r{
           <li>
-          <a\ .+?>Wandern</a>
+          <a\ .+?><i\ .+?></i><span\ .+?>Wandern</span></a>
           \s*\(
-            <a\ .+?>Wanderweg</a>
-            ,\s*
+            <a\ .+?>Wanderweg</a>,\s*
             <a\ .+?>Bergtour</a>
           \)
           </li>
         }x
       )
-      expect(html).to match(/<li><a .+?>Klettern<\/a> \(<a .+?>Fels<\/a>\)<\/li>/)
+      expect(html).to match(/<li><a .+?><i .+?><\/i><span .+?>Klettern<\/span><\/a> \(<a .+?>Fels<\/a>\)<\/li>/)
     end
 
     it "returns list of parents without children for target groups" do

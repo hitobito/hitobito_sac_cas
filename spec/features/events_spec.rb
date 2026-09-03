@@ -344,14 +344,14 @@ describe :events, js: true do
 
         within("#event_fitness_requirement_id + .ts-wrapper") do
           expect(page).to have_selector(".ts-control .item", count: 1)
-          expect(page).to have_selector(".ts-control .item", text: "B - wenig anstrengend")
+          expect(page).to have_selector(".ts-control .item", text: "B")
 
           find(".ts-control").click
           expect(page).to have_selector(".ts-dropdown .option",
             count: Event::FitnessRequirement.count)
 
-          find(".ts-dropdown .option", text: "A - nicht anstrengend").click
-          expect(page).to have_selector(".ts-control .item", text: "A - nicht anstrengend")
+          find(".ts-dropdown .option", text: "A").click
+          expect(page).to have_selector(".ts-control .item", text: "A")
           expect(page).to have_no_selector(".ts-dropdown")
         end
 

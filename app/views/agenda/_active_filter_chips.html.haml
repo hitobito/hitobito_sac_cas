@@ -1,0 +1,36 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# locals: event_filter:, group:
+-# Unlike the filter form's own inputs (which only need the results list to
+-# refresh, and stay scoped to the turbo frame), removing a chip or
+-# resetting here changes filters the FORM itself displays (checkboxes,
+-# date fields, ...) - those live outside the frame, so a frame-scoped
+-# request would leave them showing stale state. data: {turbo: false} makes
+-# both links plain, un-intercepted browser navigations instead - not just
+-# "no data-turbo-frame", since that alone still lets Turbo Drive restore a
+-# cached snapshot of a previously-visited URL (e.g. this same index URL,
+-# visited before any filter was applied) instead of hitting the server.
+- chips = AgendaFilterChips.new(event_filter,
+    group,
+    target_groups: @target_groups,
+    activities: @activities,
+    technical_requirements: @technical_requirements,
+    fitness_requirements: @fitness_requirements,
+    traits: @traits,
+    leaders: @leaders).chips
+- if chips.any?
+  .agenda-active-filter-chips.bg-white.border.shadow-sm.mb-3.d-flex.flex-wrap.align-items-center.justify-content-between.gap-2
+    .d-flex.flex-wrap.gap-2
+      - chips.each do |chip|
+        = link_to(chip[:path], class: "agenda-filter-chip", data: {turbo: false}) do
+          = chip[:label]
+          = agenda_icon(:x, class: "agenda-icon-sm")
+
+    = link_to(agenda_index_path(group_id: group.id),
+        class: "agenda-btn-ghost d-inline-flex align-items-center gap-1",
+        data: {turbo: false}) do
+      = agenda_icon(:rotate_ccw)
+      = t("agenda.index.reset_all_filters")

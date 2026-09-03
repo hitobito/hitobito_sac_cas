@@ -1,0 +1,26 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# locals: f: (the agenda index form builder)
+.agenda-filter-bar.bg-white.border.rounded.shadow-sm.mb-3
+  .d-flex.flex-wrap.gap-3.align-items-end.mb-3
+    = render "filter_dates", f: f
+    = render "filter_full_text"
+
+  .d-flex.flex-wrap.gap-2.align-items-center
+    = render "filter_target_groups", target_groups: @target_groups
+    = render "filter_activities", activities: @activities
+    = render "filter_fitness_requirements", fitness_requirements: @fitness_requirements
+    = render "filter_traits", traits: @traits
+    = render "filter_leaders", leaders: @leaders
+    = render "filter_stubs"
+
+    .ms-auto.d-flex.gap-2
+      -# The form auto-submits on every filter change (see autosubmit on the
+      -# form in index.html.haml) - kept visually hidden rather than removed
+      -# so it's still reachable/usable via keyboard and screen readers, and
+      -# still works if JS is unavailable.
+      .visually-hidden
+        = submit_button(f, t("global.button.search"), name: nil)

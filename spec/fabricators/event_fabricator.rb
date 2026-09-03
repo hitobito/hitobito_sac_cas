@@ -62,7 +62,9 @@ Fabricator(:sac_published_tour, from: :sac_tour) do
   application_closing_at { 16.months.ago }
   maximum_participants { 20 }
   minimum_participants { 5 }
-  after_build { _1.technical_requirements = _1.activities.map(&:technical_requirement).compact }
+  after_build do |event|
+    event.technical_requirements = event.activities.map(&:technical_requirement).compact.first&.children
+  end
   before_create do |event|
     event.dates.build(start_at: 12.months.ago) if event.dates.empty?
   end

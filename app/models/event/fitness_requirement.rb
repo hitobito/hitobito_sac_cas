@@ -33,8 +33,16 @@ class Event::FitnessRequirement < ActiveRecord::Base
   scope :list, -> { includes(:translations).order(:order) }
   scope :assignable, ->(ids = []) { without_deleted.or(where(id: ids)) }
 
-  def to_s
-    label
+  def to_s(format = :default)
+    if format == :long
+      label_long
+    else
+      label
+    end
+  end
+
+  def label_long
+    [label, short_description].compact_blank.join(" - ")
   end
 
   # Soft destroy if events exist, otherwise hard destroy

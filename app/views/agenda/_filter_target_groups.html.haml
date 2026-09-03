@@ -1,0 +1,30 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Zielgruppe filter: one fieldset per main target group, its children
+-# nested underneath with tri-state parent selection (see
+-# _nested_group_header). A main with no children (most target groups) or
+-# with a single, identically-labelled child renders as a single flat
+-# checkbox instead.
+-#
+-# locals: target_groups: [Event::TargetGroup, ...] (mains and children, unsorted)
+- selected = Array(event_filter.chain.dig(:tour_essentials, :target_group_id))
+
+= render layout: "filter_dropdown_shell",
+    locals: {label: t("agenda.filters.target_groups"), icon_name: "users", count: selected.size} do
+  - target_groups.select(&:main?).each_with_index do |main, index|
+    - children = target_groups.select { |group| group.parent_id == main.id }
+    - field_name = 'filters[tour_essentials][target_group_id][]'
+    - if children.empty?
+      = render "filter_checkbox_option", value: main, selected:, field_name:
+    - elsif children.one? && children.first.label == main.label
+      = render "filter_checkbox_option", value: children.first, selected:, field_name:
+    - else
+      %fieldset.agenda-filter-group
+        %legend.visually-hidden= main.label
+        = render "filter_nested_checkbox_header", dom_id: "target_group_group_#{main.id}", label: main.label, regular: true
+        .ms-4
+          - children.each do |child|
+            = render "filter_checkbox_option", value: child, selected:, field_name:

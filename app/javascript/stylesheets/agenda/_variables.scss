@@ -1,0 +1,82 @@
+//  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+//  hitobito_sac_cas and licensed under the Affero General Public License version 3
+//  or later. See the COPYING file at the top-level directory or at
+//  https://github.com/hitobito/hitobito_sac_cas.
+
+// CSS variables for the public Agenda pages (Tourenportal)
+//
+// This is intentionally self-contained: the Agenda pages are visually
+// independent from the rest of the application, so these are plain Sass
+// variables local to the agenda pack, not imported from or shared with
+// `hitobito/customizable/_variables.scss`. Imported before
+// `bootstrap/scss/variables` (see agenda.scss.erb) so it can override
+// Bootstrap's defaults for this page only.
+
+$agenda-red: #e30613;
+$agenda-red-hover: #b00511;
+$agenda-green: #84be41;
+$agenda-green-hover: #81a624;
+$agenda-orange: #ff8800;
+$agenda-blue: #00a3da;
+$agenda-black: #333333;
+$agenda-gray-dark: #707070;
+$agenda-gray-medium: #999999;
+$agenda-gray: #e9e9e9;
+$agenda-gray-light: #f4f4f4;
+$agenda-snow: #f9f9f9;
+$agenda-placeholder: #bfbfbf;
+
+$primary: $agenda-red;
+$secondary: $agenda-gray-dark;
+$body-color: $agenda-black;
+$body-bg: $agenda-snow;
+$border-color: $agenda-gray;
+$link-color: $agenda-red;
+$link-hover-color: $agenda-red-hover;
+
+$input-bg: #fff;
+$input-border-color: $agenda-gray;
+
+$text-muted: $agenda-gray-dark;
+
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+
+$box-shadow-sm: 0 1px 2px 0 rgba(#000, 0.05);
+
+$focus-ring-color: rgba($agenda-red, 0.25);
+
+$input-focus-border-color: $agenda-red;
+$input-focus-box-shadow: 0 0 0 2px rgba($agenda-red, 0.4);
+
+$form-check-padding-start: 1.75em;
+$form-check-input-border: 1px solid $agenda-gray-dark;
+$form-check-input-border-radius: 0;
+$form-check-input-focus-box-shadow: none;
+$form-check-input-width: 1.16667em;
+$form-check-input-height: 1.16667em;
+$form-check-input-checked-bg-color: $input-bg;
+$form-check-input-checked-border-color: $agenda-red;
+$form-check-input-checked-color: $agenda-red;
+$form-check-input-checked-bg-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e30613" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>');
+$form-check-input-indeterminate-bg-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e30613" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path></svg>');
+$form-check-input-indeterminate-bg-color: $input-bg;
+$form-check-input-indeterminate-border-color: $agenda-red;
+$form-check-input-indeterminate-color: $agenda-red;
+
+$font-family-sans-serif:
+  Frutiger,
+  "Frutiger LT Std",
+  ui-sans-serif,
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
+$font-size-base: 0.875rem; // 14px
+$line-height-base: 1.5;
+$font-weight-base: 300;
+$headings-font-weight: 700;

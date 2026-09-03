@@ -1,24 +1,25 @@
--# Copyright (c) 2026, Hitobito AG. This file is part of
--# hitobito and licensed under the Affero General Public License version 3
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
 -# or later. See the COPYING file at the top-level directory or at
--# https://github.com/hitobito/hitobito.
+-# https://github.com/hitobito/hitobito_sac_cas.
 
-= link_to t("global.button.back"), agenda_index_path(group, returning: true)
+.d-flex.flex-column.gap-3
+  = render "show_back_link"
 
-%div
-  %div= event.id
-  %div= event.name
-  %div= I18n.l(event.start_at)
-  %div= event.total_duration_days
+  -# The tour's accent colour is handed to the stylesheet once here; every
+  -# element tinted by it reads --tour-color, with a neutral fallback for the
+  -# event types that have no activity to take a colour from.
+  - color = tour_accent_color(event)
+  .agenda-tour-detail.bg-white.border.shadow-sm.overflow-hidden{style: ("--tour-color: #{color}" if color.present?)}
+    = render "show_header"
 
-  - if event.display_booking_info?
-    %div= "#{event.participant_count}/#{event.maximum_participants}"
+    .agenda-tour-detail-body
+      = render "show_badges"
 
-  %div= event.contact
+      = render "show_facts"
 
-  - if event.is_a?(Event::Tour)
-    %div= event.activities.join(", ")
-    %div= event.technical_requirements.join(", ")
-    %div= event.fitness_requirement
-    %div= event.target_groups.join(", ")
-    %div= "#{event.ascent} / #{event.descent} / #{event.duration_in_hours}"
+      = render "show_details"
+
+      = render "show_buttons"
+
+    = render "show_notice"

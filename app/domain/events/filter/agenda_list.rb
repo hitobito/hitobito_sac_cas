@@ -9,6 +9,10 @@ class Events::Filter::AgendaList < Filter::List
   self.item_class = Event
   self.filter_chain_class = Events::Filter::Chain
 
+  def entries
+    super.preload(:translations, :dates)
+  end
+
   private
 
   def filtered_scope
@@ -30,5 +34,9 @@ class Events::Filter::AgendaList < Filter::List
 
   def event_type
     nil
+  end
+
+  def default_order(events)
+    events.list
   end
 end

@@ -1,20 +1,25 @@
-//  Copyright (c) 2026, Hitobito AG. This file is part of
-//  hitobito and licensed under the Affero General Public License version 3
+//  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+//  hitobito_sac_cas and licensed under the Affero General Public License version 3
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
 
 // Bootstrap
 @import "bootstrap/scss/functions";
+
+// Agenda-only color tokens, must come before bootstrap/scss/variables so
+// they can override Bootstrap's defaults for these pages only.
+@import "../stylesheets/agenda/variables";
+
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/maps";
 @import "bootstrap/scss/utilities";
 @import "bootstrap/scss/bootstrap";
 
-
-// Dependencies
-@import "~@fortawesome/fontawesome-free/css/all";
-@import "~tom-select/dist/css/tom-select.bootstrap5.css";
+// No FontAwesome import here: the agenda pages render every icon as an
+// inline SVG (see AgendaIcon#to_svg), not from an icon font.
 
 // Custom Stylesheets
-@import "../stylesheets/agenda";
+// ui-datepicker before agenda.scss, so agenda.scss's own datepicker
+// overrides (restyling it to match the rest of this page) win the cascade.
 @import "~stylesheets/hitobito/modules/ui-datepicker";
+@import "../stylesheets/agenda";

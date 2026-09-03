@@ -1,0 +1,13 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# Visual-only stub filters from the prototype with no backing data model
+-# yet (Merkmale, Status). Styled to match, but inert - disabled checkboxes
+-# and no field name, so nothing is ever submitted. Wire up for real once
+-# the underlying data model exists.
+
+= render "filter_checkbox_dropdown", disabled: true, field_name: nil,
+    label: t("agenda.filters.status"), icon_name: "calendar_check",
+    options: [[1, "Anmeldung offen"], [2, "Warteliste"], [3, "Ausgebucht"]], selected: []

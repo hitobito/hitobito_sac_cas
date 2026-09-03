@@ -1,0 +1,18 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# locals: field_name: string, value: Object, selected: [], string_format: Symbol
+- dom_id = "#{field_name.parameterize}-#{value.id}"
+- string_format ||= nil
+
+.form-check.agenda-filter-option
+  = check_box_tag(field_name,
+      value.id,
+      selected.include?(value.id),
+      id: dom_id,
+      class: "form-check-input",
+      data: {action: "change->sac-cas--checkbox-filter#toggleOption",
+             "sac-cas--checkbox-filter-target": "option"})
+  = label_tag(dom_id, value.to_s(string_format), class: "form-check-label")
