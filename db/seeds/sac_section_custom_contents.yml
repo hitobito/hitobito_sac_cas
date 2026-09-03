@@ -325,7 +325,7 @@ event_tour_canceled_weather:
     {section-name}
 
 event_tour_back_to_draft:
-  label: "Tour: E-Mail Zurück zu Entfwurf (intern)"
+  label: "Tour: E-Mail Zurück zu Entwurf (intern)"
   subject: "Statuswechsel der Tour {event-name} zurück zu Entwurf"
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name,
