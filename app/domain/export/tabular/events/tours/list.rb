@@ -28,7 +28,7 @@ module Export::Tabular::Events::Tours
     def add_tour_essential_labels(labels)
       labels[:season] = human_attribute(:season)
       labels[:summit] = human_attribute(:summit)
-      labels[:elevation] = I18n.t("global.elevation_label")
+      labels[:elevation] = human_attribute(:elevation)
       labels[:duration_in_hours] = human_attribute(:duration_in_hours)
       labels[:tourenportal_link] = human_attribute(:tourenportal_link)
       labels[:maps] = human_attribute(:maps)
@@ -44,7 +44,6 @@ module Export::Tabular::Events::Tours
     end
 
     def add_tour_price_labels(labels)
-      labels[:prices] = I18n.t("events.form_tabs.prices")
       labels[:price_special] = human_attribute(:price_special)
       labels[:price_member] = human_attribute(:price_member)
       labels[:price_regular] = human_attribute(:price_regular)

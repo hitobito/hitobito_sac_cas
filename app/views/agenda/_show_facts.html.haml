@@ -11,7 +11,7 @@
     = agenda_fact(:clock, t("agenda.list.tour_card.duration_label")) do
       = t("agenda.list.tour_card.duration", count: event.total_duration_days)
       - if event.tour? && event.duration_in_hours
-        = "/ #{event.duration_in_hours} #{t("agenda.show.hours_abbreviation")}"
+        = "/ #{event.duration_in_hours} #{t("global.hours_abbreviation")}"
 
   - if event.tour? && event.summit.present?
     = agenda_fact(:mountain, Event::Tour.human_attribute_name(:summit)) do
@@ -24,7 +24,7 @@
 
   - if event.tour? && (event.ascent || event.descent)
     = agenda_fact(:trending_up, t("agenda.show.elevation")) do
-      = tour_altitude_difference(event)
+      = event.elevation
 
   - if event.tour? && event.technical_requirements.any?
     = agenda_fact(:gauge, Event::TechnicalRequirement.model_name.human(count: 2)) do

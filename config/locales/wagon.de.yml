@@ -37,8 +37,9 @@ de:
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: h:mm
-    elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
+    meters_abbreviation: m
+    hours_abbreviation: h
 
   layouts:
     unauthorized:
@@ -559,6 +560,7 @@ de:
         descent: Abstieg
         duration: Zeitaufwand
         duration_in_hours: Zeitaufwand
+        elevation: Auf-/Abstieg (Hm)
         maps: Karten
         minimum_age: Mindestalter
         price_description: Beschreibung
@@ -1576,8 +1578,6 @@ de:
       back_to_overview: Zurück zur Übersicht
       leaders: Tourenleitung
       elevation: Höhenmeter
-      hours_abbreviation: h
-      meters_abbreviation: m
       price:
         price_special: Sektionsmitglieder
         price_member: SAC-Mitglieder
@@ -2078,17 +2078,16 @@ de:
   export/tabular/events/tours/list:
     leaders: Leitungsteam
     price_description: Kosten Hinweis
-
     group_names: "Organisatoren"
     duration: Zeitraum
     date: "Datum %{index}"
+
+    # youth columns
     male_count: Anzahl Teilnehmende Männer
     female_count: Anzahl Teilnehmende Frauen
     absent_count: Anzahl Nicht erschienene
     canceled_count: Anzahl Abgemeldete
     rejected_count: Anzahl Abgelehnte
-
-
 
   export/tabular/people/mitgliedschaft:
     attributes:

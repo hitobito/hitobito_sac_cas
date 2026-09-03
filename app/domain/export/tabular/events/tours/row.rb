@@ -11,10 +11,6 @@ module Export::Tabular::Events::Tours
       entry.season_label
     end
 
-    def elevation
-      [ascent_text, descent_text].compact.join(" / ")
-    end
-
     # All leaders and assistant leaders, formatted as "Vorname Nachname (Rolle)".
     def leaders
       leader_types = entry.role_types.select(&:leader?)
@@ -25,15 +21,6 @@ module Export::Tabular::Events::Tours
       end.join(", ")
     end
 
-    def prices
-      Event::Tour::PRICE_ATTRIBUTES.filter_map do |attr|
-        value = entry.send(attr)
-        next if value.blank?
-
-        "#{entry.class.human_attribute_name(attr)}: #{format_price(value)}"
-      end.join(", ")
-    end
-
     def price_special = format_price(entry.price_special)
 
     def price_member = format_price(entry.price_member)
@@ -41,7 +28,7 @@ module Export::Tabular::Events::Tours
     def price_regular = format_price(entry.price_regular)
 
     def activities
-      essential_children(entry.activities)
+      essentials_label_list(entry.activities)
     end
 
     def target_groups
@@ -49,29 +36,17 @@ module Export::Tabular::Events::Tours
     end
 
     def technical_requirements
-      essential_children(entry.technical_requirements)
+      essentials_label_list(entry.technical_requirements)
     end
 
     def traits
-      essential_children(entry.traits)
+      essentials_label_list(entry.traits)
     end
 
     private
 
-    def ascent_text
-      "#{entry.ascent} ↗" if entry.ascent.present?
-    end
-
-    def descent_text
-      "#{entry.descent} ↘" if entry.descent.present?
-    end
-
     def format_price(value)
       value&.to_s("F")
-    end
-
-    def essential_children(essentials)
-      essentials_label_list(essentials.reject(&:main?))
     end
 
     def essentials_label_list(essentials)

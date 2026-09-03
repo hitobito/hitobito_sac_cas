@@ -8,8 +8,7 @@
     = labeled_attr(entry, :summit)
 
   - if entry.ascent.present? || entry.descent.present?
-    = labeled t("global.elevation_label") do
-      = format_elevation(entry)
+    = labeled_attr(entry, :elevation)
 
   - entry.used?(:duration) do
     = present_labeled_attr(entry, :duration_in_hours)

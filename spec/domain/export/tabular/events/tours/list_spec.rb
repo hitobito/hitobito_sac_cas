@@ -18,7 +18,7 @@ describe Export::Tabular::Events::Tours::List do
   it "includes the tour specific columns in addition to the base event columns" do
     expect(list.attributes).to include(
       :id, :season, :summit, :elevation, :duration_in_hours, :tourenportal_link, :maps,
-      :alternative_route, :additional_info, :leaders, :minimum_participants, :prices,
+      :alternative_route, :additional_info, :leaders, :minimum_participants,
       :price_special, :price_member, :price_regular, :price_description,
       :activities, :target_groups, :fitness_requirement, :technical_requirements, :traits
     )
@@ -32,7 +32,6 @@ describe Export::Tabular::Events::Tours::List do
     expect(labels[:id]).to eq "Event-ID"
     expect(labels[:elevation]).to eq "Auf-/Abstieg (Hm)"
     expect(labels[:leaders]).to eq "Leitungsteam"
-    expect(labels[:prices]).to eq "Preise"
     expect(labels[:price_special]).to eq "Kosten SAC Sektionsmitglied"
     expect(labels[:price_member]).to eq "Kosten SAC-Mitglied (extern)"
     expect(labels[:price_regular]).to eq "Kosten nicht-SAC-Mitglied (Gast)"

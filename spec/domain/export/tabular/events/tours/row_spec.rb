@@ -20,7 +20,7 @@ describe Export::Tabular::Events::Tours::Row do
   end
 
   it "formats ascent and descent as one combined elevation value" do
-    expect(fetch(:elevation)).to eq "2872 ↗ / 911 ↘"
+    expect(fetch(:elevation)).to eq "2872m ↗ / 911m ↘"
   end
 
   it "returns an empty elevation when neither ascent nor descent are present" do
@@ -28,13 +28,6 @@ describe Export::Tabular::Events::Tours::Row do
     tour.descent = nil
 
     expect(fetch(:elevation)).to eq ""
-  end
-
-  it "joins the applicable prices with their label" do
-    expect(fetch(:prices)).to eq(
-      "Kosten SAC Sektionsmitglied: 50.0, Kosten SAC-Mitglied (extern): 60.0, " \
-      "Kosten nicht-SAC-Mitglied (Gast): 80.0"
-    )
   end
 
   it "formats the individual price columns without scientific notation" do
@@ -55,29 +48,6 @@ describe Export::Tabular::Events::Tours::Row do
       "#{people(:admin)} (#{leader.class.label})",
       "#{people(:mitglied)} (#{assistant_leader.class.label})"
     ])
-  end
-
-  it "only exports child activities, not the parent they belong to" do
-    tour.activities << event_activities(:wandern)
-
-    expect(fetch(:activities)).to eq event_activities(:wanderweg).label
-  end
-
-  it "only exports child technical requirements, not the parent they belong to" do
-    tour.technical_requirements << event_technical_requirements(:wandern)
-
-    expect(fetch(:technical_requirements)).to eq(
-      [event_technical_requirements(:wandern_t3), event_technical_requirements(:wandern_t4)]
-        .map(&:label).sort.join(", ")
-    )
-  end
-
-  it "only exports child traits, not the parent they belong to" do
-    tour.traits << event_traits(:travel)
-
-    expect(fetch(:traits)).to eq(
-      [event_traits(:public_transport), event_traits(:excursion)].map(&:label).sort.join(", ")
-    )
   end
 
   it "exports all target groups without filtering by category" do
