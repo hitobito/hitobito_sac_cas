@@ -41,9 +41,11 @@ describe Export::Tabular::Event::SacCourseFinances::LeaderCompensations do
 
     @other_course = Fabricate(:sac_open_course,
       kind: @other_kind,
-      dates_attributes: [{start_at: "2024-06-01", finish_at: "2024-06-04"}])
+      dates_attributes: [
+        {start_at: "2024-06-01", finish_at: "2024-06-03"},
+        {start_at: "2024-06-12 22:00"}
+      ])
     create_participation(@other_course,
-      actual_days: 3,
       roles: [
         :"Event::Course::Role::LeaderAspirant",
         :"Event::Course::Role::AssistantLeader" # assistant leader will be used before leader aspirant
@@ -67,7 +69,7 @@ describe Export::Tabular::Event::SacCourseFinances::LeaderCompensations do
     )
   end
 
-  def create_participation(event, actual_days:, roles: [:"Event::Course::Role::Participant"])
+  def create_participation(event, actual_days: nil, roles: [:"Event::Course::Role::Participant"])
     Fabricate(:event_participation,
       event: event,
       actual_days: actual_days,
@@ -78,7 +80,7 @@ describe Export::Tabular::Event::SacCourseFinances::LeaderCompensations do
     course_ids = [@course1.id, @other_course.id]
     expect(described_class.new.fetch(course_ids)).to eq(
       @course1.id => 5 * (50 + 60) + 4 * (45 + 55), # rate1 + rate22, leader + assistant_leader
-      @other_course.id => 3 * 50 # rate_other_kind
+      @other_course.id => 4 * 50 # rate_other_kind
     )
   end
 end
