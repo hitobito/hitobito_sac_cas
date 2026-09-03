@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -27,6 +27,11 @@ describe "event/activities/_form.html.haml" do
       expect(dom).to have_select "Übergeordnete Aktivität", visible: true
     end
 
+    it "renders the icon upload without a remove checkbox" do
+      expect(dom).to have_field "Icon hochladen", type: "file", visible: true
+      expect(dom).to have_no_field "Aktuelles Icon entfernen", visible: :all
+    end
+
     it "does not render technical requirement field" do
       expect(dom).to have_select "Technische Anforderung", visible: false
     end
@@ -37,6 +42,23 @@ describe "event/activities/_form.html.haml" do
 
     it "renders color and technical requirment fields" do
       expect(dom).to have_field "Farbe", visible: true
+    end
+
+    it "renders the icon upload" do
+      expect(dom).to have_field "Icon hochladen", type: "file", visible: true
+    end
+
+    it "renders no remove checkbox as long as no icon is attached" do
+      expect(dom).to have_no_field "Aktuelles Icon entfernen", visible: :all
+    end
+
+    context "with an attached icon" do
+      before { activity.icon.attach(fixture_file_upload("icon.svg", "image/svg+xml")) }
+
+      it "inlines the icon and renders its remove checkbox" do
+        expect(dom).to have_css "svg[stroke='currentColor']"
+        expect(dom).to have_field "Aktuelles Icon entfernen", visible: true
+      end
     end
 
     it "does not render parent and technical requirment fields" do
@@ -52,8 +74,9 @@ describe "event/activities/_form.html.haml" do
       expect(dom).to have_select "Technische Anforderung", visible: true
     end
 
-    it "does not render color and parent fields" do
+    it "does not render color, icon and parent fields" do
       expect(dom).to have_field "Farbe", visible: false
+      expect(dom).to have_field "Icon hochladen", type: "file", visible: false
       expect(dom).to have_no_select "Übergeordnete Aktivität"
     end
   end

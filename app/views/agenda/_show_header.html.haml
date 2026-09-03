@@ -10,7 +10,7 @@
         .d-flex.flex-wrap.align-items-center.gap-2
           - event.activities.each do |activity|
             %span.agenda-activity-header-icon{style: ("--activity-color: #{activity.parent.color}" if activity.parent&.color.present?)}
-              %span.agenda-activity-icon= agenda_icon(:mountain)
+              = agenda_activity_icon(activity)
             %span.agenda-tour-detail-type= activity.label.upcase
           - tour_activity_requirements(event).each do |activity, requirements|
             - requirements.each do |requirement|

@@ -51,6 +51,7 @@ de:
 
   errors:
     messages:
+      file_size_not_less_than: "darf nicht grösser als %{max} sein (Datei ist %{file_size} gross)"
       assert_old_enough: muss ein Geburtsdatum haben und mindestens %{minimum_years} Jahre alt sein
       too_young: muss %{minimum_years} Jahre oder älter sein
       too_old: muss %{maximum_years} Jahre oder jünger sein
@@ -432,6 +433,7 @@ de:
         subito: Subito
       event/activity:
         color: Farbe
+        icon: Icon
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
@@ -1640,6 +1642,10 @@ de:
     activities:
       form:
         help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
+        help_inline_icon: >-
+          Symbol für die Aktivität im Tourenprogramm (SVG, GIF, JPG oder PNG).
+        upload_icon: Icon hochladen
+        remove_icon: Aktuelles Icon entfernen
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen

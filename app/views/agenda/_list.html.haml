@@ -9,7 +9,7 @@
 
   - if events.any?
     - events.each do |event|
-      - cache event do
+      - cache([event, I18n.locale, Time.zone.today]) do
         = render "list_card", event: event
   - else
     = render "no_results", group: group

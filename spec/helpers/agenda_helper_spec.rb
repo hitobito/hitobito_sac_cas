@@ -22,6 +22,32 @@ describe AgendaHelper do
     end
   end
 
+  describe "#agenda_activity_icon" do
+    let(:activity) { event_activities(:wanderweg) }
+
+    it "is nothing as long as the main activity has no icon" do
+      expect(helper.agenda_activity_icon(activity)).to be_nil
+    end
+
+    it "inlines an uploaded svg, so that it takes the badge colour" do
+      activity.parent.icon.attach(fixture_file_upload("icon.svg", "image/svg+xml"))
+
+      markup = helper.agenda_activity_icon(activity)
+      expect(markup).to include 'class="agenda-activity-icon"'
+      expect(markup).to include 'class="agenda-icon"'
+      expect(markup).to include "currentColor"
+      expect(markup).not_to include "<img"
+    end
+
+    it "links an uploaded raster icon, which cannot take the badge colour" do
+      activity.parent.icon.attach(fixture_file_upload("icon.png", "image/png"))
+
+      dom = Capybara::Node::Simple.new(helper.agenda_activity_icon(activity))
+      expect(dom).to have_css ".agenda-activity-icon img.agenda-icon"
+      expect(dom.find("img")[:src]).to include "icon.png"
+    end
+  end
+
   describe "#tour_activity_requirements" do
     it "contains requirements of one activity" do
       expect(helper.tour_activity_requirements(tour)).to eq(

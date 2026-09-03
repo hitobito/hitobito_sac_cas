@@ -251,6 +251,20 @@ describe AgendaController do
           .to eq ["Kinder (KiBe)", "Familien (FaBe)", "Anreise mit ÖV", "Exkursion"]
       end
 
+      it "badges the activity without an icon as long as none is uploaded" do
+        expect(card).to have_css(".agenda-activity-badge", text: "WANDERWEG")
+        expect(card).to have_no_css(".agenda-activity-badge .agenda-activity-icon")
+      end
+
+      it "badges the activity with the main activity's own icon once uploaded" do
+        event_activities(:wandern).icon
+          .attach(fixture_file_upload("icon.svg", "image/svg+xml"))
+
+        icon = card.find(".agenda-activity-badge .agenda-activity-icon svg.agenda-icon")
+        expect(icon[:stroke]).to eq "currentColor"
+        expect(icon).to have_css("path[d='m8 3 4 8 5-5 5 15H2L8 3z']", visible: :all)
+      end
+
       it "renders the status badge" do
         expect(card).to have_css(".agenda-status-badge.agenda-status-application_open",
           text: "Anmeldung offen")
@@ -341,6 +355,15 @@ describe AgendaController do
 
         expect(header).to have_css(".agenda-tour-detail-type", text: "WANDERWEG")
         expect(header.all(".agenda-tour-detail-header-badge").map(&:text)).to eq ["\nT3\n", "\nT4\n"]
+      end
+
+      it "renders the main activity's own icon in the header once uploaded" do
+        event_activities(:wandern).icon
+          .attach(fixture_file_upload("icon.png", "image/png"))
+        detail # renders the page
+
+        expect(header).to have_css(".agenda-activity-icon img.agenda-icon")
+        expect(header).to have_no_css(".agenda-activity-icon svg.agenda-icon")
       end
 
       it "renders the status badge before the target group and trait badges" do

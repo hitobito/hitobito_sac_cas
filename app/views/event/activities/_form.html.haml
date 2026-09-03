@@ -1,4 +1,4 @@
-- #  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+- #  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 - #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 - #  or later. See the COPYING file at the top-level directory or at
 - #  https://github.com/hitobito/hitobito_sac_cas.
@@ -8,6 +8,14 @@
   %div{ data: { controller: "field-visibility", "field-visibility-observed-field-id-value": "event_activity_parent_id", "field-visibility-hide-when-present-value": "true", "field-visibility-clear-container-inputs-on-hide-value": "true" } }
     %div{ class: ("hidden" if entry.parent_id), data: { "field-visibility-target": "container" } }
       = f.labeled_short_field :color, help_inline: t('.help_inline_color')
+      - if upload_exists?(entry, :icon)
+        = f.labeled :icon do
+          .d-flex.align-items-center.gap-3
+            = event_activity_icon(entry, style: "width: 1rem; height: 1rem;")
+            = f.boolean_field :remove_icon, caption: t('.remove_icon'), class: 'form-check-input'
+      = f.labeled :icon, t('.upload_icon') do
+        = f.file_field :icon, accept: Event::Activity::ICON_CONTENT_TYPES.join(','), class: 'form-control form-control-sm'
+        = f.help_inline t('.help_inline_icon')
   = f.labeled_input_field :parent_id if entry.new_record?
   %div{ data: { controller: "field-visibility", "field-visibility-observed-field-id-value": "event_activity_parent_id", "field-visibility-show-when-present-value": "true", "field-visibility-clear-container-inputs-on-hide-value": "true" } }
     %div{ class: ("hidden" if entry.new_record? || entry.parent_id.nil?), data: { "field-visibility-target": "container" } }
