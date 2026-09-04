@@ -37,8 +37,9 @@ en:
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: "h:mm"
-    elevation_label: Auf-/Abstieg (Hm)
     token_invalid: Das verwendete Token ist nicht gültig.
+    meters_abbreviation: m
+    hours_abbreviation: h
 
   layouts:
     unauthorized:
@@ -395,11 +396,13 @@ en:
           evening: Evening
         states:
           created: Draft
+          draft: Entwurf
           application_open: Published
           application_paused: Registration paused
           application_closed: Registration completed
           assignment_closed: Allocation completed
           ready: Ready for implementation
+          published: Publiziert
           closed: Completed
           canceled: Canceled
         price_member: "Mitgliederpreis"
@@ -549,6 +552,7 @@ en:
         descent: Abstieg
         duration: Zeitaufwand
         duration_in_hours: Zeitaufwand
+        elevation: Auf-/Abstieg (Hm)
         maps: Karten
         minimum_age: Mindestalter
         price_description: Beschreibung
@@ -793,8 +797,13 @@ en:
               longer_than_event_duration: must not be longer than the planned course duration.
         event/tour:
           attributes:
+            activities:
+              must_be_child: müssen untergeordnete Aktivitäten sein
+            traits:
+              must_be_child: müssen untergeordnete Merkmale sein
             technical_requirements:
               not_matching_activities: müssen zu den ausgewählten Aktivitäten gehören
+              must_be_child: müssen untergeordnete Anforderungen sein
             base:
               report_must_be_closed: Tourenrapport muss vorgängig abgeschlossen werden
 
@@ -1511,22 +1520,67 @@ en:
     sac_statistics_info: >
       Wichtiges zum Export
   agenda:
-    date_filters:
+    header:
+      title: Tourenprogramm
+      brand: Schweizer Alpen-Club SAC
+    filters:
+      reset: Zurücksetzen
       since: Von
       until: Bis
-    application_filters:
-      application_open: "Anmeldefenster offen?"
-      places_available: "Freie Plätze verfügbar?"
+      date_placeholder: "TT.MM.JJJJ"
+      target_groups: Zielgruppe
+      activities: Aktivitäten
+      fitness_requirements: Kondition
+      traits: Merkmale
+      leader: Leitung
+      status: Status
+      search: Suche
+      search_placeholder: "Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen"
     index:
       title: "Agenda %{group_name}"
       select_group_alert: "Bitte geben Sie eine Sektion an, deren Anlässe angezeigt werden sollen"
       apply_filter: Filtern
       reset_filter: Filter zurücksetzen
+      reset_all_filters: Alle Filter zurücksetzen
     list:
-      show_details: Details anzeigen
+      view_list: Liste
+      view_table: Tabelle
+      export_csv: CSV exportieren
       tours_found:
         one: "%{count} Tour gefunden"
         other: "%{count} Touren gefunden"
+      no_results:
+        title: Keine Anlässe gefunden
+        subtitle: Passe deine Filter an oder setze sie zurück.
+      tour_card:
+        date: Datum
+        duration_label: Dauer
+        duration:
+          one: "%{count} Tag"
+          other: "%{count} Tage"
+        participants_label: Teilnehmende
+        participants_suffix: Teilnehmende
+        max_participants: "Max. %{max} Teilnehmende"
+        contact: Kontakt
+    show:
+      back_to_overview: Zurück zur Übersicht
+      leaders: Tourenleitung
+      elevation: Höhenmeter
+      price:
+        price_special: Sektionsmitglieder
+        price_member: SAC-Mitglieder
+        price_regular: Nicht-Mitglieder
+    buttons:
+      show_details: Details
+      apply: Anmelden
+      waiting_list: Warteliste
+    status:
+      published: Veröffentlicht
+      application_open: Anmeldung offen
+      application_waiting: Anmeldung offen (Warteliste)
+      application_closed: Anmeldung geschlossen
+      closed: Durchgeführt
+      canceled: Abgesagt
 
   event:
     application_market:
@@ -1974,6 +2028,20 @@ en:
       age_61__count: Anzahl TN Altersgruppe 61+ Jahre
       sac_member_count: Anzahl TN SAC Mitglieder
       non_sac_member_count: Anzahl TN Nicht SAC Mitglieder
+
+  export/tabular/events/tours/list:
+    leaders: Leitungsteam
+    price_description: Kosten Hinweis
+    group_names: "Organisatoren"
+    duration: Zeitraum
+    date: "Datum %{index}"
+
+    # youth columns
+    male_count: Anzahl Teilnehmende Männer
+    female_count: Anzahl Teilnehmende Frauen
+    absent_count: Anzahl Nicht erschienene
+    canceled_count: Anzahl Abgemeldete
+    rejected_count: Anzahl Abgelehnte
 
   export/tabular/people/mitgliedschaft:
     attributes:

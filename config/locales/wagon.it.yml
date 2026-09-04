@@ -37,8 +37,9 @@ it:
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: "h:mm"
-    elevation_label: Salita/discesa (metri di altitudine)
     token_invalid: Il token utilizzato non è valido.
+    meters_abbreviation: m
+    hours_abbreviation: h
 
   layouts:
     unauthorized:
@@ -397,11 +398,13 @@ it:
           evening: Sera
         states:
           created: Bozza
+          draft: Entwurf
           application_open: Pubblicato
           application_paused: Registrazione sospesa
           application_closed: Registrazione completata
           assignment_closed: Assegnazione completata
           ready: Pronto per lo svolgimento
+          published: Publiziert
           closed: Completato
           canceled: Cancellato
         price_member: "Prezzo per i soci"
@@ -551,6 +554,7 @@ it:
         descent: Discesa
         duration: Tempo richiesto
         duration_in_hours: Tempo richiesto
+        elevation: Auf-/Abstieg (Hm)
         maps: Mappe
         minimum_age: Età minima
         price_description: Descrizione del
@@ -796,8 +800,13 @@ it:
               longer_than_event_duration: non deve essere superiore alla durata del corso prevista.
         event/tour:
           attributes:
+            activities:
+              must_be_child: müssen untergeordnete Aktivitäten sein
+            traits:
+              must_be_child: müssen untergeordnete Merkmale sein
             technical_requirements:
               not_matching_activities: devono rientrare tra le attività selezionate
+              must_be_child: müssen untergeordnete Anforderungen sein
             base:
               report_must_be_closed: Il rapporto di viaggio deve essere compilato in anticipo
 
@@ -1578,23 +1587,68 @@ it:
     sac_statistics_info: >
       Informazioni importanti sull’esportazione
   agenda:
-    date_filters:
-      since: Da
-      until: Fino a
-    application_filters:
-      application_open: "La finestra di registrazione è aperta?"
-      places_available: "Ci sono posti disponibili?"
+    header:
+      title: Tourenprogramm
+      brand: Schweizer Alpen-Club SAC
+    filters:
+      reset: Zurücksetzen
+      since: Von
+      until: Bis
+      date_placeholder: "TT.MM.JJJJ"
+      target_groups: Zielgruppe
+      activities: Aktivitäten
+      fitness_requirements: Kondition
+      traits: Merkmale
+      leader: Leitung
+      status: Status
+      search: Suche
+      search_placeholder: "Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen"
     index:
       title: "Ordine del giorno %{group_name}"
       select_group_alert: Si prega di specificare una sezione di cui si desidera visualizzare gli eventi
       apply_filter: Filtra
       reset_filter: Reimposta i filtri
+      reset_all_filters: Alle Filter zurücksetzen
     list:
-      show_details: Mostra i dettagli
+      view_list: Liste
+      view_table: Tabelle
+      export_csv: CSV exportieren
       tours_found:
         one: "%{count} Tour trovato"
         many: "%{count} Itinerari trovati"
         other: "%{count} Itinerari trovati"
+      no_results:
+        title: Keine Anlässe gefunden
+        subtitle: Passe deine Filter an oder setze sie zurück.
+      tour_card:
+        date: Datum
+        duration_label: Dauer
+        duration:
+          one: "%{count} Tag"
+          other: "%{count} Tage"
+        participants_label: Teilnehmende
+        participants_suffix: Teilnehmende
+        max_participants: "Max. %{max} Teilnehmende"
+        contact: Kontakt
+    show:
+      back_to_overview: Zurück zur Übersicht
+      leaders: Tourenleitung
+      elevation: Höhenmeter
+      price:
+        price_special: Sektionsmitglieder
+        price_member: SAC-Mitglieder
+        price_regular: Nicht-Mitglieder
+    buttons:
+      show_details: Details
+      apply: Anmelden
+      waiting_list: Warteliste
+    status:
+      published: Veröffentlicht
+      application_open: Anmeldung offen
+      application_waiting: Anmeldung offen (Warteliste)
+      application_closed: Anmeldung geschlossen
+      closed: Durchgeführt
+      canceled: Abgesagt
 
   event:
     application_market:
@@ -2049,6 +2103,20 @@ it:
       age_61__count: Numero di partecipanti nella fascia d'età 61+ anni
       sac_member_count: "Numero di partecipanti, soci del SAC"
       non_sac_member_count: Numero di partecipanti non soci del CAS
+
+  export/tabular/events/tours/list:
+    leaders: Leitungsteam
+    price_description: Kosten Hinweis
+    group_names: "Organisatoren"
+    duration: Zeitraum
+    date: "Datum %{index}"
+
+    # youth columns
+    male_count: Anzahl Teilnehmende Männer
+    female_count: Anzahl Teilnehmende Frauen
+    absent_count: Anzahl Nicht erschienene
+    canceled_count: Anzahl Abgemeldete
+    rejected_count: Anzahl Abgelehnte
 
   export/tabular/people/mitgliedschaft:
     attributes:
