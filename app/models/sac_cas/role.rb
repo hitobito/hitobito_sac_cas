@@ -99,6 +99,6 @@ module SacCas::Role
   # Only FreigabeKomitee Pruefer has the actual association.
   # This method is used to be able to render the new role form.
   def approval_kind_ids
-    []
+    defined?(super) ? super : []
   end
 end

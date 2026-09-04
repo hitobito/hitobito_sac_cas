@@ -23,6 +23,10 @@ class Group::FreigabeKomitee < Group
   after_commit :create_approval_commission_responsibilities, if: :first_in_layer?, on: :create
 
   class Pruefer < ::Role
+    # This is necessary since FreigabeKomitee is indirectly referenced and loaded by
+    # the SacCas module (see above)
+    prepend SacCas::Role
+
     has_and_belongs_to_many :approval_kinds,
       class_name: "Event::ApprovalKind",
       join_table: :roles_event_approval_kinds,
