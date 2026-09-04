@@ -33,4 +33,38 @@ describe GroupAbility do
       end
     end
   end
+
+  describe "restricted groups" do
+    let(:funktionaere) { groups(:bluemlisalp_funktionaere) }
+
+    context "as sac admin" do
+      let(:person) { people(:admin) }
+
+      it { is_expected.to be_able_to(:create, Group::SektionsClubhuetten.new(parent: funktionaere)) }
+      it { is_expected.to be_able_to(:destroy, groups(:bluemlisalp_mitglieder)) }
+    end
+
+    context "as sektions admin" do
+      let(:person) do
+        Fabricate(Group::SektionsFunktionaere::Administration.name.to_sym,
+          group: funktionaere).person
+      end
+
+      it do
+        is_expected.not_to be_able_to(:create,
+          Group::SektionsClubhuetten.new(parent: funktionaere))
+      end
+      it { is_expected.not_to be_able_to(:destroy, groups(:bluemlisalp_mitglieder)) }
+    end
+
+    context "as schreibrecht" do
+      let(:huetten) { Group::Sektionshuetten.create!(parent: funktionaere) }
+      let(:person) do
+        Fabricate(Group::SektionsFunktionaere::Schreibrecht.name.to_sym, group: funktionaere).person
+      end
+
+      it { is_expected.not_to be_able_to(:create, Group::Sektionshuette.new(parent: huetten)) }
+      it { is_expected.not_to be_able_to(:destroy, Group::Sektionshuette.create!(name: "Testhütte", parent: huetten)) }
+    end
+  end
 end
