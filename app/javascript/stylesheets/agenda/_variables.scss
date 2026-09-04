@@ -25,18 +25,16 @@ $agenda-gray: #e9e9e9;
 $agenda-gray-light: #f4f4f4;
 $agenda-snow: #f9f9f9;
 $agenda-placeholder: #bfbfbf;
+$white: #ffffff;
 
 $primary: $agenda-red;
 $secondary: $agenda-gray-dark;
+
 $body-color: $agenda-black;
 $body-bg: $agenda-snow;
 $border-color: $agenda-gray;
 $link-color: $agenda-red;
 $link-hover-color: $agenda-red-hover;
-
-$input-bg: #fff;
-$input-border-color: $agenda-gray;
-
 $text-muted: $agenda-gray-dark;
 
 $border-radius: 0;
@@ -46,6 +44,25 @@ $border-radius-lg: 0;
 $box-shadow-sm: 0 1px 2px 0 rgba(#000, 0.05);
 
 $focus-ring-color: rgba($agenda-red, 0.25);
+
+$font-family-sans-serif:
+  Frutiger,
+  "Frutiger LT Std",
+  ui-sans-serif,
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Roboto,
+  Helvetica,
+  Arial,
+  sans-serif;
+$font-size-base: 0.875rem; // 14px
+$line-height-base: 1.5;
+$font-weight-base: 300;
+$headings-font-weight: 700;
+
+$input-bg: $white;
+$input-border-color: $agenda-gray;
 
 $input-focus-border-color: $agenda-red;
 $input-focus-box-shadow: 0 0 0 2px rgba($agenda-red, 0.4);
@@ -65,18 +82,7 @@ $form-check-input-indeterminate-bg-color: $input-bg;
 $form-check-input-indeterminate-border-color: $agenda-red;
 $form-check-input-indeterminate-color: $agenda-red;
 
-$font-family-sans-serif:
-  Frutiger,
-  "Frutiger LT Std",
-  ui-sans-serif,
-  system-ui,
-  -apple-system,
-  "Segoe UI",
-  Roboto,
-  Helvetica,
-  Arial,
-  sans-serif;
-$font-size-base: 0.875rem; // 14px
-$line-height-base: 1.5;
-$font-weight-base: 300;
-$headings-font-weight: 700;
+$tooltip-bg: $white;
+$tooltip-color: $text-muted;
+$tooltip-opacity: 1;
+$tooltip-max-width: 300px;

@@ -3,10 +3,8 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito_sac_cas.
 
-.d-flex.flex-wrap.align-items-center.gap-2
-  = agenda_status_badge(event)
-  - if event.tour?
-    - event.target_groups.each do |target_group|
-      = agenda_outline_badge(target_group)
-    - event.traits.each do |trait|
-      = agenda_outline_badge(trait)
+%strong.text-black= activity.technical_requirement.label
+%br
+= requirement.label
+–
+= requirement.description
