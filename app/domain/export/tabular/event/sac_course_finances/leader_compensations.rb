@@ -7,22 +7,23 @@
 
 class Export::Tabular::Event::SacCourseFinances
   class LeaderCompensations
-    def fetch(course_ids)
+    def fetch(course_ids) # rubocop:disable Metrics/MethodLength
       CourseCompensationRate
-        .with(event_starts:)
+        .with(event_starts:, event_durations:)
         .joins(course_compensation_category: {
           event_kinds: {
             events: [participations: :roles]
           }
         })
         .joins("INNER JOIN event_starts ON event_starts.event_id = events.id")
+        .joins("INNER JOIN event_durations ON event_durations.event_id = events.id")
         .where(course_compensation_categories: {leader_settlement: true, kind: :day})
         .where(events: {id: course_ids})
         .where("(event_starts.date_on >= valid_from) AND " \
           "(valid_to IS NULL OR valid_to >= event_starts.date_on)")
         .where(event_roles: {type: highest_leader_role})
         .group("events.id")
-        .sum("#{rate_column} * event_participations.actual_days")
+        .sum("#{rate_column} * COALESCE(event_participations.actual_days, event_durations.days)")
     end
 
     private
@@ -31,6 +32,14 @@ class Export::Tabular::Event::SacCourseFinances
       Event::Date
         .group("event_id")
         .select("event_id, MIN(DATE(start_at)) AS date_on")
+    end
+
+    def event_durations
+      Event::Date
+        .group("event_id")
+        .select("event_id, " \
+          "SUM(CASE WHEN finish_at IS NULL THEN 1 " \
+          "ELSE DATE(finish_at) - DATE(start_at) + 1 END) AS days")
     end
 
     def highest_leader_role
