@@ -33,6 +33,7 @@ class AgendaController < ApplicationController
   end
 
   def show
+    preload_tour_assocs([event]) if event.tour?
   end
 
   private
@@ -61,7 +62,7 @@ class AgendaController < ApplicationController
     return unless group
 
     load_event_leaders(events)
-    preload_tour_assocs
+    preload_tour_assocs(events.filter(&:tour?))
   end
 
   def load_event_leaders(events)
@@ -75,12 +76,13 @@ class AgendaController < ApplicationController
     @event_leaders[event.id]
   end
 
-  def preload_tour_assocs
-    tours = events.filter(&:tour?)
+  def preload_tour_assocs(tours)
     ActiveRecord::Associations::Preloader.new(
       records: tours,
       associations: [
-        {activities: [:translations, :parent, :technical_requirement]},
+        {activities: [:translations,
+          {parent: :icon_attachment,
+           technical_requirement: :translations}]},
         {target_groups: :translations},
         {technical_requirements: :translations},
         {fitness_requirement: :translations},

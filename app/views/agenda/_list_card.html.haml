@@ -19,9 +19,12 @@
       %h3.mb-2
         = link_to event.name, agenda_show_path(group, event)
 
-      - outline_badges = agenda_outline_badges(event)
-      - if outline_badges
-        .d-flex.flex-wrap.align-items-center.gap-2.mt-3= outline_badges
+      - if event.tour?
+        .d-flex.flex-wrap.align-items-center.gap-2.mt-3
+          - event.target_groups.each do |target_group|
+            = agenda_outline_badge(target_group)
+          - event.traits.each do |trait|
+            = agenda_outline_badge(trait)
 
       - status_badge = agenda_status_badge(event)
       - if status_badge
@@ -38,15 +41,26 @@
 
       - if event.tour?
         - if event.fitness_requirement
-          = agenda_meta_row(:activity) do
+          - tooltip = capture do
+            = render "tooltip_fitness_requirement", requirement: event.fitness_requirement
+          = agenda_meta_row(:activity, tooltip:) do
             %span
               = t("agenda.filters.fitness_requirements")
               %span.agenda-tour-card-value.fw-bold= event.fitness_requirement.short_label
 
         - if event.technical_requirements.any?
           - tour_activity_requirements(event).each do |activity, requirements|
-            = agenda_meta_row(:gauge) do
-              %span.agenda-requirement-badge{style: ("--bs-badge-color: #{activity.parent.color}; --bs-badge-bg-color: #{activity.parent.color}33;" if activity.parent&.color.present?)}
+            - tooltip = capture do
+              %strong.text-black= activity.technical_requirement.label
+              %br
+              - requirements.select(&:description?).each do |r|
+                = r.label
+                –
+                = r.description
+                %br
+            - style = "--bs-badge-color: #{activity.parent.color}; --bs-badge-bg-color: #{activity.parent.color}33;" if activity.parent&.color.present?
+            = agenda_meta_row(:gauge, tooltip:) do
+              %span.agenda-requirement-badge{style:}
                 = requirements.map(&:label).join(", ")
 
         - if event.ascent || event.descent
