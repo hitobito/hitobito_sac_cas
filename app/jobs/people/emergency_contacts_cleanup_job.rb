@@ -33,9 +33,8 @@ class People::EmergencyContactsCleanupJob < RecurringJob
   end
 
   def people_ids_of_current_or_future_events
-    Event::Participation.joins(event: :dates)
+    Event::Participation.upcoming
       .where(participant_type: Person.sti_name)
-      .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff", cutoff: cutoff)
       .select(:participant_id)
   end
 

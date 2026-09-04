@@ -17,88 +17,59 @@ module Migrations
       "Notfallkontakt 2 - Name und Telefonnummer" => :emergency_contact_2_name
     }.freeze
 
-    def initialize(template_ids: [])
-      @template_ids = Array(template_ids)
-    end
-
-    def list_templates
-      legacy_templates.map do |template|
-        [template.id, template.group_id, template.default, template.event_type, de_text(template)]
-      end
-    end
-
     def copy_answers
-      updated = 0
-      Event::Question.transaction do
-        legacy_templates.each do |template|
-          updated += copy_answers_of(derived_question_ids(template), target_attribute(template))
-        end
+      legacy_questions.each do |question|
+        copy_answers_of(question, target_attribute(question))
       end
-      updated
     end
 
     def remove_legacy_questions
-      Event::Question.transaction do
-        template_ids = legacy_templates.map(&:id)
-        derived_ids = Event::Question.where(template_id: template_ids).pluck(:id)
+      question_ids = legacy_questions.pluck(:id)
 
-        destroy_questions(derived_ids)
-        Event::QuestionTemplate.where(id: template_ids).delete_all
-        destroy_questions(legacy_templates.map(&:question_id))
-      end
+      destroy_questions(question_ids)
     end
 
     private
 
-    def copy_answers_of(question_ids, attr)
-      updated = 0
-      answers_for(question_ids).each do |answer|
+    def copy_answers_of(question, attr)
+      answers_for(question).each do |answer|
         person = answer.participation.participant
         next if person[attr].present?
 
         person.update_columns(attr => answer.answer.to_s)
-        updated += 1
       end
-      updated
     end
 
-    def answers_for(question_ids)
+    def answers_for(question)
       Event::Answer.joins(participation: :event)
-        .where(question_id: question_ids)
+        .where(question: question)
         .where(event_participations: {participant_type: Person.sti_name})
         .where("events.number LIKE ?", "#{NUMBER_PREFIX}%")
-        .order(Arel.sql("events.number DESC"))
     end
 
-    def derived_question_ids(template)
-      Event::Question.where(template_id: template.id).select(:id)
+    def target_attribute(question)
+      LEGACY_QUESTIONS.fetch(de_text(question))
     end
 
-    def target_attribute(template)
-      LEGACY_QUESTIONS.fetch(de_text(template))
+    def de_text(question)
+      question.translations.where(locale: "de").pick(:question)
     end
 
-    def de_text(template)
-      template.question.translations.where(locale: "de").pick(:question)
+    def legacy_questions
+      @legacy_questions ||= questions_scope.to_a
     end
 
-    def legacy_templates
-      @legacy_templates ||= template_scope.to_a
-    end
-
-    def template_scope
-      scope = Event::QuestionTemplate.joins(question: :translations)
+    def questions_scope
+      Event::Question.joins(:translations).left_joins(:event)
         .where(event_question_translations: {locale: "de"})
-      if @template_ids.present?
-        scope.where(id: @template_ids)
-      else
-        scope.where(event_question_translations: {question: LEGACY_QUESTIONS.keys})
-      end
+        .where(event_question_translations: {question: LEGACY_QUESTIONS.keys})
+        .order(Arel.sql("events.number DESC"))
     end
 
     def destroy_questions(ids)
       return if ids.empty?
 
+      Event::QuestionTemplate.where(question_id: ids).delete_all
       Event::Answer.where(question_id: ids).delete_all
       Event::QuestionVisibility.where(question_id: ids).delete_all
       Event::Question::Translation.where(event_question_id: ids).delete_all

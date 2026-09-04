@@ -26,25 +26,6 @@ describe Migrations::EmergencyContactAnswersMigrator do
     question
   end
 
-  describe "#list_templates" do
-    it "lists id, group, default flag and german text of the legacy templates" do
-      rows = migrator.list_templates
-
-      expect(rows.map(&:first))
-        .to contain_exactly(event_question_templates(:notfallkontakt_1_template).id,
-          event_question_templates(:notfallkontakt_2_template).id)
-      expect(rows.map(&:last)).to all(start_with "Notfallkontakt")
-    end
-
-    it "only lists the given template ids" do
-      rows = described_class
-        .new(template_ids: [event_question_templates(:notfallkontakt_1_template).id]).list_templates
-
-      expect(rows.size).to eq(1)
-      expect(rows.first.last).to eq("Notfallkontakt 1 - Name und Telefonnummer")
-    end
-  end
-
   describe "#copy_answers" do
     it "copies the whole answer text into the name column of contact 1" do
       create_course_with_answer(number: "2027-001", answer_text: "Tina Muster / 079 111 22 33", contact: 1)
@@ -61,12 +42,6 @@ describe Migrations::EmergencyContactAnswersMigrator do
       expect { migrator.copy_answers }.to change { person.reload.emergency_contact_2_name }
         .from(nil).to("Xanthippe Muster / 079 444 55 66")
       expect(person.emergency_contact_2_phone).to be_nil
-    end
-
-    it "returns the number of updated entries" do
-      create_course_with_answer(number: "2027-001", answer_text: "Tina Muster", contact: 1)
-
-      expect(migrator.copy_answers).to eq(1)
     end
 
     it "does not copy answers of courses with a different number prefix" do
@@ -122,21 +97,6 @@ describe Migrations::EmergencyContactAnswersMigrator do
       expect(unrelated_answer.reload.answer).to eq "Unverändert"
       expect(Event::Question.exists?(unrelated_question.id)).to be true
       expect(Event::QuestionTemplate.exists?(unrelated_template.id)).to be true
-    end
-
-    it "only processes the given template ids" do
-      create_course_with_answer(number: "2027-001", answer_text: "Tina Muster", contact: 1)
-      create_course_with_answer(number: "2027-002", answer_text: "Xanthippe Muster", contact: 2)
-
-      scoped = described_class
-        .new(template_ids: [event_question_templates(:notfallkontakt_1_template).id])
-      scoped.copy_answers
-      scoped.remove_legacy_questions
-
-      expect(person.reload.emergency_contact_1_name).to eq "Tina Muster"
-      expect(person.reload.emergency_contact_2_name).to be_nil
-      expect(Event::QuestionTemplate.exists?(event_question_templates(:notfallkontakt_2_template).id))
-        .to be true
     end
   end
 end

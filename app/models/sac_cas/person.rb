@@ -212,9 +212,8 @@ module SacCas::Person
 
   def future_course_participation?
     event_participations
-      .joins(event: :dates)
+      .upcoming
       .where(events: {type: Event::Course.sti_name})
-      .where("event_dates.start_at > :now OR event_dates.finish_at > :now", now: Time.zone.now)
       .exists?
   end
 
