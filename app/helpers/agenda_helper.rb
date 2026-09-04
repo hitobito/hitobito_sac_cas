@@ -13,10 +13,16 @@ module AgendaHelper
   def agenda_activity_icon(activity)
     return unless activity.parent&.icon&.attached?
 
+    options = {"aria-hidden": "true"}
+    if activity.description?
+      options[:title] =
+        "<strong class='text-black'>#{activity.label}</strong><br>#{activity.description}"
+      options[:data] = {bs_toggle: :tooltip, bs_placement: :top, bs_html: "true"}
+    end
     content_tag(:span,
       event_activity_icon(activity.parent, class: "agenda-icon"),
       class: "agenda-activity-icon",
-      "aria-hidden": "true")
+      **options)
   end
 
   def tour_accent_color(event)
@@ -51,8 +57,15 @@ module AgendaHelper
     end
   end
 
-  def agenda_meta_row(icon, &block)
-    content_tag(:span, class: "agenda-tour-card-meta-row") do
+  def agenda_meta_row(icon, tooltip: nil, &block)
+    options = {}
+    if tooltip.present?
+      options = {
+        title: tooltip,
+        data: {bs_toggle: :tooltip, bs_placement: :top, bs_html: true}
+      }
+    end
+    content_tag(:span, class: "agenda-tour-card-meta-row", **options) do
       agenda_icon(icon) + capture(&block)
     end
   end
@@ -63,7 +76,6 @@ module AgendaHelper
     safe_join(values, tag.br + "\n")
   end
 
-  # One formatted label per date of the event, e.g. "Mo 02.03.2026".
   def agenda_date_labels(event)
     separator = " - "
     event.dates.map do |date|
@@ -81,24 +93,18 @@ module AgendaHelper
     end
   end
 
-  # "3/12", "3" or nil - the booked places, but only for events that publish
-  # their booking info at all.
   def agenda_participant_count(event)
     return unless event.display_booking_info?
 
     [event.participant_count, event.maximum_participants].compact.join("/")
   end
 
-  # The participant limit for events that don't publish their booking info,
-  # nil for those that do or that have no limit worth mentioning.
   def agenda_max_participants_label(event)
     return if event.display_booking_info? || !event.maximum_participants?
 
     t("agenda.list.tour_card.max_participants", max: event.maximum_participants)
   end
 
-  # The event's current status as a badge, nil for the event types that have
-  # no agenda status at all.
   def agenda_status_badge(event)
     status = event.agenda_status
     return unless status
@@ -107,20 +113,15 @@ module AgendaHelper
       class: "agenda-status-badge agenda-status-#{status}")
   end
 
-  # The tour's target groups and traits as outline badges. Just the badges,
-  # without a row around them: the two agenda views place them differently
-  # relative to the status badge.
-  def agenda_outline_badges(event)
-    return unless event.tour?
-
-    safe_join((event.target_groups + event.traits)
-      .map { |entry| tag.span(entry.label, class: "agenda-badge-outline") }, "\n")
+  def agenda_outline_badge(essential)
+    tag.span(
+      essential.label,
+      class: "agenda-badge-outline",
+      title: essential.description,
+      data: {bs_toggle: :tooltip, bs_placement: :bottom}
+    )
   end
 
-  # The call to action for an event one can still apply for, nil otherwise.
-  # Note that this asks the event about its places rather than reading
-  # #agenda_status: a course reports :application_waiting whenever it is
-  # full, no matter whether it publishes its booking info.
   def agenda_apply_button(event, group)
     return unless event.application_possible?
 
@@ -130,10 +131,6 @@ module AgendaHelper
       class: "btn btn-sm agenda-btn-cta agenda-btn-positive"
   end
 
-  # The application deadline or, as long as the application has not opened
-  # yet, the opening date - whichever of the two is currently relevant.
-  # Returns the parts rather than a finished string because the two agenda
-  # views emphasize them differently.
   def agenda_application_deadline(event)
     if event.application_possible? && event.application_closing_at.present?
       {label: Event.human_attribute_name(:application_closing_at),
@@ -144,25 +141,14 @@ module AgendaHelper
     end
   end
 
-  # The leader/co-leader people for an event (never participants/helpers),
-  # in role order - there's no ready-made "leaders" association (the
-  # `leaders` attr_accessor on Event::Tour is for Event::TourResource, not
-  # a DB relation), so this goes through the same Participatable API the
-  # rest of the app uses to look up people by role kind.
   def event_leader_participations(event)
     event.participations_for(*event.class.leader_types)
   end
 
-  # "Viviane Fischer" -> "VF", matching the prototype's fallback avatar for
-  # a leader with no picture.
   def person_initials(person)
     person.to_s.split.filter_map { |word| word[0] }.first(2).join.upcase
   end
 
-  # Every price category this tour currently charges, labelled for public
-  # display - Event::Tour::PRICE_ATTRIBUTES' own human_attribute_name
-  # (e.g. "Kosten SAC-Mitglied (extern)") is written for the edit form, not
-  # an inline cost list, hence the shorter agenda-scoped labels.
   def tour_price_categories(event)
     return [] unless event.tour?
 

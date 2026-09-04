@@ -128,18 +128,12 @@ describe AgendaHelper do
     end
   end
 
-  describe "#agenda_outline_badges" do
-    it "is one badge per target group and trait, target groups first" do
-      expect(helper.agenda_outline_badges(tour).split("\n")).to eq [
-        '<span class="agenda-badge-outline">Kinder (KiBe)</span>',
-        '<span class="agenda-badge-outline">Familien (FaBe)</span>',
-        '<span class="agenda-badge-outline">Anreise mit ÖV</span>',
-        '<span class="agenda-badge-outline">Exkursion</span>'
-      ]
-    end
-
-    it "is nil for an event that is not a tour" do
-      expect(helper.agenda_outline_badges(course)).to be_nil
+  describe "#agenda_outline_badge" do
+    it "renders badge with tooltip" do
+      expect(helper.agenda_outline_badge(tour.target_groups.first)).to eq(
+        '<span class="agenda-badge-outline" title="Kinderprogramm" data-bs-toggle="tooltip" ' \
+         'data-bs-placement="bottom">Kinder (KiBe)</span>'
+      )
     end
   end
 

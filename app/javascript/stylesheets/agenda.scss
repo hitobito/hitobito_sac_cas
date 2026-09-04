@@ -764,6 +764,17 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
   color: $agenda-orange;
 }
 
+.tooltip-inner {
+  border: solid $agenda-red 1px;
+  text-align: left;
+}
+
+.tooltip {
+  .tooltip-arrow {
+    display: none;
+  }
+}
+
 .ui-datepicker {
   background-color: $white;
   border: 1px solid $agenda-gray;
