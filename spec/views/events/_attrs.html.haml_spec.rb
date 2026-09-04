@@ -8,10 +8,10 @@ require "spec_helper"
 describe "events/_attrs.html.haml" do
   include FormatHelper
 
-  let(:dom) {
+  let(:dom) do
     render
     Capybara::Node::Simple.new(@rendered)
-  }
+  end
   let(:person) { Person.new }
 
   before do
@@ -21,9 +21,10 @@ describe "events/_attrs.html.haml" do
   end
 
   context "event" do
-    let(:event) { Fabricate.build(:event) }
+    let(:event) { Fabricate(:event) }
 
     before do
+      assign(:group, event.groups.first)
       allow(view).to receive(:course?).and_return(false)
       allow(view).to receive(:tour?).and_return(false)
     end
@@ -39,9 +40,10 @@ describe "events/_attrs.html.haml" do
   end
 
   context "Event::Course" do
-    let(:event) { Fabricate.build(:course, minimum_age: 10, canceled_reason: :weather) }
+    let(:event) { Fabricate(:course, minimum_age: 10, canceled_reason: :weather) }
 
     before do
+      assign(:group, event.groups.first)
       allow(view).to receive(:course?).and_return(true)
       allow(view).to receive(:tour?).and_return(false)
     end

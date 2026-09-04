@@ -154,6 +154,10 @@ class Event::Tour < Event # rubocop:disable Metrics/ClassLength
     true # people may always apply, even if there are no available places
   end
 
+  def application_period_open?
+    published? && super
+  end
+
   def tentative_application_possible?
     tentative_applications?
   end

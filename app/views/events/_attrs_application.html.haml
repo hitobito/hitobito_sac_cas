@@ -14,6 +14,8 @@
     - entry.used?(:application_closing_at) do
       = present_labeled_attr(entry, :application_closing_at)
     = labeled_attr(entry, :booking_info)
+    - application_url = contact_data_group_event_participations_url(@group, entry.id)
+    = labeled(t('events.show.application_link'), link_to(application_url, application_url))
     - entry.used?(:external_applications) do
       = labeled(Event.human_attribute_name(:external_applications), entry.external_application_link(@group))
 

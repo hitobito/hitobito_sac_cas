@@ -88,7 +88,7 @@ describe Event::ParticipationContactDatasController do
   end
 
   context "tour" do
-    let(:event) { events(:section_tour) }
+    let(:event) { events(:section_tour).tap { _1.update_column(:state, :published) } }
 
     context "GET#edit" do
       render_views

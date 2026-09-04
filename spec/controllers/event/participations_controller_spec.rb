@@ -954,6 +954,8 @@ describe Event::ParticipationsController do
       context "pricing" do
         let(:participation) { assigns(:participation) }
 
+        before { event.update_column(:state, :published) }
+
         context "member" do
           let(:user) { people(:mitglied) }
 
