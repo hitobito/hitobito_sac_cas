@@ -68,6 +68,7 @@ describe Event::Course do
 
     it "has expected removals" do
       expect(described_class.used_attributes).not_to include(:cost)
+      expect(described_class.used_attributes).not_to include(:guest_limit)
     end
   end
 

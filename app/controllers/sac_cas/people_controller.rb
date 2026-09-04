@@ -16,6 +16,7 @@ module SacCas::PeopleController
     before_update :check_birthday, :check_email
 
     permitted_attrs << :correspondence << :advertising << :canton
+    permitted_attrs.concat(Person::EMERGENCY_CONTACTS)
   end
 
   def list_filter_args

@@ -26,6 +26,11 @@ describe "Event Signup", :js do
     find(:option, text: "Vereinigte Staaten").click
   end
 
+  def complete_emergency_contacts
+    fill_in "event_participation_contact_data_emergency_contact_1_name", with: "Tina #{admin.last_name}"
+    fill_in "event_participation_contact_data_emergency_contact_1_phone", with: "+41 79 000 00 00"
+  end
+
   context "event" do
     let(:group) { groups(:geschaeftsstelle) }
     let(:event) { Fabricate(:event, groups: [group]) }
@@ -61,6 +66,7 @@ describe "Event Signup", :js do
       expect(page).to have_css ".stepwizard-step.is-current", text: "Kontaktangaben"
       expect(page).to have_text "CHF 20"
       complete_contact_data
+      complete_emergency_contacts
       first(:button, "Weiter").click
       expect(page).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
       first(:button, "Zurück").click
@@ -95,6 +101,7 @@ describe "Event Signup", :js do
         expect(page).to have_css ".stepwizard-step", count: 4
         expect(page).to have_css ".stepwizard-step.is-current", text: "Kontaktangaben"
         complete_contact_data
+        complete_emergency_contacts
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
         first(:button, "Weiter").click

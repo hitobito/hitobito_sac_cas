@@ -22,6 +22,8 @@ describe Event::ParticipationContactData do
       town: "Zürich",
       country: "CH",
       birthday: "01.01.1980",
+      emergency_contact_1_name: "Tina Muster",
+      emergency_contact_1_phone: "+41 76 123 45 67",
       phone_number_mobile_attributes: {
         number: "+41 79 123 45 56"
       }
@@ -50,6 +52,71 @@ describe Event::ParticipationContactData do
         "Mobiltelefon ist nicht gültig"
       ]
       expect(contact_data.person.phone_number_mobile).to have(1).error_on(:number)
+    end
+  end
+
+  context "emergency contacts" do
+    let(:attrs_without_emergency_contact) {
+      attrs.except("emergency_contact_1_name", "emergency_contact_1_phone")
+    }
+
+    it "requires first emergency contact for courses" do
+      contact_data = build(attrs_without_emergency_contact)
+
+      expect(contact_data).not_to be_valid
+      expect(contact_data.errors[:emergency_contact_1_name]).to eq ["muss ausgefüllt werden"]
+      expect(contact_data.errors[:emergency_contact_1_phone]).to eq ["muss ausgefüllt werden"]
+    end
+
+    it "requires first emergency contact for tours" do
+      event = Fabricate.build(:sac_tour)
+      contact_data = Event::ParticipationContactData.new(event, person.clone,
+        attrs_without_emergency_contact)
+
+      expect(contact_data).not_to be_valid
+      expect(contact_data.errors[:emergency_contact_1_name]).to be_present
+      expect(contact_data.errors[:emergency_contact_1_phone]).to be_present
+    end
+
+    it "does not require emergency contacts for other events" do
+      event = Fabricate.build(:event)
+      contact_data = Event::ParticipationContactData.new(event, person.clone,
+        attrs_without_emergency_contact)
+
+      expect(contact_data).to be_valid
+    end
+
+    it "does not require second emergency contact" do
+      contact_data = build(attrs)
+      expect(person.emergency_contact_2_name).to be_blank
+
+      expect(contact_data).to be_valid
+    end
+
+    it "validates the emergency contact phone number" do
+      contact_data = build(attrs.merge(emergency_contact_1_phone: "abc"))
+
+      expect(contact_data).not_to be_valid
+      expect(contact_data.person.errors[:emergency_contact_1_phone]).to include("ist nicht gültig")
+    end
+
+    describe "#mark_as_required?" do
+      it "marks first emergency contact as required for courses" do
+        contact_data = build(attrs)
+
+        expect(contact_data.mark_as_required?(:emergency_contact_1_name)).to be true
+        expect(contact_data.mark_as_required?(:emergency_contact_1_phone)).to be true
+        expect(contact_data.mark_as_required?(:emergency_contact_2_name)).to be false
+        expect(contact_data.mark_as_required?(:emergency_contact_2_phone)).to be false
+      end
+
+      it "does not mark emergency contacts as required for other events" do
+        event = Fabricate.build(:event)
+        contact_data = Event::ParticipationContactData.new(event, person.clone, attrs)
+
+        expect(contact_data.mark_as_required?(:emergency_contact_1_name)).to be false
+        expect(contact_data.mark_as_required?(:phone_numbers)).to be true
+      end
     end
   end
 

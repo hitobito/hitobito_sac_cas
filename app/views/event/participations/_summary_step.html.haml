@@ -19,7 +19,9 @@
     = "#{Wizards::Steps::Signup::PersonFields.human_attribute_name(:phone_number)}: #{entry.person.phone_numbers.first&.number}"
     %br
     = "#{Wizards::Steps::Signup::PersonFields.human_attribute_name(:email)}: #{entry.person.email}"
-
+  - if @event.needs_emergency_contact?
+    .mb-2
+      = "#{Person.human_attribute_name(:emergency_contact_1)}: #{person_emergency_contact(entry.person, :emergency_contact_1)}"
 
 = section(t('event.participations.step_wizard.answers_title')) do
   %dl

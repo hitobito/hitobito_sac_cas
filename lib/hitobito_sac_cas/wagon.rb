@@ -51,6 +51,7 @@ module HitobitoSacCas
         Qualifications::ExpirationMailerJob,
         People::CacheMembershipYearsJob,
         People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob,
+        People::EmergencyContactsCleanupJob,
         Roles::TerminateTourenleiterJob,
         Roles::TerminateStaleNeuanmeldungenNvJob,
         Invoices::Abacus::CreateYearlyAboAlpenInvoicesJob

@@ -45,4 +45,34 @@ describe "event/participations/_summary_step.html.haml" do
       expect(dom).not_to have_css "input[name='event_participation[terms_and_conditions]']"
     end
   end
+
+  context "emergency contact" do
+    let(:event) { events(:top_course) }
+    let(:contact_name) { "Tina #{people(:mitglied).last_name}" }
+
+    before do
+      people(:mitglied).update!(
+        emergency_contact_1_name: contact_name,
+        emergency_contact_1_phone: "+41 79 123 45 67"
+      )
+    end
+
+    it "renders first emergency contact for courses" do
+      expect(dom).to have_text "Notfallkontakt 1: #{contact_name} / +41 79 123 45 67"
+      expect(dom).to have_link "+41 79 123 45 67", href: "tel:+41791234567"
+    end
+
+    it "renders first emergency contact for tours" do
+      assign(:event, events(:section_tour).decorate)
+
+      expect(dom).to have_text "Notfallkontakt 1: #{contact_name} / +41 79 123 45 67"
+      expect(dom).to have_link "+41 79 123 45 67", href: "tel:+41791234567"
+    end
+
+    it "hides emergency contact for events that are neither course nor tour" do
+      assign(:event, events(:top_event).decorate)
+
+      expect(dom).not_to have_text "Notfallkontakt 1:"
+    end
+  end
 end

@@ -6,6 +6,20 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::PeopleHelper
+  def format_emergency_contact_1(person) = person_emergency_contact(person, :emergency_contact_1)
+
+  def format_emergency_contact_2(person) = person_emergency_contact(person, :emergency_contact_2)
+
+  def person_emergency_contact(person, contact)
+    name = person.send(:"#{contact}_name")
+    phone = person.send(:"#{contact}_phone")
+
+    safe_join([
+      name.presence,
+      (link_to(phone, "tel:#{phone.gsub(/\s/, "")}") if phone.present?)
+    ].compact_blank, " / ")
+  end
+
   def format_person_membership_years(person)
     f(person.membership_years.floor)
   end

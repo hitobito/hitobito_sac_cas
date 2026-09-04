@@ -23,10 +23,16 @@ module SacCas::Person
       sac_remark_section_4 sac_remark_section_5]
     Person::SAC_REMARKS = Person::SAC_SECTION_REMARKS + [Person::SAC_REMARK_NATIONAL_OFFICE]
 
-    Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
+    Person::EMERGENCY_CONTACTS = %w[emergency_contact_1_name emergency_contact_1_phone
+      emergency_contact_2_name emergency_contact_2_phone]
 
-    paper_trail_options[:skip] += [*Person::SAC_REMARKS, "wso2_legacy_password_hash",
-      "wso2_legacy_password_salt"]
+    Person::INTERNAL_ATTRS.concat(Person::SAC_REMARKS.map(&:to_sym))
+    Person::INTERNAL_ATTRS.concat(Person::EMERGENCY_CONTACTS.map(&:to_sym))
+
+    paper_trail_options[:skip] += [
+      *Person::SAC_REMARKS, *Person::EMERGENCY_CONTACTS,
+      "wso2_legacy_password_hash", "wso2_legacy_password_salt"
+    ]
     devise_login_id_attrs << :membership_number
 
     Person.used_attributes.delete(:nickname)
@@ -57,12 +63,16 @@ module SacCas::Person
     before_validation :reset_confirmed_at_and_correspondence, if: -> { email.blank? }
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
+    validates(:emergency_contact_1_name, :emergency_contact_2_name, format: {with: /\A[^\n\r]*\z/})
+    validates(:emergency_contact_1_phone, :emergency_contact_2_phone, phone: true,
+      allow_blank: true)
     with_options if: :roles_require_name_and_address?, on: [:create, :update] do
       validates :first_name, :last_name, presence: true, unless: :company?
       validates :zip_code, :town, presence: true
       validates_with Person::AddressValidator
     end
     validates :canton, absence: true, unless: :swiss?
+    validate :assert_emergency_contacts_present_for_future_course
 
     before_save :set_digital_correspondence
 
@@ -186,6 +196,26 @@ module SacCas::Person
   end
 
   private
+
+  def assert_emergency_contacts_present_for_future_course
+    # prevent participation-check if we have valid data already
+    return true if [:emergency_contact_1_name, :emergency_contact_1_phone].all? do |attr|
+      send(attr).present?
+    end
+
+    return unless future_course_participation?
+
+    [:emergency_contact_1_name, :emergency_contact_1_phone].each do |attr|
+      errors.add(attr, :blank) if send(attr).blank?
+    end
+  end
+
+  def future_course_participation?
+    event_participations
+      .upcoming
+      .where(events: {type: Event::Course.sti_name})
+      .exists?
+  end
 
   def reset_confirmed_at_and_correspondence
     self.correspondence = "print"

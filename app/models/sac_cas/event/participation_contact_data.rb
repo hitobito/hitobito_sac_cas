@@ -9,6 +9,8 @@ module SacCas::Event::ParticipationContactData
   extend ActiveSupport::Concern
   include AssignsSacPhoneNumbers
 
+  EMERGENCY_CONTACT_REQUIRED_ATTRS = %i[emergency_contact_1_name emergency_contact_1_phone]
+
   prepended do
     attr_reader :event
 
@@ -16,6 +18,11 @@ module SacCas::Event::ParticipationContactData
     delegate :phone_number_mobile, :build_phone_number_mobile,
       :phone_number_landline, :build_phone_number_landline,
       to: :person
+    delegate :emergency_contact_1_name, :emergency_contact_1_phone,
+      :emergency_contact_2_name, :emergency_contact_2_phone,
+      to: :person
+
+    validate :assert_emergency_contact_present
 
     include Events::Participations::PriceCalculatable
 
@@ -32,21 +39,31 @@ module SacCas::Event::ParticipationContactData
   def mark_as_required?(attr)
     # We specify this specifically, since we want the phone number label to show the required mark
     # Adding the phone_numbers attribute to mandatory_contact_attrs doesnt work, because that also
-    # rubocop:todo Layout/LineLength
-    # affects the backend validation, participation_contact_data doesnt have a phone_numbers attribute, just
-    # rubocop:enable Layout/LineLength
-    # multiple different phone_number types
-    attr == :phone_numbers
+    # affects the backend validation, participation_contact_data doesnt have a phone_numbers
+    # attribute, just multiple different phone_number types
+    attr == :phone_numbers ||
+      (emergency_contacts_required? && EMERGENCY_CONTACT_REQUIRED_ATTRS.include?(attr.to_sym))
   end
 
   private
+
+  def emergency_contacts_required?
+    event.needs_emergency_contact?
+  end
+
+  def assert_emergency_contact_present
+    return unless emergency_contacts_required?
+
+    EMERGENCY_CONTACT_REQUIRED_ATTRS.each do |attr|
+      errors.add(attr, :blank) if person.send(attr).blank?
+    end
+  end
 
   def participation
     @participation ||= Event::Participation.new(event: @event, person: @person)
   end
 
-  # rubocop:todo Metrics/AbcSize
-  def assert_required_contact_attrs_valid # rubocop:todo Metrics/CyclomaticComplexity # rubocop:todo Metrics/AbcSize
+  def assert_required_contact_attrs_valid # rubocop:todo Metrics/CyclomaticComplexity,Metrics/AbcSize
     super
 
     # Ensure that at least one phone number is present
@@ -55,9 +72,8 @@ module SacCas::Event::ParticipationContactData
       .select { |phone_number| !phone_number&.marked_for_destruction? }
       .any?
 
-    # rubocop:todo Layout/LineLength
-    # We add the error message to the contact data object, this is used to display the error message on form submits
-    # rubocop:enable Layout/LineLength
+    # We add the error message to the contact data object,
+    # this is used to display the error message on form submits
     errors.add(:base,
       t("activerecord.errors.messages.at_least_one_present",
         model_name: PhoneNumber.model_name.human))
@@ -71,5 +87,4 @@ module SacCas::Event::ParticipationContactData
       object.errors.add(:number)
     end
   end
-  # rubocop:enable Metrics/AbcSize
 end

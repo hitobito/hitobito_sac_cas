@@ -118,6 +118,10 @@ de:
         gender: Geschlecht
         phone_number: Telefon
         address: Strasse und Nr.
+        emergency_contact_1_name: Notfallkontakt 1 Name
+        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
+        emergency_contact_2_name: Notfallkontakt 2 Name
+        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
         adult_consent: Einverständniserklärung der Erziehungsberechtigten
         contribution_regulations: Beitragsreglement
         data_protection: Datenschutzerklärung
@@ -636,6 +640,18 @@ de:
           m: Herr
           w: Frau
         additional_information: Bemerkungen (z.B. Beruf)
+        emergency_contact_1: Notfallkontakt 1
+        emergency_contact_1_name: Notfallkontakt 1 Name
+        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
+        emergency_contact_2: Notfallkontakt 2
+        emergency_contact_2_name: Notfallkontakt 2 Name
+        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
+        emergency_contacts_privacy_notice_html: >-
+          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit
+          dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene
+          Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln.
+          Weitere Informationen finden Sie in unseren
+          <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
       person/phone_number_mobile:
         number: Mobiltelefon
       person/phone_number_landline:

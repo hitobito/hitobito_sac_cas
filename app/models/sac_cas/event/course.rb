@@ -153,6 +153,7 @@ module SacCas::Event::Course
       :cost,
       :motto,
       :waiting_list,
+      :guest_limit,
       :tentative_applications,
       :required_contact_attrs,
       :hidden_contact_attrs

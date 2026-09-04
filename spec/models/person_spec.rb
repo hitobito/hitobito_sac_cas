@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -173,6 +173,141 @@ describe Person do
       person.wso2_legacy_password_hash = "password-hash"
       person.wso2_legacy_password_salt = "password-salt"
       expect { person.save! }.not_to change { person.versions.count }
+    end
+
+    it "does not track emergency contact attrs" do
+      person.emergency_contact_1_name = "Tom Tester"
+      person.emergency_contact_1_phone = "079 123 45 67"
+      person.emergency_contact_2_name = "Tina Tester"
+      person.emergency_contact_2_phone = "076 456 78 90"
+
+      expect { person.save! }.not_to change { person.versions.count }
+    end
+  end
+
+  context "emergency contacts" do
+    let(:person) { people(:mitglied) }
+
+    describe "are integrated" do
+      it "EMERGENCY_CONTACTS contains all four fields" do
+        expect(Person::EMERGENCY_CONTACTS).to match_array(
+          %w[
+            emergency_contact_1_name
+            emergency_contact_1_phone
+            emergency_contact_2_name
+            emergency_contact_2_phone
+          ]
+        )
+      end
+
+      it "INTERNAL_ATTRS includes emergency contacts to exclude them from exports and paper trail" do
+        expect(Person::INTERNAL_ATTRS).to include(*Person::EMERGENCY_CONTACTS.map(&:to_sym))
+      end
+    end
+
+    describe "validations" do
+      describe "name fields" do
+        it "is invalid when containing a line break" do
+          person.emergency_contact_1_name = "Foo\nBar"
+          expect(person).not_to be_valid
+          expect(person.errors[:emergency_contact_1_name]).to include("ist nicht gültig")
+        end
+
+        it "is valid when blank" do
+          expect(person).to be_valid
+        end
+      end
+
+      describe "phone fields" do
+        it "is valid for a valid phone number" do
+          person.emergency_contact_1_phone = "+41791234567"
+          expect(person).to be_valid
+        end
+
+        it "is invalid for an invalid phone number" do
+          person.emergency_contact_1_phone = "abc"
+          expect(person).not_to be_valid
+          expect(person.errors[:emergency_contact_1_phone]).to include("ist nicht gültig")
+        end
+
+        it "is valid when blank" do
+          expect(person).to be_valid
+        end
+
+        it "validates both phone fields" do
+          person.emergency_contact_1_phone = "abc"
+          person.emergency_contact_2_phone = "def"
+          expect(person).not_to be_valid
+          expect(person.errors[:emergency_contact_1_phone]).to include("ist nicht gültig")
+          expect(person.errors[:emergency_contact_2_phone]).to include("ist nicht gültig")
+        end
+      end
+
+      describe "required for future course participation" do
+        let(:course_with_future_date) do
+          Fabricate(
+            :sac_open_course,
+            dates: [Fabricate(:event_date, start_at: 1.week.from_now)]
+          )
+        end
+
+        it "is invalid without emergency contact 1 when registered for a future course" do
+          Fabricate(:event_participation, event: course_with_future_date, participant: person)
+
+          person.emergency_contact_1_name = nil
+          person.emergency_contact_1_phone = nil
+
+          expect(person.emergency_contact_1_name).to_not be_present
+          expect(person.emergency_contact_1_phone).to_not be_present
+
+          expect(person).to_not be_valid
+
+          expect(person.errors[:emergency_contact_1_name]).to include("muss ausgefüllt werden")
+          expect(person.errors[:emergency_contact_1_phone]).to include("muss ausgefüllt werden")
+        end
+
+        it "is invalid when only the name is present" do
+          Fabricate(:event_participation, event: course_with_future_date, participant: person)
+          person.emergency_contact_1_name = "Max Muster"
+          person.validate
+
+          expect(person.errors[:emergency_contact_1_name]).to be_empty
+          expect(person.errors[:emergency_contact_1_phone]).to include("muss ausgefüllt werden")
+        end
+
+        it "is valid when emergency contact 1 is present" do
+          Fabricate(:event_participation, event: course_with_future_date, participant: person)
+          person.emergency_contact_1_name = "Max Muster"
+          person.emergency_contact_1_phone = "+41791234567"
+
+          expect(person).to be_valid
+        end
+
+        it "is valid without emergency contacts when registered for a past course" do
+          Fabricate(:event_participation, event: Fabricate(:sac_course), participant: person)
+          person.validate
+
+          expect(person.errors[:emergency_contact_1_name]).to be_empty
+          expect(person.errors[:emergency_contact_1_phone]).to be_empty
+        end
+
+        it "is valid without emergency contacts when registered for a future tour" do
+          tour = Fabricate(:sac_published_tour)
+          tour.dates.update_all(start_at: 1.week.from_now)
+          Fabricate(:event_participation, event: tour, participant: person)
+          person.validate
+
+          expect(person.errors[:emergency_contact_1_name]).to be_empty
+          expect(person.errors[:emergency_contact_1_phone]).to be_empty
+        end
+
+        it "is valid without emergency contacts when not registered for any course" do
+          person.validate
+
+          expect(person.errors[:emergency_contact_1_name]).to be_empty
+          expect(person.errors[:emergency_contact_1_phone]).to be_empty
+        end
+      end
     end
   end
 
