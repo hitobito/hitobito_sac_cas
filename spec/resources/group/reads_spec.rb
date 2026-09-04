@@ -51,7 +51,8 @@ describe GroupResource, :draper_with_helpers, type: :resource do
       before { params[:extra_fields] = {groups: "has_youth_organization"} }
 
       it 'is true for sektion with social account label "Homepage JO"' do
-        bluemlisalp.social_accounts.create!(label: "Homepage JO", name: "https://www.bluemlisalp.ch")
+        bluemlisalp.social_accounts.create!(label: "Homepage JO", name: "https://www.bluemlisalp.ch",
+          category: contact_account_categories(:social_account_group_other))
         params[:filter] = {id: {eq: bluemlisalp.id}}
         render
         expect(jsonapi_data[0].attributes["has_youth_organization"]).to be true
@@ -59,14 +60,16 @@ describe GroupResource, :draper_with_helpers, type: :resource do
 
       it 'is false for sektion without social account label "Homepage JO"' do
         expect(bluemlisalp.social_accounts).to be_blank
-        bluemlisalp.social_accounts.create!(label: "Homepage non-JO", name: "https://www.bluemlisalp.ch")
+        bluemlisalp.social_accounts.create!(label: "Homepage non-JO", name: "https://www.bluemlisalp.ch",
+          category: contact_account_categories(:social_account_group_other))
         params[:filter] = {id: {eq: bluemlisalp.id}}
         render
         expect(jsonapi_data[0].attributes["has_youth_organization"]).to be false
       end
 
       it 'is true for ortsgruppe with social account label "Homepage JO"' do
-        ortsgruppe.social_accounts.create!(label: "Homepage JO", name: "https://www.bluemlisalp.ch")
+        ortsgruppe.social_accounts.create!(label: "Homepage JO", name: "https://www.bluemlisalp.ch",
+          category: contact_account_categories(:social_account_group_other))
         params[:filter] = {id: {eq: ortsgruppe.id}}
         render
         expect(jsonapi_data[0].attributes["has_youth_organization"]).to be true
@@ -74,14 +77,16 @@ describe GroupResource, :draper_with_helpers, type: :resource do
 
       it 'is false for ortsgruppe without social account label "Homepage JO"' do
         expect(ortsgruppe.social_accounts).to be_blank
-        ortsgruppe.social_accounts.create!(label: "Homepage non-JO", name: "https://www.bluemlisalp.ch")
+        ortsgruppe.social_accounts.create!(label: "Homepage non-JO", name: "https://www.bluemlisalp.ch",
+          category: contact_account_categories(:social_account_group_other))
         params[:filter] = {id: {eq: ortsgruppe.id}}
         render
         expect(jsonapi_data[0].attributes["has_youth_organization"]).to be false
       end
 
       it 'is nil for other group types with social account label "Homepage JO"' do
-        geschaeftsstelle.social_accounts.create!(label: "Homepage JO", name: "https://www.bluemlisalp.ch")
+        geschaeftsstelle.social_accounts.create!(label: "Homepage JO", name: "https://www.bluemlisalp.ch",
+          category: contact_account_categories(:social_account_group_other))
         params[:filter] = {id: {eq: geschaeftsstelle.id}}
         render
         expect(jsonapi_data[0].attributes["has_youth_organization"]).to be nil

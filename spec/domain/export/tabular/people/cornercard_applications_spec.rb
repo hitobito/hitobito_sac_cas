@@ -71,7 +71,10 @@ describe Export::Tabular::People::CornercardApplications do
   describe "#data_rows" do
     it "contains all attributes for a person" do
       person.create_cornercard_upload!
-      person.phone_numbers.create!(label: "mobile", number: "+41 79 123 45 67")
+      person.phone_numbers.create!(
+        category: contact_account_categories(:phone_number_person_mobile),
+        number: "+41 79 123 45 67"
+      )
 
       rows = tabular.data_rows.to_a
       expect(rows.size).to eq 1

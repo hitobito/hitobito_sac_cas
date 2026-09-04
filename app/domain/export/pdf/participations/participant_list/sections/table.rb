@@ -90,7 +90,7 @@ class Export::Pdf::Participations::ParticipantList::Sections::Table < Export::Pd
       person.address,
       "#{person.zip_code} #{person.town}",
       person.email,
-      phone_numbers(person, %w[landline mobile]),
+      phone_numbers(person, SacPhoneNumbers::FIXED_SLOT_KEYS),
       Person::LANGUAGES[person.language&.to_sym],
       person.gender_label,
       person.sac_membership.stammsektion.to_s
@@ -104,9 +104,9 @@ class Export::Pdf::Participations::ParticipantList::Sections::Table < Export::Pd
     ]
   end
 
-  def phone_numbers(person, labels)
+  def phone_numbers(person, keys)
     person.phone_numbers
-      .select { |phone| labels.include?(phone.label) }
+      .select { |phone| keys.include?(phone.category&.key) }
       .map { |phone| phone.number }
       .sort
       .join(", ")
@@ -129,7 +129,7 @@ class Export::Pdf::Participations::ParticipantList::Sections::Table < Export::Pd
         .order("people.last_name, people.first_name")
         .tap do |participations|
           ::Event::Participation::PreloadParticipations.preload(participations,
-            participant: [:phone_numbers])
+            participant: {phone_numbers: :category})
         end
         .group_by { |p| p.highest_leader_role_type || "participant" }
   end

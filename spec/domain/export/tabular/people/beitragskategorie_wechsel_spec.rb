@@ -158,6 +158,12 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
     end
 
     it "does not do N+1 queries" do
+      # SacPhoneNumbers.category_id memoizes per [contactable_type, key] for the whole
+      # process, not per example -- reset so this count doesn't depend on whether some
+      # earlier-run example already warmed it (it would otherwise save 2 queries and
+      # make this fail as a false negative, and be flaky across --order runs).
+      SacPhoneNumbers.instance_variable_set(:@category_ids, nil)
+
       create_role("youth", person: people(:mitglied), start_on: "1.1.2000", end_on: "31.12.2014")
       create_role("adult", person: people(:familienmitglied), start_on: "1.1.2000", end_on: "31.12.2014")
       create_role("adult", person: people(:familienmitglied2), start_on: "1.1.2000", end_on: "31.12.2014")
@@ -165,7 +171,7 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
 
       expect do
         expect(tabular.data_rows).to have(3).items
-      end.to make(5).db_queries
+      end.to make(7).db_queries
     end
 
     describe "common" do
@@ -186,8 +192,10 @@ describe Export::Tabular::People::BeitragskategorieWechsel do
           birthday: "21.04.1972",
           canton: "so"
         )
-        mitglied.phone_numbers.create!(label: "landline", number: "031 333 44 55")
-        mitglied.phone_numbers.create!(label: "mobile", number: "079 333 44 55")
+        mitglied.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+          number: "031 333 44 55")
+        mitglied.phone_numbers.create!(category: contact_account_categories(:phone_number_person_mobile),
+          number: "079 333 44 55")
 
         expect(row_for(mitglied).to_h).to eq({
           id: 600001,

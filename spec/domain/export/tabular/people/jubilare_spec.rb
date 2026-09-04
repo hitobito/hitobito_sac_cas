@@ -17,9 +17,15 @@ describe Export::Tabular::People::Jubilare do
 
   describe "#data_rows" do
     it "does not do N+1 queries" do
+      # SacPhoneNumbers.category_id memoizes per [contactable_type, key] for the whole
+      # process, not per example -- reset so this count doesn't depend on whether some
+      # earlier-run example already warmed it (it would otherwise save 2 queries and
+      # make this fail as a false negative, and be flaky across --order runs).
+      SacPhoneNumbers.instance_variable_set(:@category_ids, nil)
+
       expect do
         tabular.data_rows.to_a
-      end.to make(7).db_queries
+      end.to make(9).db_queries
     end
 
     it "contains all attributes" do
@@ -30,8 +36,10 @@ describe Export::Tabular::People::Jubilare do
         birthday: "21.04.1972",
         canton: "be"
       )
-      people(:mitglied).phone_numbers.create!(label: "landline", number: "031 333 44 55")
-      people(:mitglied).phone_numbers.create!(label: "mobile", number: "079 333 44 55")
+      people(:mitglied).phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+        number: "031 333 44 55")
+      people(:mitglied).phone_numbers.create!(category: contact_account_categories(:phone_number_person_mobile),
+        number: "079 333 44 55")
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
         group: groups(:matterhorn_mitglieder), person: people(:abonnent), start_on: "2.10.2015")
       Fabricate(Group::SektionsMitglieder::MitgliedZusatzsektion.sti_name,

@@ -8,60 +8,49 @@
 require "spec_helper"
 
 describe PhoneNumber do
-  it "::predefined_labels" do
-    expect(PhoneNumber.predefined_labels).to eq(%w[landline mobile])
+  let(:landline_category) { contact_account_categories(:phone_number_person_landline) }
+  let(:mobile_category) { contact_account_categories(:phone_number_person_mobile) }
+
+  it "::FIXED_SLOT_KEYS" do
+    expect(SacPhoneNumbers::FIXED_SLOT_KEYS).to eq(%w[landline mobile])
   end
 
   context "validations" do
     let(:contactable) { people(:mitglied) }
     let(:phone_number) { PhoneNumber.new(contactable:, number: "0780000000") }
 
-    describe "label" do
-      it "accepts predefined labels" do
-        PhoneNumber.predefined_labels.each do |label|
-          phone_number.label = label
+    describe "category" do
+      it "accepts the fixed slot categories" do
+        [landline_category, mobile_category].each do |category|
+          phone_number.category = category
           expect(phone_number).to be_valid
         end
       end
 
-      it "rejects other labels" do
-        phone_number.label = "invalid_label"
+      it "rejects other categories" do
+        phone_number.category = contact_account_categories(:phone_number_person_other)
         expect(phone_number).not_to be_valid
-        expect(phone_number.errors[:label]).to include("ist kein gültiger Wert")
+        expect(phone_number.errors[:category]).to include("ist kein gültiger Wert")
       end
 
-      it "validates presence of label" do
+      it "validates presence of category" do
         expect(phone_number).not_to be_valid
-        expect(phone_number.errors[:label]).to include("ist kein gültiger Wert")
+        expect(phone_number.errors[:category]).to include("muss ausgefüllt werden")
       end
 
-      it "validates uniqueness of label scoped to contactable_type and contactable_id" do
+      it "validates uniqueness of category scoped to contactable_type and contactable_id" do
         _existing_phone_number = PhoneNumber.create!(
           contactable: people(:mitglied),
-          label: "landline",
+          category: landline_category,
           number: "0780000000"
         )
 
-        phone_number.label = "landline"
+        phone_number.category = landline_category
         expect(phone_number).not_to be_valid
-        expect(phone_number.errors[:label]).to include("ist bereits vergeben")
+        expect(phone_number.errors[:category_id]).to include("ist bereits vergeben")
 
-        phone_number.label = "mobile"
+        phone_number.category = mobile_category
         expect(phone_number).to be_valid
-      end
-
-      it "does not normalize label" do
-        I18n.with_locale(:fr) do
-          label_translations = I18n.t(PhoneNumber.labels_translations_key)
-          expect(label_translations[:mobile]).to eq "Mobile"
-
-          phone_number.label = "mobile"
-
-          expect { phone_number.send(:normalize_label) }.not_to change { phone_number.label }
-
-          phone_number.save!
-          expect(phone_number.label).to eq "mobile"
-        end
       end
     end
   end

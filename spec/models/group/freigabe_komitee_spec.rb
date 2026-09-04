@@ -65,8 +65,8 @@ describe Group::FreigabeKomitee do
   end
 
   it "has the phone_number_landline association provided by SacPhoneNumbers" do
-    PhoneNumber.predefined_labels.each do |label|
-      assoc = :"phone_number_#{label}"
+    SacPhoneNumbers::FIXED_SLOT_KEYS.each do |key|
+      assoc = :"phone_number_#{key}"
       expect(Group::FreigabeKomitee.reflect_on_all_associations.map(&:name)).to include(assoc)
     end
   end

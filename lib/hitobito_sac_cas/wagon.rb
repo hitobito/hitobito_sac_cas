@@ -102,10 +102,24 @@ module HitobitoSacCas
       Roles::TerminateRoleLink.prepend SacCas::Roles::TerminateRoleLink
       Qualification.include SacCas::Qualification
       QualificationKind.include SacCas::QualificationKind
-      PhoneNumber.predefined_labels.each do |label|
-        PeopleController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
-        GroupsController.permitted_attrs << {"phone_number_#{label}_attributes": [:id, :number]}
+      SacPhoneNumbers::FIXED_SLOT_KEYS.each do |key|
+        PeopleController.permitted_attrs << {"phone_number_#{key}_attributes": [:id, :number]}
+        GroupsController.permitted_attrs << {"phone_number_#{key}_attributes": [:id, :number]}
       end
+
+      # contact account categories (#4359): SAC uses only landline and mobile
+      # phone number slots for both Person and Group.
+      require Rails.root.join("db", "seeds", "support", "contact_account_category_seeder.rb")
+      phone_number_categories = [
+        {key: "landline",
+         name: {de: "Festnetz", fr: "Ligne fixe", it: "Telefono fisso", en: "Landline"}},
+        {key: "mobile",
+         name: {de: "Mobil", fr: "Mobile", it: "Cellulare", en: "Mobile"}}
+      ]
+      ContactAccountCategorySeeder::CATEGORIES["PhoneNumber"] = {
+        "Person" => phone_number_categories.dup,
+        "Group" => phone_number_categories.dup
+      }
 
       Wizards::Base.prepend SacCas::Wizards::Base
       Wizards::Steps::NewUserForm.support_company = false

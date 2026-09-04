@@ -278,10 +278,6 @@ de:
         password: Passwort
         email_confirmation: E-Mail Bestätigung
         password_confirmation: Passwort Bestätigung
-      contact_account:
-        predefined_labels:
-          landline: Festnetz
-          mobile: Mobil
       cost_center:
         label: Bezeichnung
         event_kind_categories: Kurskategorien

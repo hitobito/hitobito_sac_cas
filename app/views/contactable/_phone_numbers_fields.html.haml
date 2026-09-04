@@ -4,8 +4,8 @@
 - #  https://github.com/hitobito/hitobito_sac_cas.
 
 = f.labeled :phone_numbers do
-  - PhoneNumber.predefined_labels.each do |label|
-    - assoc = "phone_number_#{label}"
+  - SacPhoneNumbers::FIXED_SLOT_KEYS.each do |key|
+    - assoc = "phone_number_#{key}"
     - number = entry.send(assoc) || entry.send("build_#{assoc}")
     = f.fields_for assoc, number do |fields|
       - render 'contactable/phone_number_fields', f: fields

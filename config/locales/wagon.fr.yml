@@ -269,10 +269,6 @@ fr:
         password: Mot de passe
         email_confirmation: Confirmation d'e-mail
         password_confirmation: Confirmation du mot de passe
-      contact_account:
-        predefined_labels:
-          landline: Ligne fixe
-          mobile: Mobile
       cost_center:
         label: Désignation
         event_kind_categories: Catégories de cours

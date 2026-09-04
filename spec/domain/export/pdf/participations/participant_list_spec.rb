@@ -34,9 +34,9 @@ describe Export::Pdf::Participations::ParticipantList do
     @aspirant = Fabricate(Event::Course::Role::AssistantLeaderAspirant.name.to_sym,
       participation: Fabricate(:event_participation, event: event)).participation.person
     Fabricate(:phone_number, contactable: people(:familienmitglied),
-      label: :mobile, number: "+41 77 360 75 63")
+      category: contact_account_categories(:phone_number_person_mobile), number: "+41 77 360 75 63")
     Fabricate(:phone_number, contactable: people(:mitglied),
-      label: :landline, number: "+41 77 484 21 96")
+      category: contact_account_categories(:phone_number_person_landline), number: "+41 77 484 21 96")
   end
 
   it "renders text" do

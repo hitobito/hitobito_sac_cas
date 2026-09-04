@@ -279,8 +279,10 @@ describe Export::Tabular::People::Eintritte do
           canton: "be"
         )
 
-        mitglied.phone_numbers.create!(label: "landline", number: "031 333 44 55")
-        mitglied.phone_numbers.create!(label: "mobile", number: "079 333 44 55")
+        mitglied.phone_numbers.create!(category: contact_account_categories(:phone_number_person_landline),
+          number: "031 333 44 55")
+        mitglied.phone_numbers.create!(category: contact_account_categories(:phone_number_person_mobile),
+          number: "079 333 44 55")
         Person.update_all(self_registration_reason_id: reason.id) # ro attr, might be set on model directly
 
         expect(row_for(mitglied).to_h).to eq({
