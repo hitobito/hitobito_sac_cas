@@ -7,7 +7,7 @@
 
 module People
   class AccountCompletionsController < ApplicationController
-    before_action :redirect_to_sign_in, if: :person_has_email
+    before_action :redirect_to_sign_in, if: -> { person.email? }
 
     skip_before_action :authenticate_person!
     skip_authorization_check
@@ -37,15 +37,16 @@ module People
       redirect_to new_person_session_path, notice: t(".email_already_present")
     end
 
-    def person_has_email = person.email.present?
-
     def person
       @person ||= Person.find_by_token_for!(:account_completion, params[:token])
     end
 
     def model_params
-      params.key?(:person) ? params.require(:person).permit(:unconfirmed_email, :password,
-        :password_confirmation) : {}
+      if params.key?(:person)
+        params.require(:person).permit(:unconfirmed_email, :password, :password_confirmation)
+      else
+        {}
+      end
     end
   end
 end
