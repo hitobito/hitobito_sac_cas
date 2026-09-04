@@ -140,14 +140,10 @@ describe Person do
 
       it "can be chained with other scopes" do
         expect(Person.where_login_matches(person.email).where(confirmed_at: nil)).to be_empty
-        # rubocop:todo Layout/LineLength
         expect(Person.where_login_matches(person.email).where.not(confirmed_at: nil)).to eq([person])
-        # rubocop:enable Layout/LineLength
 
         expect(Person.where(confirmed_at: nil).where_login_matches(person.email)).to be_empty
-        # rubocop:todo Layout/LineLength
         expect(Person.where.not(confirmed_at: nil).where_login_matches(person.email)).to eq([person])
-        # rubocop:enable Layout/LineLength
       end
     end
   end
@@ -425,6 +421,7 @@ describe Person do
 
     it "transmits to abacus if transmittable" do
       Fabricate(Group::SektionsMitglieder::Mitglied.sti_name, group: groups(:matterhorn_mitglieder), person:)
+      Invoices::Abacus::TransmitPersonJob.new(person).delayed_jobs.destroy_all
       expect do
         person.confirm
       end.to change { person.reload.confirmed? }.from(false).to(true)
@@ -701,13 +698,11 @@ describe Person do
   end
 
   describe "#transmit_data_to_abacus" do
-    let(:person) {
-      people(:mitglied).tap { |p|
-     # rubocop:todo Layout/IndentationWidth
-     p.phone_numbers.create!(number: "+41791234567", label: "mobile")
-        # rubocop:enable Layout/IndentationWidth
-      }
-    }
+    let(:person) do
+      people(:mitglied).tap do |p|
+        p.phone_numbers.create!(number: "+41791234567", label: "mobile")
+      end
+    end
     let(:job) { Delayed::Job.where("handler like '%TransmitPersonJob%'") }
 
     it "enqueues the job" do
@@ -718,9 +713,7 @@ describe Person do
       expect { person.update!(email: "") }.to change(job, :count).by(1)
     end
 
-    # rubocop:todo Layout/LineLength
     it "enqueues the job with an existing abacus_subject_key but without an sac membership invoice" do
-      # rubocop:enable Layout/LineLength
       person.roles.destroy_all
       expect {
         person.update!(first_name: "Abacus", abacus_subject_key: 42)
@@ -730,6 +723,7 @@ describe Person do
     it "enqueues the job with an abonnent role" do
       person.roles.destroy_all
       Group::AboMagazin::Abonnent.create!(person: person, group: groups(:abo_die_alpen))
+      Invoices::Abacus::TransmitPersonJob.new(person).delayed_jobs.destroy_all
       expect { person.update!(first_name: "Abacus") }.to change(job, :count).by(1)
     end
 
@@ -737,18 +731,14 @@ describe Person do
       person = people(:familienmitglied2)
       expect { person.update!(town: "Neuer Ort") }.to change(job, :count).by(1)
       expect(people(:familienmitglied).town).to eq("Neuer Ort")
-      # rubocop:todo Layout/LineLength
       expect(job.order(:created_at).last.payload_object.send(:person)).to eq(people(:familienmitglied))
-      # rubocop:enable Layout/LineLength
     end
 
     it "enqueues the job for the family main person if it is changed" do
       person = people(:familienmitglied)
       expect { person.update!(town: "Neuer Ort") }.to change(job, :count).by(1)
       expect(people(:familienmitglied2).town).to eq("Neuer Ort")
-      # rubocop:todo Layout/LineLength
       expect(job.order(:created_at).last.payload_object.send(:person)).to eq(people(:familienmitglied))
-      # rubocop:enable Layout/LineLength
     end
 
     it "doesn't enqueue the job if an irrelevant attribute changed" do

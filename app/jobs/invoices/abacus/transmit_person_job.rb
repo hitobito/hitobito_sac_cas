@@ -13,6 +13,13 @@ class Invoices::Abacus::TransmitPersonJob < BaseJob
     @person_id = person.id
   end
 
+  def before(job)
+    if other_running_jobs?(job)
+      enqueue!(run_at: Time.zone.now + rand(1..15).seconds)
+      @person = @person_id = nil # prevent perform from running
+    end
+  end
+
   def perform
     return if person.nil? # may have been deleted already
 
@@ -27,7 +34,19 @@ class Invoices::Abacus::TransmitPersonJob < BaseJob
     super
   end
 
+  def enqueue!(options = {})
+    super unless pending_jobs?
+  end
+
   private
+
+  def pending_jobs?
+    delayed_jobs.where(locked_at: nil, locked_by: nil).exists?
+  end
+
+  def other_running_jobs?(job)
+    delayed_jobs.where.not(locked_at: nil, locked_by: nil).where.not(id: job.id).exists?
+  end
 
   def create_log_error(message)
     HitobitoLogEntry.create!(
