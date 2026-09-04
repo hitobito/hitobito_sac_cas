@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -99,6 +99,28 @@ describe Event::ActivitiesController do
     expect(entry.order).to eq(6)
     expect(entry.parent).to eq(event_activities(:klettern))
     expect(entry.technical_requirement).to eq(event_technical_requirements(:wandern))
+  end
+
+  it "POST#create attaches the icon of a main entry" do
+    post :create, params: {
+      event_activity: {
+        label: "Alpin",
+        description: "Alpen",
+        order: 6,
+        icon: fixture_file_upload("icon.svg", "image/svg+xml")
+      }
+    }
+
+    expect(Event::Activity.last.icon).to be_attached
+  end
+
+  it "PATCH#update purges the icon of a main entry" do
+    wandern = event_activities(:wandern)
+    wandern.icon.attach(fixture_file_upload("icon.svg", "image/svg+xml"))
+
+    expect do
+      patch :update, params: {id: wandern.id, event_activity: {remove_icon: "1"}}
+    end.to have_enqueued_job(ActiveStorage::PurgeJob)
   end
 
   it "PATCH#update updates deleted entry" do

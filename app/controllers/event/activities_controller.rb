@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -10,7 +10,7 @@ class Event::ActivitiesController < Event::NestableTourEssentialsController
     label: "event_activity_translations.label"
   }
 
-  self.permitted_attrs += [:color, :technical_requirement_id]
+  self.permitted_attrs += [:color, :technical_requirement_id, :icon, :remove_icon]
 
   def show
     redirect_to edit_event_activity_path(entry)

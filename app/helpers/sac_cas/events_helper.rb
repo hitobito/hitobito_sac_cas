@@ -53,6 +53,17 @@ module SacCas::EventsHelper
     end
   end
 
+  # An svg is inlined, which is both the only way Active Storage lets us display one
+  # and what makes it take the surrounding colour, see SanitizedSvg. A raster icon
+  # is an img tag on the variant resized on upload.
+  def event_activity_icon(activity, **attributes)
+    if activity.icon_svg?
+      activity.icon_svg(**attributes)
+    else
+      image_tag(activity.icon.variant(:agenda), alt: "", **attributes)
+    end
+  end
+
   def format_event_application_conditions(entry)
     if entry.application_conditions.present?
       safe_auto_link(entry.application_conditions, html: {target: "_blank"})

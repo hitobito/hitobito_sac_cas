@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -94,6 +94,103 @@ describe Event::Activity do
 
       expect(child_activity).not_to be_valid
       expect(child_activity.errors.full_messages).to include "Farbe darf nicht ausgefüllt werden"
+    end
+  end
+
+  context "icon" do
+    let(:png) { fixture_file_upload("icon.png", "image/png") }
+    let(:svg) { fixture_file_upload("icon.svg", "image/svg+xml") }
+
+    it "may be attached to a main activity" do
+      expect(main_activity.update(icon: png)).to be(true)
+      expect(main_activity.reload.icon).to be_attached
+    end
+
+    it "must be absent on a child activity" do
+      expect(child_activity.update(icon: png)).to be(false)
+      expect(child_activity.errors.full_messages).to include "Icon darf nicht ausgefüllt werden"
+    end
+
+    Event::Activity::ICON_CONTENT_TYPES.each do |content_type|
+      it "accepts #{content_type}" do
+        main_activity.icon.attach(io: StringIO.new("icon"), filename: "icon",
+          content_type: content_type)
+
+        expect(main_activity).to be_valid
+      end
+    end
+
+    it "rejects any other content type" do
+      main_activity.icon.attach(io: StringIO.new("icon"), filename: "icon.pdf",
+        content_type: "application/pdf")
+
+      expect(main_activity).not_to be_valid
+      expect(main_activity.errors.full_messages.first)
+        .to start_with "Icon akzeptiert nur die folgenden Dateitypen"
+    end
+
+    it "rejects an svg above the size that may be inlined" do
+      oversized = "<svg viewBox=\"0 0 24 24\">#{"<!-- pad -->" * 10_000}</svg>"
+      main_activity.icon.attach(io: StringIO.new(oversized), filename: "icon.svg",
+        content_type: Event::Activity::SVG_CONTENT_TYPE)
+
+      expect(main_activity).not_to be_valid
+      expect(main_activity.errors.full_messages.first).to start_with "Icon darf nicht grösser als"
+    end
+
+    it "accepts a raster icon of the same size, which is resized on upload" do
+      expect(png.size).to be > Event::Activity::ICON_SVG_MAX_BYTES
+
+      expect(main_activity.update(icon: png)).to be(true)
+    end
+
+    it "#icon_svg? tells an svg upload from a raster one" do
+      expect(main_activity.icon_svg?).to be(false)
+
+      main_activity.icon.attach(svg)
+      expect(main_activity.icon_svg?).to be(true)
+
+      main_activity.icon.attach(png)
+      expect(main_activity.icon_svg?).to be(false)
+    end
+
+    it "#icon_svg is nil unless the upload is an svg" do
+      expect(main_activity.icon_svg).to be_nil
+
+      main_activity.icon.attach(png)
+      expect(main_activity.icon_svg).to be_nil
+    end
+
+    it "#icon_svg is the sanitized markup, ready to be placed in a view" do
+      main_activity.icon.attach(svg) # painted in currentColor
+
+      markup = main_activity.icon_svg(class: "agenda-icon")
+      expect(markup).to be_html_safe
+      expect(markup).to include 'class="agenda-icon"'
+      expect(markup).to include 'stroke="currentColor"'
+      expect(markup).to include 'xmlns="http://www.w3.org/2000/svg"'
+    end
+
+    it "#icon_svg keeps the colours an icon paints itself in" do
+      main_activity.icon.attach(io: StringIO.new(
+        '<svg viewBox="0 0 24 24"><path d="M0 0Z" fill="#237100"/></svg>'
+      ), filename: "icon.svg", content_type: Event::Activity::SVG_CONTENT_TYPE)
+
+      expect(main_activity.icon_svg).to include 'fill="#237100"'
+    end
+
+    it "#remove_icon= schedules the icon for purging" do
+      main_activity.icon.attach(png)
+
+      expect { main_activity.remove_icon = "1" }
+        .to have_enqueued_job(ActiveStorage::PurgeJob)
+    end
+
+    it "#remove_icon= keeps the icon for any other value" do
+      main_activity.icon.attach(png)
+
+      expect { main_activity.remove_icon = "0" }
+        .not_to have_enqueued_job(ActiveStorage::PurgeJob)
     end
   end
 

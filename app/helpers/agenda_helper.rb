@@ -6,9 +6,17 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module AgendaHelper
-  # Shorthand for the agenda pages' inline icons, see AgendaIcon.
   def agenda_icon(name, **attributes)
     AgendaIcon.new(name).to_svg(**attributes)
+  end
+
+  def agenda_activity_icon(activity)
+    return unless activity.parent&.icon&.attached?
+
+    content_tag(:span,
+      event_activity_icon(activity.parent, class: "agenda-icon"),
+      class: "agenda-activity-icon",
+      "aria-hidden": "true")
   end
 
   def tour_accent_color(event)

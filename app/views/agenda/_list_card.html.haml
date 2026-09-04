@@ -13,8 +13,7 @@
         .d-flex.flex-wrap.gap-3.mb-2
           - event.activities.each do |activity|
             %span.agenda-activity-badge{style: ("--activity-color: #{activity.parent.color}" if activity.parent&.color.present?)}
-              %span.agenda-activity-icon
-                = agenda_icon(:mountain)
+              = agenda_activity_icon(activity)
               = activity.label.upcase
 
       %h3.mb-2
