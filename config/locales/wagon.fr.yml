@@ -1647,8 +1647,10 @@ fr:
         participants_suffix: Teilnehmende
         max_participants: "Max. %{max} Teilnehmende"
         contact: Kontakt
+        fitness_requirements: Kondition
     show:
       back_to_overview: Zurück zur Übersicht
+      contact: Kontakt
       leaders: Tourenleitung
       elevation: Höhenmeter
       price:
