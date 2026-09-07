@@ -40,5 +40,5 @@
           - agenda_contact_social_accounts(contact).each do |account|
             .agenda-contact-detail
               = agenda_icon(:link)
-              = muted(account.translated_label)
+              = muted(account.category)
               %span= auto_link_value(account.value)
