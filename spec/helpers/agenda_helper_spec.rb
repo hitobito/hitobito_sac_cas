@@ -238,8 +238,10 @@ describe AgendaHelper do
     let(:contact) { people(:admin) }
 
     it "omits the numbers that are not public" do
-      contact.phone_numbers.create!(label: "landline", number: "+41 79 123 45 67", public: true)
-      contact.phone_numbers.create!(label: "mobile", number: "+41 79 765 43 21", public: false)
+      contact.phone_numbers.create!(number: "+41 79 123 45 67", public: true,
+        category: contact_account_categories(:phone_number_person_landline))
+      contact.phone_numbers.create!(number: "+41 79 765 43 21", public: false,
+        category: contact_account_categories(:phone_number_person_mobile))
 
       expect(helper.agenda_contact_phone_numbers(contact)).to eq ["+41 79 123 45 67"]
     end
@@ -249,9 +251,11 @@ describe AgendaHelper do
     let(:contact) { people(:admin) }
 
     it "combines the primary email with the public additional ones" do
-      contact.additional_emails.create!(label: "Arbeit", email: "work@example.com", public: true)
-      contact.additional_emails.create!(label: "Privat", email: "private@example.com",
-        public: false)
+      contact.additional_emails.create!(email: "work@example.com", public: true,
+        category: contact_account_categories(:additional_email_person_private))
+
+      contact.additional_emails.create!(email: "private@example.com", public: false,
+        category: contact_account_categories(:additional_email_person_work))
 
       expect(helper.agenda_contact_emails(contact))
         .to eq ["support@hitobito.example.com", "work@example.com"]
@@ -268,8 +272,10 @@ describe AgendaHelper do
     let(:contact) { people(:admin) }
 
     it "omits the accounts that are not public" do
-      contact.social_accounts.create!(label: "Webseite", name: "example.com", public: true)
-      contact.social_accounts.create!(label: "Skype", name: "anna.admin", public: false)
+      contact.social_accounts.create!(name: "example.com", public: true,
+        category: contact_account_categories(:social_account_person_website))
+      contact.social_accounts.create!(name: "anna.admin", public: false,
+        category: contact_account_categories(:social_account_person_facebook))
 
       expect(helper.agenda_contact_social_accounts(contact).map(&:value)).to eq ["example.com"]
     end

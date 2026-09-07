@@ -229,9 +229,10 @@ describe AgendaController do
       let(:contact) { people(:admin) }
 
       before do
-        contact.phone_numbers.create!(label: "landline", number: "+41 79 123 45 67", public: true)
-        contact.social_accounts.create!(label: "Webseite", name: "sac-cas.example.com",
-          public: true)
+        contact.phone_numbers.create!(number: "+41 79 123 45 67", public: true,
+          category: contact_account_categories(:phone_number_person_landline))
+        contact.social_accounts.create!(name: "sac-cas.example.com", public: true,
+          category: contact_account_categories(:social_account_person_website))
       end
 
       it "renders every contact attribute the event publishes" do
