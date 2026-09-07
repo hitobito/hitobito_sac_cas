@@ -1,4 +1,4 @@
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -51,6 +51,7 @@ en:
 
   errors:
     messages:
+      file_size_not_less_than: "darf nicht grösser als %{max} sein (Datei ist %{file_size} gross)"
       assert_old_enough: "must have a date of birth and be at least %{minimum_years} years old"
       too_young: "must be %{minimum_years} years or older"
       too_old: "muss %{maximum_years} Jahre oder jünger sein"
@@ -117,6 +118,10 @@ en:
         gender: Geschlecht
         phone_number: Telephone
         address: Street and no.
+        emergency_contact_1_name: Notfallkontakt 1 Name
+        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
+        emergency_contact_2_name: Notfallkontakt 2 Name
+        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
         adult_consent: Declaration of consent by the parent or legal guardian
         contribution_regulations: Contribution regulations
         data_protection: Privacy policy
@@ -420,6 +425,7 @@ en:
         subito: Subito
       event/activity:
         color: Farbe
+        icon: Icon
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
@@ -439,6 +445,7 @@ en:
         short_description: Kurzbeschrieb
         order: Reihenfolge
       event/fitness_requirement:
+        short_label: Kürzel
         label: Bezeichnung
         short_description: Kurzbeschreibung
         description: Beschreibung
@@ -628,6 +635,14 @@ en:
           m: Mr.
           w: Woman
         additional_information: Remarks (e.g. profession)
+        emergency_contact_1: Notfallkontakt 1
+        emergency_contact_1_name: Notfallkontakt 1 Name
+        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
+        emergency_contact_2: Notfallkontakt 2
+        emergency_contact_2_name: Notfallkontakt 2 Name
+        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
+        emergency_contacts_privacy_notice_html: >-
+          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unseren <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
       person/phone_number_mobile:
         number: Mobiltelefon
       person/phone_number_landline:
@@ -1611,6 +1626,10 @@ en:
     activities:
       form:
         help_inline_color: "Gültiger hexadezimaler Farbwert (zb. #fcba03)"
+        help_inline_icon: >-
+          Symbol für die Aktivität im Tourenprogramm (SVG, GIF, JPG oder PNG).
+        upload_icon: Icon hochladen
+        remove_icon: Aktuelles Icon entfernen
     kinds:
       actions_edit:
         push_down_button: Werte auf Kurse übertragen
@@ -1852,6 +1871,9 @@ en:
         Sagt den Kurs %{name} (%{number}) ab und annulliert alle Teilnahmen. Dabei werden allfällige Rechnungen storniert und bereits bezahlte Beträge rückerstattet. Diese Aktion kann nicht rückgängig gemacht werden.
       inform_participants_caption: Alle Teilnehmenden per E-Mail über Absage informieren
       canceled_reason_label: Grund
+
+    show:
+      application_link: Direkte Anmeldung
 
     state_details_sac_cas:
       approval_level: Freigabestufe
