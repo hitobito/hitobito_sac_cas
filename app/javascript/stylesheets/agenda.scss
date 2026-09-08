@@ -483,16 +483,12 @@ a {
 // take a colour from fall back to the neutral grey.
 $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
 
-.agenda-tour-detail-header {
+.agenda-detail-header {
   padding: 1rem 1.25rem;
   background-color: $agenda-tour-color;
 }
 
-.agenda-tour-detail-type {
-  font-size: 0.75rem; // 12px
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.agenda-detail-header-activity-label {
   color: $white;
 }
 
@@ -500,6 +496,7 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
   display: inline-flex;
   align-items: center;
   padding: 0.125rem 0.5rem;
+  margin-right: 0.25rem;
   border-radius: 50rem;
   background-color: $white;
   color: var(--bs-badge-color, $agenda-gray-dark);
@@ -632,7 +629,7 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
 .agenda-requirement-badge {
   display: inline;
   margin-right: 0.25rem;
-  padding: 0.25rem 0.75rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 50rem;
   font-size: 0.75rem; // 12px
   font-weight: 700;

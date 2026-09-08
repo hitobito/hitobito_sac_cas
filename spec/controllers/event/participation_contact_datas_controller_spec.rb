@@ -117,7 +117,7 @@ describe Event::ParticipationContactDatasController do
 
         expect(response).to redirect_to(group_event_path(group, event))
         expect(flash[:alert]).to eq "Für diese Tour sind nur die folgenden Gruppen erlaubt: " \
-          "Kosten SAC Sektionsmitglied, Kosten SAC-Mitglied (extern)"
+          "Sektionsmitglieder, SAC-Mitglieder"
       end
     end
   end

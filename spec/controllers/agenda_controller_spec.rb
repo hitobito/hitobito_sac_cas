@@ -445,7 +445,7 @@ describe AgendaController do
         dom.find(".agenda-tour-detail-body")
       end
 
-      let(:header) { dom.find(".agenda-tour-detail-header") }
+      let(:header) { dom.find(".agenda-detail-header") }
 
       it "hands the accent colour to the stylesheet once, on the outer element" do
         detail # renders the page
@@ -456,7 +456,7 @@ describe AgendaController do
       it "renders the activity and the requirements in the header" do
         detail # renders the page
 
-        expect(header).to have_css(".agenda-tour-detail-type", text: "WANDERWEG")
+        expect(header).to have_css(".agenda-detail-header-activity-label", text: "WANDERWEG")
         expect(header.all(".agenda-tour-detail-header-badge").map(&:text)).to eq ["\nT3\n", "\nT4\n"]
       end
 
@@ -486,7 +486,7 @@ describe AgendaController do
           "Konditionelle Anforderung" => "B - wenig anstrengend",
           "Teilnehmende" => "3/30",
           "Tourenleitung" => "Anna Admin Edmund Hillary",
-          "Kosten" => "Sektionsmitglieder CHF 50 SAC-Mitglieder CHF 60 Nicht-Mitglieder CHF 80"
+          "Kosten" => "Sektionsmitglieder CHF 50 SAC-Mitglieder CHF 60 Nicht-SAC-Mitglieder CHF 80"
         )
       end
 
@@ -499,7 +499,7 @@ describe AgendaController do
           "Beschreibung" => "Winterzauber im wunderschönen Kiental",
           "Zusatzinfo" => "Wichtige Infos, welche gelesen werden sollten",
           "Alternativroute" => "Ich kenne mich aus, vertrau mir",
-          "Kosten" => "Sektionsmitglieder CHF 50 SAC-Mitglieder CHF 60 Nicht-Mitglieder CHF 80"
+          "Kosten" => "Sektionsmitglieder CHF 50 SAC-Mitglieder CHF 60 Nicht-SAC-Mitglieder CHF 80"
         )
       end
 
@@ -529,7 +529,7 @@ describe AgendaController do
           detail # renders the page
 
           expect(dom.find(".agenda-tour-detail")[:style]).to be_blank
-          expect(header).not_to have_css(".agenda-tour-detail-type")
+          expect(header).not_to have_css(".agenda-detail-header-activity-label")
         end
       end
     end
