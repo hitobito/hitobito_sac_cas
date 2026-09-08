@@ -66,7 +66,7 @@
               %span.agenda-requirement-badge{style:}
                 = requirements.map(&:label).join(", ")
 
-        - if event.ascent || event.descent
+        - if event.ascent? || event.descent?
           = agenda_meta_row(:trending_up) do
             = event.elevation
 
