@@ -1,0 +1,20 @@
+-# Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
+-# hitobito_sac_cas and licensed under the Affero General Public License version 3
+-# or later. See the COPYING file at the top-level directory or at
+-# https://github.com/hitobito/hitobito_sac_cas.
+
+-# locals: events:
+-# Infinite scroll: this frame lazily loads the next page once it scrolls
+-# into view. Its initial content (shown until then, and kept as a
+-# fallback if the browser never triggers the lazy load) is a manual
+-# "load more" button - clicking it navigates within this same frame,
+-# since link/button navigation from inside a turbo-frame targets it by
+-# default.
+- if events.next_page
+  = turbo_frame_tag(pagination_frame_id,
+      src: agenda_index_path(pagination_params(events.next_page)),
+      loading: :lazy) do
+    .text-center.my-4
+      = link_to t("agenda.list.load_more"),
+          agenda_index_path(pagination_params(events.next_page)),
+          class: "btn btn-sm agenda-btn-cta agenda-btn-outline"

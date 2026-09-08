@@ -1580,6 +1580,7 @@ de:
       tours_found:
         one: "%{count} Tour gefunden"
         other: "%{count} Touren gefunden"
+      load_more: Weitere laden
       no_results:
         title: Keine Anlässe gefunden
         subtitle: Passe deine Filter an oder setze sie zurück.

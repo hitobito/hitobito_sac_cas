@@ -38,6 +38,10 @@ describe "agenda page", js: true do
     expect(find_field("filters_date_range_until").value).to be_blank
   end
 
+  it "does not show a load more link when there are fewer than 20 events to begin with" do
+    expect(page).not_to have_link("Weitere laden")
+  end
+
   it "auto-submits on every filter change, with the search button kept but visually hidden" do
     expect(page).to have_button("Suchen", visible: :all)
     expect(page).not_to have_button("Suchen", visible: true)
@@ -308,6 +312,104 @@ describe "agenda page", js: true do
       expect(page).to have_text("1 Tour gefunden")
 
       expect(find_field("Jugend (JO)", visible: :all)).not_to be_checked
+    end
+  end
+end
+
+describe "agenda page infinite scroll", js: true do
+  let(:group) { groups(:bluemlisalp) }
+
+  around do |example|
+    travel_to(Time.zone.local(2026, 1, 1)) { example.run }
+  end
+
+  def fabricate_tours(count)
+    count.times do |i|
+      tour = Fabricate(:sac_published_tour,
+        name: "Tour #{i.to_s.rjust(2, "0")}",
+        groups: [group],
+        globally_visible: true)
+      tour.dates.update_all(start_at: Date.new(2026, 2, 1))
+    end
+  end
+
+  context "with more tours than fit on one page" do
+    before { fabricate_tours(25) }
+
+    it "shows only the first 20 tours, but the true total count" do
+      visit agenda_index_path(group_id: group.id)
+
+      expect(page).to have_css(".agenda-tour-card", count: 20)
+      expect(page).to have_text("25 Touren gefunden")
+    end
+
+    it "shows a load more button that reveals the remaining tours when clicked" do
+      visit agenda_index_path(group_id: group.id)
+
+      expect(page).to have_link("Weitere laden")
+
+      click_link "Weitere laden"
+
+      expect(page).to have_css(".agenda-tour-card", count: 25)
+      expect(page).not_to have_link("Weitere laden")
+    end
+
+    it "lazily loads the next page once scrolled into view, without clicking the button" do
+      visit agenda_index_path(group_id: group.id)
+      expect(page).to have_css(".agenda-tour-card", count: 20)
+
+      page.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+
+      expect(page).to have_css(".agenda-tour-card", count: 25)
+      expect(page).not_to have_link("Weitere laden")
+    end
+  end
+
+  context "keeping the active filters when loading the next page" do
+    before do
+      22.times do |i|
+        tour = Fabricate(:sac_published_tour,
+          name: "Kinder Tour #{i.to_s.rjust(2, "0")}",
+          groups: [group],
+          globally_visible: true,
+          target_groups: [event_target_groups(:kinder)])
+        tour.dates.update_all(start_at: Date.new(2026, 2, 1))
+      end
+
+      3.times do |i|
+        tour = Fabricate(:sac_published_tour,
+          name: "Jugend Tour #{i}",
+          groups: [group],
+          globally_visible: true,
+          target_groups: [event_target_groups(:jugend)])
+        tour.dates.update_all(start_at: Date.new(2026, 2, 1))
+      end
+    end
+
+    it "only ever shows tours matching the filter, across both pages" do
+      visit agenda_index_path(group_id: group.id)
+      click_button "Zielgruppe"
+      check "Kinder (KiBe)"
+      expect(page).to have_text("22 Touren gefunden")
+      expect(page).to have_css(".agenda-tour-card", count: 20)
+
+      click_link "Weitere laden"
+
+      expect(page).to have_css(".agenda-tour-card", count: 22)
+      expect(page).not_to have_link("Weitere laden")
+      expect(page).not_to have_text("Jugend Tour")
+    end
+  end
+
+  context "with fewer tours than fit on one page" do
+    before { fabricate_tours(5) }
+
+    it "does not show a load more button" do
+      visit agenda_index_path(group_id: group.id)
+
+      expect(page).to have_css(".agenda-tour-card", count: 5)
+      expect(page).to have_text("5 Touren gefunden")
+      expect(page).not_to have_link("Weitere laden")
     end
   end
 end
