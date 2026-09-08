@@ -61,7 +61,7 @@ describe AgendaHelper do
       expect(helper.tour_price_categories(tour)).to eq [
         "Sektionsmitglieder CHF 50",
         "SAC-Mitglieder CHF 60",
-        "Nicht-Mitglieder CHF 80"
+        "Nicht-SAC-Mitglieder CHF 80"
       ]
     end
 

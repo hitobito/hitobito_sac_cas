@@ -577,6 +577,10 @@ de:
         regular_may_apply: Anmeldung möglich
         price_special: Kosten SAC Sektionsmitglied
         special_may_apply: Anmeldung möglich
+        price_categories:
+          price_special: Sektionsmitglieder
+          price_member: SAC-Mitglieder
+          price_regular: Nicht-SAC-Mitglieder
         season: Saison
         seasons:
           winter: Winter
@@ -1599,10 +1603,6 @@ de:
       contact: Kontakt
       leaders: Tourenleitung
       elevation: Höhenmeter
-      price:
-        price_special: Sektionsmitglieder
-        price_member: SAC-Mitglieder
-        price_regular: Nicht-Mitglieder
     buttons:
       show_details: Details
       apply: Anmelden

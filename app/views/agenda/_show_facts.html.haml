@@ -22,7 +22,7 @@
       - else
         = event.summit
 
-  - if event.tour? && (event.ascent || event.descent)
+  - if event.tour? && (event.ascent? || event.descent?)
     = agenda_fact(:trending_up, t("agenda.show.elevation")) do
       = event.elevation
 

@@ -126,9 +126,14 @@ module AgendaHelper
     return unless event.application_possible?
 
     waiting = !event.places_available? && event.display_booking_info?
-    link_to t("agenda.buttons.#{waiting ? "waiting_list" : "apply"}"),
+    link_to(
+      t("agenda.buttons.#{waiting ? "waiting_list" : "apply"}"),
       contact_data_group_event_participations_path(group, event),
+      data: {turbo: false},
+      target: :_blank,
+      rel: :noopener,
       class: "btn btn-sm agenda-btn-cta agenda-btn-positive"
+    )
   end
 
   def agenda_application_deadline(event)
@@ -169,7 +174,7 @@ module AgendaHelper
       next if amount.blank?
 
       formatted = number_with_precision(amount, precision: 2, strip_insignificant_zeros: true)
-      "#{t("agenda.show.price.#{attribute}")} CHF #{formatted}"
+      "#{t("activerecord.attributes.event/tour.price_categories.#{attribute}")} CHF #{formatted}"
     end
   end
 end

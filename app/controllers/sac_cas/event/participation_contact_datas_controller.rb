@@ -15,9 +15,9 @@ module SacCas::Event::ParticipationContactDatasController
   def assert_price_category_possible
     return if entry.price_category_may_apply?
 
-    possible_categories = event.possible_price_categories.map {
-      Event::Tour.human_attribute_name(_1)
-    }.join(", ")
+    possible_categories = event.possible_price_categories
+      .map { |c| I18n.t("activerecord.attributes.event/tour.price_categories.#{c}") }
+      .join(", ")
 
     flash[:alert] = I18n.t(
       "event.participation_contact_datas.flash.price_category_not_possible",
