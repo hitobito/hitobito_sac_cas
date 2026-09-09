@@ -573,6 +573,10 @@ fr:
         regular_may_apply: Inscription possible
         price_special: Coût membre de la section CAS
         special_may_apply: Inscription possible
+        price_categories:
+          price_special: Sektionsmitglieder
+          price_member: SAC-Mitglieder
+          price_regular: Nicht-SAC-Mitglieder
         season: Saison
         seasons:
           winter: Hiver
@@ -1653,10 +1657,6 @@ fr:
       contact: Kontakt
       leaders: Tourenleitung
       elevation: Höhenmeter
-      price:
-        price_special: Sektionsmitglieder
-        price_member: SAC-Mitglieder
-        price_regular: Nicht-Mitglieder
     buttons:
       show_details: Details
       apply: Anmelden
