@@ -479,7 +479,7 @@ describe AgendaController do
         expect(facts(detail)).to eq(
           "Datum" => "Mo 02.03.2026",
           "Dauer" => "1 Tag / 12:30 h",
-          "Gipfel" => "Bettmerhorn",
+          "Ziel" => "Bettmerhorn",
           "Höhenmeter" => "2872m ↗ / 911m ↘",
           "Technische Anforderungen" => "T3 T4",
           "Konditionelle Anforderung" => "B - wenig anstrengend",

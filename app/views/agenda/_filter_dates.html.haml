@@ -12,9 +12,9 @@
 -# with no {bubbles: true}, which never reaches a form-level listener.
 -# Binding the action on the input itself catches that non-bubbling event
 -# too, since bubbling only matters for reaching an ancestor's listener.
-.d-flex.gap-3
+.d-flex.flex-wrap.gap-3
   = f.fields_for(:date_range) do |ff|
-    .position-relative.agenda-date-field
+    .agenda-date-field
       = ff.label(:since, t("agenda.filters.since"), class: "agenda-date-field-label")
       = ff.text_field(:since,
         value: event_filter.chain.dig(:date_range, :since),
@@ -23,7 +23,7 @@
         data: {reset_value: l(Time.zone.today.to_date),
         action: "change->autosubmit#submit"})
       = agenda_icon(:calendar, class: "agenda-date-field-icon")
-    .position-relative.agenda-date-field
+    .agenda-date-field
       = ff.label(:until, t("agenda.filters.until"), class: "agenda-date-field-label")
       = ff.text_field(:until,
         value: event_filter.chain.dig(:date_range, :until),

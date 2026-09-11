@@ -61,7 +61,7 @@ a {
   display: block;
   position: relative;
 
-  width: 160px;
+  // width: 160px;  smaller images may take less space
   height: 68px;
   object-fit: contain;
   object-position: center center;
@@ -136,6 +136,10 @@ a {
 }
 
 .agenda-date-field {
+  flex: 1 1 auto;
+  position: relative;
+  width: 10rem;
+
   .agenda-date-field-label {
     position: absolute;
     left: 0.875rem; // 14px
@@ -153,7 +157,6 @@ a {
     padding: 1.125rem 2.5rem 0 0.875rem; // pt-[18px] pr-10 pl-[14px]
     font-size: 0.75rem; // 12px
     font-weight: 300;
-    width: 10rem;
 
     &::placeholder {
       color: $agenda-placeholder;
@@ -580,10 +583,14 @@ $agenda-tour-color: var(--tour-color, #{$agenda-gray-dark});
 
 .agenda-fact-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
   gap: 1rem;
 
   @include media-breakpoint-up(sm) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-breakpoint-up(md) {
     grid-template-columns: repeat(3, 1fr);
   }
 
