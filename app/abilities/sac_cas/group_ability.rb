@@ -24,6 +24,11 @@ module SacCas::GroupAbility
     on(Group) do
       permission(:any).may(:"index_event/tours").all
 
+      permission(:group_full).may(:"export_event/tours").in_same_group
+      permission(:group_and_below_full).may(:"export_event/tours").in_same_group_or_below
+      permission(:layer_read).may(:"export_event/tours").in_same_layer
+      permission(:layer_and_below_read).may(:"export_event/tours").in_same_layer_or_below
+
       permission(:layer_and_below_full)
         .may(:create_yearly_membership_invoice)
         .if_backoffice
@@ -32,21 +37,19 @@ module SacCas::GroupAbility
         .may(:download_statistics)
         .in_same_layer
 
+      permission(:group_and_below_full)
+        .may(:create)
+        .with_parent_in_same_group_hierarchy_except_restricted
       permission(:layer_and_below_full)
         .may(:create)
         .with_parent_in_same_layer_or_below_except_restricted
 
-      permission(:layer_and_below_full)
-        .may(:destroy)
-        .in_same_layer_or_below_except_permission_giving_or_restricted
-
-      permission(:group_and_below_full)
-        .may(:create)
-        .with_parent_in_same_group_hierarchy_except_restricted
-
       permission(:group_and_below_full)
         .may(:destroy)
         .in_below_group_except_restricted
+      permission(:layer_and_below_full)
+        .may(:destroy)
+        .in_same_layer_or_below_except_permission_giving_or_restricted
     end
   end
 
