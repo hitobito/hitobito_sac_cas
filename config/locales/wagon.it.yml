@@ -51,7 +51,7 @@ it:
 
   errors:
     messages:
-      file_size_not_less_than: "darf nicht grösser als %{max} sein (Datei ist %{file_size} gross)"
+      file_size_not_less_than: "non deve superare i %{max} (il file ha una dimensione di %{file_size} )"
       assert_old_enough: "deve avere una data di nascita e un’età minima di almeno %{minimum_years} anni"
       too_young: "deve avere almeno %{minimum_years} anni"
       too_old: "deve avere %{maximum_years} anni o meno"
@@ -118,10 +118,10 @@ it:
         gender: Sesso
         phone_number: Telefono
         address: Via e n.
-        emergency_contact_1_name: Notfallkontakt 1 Name
-        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
-        emergency_contact_2_name: Notfallkontakt 2 Name
-        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
+        emergency_contact_1_name: Contatto di emergenza 1 Nome
+        emergency_contact_1_phone: "Contatto di emergenza 1: numero di telefono"
+        emergency_contact_2_name: Contatto di emergenza 2 Nome
+        emergency_contact_2_phone: "Contatto di emergenza 2: numero di telefono"
         adult_consent: Dichiarazione di consenso del tutore legale
         contribution_regulations: Regolamento delle quote sociali
         data_protection: Protezione dei dati
@@ -136,8 +136,8 @@ it:
         register_on: Data di adesione dal
         self_registration_reason_id: Motivo dell'ingresso
       wizards/steps/signup/sektion/cornercard_fields:
-        card_application: Cornèrcard beantragen
-        consent_given: Datenschutz und AGB
+        card_application: Richiedere la Cornèrcard
+        consent_given: Informativa sulla privacy e Condizioni generali di contratto
       wizards/steps/signup/sektion/summary_fields:
         sektion_statuten: Statuto della sezione
         adult_consent: Dichiarazione di consenso del tutore legale
@@ -187,7 +187,7 @@ it:
     errors:
       messages:
         cornercard_consent_missing: >-
-          Bitte bestätige die Verarbeitung deiner Daten und die AGB, wenn du die Cornèrcard bestellen möchtest
+          Se desideri richiedere la Cornèrcard, ti preghiamo di confermare il trattamento dei tuoi dati e di accettare le Condizioni generali di contratto
         youth_not_allowed_in_family: >-
           I giovani di età compresa tra %{from_age} e %{to_age} anni non possono essere inseriti in un’affiliazione famigliare.
         invalid_date_range: "deve essere compreso tra il %{start_on} e il  %{end_on} "
@@ -274,8 +274,8 @@ it:
         password_confirmation: Conferma della password
       contact_account:
         predefined_labels:
-          landline: Festnetz
-          mobile: Mobil
+          landline: Rete fissa
+          mobile: Cellulare
       cost_center:
         label: Denominazione
         event_kind_categories: Categorie di corsi
@@ -403,13 +403,13 @@ it:
           evening: Sera
         states:
           created: Bozza
-          draft: Entwurf
+          draft: Bozza
           application_open: Pubblicato
           application_paused: Registrazione sospesa
           application_closed: Registrazione completata
           assignment_closed: Assegnazione completata
           ready: Pronto per lo svolgimento
-          published: Publiziert
+          published: Pubblicato
           closed: Completato
           canceled: Cancellato
         price_member: "Prezzo per i soci"
@@ -427,7 +427,7 @@ it:
         subito: Subito
       event/activity:
         color: Colore
-        icon: Icon
+        icon: Icona
         label: Denominazione
         short_description: Breve descrizione
         description: Descrizione
@@ -447,7 +447,7 @@ it:
         short_description: Breve descrizione
         order: Sequenza
       event/fitness_requirement:
-        short_label: Kürzel
+        short_label: Abbreviazioni
         label: Designazione
         short_description: Breve descrizione
         description: Descrizione del
@@ -561,7 +561,7 @@ it:
         descent: Discesa
         duration: Tempo richiesto
         duration_in_hours: Tempo richiesto
-        elevation: Auf-/Abstieg (Hm)
+        elevation: Salita/discesa (dislivello)
         maps: Mappe
         minimum_age: Età minima
         price_description: Descrizione del
@@ -572,15 +572,15 @@ it:
         price_special: Costi Membro della sezione SAC
         special_may_apply: È possibile registrarsi
         price_categories:
-          price_special: Sektionsmitglieder
-          price_member: SAC-Mitglieder
-          price_regular: Nicht-SAC-Mitglieder
+          price_special: Membri della sezione
+          price_member: Soci del CAS
+          price_regular: Non soci del SAC
         season: Stagione
         seasons:
           winter: Inverno
           summer: Estate
         subito: È Subito Tour
-        summit: Vertice
+        summit: Meta
         tourenportal_link: Link al portale del tour
         state_translated: Stato
         states:
@@ -641,14 +641,14 @@ it:
           m: Signor
           w: Signora
         additional_information: Osservazioni (ad es. professione)
-        emergency_contact_1: Notfallkontakt 1
-        emergency_contact_1_name: Notfallkontakt 1 Name
-        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
-        emergency_contact_2: Notfallkontakt 2
-        emergency_contact_2_name: Notfallkontakt 2 Name
-        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
+        emergency_contact_1: Contatto di emergenza 1
+        emergency_contact_1_name: "Contatto di emergenza 1: Nome"
+        emergency_contact_1_phone: "Contatto di emergenza 1: numero di telefono"
+        emergency_contact_2: Contatto di emergenza 2
+        emergency_contact_2_name: Contatto di emergenza 2 Nome
+        emergency_contact_2_phone: "Contatto di emergenza 2: numero di telefono"
         emergency_contacts_privacy_notice_html: >-
-          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unseren <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
+          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa escursione o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">le</a> nostre <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">Condizioni generali di contratto per la formazione | Club Alpino Svizzero CAS</a>.
       person/phone_number_mobile:
         number: Telefono cellulare
       person/phone_number_landline:
@@ -820,12 +820,12 @@ it:
         event/tour:
           attributes:
             activities:
-              must_be_child: müssen untergeordnete Aktivitäten sein
+              must_be_child: devono essere attività subordinate
             traits:
-              must_be_child: müssen untergeordnete Merkmale sein
+              must_be_child: devono essere caratteristiche secondarie
             technical_requirements:
               not_matching_activities: devono rientrare tra le attività selezionate
-              must_be_child: müssen untergeordnete Anforderungen sein
+              must_be_child: devono essere requisiti secondari
             base:
               report_must_be_closed: Il rapporto di viaggio deve essere compilato in anticipo
 
@@ -1607,65 +1607,66 @@ it:
       Informazioni importanti sull’esportazione
   agenda:
     header:
-      title: Tourenprogramm
-      brand: Schweizer Alpen-Club SAC
+      title: Programma delle escursioni
+      brand: Club Alpino Svizzero CAS
     filters:
-      reset: Zurücksetzen
-      since: Von
-      until: Bis
-      date_placeholder: "TT.MM.JJJJ"
-      target_groups: Zielgruppe
-      activities: Aktivitäten
-      fitness_requirements: Kondition
-      traits: Merkmale
-      leader: Leitung
-      status: Status
-      search: Suche
-      search_placeholder: "Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen"
+      reset: Ripristina
+      since: Da
+      until: Fino a
+      date_placeholder: "GG.MM.AAAA"
+      target_groups: Destinatari
+      activities: Attività
+      fitness_requirements: Condizione fisica
+      traits: Caratteristiche
+      leader: Direzione
+      status: Stato
+      search: Cerca
+      search_placeholder: "Cerca per titolo dell'attività, descrizione, tipo, ecc."
     index:
       title: "Ordine del giorno %{group_name}"
       select_group_alert: Si prega di specificare una sezione di cui si desidera visualizzare gli eventi
       apply_filter: Filtra
       reset_filter: Reimposta i filtri
-      reset_all_filters: Alle Filter zurücksetzen
+      reset_all_filters: Reimposta tutti i filtri
     list:
-      view_list: Liste
-      view_table: Tabelle
-      export_csv: CSV exportieren
+      view_list: Elenco
+      view_table: Tabella
+      export_csv: Esporta in CSV
       tours_found:
         one: "%{count} Tour trovato"
         many: "%{count} Itinerari trovati"
         other: "%{count} Itinerari trovati"
       no_results:
-        title: Keine Anlässe gefunden
-        subtitle: Passe deine Filter an oder setze sie zurück.
+        title: Nessun evento trovato
+        subtitle: Personalizza i filtri o ripristina le impostazioni predefinite.
       tour_card:
-        date: Datum
-        duration_label: Dauer
+        date: Data
+        duration_label: Durata
         duration:
-          one: "%{count} Tag"
-          other: "%{count} Tage"
-        participants_label: Teilnehmende
-        participants_suffix: Teilnehmende
-        max_participants: "Max. %{max} Teilnehmende"
-        contact: Kontakt
-        fitness_requirements: Kondition
+          one: "%{count} Giorno"
+          many: "%{count} Giorni"
+          other: "%{count} Giorni"
+        participants_label: Partecipanti
+        participants_suffix: Partecipanti
+        max_participants: "%{max} massimo dei partecipanti"
+        contact: Contatti
+        fitness_requirements: Condizione fisica
     show:
-      back_to_overview: Zurück zur Übersicht
-      contact: Kontakt
-      leaders: Tourenleitung
-      elevation: Höhenmeter
+      back_to_overview: Torna alla panoramica
+      contact: Contatti
+      leaders: Guida turistica
+      elevation: Dislivello
     buttons:
-      show_details: Details
-      apply: Anmelden
-      waiting_list: Warteliste
+      show_details: Dettagli
+      apply: Accedi
+      waiting_list: Lista d'attesa
     status:
-      published: Veröffentlicht
-      application_open: Anmeldung offen
-      application_waiting: Anmeldung offen (Warteliste)
-      application_closed: Anmeldung geschlossen
-      closed: Durchgeführt
-      canceled: Abgesagt
+      published: Pubblicato
+      application_open: Iscrizioni aperte
+      application_waiting: Iscrizioni aperte (lista d'attesa)
+      application_closed: Le iscrizioni sono chiuse
+      closed: Realizzato
+      canceled: Annullato
 
   event:
     application_market:
@@ -1698,9 +1699,9 @@ it:
       form:
         help_inline_color: "Valore di colore esadecimale valido (ad es. #fcba03)"
         help_inline_icon: >-
-          Symbol für die Aktivität im Tourenprogramm (SVG, GIF, JPG oder PNG).
-        upload_icon: Icon hochladen
-        remove_icon: Aktuelles Icon entfernen
+          Icona che rappresenta l'attività nel programma delle escursioni (SVG, GIF, JPG o PNG).
+        upload_icon: Carica icona
+        remove_icon: Rimuovi l'icona "Attualità"
     kinds:
       actions_edit:
         push_down_button: Valori di trasferimento ai corsi
@@ -1793,7 +1794,7 @@ it:
           Per questo corso, i membri del CAS possono richiedere un contributo di sovvenzione.
 
 
-          <b>Importante:</b> la tariffa ridotta del corso verrà applicata solo dopo il ricevimento del modulo di richiesta della sovvenzione, debitamente compilato e firmato dalla tua sezione.
+          Importante: la tariffa ridotta del corso verrà applicata solo dopo il ricevimento del modulo di richiesta della sovvenzione, debitamente compilato e firmato dalla tua sezione.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
         detail_info_text: >-
           Un’iscrizione firmata dal responsabile o dalla responsabile delle escursioni conferma lo status di guida SAC attiva o futura e dà diritto al prezzo sovvenzionato del corso (%{amount}). Ti preghiamo, se necessario, di compilare il modulo %{link} e <b>di restituircelo</b> il prima possibile, comunque entro <b>e non oltre 5 settimane prima dell’inizio del corso</b>.
@@ -1947,7 +1948,7 @@ it:
       canceled_reason_label: Motivazione
 
     show:
-      application_link: Direkte Anmeldung
+      application_link: Registrazione diretta
 
     state_details_sac_cas:
       approval_level: Livello di autorizzazione
@@ -2129,18 +2130,18 @@ it:
       non_sac_member_count: Numero di partecipanti non soci del CAS
 
   export/tabular/events/tours/list:
-    leaders: Leitungsteam
-    price_description: Kosten Hinweis
-    group_names: "Organisatoren"
-    duration: Zeitraum
-    date: "Datum %{index}"
+    leaders: Gruppo direttivo
+    price_description: Nota sui costi
+    group_names: "Organizzatori"
+    duration: Periodo
+    date: "Data %{index}"
 
     # youth columns
-    male_count: Anzahl Teilnehmende Männer
-    female_count: Anzahl Teilnehmende Frauen
-    absent_count: Anzahl Nicht erschienene
-    canceled_count: Anzahl Abgemeldete
-    rejected_count: Anzahl Abgelehnte
+    male_count: Numero di partecipanti di sesso maschile
+    female_count: Numero di partecipanti donne
+    absent_count: Numero di assenti
+    canceled_count: Numero di utenti che hanno annullato l'iscrizione
+    rejected_count: Numero di richieste respinte
 
   export/tabular/people/mitgliedschaft:
     attributes:
@@ -2194,19 +2195,19 @@ it:
 
   export/tabular/people/cornercard_applications:
     attributes:
-      id: Mitgliedernummer
-      last_name: Nachname
-      first_name: Vorname
-      gender: Geschlecht
-      birthday: Geburtsdatum
-      email: Hauptemail
-      mobile: Mobile
-      street: Strasse
-      housenumber: Hausnummer
-      postbox: Postfach
-      zip_code: PLZ
-      town: Ort
-      country: Land
+      id: Numero di iscrizione
+      last_name: Cognome
+      first_name: Nome
+      gender: Sesso
+      birthday: Data di nascita
+      email: Indirizzo e-mail principale
+      mobile: Cellulari
+      street: Strada
+      housenumber: Numero civico
+      postbox: Casella postale
+      zip_code: Codice postale
+      town: Luogo
+      country: Paese
 
   export/tabular/people/jubilare:
     sheet_name: "Membri per %{reference_date}"
@@ -2967,23 +2968,23 @@ it:
           various_fields_title: Dati aggiuntivi
           cornercard_fields_title: Cornèrcard
           cornercard_fields:
-            card_application: Cornèrcard beantragen
-            benefit_heading: Mitgliedervorteil
-            order_heading: SAC-Cornèrcard bestellen
+            card_application: Richiedere una Cornèrcard
+            benefit_heading: Vantaggio riservato ai soci
+            order_heading: Richiedi la SAC-Cornèrcard
             order_description: >-
-              Ergänze deine Mitgliedschaft mit der kostenlosen SAC-Cornèrcard und profitiere von exklusiven Vorteilen bei deinen SAC-Aktivitäten und im Alltag.
-            benefits_heading: "Deine Vorteile auf einen Blick:"
-            benefit_1: Keine Jahresgebühr
-            benefit_2: 20-faches Cashback im SAC-Shop (entspricht zusätzlichen 6% Preisvorteil)
-            benefit_3: Exklusives SAC-Kartendesign
+              Completa la tua iscrizione con la Cornèrcard del CAS gratuita e approfitta di vantaggi esclusivi durante le tue attività con il CAS e nella vita di tutti i giorni.
+            benefits_heading: "I tuoi vantaggi in sintesi:"
+            benefit_1: Nessuna quota annuale
+            benefit_2: Cashback 20 volte superiore nello shop SAC (corrisponde a un ulteriore sconto del 6%)
+            benefit_3: Design esclusivo delle carte SAC
             support_text: >-
-              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+              Ogni volta che utilizzi la carta, sostieni contemporaneamente il CAS. In qualità di partner principale, Cornèrcard devolve allo SAC <strong>lo 0,2% del fatturato generato dalla carta</strong>, <strong>senza alcun costo aggiuntivo per te.</strong>
             card_application_label: >-
-              Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC Cornèrcard beantragen.
+              Vorrei usufruire del vantaggio riservato ai soci e richiedere la Cornèrcard SAC gratuita.
             consent_label: >-
-              Ich stimme der %{data_processing_link} zu und habe die %{agb_link} gelesen und akzeptiere diese.
-            data_processing_link_text: Verarbeitung meiner Daten
-            agb_link_text: Allgemeinen Geschäftsbedingungen
+              Sono d'accordo con %{data_processing_link}, ho letto %{agb_link} e ne accetto i termini.
+            data_processing_link_text: Trattamento dei miei dati
+            agb_link_text: Condizioni generali di contratto
           summary_fields_title: Riepilogo
           summary_fields:
             my_membership: "La mia affiliazione"
@@ -2994,7 +2995,7 @@ it:
               Dopo aver fatto richiesta ufficiale di affiliazione riceverai la fattura tramite e-mail.
             entry_per: "Adesione dal:"
             next_button: Richiedere affiliazione
-            cornercard_will_be_ordered: "SAC-Cornèrcard wird bestellt"
+            cornercard_will_be_ordered: "Viene nominata la SAC-Cornèrcard"
           summary_person_card:
             contact_person: "Persona di contatto"
           summary_family_member_card:

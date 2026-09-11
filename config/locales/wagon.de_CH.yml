@@ -578,7 +578,7 @@ de_CH:
           winter: Winter
           summer: Sommer
         subito: Ist Subito-Tour
-        summit: Gipfel
+        summit: Ziel
         tourenportal_link: Link zum Tourenportal
         state_translated: Status
         states:
@@ -1724,7 +1724,7 @@ de_CH:
           Für diesen Kurs können SAC-Mitglieder einen Subventionsbeitrag beantragen.
 
 
-          <b>Wichtig:</b> Der reduzierte Kurspreis wird erst nach Erhalt des vollständig ausgefüllten und von deiner SAC-Sektion unterzeichneten Subventionsantrags freigeschaltet.
+          Wichtig: Der reduzierte Kurspreis wird erst nach Erhalt des vollständig ausgefüllten und von deiner SAC-Sektion unterzeichneten Subventionsantrags freigeschaltet.
         detail_info_header: "Was muss ich tun um einen Subventionsantrag zu stellen?"
         detail_info_text: >-
           Eine Anmeldung mit Unterschrift des Tourenchefs oder der Tourenchefin bestätigt den aktiven oder künftigen SAC-Leitersatz und berechtigt jeweils zum subventionierten Kurspreis (%{amount}). Wir bitten dich, gegebenenfalls das Formular %{link} auszufüllen und es uns so rasch als möglich, jedoch bis <b>spätestens 5 Wochen vor Kursbeginn zu retournieren</b>.

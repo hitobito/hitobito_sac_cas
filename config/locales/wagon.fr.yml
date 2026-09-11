@@ -51,7 +51,7 @@ fr:
 
   errors:
     messages:
-      file_size_not_less_than: "darf nicht grösser als %{max} sein (Datei ist %{file_size} gross)"
+      file_size_not_less_than: "ne doit pas dépasser %{max} (le fichier pèse %{file_size} )"
       assert_old_enough: "doit avoir une date de naissance et être âgé·e d’au moins %{minimum_years} "
       too_young: "doit être âgé·e de %{minimum_years} ans ou plus"
       too_old: "doit être âgé de %{maximum_years} ans ou moins"
@@ -118,10 +118,10 @@ fr:
         gender: Sexe
         phone_number: Téléphone
         address: Rue et n°
-        emergency_contact_1_name: Notfallkontakt 1 Name
-        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
-        emergency_contact_2_name: Notfallkontakt 2 Name
-        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
+        emergency_contact_1_name: "Contact en cas d'urgence 1 : Nom"
+        emergency_contact_1_phone: "Contact en cas d'urgence 1 : numéro de téléphone"
+        emergency_contact_2_name: "Contact en cas d'urgence 2 : Nom"
+        emergency_contact_2_phone: "Contact d'urgence 2 : numéro de téléphone"
         adult_consent: Consentement du représentant légal
         contribution_regulations: Règlement des cotisations
         data_protection: Politique de confidentialité
@@ -136,8 +136,8 @@ fr:
         register_on: Date d’entrée au
         self_registration_reason_id: Motif d’entrée
       wizards/steps/signup/sektion/cornercard_fields:
-        card_application: Cornèrcard beantragen
-        consent_given: Datenschutz und AGB
+        card_application: Demander une carte Cornèrcard
+        consent_given: Confidentialité et conditions générales
       wizards/steps/signup/sektion/summary_fields:
         sektion_statuten: Statuts de la section
         adult_consent: Consentement du responsable légal
@@ -187,7 +187,7 @@ fr:
     errors:
       messages:
         cornercard_consent_missing: >-
-          Bitte bestätige die Verarbeitung deiner Daten und die AGB, wenn du die Cornèrcard bestellen möchtest
+          Si tu souhaites commander la carte Cornèrcard, merci de confirmer que tu acceptes le traitement de tes données et les conditions générales.
         youth_not_allowed_in_family: >-
           Les adolescent·e·s âgé·e·s de %{from_age} à %{to_age} ans ne peuvent pas être admis·e·s
 
@@ -276,8 +276,8 @@ fr:
         password_confirmation: Confirmation du mot de passe
       contact_account:
         predefined_labels:
-          landline: Festnetz
-          mobile: Mobil
+          landline: Téléphone fixe
+          mobile: Mobile
       cost_center:
         label: Désignation
         event_kind_categories: Catégories de cours
@@ -405,13 +405,13 @@ fr:
           evening: Soir
         states:
           created: Projet
-          draft: Entwurf
+          draft: Projet
           application_open: Publié
           application_paused: Inscription en pause
           application_closed: Inscription terminée
           assignment_closed: Attribution terminée
           ready: Prêt à débuter
-          published: Publiziert
+          published: Publié
           closed: Terminé
           canceled: Annulé
         price_member: "Prix pour les membres"
@@ -429,7 +429,7 @@ fr:
         subito: Subito
       event/activity:
         color: Couleur
-        icon: Icon
+        icon: Icône
         label: Dénomination
         short_description: Brève description
         description: Description
@@ -449,7 +449,7 @@ fr:
         short_description: Brève description
         order: Ordre
       event/fitness_requirement:
-        short_label: Kürzel
+        short_label: Abréviations
         label: Désignation
         short_description: Brève description
         description: Description
@@ -563,7 +563,7 @@ fr:
         descent: Descente
         duration: Temps nécessaire
         duration_in_hours: Temps nécessaire
-        elevation: Auf-/Abstieg (Hm)
+        elevation: Montée/descente (dénivelé)
         maps: Cartes
         minimum_age: Âge minimum
         price_description: Description
@@ -574,15 +574,15 @@ fr:
         price_special: Coût membre de la section CAS
         special_may_apply: Inscription possible
         price_categories:
-          price_special: Sektionsmitglieder
-          price_member: SAC-Mitglieder
-          price_regular: Nicht-SAC-Mitglieder
+          price_special: Membres de la section
+          price_member: Membres du CAS
+          price_regular: Personnes non membres du CAS
         season: Saison
         seasons:
           winter: Hiver
           summer: Été
         subito: Est Subito Tour
-        summit: Sommet
+        summit: Destination
         tourenportal_link: Lien vers le portail des randonnées
         state_translated: Statut
         states:
@@ -643,14 +643,14 @@ fr:
           m: Monsieur
           w: Madame
         additional_information: Remarques (p. ex. profession)
-        emergency_contact_1: Notfallkontakt 1
-        emergency_contact_1_name: Notfallkontakt 1 Name
-        emergency_contact_1_phone: Notfallkontakt 1 Telefonnummer
-        emergency_contact_2: Notfallkontakt 2
-        emergency_contact_2_name: Notfallkontakt 2 Name
-        emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
+        emergency_contact_1: Contact en cas d'urgence 1
+        emergency_contact_1_name: "Contact en cas d'urgence 1 : Nom"
+        emergency_contact_1_phone: "Contact en cas d'urgence 1 : numéro de téléphone"
+        emergency_contact_2: Contact en cas d'urgence 2
+        emergency_contact_2_name: "Contact en cas d'urgence 2 : Nom"
+        emergency_contact_2_phone: "Contact d'urgence 2 : numéro de téléphone"
         emergency_contacts_privacy_notice_html: >-
-          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unseren <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
+          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette randonnée ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nos <a href="https://www.sac-cas.ch/fr/meta/cg/formations/" target="_blank" rel="noreferrer">Conditions générales de formation | Club alpin suisse CAS</a>.
       person/phone_number_mobile:
         number: Téléphone mobile
       person/phone_number_landline:
@@ -822,12 +822,12 @@ fr:
         event/tour:
           attributes:
             activities:
-              must_be_child: müssen untergeordnete Aktivitäten sein
+              must_be_child: doivent être des activités secondaires
             traits:
-              must_be_child: müssen untergeordnete Merkmale sein
+              must_be_child: doivent être des caractéristiques secondaires
             technical_requirements:
               not_matching_activities: doivent faire partie des activités sélectionnées
-              must_be_child: müssen untergeordnete Anforderungen sein
+              must_be_child: doivent être des exigences secondaires
             base:
               report_must_be_closed: Le rapport de tournée doit être rempli au préalable
 
@@ -1609,65 +1609,66 @@ fr:
       Informations importantes concernant l'exportation
   agenda:
     header:
-      title: Tourenprogramm
-      brand: Schweizer Alpen-Club SAC
+      title: Programme des courses
+      brand: Club alpin suisse CAS
     filters:
-      reset: Zurücksetzen
-      since: Von
-      until: Bis
-      date_placeholder: "TT.MM.JJJJ"
-      target_groups: Zielgruppe
-      activities: Aktivitäten
-      fitness_requirements: Kondition
-      traits: Merkmale
-      leader: Leitung
-      status: Status
-      search: Suche
-      search_placeholder: "Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen"
+      reset: Réinitialiser
+      since: Par
+      until: Jusqu'à
+      date_placeholder: "JJ.MM.AAAA"
+      target_groups: Public cible
+      activities: Activités
+      fitness_requirements: condition physique
+      traits: Caractéristiques
+      leader: Direction
+      status: Statut
+      search: Recherche
+      search_placeholder: "Rechercher par titre d'activité, description, type, etc."
     index:
       title: "Ordre du jour %{group_name}"
       select_group_alert: Veuillez indiquer une section dont vous souhaitez afficher les événements
       apply_filter: Filtrer
       reset_filter: Réinitialiser les filtres
-      reset_all_filters: Alle Filter zurücksetzen
+      reset_all_filters: Réinitialiser tous les filtres
     list:
       view_list: Liste
-      view_table: Tabelle
-      export_csv: CSV exportieren
+      view_table: Tableau
+      export_csv: Exporter au format CSV
       tours_found:
         one: "%{count} Circuit trouvé"
         many: "%{count} Circuits trouvés"
         other: "%{count} Circuits trouvés"
       no_results:
-        title: Keine Anlässe gefunden
-        subtitle: Passe deine Filter an oder setze sie zurück.
+        title: Aucun événement trouvé
+        subtitle: Personnalise tes filtres ou réinitialise-les.
       tour_card:
-        date: Datum
-        duration_label: Dauer
+        date: Date
+        duration_label: Durée
         duration:
-          one: "%{count} Tag"
-          other: "%{count} Tage"
-        participants_label: Teilnehmende
-        participants_suffix: Teilnehmende
-        max_participants: "Max. %{max} Teilnehmende"
-        contact: Kontakt
-        fitness_requirements: Kondition
+          one: "%{count} Jour"
+          many: "%{count} jours"
+          other: "%{count} jours"
+        participants_label: Participants
+        participants_suffix: Participants
+        max_participants: "%{max} s maximales des participants"
+        contact: Contact
+        fitness_requirements: condition physique
     show:
-      back_to_overview: Zurück zur Übersicht
-      contact: Kontakt
-      leaders: Tourenleitung
-      elevation: Höhenmeter
+      back_to_overview: Retour à la liste
+      contact: Contact
+      leaders: Chef de course
+      elevation: dénivelé
     buttons:
-      show_details: Details
-      apply: Anmelden
-      waiting_list: Warteliste
+      show_details: Détails
+      apply: Se connecter
+      waiting_list: Liste d'attente
     status:
-      published: Veröffentlicht
-      application_open: Anmeldung offen
-      application_waiting: Anmeldung offen (Warteliste)
-      application_closed: Anmeldung geschlossen
-      closed: Durchgeführt
-      canceled: Abgesagt
+      published: Publié
+      application_open: Inscription ouverte
+      application_waiting: Inscription ouverte (liste d'attente)
+      application_closed: Les inscriptions sont closes
+      closed: Réalisé
+      canceled: Annulé
 
   event:
     application_market:
@@ -1700,9 +1701,9 @@ fr:
       form:
         help_inline_color: "Valeur de couleur hexadécimale valide (par ex. #fcba03)"
         help_inline_icon: >-
-          Symbol für die Aktivität im Tourenprogramm (SVG, GIF, JPG oder PNG).
-        upload_icon: Icon hochladen
-        remove_icon: Aktuelles Icon entfernen
+          Icône représentant l'activité dans le programme d'excursions (SVG, GIF, JPG ou PNG).
+        upload_icon: Télécharger une icône
+        remove_icon: Supprimer l'icône « Actualités »
     kinds:
       actions_edit:
         push_down_button: Transférer les valeurs aux cours
@@ -1795,7 +1796,7 @@ fr:
           Pour ce cours, les membres du CAS peuvent demander une contribution de subvention.
 
 
-          <b>Important :</b> Le tarif réduit du cours ne sera appliqué qu'après réception du formulaire de demande de subvention dûment rempli et signé par ta section.
+          Important : Le tarif réduit du cours ne sera appliqué qu'après réception du formulaire de demande de subvention dûment rempli et signé par ta section.
         detail_info_header: "Que dois-je faire pour réaliser une demande de subvention?"
         detail_info_text: >-
           Une inscription portant la signature du/de la préposé·e aux course confirme le statut de moniteur ou de monitrice actif(ve) ou futur(e) du CAS et donne droit au tarif subventionné du cours (%{amount}). Nous te prions, le cas échéant, de remplir le formulaire %{link} et <b>de</b> nous le <b>renvoyer</b> dès que possible, au <b>plus tard 5 semaines avant le début du cours</b>.
@@ -1949,7 +1950,7 @@ fr:
       canceled_reason_label: motif
 
     show:
-      application_link: Direkte Anmeldung
+      application_link: Inscription directe
 
     state_details_sac_cas:
       approval_level: niveau d'autorisation
@@ -2131,18 +2132,18 @@ fr:
       non_sac_member_count: Nombre de participants non membres du CAS
 
   export/tabular/events/tours/list:
-    leaders: Leitungsteam
-    price_description: Kosten Hinweis
-    group_names: "Organisatoren"
-    duration: Zeitraum
-    date: "Datum %{index}"
+    leaders: Équipe de direction
+    price_description: Remarque concernant les coûts
+    group_names: "Organisateurs"
+    duration: Période
+    date: "Date %{index}"
 
     # youth columns
-    male_count: Anzahl Teilnehmende Männer
-    female_count: Anzahl Teilnehmende Frauen
-    absent_count: Anzahl Nicht erschienene
-    canceled_count: Anzahl Abgemeldete
-    rejected_count: Anzahl Abgelehnte
+    male_count: Nombre d'hommes participants
+    female_count: Nombre de participantes
+    absent_count: Nombre de personnes absentes
+    canceled_count: Nombre de personnes ayant annulé leur inscription
+    rejected_count: Nombre de refusés
 
   export/tabular/people/mitgliedschaft:
     attributes:
@@ -2196,19 +2197,19 @@ fr:
 
   export/tabular/people/cornercard_applications:
     attributes:
-      id: Mitgliedernummer
-      last_name: Nachname
-      first_name: Vorname
-      gender: Geschlecht
-      birthday: Geburtsdatum
-      email: Hauptemail
+      id: numéro de membre
+      last_name: Nom de famille
+      first_name: Prénom
+      gender: Sexe
+      birthday: Date de naissance
+      email: Adresse e-mail principale
       mobile: Mobile
-      street: Strasse
-      housenumber: Hausnummer
-      postbox: Postfach
-      zip_code: PLZ
-      town: Ort
-      country: Land
+      street: Rue
+      housenumber: numéro de rue
+      postbox: Boîte postale
+      zip_code: code postal
+      town: Lieu
+      country: Pays
 
   export/tabular/people/jubilare:
     sheet_name: "Membres par %{reference_date}"
@@ -2969,23 +2970,23 @@ fr:
           various_fields_title: Données supplémentaires
           cornercard_fields_title: Cornèrcard
           cornercard_fields:
-            card_application: Cornèrcard beantragen
-            benefit_heading: Mitgliedervorteil
-            order_heading: SAC-Cornèrcard bestellen
+            card_application: Demander une carte Cornèrcard
+            benefit_heading: Avantage réservé aux membres
+            order_heading: Commander la carte SAC-Cornèrcard
             order_description: >-
-              Ergänze deine Mitgliedschaft mit der kostenlosen SAC-Cornèrcard und profitiere von exklusiven Vorteilen bei deinen SAC-Aktivitäten und im Alltag.
-            benefits_heading: "Deine Vorteile auf einen Blick:"
-            benefit_1: Keine Jahresgebühr
-            benefit_2: 20-faches Cashback im SAC-Shop (entspricht zusätzlichen 6% Preisvorteil)
-            benefit_3: Exklusives SAC-Kartendesign
+              Complétez votre adhésion avec la carte Cornèrcard CAS gratuite et profitez d'avantages exclusifs lors de vos activités au sein du CAS et au quotidien.
+            benefits_heading: "Tes avantages en un coup d'œil :"
+            benefit_1: Pas de cotisation annuelle
+            benefit_2: Cashback multiplié par 20 dans la boutique du CAS (ce qui correspond à une réduction supplémentaire de 6 %)
+            benefit_3: Design exclusif aux couleurs du CAS
             support_text: >-
-              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+              Chaque fois que tu utilises ta carte, tu soutiens en même temps le CAS. En tant que partenaire principal, Cornèrcard reverse <strong>0,2 % du chiffre d'affaires généré par les transactions par carte</strong> au CAS, <strong>sans frais supplémentaires pour toi.</strong>
             card_application_label: >-
-              Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC Cornèrcard beantragen.
+              Je souhaite profiter des avantages réservés aux membres et demander la carte Cornèrcard CAS gratuite.
             consent_label: >-
-              Ich stimme der %{data_processing_link} zu und habe die %{agb_link} gelesen und akzeptiere diese.
-            data_processing_link_text: Verarbeitung meiner Daten
-            agb_link_text: Allgemeinen Geschäftsbedingungen
+              Je suis d'accord avec l'%{data_processing_link}, j'ai lu les %{agb_link} et je les accepte.
+            data_processing_link_text: Traitement de mes données
+            agb_link_text: Conditions générales de vente
           summary_fields_title: Résumé
           summary_fields:
             my_membership: "Mon adhésion"
@@ -2996,7 +2997,7 @@ fr:
               Après avoir fait ta demande d’adhésion formelle, tu recevras la facture par e-mail.
             entry_per: "Entrée au:"
             next_button: Demander une adhésion
-            cornercard_will_be_ordered: "SAC-Cornèrcard wird bestellt"
+            cornercard_will_be_ordered: "Cornèrcard-CAS sera commandée."
           summary_person_card:
             contact_person: "Personne de contact"
           summary_family_member_card:
