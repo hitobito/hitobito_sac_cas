@@ -149,7 +149,7 @@ module Wizards::Signup
 
       return person_fields_step if step == :_start && current_user
       return various_fields_step if at_person_fields?(step) && too_young_for_household?
-      return summary_fields_step if at_various_fields?(step) && too_young_for_cornercard?
+      return summary_fields_step if at_various_fields?(step) && hide_cornercard_step?
 
       super
     end
@@ -165,6 +165,10 @@ module Wizards::Signup
     def at_various_fields?(step) = step == Wizards::Steps::Signup::Sektion::VariousFields
 
     def too_young_for_household? = has_needed_age(MIN_ADULT_YEARS)
+
+    def hide_cornercard_step?
+      Settings.cornercard.config.blank? || too_young_for_cornercard?
+    end
 
     def too_young_for_cornercard? = has_needed_age(MIN_CORNERCARD_YEARS)
 
