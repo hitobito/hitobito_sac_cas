@@ -45,11 +45,9 @@ describe OidcClaimSetup, :outside_language_scope do
     let(:logo) { Rails.root.join("spec", "fixtures", "files", "images", "logo.png") }
 
     it "has fallback picture" do
-      image_fn = "media/images/profile-c150952c7e2ec2cf298980d55b2bcde3.svg"
+      expected_path = ActionController::Base.helpers.image_path(owner.picture_default)
 
-      expect(claims[:picture_url])
-        .to eq("http://test.host/packs-test/#{image_fn}")
-        .or eq "http://test.host/packs/#{image_fn}"
+      expect(claims[:picture_url]).to eq "http://test.host#{expected_path}"
     end
 
     it "has redirect url to store image" do

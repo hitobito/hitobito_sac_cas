@@ -24,8 +24,9 @@ RSpec.describe ApplicationMailer, type: :mailer do
         "3000 Bern 14\n<br />",
         "<a href=\"https://www.sac-cas.ch\">https://www.sac-cas.ch</a>"
       )
+      logo_path = Regexp.escape(ActionController::Base.helpers.image_path("sac_logo_de.svg"))
       expect(mail.body.to_s)
-        .to match(/<img .*src="http:\/\/test.host\/packs(-test)?\/media\/images\/sac_logo_de-.+.svg"/)
+        .to match(/<img .*src="http:\/\/test.host#{logo_path}"/)
     end
 
     it "renders sektions specific header and footer" do
