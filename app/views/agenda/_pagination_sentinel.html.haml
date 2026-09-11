@@ -3,7 +3,6 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito_sac_cas.
 
--# locals: events:
 -# Infinite scroll: this frame lazily loads the next page once it scrolls
 -# into view. Its initial content (shown until then, and kept as a
 -# fallback if the browser never triggers the lazy load) is a manual
@@ -11,10 +10,11 @@
 -# since link/button navigation from inside a turbo-frame targets it by
 -# default.
 - if events.next_page
-  = turbo_frame_tag(pagination_frame_id,
-      src: agenda_index_path(pagination_params(events.next_page)),
+  - pagination_params = {group_id: group.id, page: events.next_page, filters: params[:filters]&.to_unsafe_h}
+  = turbo_frame_tag(:agenda_events_list_page,
+      src: agenda_index_path(pagination_params),
       loading: :lazy) do
     .text-center.my-4
       = link_to t("agenda.list.load_more"),
-          agenda_index_path(pagination_params(events.next_page)),
+          agenda_index_path(pagination_params),
           class: "btn btn-sm agenda-btn-cta agenda-btn-outline"

@@ -3,7 +3,6 @@
 -# or later. See the COPYING file at the top-level directory or at
 -# https://github.com/hitobito/hitobito_sac_cas.
 
--# locals: events:
 - events.each do |event|
   - cache([event, I18n.locale, Time.zone.today]) do
     = render "list_card", event: event

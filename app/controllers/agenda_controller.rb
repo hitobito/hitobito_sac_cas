@@ -9,11 +9,6 @@ class AgendaController < ApplicationController
   include Rememberable
 
   PER_PAGE = 20
-  # Distinct id for the infinite-scroll sentinel frame, so we can tell a
-  # pagination fetch (only the next page's cards + a new sentinel) apart
-  # from a filter change (the whole list, chips and results count included).
-  PAGINATION_FRAME_ID = "agenda_events_list_pagination"
-  FILTER_FRAME_ID = "agenda_events_list_filter"
 
   skip_before_action :authenticate_person!
   skip_authorization_check
@@ -28,15 +23,16 @@ class AgendaController < ApplicationController
 
   layout -> { turbo_frame_request? ? false : "agenda" }
 
-  helper_method :group, :events, :event, :event_filter, :event_leaders,
-    :filter_frame_id, :pagination_frame_id, :pagination_params
+  helper_method :group, :events, :event, :event_filter, :event_leaders
 
   def index
     preload_assocs
-    if pagination_frame_request?
-      render partial: "list_page", locals: {events: events}
-    elsif filter_frame_request?
-      render partial: "list"
+    if turbo_frame_request?
+      if params[:page].present?
+        render partial: "list_page"
+      else
+        render partial: "list"
+      end
     else
       render :index
     end
@@ -115,26 +111,5 @@ class AgendaController < ApplicationController
 
   def event
     @event ||= event_filter.entries.find(params[:event_id])
-  end
-
-  def pagination_frame_request?
-    turbo_frame_request_id == PAGINATION_FRAME_ID
-  end
-
-  def filter_frame_request?
-    turbo_frame_request_id == FILTER_FRAME_ID
-  end
-
-  def pagination_frame_id
-    PAGINATION_FRAME_ID
-  end
-
-  def filter_frame_id
-    FILTER_FRAME_ID
-  end
-
-  # Preserves the current filters (and group) when linking to the next page.
-  def pagination_params(page)
-    {group_id: group.id, page: page, filters: params[:filters]&.to_unsafe_h}
   end
 end

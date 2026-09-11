@@ -20,11 +20,11 @@
         scope: :filters,
         data: { controller: "autosubmit",
           action: "change->autosubmit#submit",
-          turbo_frame: filter_frame_id,
+          turbo_frame: :agenda_events_list,
           turbo_action: "advance" }) do |f|
       = render "filter_bar", f: f
 
-    = turbo_frame_tag(filter_frame_id, target: :_top) do
+    = turbo_frame_tag(:agenda_events_list, target: :_top) do
       = render "list", events: events
 
 - else
