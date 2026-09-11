@@ -8,6 +8,8 @@
 class AgendaController < ApplicationController
   include Rememberable
 
+  PER_PAGE = 20
+
   skip_before_action :authenticate_person!
   skip_authorization_check
 
@@ -26,7 +28,11 @@ class AgendaController < ApplicationController
   def index
     preload_assocs
     if turbo_frame_request?
-      render partial: "list"
+      if params[:page].present?
+        render partial: "list_page"
+      else
+        render partial: "list"
+      end
     else
       render :index
     end
@@ -96,7 +102,7 @@ class AgendaController < ApplicationController
   end
 
   def events
-    @events ||= event_filter.entries.to_a
+    @events ||= event_filter.entries.page(params[:page]).per(PER_PAGE)
   end
 
   def group

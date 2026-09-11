@@ -5,11 +5,10 @@
 
 = turbo_frame_tag(:agenda_events_list, target: :_top) do
   = render "active_filter_chips", event_filter: event_filter, group: group
-  = render "results_summary", count: events.count
+  = render "results_summary", count: events.total_count
 
   - if events.any?
-    - events.each do |event|
-      - cache([event, I18n.locale, Time.zone.today]) do
-        = render "list_card", event: event
+    = render "event_cards", events: events
+    = render "pagination_sentinel", events: events
   - else
     = render "no_results", group: group

@@ -40,7 +40,7 @@ describe AgendaController do
     end
 
     it "renders without a layout for turbo frame requests" do
-      request.headers["Turbo-Frame"] = "agenda_events_list"
+      request.headers["Turbo-Frame"] = :agenda_events_list
       get :index, params: {group_id: group.id}
 
       expect(response).to render_template(layout: false)
