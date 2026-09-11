@@ -59,9 +59,9 @@ describe AgendaHelper do
   describe "#tour_price_categories" do
     it "labels every price the tour charges" do
       expect(helper.tour_price_categories(tour)).to eq [
-        "Sektionsmitglieder CHF 50",
-        "SAC-Mitglieder CHF 60",
-        "Nicht-SAC-Mitglieder CHF 80"
+        "Sektionsmitglieder <span class='text-nowrap'>CHF 50</span>",
+        "SAC-Mitglieder <span class='text-nowrap'>CHF 60</span>",
+        "Nicht-SAC-Mitglieder <span class='text-nowrap'>CHF 80</span>"
       ]
     end
 

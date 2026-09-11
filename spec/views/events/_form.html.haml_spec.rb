@@ -87,7 +87,7 @@ describe "events/_form.html.haml" do
     end
 
     it "renders additional fields" do
-      expect(dom).to have_field "Gipfel"
+      expect(dom).to have_field "Ziel"
       expect(dom).to have_field "Aufstieg"
       expect(dom).to have_field "Abstieg"
       expect(dom).to have_field "Saison"

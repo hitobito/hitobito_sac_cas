@@ -70,7 +70,7 @@ describe "events/_attrs.html.haml" do
     end
 
     it "renders additional attrs" do
-      expect(dom).to have_css ".well dt", text: "Gipfel"
+      expect(dom).to have_css ".well dt", text: "Ziel"
       expect(dom).to have_css ".well dt", text: "Auf-/Abstieg (Hm)"
       expect(dom).to have_css ".well dt", text: "Link zum Tourenportal"
       expect(dom).to have_css ".well dt", text: "Zeitaufwand"

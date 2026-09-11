@@ -174,7 +174,8 @@ module AgendaHelper
       next if amount.blank?
 
       formatted = number_with_precision(amount, precision: 2, strip_insignificant_zeros: true)
-      "#{t("activerecord.attributes.event/tour.price_categories.#{attribute}")} CHF #{formatted}"
+      label = t("activerecord.attributes.event/tour.price_categories.#{attribute}")
+      "#{label} <span class='text-nowrap'>CHF #{formatted}</span>".html_safe
     end
   end
 end
