@@ -48,7 +48,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         zip_code: user.zip_code,
         town: user.town,
         country: user.country,
-        picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
+        picture_url: "http://www.example.com#{ActionController::Base.helpers.image_path(user.picture_default)}",
         membership_verify_url: "http://hitobito.example.com/passes/verify/#{membership_pass.verify_token}?locale=de",
         phone_number_landline: nil,
         phone_number_mobile: nil
@@ -84,7 +84,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         birthday: user.birthday.to_s.presence,
         primary_group_id: user.primary_group_id,
         language: user.language,
-        picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
+        picture_url: "http://www.example.com#{ActionController::Base.helpers.image_path(user.picture_default)}",
         membership_verify_url: "http://hitobito.example.com/passes/verify/#{membership_pass.verify_token}?locale=de",
         phone_number_landline: nil,
         phone_number_mobile: nil,

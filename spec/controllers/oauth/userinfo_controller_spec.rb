@@ -40,7 +40,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
           country: user.country,
           phone_number_landline: nil,
           phone_number_mobile: nil,
-          picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
+          picture_url: "http://test.host#{ActionController::Base.helpers.image_path(user.picture_default)}",
           membership_verify_url: nil
         }.deep_stringify_keys)
       end
@@ -102,7 +102,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
           phone_number_landline: nil,
           phone_number_mobile: nil,
           membership_years: 0,
-          picture_url: %r{packs(-test)?/media/images/profile-.*\.svg},
+          picture_url: "http://test.host#{ActionController::Base.helpers.image_path(user.picture_default)}",
           membership_verify_url: nil,
           roles: [
             {
