@@ -274,8 +274,8 @@ it:
         password_confirmation: Conferma della password
       contact_account:
         predefined_labels:
-          landline: Rete fissa
-          mobile: Cellulare
+          landline: Festnetz
+          mobile: Mobil
       cost_center:
         label: Denominazione
         event_kind_categories: Categorie di corsi
