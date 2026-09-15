@@ -288,6 +288,7 @@ module HitobitoSacCas
 
       NavigationHelper::ADMIN_GROUPS[:cost_accounting] = {
         heading: "admins.show.cost_accounting",
+        position: 60,
         items: [
           NavigationHelper::Item.new(model: CostCenter, path: :cost_centers_path),
           NavigationHelper::Item.new(model: CostUnit, path: :cost_units_path)
@@ -296,6 +297,7 @@ module HitobitoSacCas
 
       NavigationHelper::ADMIN_GROUPS[:tours] = {
         heading: "admins.show.tours",
+        position: 25,
         items: [
           NavigationHelper::Item.new(model: Event::Activity, path: :event_activities_path),
           NavigationHelper::Item.new(model: Event::TargetGroup,
