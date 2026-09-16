@@ -10,4 +10,4 @@
     - else
       - logo = Settings.application.logo
       - path = logo&.dig(:multilanguage_image, I18n.locale) || logo&.image
-      = wagon_image_pack_tag(path, alt: Settings.application.name)
+      = wagon_image_tag(path, alt: Settings.application.name)

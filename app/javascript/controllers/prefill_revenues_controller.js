@@ -5,9 +5,6 @@
 
 import { Controller } from "@hotwired/stimulus"
 
-// Currently (Jun '26) we are not able to import libraries using webpacker inside wagons.
-// Therefore we place wagon stimulus controllers in core until webpacker is replaced.
-
 export default class extends Controller {
   static values = { url: String }
 

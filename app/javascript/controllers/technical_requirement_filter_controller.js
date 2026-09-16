@@ -3,9 +3,6 @@
 // or later. See the COPYING file at the top-level directory or at
 // https://github.com/hitobito/hitobito
 
-// Currently (Jul '26) we are not able to import libraries using webpacker inside wagons.
-// Therefore we place wagon stimulus controllers in core until webpacker is replaced.
-
 // This controller is used to filter technical requirment options in tour form
 // based on selected event activities
 

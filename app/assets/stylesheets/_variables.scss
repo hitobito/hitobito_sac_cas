@@ -7,7 +7,7 @@
 //
 // This is intentionally self-contained: the Agenda pages are visually
 // independent from the rest of the application, so these are plain Sass
-// variables local to the agenda pack, not imported from or shared with
+// variables local to the agenda entrypoint, not imported from or shared with
 // `hitobito/customizable/_variables.scss`. Imported before
 // `bootstrap/scss/variables` (see agenda.scss.erb) so it can override
 // Bootstrap's defaults for this page only.

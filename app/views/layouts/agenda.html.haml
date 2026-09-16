@@ -14,7 +14,7 @@
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1.0'}
 
     = csrf_meta_tags
-    = wagon_favicon_pack_tag 'favicon.ico'
+    = wagon_favicon_tag 'favicon.ico'
 
     = javascript_include_tag 'core', 'data-turbo-track': true
     = stylesheet_link_tag 'agenda', media: 'all', 'data-turbo-track': true
@@ -34,7 +34,7 @@
           - else
             - logo = Settings.application.logo
             - path = logo&.dig(:multilanguage_image, I18n.locale) || logo&.image
-            = wagon_image_pack_tag(path, alt: Settings.application.name)
+            = wagon_image_tag(path, alt: Settings.application.name)
 
     #flash
       = render partial: 'layouts/flash', collection: [:notice, :warning, :alert], as: :level
