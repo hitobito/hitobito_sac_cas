@@ -3,19 +3,16 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
 
-// This file gets rendered (via ERB, see hitobito core's lib/tasks/assets.rake)
-// into hitobito core's app/assets/stylesheets_generated/ and compiled from
-// there, so this wagon's own files have to be @import'ed by absolute path -
-// `wagon_path` is this wagon's root, provided by the renderer. Core files are
-// reachable as "hitobito/..." (core's app/assets/stylesheets is a dart-sass
-// load path, see core's config/build_css.mjs).
+// Core files are reachable as "hitobito/..." - the core's
+// app/assets/stylesheets is a dart-sass load path, see core's
+// config/build_css.mjs.
 
 // Bootstrap
 @import "bootstrap/scss/functions";
 
 // Agenda-only color tokens, must come before bootstrap/scss/variables so
 // they can override Bootstrap's defaults for these pages only.
-@import "<%= wagon_path.join("app", "assets", "stylesheets", "variables") %>";
+@import "sac_cas/variables";
 
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/maps";
@@ -29,4 +26,4 @@
 // ui-datepicker before agenda.scss, so agenda.scss's own datepicker
 // overrides (restyling it to match the rest of this page) win the cascade.
 @import "hitobito/modules/ui-datepicker";
-@import "<%= wagon_path.join("app", "assets", "stylesheets", "agenda") %>";
+@import "sac_cas/agenda";
