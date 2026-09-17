@@ -3,12 +3,16 @@
 //  or later. See the COPYING file at the top-level directory or at
 //  https://github.com/hitobito/hitobito_sac_cas.
 
+// Core files are reachable as "hitobito/..." - the core's
+// app/assets/stylesheets is a dart-sass load path, see core's
+// config/build_css.mjs.
+
 // Bootstrap
 @import "bootstrap/scss/functions";
 
 // Agenda-only color tokens, must come before bootstrap/scss/variables so
 // they can override Bootstrap's defaults for these pages only.
-@import "../stylesheets/variables";
+@import "sac_cas/variables";
 
 @import "bootstrap/scss/variables";
 @import "bootstrap/scss/maps";
@@ -21,5 +25,5 @@
 // Custom Stylesheets
 // ui-datepicker before agenda.scss, so agenda.scss's own datepicker
 // overrides (restyling it to match the rest of this page) win the cascade.
-@import "~stylesheets/hitobito/modules/ui-datepicker";
-@import "../stylesheets/agenda";
+@import "hitobito/modules/ui-datepicker";
+@import "sac_cas/agenda";

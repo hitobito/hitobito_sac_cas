@@ -42,7 +42,7 @@ Note: This payload is currently unmodified from hitobito core.
   "zip_code": "",
   "town": null,
   "country": null,
-  "picture_url": "http://localhost:3000/packs/media/images/profil-d4d04543c5d265981cecf6ce059f2c5d.svg"
+  "picture_url": "http://localhost:3000/assets/profil-d4d04543c5d265981cecf6ce059f2c5d.svg"
 }
 ```
 
@@ -64,7 +64,7 @@ Note: This payload is currently unmodified from hitobito core.
       "layer_group_id": 1
     }
   ],
-  "picture_url": "http://localhost:3000/packs/media/images/profil-d4d04543c5d265981cecf6ce059f2c5d.svg",
+  "picture_url": "http://localhost:3000/assets/profil-d4d04543c5d265981cecf6ce059f2c5d.svg",
   "first_name": "Puzzle",
   "last_name": "ITC",
   "nickname": null,
@@ -102,7 +102,7 @@ Note: This payload is currently unmodified from hitobito core.
       "layer_group_id": 1
     }
   ],
-  "picture_url": "http://localhost:3000/packs/media/images/profil-d4d04543c5d265981cecf6ce059f2c5d.svg",
+  "picture_url": "http://localhost:3000/assets/profil-d4d04543c5d265981cecf6ce059f2c5d.svg",
   "first_name": "Puzzle",
   "last_name": "ITC",
   "nickname": null,
