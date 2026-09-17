@@ -12,7 +12,7 @@
 -# with no {bubbles: true}, which never reaches a form-level listener.
 -# Binding the action on the input itself catches that non-bubbling event
 -# too, since bubbling only matters for reaching an ancestor's listener.
-.d-flex.flex-wrap.gap-3
+.d-flex.flex-wrap.gap-2.gap-md-3
   = f.fields_for(:date_range) do |ff|
     .agenda-date-field
       = ff.label(:since, t("agenda.filters.since"), class: "agenda-date-field-label")

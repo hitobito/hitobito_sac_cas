@@ -4,24 +4,23 @@
 -# https://github.com/hitobito/hitobito_sac_cas.
 
 .agenda-detail-header
-  .d-flex.align-items-start.justify-content-between.gap-3
-    .flex-grow-1.overflow-hidden
-      - if event.tour?
-        .d-flex.flex-wrap.align-items-center.gap-3
-          - event.activities.each do |activity|
-            .agenda-activity-label{style: ("--activity-color: #{activity.parent.color}" if activity.parent&.color.present?)}
-              = agenda_activity_icon(activity)
-              %span.agenda-detail-header-activity-label= activity.label.upcase
-          - tour_activity_requirements(event).each do |activity, requirements|
-            %span
-              - requirements.each do |requirement|
-                - tooltip = nil
-                - if requirement.description?
-                  - tooltip = capture do
-                    = render "tooltip_technical_requirement", activity:, requirement:
-                %span.agenda-tour-detail-header-badge{title: tooltip,
-                  data: {bs_toggle: :tooltip, bs_placement: :top, bs_html: "true"},
-                  style: ("--bs-badge-color: #{activity.parent.color};" if activity.parent&.color.present?)}
-                  = requirement.label
+  .overflow-hidden
+    - if event.tour?
+      .d-flex.flex-wrap.align-items-center.gap-2.gap-md-3
+        - event.activities.each do |activity|
+          .agenda-activity-label{style: ("--activity-color: #{activity.parent.color}" if activity.parent&.color.present?)}
+            = agenda_activity_icon(activity)
+            %span.agenda-detail-header-activity-label= activity.label.upcase
+        - tour_activity_requirements(event).each do |activity, requirements|
+          %span
+            - requirements.each do |requirement|
+              - tooltip = nil
+              - if requirement.description?
+                - tooltip = capture do
+                  = render "tooltip_technical_requirement", activity:, requirement:
+              %span.agenda-tour-detail-header-badge{title: tooltip,
+                data: {bs_toggle: :tooltip, bs_placement: :top, bs_html: "true"},
+                style: ("--bs-badge-color: #{activity.parent.color};" if activity.parent&.color.present?)}
+                = requirement.label
 
-      %h2.agenda-tour-detail-title= event.name
+    %h2.agenda-tour-detail-title= event.name
