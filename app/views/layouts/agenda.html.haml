@@ -16,8 +16,8 @@
     = csrf_meta_tags
     = wagon_favicon_tag 'favicon.ico'
 
-    = javascript_include_tag 'core', 'data-turbo-track': true
-    = stylesheet_link_tag 'agenda', media: 'all', 'data-turbo-track': true
+    = javascript_include_tag 'core', 'data-turbo-track': turbo_track
+    = stylesheet_link_tag 'agenda', media: 'all', 'data-turbo-track': turbo_track
 
     = yield(:head)
 
