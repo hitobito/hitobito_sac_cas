@@ -55,7 +55,6 @@ class SacEventSeeder < EventSeeder
       automatic_assignment: true,
       priorization: false,
       requires_approval: false,
-      external_applications: true,
       activities: activities,
       technical_requirements: activities.map(&:technical_requirement).compact,
       fitness_requirement: Event::FitnessRequirement.assignable.sample,
