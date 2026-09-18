@@ -69,6 +69,7 @@ RSpec.describe "GET oauth/profile", type: :request do
         family_name: user.last_name,
         locale: user.language,
         nickname: user.nickname,
+        canton: user.canton,
         company_name: user.company_name,
         company: user.company,
         email: user.email,

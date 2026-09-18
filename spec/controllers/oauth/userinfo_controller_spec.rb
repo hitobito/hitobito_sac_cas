@@ -84,6 +84,7 @@ describe Doorkeeper::OpenidConnect::UserinfoController, :outside_language_scope 
           family_name: user.last_name,
           locale: user.language,
           nickname: user.nickname,
+          canton: user.canton,
           company_name: user.company_name,
           company: user.company,
           email: user.email,
