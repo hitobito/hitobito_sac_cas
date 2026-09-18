@@ -247,6 +247,10 @@ describe Person do
           )
         end
 
+        before do
+          person.update!(emergency_contact_1_name: "Max Muster", emergency_contact_1_phone: "+41791234567")
+        end
+
         it "is invalid without emergency contact 1 when registered for a future course" do
           Fabricate(:event_participation, event: course_with_future_date, participant: person)
 
@@ -265,6 +269,7 @@ describe Person do
         it "is invalid when only the name is present" do
           Fabricate(:event_participation, event: course_with_future_date, participant: person)
           person.emergency_contact_1_name = "Max Muster"
+          person.emergency_contact_1_phone = nil
           person.validate
 
           expect(person.errors[:emergency_contact_1_name]).to be_empty
@@ -273,35 +278,58 @@ describe Person do
 
         it "is valid when emergency contact 1 is present" do
           Fabricate(:event_participation, event: course_with_future_date, participant: person)
-          person.emergency_contact_1_name = "Max Muster"
-          person.emergency_contact_1_phone = "+41791234567"
+          person.emergency_contact_1_name = "Maxime Muster"
+          person.emergency_contact_1_phone = "+41791234568"
+
+          expect(person).to be_valid
+        end
+
+        it "is valid with empty but unchanged emergency contact 1 when registered for a future course" do
+          person.update!(emergency_contact_1_name: "", emergency_contact_1_phone: "")
+          Fabricate(:event_participation, event: course_with_future_date, participant: person)
+
+          expect(person.emergency_contact_1_name).to_not be_present
+          expect(person.emergency_contact_1_phone).to_not be_present
+
+          person.emergency_contact_1_name = ""
+
+          expect(person).to be_valid
+        end
+
+        it "is valid without emergency contact 1 when registered for a future j+s course" do
+          course_with_future_date.kind.kind_category.update!(j_s_course: true)
+          Fabricate(:event_participation, event: course_with_future_date, participant: person)
+
+          person.emergency_contact_1_name = nil
+          person.emergency_contact_1_phone = nil
 
           expect(person).to be_valid
         end
 
         it "is valid without emergency contacts when registered for a past course" do
           Fabricate(:event_participation, event: Fabricate(:sac_course), participant: person)
-          person.validate
+          person.emergency_contact_1_name = nil
+          person.emergency_contact_1_phone = nil
 
-          expect(person.errors[:emergency_contact_1_name]).to be_empty
-          expect(person.errors[:emergency_contact_1_phone]).to be_empty
+          expect(person).to be_valid
         end
 
         it "is valid without emergency contacts when registered for a future tour" do
           tour = Fabricate(:sac_published_tour)
           tour.dates.update_all(start_at: 1.week.from_now)
           Fabricate(:event_participation, event: tour, participant: person)
-          person.validate
 
-          expect(person.errors[:emergency_contact_1_name]).to be_empty
-          expect(person.errors[:emergency_contact_1_phone]).to be_empty
+          person.emergency_contact_1_name = nil
+          person.emergency_contact_1_phone = nil
+
+          expect(person).to be_valid
         end
 
         it "is valid without emergency contacts when not registered for any course" do
-          person.validate
+          person.emergency_contact_1_name = nil
+          person.emergency_contact_1_phone = nil
 
-          expect(person.errors[:emergency_contact_1_name]).to be_empty
-          expect(person.errors[:emergency_contact_1_phone]).to be_empty
+          expect(person).to be_valid
         end
       end
     end

@@ -138,6 +138,6 @@ module SacCas::Event
   end
 
   def needs_emergency_contact?
-    course? || tour?
+    (course? && !kind.kind_category.j_s_course) || tour?
   end
 end

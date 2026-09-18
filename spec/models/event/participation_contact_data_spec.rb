@@ -68,6 +68,13 @@ describe Event::ParticipationContactData do
       expect(contact_data.errors[:emergency_contact_1_phone]).to eq ["muss ausgefüllt werden"]
     end
 
+    it "does not require first emergency contact for j+s courses" do
+      event.kind.kind_category.update!(j_s_course: true)
+      contact_data = build(attrs_without_emergency_contact)
+
+      expect(contact_data).to be_valid
+    end
+
     it "requires first emergency contact for tours" do
       event = Fabricate.build(:sac_tour)
       contact_data = Event::ParticipationContactData.new(event, person.clone,

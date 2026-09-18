@@ -6,6 +6,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class People::EmergencyContactsCleanupJob < RecurringJob
+  EVENT_TYPES_WITH_EMERGENCY_CONTACTS = ["Event::Course", "Event::Tour"].freeze
+
   run_every 1.day
 
   def perform_internal
@@ -25,29 +27,29 @@ class People::EmergencyContactsCleanupJob < RecurringJob
   end
 
   def people_ids_of_past_events
-    Event::Participation.joins(:event)
+    Event::Participation
+      .joins(:event)
+      .joins("LEFT JOIN event_kinds ON events.kind_id = event_kinds.id " \
+        "LEFT JOIN event_kind_categories ON " \
+        "event_kinds.kind_category_id = event_kind_categories.id")
       .where(participant_type: Person.sti_name)
-      .where(events: {type: emergency_contact_event_types})
-      .where(no_upcoming_event_date_exists_for_participation)
+      .where(events: {type: EVENT_TYPES_WITH_EMERGENCY_CONTACTS})
+      .where(no_recent_event_date_exists_for_participation)
+      .where(event_kind_categories: {j_s_course: [nil, false]})
       .select(:participant_id)
   end
 
   def people_ids_of_current_or_future_events
-    Event::Participation.upcoming
+    Event::Participation
+      .upcoming
       .where(participant_type: Person.sti_name)
       .select(:participant_id)
   end
 
-  def no_upcoming_event_date_exists_for_participation
+  def no_recent_event_date_exists_for_participation
     Event::Date.where("event_dates.event_id = events.id")
       .where("event_dates.start_at > :cutoff OR event_dates.finish_at > :cutoff", cutoff: cutoff)
       .arel.exists.not
-  end
-
-  def emergency_contact_event_types
-    ([Event] + Event.descendants).select do |event_class|
-      event_class.new.needs_emergency_contact?
-    end.map(&:sti_name)
   end
 
   def empty_emergency_contacts

@@ -208,21 +208,25 @@ module SacCas::Person
 
   def assert_emergency_contacts_present_for_future_course
     # prevent participation-check if we have valid data already
-    return true if [:emergency_contact_1_name, :emergency_contact_1_phone].all? do |attr|
-      send(attr).present?
-    end
-
-    return unless future_course_participation?
-
-    [:emergency_contact_1_name, :emergency_contact_1_phone].each do |attr|
-      errors.add(attr, :blank) if send(attr).blank?
+    if emergency_1_attr_changed_to_blank? && future_non_js_course_participation?
+      SacCas::Event::ParticipationContactData::EMERGENCY_CONTACT_REQUIRED_ATTRS.each do |attr|
+        errors.add(attr, :blank) if send(attr).blank?
+      end
     end
   end
 
-  def future_course_participation?
+  def emergency_1_attr_changed_to_blank?
+    SacCas::Event::ParticipationContactData::EMERGENCY_CONTACT_REQUIRED_ATTRS.any? do |attr|
+      attribute_changed?(attr) && send(attr).blank?
+    end
+  end
+
+  def future_non_js_course_participation?
     event_participations
       .upcoming
+      .joins(event: {kind: :kind_category})
       .where(events: {type: Event::Course.sti_name})
+      .where(event_kind_categories: {j_s_course: [nil, false]})
       .exists?
   end
 
