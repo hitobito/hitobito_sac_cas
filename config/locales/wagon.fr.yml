@@ -602,7 +602,6 @@ fr:
       person:
         id: Numéro de personne
         advertising: Envoi de publicité
-        canton: Canton
         address_care_of: Complément d’adresse
         correspondence: Facturation
         confirmed_at: E-mail confirmé

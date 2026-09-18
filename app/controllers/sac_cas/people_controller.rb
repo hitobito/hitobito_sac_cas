@@ -15,7 +15,7 @@ module SacCas::PeopleController
     before_action :set_lookup_prefixes
     before_update :check_birthday, :check_email
 
-    permitted_attrs << :correspondence << :advertising << :canton
+    permitted_attrs << :correspondence << :advertising
     permitted_attrs.concat(Person::EMERGENCY_CONTACTS)
   end
 

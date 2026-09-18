@@ -600,7 +600,6 @@ it:
       person:
         id: Numero personale
         advertising: Invio di pubblicità
-        canton: Cantone
         address_care_of: Complemento di indirizzo
         correspondence: Fatturazione
         confirmed_at: E-mail verificata

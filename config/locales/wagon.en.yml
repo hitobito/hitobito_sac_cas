@@ -598,7 +598,6 @@ en:
       person:
         id: Personennummer
         advertising: Werbesendungen
-        canton: Kanton
         address_care_of: Adresszusatz
         correspondence: Invoicing
         confirmed_at: E-Mail bestätigt
