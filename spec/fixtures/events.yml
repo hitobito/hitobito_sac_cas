@@ -49,7 +49,6 @@ section_tour:
   groups: bluemlisalp
   type: Event::Tour
   state: review
-  external_applications: true
   activities:
     - wanderweg
   target_groups:

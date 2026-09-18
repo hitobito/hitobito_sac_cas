@@ -33,7 +33,8 @@ class Event::Tour < Event # rubocop:disable Metrics/ClassLength
     :tourenportal_link, :subito, :special_may_apply, :member_may_apply, :regular_may_apply,
     *PRICE_ATTRIBUTES]
   self.used_attributes -= [:motto, :waiting_list, :required_contact_attrs, :hidden_contact_attrs,
-    :signature, :signature_confirmation, :signature_confirmation_text, :guest_limit, :cost]
+    :external_applications, :signature, :signature_confirmation, :signature_confirmation_text,
+    :guest_limit, :cost]
 
   self.filterable_attrs += [
     :summit,
