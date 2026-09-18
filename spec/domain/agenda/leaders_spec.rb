@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe AgendaLeaders do
+describe Agenda::Leaders do
   let(:tour) { events(:section_tour) }
   let(:course) { events(:top_course) }
 

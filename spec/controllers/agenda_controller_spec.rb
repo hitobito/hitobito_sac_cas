@@ -175,7 +175,7 @@ describe AgendaController do
       add_leader(tour, people(:admin), Event::Role::Leader)
       add_leader(course, people(:familienmitglied2), Event::Course::Role::Leader)
 
-      expect(AgendaLeaders).to receive(:new).once.and_call_original
+      expect(Agenda::Leaders).to receive(:new).once.and_call_original
 
       get :index, params: {group_id: group.id}
 
