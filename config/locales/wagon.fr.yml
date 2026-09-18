@@ -276,8 +276,8 @@ fr:
         password_confirmation: Confirmation du mot de passe
       contact_account:
         predefined_labels:
-          landline: Festnetz
-          mobile: Mobil
+          landline: Téléphone fixe
+          mobile: Mobile
       cost_center:
         label: Désignation
         event_kind_categories: Catégories de cours
@@ -582,7 +582,7 @@ fr:
           winter: Hiver
           summer: Été
         subito: Est Subito Tour
-        summit: Ziel
+        summit: Destination
         tourenportal_link: Lien vers le portail des randonnées
         state_translated: Statut
         states:
@@ -1758,7 +1758,7 @@ fr:
         contact_data_aside:
           contact_title: Questions concernant l'inscription
           contact_text: |
-            Vous pouvez nous joindre pendant nos horaires d'ouverture :
+            Il est possible de nous joindre pendant nos horaires d'ouverture :
             du lundi au vendredi, de 9 h à 12 h et de 14 h à 17 h.
       tours:
         contact_data_aside:
