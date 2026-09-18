@@ -7,7 +7,7 @@
 
 # The leaders of the given events, loaded for all of them at once so that the
 # agenda's list can render them without an N+1.
-class AgendaLeaders
+class Agenda::Leaders
   PERSON_ATTRIBUTES = [
     :id,
     :first_name,

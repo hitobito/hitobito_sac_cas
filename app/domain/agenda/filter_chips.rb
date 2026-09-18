@@ -11,12 +11,14 @@
 # AgendaHelper so the chip-building logic (previously five private helper
 # methods reaching into controller ivars) has its own explicit
 # dependencies instead.
-class AgendaFilterChips
+class Agenda::FilterChips
   delegate :agenda_index_path, to: "Rails.application.routes.url_helpers"
+
+  attr_reader :filter_params
 
   def initialize(event_filter, group, target_groups:, activities:,
     technical_requirements:, fitness_requirements:, traits:, leaders:)
-    @event_filter = event_filter
+    @filter_params = event_filter.chain.to_params.with_indifferent_access
     @group = group
     @target_groups = target_groups
     @activities = activities
@@ -27,77 +29,75 @@ class AgendaFilterChips
   end
 
   def chips
-    params = @event_filter.chain.to_params.deep_dup.with_indifferent_access
-
     [
-      date_range_chip(params, :since, I18n.t("agenda.filters.since")),
-      date_range_chip(params, :until, I18n.t("agenda.filters.until")),
-      full_text_chip(params),
-      *essential_chips(params, :target_group_id, @target_groups),
-      *essential_chips(params, :activity_id, @activities),
-      *essential_chips(params, :technical_requirement_id, @technical_requirements),
-      *essential_chips(params, :fitness_requirement_id, @fitness_requirements),
-      *essential_chips(params, :trait_id, @traits),
-      *leader_chips(params),
-      *status_chips(params)
+      date_range_chip(:since, I18n.t("agenda.filters.since")),
+      date_range_chip(:until, I18n.t("agenda.filters.until")),
+      full_text_chip,
+      *essential_chips(:target_group_id, @target_groups),
+      *essential_chips(:activity_id, @activities),
+      *essential_chips(:technical_requirement_id, @technical_requirements),
+      *essential_chips(:fitness_requirement_id, @fitness_requirements),
+      *essential_chips(:trait_id, @traits),
+      *leader_chips,
+      *status_chips
     ].compact
   end
 
   private
 
-  def date_range_chip(params, key, label)
-    value = params.dig(:date_range, key)
+  def date_range_chip(key, label)
+    value = filter_params.dig(:date_range, key)
     return if value.blank?
     return if key == :since && value == I18n.l(Time.zone.today)
 
-    without = params.deep_dup
+    without = filter_params.deep_dup
     without[:date_range] = without[:date_range].except(key)
     chip("#{label}: #{value}", without)
   end
 
-  def boolean_chip(params, key, label)
-    return unless params.dig(key, :value) == "1"
+  def boolean_chip(key, label)
+    return unless filter_params.dig(key, :value) == "1"
 
-    without = params.deep_dup
+    without = filter_params.deep_dup
     without.delete(key)
     chip(label, without)
   end
 
-  def full_text_chip(params)
-    value = params.dig(:full_text, :q)
+  def full_text_chip
+    value = filter_params.dig(:full_text, :q)
     return if value.blank?
 
-    without = params.deep_dup
+    without = filter_params.deep_dup
     without.delete(:full_text)
     chip("\"#{value}\"", without)
   end
 
-  def essential_chips(params, key, entries)
-    Array(params.dig(:tour_essentials, key)).filter_map do |id|
+  def essential_chips(key, entries)
+    Array(filter_params.dig(:tour_essentials, key)).filter_map do |id|
       entry = entries.find { |candidate| candidate.id == id }
       next unless entry
 
-      without = params.deep_dup
+      without = filter_params.deep_dup
       without[:tour_essentials][key] = without[:tour_essentials][key] - [id]
       chip(entry.to_s, without)
     end
   end
 
-  def leader_chips(params)
-    Array(params.dig(:leader, :ids)).filter_map do |id|
+  def leader_chips
+    Array(filter_params.dig(:leader, :ids)).filter_map do |id|
       int_id = id.to_i
       entry = @leaders.find { |p| p.id == int_id }
       next unless entry
 
-      without = params.deep_dup
+      without = filter_params.deep_dup
       without[:leader][:ids] = without[:leader][:ids] - [id]
       chip(entry.to_s(:list), without)
     end
   end
 
-  def status_chips(params)
-    Array(params.dig(:agenda_status, :values)).map do |status|
-      without = params.deep_dup
+  def status_chips
+    Array(filter_params.dig(:agenda_status, :values)).map do |status|
+      without = filter_params.deep_dup
       without[:agenda_status][:values] = without[:agenda_status][:values] - [status]
       chip(I18n.t("agenda.status.#{status}"), without)
     end

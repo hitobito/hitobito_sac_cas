@@ -13,7 +13,7 @@
 -# "no data-turbo-frame", since that alone still lets Turbo Drive restore a
 -# cached snapshot of a previously-visited URL (e.g. this same index URL,
 -# visited before any filter was applied) instead of hitting the server.
-- chips = AgendaFilterChips.new(event_filter,
+- chips = Agenda::FilterChips.new(event_filter,
     group,
     target_groups: @target_groups,
     activities: @activities,

@@ -45,8 +45,10 @@ class AgendaController < ApplicationController
   private
 
   def set_default_date_range_filter
-    params[:filters] ||= {}
-    params[:filters][:date_range] ||= {since: I18n.l(Time.zone.today.to_date)}
+    if params[:filters].blank?
+      params[:filters] ||= {}
+      params[:filters][:date_range] ||= {since: I18n.l(Time.zone.today.to_date)}
+    end
   end
 
   def preload_filter_options
@@ -57,7 +59,7 @@ class AgendaController < ApplicationController
     @technical_requirements = preload_essentials(Event::TechnicalRequirement)
     @fitness_requirements = preload_essentials(Event::FitnessRequirement)
     @traits = preload_essentials(Event::Trait)
-    @leaders = AgendaLeaders.filter_leaders(group)
+    @leaders = Agenda::Leaders.filter_leaders(group)
   end
 
   def preload_essentials(klass)
@@ -72,7 +74,7 @@ class AgendaController < ApplicationController
   end
 
   def load_event_leaders(events)
-    @event_leaders = (@event_leaders || {}).merge(AgendaLeaders.new(events).to_h)
+    @event_leaders = (@event_leaders || {}).merge(Agenda::Leaders.new(events).to_h)
   end
 
   # used for index and for show
