@@ -191,6 +191,13 @@ module SacCas::Event::Course
     belongs_to :cost_center, optional: true
     belongs_to :cost_unit, optional: true
 
+    # duplicate from sac event because of mixin loading order
+    has_many :cached_leaders,
+      class_name: "Event::CachedLeader",
+      dependent: :delete_all,
+      foreign_key: :event_id,
+      inverse_of: :event
+
     validates :number, presence: true, uniqueness: {if: :number}
     validates :description, :application_opening_at, :application_closing_at, :contact_id,
       :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,

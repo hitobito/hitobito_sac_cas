@@ -7,6 +7,10 @@
 
 module Events::Filter
   class MyAssistantLeader < Leader
+    def apply(scope)
+      apply_without_leaders(scope)
+    end
+
     def leader_roles
       event_types.flat_map(&:role_types).select { |t| role_type_applies?(t) }
     end

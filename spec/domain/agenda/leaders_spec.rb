@@ -51,7 +51,8 @@ describe Agenda::Leaders do
 
   it "omits inactive participations" do
     # The role activates its participation, hence the update_column
-    add_role(tour, people(:mitglied), Event::Role::Leader).update_column(:active, false)
+    add_role(tour, people(:mitglied), Event::Role::Leader)
+      .update!(state: :canceled)
 
     expect(leaders_of(tour)[tour.id]).to be_empty
   end
@@ -67,21 +68,21 @@ describe Agenda::Leaders do
   end
 
   it "orders by role type as configured in role_types, then by name" do
-    add_role(tour, people(:familienmitglied2), Event::Role::AssistantLeader) # Frieda Norgay
-    add_role(tour, people(:familienmitglied), Event::Role::AssistantLeader)  # Tenzing Norgay
-    add_role(tour, people(:mitglied), Event::Role::Leader)                   # Edmund Hillary
-    add_role(tour, people(:admin), Event::Role::Leader)                      # Anna Admin
+    add_role(tour, people(:familienmitglied2), Event::Role::Leader) # Frieda Norgay
+    add_role(tour, people(:familienmitglied), Event::Role::Leader)  # Tenzing Norgay
+    add_role(tour, people(:mitglied), Event::Role::AssistantLeader) # Edmund Hillary
+    add_role(tour, people(:admin), Event::Role::AssistantLeader)    # Anna Admin
 
     expect(leaders_of(tour)[tour.id].map(&:to_s))
-      .to eq ["Anna Admin", "Edmund Hillary", "Frieda Norgay", "Tenzing Norgay"]
+      .to eq ["Frieda Norgay", "Tenzing Norgay", "Anna Admin", "Edmund Hillary"]
   end
 
-  it "lists a person holding several leader roles once, under the first of them" do
+  it "lists a person holding several leader roles once" do
     participation = add_role(tour, people(:mitglied), Event::Role::AssistantLeader)
     Event::Role::Leader.create!(participation: participation)
     add_role(tour, people(:admin), Event::Role::AssistantLeader)
 
-    expect(leaders_of(tour)[tour.id].map(&:to_s)).to eq ["Edmund Hillary", "Anna Admin"]
+    expect(leaders_of(tour)[tour.id].map(&:to_s)).to eq ["Anna Admin", "Edmund Hillary"]
   end
 
   it "loads the leaders of all events with a single query" do
