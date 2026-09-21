@@ -24,8 +24,7 @@
           turbo_action: "advance" }) do |f|
       = render "filter_bar", f: f
 
-    = turbo_frame_tag(:agenda_events_list, target: :_top) do
-      = render "list", events: events
+    = render "list", events: events
 
 - else
   = t(".select_group_alert")

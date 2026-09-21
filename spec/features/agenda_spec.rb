@@ -52,6 +52,17 @@ describe "agenda page", js: true do
     expect(page).to have_text(tour.name)
   end
 
+  it "covers the results with a loading indicator while the frame request is in flight" do
+    expect(page).to have_css("#agenda_events_list:not([aria-busy])")
+    expect(page).to have_css(".agenda-results-loading", visible: :hidden)
+
+    page.execute_script(
+      "document.getElementById('agenda_events_list').setAttribute('aria-busy', 'true')"
+    )
+
+    expect(page).to have_css(".agenda-results-loading", visible: true)
+  end
+
   describe "filtering" do
     it "keeps the tour when the filters still match" do
       find_field("filters_date_range_until").set("01.01.2027").send_keys(:tab)
