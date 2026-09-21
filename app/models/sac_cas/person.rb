@@ -61,9 +61,10 @@ module SacCas::Person
     before_validation :reset_confirmed_at_and_correspondence, if: -> { email.blank? }
 
     validates(*Person::SAC_REMARKS, format: {with: /\A[^\n\r]*\z/})
-    validates(:emergency_contact_1_name, :emergency_contact_2_name, format: {with: /\A[^\n\r]*\z/})
-    validates(:emergency_contact_1_phone, :emergency_contact_2_phone, phone: true,
-      allow_blank: true)
+    validates :emergency_contact_1_name, :emergency_contact_2_name,
+      format: {with: /\A[^\n\r]*\z/}
+    validates :emergency_contact_1_phone, :emergency_contact_2_phone,
+      phone: true, allow_blank: true
     with_options if: :roles_require_name_and_address?, on: [:create, :update] do
       validates :first_name, :last_name, presence: true, unless: :company?
       validates :zip_code, :town, presence: true
@@ -173,6 +174,14 @@ module SacCas::Person
   def membership_pass
     @membership_pass ||= passes
       .find_by(pass_definition_id: Settings.passes.membership_pass_definition_id)
+  end
+
+  def emergency_contact_1
+    [emergency_contact_1_name, emergency_contact_1_phone].compact_blank.join(", ")
+  end
+
+  def emergency_contact_2
+    [emergency_contact_2_name, emergency_contact_2_phone].compact_blank.join(", ")
   end
 
   protected
