@@ -334,6 +334,22 @@ a {
   }
 }
 
+.agenda_results {
+  position: relative;
+}
+
+.agenda-results-loading {
+  display: none;
+}
+
+#agenda_events_list[aria-busy="true"] > .agenda_results > .agenda-results-loading {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba($agenda-snow, 0.7);
+}
+
 .agenda-no-results {
   display: flex;
   flex-direction: column;
