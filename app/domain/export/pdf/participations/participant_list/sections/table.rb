@@ -113,11 +113,9 @@ class Export::Pdf::Participations::ParticipantList::Sections::Table < Export::Pd
   end
 
   def emergency_contact(participation)
-    participation.answers
-      .select { |answer| answer.question.question.include?(t("emergency_contact")) }
-      .sort_by { |answer| answer.question.question }
-      .map { |answer| answer.answer }
-      .join("\n")
+    person = participation.person
+
+    [person.emergency_contact_1, person.emergency_contact_2].compact_blank.join("\n")
   end
 
   def participations
