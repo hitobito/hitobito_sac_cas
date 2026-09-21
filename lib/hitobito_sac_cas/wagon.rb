@@ -87,6 +87,7 @@ module HitobitoSacCas
       Event::ParticipationContactData.prepend SacCas::Event::ParticipationContactData
       Event::Participatable.prepend SacCas::Event::Participatable
       Event::Participation.prepend SacCas::Event::Participation
+      Event::Role.prepend SacCas::Event::Role
       Event::Answer.include SacCas::Event::Answer
       Group.prepend SacPhoneNumbers
       Group.include SacCas::Group
@@ -194,13 +195,6 @@ module HitobitoSacCas
       Event::ParticipantAssigner.prepend SacCas::Event::ParticipantAssigner
       Event::Qualifier::StartAtCalculator.prepend SacCas::Event::Qualifier::StartAtCalculator
       Event::TrainingDays::CoursesLoader.prepend SacCas::Event::TrainingDays::CoursesLoader
-      SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
-      SearchStrategies::EventSearch.prepend SacCas::SearchStrategies::EventSearch
-      Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
-      Synchronize::Addresses::SwissPost::ResultProcessor.prepend(
-        SacCas::Synchronize::Addresses::SwissPost::ResultProcessor
-      )
-
       Events::Filter::Chain.types <<
         Events::Filter::Sac <<
         Events::Filter::TourEssentials <<
@@ -211,8 +205,14 @@ module HitobitoSacCas
         Events::Filter::MyAssistantLeader <<
         Events::Filter::ApplicationOpen <<
         Events::Filter::AgendaStatus
-      Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
-
+      Events::Filter::FullText.prepend(SacCas::Events::Filter::FullText)
+      Events::Filter::Leader.include(SacCas::Events::Filter::Leader)
+      SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch
+      SearchStrategies::EventSearch.prepend SacCas::SearchStrategies::EventSearch
+      Synchronize::Mailchimp::Subscriber.prepend SacCas::Synchronize::Mailchimp::Subscriber
+      Synchronize::Addresses::SwissPost::ResultProcessor.prepend(
+        SacCas::Synchronize::Addresses::SwissPost::ResultProcessor
+      )
       Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8
       Synchronize::Addresses::SwissPost::Generator.fields = { # are customized for SAC_v1 batch key
         "KDNR (QSTAT)": :id,

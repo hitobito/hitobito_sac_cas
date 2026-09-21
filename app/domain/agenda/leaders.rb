@@ -22,26 +22,18 @@ class Agenda::Leaders
     def scope
       Person
         .select(*PERSON_ATTRIBUTES)
-        .joins(event_participations: :roles)
-        .where(
-          event_participations: {active: true},
-          event_roles: {type: leader_roles.map(&:sti_name)}
-        )
+        .joins(:event_cached_leaders)
         .order_by_name
         .distinct
     end
 
     def filter_leaders(group)
       scope
-        .joins(event_participations: [event: [:dates, :groups]])
+        .joins(event_cached_leaders: {event: [:dates, :groups]})
         .where(
           groups: {id: group.id},
           event_dates: {start_at: leader_date_range}
         )
-    end
-
-    def leader_roles
-      Events::Filter::Leader.new(:leader, {}).leader_roles
     end
 
     private
@@ -67,9 +59,8 @@ class Agenda::Leaders
     return [] if @events.empty?
 
     self.class.scope
-      .select("event_participations.event_id AS event_id",
-        "event_roles.type AS role_type")
-      .where(event_participations: {event_id: @events.map(&:id)})
+      .where(event_cached_leaders: {event_id: @events.map(&:id)})
+      .select("event_cached_leaders.event_id as event_id", "event_cached_leaders.role_type")
   end
 
   def sort(people, event)

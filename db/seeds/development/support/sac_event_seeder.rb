@@ -47,21 +47,24 @@ class SacEventSeeder < EventSeeder
   def tour_attributes(values)
     state = Event::Tour.possible_states.sample
     activities = [Event::Activity.assignable.sample]
+    summit = Faker::Mountain.name
 
     values.merge({
-      name: Faker::Mountain.name,
+      name: summit,
       state: state,
       canceled_reason: (state == "canceled") ? Event::Tour::CANCELED_REASONS.sample : nil,
       automatic_assignment: true,
       priorization: false,
       requires_approval: false,
       external_applications: true,
+      globally_visible: true,
       activities: activities,
       technical_requirements: activities.map(&:technical_requirement).compact,
       fitness_requirement: Event::FitnessRequirement.assignable.sample,
       target_groups: [Event::TargetGroup.assignable.sample],
       subito: [true, false].sample,
-      season: Event::Kind::SEASONS.sample
+      season: Event::Kind::SEASONS.sample,
+      summit: summit
     })
   end
   # rubocop:enable Metrics/AbcSize
@@ -96,11 +99,13 @@ class SacEventSeeder < EventSeeder
     end
   end
 
-  def seed_essentials(event)
+  def seed_essentials(event) # rubocop:disable Metrics/AbcSize
     event.activities = activities.sample(rand(1..3))
     event.target_groups = target_groups.sample(rand(1..2))
     event.fitness_requirement = fitness_requirements.sample
-    event.technical_requirements = technical_requirements.sample(rand(1..2))
+    event.technical_requirements = event.activities
+      .flat_map { |a| a.technical_requirement&.children || [] }
+      .sample(rand(1..2))
     event.traits = traits.sample(rand(0..2))
   end
 

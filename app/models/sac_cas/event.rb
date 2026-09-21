@@ -101,10 +101,16 @@ module SacCas::Event
       numericality: {less_than_or_equal_to: :total_duration_days, allow_nil: true}, if: -> {
         dates.all?(&:valid?)
       }
+
+    has_many :cached_leaders, class_name: "Event::CachedLeader", dependent: :delete_all
   end
 
   module ClassMethods
     def receiving_reminders = where.not(state: [:closed, :canceled])
+
+    def leader_roles
+      role_types.select { |role| role.kind == :leader }
+    end
   end
 
   def total_duration_days
@@ -139,5 +145,9 @@ module SacCas::Event
 
   def needs_emergency_contact?
     course? || tour?
+  end
+
+  def update_cached_leaders
+    Event::CachedLeader.backfill_event(self)
   end
 end
