@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -158,6 +158,24 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       expect(child.reload.household_key).to be_nil
       expect(family_member.reload.household_key).to be_present
       expect(family_member.household.people.count).to eq(2)
+    end
+
+    it "destroys household when removing the outgrown member leaves fewer than two people" do
+      people(:familienmitglied2).update!(household_key: nil)
+      child = people(:familienmitglied_kind)
+      end_all_memberships(child, 10.days.ago)
+      Group::SektionsMitglieder::Mitglied.create!(
+        person: child,
+        group: groups(:bluemlisalp_mitglieder),
+        start_on: 9.days.ago,
+        end_on: Time.zone.today.end_of_year,
+        beitragskategorie: :youth
+      )
+
+      job.perform
+
+      expect(child.reload.household_key).to be_nil
+      expect(family_member.reload.household_key).to be_nil
     end
 
     def end_all_memberships(person, date)
