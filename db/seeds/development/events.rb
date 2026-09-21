@@ -18,6 +18,9 @@ end
   seeder.seed_event(Group.root_id, :course).update_column(:state, :assignment_closed)
 end
 
+I18n.enforce_available_locales = false
+Faker::Config.locale = "de-CH" # swiss mountain names ;)
+
 Group.where(type: [Group::Sektion, Group::Ortsgruppe].map(&:sti_name)).find_each do |group|
   10.times do
     seeder.seed_event(group.id, :tour)
