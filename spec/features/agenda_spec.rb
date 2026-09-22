@@ -153,55 +153,6 @@ describe "agenda page", js: true do
     end
   end
 
-  describe "fitness requirement filter" do
-    it "filters tours by the checked fitness requirement" do
-      click_button "Kondition"
-      check "B - wenig anstrengend"
-
-      expect(page).to have_css(".agenda-filter-chip", text: "B - wenig anstrengend")
-      expect(page).to have_text(tour.name)
-    end
-  end
-
-  describe "traits filter" do
-    it "filters tours by the checked traits" do
-      click_button "Merkmal"
-      check "Anreise mit ÖV"
-
-      expect(page).to have_css(".agenda-filter-chip", text: "Anreise mit ÖV")
-      expect(page).to have_text(tour.name)
-    end
-  end
-
-  describe "leader filter" do
-    it "filters tours by the checked leaders" do
-      click_button "Leitung"
-      check "Paschke Ida"
-
-      expect(page).to have_css(".agenda-filter-chip", text: "Paschke Ida")
-      expect(page).to have_text(tour.name)
-    end
-  end
-
-  describe "status filter" do
-    it "filters tours by the checked status" do
-      click_button "Status"
-      check "Anmeldung offen", exact: true
-
-      expect(page).to have_css(".agenda-filter-chip", text: "Anmeldung offen")
-      expect(page).to have_text(tour.name)
-    end
-
-    it "excludes the tour once no checked status matches" do
-      click_button "Status"
-      check "Abgesagt"
-
-      expect(page).to have_css(".agenda-filter-chip", text: "Abgesagt")
-      expect(page).not_to have_text(tour.name)
-      expect(page).to have_text("0 Touren gefunden")
-    end
-  end
-
   describe "activities filter" do
     it "reveals the checked activity's technical requirement grades as chips and filters by one" do
       click_button "Aktivitäten"
@@ -254,6 +205,74 @@ describe "agenda page", js: true do
       check "Sololauf"
 
       expect(page).to have_button("T1", visible: true)
+    end
+  end
+
+  describe "fitness requirement filter" do
+    it "filters tours by the checked fitness requirement" do
+      click_button "Kondition"
+      check "B - wenig anstrengend"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "B - wenig anstrengend")
+      expect(page).to have_text(tour.name)
+    end
+  end
+
+  describe "traits filter" do
+    it "filters tours by the checked traits" do
+      click_button "Merkmal"
+      check "Anreise mit ÖV"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Anreise mit ÖV")
+      expect(page).to have_text(tour.name)
+    end
+  end
+
+  describe "leader filter" do
+    it "filters tours by the checked leaders" do
+      click_button "Leitung"
+      check "Paschke Ida"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Paschke Ida")
+      expect(page).to have_text(tour.name)
+    end
+  end
+
+  describe "status filter" do
+    it "filters tours by the checked status" do
+      click_button "Status"
+      check "Anmeldung offen", exact: true
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Anmeldung offen")
+      expect(page).to have_text(tour.name)
+    end
+
+    it "excludes the tour once no checked status matches" do
+      click_button "Status"
+      check "Abgesagt"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Abgesagt")
+      expect(page).not_to have_text(tour.name)
+      expect(page).to have_text("0 Touren gefunden")
+    end
+  end
+
+  describe "type filter" do
+    it "filters events by the checked type" do
+      click_button "Typ"
+      check "Reguläre Tour", exact: true
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Reguläre Tour")
+      expect(page).to have_text(tour.name)
+    end
+
+    it "excludes the tour once no checked type matches" do
+      click_button "Typ"
+      check "Subito-Tour"
+
+      expect(page).to have_css(".agenda-filter-chip", text: "Subito-Tour")
+      expect(page).not_to have_text(tour.name)
+      expect(page).to have_text("0 Touren gefunden")
     end
   end
 

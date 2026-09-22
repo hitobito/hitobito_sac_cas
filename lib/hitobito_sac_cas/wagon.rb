@@ -210,7 +210,8 @@ module HitobitoSacCas
         Events::Filter::MyMainLeader <<
         Events::Filter::MyAssistantLeader <<
         Events::Filter::ApplicationOpen <<
-        Events::Filter::AgendaStatus
+        Events::Filter::AgendaStatus <<
+        Events::Filter::AgendaType
       Events::Filter::FullText::SEARCHABLE_ATTRIBUTES << "event_translations.additional_info"
 
       Synchronize::Addresses::SwissPost::Config.encoding = "Windows-1252" # See if works with UTF-8

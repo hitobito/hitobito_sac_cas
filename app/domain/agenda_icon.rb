@@ -47,6 +47,9 @@ class AgendaIcon
     tag: '<path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 ' \
       '.586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z" />' \
       '<circle cx="7.5" cy="7.5" r=".5" fill="currentColor" />',
+    type: '<path d="M12 2v2M15.726 21.01A2 2 0 0 1 14 22H4a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2M18' \
+      ' 2v2M2 13h2M8 8h14"/>' \
+      '<rect width="14" height="14" x="8" y="3" rx="2"/>',
     trending_up: '<path d="M16 7h6v6" /><path d="m22 7-8.5 8.5-5-5L2 17" />',
     user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />' \
       '<circle cx="12" cy="7" r="4" />',

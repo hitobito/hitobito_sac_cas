@@ -81,6 +81,15 @@ describe AgendaFilterChips do
     expect(chips_for(agenda_status: {values: ["bogus"]})).to eq([])
   end
 
+  it "builds one chip per selected agenda type, each dropping only its own value" do
+    chips = chips_for(agenda_type: {values: %w[subito_tour regular_event]})
+
+    expect(chips.pluck(:label)).to eq ["Subito-Tour", "Anlass"]
+    expect(chips.first[:path]).to eq(
+      agenda_index_path(group_id: group.id, filters: {agenda_type: {values: ["regular_event"]}})
+    )
+  end
+
   it "skips an essential id that matches none of the given entries" do
     chips = chips_for(tour_essentials: {target_group_id: [-1]})
 
