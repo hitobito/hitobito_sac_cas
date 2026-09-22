@@ -204,7 +204,8 @@ module HitobitoSacCas
         Events::Filter::MyMainLeader <<
         Events::Filter::MyAssistantLeader <<
         Events::Filter::ApplicationOpen <<
-        Events::Filter::AgendaStatus
+        Events::Filter::AgendaStatus <<
+        Events::Filter::AgendaType
       Events::Filter::FullText.prepend(SacCas::Events::Filter::FullText)
       Events::Filter::Leader.include(SacCas::Events::Filter::Leader)
       SearchStrategies::PersonSearch.prepend SacCas::SearchStrategies::PersonSearch

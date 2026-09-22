@@ -1564,6 +1564,12 @@ de:
       traits: Merkmale
       leader: Leitung
       status: Status
+      type: Typ
+      types:
+        regular_tour: Reguläre Tour
+        subito_tour: Subito-Tour
+        regular_event: Anlass
+      subito: Subito-Tour
       search: Suche
       search_placeholder: Nach Aktivitätstitel, Beschreibung, Typ, etc. suchen
     index:
