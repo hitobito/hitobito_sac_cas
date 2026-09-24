@@ -26,7 +26,7 @@ def seed_subscription(list, *role_types, group: Group.root)
   if sub.role_types.sort != role_types.map(&:sti_name).sort
     sub.role_types = role_types
   end
-  sub.save!
+  sub.save || warn("Subscription #{sub} could not be created for #{list} with #{role_types}")
 end
 
 sac_newsletter_list = seed_list(
