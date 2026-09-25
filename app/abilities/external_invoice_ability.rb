@@ -9,7 +9,14 @@ class ExternalInvoiceAbility < AbilityDsl::Base
   include AbilityDsl::Constraints::Person
 
   on(ExternalInvoice) do
-    permission(:layer_and_below_full).may(:manage).if_backoffice
+    # index on a specific person is allowed via Person :index_external_invoices
+    class_side(:index).if_backoffice
+
+    # not possible to use :manage here because that would open up the :index
+    # action to all :layer_and_below_full roles on all layers
+    permission(:layer_and_below_full)
+      .may(:show, :create, :update, :destroy, :cancel, :record_payment)
+      .if_backoffice
   end
 
   def person
@@ -17,6 +24,8 @@ class ExternalInvoiceAbility < AbilityDsl::Base
   end
 
   def if_backoffice
-    role_type?(*SacCas::SAC_BACKOFFICE_ROLES)
+    role_type?(*SacCas::SAC_BACKOFFICE_ROLES) ||
+      (user.service_token&.layer&.root? &&
+       user.service_token&.permission == "layer_and_below_full")
   end
 end
