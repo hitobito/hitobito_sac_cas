@@ -6,7 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:event_activity, class_name: "Event::Activity") do
-  label { Faker::Sport.sport }
+  label { sequence(:event_activity_label) { |i| "#{Faker::Sport.sport} #{i}" } }
   description { Faker::Lorem.sentence }
   after_build do |activity|
     if activity.parent_id

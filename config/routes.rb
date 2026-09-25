@@ -149,7 +149,15 @@ Rails.application.routes.draw do
     scope path: ApplicationResource.endpoint_namespace, module: :json_api,
       constraints: {format: "jsonapi"}, defaults: {format: "jsonapi"} do
       resources :external_invoices, only: [:index, :show, :update]
+      resources :event_activities, module: :event, controller: :activities, only: [:index, :show]
+      resources :event_fitness_requirements, module: :event, controller: :fitness_requirements,
+        only: [:index, :show]
       resources :event_levels, module: :event, controller: :levels, only: [:index, :show]
+      resources :event_target_groups, module: :event, controller: :target_groups,
+        only: [:index, :show]
+      resources :event_technical_requirements, module: :event, controller: :technical_requirements,
+        only: [:index, :show]
+      resources :event_traits, module: :event, controller: :traits, only: [:index, :show]
     end
   end
 end

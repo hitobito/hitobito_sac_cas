@@ -547,6 +547,161 @@
       }
     },
     {
+      "name": "Event::ActivityResource",
+      "type": "event_activities",
+      "graphql_entrypoint": "activities",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "order": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "color": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {
+        "icon": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        }
+      },
+      "sorts": {
+        "id": {},
+        "label": {},
+        "short_description": {},
+        "description": {},
+        "order": {},
+        "color": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "color": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        }
+      },
+      "relationships": {
+        "parent": {
+          "type": "has_one",
+          "description": null,
+          "resource": "Event::ActivityResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "Event::CourseResource",
       "type": "courses",
       "graphql_entrypoint": "courses",
@@ -678,6 +833,18 @@
           "writable": false,
           "description": null
         },
+        "teamer_count": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "display_booking_info": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "minimum_participants": {
           "type": "integer",
           "readable": true,
@@ -686,12 +853,6 @@
         },
         "number": {
           "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "teamer_count": {
-          "type": "integer",
           "readable": true,
           "writable": false,
           "description": null
@@ -878,6 +1039,36 @@
           "operators": [
             "eq",
             "not_eq"
+          ]
+        },
+        "activity_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "target_group_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "technical_requirement_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "trait_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "fitness_requirement_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
           ]
         },
         "state": {
@@ -1108,6 +1299,149 @@
           "resource": "EventResource"
         }
       },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Event::FitnessRequirementResource",
+      "type": "event_fitness_requirements",
+      "graphql_entrypoint": "fitnessRequirements",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "order": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "label": {},
+        "short_label": {},
+        "short_description": {},
+        "description": {},
+        "order": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {},
       "stats": {
         "total": [
           "count"
@@ -1959,6 +2293,260 @@
       }
     },
     {
+      "name": "Event::TargetGroupResource",
+      "type": "event_target_groups",
+      "graphql_entrypoint": "targetGroups",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "order": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "label": {},
+        "short_description": {},
+        "description": {},
+        "order": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "parent": {
+          "type": "has_one",
+          "description": null,
+          "resource": "Event::TargetGroupResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Event::TechnicalRequirementResource",
+      "type": "event_technical_requirements",
+      "graphql_entrypoint": "technicalRequirements",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "order": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "label": {},
+        "short_description": {},
+        "description": {},
+        "order": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "parent": {
+          "type": "has_one",
+          "description": null,
+          "resource": "Event::TechnicalRequirementResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
       "name": "Event::TourResource",
       "type": "tours",
       "graphql_entrypoint": "tours",
@@ -2072,6 +2660,18 @@
           "writable": false,
           "description": null
         },
+        "season": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "subito": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "applicant_count": {
           "type": "integer",
           "readable": true,
@@ -2084,13 +2684,19 @@
           "writable": false,
           "description": null
         },
-        "minimum_participants": {
+        "teamer_count": {
           "type": "integer",
           "readable": true,
           "writable": false,
           "description": null
         },
-        "teamer_count": {
+        "display_booking_info": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "minimum_participants": {
           "type": "integer",
           "readable": true,
           "writable": false,
@@ -2114,8 +2720,74 @@
           "writable": false,
           "description": null
         },
-        "season": {
+        "duration": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "maps": {
           "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "alternative_route": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "additional_info": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "tourenportal_link": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_member": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_regular": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_special": {
+          "type": "float",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "price_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "special_may_apply": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "member_may_apply": {
+          "type": "boolean",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "regular_may_apply": {
+          "type": "boolean",
           "readable": true,
           "writable": false,
           "description": null
@@ -2128,18 +2800,6 @@
         },
         "maximum_age": {
           "type": "integer",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "tourenportal_link": {
-          "type": "string",
-          "readable": true,
-          "writable": false,
-          "description": null
-        },
-        "subito": {
-          "type": "boolean",
           "readable": true,
           "writable": false,
           "description": null
@@ -2223,6 +2883,36 @@
             "not_eq"
           ]
         },
+        "activity_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "target_group_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "technical_requirement_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "trait_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "fitness_requirement_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
         "state": {
           "type": "string",
           "operators": [
@@ -2237,6 +2927,28 @@
             "match",
             "not_match"
           ]
+        },
+        "season": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "subito": {
+          "type": "boolean",
+          "operators": [
+            "eq"
+          ],
+          "single": true
         }
       },
       "relationships": {
@@ -2264,6 +2976,158 @@
           "type": "has_many",
           "description": null,
           "resource": "Person::NameResource"
+        },
+        "activities": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::ActivityResource"
+        },
+        "target_groups": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::TargetGroupResource"
+        },
+        "technical_requirements": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::TechnicalRequirementResource"
+        },
+        "traits": {
+          "type": "has_many",
+          "description": null,
+          "resource": "Event::TraitResource"
+        },
+        "fitness_requirement": {
+          "type": "belongs_to",
+          "description": null,
+          "resource": "Event::FitnessRequirementResource"
+        }
+      },
+      "stats": {
+        "total": [
+          "count"
+        ]
+      }
+    },
+    {
+      "name": "Event::TraitResource",
+      "type": "event_traits",
+      "graphql_entrypoint": "traits",
+      "description": null,
+      "attributes": {
+        "id": {
+          "type": "integer_id",
+          "readable": true,
+          "writable": true,
+          "description": null
+        },
+        "label": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "short_description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "order": {
+          "type": "integer",
+          "readable": true,
+          "writable": false,
+          "description": null
+        }
+      },
+      "extra_attributes": {},
+      "sorts": {
+        "id": {},
+        "label": {},
+        "short_description": {},
+        "description": {},
+        "order": {}
+      },
+      "filters": {
+        "id": {
+          "type": "integer_id",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "short_description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "operators": [
+            "eq",
+            "not_eq",
+            "eql",
+            "not_eql",
+            "prefix",
+            "not_prefix",
+            "suffix",
+            "not_suffix",
+            "match",
+            "not_match"
+          ]
+        },
+        "order": {
+          "type": "integer",
+          "operators": [
+            "eq",
+            "not_eq",
+            "gt",
+            "gte",
+            "lt",
+            "lte"
+          ]
+        }
+      },
+      "relationships": {
+        "parent": {
+          "type": "has_one",
+          "description": null,
+          "resource": "Event::TraitResource"
         }
       },
       "stats": {
@@ -2457,6 +3321,36 @@
           "operators": [
             "eq",
             "not_eq"
+          ]
+        },
+        "activity_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "target_group_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "technical_requirement_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "trait_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
+        },
+        "fitness_requirement_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
           ]
         }
       },
@@ -5370,6 +6264,26 @@
     }
   ],
   "endpoints": {
+    "/api/event_activities": {
+      "actions": {
+        "index": {
+          "resource": "Event::ActivityResource"
+        },
+        "show": {
+          "resource": "Event::ActivityResource"
+        }
+      }
+    },
+    "/api/event_fitness_requirements": {
+      "actions": {
+        "index": {
+          "resource": "Event::FitnessRequirementResource"
+        },
+        "show": {
+          "resource": "Event::FitnessRequirementResource"
+        }
+      }
+    },
     "/api/event_kind_categories": {
       "actions": {
         "index": {
@@ -5407,6 +6321,36 @@
         },
         "show": {
           "resource": "Event::ParticipationResource"
+        }
+      }
+    },
+    "/api/event_target_groups": {
+      "actions": {
+        "index": {
+          "resource": "Event::TargetGroupResource"
+        },
+        "show": {
+          "resource": "Event::TargetGroupResource"
+        }
+      }
+    },
+    "/api/event_technical_requirements": {
+      "actions": {
+        "index": {
+          "resource": "Event::TechnicalRequirementResource"
+        },
+        "show": {
+          "resource": "Event::TechnicalRequirementResource"
+        }
+      }
+    },
+    "/api/event_traits": {
+      "actions": {
+        "index": {
+          "resource": "Event::TraitResource"
+        },
+        "show": {
+          "resource": "Event::TraitResource"
         }
       }
     },
