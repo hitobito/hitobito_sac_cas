@@ -49,6 +49,24 @@ RSpec.describe "external_invoices#update", type: :request do
           .and change { external_invoice.reload.total }.to(100)
           .and change { external_invoice.reload.sent_at }.to(Date.new(2024, 1, 1))
       end
+
+      it "cannot update the resource with read permissions" do
+        service_token.update!(permission: :layer_and_below_read)
+        make_request
+        expect(response.status).to eq(403)
+      end
+
+      it "cannot update the resource without invoices scope" do
+        service_token.update!(invoices: false)
+        make_request
+        expect(response.status).to eq(403)
+      end
+
+      it "cannot update the resource with permission on sektion" do
+        service_token.update!(layer: groups(:bluemlisalp))
+        make_request
+        expect(response.status).to eq(403)
+      end
     end
   end
 end

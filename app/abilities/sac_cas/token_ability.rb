@@ -6,13 +6,17 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 module SacCas::TokenAbility
+  extend ActiveSupport::Concern
+
+  prepended do
+    ApiScopeAbility::REQUIRED_SCOPES["Event::Level"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES["ExternalInvoice"] = :invoices
+  end
+
   private
 
   def initialize(token)
     super
-
-    can :manage, ExternalInvoice if token.layer.root?
-    can :manage, Event::Level if token.layer.root?
 
     if token.events?
       can :"index_event/tours", Group do |g|
