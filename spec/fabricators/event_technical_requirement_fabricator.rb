@@ -6,6 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:event_technical_requirement, class_name: "Event::TechnicalRequirement") do
-  label { Faker::Sport.sport }
+  label { sequence(:event_technical_requirement_label) { |i| "#{Faker::Sport.sport} #{i}" } }
   description { Faker::Lorem.sentence }
 end

@@ -61,10 +61,10 @@ section_tour:
   traits:
     - public_transport
     - excursion
-  summit: Bettmerhorn
+  summit: Grosser Bundstock
   ascent: 2872
   descent: 911
-  tourenportal_link: https://tourenportal.test/bettmerhorn
+  tourenportal_link: https://tourenportal.test/bundstock
   subito: false
   season: summer
   duration: 750

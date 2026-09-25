@@ -6,6 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:event_trait, class_name: "Event::Trait") do
-  label { Faker::Lorem.word }
+  label { sequence(:event_trait_label) { |i| "#{Faker::Lorem.word} #{i}" } }
   description { Faker::Lorem.sentence }
 end
