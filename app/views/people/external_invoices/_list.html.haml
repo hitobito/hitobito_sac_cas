@@ -20,7 +20,7 @@
                   class: 'btn-sm',
                   method: :post,
                   data: { confirm: t('.record_payment_confirmation') })
-    - if invoice.cancellable? && can?(:cancel_external_invoice, invoice)
+    - if invoice.cancellable? && can?(:cancel, invoice)
       = action_button(t('.cancel_invoice'),
                   cancel_external_invoices_group_people_group_person_path(@group, @person, invoice),
                   :ban,

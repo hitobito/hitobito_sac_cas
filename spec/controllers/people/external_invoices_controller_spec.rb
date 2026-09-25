@@ -52,16 +52,6 @@ describe People::ExternalInvoicesController do
   end
 
   context "#index" do
-    context "as member" do
-      let(:user) { person }
-
-      it "is unauthorized" do
-        expect do
-          get :index, params: {group_id: group_id, id: person.id}
-        end.to raise_error(CanCan::AccessDenied)
-      end
-    end
-
     context "as admin" do
       render_views
 
@@ -85,11 +75,8 @@ describe People::ExternalInvoicesController do
           get :index, params: {group_id: group_id, id: person.id}
         end
 
-        it "is authorized" do
-          expect(response).to have_http_status(:success)
-        end
-
         it "renders the external invoice" do
+          expect(response).to have_http_status(:success)
           page = Capybara.string(response.body)
           expect(page).to have_selector("a", text: "Mitgliedschaftsrechnung erstellen")
           expect(page).to have_selector("th", text: "Titel")
@@ -207,20 +194,20 @@ describe People::ExternalInvoicesController do
         end.to raise_error(CanCan::AccessDenied)
       end
     end
-  end
-
-  context "#cancel" do
-    let(:invoice) { Fabricate(:external_invoice, person_id: person.id) }
 
     context "as member" do
       let(:user) { person }
 
       it "is unauthorized" do
         expect do
-          post :cancel, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+          get :index, params: {group_id: group_id, id: person.id}
         end.to raise_error(CanCan::AccessDenied)
       end
     end
+  end
+
+  context "#cancel" do
+    let(:invoice) { Fabricate(:external_invoice, person_id: person.id) }
 
     context "as admin" do
       it "cancels the invoice" do
@@ -236,10 +223,20 @@ describe People::ExternalInvoicesController do
     context "as functionary" do
       let(:user) do
         Fabricate(Group::SektionsFunktionaere::Administration.sti_name,
-          group: groups(:matterhorn_funktionaere)).person
+          group: groups(:bluemlisalp_funktionaere)).person
       end
 
       it "is not authorized" do
+        expect do
+          post :cancel, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as member" do
+      let(:user) { person }
+
+      it "is unauthorized" do
         expect do
           post :cancel, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
         end.to raise_error(CanCan::AccessDenied)
@@ -250,16 +247,6 @@ describe People::ExternalInvoicesController do
   context "#record_payment" do
     let(:section) { groups(:bluemlisalp) }
     let(:invoice) { Fabricate(:sac_membership_invoice, person_id: person.id, state: "open", link: section) }
-
-    context "as member" do
-      let(:user) { person }
-
-      it "is unauthorized" do
-        expect do
-          post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
-        end.to raise_error(CanCan::AccessDenied)
-      end
-    end
 
     context "as admin" do
       it "records the payment" do
@@ -293,11 +280,21 @@ describe People::ExternalInvoicesController do
 
     context "as functionary" do
       let(:user) do
-        Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name,
-          group: groups(:matterhorn_funktionaere)).person
+        Fabricate(Group::SektionsFunktionaere::Administration.sti_name,
+          group: groups(:bluemlisalp_funktionaere)).person
       end
 
-      it "is not authorized" do
+      it "is unauthorized" do
+        expect do
+          post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
+        end.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as member" do
+      let(:user) { person }
+
+      it "is unauthorized" do
         expect do
           post :record_payment, params: {group_id: group_id, id: person.id, invoice_id: invoice.id}
         end.to raise_error(CanCan::AccessDenied)

@@ -18,6 +18,6 @@ class Event::LevelResource < ApplicationResource
   end
 
   def base_scope
-    Event::Level.all.accessible_by(JsonApi::Event::LevelAbility.new(current_ability))
+    Event::Level.all
   end
 end

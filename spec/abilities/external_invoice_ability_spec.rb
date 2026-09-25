@@ -17,26 +17,44 @@ describe ExternalInvoiceAbility do
     Fabricate(Group::Geschaeftsstelle::Andere.sti_name.to_sym,
       group: groups(:geschaeftsstelle)).person
   end
-  let(:mitgliederverwaltung_sektion) do
-    Fabricate(Group::SektionsFunktionaere::Mitgliederverwaltung.sti_name.to_sym,
+  let(:admin_sektion) do
+    Fabricate(Group::SektionsFunktionaere::Administration.sti_name.to_sym,
       group: groups(:bluemlisalp_funktionaere)).person
   end
 
-  context "manage" do
+  context "update" do
     it "is permitted as admin" do
-      expect(Ability.new(admin)).to be_able_to(:manage, invoice)
+      expect(Ability.new(admin)).to be_able_to(:update, invoice)
     end
 
     it "is not permitted as andere" do
-      expect(Ability.new(andere)).not_to be_able_to(:manage, invoice)
+      expect(Ability.new(andere)).not_to be_able_to(:update, invoice)
     end
 
     it "is not permitted as mitglied" do
-      expect(Ability.new(mitglied)).not_to be_able_to(:manage, invoice)
+      expect(Ability.new(mitglied)).not_to be_able_to(:update, invoice)
     end
 
-    it "is not permitted as mitgliederverwaltung sektion" do
-      expect(Ability.new(mitgliederverwaltung_sektion)).not_to be_able_to(:manage, invoice)
+    it "is not permitted as admin sektion" do
+      expect(Ability.new(admin_sektion)).not_to be_able_to(:update, invoice)
+    end
+  end
+
+  context "index" do
+    it "is permitted as admin" do
+      expect(Ability.new(admin)).to be_able_to(:index, ExternalInvoice)
+    end
+
+    it "is not permitted as andere" do
+      expect(Ability.new(andere)).not_to be_able_to(:index, ExternalInvoice)
+    end
+
+    it "is not permitted as mitglied" do
+      expect(Ability.new(mitglied)).not_to be_able_to(:index, ExternalInvoice)
+    end
+
+    it "is not permitted as admin sektion" do
+      expect(Ability.new(admin_sektion)).not_to be_able_to(:index, ExternalInvoice)
     end
   end
 end
