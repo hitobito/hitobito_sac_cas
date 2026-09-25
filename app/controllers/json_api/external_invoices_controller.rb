@@ -6,24 +6,4 @@
 #  https://github.com/hitobito/hitobito.
 
 class JsonApi::ExternalInvoicesController < JsonApiController
-  def index
-    authorize!(:index, ExternalInvoice)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  def update
-    authorize!(:update, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= ExternalInvoice.accessible_by(current_ability).find(params[:id])
-  end
 end
