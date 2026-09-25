@@ -480,7 +480,7 @@ describe AgendaController do
         expect(facts(detail)).to eq(
           "Datum" => "Mo 02.03.2026",
           "Dauer" => "1 Tag / 12:30 h",
-          "Ziel" => "Bettmerhorn",
+          "Ziel" => "Grosser Bundstock",
           "Höhenmeter" => "2872m ↗ / 911m ↘",
           "Technische Anforderungen" => "T3 T4",
           "Konditionelle Anforderung" => "B - wenig anstrengend",
@@ -491,7 +491,7 @@ describe AgendaController do
       end
 
       it "links the summit to the tourenportal" do
-        expect(detail).to have_link("Bettmerhorn", href: tour.tourenportal_link)
+        expect(detail).to have_link("Grosser Bundstock", href: tour.tourenportal_link)
       end
 
       it "renders one text section per filled attribute" do

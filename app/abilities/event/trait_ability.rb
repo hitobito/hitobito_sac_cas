@@ -7,7 +7,7 @@
 
 class Event::TraitAbility < AbilityDsl::Base
   on(Event::Trait) do
-    class_side(:index).if_admin
+    class_side(:index, :show).all
 
     permission(:admin).may(:manage).all
   end

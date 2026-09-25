@@ -6,6 +6,7 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:event_fitness_requirement, class_name: "Event::FitnessRequirement") do
-  label { Faker::Job.seniority }
+  short_label { sequence(:event_fitness_requirement_short_label) { |i| "F#{i}" } }
+  label { sequence(:event_fitness_requirement_label) { |i| "#{Faker::Job.seniority} #{i}" } }
   description { Faker::Lorem.sentence }
 end

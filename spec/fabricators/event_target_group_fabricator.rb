@@ -6,6 +6,6 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 Fabricator(:event_target_group, class_name: "Event::TargetGroup") do
-  label { Faker::Relationship.familial }
+  label { sequence(:event_target_group_label) { |i| "#{Faker::Relationship.familial} #{i}" } }
   description { Faker::Lorem.sentence }
 end
