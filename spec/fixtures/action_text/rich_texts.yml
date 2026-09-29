@@ -1,0 +1,188 @@
+login_de_body:
+  record: login_de (CustomContent::Translation)
+  name: body
+  body: '
+  Hallo {recipient-name}<br/><br/>
+  Willkommen bei <%= Settings.application.name %>!
+  Unter dem folgenden Link kannst du
+  dein Login Passwort setzen:<br/><br/>{login-url}<br/><br/>
+  Bis bald!<br/><br/>{sender-name}'
+
+login_fr_body:
+  record: login_fr (CustomContent::Translation)
+  name: body
+  body: "Salut {recipient-name}, voici ta site login: {login-url}"
+
+notes_body:
+  record: notes (CustomContent::Translation)
+  name: body
+  body: Bla bla bla bla
+
+bulk_mail_success_de_body:
+  record: bulk_mail_success_de (CustomContent::Translation)
+  name: body
+  body: '
+  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
+  Betreff: {mail-subject}<br/>
+  Zeit: {delivered-at}<br/>
+  Empfänger: {total-recipients}<br/><br/>'
+
+bulk_mail_with_failed_de_body:
+  record: bulk_mail_with_failed_de (CustomContent::Translation)
+  name: body
+  body: '
+  Deine Mail an {mail-to} wurde verschickt:<br/><br/>
+  Betreff: {mail-subject}<br/>
+  Zeit: {delivered-at}<br/>
+  Empfänger: {total-succeeded-recipients}/{total-recipients}<br/><br/>
+  Folgende Empfänger konnten nicht zugestellt werden:<br/><br/>{failed-recipients}
+  <br/><br/>
+  '
+
+content_invoice_notification_body:
+  record: content_invoice_notification (CustomContent::Translation)
+  name: body
+  body: '<p>Hallo {recipient-name}</p>
+   <p>Rechnung von:</p>
+   <p><b>Absender: {group-address}</b></p>
+   <br/><br/>
+   {invoice-items}<br/><br/>
+   {invoice-total}<br/><br/>
+   {payment-information}<br/><br/>
+  '
+
+person_add_request_person_body:
+  record: person_add_request_person (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-name}<br/><br/>
+    {requester-name} möchte dich hier hinzufügen: <br><br/>
+    {request-body}<br><br/>
+    {requester-name} hat folgende schreibberechtigten Rollen: <br><br/>
+    {requester-roles}<br><br/>
+    Bitte bestätige oder verwerfe diese Anfrage:<br><br/>
+    {answer-request-url}
+  '
+
+person_add_request_responsibles_body:
+  record: person_add_request_responsibles (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-names}<br/><br/>
+    {requester-name} möchte {person-name} hier hinzufügen: <br/><br/>
+    {request-body}<br/><br/>
+    {requester-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+    {requester-roles}<br/><br/>
+    Bitte bestätige oder verwerfe diese Anfrage:<br/><br/>
+    {answer-request-url}'
+
+person_add_request_approved_body:
+  record: person_add_request_approved (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-name}<br/><br/>
+   {approver-name} hat deine Anfrage für {person-name} freigegeben.<br/><br/>
+   {person-name} wurde zu {request-body} hinzugefügt.<br/><br/>
+   {approver-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+   {approver-roles}<br/><br/>'
+
+person_add_request_rejected_body:
+  record: person_add_request_rejected (CustomContent::Translation)
+  name: body
+  body: 'Hallo {recipient-name}<br/><br/>
+    {rejecter-name} hat deine Anfrage für {person-name} abgelehnt.<br/><br/>
+    {person-name} wird nicht zu {request-body} hinzugefügt.<br/><br/>
+    {rejecter-name} hat folgende schreibberechtigten Rollen: <br/><br/>
+    {rejecter-roles}<br/><br/>'
+
+address_validation_checks_body:
+  record: address_validation_checks (CustomContent::Translation)
+  name: body
+  body: 'Die Personen: {invalid-people} haben Addressen, welche nicht im Archiv gefunden wurden.'
+
+assignment_assignee_notification_body:
+  record: assignment_assignee_notification (CustomContent::Translation)
+  name: body
+  body: 'Sie haben einen neuen Druckauftrag: {assignment-title} erhalten. Login Sie sich bitte ein, um diesen einzusehen.'
+
+self_registration_notification_body:
+  record: self_registration_notification (CustomContent::Translation)
+  name: body
+  body: 'Die Person {person-name} hat sich auf der Gruppe {group-name} per Selbstregistrierung angemeldet:<br/><br/>{person-url}'
+
+
+people_action_index_de_body:
+  record: people_action_index_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+person_field_name_de_body:
+  record: person_field_name_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+event_field_name_de_body:
+  record: event_field_name_de (HelpText::Translation)
+  name: body
+  body: 'base'
+
+course_field_name_de_body:
+  record: course_field_name_de (HelpText::Translation)
+  name: body
+  body: 'inherited'
+
+participations_action_index_de_body:
+  record: participations_action_index_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+events_action_index_de_body:
+  record: events_action_index_de (HelpText::Translation)
+  name: body
+  body: 'test'
+
+letter_body:
+  record: letter (Message)
+  name: body
+  body: |
+    Hallo<br/><br/>
+    Wir laden <strong>dich</strong> ein!
+    <br/><br/>
+    Bis bald
+letter_invoice:
+  record: with_invoice (Message)
+  name: body
+  body: |
+    Hallo<br/><br/>
+    Dein <strong>Mitgliedsbeitrag</strong> ist fällig!
+    <br/><br/>
+    Bis bald
+
+content_user_password_override_body:
+  record: content_user_password_override (CustomContent::Translation)
+  name: body
+  body: |
+    Hallo {recipient-name}, <br/>
+    {taker-name} hat auf [#{Settings.application.name}] das Passwort deines Accounts zurückgesetzt.
+    Dies geschieht typischerweise, wenn jemand den Verdacht hat, dass dein Passwort nicht mehr sicher ist. <br/>
+    Im Moment kann sich also niemand mit deinem Account einloggen. Du kannst über die Funktion \"Passwort vergessen\"
+    ein neues Passwort anfordern
+
+content_inactivity_block_warning_body:
+  record: content_inactivity_block_warning (CustomContent::Translation)
+  name: body
+  body: |
+    Hallo {recipient-name}, <br/>
+    TBD auf [#{Settings.application.name}]
+
+top_course_de_description:
+  record: top_course_de (Event::Translation)
+  name: description
+  body: Tourenleiter/in 1 Sommer
+
+application_closed_de_description:
+  record: application_closed_de (Event::Translation)
+  name: description
+  body: Tourenleiter/in 1 Winter
+
+section_tour_de_description:
+  record: section_tour_de (Event::Translation)
+  name: description
+  body: Winterzauber im wunderschönen Kiental
