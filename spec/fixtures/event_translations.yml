@@ -5,6 +5,7 @@
 
 
 top_event_de:
+  id: <%= ActiveRecord::FixtureSet.identify(:top_event_de) %>
   event_id: <%= ActiveRecord::FixtureSet.identify(:top_event) %>
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
@@ -12,6 +13,7 @@ top_event_de:
   name: Top Event
 
 top_course_de:
+  id: <%= ActiveRecord::FixtureSet.identify(:top_course_de) %>
   event_id: <%= ActiveRecord::FixtureSet.identify(:top_course) %>
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
@@ -19,6 +21,7 @@ top_course_de:
   name: Tourenleiter/in 1 Sommer
 
 application_closed_de:
+  id: <%= ActiveRecord::FixtureSet.identify(:application_closed_de) %>
   event_id: <%= ActiveRecord::FixtureSet.identify(:application_closed) %>
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
@@ -26,6 +29,7 @@ application_closed_de:
   name: Tourenleiter/in 1 Winter
 
 section_tour_de:
+  id: <%= ActiveRecord::FixtureSet.identify(:section_tour_de) %>
   event_id: <%= ActiveRecord::FixtureSet.identify(:section_tour) %>
   locale: de
   created_at: 2023-05-09 13:28:24 +0200
