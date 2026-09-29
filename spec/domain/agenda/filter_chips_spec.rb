@@ -7,7 +7,7 @@
 
 require "spec_helper"
 
-describe AgendaFilterChips do
+describe Agenda::FilterChips do
   include Rails.application.routes.url_helpers
 
   let(:group) { groups(:bluemlisalp) }
