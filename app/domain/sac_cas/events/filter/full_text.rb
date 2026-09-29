@@ -68,10 +68,6 @@ module SacCas::Events::Filter::FullText
       .where(search_condition)
   end
 
-  def requirements_search(scope)
-    scope.where(requirements_condition)
-  end
-
   def blank?
     search_words.blank?
   end
