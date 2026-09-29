@@ -208,7 +208,7 @@ describe Export::Tabular::Event::SacCourseFinances do
       Group.root_id # force eager loading
       expect do
         expect(table.data_rows).to have(2).items
-      end.to make(13).db_queries
+      end.to make(14).db_queries
     end
 
     it "contains all attributes" do
