@@ -81,7 +81,7 @@ module CourseMailer
     info << labeled(:dates) { join_lines(@course.dates.map(&:to_s)) }
     info << labeled(:motto)
     info << labeled(:cost)
-    info << labeled(:description) { convert_newlines_to_breaks(@course.description) }
+    info << labeled(:description) { convert_newlines_to_breaks(@course.plain_description) }
     info << labeled(:location) { convert_newlines_to_breaks(@course.location) }
     info << labeled(:contact) { escape_html(@course.contact) + br_tag + @course.contact.email }
     join_lines(info.compact, br_tag * 2)
