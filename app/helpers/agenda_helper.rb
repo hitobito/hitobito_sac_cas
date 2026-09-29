@@ -7,7 +7,7 @@
 
 module AgendaHelper
   def agenda_icon(name, **attributes)
-    AgendaIcon.new(name).to_svg(**attributes)
+    Agenda::Icon.new(name).to_svg(**attributes)
   end
 
   def agenda_activity_icon(activity)

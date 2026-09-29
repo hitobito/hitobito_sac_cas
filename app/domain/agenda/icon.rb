@@ -9,12 +9,12 @@
 # coloured via CSS (currentColor + the .agenda-icon class) exactly like
 # the prototype's Lucide icons, never FontAwesome, which the agenda pages
 # don't load.
-class AgendaIcon
+class Agenda::Icon
   include ActionView::Helpers::TagHelper
 
   # Icon paths copied verbatim from the Lucide icon set
   # https://lucide.dev ISC licensed
-  AGENDA_ICONS = {
+  SVGS = {
     activity: '<path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0' \
       'L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2" />',
     alert_triangle: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 ' \
@@ -71,7 +71,7 @@ class AgendaIcon
   # out of one inside the method body.
   def to_svg(**attributes)
     content_tag(:svg,
-      AGENDA_ICONS.fetch(@name.to_sym).html_safe,
+      SVGS.fetch(@name.to_sym).html_safe,
       xmlns: "http://www.w3.org/2000/svg",
       viewBox: "0 0 24 24",
       fill: "none",

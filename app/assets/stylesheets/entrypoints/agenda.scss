@@ -19,9 +19,6 @@
 @import "bootstrap/scss/utilities";
 @import "bootstrap/scss/bootstrap";
 
-// No FontAwesome import here: the agenda pages render every icon as an
-// inline SVG (see AgendaIcon#to_svg), not from an icon font.
-
 // Custom Stylesheets
 // ui-datepicker before agenda.scss, so agenda.scss's own datepicker
 // overrides (restyling it to match the rest of this page) win the cascade.
