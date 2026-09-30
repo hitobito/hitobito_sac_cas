@@ -47,6 +47,7 @@ module SacCas::Events::Filter::FullText
     search_scope = scope
       .joins(join_essentials_and_parents("technical_requirement"))
       .joins(join_fitness_requirement)
+      .left_outer_joins(translations: :rich_text_description)
 
     if short_words.present?
       search_scope = search_scope.where(requirements_condition)
