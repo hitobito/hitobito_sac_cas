@@ -218,7 +218,7 @@ module TourMailer
 
   def placeholder_event_details
     join_lines([
-      labeled_text_attr(@event, :description),
+      labeled_text_attr(@event, :plain_description),
       labeled_text_attr(@event, :additional_info)
     ].compact, "\n")
   end
