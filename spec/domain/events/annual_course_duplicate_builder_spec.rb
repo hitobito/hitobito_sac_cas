@@ -22,11 +22,11 @@ describe Events::AnnualCourseDuplicateBuilder do
 
   let(:source_course) do
     course = Fabricate(:sac_open_course, number: "2025-1000",
-      application_opening_at: source_application_opening_at,
-      application_closing_at: source_application_closing_at)
+                       application_opening_at: source_application_opening_at,
+                       application_closing_at: source_application_closing_at)
 
     Event::Date.where(event: course).first.update!(start_at: source_start_at,
-      finish_at: source_finish_at)
+                                                   finish_at: source_finish_at)
 
     [:de, :fr, :it].each do |locale|
       translation = Event::Translation.find_or_initialize_by(event_id: course.id, locale:)
@@ -75,13 +75,18 @@ describe Events::AnnualCourseDuplicateBuilder do
   let(:translated_attributes) {
     [
       "name",
-      "description",
       "application_conditions",
       "signature_confirmation_text",
       "brief_description",
       "specialities",
       "similar_tours",
       "program"
+    ]
+  }
+  let(:rich_text_attributes) {
+    [
+      "body",
+      "record_type"
     ]
   }
 
@@ -109,6 +114,9 @@ describe Events::AnnualCourseDuplicateBuilder do
         translated_attributes.each do |attr|
           expect(duplicate_translations.send(attr)).to eq(source_translations.send(attr))
         end
+        rich_text_attributes.each do |attr|
+          expect(duplicate_translations.description.send(attr)).to eq(source_translations.description.send(attr))
+        end
       end
 
       expect(duplicate.questions.size).to eq(5)
@@ -128,7 +136,7 @@ describe Events::AnnualCourseDuplicateBuilder do
       expect(duplicate.participations.size).to eq(2)
       source_leader, source_leader_aspirant = source_course.participations.joins(:roles).where(
         state: :assigned,
-        roles: {type: %w[Event::Course::Role::Leader Event::Course::Role::LeaderAspirant]}
+        roles: { type: %w[Event::Course::Role::Leader Event::Course::Role::LeaderAspirant] }
       ).order("roles.type")
 
       expect(source_leader.answers).to be_present
@@ -157,13 +165,13 @@ describe Events::AnnualCourseDuplicateBuilder do
       expect do
         duplicate = builder.create!
       end.to change { Event::Course.count }.by(1)
-        .and change { Event::Date.count }.by(1)
-        .and change { Event::Translation.count }.by(3)
-        .and change { Event::Question.count }.by(5)
-        .and change { Event::Question::Translation.count }.by(15)
-        .and change { Event::Participation.count }.by(2)
-        .and change { Event::Role.count }.by(2)
-        .and change { Event::Answer.where.not(participation_id: nil).count }.by(0)
+                                           .and change { Event::Date.count }.by(1)
+                                                                            .and change { Event::Translation.count }.by(3)
+                                                                                                                    .and change { Event::Question.count }.by(5)
+                                                                                                                                                         .and change { Event::Question::Translation.count }.by(15)
+                                                                                                                                                                                                           .and change { Event::Participation.count }.by(2)
+                                                                                                                                                                                                                                                     .and change { Event::Role.count }.by(2)
+                                                                                                                                                                                                                                                                                      .and change { Event::Answer.where.not(participation_id: nil).count }.by(0)
 
       expect(duplicate.created_at).to be_present
       expect(duplicate.participations.find(&:leader?).answers).to be_empty
