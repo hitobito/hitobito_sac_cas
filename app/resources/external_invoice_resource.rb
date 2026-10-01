@@ -37,12 +37,6 @@ class ExternalInvoiceResource < ApplicationResource
   end
 
   def base_scope
-    readable = if current_ability.is_a?(TokenAbility)
-      current_ability
-    else
-      JsonApi::ExternalInvoiceAbility.new(current_ability.user)
-    end
-
-    ExternalInvoice.all.accessible_by(readable)
+    ExternalInvoice.all # abilities handled by the controller
   end
 end

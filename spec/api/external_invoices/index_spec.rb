@@ -8,7 +8,7 @@
 require "spec_helper"
 
 RSpec.describe "external_invoices#index", type: :request do
-  it_behaves_like "jsonapi authorized requests", person: nil, required_scopes: [] do
+  it_behaves_like "jsonapi authorized requests", person: nil, required_scopes: [:invoices] do
     let!(:service_token) { service_tokens(:permitted_root_layer_token) }
     let!(:external_invoices) do
       Array.new(3) {
@@ -31,6 +31,24 @@ RSpec.describe "external_invoices#index", type: :request do
         expect(response.status).to eq(200), response.body
         expect(d.map(&:jsonapi_type).uniq).to match_array(["external_invoices"])
         expect(d.map(&:id)).to match_array(external_invoices.pluck(:id))
+      end
+
+      it "cannot fetch with read-only token" do
+        service_token.update!(permission: :layer_and_below_read)
+        make_request
+        expect(response.status).to eq(403)
+      end
+
+      it "cannot fetch with non-invoice token" do
+        service_token.update!(invoices: false)
+        make_request
+        expect(response.status).to eq(403)
+      end
+
+      it "cannot fetch with token on lower layer" do
+        service_token.update!(layer: groups(:bluemlisalp))
+        make_request
+        expect(response.status).to eq(403)
       end
     end
 

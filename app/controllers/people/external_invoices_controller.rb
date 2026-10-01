@@ -6,8 +6,15 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class People::ExternalInvoicesController < ListController
+  prepend_before_action :invoice, only: [:show, :cancel, :record_payment]
+
+  def show
+    person_id = invoice.person_id
+    group_id = Person.where(id: person_id).pick(:primary_group_id)
+    redirect_to external_invoices_group_person_path(group_id, person_id)
+  end
+
   def cancel # rubocop:todo Metrics/AbcSize
-    authorize!(:cancel_external_invoice, invoice)
     invoice.state = "cancelled"
     invoice.save!
     Invoices::Abacus::CancelInvoiceJob.new(invoice).enqueue!
@@ -16,14 +23,8 @@ class People::ExternalInvoicesController < ListController
     redirect_to external_invoices_group_person_path(group, person)
   end
 
-  def show
-    person_id = invoice.person_id
-    group_id = Person.where(id: person_id).pick(:primary_group_id)
-    redirect_to external_invoices_group_person_path(group_id, person_id)
-  end
-
   def record_payment
-    flash_key, message_key = update_membership_invoice(invoice)
+    flash_key, message_key = update_membership_invoice
 
     flash[flash_key] = t(message_key, invoice: invoice.title)
     redirect_to external_invoices_group_person_path(group, person)
@@ -31,7 +32,7 @@ class People::ExternalInvoicesController < ListController
 
   private
 
-  def update_membership_invoice(invoice)
+  def update_membership_invoice
     return [:warning, ".flash_already_payed"] if invoice.payed?
 
     ActiveRecord::Base.transaction do
@@ -64,7 +65,7 @@ class People::ExternalInvoicesController < ListController
   end
 
   def invoice
-    @invoice ||= ExternalInvoice.find(params[:invoice_id])
+    @external_invoice ||= ExternalInvoice.find(params[:invoice_id])
   end
 
   def authorize_class
