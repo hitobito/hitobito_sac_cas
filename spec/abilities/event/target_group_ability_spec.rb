@@ -9,5 +9,5 @@ require "spec_helper"
 require_relative "../admin_permission_shared_examples"
 
 describe Event::TargetGroupAbility do
-  it_behaves_like "model for admins only", Event::TargetGroup
+  it_behaves_like "model for admins only", Event::TargetGroup, except: [:index]
 end

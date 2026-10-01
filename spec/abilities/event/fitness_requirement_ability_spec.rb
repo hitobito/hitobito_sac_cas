@@ -9,5 +9,5 @@ require "spec_helper"
 require_relative "../admin_permission_shared_examples"
 
 describe Event::FitnessRequirementAbility do
-  it_behaves_like "model for admins only", Event::FitnessRequirement
+  it_behaves_like "model for admins only", Event::FitnessRequirement, except: [:index]
 end

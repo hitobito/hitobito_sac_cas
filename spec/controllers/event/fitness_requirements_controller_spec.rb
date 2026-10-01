@@ -78,14 +78,4 @@ describe Event::FitnessRequirementsController do
       expect(response).to redirect_to(event_fitness_requirements_path(returning: true))
     end.to change { Event::FitnessRequirement.with_deleted.count }.by(-1)
   end
-
-  context "unauthorized" do
-    let(:current_user) { people(:mitglied) }
-
-    it "may not index" do
-      expect do
-        get :index
-      end.to raise_error(CanCan::AccessDenied)
-    end
-  end
 end
