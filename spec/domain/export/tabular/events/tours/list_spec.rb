@@ -23,7 +23,7 @@ describe Export::Tabular::Events::Tours::List do
       :activities, :target_groups, :fitness_requirement, :technical_requirements, :traits
     )
     # base columns are still present, unchanged
-    expect(list.attributes).to include(:name, :group_names, :description, :location,
+    expect(list.attributes).to include(:name, :group_names, :plain_description, :location,
       :maximum_participants, :teamer_count, :participant_count, :applicant_count)
   end
 
