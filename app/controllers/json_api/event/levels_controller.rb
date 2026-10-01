@@ -6,19 +6,4 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 class JsonApi::Event::LevelsController < JsonApiController
-  def index
-    authorize!(:index, Event::Level)
-    super
-  end
-
-  def show
-    authorize!(:show, entry)
-    super
-  end
-
-  private
-
-  def entry
-    @entry ||= Event::Level.find(params[:id])
-  end
 end
