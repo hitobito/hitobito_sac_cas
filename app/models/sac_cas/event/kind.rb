@@ -51,13 +51,10 @@ module SacCas::Event::Kind
   INHERITABLE_TRANSLATED_ATTRIBUTES = %w[
     application_conditions
     brief_description
+    general_information
     specialities
     similar_tours
     program
-  ].freeze
-
-  INHERITABLE_TRANSLATED_RICH_TEXT_ATTRIBUTES = %w[
-    general_information
   ].freeze
 
   prepended do
@@ -92,7 +89,6 @@ module SacCas::Event::Kind
       attrs = INHERITABLE_ATTRIBUTES.index_with { |attr| send(attr) }
       push_down_events.update_all(attrs)
       push_down_translated_attributes!
-      push_down_translated_rich_text_attributes
     end
   end
 
@@ -101,14 +97,13 @@ module SacCas::Event::Kind
       push_down_translated_attributes!(field)
     elsif INHERITABLE_ATTRIBUTES.include?(field)
       push_down_events.update_all(field => send(field))
-    elsif INHERITABLE_TRANSLATED_RICH_TEXT_ATTRIBUTES.include?(field)
-      push_down_translated_rich_text_attributes
     end
   end
 
   private
 
-  def push_down_translated_attributes!(attr = nil) # rubocop:todo Metrics/MethodLength
+  def push_down_translated_attributes!(attr = nil)
+    # rubocop:todo Metrics/MethodLength
     event_ids = push_down_events.pluck(:id)
     return if event_ids.blank?
 
@@ -116,36 +111,33 @@ module SacCas::Event::Kind
       fields = attr ? [attr] : INHERITABLE_TRANSLATED_ATTRIBUTES
       attrs = t.attributes.slice("locale", *fields)
 
-      translation_attrs = event_ids.map { |id| attrs.merge(event_id: id) }
+      translation_attrs = event_ids.map { |id|
+        attrs.except("general_information").merge(event_id: id)
+      }
       Event::Translation.upsert_all(
         translation_attrs,
         unique_by: [:event_id, :locale],
         returning: false
       )
+      push_down_descriptions(t) if attrs.key?("general_information")
     end
   end
 
-  def push_down_translated_rich_text_attributes
-    push_down_translated_attributes!
-    event_translations = push_down_event_translations
-    translations.each do |t|
-      event_translation_ids = event_translations.where(locale: t.locale).pluck(:id)
-      attrs = t.attributes.slice(*INHERITABLE_TRANSLATED_RICH_TEXT_ATTRIBUTES)
-      if attrs.key?("general_information")
-        attrs["description"] = attrs.delete("general_information")
-      end
-      attrs.select do | attr_key, attr_value |
-        translation_attrs = event_translation_ids.map { |id| {body: attr_value,
-                                                              record_id: id,
-                                                              record_type: "Event::Translation",
-                                                              name: attr_key.to_s} }
-        ActionText::RichText.upsert_all(
-          translation_attrs,
-          unique_by:  [:record_type, :record_id, :name],
-          returning: false
-        )
-      end
-    end
+  def push_down_descriptions(translation)
+    event_translation_ids = push_down_event_translations.where(locale: translation.locale).pluck(:id)
+    description = translation.attributes["general_information"]
+
+    translation_attrs = event_translation_ids.map { |id|
+      {body: description,
+       record_id: id,
+       record_type: "Event::Translation",
+       name: "description"}
+    }
+    ActionText::RichText.upsert_all(
+      translation_attrs,
+      unique_by: [:record_type, :record_id, :name],
+      returning: false
+    )
   end
 
   def push_down_events
