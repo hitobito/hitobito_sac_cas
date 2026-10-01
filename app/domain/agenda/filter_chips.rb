@@ -106,7 +106,7 @@ class Agenda::FilterChips
 
   def type_chips
     Array(filter_params.dig(:agenda_type, :values)).map do |type|
-      without = params.deep_dup
+      without = filter_params.deep_dup
       without[:agenda_type][:values] = without[:agenda_type][:values] - [type]
       chip(I18n.t("agenda.filters.types.#{type}"), without)
     end
