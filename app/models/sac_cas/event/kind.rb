@@ -123,7 +123,8 @@ module SacCas::Event::Kind
   end
 
   def push_down_descriptions(translation)
-    event_translation_ids = push_down_event_translations.where(locale: translation.locale).pluck(:id)
+    event_translation_ids = push_down_event_translations.where(locale: translation.locale)
+      .pluck(:id)
     description = translation.attributes["general_information"]
 
     translation_attrs = event_translation_ids.map { |id|

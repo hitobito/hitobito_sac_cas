@@ -821,10 +821,10 @@ describe Event::Course do
       expect(dup.attributes.except(*excluded_attrs)).to eq(orig.attributes.except(*excluded_attrs))
 
       expect(dup.name).to eq("Tourenleiter/in 1 Sommer")
-      expect(dup.plain_description).to eq("Tourenleiter/in 1 Sommer")
+      expect(dup.description.to_s).to eq(orig.description.to_s)
       I18n.with_locale(:fr) do
         expect(dup.name).to eq("Le cours")
-        expect(dup.plain_description).to eq("description du cours")
+        expect(dup.description.to_s).to eq(orig.description.to_s)
         expect(dup.brief_description).to eq("Un cours de test")
       end
     end
