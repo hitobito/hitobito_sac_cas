@@ -49,9 +49,9 @@ module SacCas::Event::Kind
   ].freeze
 
   INHERITABLE_TRANSLATED_ATTRIBUTES = %w[
+    general_information
     application_conditions
     brief_description
-    general_information
     specialities
     similar_tours
     program
@@ -102,8 +102,7 @@ module SacCas::Event::Kind
 
   private
 
-  def push_down_translated_attributes!(attr = nil)
-    # rubocop:todo Metrics/MethodLength
+  def push_down_translated_attributes!(attr = nil) # rubocop:todo Metrics/MethodLength
     event_ids = push_down_events.pluck(:id)
     return if event_ids.blank?
 
