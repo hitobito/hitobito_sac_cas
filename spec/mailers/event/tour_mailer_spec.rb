@@ -57,7 +57,7 @@ describe Event::TourMailer do
         "<dt>Merkmal(e)</dt><dd>Anreise mit ÖV, Exkursion</dd>",
         "<dt>Konditionelle Anforderung</dt><dd>B - wenig anstrengend</dd>",
         "<dt>Technische Anforderung(en)</dt><dd>T3, T4</dd>",
-        "<dt>Beschreibung</dt><dd>Wichtige Infos<br/>auf mehreren Zeilen</dd>",
+        "<dl><dt>Beschreibung</dt><dd><div class=\"trix-content\">\n  Wichtige Infos\nauf mehreren Zeilen\n</div>\n</dd></dl>",
         "Bei Fragen kannst du dich jederzeit an Tenzing Norgay wenden " \
         "(#{contact.id}, +41 79 123 45 67, t.norgay@hitobito.example.com)."
       )
