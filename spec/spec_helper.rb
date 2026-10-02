@@ -21,6 +21,15 @@ Dir[HitobitoSacCas::Wagon.root.join("spec/support/**/*.rb")].sort.each { |f| req
 RSpec.configure do |config|
   config.fixture_paths = [File.expand_path("fixtures", __dir__)]
 
+  config.seeds << {
+    paths: [
+      Rails.root.join("db", "seeds"),
+      HitobitoYouth::Wagon.root.join("db", "seeds"),
+      HitobitoSacCas::Wagon.root.join("db", "seeds")
+    ],
+    filter: /custom_contents|self_registration_reasons/
+  }
+
   config.before do
     PaperTrail.request.whodunnit = "rspec"
 
