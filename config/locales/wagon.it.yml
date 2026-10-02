@@ -1615,6 +1615,12 @@ it:
       traits: Caratteristiche
       leader: Direzione
       status: Stato
+      type: Typ
+      types:
+        regular_tour: Reguläre Tour
+        subito_tour: Subito-Tour
+        regular_event: Anlass
+      subito: Subito-Tour
       search: Cerca
       search_placeholder: "Cerca per titolo dell'attività, descrizione, tipo, ecc."
     index:
