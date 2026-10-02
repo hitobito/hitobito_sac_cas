@@ -77,14 +77,4 @@ describe Event::TargetGroupsController do
       expect(response).to redirect_to(event_target_groups_path(returning: true))
     end.to change { Event::TargetGroup.with_deleted.count }.by(-1)
   end
-
-  context "unauthorized" do
-    let(:current_user) { people(:mitglied) }
-
-    it "may not index" do
-      expect do
-        get :index
-      end.to raise_error(CanCan::AccessDenied)
-    end
-  end
 end

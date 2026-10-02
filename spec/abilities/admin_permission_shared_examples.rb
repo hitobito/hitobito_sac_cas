@@ -5,7 +5,9 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
 
-shared_examples "model for admins only" do |model_class|
+shared_examples "model for admins only" do |model_class, options = {}|
+  except = Array(options[:except])
+
   def build_role(type)
     Fabricate.build(type.sti_name, group: group).tap do |r|
       r.person.roles = [r]
@@ -18,8 +20,13 @@ shared_examples "model for admins only" do |model_class|
   context "without admin permission" do
     let(:role) { Group::Geschaeftsstelle::Mitarbeiter }
 
-    it "may not view nor manage #{model_class} records" do
-      expect(ability).not_to be_able_to(:index, model_class)
+    unless except.include?(:index)
+      it "may not view #{model_class} records" do
+        expect(ability).not_to be_able_to(:index, model_class)
+      end
+    end
+
+    it "may not manage #{model_class} records" do
       expect(ability).not_to be_able_to(:manage, model_class.new)
     end
   end

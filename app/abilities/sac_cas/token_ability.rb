@@ -9,8 +9,13 @@ module SacCas::TokenAbility
   extend ActiveSupport::Concern
 
   prepended do
-    ApiScopeAbility::REQUIRED_SCOPES["Event::Level"] = :events
-    ApiScopeAbility::REQUIRED_SCOPES["ExternalInvoice"] = :invoices
+    ApiScopeAbility::REQUIRED_SCOPES[:"Event::Level"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES[:"Event::Activity"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES[:"Event::FitnessRequirement"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES[:"Event::TargetGroup"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES[:"Event::TechnicalRequirement"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES[:"Event::Trait"] = :events
+    ApiScopeAbility::REQUIRED_SCOPES[:ExternalInvoice] = :invoices
   end
 
   private

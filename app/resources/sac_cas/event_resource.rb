@@ -23,5 +23,36 @@ module SacCas::EventResource
         scope.select("events.*").joins(:kind).where.not(kind: {level_id: level_ids})
       }
     end
+
+    filter :activity_id, :integer, only: [:eq] do
+      eq { |scope, ids| scope.where(id: tours_with(:activities, ids)) }
+    end
+
+    filter :target_group_id, :integer, only: [:eq] do
+      eq { |scope, ids| scope.where(id: tours_with(:target_groups, ids)) }
+    end
+
+    filter :technical_requirement_id, :integer, only: [:eq] do
+      eq { |scope, ids| scope.where(id: tours_with(:technical_requirements, ids)) }
+    end
+
+    filter :trait_id, :integer, only: [:eq] do
+      eq { |scope, ids| scope.where(id: tours_with(:traits, ids)) }
+    end
+
+    filter :fitness_requirement_id, :integer, only: [:eq] do
+      eq { |scope, ids| scope.where(fitness_requirement_id: ids) }
+    end
+  end
+
+  private
+
+  # The filters run on the polymorphic Event scope, which does not know the Event::Tour
+  # associations, hence the matching tours are looked up in a subquery.
+  # Filtering by a main entry matches the tours assigned to one of its children as well.
+  def tours_with(association, ids)
+    model = Event::Tour.reflect_on_association(association).klass
+    matching = model.where(id: ids).or(model.where(parent_id: ids)).select(:id)
+    Event::Tour.joins(association).where(model.table_name => {id: matching}).select(:id)
   end
 end

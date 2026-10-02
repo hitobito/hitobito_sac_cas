@@ -143,14 +143,4 @@ describe Event::ActivitiesController do
     entry.reload
     expect(entry.deleted_at).to be_present
   end
-
-  context "unauthorized" do
-    let(:current_user) { people(:mitglied) }
-
-    it "may not index" do
-      expect do
-        get :index
-      end.to raise_error(CanCan::AccessDenied)
-    end
-  end
 end

@@ -7,7 +7,7 @@
 
 class Event::ActivityAbility < AbilityDsl::Base
   on(Event::Activity) do
-    class_side(:index).if_admin
+    class_side(:index, :show).all
 
     permission(:admin).may(:manage).all
   end

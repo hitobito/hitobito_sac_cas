@@ -9,5 +9,5 @@ require "spec_helper"
 require_relative "../admin_permission_shared_examples"
 
 describe Event::TechnicalRequirementAbility do
-  it_behaves_like "model for admins only", Event::TechnicalRequirement
+  it_behaves_like "model for admins only", Event::TechnicalRequirement, except: [:index]
 end

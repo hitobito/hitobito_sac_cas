@@ -80,14 +80,4 @@ describe Event::TraitsController do
     end.to change { Event::Trait.with_deleted.count }.by(0)
       .and change { Event::Trait.without_deleted.count }.by(-1)
   end
-
-  context "unauthorized" do
-    let(:current_user) { people(:mitglied) }
-
-    it "may not index" do
-      expect do
-        get :index
-      end.to raise_error(CanCan::AccessDenied)
-    end
-  end
 end

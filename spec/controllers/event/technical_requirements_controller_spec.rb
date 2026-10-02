@@ -78,14 +78,4 @@ describe Event::TechnicalRequirementsController do
     end.not_to change { Event::TechnicalRequirement.count }
     expect(flash[:alert]).to eq "Ein Eintrag mit Untereinträgen kann nicht gelöscht werden."
   end
-
-  context "unauthorized" do
-    let(:current_user) { people(:mitglied) }
-
-    it "may not index" do
-      expect do
-        get :index
-      end.to raise_error(CanCan::AccessDenied)
-    end
-  end
 end

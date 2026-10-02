@@ -9,5 +9,5 @@ require "spec_helper"
 require_relative "../admin_permission_shared_examples"
 
 describe Event::ActivityAbility do
-  it_behaves_like "model for admins only", Event::Activity
+  it_behaves_like "model for admins only", Event::Activity, except: [:index]
 end
