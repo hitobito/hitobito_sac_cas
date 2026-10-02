@@ -17,17 +17,21 @@ describe FullTextController, type: :controller do
 
     let(:user) { Fabricate(Group::Geschaeftsstelle::Admin.name.to_sym, group: group).person }
 
+    let(:person) { people(:admin) }
+
     before do
       sign_in(user)
       allow_any_instance_of(FullTextController).to receive(:only_result).and_return(nil)
     end
 
     it "renders membership_number column" do
-      get :index, params: {q: Person.first.first_name}
+      get :index, params: {q: person.first_name}
 
-      expect(dom.all(:css, ".table thead th:last")[0].text).to include "Mitglied-Nr"
-      expect(dom.all(:css,
-        ".table tr td:last")[0].text).to include Person.first.membership_number.to_s
+      # Search results are ordered by relevance only, so address the person's own row instead
+      # of relying on its position among equally ranked results.
+      expect(dom.find("#people table thead th:last-child").text).to include "Mitglied-Nr"
+      expect(dom.find("#people table tr#person_#{person.id} td:last-child").text)
+        .to include person.membership_number.to_s
     end
   end
 end
