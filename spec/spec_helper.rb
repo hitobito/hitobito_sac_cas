@@ -21,6 +21,10 @@ Dir[HitobitoSacCas::Wagon.root.join("spec/support/**/*.rb")].sort.each { |f| req
 RSpec.configure do |config|
   config.fixture_paths = [File.expand_path("fixtures", __dir__)]
 
+  config.before(:suite) do
+    Event::CachedLeader.backfill_all
+  end
+
   config.seeds << {
     paths: [
       Rails.root.join("db", "seeds"),

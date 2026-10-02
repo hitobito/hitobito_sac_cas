@@ -109,22 +109,43 @@ module SacCas::Event::Kind
     translations.each do |t|
       fields = attr ? [attr] : INHERITABLE_TRANSLATED_ATTRIBUTES
       attrs = t.attributes.slice("locale", *fields)
-      if attrs.key?("general_information")
-        attrs["description"] =
-          attrs.delete("general_information")
-      end
 
-      translation_attrs = event_ids.map { |id| attrs.merge(event_id: id) }
+      translation_attrs = event_ids.map { |id|
+        attrs.except("general_information").merge(event_id: id)
+      }
       Event::Translation.upsert_all(
         translation_attrs,
         unique_by: [:event_id, :locale],
         returning: false
       )
+      push_down_descriptions(t) if attrs.key?("general_information")
     end
+  end
+
+  def push_down_descriptions(translation)
+    event_translation_ids = push_down_event_translations.where(locale: translation.locale)
+      .pluck(:id)
+    description = translation.attributes["general_information"]
+
+    translation_attrs = event_translation_ids.map { |id|
+      {body: description,
+       record_id: id,
+       record_type: "Event::Translation",
+       name: "description"}
+    }
+    ActionText::RichText.upsert_all(
+      translation_attrs,
+      unique_by: [:record_type, :record_id, :name],
+      returning: false
+    )
   end
 
   def push_down_events
     events.where.not(state: %w[closed canceled])
+  end
+
+  def push_down_event_translations
+    Event::Translation.where(event_id: push_down_events.pluck(:id))
   end
 
   def maximum_age_greater_than_minimum_age

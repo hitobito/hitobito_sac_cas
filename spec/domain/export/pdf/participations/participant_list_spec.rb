@@ -126,4 +126,68 @@ describe Export::Pdf::Participations::ParticipantList do
         "divers"]
     )
   end
+
+  context "for leaders" do
+    let(:list_kind) { "for_leaders" }
+
+    before do
+      people(:mitglied).update!(
+        emergency_contact_1_name: "Jane Doe",
+        emergency_contact_1_phone: "+41 79 111 11 11",
+        emergency_contact_2_name: "John Doe",
+        emergency_contact_2_phone: "+41 79 222 22 22"
+      )
+      event.participations.find_by(participant: people(:mitglied))
+        .update!(additional_information: "Vegetarisch")
+    end
+
+    it "renders emergency contacts and remarks columns" do
+      text = text_analyzer.show_text
+
+      expect(text[14..25]).to eq(
+        ["Mitglieder-Nr.",
+          "Vorname",
+          "Nachname",
+          "Strasse",
+          "Wohnort",
+          "E-Mail",
+          "Telefonnummer",
+          "Sprache",
+          "Geschlecht",
+          "Sektion",
+          "Notfallkontakt",
+          "Bemerkungen"]
+      )
+
+      expect(text[26..38]).to eq(
+        ["600001",
+          "Edmund",
+          "Hillary",
+          "Ophovenerstrasse 79a",
+          "2843 Neu Carlscheid",
+          "e.hillary@hitobito.example.com",
+          "+41 77 484 21 96",
+          "Deutsch",
+          "weiblich",
+          "SAC Blüemlisalp",
+          "Jane Doe, +41 79 111 11 11",
+          "John Doe, +41 79 222 22 22",
+          "Vegetarisch"]
+      )
+
+      expect(text[39..49]).to eq(
+        ["600002",
+          "Tenzing",
+          "Norgay",
+          "Ophovenerstrasse 79a",
+          "2843 Neu Carlscheid",
+          "t.norgay@hitobito.example.com",
+          "+41 77 360 75 63",
+          "Deutsch",
+          "divers",
+          "SAC Blüemlisalp",
+          "Kursleitung"]
+      )
+    end
+  end
 end

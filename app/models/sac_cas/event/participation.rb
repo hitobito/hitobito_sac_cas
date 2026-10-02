@@ -36,12 +36,12 @@ module SacCas::Event::Participation
 
     before_validation :round_actual_days
     before_save :update_previous_state, if: :state_changed?
+    after_save :update_event_cached_leaders, if: :active_previously_changed?
+    after_destroy :update_event_cached_leaders
 
     attr_accessor :adult_consent, :terms_and_conditions, :newsletter, :check_root_conditions
 
-    # rubocop:todo Rails/InverseOf
-    has_many :external_invoices, as: :link, dependent: :restrict_with_error
-    # rubocop:enable Rails/InverseOf
+    has_many :external_invoices, as: :link, dependent: :restrict_with_error # rubocop:disable Rails/InverseOf
 
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
@@ -110,6 +110,10 @@ module SacCas::Event::Participation
   end
 
   def state_changed_to_canceled?
-    saved_change_to_attribute(:state)&.second == "canceled"
+    saved_change_to_attribute(:state)&.second == "cancelled"
+  end
+
+  def update_event_cached_leaders
+    event.update_cached_leaders if roles.any? { |r| r.class.leader? }
   end
 end
