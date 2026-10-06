@@ -8,6 +8,8 @@
 # Creates/extends sac memberships after membership invoice has been paid.
 # rubocop:disable Metrics/ClassLength
 class Invoices::SacMemberships::MembershipManager
+  class HouseholdNotRestorable < StandardError; end
+
   attr_reader :person, :group, :year, :member, :today, :end_of_year
 
   def initialize(person, group, year)
@@ -307,9 +309,19 @@ class Invoices::SacMemberships::MembershipManager
   #  `set_family_main_person!` manually afterwards, the PeopleManagers will be created.
   def restore_household
     restored_household = Household.new(person, maintain_sac_family: false, validate_members: false)
-    family_members = expired_family_member_roles.map(&:person).uniq.presence or return
+    family_members = expired_family_member_roles.map(&:person).uniq.presence or
+      raise_household_not_restorable
     family_members.reduce(restored_household, :add).save!(context: :create)
     restored_household.set_family_main_person!
+  end
+
+  # Without the other family members, the family membership roles cannot be recreated.
+  # Fail loudly instead of leaving it to whichever validation happens to catch it.
+  def raise_household_not_restorable
+    raise HouseholdNotRestorable,
+      "Household of person #{person.id} cannot be restored: no other family members " \
+      "with family_id #{expired_stammsektion_role.family_id} and " \
+      "end_on #{expired_stammsektion_role.end_on} found"
   end
 
   def log_missing_membership
