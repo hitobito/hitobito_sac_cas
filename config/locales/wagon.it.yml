@@ -581,7 +581,7 @@ it:
         state_translated: Stato
         states:
           draft: Bozza
-          review: In uscita
+          review: In corso di convalida
           approved: Rilasciato
           published: Pubblicato
           ready: Preparazione completata

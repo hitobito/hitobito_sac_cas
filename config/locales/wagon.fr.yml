@@ -551,7 +551,7 @@ fr:
         additional_info: Infos supplémentaires
         alternative_route: Itinéraire alternatif
         ascent: Montée
-        canceled_reason: motif du refus
+        canceled_reason: Motif du refus
         canceled_reasons:
           minimum_participants: Le nombre minimum de participants n'a pas été atteint
           no_leader: Absence d'un responsable de cours
@@ -582,12 +582,12 @@ fr:
         tourenportal_link: Lien vers le portail des randonnées
         state_translated: Statut
         states:
-          draft: projet
+          draft: Conception
           review: En cours de validation
-          approved: Libéré
-          published: publié
-          ready: Préparation terminée
-          closed: terminé
+          approved: Validé
+          published: Publié
+          ready: Clore la préparation
+          closed: Terminé
           canceled: Annulé / Annulation
       external_training:
         person: Personne
@@ -1593,7 +1593,7 @@ fr:
     custom_content: Modèles d'e-mail
     sac_membership_configs: Paramètres pour les factures des membres
     sac_section_membership_configs: Paramètres pour les factures des membres
-    event_approval_commission_responsibility: Responsabilités de validation de la tournée
+    event_approval_commission_responsibility: Responsabilités pour la validation des activités alpines
 
   dropdown/sac_cas_exports:
     button: Exportations SAC
@@ -1783,7 +1783,7 @@ fr:
         attended: Tu as participé à ce cours.
         canceled: Tu as été désinscrit de ce cours.
         rejected: Les critères d’admission ne sont pas remplis. C’est pourquoi nous avons dû refuser ton inscription.
-        summoned: Tu es convoqué·e pour ce cours.
+        summoned: Tu es convoqué·e pour cette activité
         unconfirmed: >-
           Tu es préinscrit·e à ce cours. L’inscription n’est pas encore définitive et doit être confirmée par l’administration du cours.
       step_wizard:
@@ -1857,7 +1857,7 @@ fr:
         title: Validation
         edit:
           internal_comment: Remarques internes
-          approve: Partager
+          approve: Valider l’activité
           reject: Refuser
           approved: "Partagé par %{creator} le %{at}"
           rejected: "Refusé par %{creator} le %{at}"
@@ -1873,7 +1873,7 @@ fr:
           approved: "Ta validation a été enregistrée, la tournée a maintenant le statut <i>Validé</i>."
           draft: Ton refus a été enregistré et la visite est revenue à l'état de <i>projet</i>.
       reports:
-        title: "Compte-rendu de sortie (%{status})"
+        title: "Compte-rendu de l’activité (%{status})"
         cost_summary_fields:
           revenues: Recettes
           add_tour_fees: Ajouter des frais de visite
@@ -1895,7 +1895,7 @@ fr:
             review: Valider le paiement à l'attention de
             approved: Paiement enregistré
           recipient_id: Personne
-        success_notice: Le rapport de tournée a été mis à jour avec succès
+        success_notice: Le compte-rendu de l’activité a été mis à jour avec succès
 
     tour_mailer:
       application_window: Fenêtre d'inscription
@@ -1966,16 +1966,16 @@ fr:
           destroy: Réinitialiser
           keep: Conserver
       popover_published:
-        alert_info: "Une fois validé, l'itinéraire est publié publiquement dans le programme des itinéraires."
-        alert_info_subito: "Une fois validé, l'itinéraire Subito sera publié sur le programme des itinéraires."
+        alert_info: "L’activité sera publiée dans le programme des activités, accessible à tous."
+        alert_info_subito: "L’activité \"Subito\" sera publiée dans le programme des activités, accessible à tous."
       popover_back_to_published:
         alert_info: "Une fois validé, le circuit retrouve le statut « Publié »."
       popover_ready:
-        alert_info: La validation permet de finaliser la préparation du circuit.
+        alert_info: "La préparation de l’activité sera terminée au terme de cette étape. Il n’est plus possible de modifier les inscriptions ensuite. "
       popover_closed:
-        alert_info: "La visite sera clôturée dès que tu auras validé. Assure-toi au préalable, dans la vue « Participants », de cocher les personnes qui ne se sont pas présentées."
+        alert_info: "L’activité sera clôturée. Assure-toi au préalable, dans la vue « Participants » du compte rendu de l’activité, de cocher les personnes qui ne se sont pas présentées."
       popover_canceled:
-        alert_info: "Une fois confirmée, la visite est annulée."
+        alert_info: Cette action conduira à l’annulation de l’activité
       popover_back_to_draft:
         alert_info: "Une fois validé, le circuit repasse au statut « Brouillon »."
       popover_approved:
@@ -2013,7 +2013,7 @@ fr:
       event/tour:
         draft: Retour à la conception
         ready: Retour à Préparation terminée
-        approved: Retour à Partagé
+        approved: Renvoyer au stade « Validation »
         published: Retour à Publié
 
     state_buttons:
@@ -2033,12 +2033,12 @@ fr:
         canceled: annuler
       event/tour:
         draft: Retour à la conception
-        ready: Préparation terminée
+        ready: Clore la préparation
         review: Transmettre pour validation
         approved: Partager soi-même
         published: Publier
-        closed: Fermer
-        canceled: annuler
+        closed: Fermer l’activité
+        canceled: Annuler l’activité
 
   events/filters:
     approval:
