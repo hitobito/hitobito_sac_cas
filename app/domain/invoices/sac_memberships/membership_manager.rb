@@ -135,7 +135,7 @@ class Invoices::SacMemberships::MembershipManager
     other_prolongable_roles = membership.membership_prolongable_roles.reject(&:terminated?)
 
     if only_family
-      unless stammsektion_role.beitragskategorie.family?
+      unless family_stammsektion_role?(stammsektion_role)
         stammsektion_role = nil
         other_prolongable_roles = []
       end
@@ -147,6 +147,13 @@ class Invoices::SacMemberships::MembershipManager
       *applicable_zusatzsektion_roles,
       *other_prolongable_roles
     ].compact
+  end
+
+  # The stammsektion role is missing entirely when the membership of this family member
+  # already expired at the reference date, which happens when a staggered membership
+  # extension left them behind with an earlier end_on than the rest of the household.
+  def family_stammsektion_role?(role)
+    role&.beitragskategorie&.family?
   end
 
   def collect_roles_for_housemates(person, date)
