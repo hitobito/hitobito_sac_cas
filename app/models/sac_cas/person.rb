@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -39,8 +39,8 @@ module SacCas::Person
 
     self.address_sync_relevant_fields += [:canton]
 
-    delegate :active?, :active_in?, :anytime?, :family?, :stammsektion, :stammsektion_role,
-      :zusatzsektionen, :terminated?, to: :sac_membership, prefix: true
+    delegate :active?, :active_in?, :anytime?, :family?, :mitglied?, :stammsektion,
+      :stammsektion_role, :zusatzsektionen, :terminated?, to: :sac_membership, prefix: true
     delegate :family_id, to: :sac_membership
 
     alias_attribute :membership_number, :id
