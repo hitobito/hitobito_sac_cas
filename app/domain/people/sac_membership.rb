@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -18,6 +18,10 @@ class People::SacMembership
 
   def terminated?
     stammsektion_role&.terminated?
+  end
+
+  def mitglied?
+    active_roles_of_type(mitglied_types).present?
   end
 
   # checks for any active membership roles
