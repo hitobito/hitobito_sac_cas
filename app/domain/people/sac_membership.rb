@@ -30,7 +30,7 @@ class People::SacMembership
       type: mitglied_types)
   end
 
-  # checkes for active and also approvabable (neuanmeldung) roles
+  # checks for active and also approvable (neuanmeldung) roles
   def active_or_approvable_in?(sac_section)
     @person.roles.exists?(group_id: sac_section.children,
       type: mitglied_and_neuanmeldung_types)
