@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -32,8 +32,17 @@ module SacCas::Event::ParticipationContactData
   end
 
   def initialize(event, person, model_params = {})
+    model_params = model_params.except(:birthday) unless birthday_editable_for?(person)
     super
     mark_phone_numbers_for_destroy(person)
+  end
+
+  def birthday_editable?
+    birthday_editable_for?(person)
+  end
+
+  def required_attrs
+    birthday_editable? ? super : super - [:birthday]
   end
 
   def mark_as_required?(attr)
@@ -46,6 +55,10 @@ module SacCas::Event::ParticipationContactData
   end
 
   private
+
+  def birthday_editable_for?(person)
+    !person.sac_membership_mitglied?
+  end
 
   def emergency_contacts_required?
     event.needs_emergency_contact?
