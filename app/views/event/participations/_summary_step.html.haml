@@ -1,4 +1,4 @@
--#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+-#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 -#  hitobito_sac_cas and licensed under the Affero General Public License version 3
 -#  or later. See the COPYING file at the top-level directory or at
 -#  https://github.com/hitobito/hitobito_sac_cas
@@ -14,7 +14,7 @@
   .mb-2
     = entry.person.complete_address
   .mb-2
-    = "#{Person.human_attribute_name(:birthday)}: #{l(entry.person.birthday)}"
+    = "#{Person.human_attribute_name(:birthday)}: #{l(entry.person.birthday) if entry.person.birthday}"
     %br
     = "#{Wizards::Steps::Signup::PersonFields.human_attribute_name(:phone_number)}: #{entry.person.phone_numbers.first&.number}"
     %br

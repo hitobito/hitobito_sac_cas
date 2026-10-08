@@ -8,7 +8,7 @@
     - (Person::GENDERS + ['']).each do |key|
       = f.inline_radio_button(:gender, key, f.object.salutation_label(key))
 = f.labeled_input_fields :first_name, :last_name, :email
-= f.labeled_date_field :birthday
+= f.labeled_date_field :birthday if entry.birthday_editable?
 = render 'contactable/address_fields', f: f
 = render 'contactable/phone_numbers_fields', f: f
 - if event.needs_emergency_contact?
