@@ -2422,6 +2422,9 @@ de:
           adult: Einzelmitgliedschaft
           family: Familienmitgliedschaft
           youth: Jugendmitgliedschaft
+      invoice_payed_job:
+        record_not_found: "Eingegangene Zahlung der Mitgliedschaftsrechnung %{year} konnte nicht verarbeitet werden, da die Person (ID %{person_id}) oder die Gruppe (ID %{group_id}) nicht gefunden wurde."
+        failed: "Eingegangene Zahlung der Mitgliedschaftsrechnung %{year} für %{section} konnte nicht verarbeitet werden."
 
   memberships:
     change_zusatzsektion_to_families:

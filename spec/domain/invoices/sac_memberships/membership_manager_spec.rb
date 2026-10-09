@@ -155,6 +155,31 @@ describe Invoices::SacMemberships::MembershipManager do
         expect(updated_roles_count).to eq(0)
       end
 
+      # A staggered membership extension can leave a single family member behind with an
+      # earlier end_on than the rest of the household
+      context "with family member whose membership already expired" do
+        before do
+          [familienmitglied_kind, familienmitglied_kind_zweitsektion].each do |role|
+            role.update_columns(end_on: run_on.to_date.yesterday)
+          end
+          familienmitglied_kind_person.reload
+        end
+
+        it "extends the roles of the remaining family members" do
+          expect { subject.update_membership_status }.not_to raise_error
+
+          expect(familienmitglied_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+          expect(familienmitglied2_person.roles.reload.map(&:end_on)).to all(eq(end_of_next_year))
+        end
+
+        it "leaves the expired roles of that family member untouched" do
+          subject.update_membership_status
+
+          expect(familienmitglied_kind.reload.end_on).to eq(run_on.to_date.yesterday)
+          expect(familienmitglied_kind_zweitsektion.reload.end_on).to eq(run_on.to_date.yesterday)
+        end
+      end
+
       context "family member with einzel zusatzsektion pays before stammsektion" do
         let(:familienmitglied2_ehrenmitglied) do
           ehrenmitglieder_group.roles.find_by(person: familienmitglied2_person)
@@ -511,6 +536,21 @@ describe Invoices::SacMemberships::MembershipManager do
         familienmitglied_kind_person.reload
         expect(familienmitglied2_person.household_key).to eq(familienmitglied_person.household_key)
         expect(familienmitglied_kind_person.household_key).to eq(familienmitglied_person.household_key)
+      end
+
+      it "raises if the household cannot be restored" do
+        familienmitglied_person.household.destroy
+        familienmitglied_person.update_column(:sac_family_main_person, false)
+        # a staggered membership extension left the other family members with another end_on
+        Group::SektionsMitglieder::Mitglied.with_inactive
+          .where(person: [familienmitglied2_person, familienmitglied_kind_person])
+          .update_all(end_on: prolongation_date - 1.day)
+
+        expect do
+          subject.update_membership_status
+        end.to raise_error(described_class::HouseholdNotRestorable,
+          /#{familienmitglied_person.id}.*#{familienmitglied.family_id}/)
+          .and not_change { Role.with_inactive.count }
       end
     end
   end
