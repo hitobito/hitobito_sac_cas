@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -164,6 +164,55 @@ describe Event::ParticipationContactData do
 
       expect { contact_data.save }
         .to change { person.reload.phone_number_landline.number }.to("+41 44 112 00 01")
+    end
+  end
+
+  context "with a SAC member" do
+    # the fabricated member already has a mobile number, don't submit another one
+    let(:attrs) { super().except(:phone_number_mobile_attributes) }
+
+    let(:person) do
+      Fabricate(:person_with_role, group: groups(:bluemlisalp_mitglieder), role: "Mitglied",
+        birthday: Date.new(1980, 1, 1))
+    end
+
+    # person must stay persisted here, the outer build helper clones it
+    def contact_data(attributes)
+      Event::ParticipationContactData.new(event, person, attributes)
+    end
+
+    it "does not allow editing the birthday" do
+      expect(contact_data(attrs).birthday_editable?).to be false
+    end
+
+    it "ignores a submitted birthday" do
+      contact_data = contact_data(attrs.merge(birthday: "01.01.1970"))
+
+      expect(contact_data.person.birthday).to eq Date.new(1980, 1, 1)
+    end
+
+    it "does not require a birthday" do
+      person.update!(birthday: nil)
+      contact_data = contact_data(attrs.except(:birthday))
+
+      expect(contact_data.required_attrs).not_to include :birthday
+      expect(contact_data).to be_valid
+    end
+
+    context "with only an Ehrenmitglied role" do
+      let(:person) do
+        Fabricate(:person).tap do |person|
+          # skip validations, an Ehrenmitglied without Mitglied role is invalid but exists in data
+          Fabricate.build(Group::SektionsMitglieder::Ehrenmitglied.sti_name,
+            person: person, group: groups(:bluemlisalp_mitglieder),
+            start_on: Time.zone.now.beginning_of_year, end_on: Time.zone.today.end_of_year,
+            beitragskategorie: "adult").save!(validate: false)
+        end
+      end
+
+      it "still allows editing the birthday" do
+        expect(contact_data(attrs).birthday_editable?).to be true
+      end
     end
   end
 

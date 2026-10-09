@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -13,6 +13,8 @@ describe :event_participation, js: true do
   let(:person) { people(:mitglied) }
   let(:event) { Fabricate(:event, application_opening_at: 5.days.ago, groups: [group]) }
   let(:group) { person.roles.first.group }
+  # SAC members cannot change their birthday, so the field is not rendered for them
+  let(:fill_birthday) { false }
 
   before do
     sign_in(person)
@@ -22,7 +24,7 @@ describe :event_participation, js: true do
     choose "männlich"
     fill_in "event_participation_contact_data_street", with: "Musterplatz"
     fill_in "event_participation_contact_data_housenumber", with: "23"
-    fill_in "Geburtsdatum", with: "01.01.1980"
+    fill_in "Geburtsdatum", with: "01.01.1980" if fill_birthday
     fill_in "Mobil",
       with: "+41 79 123 45 56"
     fill_in "event_participation_contact_data_zip_code", with: "40202"
@@ -68,7 +70,39 @@ describe :event_participation, js: true do
 
     first(:button, "Weiter").click
 
-    expect(page).to have_text("Mindestens eine Telefonnummer muss aufgefüllt werden")
+    expect(page).to have_text "Mindestens eine Telefonnummer muss aufgefüllt werden"
+  end
+
+  it "does not offer the birthday field to a member" do
+    visit group_event_path(group_id: group, id: event)
+
+    click_link("Anmelden")
+
+    # anchor on a field rendered after the birthday, a negative selector alone
+    # does not retry and would pass before the form is rendered
+    expect(page).to have_field "Mobil"
+    expect(page).not_to have_field "Geburtsdatum"
+  end
+
+  context "as a non member" do
+    let(:group) { groups(:root) }
+    let(:person) { Fabricate(:person, email: "nichtmitglied@hitobito.example.com") }
+    let(:fill_birthday) { true }
+
+    it "offers the birthday field and stores the given birthday" do
+      visit group_event_path(group_id: group, id: event)
+
+      click_link("Anmelden")
+
+      expect(page).to have_field "Geburtsdatum"
+
+      complete_contact_data
+      first(:button, "Weiter").click
+
+      # wait for the save to land, the person is persisted by the contact data step
+      expect(page).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
+      expect(person.reload.birthday).to eq Date.new(1980, 1, 1)
+    end
   end
 
   describe "canceling participation" do

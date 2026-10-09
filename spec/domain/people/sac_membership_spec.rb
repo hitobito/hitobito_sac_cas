@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -184,6 +184,69 @@ describe People::SacMembership do
       it "returns layer group of all zusatzsektion roles" do
         expect(membership.zusatzsektionen).to contain_exactly(groups(:matterhorn))
       end
+    end
+  end
+
+  describe "#mitglied?" do
+    let(:mitglieder) { groups(:bluemlisalp_mitglieder) }
+    let(:von) { Time.zone.now.beginning_of_year }
+    let(:bis) { Time.zone.today.end_of_year }
+
+    def create_role(role_type, group: mitglieder, start_on: von, end_on: bis, validate: true)
+      role = Fabricate.build(role_type.sti_name,
+        person: person, group: group, start_on: start_on, end_on: end_on,
+        beitragskategorie: "adult")
+      # skip validations as these states are invalid in the domain, but reachable in legacy data.
+      # beitragskategorie is passed in explicitly, as the callback setting it is skipped as well.
+      validate ? role.save! : role.save!(validate: false)
+    end
+
+    it "is false without any role" do
+      expect(membership).not_to be_mitglied
+    end
+
+    it "is true with active stammsektion role" do
+      create_role(Group::SektionsMitglieder::Mitglied)
+
+      expect(membership).to be_mitglied
+    end
+
+    it "is true with active zusatzsektion role only" do
+      # a bare zusatzsektion role is invalid, it always exists next to a stammsektion role
+      create_role(Group::SektionsMitglieder::MitgliedZusatzsektion,
+        group: groups(:matterhorn_mitglieder), validate: false)
+
+      expect(membership).to be_mitglied
+    end
+
+    it "is false with terminated stammsektion role" do
+      create_role(Group::SektionsMitglieder::Mitglied, end_on: 1.day.ago)
+
+      expect(membership).not_to be_mitglied
+    end
+
+    it "is false with future stammsektion role" do
+      create_role(Group::SektionsMitglieder::Mitglied, start_on: 1.month.from_now)
+
+      expect(membership).not_to be_mitglied
+    end
+
+    it "is false with active neuanmeldung role only" do
+      create_role(Group::SektionsNeuanmeldungenSektion::Neuanmeldung, group: neuanmeldungen_sektion)
+
+      expect(membership).not_to be_mitglied
+    end
+
+    it "is false with active sektions ehrenmitglied role only" do
+      create_role(Group::SektionsMitglieder::Ehrenmitglied, validate: false)
+
+      expect(membership).not_to be_mitglied
+    end
+
+    it "is false with active sektions beguenstigt role only" do
+      create_role(Group::SektionsMitglieder::Beguenstigt, validate: false)
+
+      expect(membership).not_to be_mitglied
     end
   end
 end

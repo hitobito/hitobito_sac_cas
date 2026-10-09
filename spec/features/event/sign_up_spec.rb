@@ -10,6 +10,8 @@ require "spec_helper"
 describe "Event Signup", :js do
   let(:admin) { people(:admin) }
   let(:root) { groups(:root) }
+  # SAC members cannot change their birthday, so the field is not rendered for them
+  let(:fill_birthday) { true }
 
   before { sign_in(admin) }
 
@@ -17,7 +19,7 @@ describe "Event Signup", :js do
     choose "männlich"
     fill_in "event_participation_contact_data_street", with: "Musterplatz"
     fill_in "event_participation_contact_data_housenumber", with: "42"
-    fill_in "Geburtsdatum", with: "01.01.1980"
+    fill_in "Geburtsdatum", with: "01.01.1980" if fill_birthday
     fill_in "Mobil",
       with: "+41 79 123 45 56"
     fill_in "event_participation_contact_data_zip_code", with: "40202"
@@ -88,10 +90,22 @@ describe "Event Signup", :js do
     end
 
     context "with role Mitglied" do
+      let(:fill_birthday) { false }
+
       before do
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name,
           group: groups(:bluemlisalp_mitglieder), person: admin)
         admin.update!(birthday: nil)
+      end
+
+      it "does not offer the birthday field" do
+        visit group_event_path(group_id: group, id: event)
+        click_on "Anmelden"
+
+        # anchor on a field rendered after the birthday, a negative selector alone
+        # does not retry and would pass before the form is rendered
+        expect(page).to have_field "Mobil"
+        expect(page).not_to have_field "Geburtsdatum"
       end
 
       it "has multi step wizard with subsidy checkbox" do
@@ -132,7 +146,7 @@ describe "Event Signup", :js do
 
         first(:button, "Weiter").click
         expect(page).to have_css ".stepwizard-step.is-current", text: "Kontaktangaben"
-        expect(page).to have_text "Geburtsdatum muss ausgefüllt werden"
+        expect(page).to have_text "Notfallkontakt 1 Name muss ausgefüllt werden"
         expect(page).to have_css "h2.card-title", text: "Kostenübersicht"
       end
     end
