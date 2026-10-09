@@ -30,15 +30,34 @@ describe "event/participation_contact_datas/_fields.html.haml" do
   }
 
   context "required fields" do
-    [:email, :first_name, :last_name, :birthday, :zip_code, :town, :country].each do |field|
-      it "#{field} is rendered with required mark" do
-        expect(dom).to have_css "label.required",
-          text: participation_contact_data.class.human_attribute_name(field)
+    context "for mitglied" do
+      [:email, :first_name, :last_name, :zip_code, :town, :country].each do |field|
+        it "#{field} is rendered with required mark" do
+          expect(dom).to have_css "label.required",
+            text: participation_contact_data.class.human_attribute_name(field)
+        end
+      end
+
+      it "street is rendered with required mark" do
+        expect(dom).to have_css "label.required", text: "Strasse"
       end
     end
 
-    it "street is rendered with required mark" do
-      expect(dom).to have_css "label.required", text: "Strasse"
+    context "for admin" do
+      let(:participation_contact_data) {
+        Event::ParticipationContactData.new(event, people(:admin))
+      }
+
+      [:email, :first_name, :last_name, :birthday, :zip_code, :town, :country].each do |field|
+        it "#{field} is rendered with required mark" do
+          expect(dom).to have_css "label.required",
+            text: participation_contact_data.class.human_attribute_name(field)
+        end
+      end
+
+      it "street is rendered with required mark" do
+        expect(dom).to have_css "label.required", text: "Strasse"
+      end
     end
   end
 
