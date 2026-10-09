@@ -19,6 +19,14 @@ application:
       it: sac_logo_it.svg
     height: 85
     width: 200
+  footer:
+    links:
+      de:
+        "Anleitungen & Hilfestellungen": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+      fr:
+        "Guides et assistance": https://saccas.atlassian.net/wiki/spaces/DOC/overview
+      it:
+        "Guide e supporto": https://saccas.atlassian.net/wiki/spaces/DOC/overview
 
 event:
   participations:
