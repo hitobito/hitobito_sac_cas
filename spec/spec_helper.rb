@@ -25,6 +25,15 @@ RSpec.configure do |config|
     Event::CachedLeader.backfill_all
   end
 
+  config.seeds << {
+    paths: [
+      Rails.root.join("db", "seeds"),
+      HitobitoYouth::Wagon.root.join("db", "seeds"),
+      HitobitoSacCas::Wagon.root.join("db", "seeds")
+    ],
+    filter: /custom_contents|self_registration_reasons/
+  }
+
   config.before do
     PaperTrail.request.whodunnit = "rspec"
 
