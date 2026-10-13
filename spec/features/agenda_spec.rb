@@ -363,6 +363,18 @@ describe "agenda page infinite scroll", js: true do
     end
   end
 
+  def disable_lazy_loading_of_next_page
+    page.execute_script(<<~JS)
+      const frame = document.getElementById("agenda_events_list_page")
+      frame.removeAttribute("src")
+      frame.removeAttribute("loading")
+    JS
+  end
+
+  def scroll_to_bottom
+    page.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+  end
+
   context "with more tours than fit on one page" do
     before { fabricate_tours(25) }
 
@@ -373,22 +385,23 @@ describe "agenda page infinite scroll", js: true do
       expect(page).to have_text("25 Touren gefunden")
     end
 
-    it "shows a load more button that reveals the remaining tours when clicked" do
+    it "lazily loads the next page once scrolled into view, without clicking the button" do
       visit agenda_index_path(group_id: group.id)
+      expect(page).to have_css(".agenda-tour-card", count: 20)
 
-      expect(page).to have_link("Weitere laden")
-
-      click_link "Weitere laden"
+      scroll_to_bottom
 
       expect(page).to have_css(".agenda-tour-card", count: 25)
       expect(page).not_to have_link("Weitere laden")
     end
 
-    it "lazily loads the next page once scrolled into view, without clicking the button" do
+    it "shows a load more button that reveals the remaining tours when clicked" do
       visit agenda_index_path(group_id: group.id)
-      expect(page).to have_css(".agenda-tour-card", count: 20)
 
-      page.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+      expect(page).to have_link("Weitere laden")
+      disable_lazy_loading_of_next_page
+
+      click_link "Weitere laden"
 
       expect(page).to have_css(".agenda-tour-card", count: 25)
       expect(page).not_to have_link("Weitere laden")
@@ -423,7 +436,7 @@ describe "agenda page infinite scroll", js: true do
       expect(page).to have_text("22 Touren gefunden")
       expect(page).to have_css(".agenda-tour-card", count: 20)
 
-      click_link "Weitere laden"
+      scroll_to_bottom
 
       expect(page).to have_css(".agenda-tour-card", count: 22)
       expect(page).not_to have_link("Weitere laden")
