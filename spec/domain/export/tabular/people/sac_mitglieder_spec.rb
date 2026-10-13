@@ -127,10 +127,17 @@ describe Export::Tabular::People::SacMitglieder do
 
   describe "#data_rows" do
     it "does not do N+1" do
-      # Expected 8 queries:
+      # SacPhoneNumbers.category_id memoizes per [contactable_type, key] for the whole
+      # process, not per example -- reset so this count doesn't depend on whether some
+      # earlier-run example already warmed it (it would otherwise save 2 queries and
+      # make this fail as a false negative, and be flaky across --order runs).
+      SacPhoneNumbers.instance_variable_set(:@category_ids, nil)
+
+      # Expected 10 queries:
       # - 1 for loading the group
       # - 1 for loading the groups children
       # - 1 for loading all people
+      # - 2 for looking up the landline and mobile phone number category ids
       # - 1 for loading phone_number_landline
       # - 1 for loading phone_number_mobile
       # - 1 for loading the people's roles_unscoped
@@ -139,7 +146,8 @@ describe Export::Tabular::People::SacMitglieder do
       expect do
         # make sure we have more than one row for the test to be meaningful
         expect(tabular.data_rows.to_a).to have_at_least(2).items
-      end.to make(8).db_queries.with(
+      end.to make(10).db_queries.with(
+        "ContactAccountCategory Pluck": 2,
         "Group Load": 3,
         "Person Load": 1,
         "PhoneNumber Load": 2,
