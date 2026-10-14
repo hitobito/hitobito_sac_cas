@@ -117,10 +117,12 @@ describe "FilterNavigation::People" do
   describe "full cycle" do
     let(:group) { groups(:bluemlisalp_ortsgruppe_ausserberg).decorate }
     let(:user) { people(:tourenchef) }
-    let(:touren_group) { groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse) }
-    let(:mitglieder) { groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder) }
-    let(:quali_kind) { qualification_kinds(:ski_leader) }
-    let(:today) { Time.zone.today }
+
+    let_it_be(:touren_group) { groups(:bluemlisalp_ortsgruppe_ausserberg_touren_und_kurse) }
+    let_it_be(:mitglieder) { groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder) }
+    let_it_be(:quali_kind) { qualification_kinds(:ski_leader) }
+
+    def today = Time.zone.today
 
     def entries(label)
       link = dom.find_link(label)
@@ -147,7 +149,7 @@ describe "FilterNavigation::People" do
       person
     end
 
-    before do
+    before_all do
       quali_kind.update!(validity: 6, reactivateable: 4)
 
       @tl_with_quali = create_person("tl with quali", tl_start: 1.year.ago)
