@@ -6,28 +6,28 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 shared_context "alps recipients test data" do
-  let(:sektion) { groups(:bluemlisalp_mitglieder) }
+  let_it_be(:sektion) { groups(:bluemlisalp_mitglieder) }
 
-  let(:abo_de) { groups(:abo_die_alpen) }
-  let!(:abo_fr) { Group::AboMagazin.create!(name: "Les Alps FR", parent: groups(:abo_magazine)) }
-  let!(:abo_it) { Group::AboMagazin.create!(name: "Le Alpi IT", parent: groups(:abo_magazine)) }
+  let_it_be(:abo_de) { groups(:abo_die_alpen) }
+  let_it_be(:abo_fr) { Group::AboMagazin.create!(name: "Les Alps FR", parent: groups(:abo_magazine)) }
+  let_it_be(:abo_it) { Group::AboMagazin.create!(name: "Le Alpi IT", parent: groups(:abo_magazine)) }
 
-  let!(:mitglied) { people(:mitglied) }
-  let!(:mitglied_germany) do
+  let_it_be(:mitglied) { people(:mitglied) }
+  let_it_be(:mitglied_germany) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, country: "DE", zip_code: "12345"),
       group: sektion,
       start_on: "2020-03-23").person
   end
-  let!(:mitglied_germany_fr) do
+  let_it_be(:mitglied_germany_fr) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, country: "DE", zip_code: "12345", language: "fr"),
       group: sektion,
       start_on: "2020-03-24").person
   end
-  let!(:mitglied_fr) do
+  let_it_be(:mitglied_fr) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, language: "fr"),
@@ -36,14 +36,14 @@ shared_context "alps recipients test data" do
     mailing_lists(:newsletter).subscriptions.create!(subscriber: p) # other subscription
     p
   end
-  let!(:mitglied_france) do
+  let_it_be(:mitglied_france) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, language: "fr", country: "FR", zip_code: "12345"),
       group: sektion,
       start_on: "2020-03-26").person
   end
-  let!(:mitglied_with_excluded_subscription) do
+  let_it_be(:mitglied_with_excluded_subscription) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
@@ -52,34 +52,34 @@ shared_context "alps recipients test data" do
     mailing_lists(:newsletter).subscriptions.create!(subscriber: p) # other subscription
     p
   end
-  let!(:new_entry) do
+  let_it_be(:new_entry) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
       start_on: "2025-07-20").person
   end
-  let!(:new_entry_fr) do
+  let_it_be(:new_entry_fr) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, language: "fr"),
       group: sektion,
       start_on: "2025-07-21").person
   end
-  let!(:new_entry_germany) do
+  let_it_be(:new_entry_germany) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, country: "DE", zip_code: "12345"),
       group: sektion,
       start_on: "2025-07-22").person
   end
-  let!(:new_entry_france) do
+  let_it_be(:new_entry_france) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       person: Fabricate(:person, language: "fr", country: "FR", zip_code: "12345"),
       group: sektion,
       start_on: "2025-07-23").person
   end
-  let!(:new_entry_with_old_membership) do
+  let_it_be(:new_entry_with_old_membership) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
@@ -92,7 +92,7 @@ shared_context "alps recipients test data" do
       start_on: "2025-08-15")
     p
   end
-  let!(:beitragskategoriewechsel) do
+  let_it_be(:beitragskategoriewechsel) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :youth,
       group: sektion,
@@ -105,7 +105,7 @@ shared_context "alps recipients test data" do
       start_on: "2025-08-21")
     p
   end
-  let!(:sektionswechsel_before_new_entries_from) do
+  let_it_be(:sektionswechsel_before_new_entries_from) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: groups(:matterhorn_mitglieder),
@@ -118,23 +118,23 @@ shared_context "alps recipients test data" do
       start_on: "2024-04-25")
     p
   end
-  let!(:terminated) do
+  let_it_be(:terminated) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
       start_on: "2023-10-10",
       end_on: "2025-07-31").person
   end
-  let!(:future) do
+  let_it_be(:future) do
     Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
       start_on: "2025-11-01").person
   end
-  let!(:magazin_abonnent) do
+  let_it_be(:magazin_abonnent) do
     people(:abonnent)
   end
-  let!(:magazin_abonnent_company) do
+  let_it_be(:magazin_abonnent_company) do
     Fabricate("Group::AboMagazin::Abonnent",
       group: abo_de,
       person: Fabricate(:person,
@@ -146,30 +146,30 @@ shared_context "alps recipients test data" do
         company: true),
       start_on: "2021-08-01").person
   end
-  let!(:magazin_abonnent_germany) do
+  let_it_be(:magazin_abonnent_germany) do
     Fabricate("Group::AboMagazin::Abonnent",
       group: abo_de,
       person: Fabricate(:person, country: "DE", zip_code: "12345"),
       start_on: "2021-08-02").person
   end
-  let!(:magazin_abonnent_germany_fr) do
+  let_it_be(:magazin_abonnent_germany_fr) do
     Fabricate("Group::AboMagazin::Abonnent",
       group: abo_fr,
       person: Fabricate(:person, country: "DE", zip_code: "12345"),
       start_on: "2021-08-03").person
   end
-  let!(:new_entry_abonnent_fr) do
+  let_it_be(:new_entry_abonnent_fr) do
     Fabricate("Group::AboMagazin::Gratisabonnent",
       group: abo_fr,
       start_on: "2025-06-15").person
   end
-  let!(:new_entry_abonnent_france) do
+  let_it_be(:new_entry_abonnent_france) do
     Fabricate("Group::AboMagazin::Abonnent",
       group: abo_fr,
       person: Fabricate(:person, language: "de", country: "FR", zip_code: "12345"),
       start_on: "2025-06-15").person
   end
-  let!(:new_entry_abonnent_with_old_abo) do
+  let_it_be(:new_entry_abonnent_with_old_abo) do
     p = Fabricate("Group::AboMagazin::Abonnent",
       group: abo_de,
       start_on: "2023-01-11",
@@ -179,7 +179,7 @@ shared_context "alps recipients test data" do
       group: abo_de, start_on: "2025-06-15")
     p
   end
-  let!(:mitglied_and_abonnent) do
+  let_it_be(:mitglied_and_abonnent) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
@@ -190,7 +190,7 @@ shared_context "alps recipients test data" do
       start_on: "2025-07-01")
     p
   end
-  let!(:old_mitglied_new_abonnent_fr) do
+  let_it_be(:old_mitglied_new_abonnent_fr) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
@@ -202,7 +202,7 @@ shared_context "alps recipients test data" do
       start_on: "2025-03-01")
     p
   end
-  let!(:new_entry_mitglied_de_and_abonnent_fr) do
+  let_it_be(:new_entry_mitglied_de_and_abonnent_fr) do
     p = Fabricate("Group::SektionsMitglieder::Mitglied",
       beitragskategorie: :adult,
       group: sektion,
@@ -213,7 +213,7 @@ shared_context "alps recipients test data" do
       start_on: "2022-04-11")
     p
   end
-  let!(:abonnent_de_and_fr) do
+  let_it_be(:abonnent_de_and_fr) do
     p = Fabricate("Group::AboMagazin::Abonnent",
       group: abo_de,
       start_on: "2023-03-07").person

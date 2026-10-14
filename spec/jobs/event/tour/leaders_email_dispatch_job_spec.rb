@@ -14,8 +14,8 @@ describe Event::Tour::LeadersEmailDispatchJob do
   let(:sektion) { tour.groups.first }
   let(:participation) { Fabricate(:event_participation, event: tour, participant: people(:mitglied)) }
 
-  before do
-    CustomContent.init_section_specific_contents(sektion)
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
   end
 
   context "participation mail" do
