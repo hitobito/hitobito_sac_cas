@@ -19,8 +19,11 @@ describe Event::Tour::ParticipantsEmailDispatchJob do
     Fabricate(:event_participation, event: tour, participant: people(:admin), state: "attended")
   }
 
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
+  end
+
   before do
-    CustomContent.init_section_specific_contents(sektion)
     Event::Tour::Role::Participant.create!(participation: participation, event: tour)
     Event::Tour::Role::Participant.create!(participation: participation_2, event: tour)
   end

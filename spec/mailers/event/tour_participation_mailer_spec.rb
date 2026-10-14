@@ -14,8 +14,8 @@ describe Event::TourParticipationMailer do
   let(:event) { events(:section_tour) }
   let(:participation) { Fabricate(:event_participation, event:, participant: person) }
 
-  before do
-    CustomContent.init_section_specific_contents(section)
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
   end
 
   context "unconfirmed" do
