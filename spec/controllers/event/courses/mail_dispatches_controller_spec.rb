@@ -10,8 +10,12 @@ require "spec_helper"
 describe Event::Courses::MailDispatchesController do
   include ActiveJob::TestHelper
 
-  before do
-    sign_in(user)
+  let_it_be(:course, reload: true) do
+    Fabricate(:sac_course, kind: event_kinds(:ski_course),
+      link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de")
+  end
+
+  before_all do
     # leader participations
     [Event::Course::Role::Leader, Event::Course::Role::AssistantLeader].map do |event_role|
       Fabricate(event_role.name.to_sym,
@@ -26,10 +30,8 @@ describe Event::Courses::MailDispatchesController do
     course.update_column(:state, :ready)
   end
 
-  let(:course) do
-    Fabricate(:sac_course, kind: event_kinds(:ski_course),
-      link_survey: "bitte-bitte-umfrage-ausfüllen.ch", language: "de")
-  end
+  before { sign_in(user) }
+
   let(:group) { course.groups.first }
 
   describe "POST #create" do
