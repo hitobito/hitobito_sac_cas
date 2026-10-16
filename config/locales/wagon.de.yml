@@ -817,6 +817,12 @@ de:
                 muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
             technical_requirement_id:
               must_be_main: muss eine Hauptanforderung sein
+        event/course:
+          attributes:
+            base:
+              qualifications_not_assessed: >-
+                Der Kurs kann erst abgeschlossen werden, wenn alle Personen in der Qualifikation
+                als bestanden oder nicht bestanden beurteilt wurden.
         event/participation:
           attributes:
             actual_days:

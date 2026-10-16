@@ -26,6 +26,8 @@ event:
     delete_answers_after_months: 6
     delete_additional_information_after_months: 6
     delete_emergency_contacts_after_months: 6
+  qualifications:
+    comment_required_if_not_qualified: true
   questions:
     list_alphabetically: true
 

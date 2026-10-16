@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -203,7 +203,8 @@ module SacCas::Event::Course
       :location, :language, :cost_center_id, :cost_unit_id, :season, :start_point_of_time,
       :accommodation, :price_member, :price_regular,
       presence: {unless: :weak_validation_state?}
-    validates :canceled_reason, presence: {if: -> { state_changed_to?(:canceled) }}
+    validates :canceled_reason, presence: {if: -> { will_change_state_to?(:canceled) }}
+    validate :assert_all_participations_assessed, if: -> { will_change_state_to?(:closed) }
 
     delegate :level, to: :kind, allow_nil: true
   end
@@ -249,6 +250,25 @@ module SacCas::Event::Course
 
   def weak_validation_state?
     state.blank? || WEAK_VALIDATION_STATES.include?(state)
+  end
+
+  def assert_all_participations_assessed
+    role_types = qualified_role_types
+    return if role_types.empty?
+    return if participations_for(*role_types).none? { |participation| participation.qualified.nil? }
+
+    errors.add(:base, :qualifications_not_assessed)
+  end
+
+  def qualified_role_types
+    types = []
+    types += role_types.select { |type| type.leader? || type.qualifiable? } if qualifies?("leader")
+    types += role_types.select(&:participant?) if qualifies?("participant")
+    types
+  end
+
+  def qualifies?(role)
+    kind.present? && kind.qualification_kinds(%w[qualification prolongation], role).exists?
   end
 
   def update_attended_participants_state
