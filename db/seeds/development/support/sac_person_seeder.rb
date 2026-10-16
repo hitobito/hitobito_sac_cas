@@ -161,8 +161,10 @@ class SacPersonSeeder < PersonSeeder
   def update_role_dates(role_class)
     role_class.find_each do |r|
       yield(r) if block_given?
-      r.update!(start_on: membership_from(r.person),
-        end_on: Time.zone.today.end_of_year)
+      r.update(
+        start_on: membership_from(r.person),
+        end_on: Time.zone.today.end_of_year
+      )
     end
   end
 
