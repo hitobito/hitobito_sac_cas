@@ -20,7 +20,7 @@ describe ExternalTraining::QualifierIssueJob do
   it "issues the qualifier for the training's person" do
     qualifier = instance_double(ExternalTrainings::Qualifier, issue: true)
     expect(ExternalTrainings::Qualifier).to receive(:new)
-      .with(person, training, "participant").and_return(qualifier)
+      .with(person, training).and_return(qualifier)
 
     job.perform
   end

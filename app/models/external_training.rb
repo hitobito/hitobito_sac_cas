@@ -72,7 +72,7 @@ class ExternalTraining < ActiveRecord::Base
   end
 
   def qualifier
-    ExternalTrainings::Qualifier.new(person, self, "participant")
+    ExternalTrainings::Qualifier.new(person, self)
   end
 
   def issue_qualifications

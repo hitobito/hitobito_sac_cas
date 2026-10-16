@@ -369,6 +369,10 @@ describe Event::Course do
       expect(course).to be_valid
       course.state = :canceled
 
+      expect(course).not_to be_valid
+      expect(course.errors.attribute_names).to include(:canceled_reason)
+
+      course.canceled_reason = :no_leader
       expect(course).to be_valid
     end
   end
@@ -480,6 +484,99 @@ describe Event::Course do
         course.update!(state: :ready)
         expect(course.closed_at).to be_nil
       end
+    end
+  end
+
+  describe "when state changes to closed" do
+    def add_kind_qualification(category:, role:)
+      course.kind.event_kind_qualification_kinds.create!(
+        qualification_kind: qualification_kinds(:ski_leader), category: category, role: role
+      )
+    end
+
+    let(:course) { events(:application_closed).tap { |c| c.update_columns(state: :ready) } }
+    let(:participation) do
+      Fabricate(:event_participation, event: course, participant: people(:mitglied), active: true)
+    end
+
+    before do
+      course.dates.build(start_at: Time.zone.local(2025, 5, 11)).save!
+      Fabricate(Event::Course::Role::Participant.sti_name.to_sym, participation: participation)
+    end
+
+    it "uses a qualifying course kind" do
+      expect(course).to be_qualifying
+    end
+
+    it "requires comment for failed qualifications" do
+      expect(Settings.event.qualifications.comment_required_if_not_qualified).to be true
+    end
+
+    it "is rejected if a participant is not assessed" do
+      expect(course.update(state: :closed)).to be false
+      expect(course.errors.full_messages).to include(/alle Personen .* beurteilt/)
+      expect(course.reload.state).to eq "ready"
+    end
+
+    context "with a leader" do
+      let!(:leader) do
+        EventRoleTypeOrder.create!(name: Event::Course::Role::Leader.sti_name, order_weight: 1)
+        leader = Fabricate(:event_participation, event: course, participant: people(:admin), active: true)
+        Fabricate(Event::Course::Role::Leader.sti_name.to_sym, participation: leader)
+        leader
+      end
+
+      before { participation.update_column(:qualified, true) }
+
+      it "is possible if the course kind has no leader qualifications" do
+        expect(course.update(state: :closed)).to be true
+      end
+
+      it "is rejected if the course kind has leader qualifications and the leader is not assessed" do
+        add_kind_qualification(category: :qualification, role: :leader)
+
+        expect(course.update(state: :closed)).to be false
+      end
+
+      it "is possible if the leader is assessed" do
+        add_kind_qualification(category: :qualification, role: :leader)
+        leader.update_column(:qualified, false)
+
+        expect(course.update(state: :closed)).to be true
+      end
+    end
+
+    it "is possible with unassessed participants if the course kind has only leader qualifications" do
+      course.kind.event_kind_qualification_kinds.destroy_all
+      add_kind_qualification(category: :qualification, role: :leader)
+
+      expect(course.update(state: :closed)).to be true
+    end
+
+    it "is possible if all participants passed or failed" do
+      participation.update_column(:qualified, true)
+      other = Fabricate(:event_participation, event: course, participant: people(:admin), active: true)
+      Fabricate(Event::Course::Role::Participant.sti_name.to_sym, participation: other)
+      other.update_column(:qualified, false)
+
+      expect(course.update(state: :closed)).to be true
+    end
+
+    it "does not consider inactive participations" do
+      participation.update_columns(active: false)
+
+      expect(course.update(state: :closed)).to be true
+    end
+
+    it "does not block other state changes" do
+      expect(course.update(state: :assignment_closed)).to be true
+    end
+
+    it "is possible without assessments if course does not grant qualifications" do
+      course.kind.event_kind_qualification_kinds.destroy_all
+
+      expect(course).not_to be_qualifying
+      expect(course.update(state: :closed)).to be true
     end
   end
 
@@ -653,7 +750,7 @@ describe Event::Course do
 
     context "without participants" do
       it "doesnt send an email" do
-        expect { course.update!(state: :canceled) }
+        expect { course.update!(state: :canceled, canceled_reason: :weather) }
           .not_to have_enqueued_mail(Event::CourseParticipationMailer)
       end
     end
@@ -670,7 +767,7 @@ describe Event::Course do
 
       it "queues job to cancel invoices for all participants" do
         expect do
-          course.update!(state: :canceled)
+          course.update!(state: :canceled, canceled_reason: :minimum_participants)
         end.to change { Delayed::Job.where("handler like '%CancelInvoiceJob%'").count }.by(2)
       end
     end
