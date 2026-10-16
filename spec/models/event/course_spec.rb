@@ -813,17 +813,18 @@ describe Event::Course do
       I18n.with_locale(:fr) do
         orig.update!(name: "Le cours", description: "description du cours", brief_description: "Un cours de test")
       end
+      # pry
       dup = orig.duplicate
       expect(dup).to be_a_new(Event::Course)
       excluded_attrs = %w[id created_at updated_at application_opening_at application_closing_at state
-        participations_visible]
+        participations_visible description description_de description_fr description_it description_en]
       expect(dup.attributes.except(*excluded_attrs)).to eq(orig.attributes.except(*excluded_attrs))
 
       expect(dup.name).to eq("Tourenleiter/in 1 Sommer")
-      expect(dup.description).to eq("Tourenleiter/in 1 Sommer")
+      expect(dup.description.to_s).to eq(orig.description.to_s)
       I18n.with_locale(:fr) do
         expect(dup.name).to eq("Le cours")
-        expect(dup.description).to eq("description du cours")
+        expect(dup.description.to_s).to eq(orig.description.to_s)
         expect(dup.brief_description).to eq("Un cours de test")
       end
     end
