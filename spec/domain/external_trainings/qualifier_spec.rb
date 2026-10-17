@@ -8,7 +8,6 @@
 require "spec_helper"
 
 describe ExternalTrainings::Qualifier do
-  let(:role) { "participant" }
   let(:mitglied) { people(:mitglied) }
   let(:ski_leader) { qualification_kinds(:ski_leader) }
   let(:ski_course) { event_kinds(:ski_course) }
@@ -185,7 +184,7 @@ describe ExternalTrainings::Qualifier do
     end
 
     def issue(training)
-      described_class.new(mitglied, training, role).issue
+      described_class.new(mitglied, training).issue
     end
   end
 
@@ -319,7 +318,7 @@ describe ExternalTrainings::Qualifier do
     end
 
     def revoke(training)
-      described_class.new(mitglied, training, role).revoke
+      described_class.new(mitglied, training).revoke
     end
   end
 
@@ -339,7 +338,7 @@ describe ExternalTrainings::Qualifier do
       event_kind: event_kind,
       qualification_kind: qualification_kind,
       category: category,
-      role: role
+      role: "participant"
     )
   end
 

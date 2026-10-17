@@ -15,6 +15,6 @@ class ExternalTraining::QualifierIssueJob < BaseJob
 
   def perform
     training = ExternalTraining.find(@external_training_id)
-    ExternalTrainings::Qualifier.new(training.person, training, "participant").issue
+    ExternalTrainings::Qualifier.new(training.person, training).issue
   end
 end

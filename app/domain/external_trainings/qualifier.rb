@@ -6,22 +6,31 @@
 #  https://github.com/hitobito/hitobito_sac_cas.
 
 module ExternalTrainings
-  class Qualifier < Event::Qualifier
-    ROLE = "participant"
+  class Qualifier
+    ROLE_KIND = "participant"
+
+    def initialize(person, training)
+      @person = person
+      @training = training
+    end
+
+    def issue
+      Qualification.transaction do
+        with_adjusted_qualifications do
+          issue_action(@training)
+        end
+      end
+    end
+
+    def revoke
+      Qualification.transaction do
+        with_adjusted_qualifications do
+          Event::Qualifier::RevokeAction.new(@person, @training, ROLE_KIND).run
+        end
+      end
+    end
 
     private
-
-    def issue_qualifications
-      with_adjusted_qualifications do
-        super
-      end
-    end
-
-    def revoke_qualifications
-      with_adjusted_qualifications do
-        super
-      end
-    end
 
     def with_adjusted_qualifications
       destroy_later_qualifications
@@ -31,37 +40,41 @@ module ExternalTrainings
 
     def create_later_qualifications
       sorted_later_events.each do |event|
-        QualifyAction.new(person, event, qualification_kinds(event.kind)).run
-        ProlongAction.new(person, event, prolongation_kinds(event.kind), role).run
+        issue_action(event)
       end
+    end
+
+    def issue_action(event)
+      Event::Qualifier::QualifyAction.new(@person, event, ROLE_KIND).run
+      Event::Qualifier::ProlongAction.new(@person, event, ROLE_KIND).run
     end
 
     def destroy_later_qualifications
       @person.qualifications
         .where(qualification_kind: qualifying_and_prolonging_kinds)
-        .where("qualified_at > ?", @event.qualification_date)
+        .where("qualified_at > ?", @training.qualification_date)
         .destroy_all
     end
 
     def sorted_later_events
       courses_loader
         .load
-        .reject { |c| c.id == @event.id && c.qualification_date == @event.qualification_date }
+        .reject { |c| c.id == @training.id && c.qualification_date == @training.qualification_date }
         .sort_by(&:qualification_date)
     end
 
     def courses_loader
       @courses_loader ||= Event::TrainingDays::CoursesLoader.new(
         @person.id,
-        ROLE,
+        ROLE_KIND,
         qualifying_and_prolonging_kinds,
-        @event.qualification_date,
+        @training.qualification_date,
         Time.zone.today
       )
     end
 
     def qualifying_and_prolonging_kinds
-      qualification_kinds + prolongation_kinds
+      @training.kind.qualification_kinds(%w[qualification prolongation], ROLE_KIND)
     end
   end
 end
