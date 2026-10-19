@@ -51,5 +51,9 @@ module Export
       ]
       "#{config.join("_")}-#{Date.current.strftime("%Y%m%d")}"
     end
+
+    def group
+      @group ||= Group::SacCas.find(params[:group_id])
+    end
   end
 end

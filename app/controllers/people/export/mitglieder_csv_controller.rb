@@ -23,7 +23,7 @@ class People::Export::MitgliederCsvController < ApplicationController
   private
 
   def group
-    @group ||= Group.find(params[:group_id])
+    @group ||= Group::SektionsMitglieder.find(params[:group_id])
   end
 
   def filename
