@@ -42,5 +42,9 @@ module Export
     def year
       params.require(:export).fetch(:year, Date.current.year).to_i
     end
+
+    def group
+      @group ||= Group::SacCas.find(params[:group_id])
+    end
   end
 end

@@ -35,7 +35,7 @@ module SacCas::GroupAbility
 
       permission(:layer_and_below_read)
         .may(:download_statistics)
-        .in_same_layer
+        .in_root_layer
 
       permission(:group_and_below_full)
         .may(:create)
@@ -75,5 +75,9 @@ module SacCas::GroupAbility
 
   def restricted_sektion_group?
     !if_backoffice && RESTRICTED_GROUPS.include?(subject.class)
+  end
+
+  def in_root_layer
+    group&.root? && permission_in_layer?(group.layer_group_id)
   end
 end
