@@ -33,7 +33,7 @@ class Events::AnnualCourseDuplicateBuilder
   end
 
   def build
-    course = @source_course.dup
+    course = Event::Course.new(@source_course.attributes.except("id"))
 
     reset_state(course)
     course.number = determine_next_number(@source_course)
