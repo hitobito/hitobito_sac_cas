@@ -54,6 +54,20 @@ describe Passes::VerificationsController do
       end
     end
 
+    context "language" do
+      it "switches language via the language links" do
+        visit "/passes/verify/#{pass.verify_token}"
+        expect(page).to have_css(".alert-success", text: "Mitgliedschaft gültig")
+
+        within("#details .lang") { click_link "FR" }
+        expect(page).to have_css(".alert-success", text: "Adhésion valide")
+        expect(page).to have_css("#sponsors img[src*='membership_verify_partner_ad_fr']")
+
+        within("#details .lang") { click_link "IT" }
+        expect(page).to have_css(".alert-success", text: "Iscrizione valida")
+      end
+    end
+
     context "as active tour guide" do
       it "shows tour guide information" do
         person.qualifications.create!(
