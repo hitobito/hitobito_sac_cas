@@ -24,6 +24,10 @@ class Event::ActivityResource < ApplicationResource
     end
   end
 
+  filter :event_id, :integer, only: [:eq] do
+    eq { |scope, event_ids| scope.includes(:events).where(events: {id: event_ids}) }
+  end
+
   has_one :parent, resource: self
 
   def base_scope

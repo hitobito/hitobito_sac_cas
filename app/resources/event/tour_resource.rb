@@ -39,10 +39,18 @@ class Event::TourResource < EventResource
   has_many :leaders, resource: Person::NameResource, writable: false,
     foreign_key: :leads_course_id
 
-  has_many :activities, resource: Event::ActivityResource
-  has_many :target_groups, resource: Event::TargetGroupResource
-  has_many :technical_requirements, resource: Event::TechnicalRequirementResource
-  has_many :traits, resource: Event::TraitResource
+  {
+    activities: Event::ActivityResource,
+    target_groups: Event::TargetGroupResource,
+    technical_requirements: Event::TechnicalRequirementResource,
+    traits: Event::TraitResource
+  }.each do |association, resource|
+    has_many association, resource: resource do
+      assign_each do |tour, children|
+        children.select { |child| child.event_ids.include?(tour.id) }
+      end
+    end
+  end
 
   belongs_to :fitness_requirement, resource: Event::FitnessRequirementResource
 

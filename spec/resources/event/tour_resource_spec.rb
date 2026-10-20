@@ -39,6 +39,23 @@ describe Event::TourResource, type: :resource do
     expect(leaders.first.last_name).to eq(leader.last_name)
   end
 
+  describe "including" do
+    let!(:other) { Fabricate(:sac_tour, groups: [groups(:bluemlisalp)]) }
+
+    %w[activities target_groups technical_requirements traits].each do |association|
+      it "includes #{association} of each tour" do
+        expect(event.send(association)).to be_present
+
+        params[:include] = association
+        render
+        jsonapi_data.each do |tour|
+          expected_ids = Event.find(tour.id).send(association).ids
+          expect(tour.sideload(association.to_sym).map(&:id)).to match_array(expected_ids)
+        end
+      end
+    end
+  end
+
   describe "filtering" do
     # A second tour, assigned to none of the entries the filters below match on.
     let!(:other) { Fabricate(:sac_tour, groups: [groups(:bluemlisalp)]) }

@@ -686,6 +686,12 @@
             "match",
             "not_match"
           ]
+        },
+        "event_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
         }
       },
       "relationships": {
@@ -2554,6 +2560,12 @@
             "lt",
             "lte"
           ]
+        },
+        "event_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
+          ]
         }
       },
       "relationships": {
@@ -2680,6 +2692,12 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "event_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
           ]
         }
       },
@@ -3275,6 +3293,12 @@
             "gte",
             "lt",
             "lte"
+          ]
+        },
+        "event_id": {
+          "type": "integer",
+          "operators": [
+            "eq"
           ]
         }
       },
