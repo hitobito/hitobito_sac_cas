@@ -8,5 +8,6 @@
 -# the next page (or nothing, if this was the last page), chaining the
 -# infinite scroll one page at a time.
 = turbo_frame_tag(:agenda_events_list_page) do
-  = render "event_cards"
+  - events.each do |event|
+    = render "list_card", event: event
   = render "pagination_sentinel"
