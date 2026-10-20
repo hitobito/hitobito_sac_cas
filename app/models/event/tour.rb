@@ -231,6 +231,8 @@ class Event::Tour < Event # rubocop:disable Metrics/ClassLength
   end
 
   def assert_technical_requirements_match_activities
+    return if will_save_change_to_state?
+
     main_ids = activities.map(&:technical_requirement_id).compact
     allowed_technical_requirement_ids = Event::TechnicalRequirement.where(id: main_ids)
       .or(Event::TechnicalRequirement.where(parent_id: main_ids))
