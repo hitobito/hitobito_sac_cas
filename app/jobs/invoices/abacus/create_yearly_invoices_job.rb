@@ -39,10 +39,11 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
 
   def error(job, exception, payload = parameters)
     super
-    # rubocop:todo Layout/LineLength
-    create_error_log_entry("Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden. " \
-              "Es erfolgt ein weiterer Versuch.", exception.message)
-    # rubocop:enable Layout/LineLength
+
+    create_error_log_entry(<<~MSG.squish, exception.message)
+      Mitgliedschaftsrechnungen konnten nicht an Abacus übermittelt werden.
+      Es erfolgt ein weiterer Versuch.
+    MSG
   end
 
   def failure(job)
