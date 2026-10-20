@@ -12,7 +12,8 @@
     = render "results_summary", count: events.total_count
 
     - if events.any?
-      = render "event_cards", events: events
+      - events.each do |event|
+        = render "list_card", event: event
       = render "pagination_sentinel", events: events
     - else
       = render "no_results", group: group
