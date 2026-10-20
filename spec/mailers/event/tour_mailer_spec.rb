@@ -12,8 +12,8 @@ describe Event::TourMailer do
   let(:person) { people(:mitglied) }
   let(:event) { events(:section_tour) }
 
-  before do
-    CustomContent.init_section_specific_contents(section)
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
   end
 
   describe "publication" do

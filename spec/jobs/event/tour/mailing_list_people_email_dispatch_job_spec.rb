@@ -17,8 +17,11 @@ describe Event::Tour::MailingListPeopleEmailDispatchJob do
 
   subject(:job) { described_class.new(:publication, tour.id) }
 
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
+  end
+
   before do
-    CustomContent.init_section_specific_contents(sektion)
     sektion.send(:create_tour_notification_mailing_lists)
   end
 

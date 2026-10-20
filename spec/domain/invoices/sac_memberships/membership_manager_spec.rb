@@ -31,7 +31,8 @@ describe Invoices::SacMemberships::MembershipManager do
 
   let(:bluemlisalp) { groups(:bluemlisalp) }
   let(:matterhorn) { groups(:matterhorn) }
-  let(:ehrenmitglieder_group) do
+
+  let_it_be(:ehrenmitglieder_group) do
     Group::Ehrenmitglieder.create!(
       name: "Ehrenmitglieder",
       parent: groups(:root)
@@ -44,31 +45,29 @@ describe Invoices::SacMemberships::MembershipManager do
     Fabricate(Group::SektionsMitglieder::Ehrenmitglied.sti_name,
       group: groups(:bluemlisalp_mitglieder),
       person: person,
-      start_on: today.beginning_of_year)
+      start_on: Time.zone.today.beginning_of_year)
     Fabricate(Group::SektionsMitglieder::Beguenstigt.sti_name,
       group: groups(:bluemlisalp_mitglieder),
       person: person,
-      start_on: today.beginning_of_year)
+      start_on: Time.zone.today.beginning_of_year)
     Fabricate(Group::Ehrenmitglieder::Ehrenmitglied.sti_name,
       group: ehrenmitglieder_group,
       person: person,
-      start_on: today.beginning_of_year)
+      start_on: Time.zone.today.beginning_of_year)
+  end
+
+  before_all do
+    people(:mitglied, :familienmitglied, :familienmitglied2, :familienmitglied_kind)
+      .each { |person| create_additional_roles(person) }
   end
 
   before do
-    people = [
-      mitglied_person,
-      familienmitglied_person,
-      familienmitglied2_person,
-      familienmitglied_kind_person
-    ]
-
-    people.each { |person| create_additional_roles(person) }
     Role.update_all(end_on: prolongation_date)
 
     travel_to(run_on)
 
-    people.each(&:reload)
+    [mitglied_person, familienmitglied_person, familienmitglied2_person, familienmitglied_kind_person]
+      .each(&:reload)
   end
 
   it "creates log entry if running without any actual work todo" do

@@ -13,8 +13,11 @@ describe Event::TourApprovalMailer do
   let(:recipient) { people(:mitglied) }
   let(:updater) { people(:familienmitglied) }
 
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
+  end
+
   before do
-    CustomContent.init_section_specific_contents(section)
     event.updater = updater
   end
 

@@ -13,8 +13,11 @@ describe Event::TourReportMailer do
   let(:report) { event_reports(:section_tour_report) }
   let(:recipient) { people(:mitglied) }
 
+  before_all do
+    CustomContent.init_section_specific_contents(groups(:bluemlisalp))
+  end
+
   before do
-    CustomContent.init_section_specific_contents(section)
     report.remarks = "Ich habe keine Anmerkungen aber will trotzdem etwas sagen."
   end
 
