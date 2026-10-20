@@ -696,7 +696,7 @@
       },
       "relationships": {
         "parent": {
-          "type": "has_one",
+          "type": "belongs_to",
           "description": null,
           "resource": "Event::ActivityResource"
         }
@@ -2570,7 +2570,7 @@
       },
       "relationships": {
         "parent": {
-          "type": "has_one",
+          "type": "belongs_to",
           "description": null,
           "resource": "Event::TargetGroupResource"
         }
@@ -2703,7 +2703,7 @@
       },
       "relationships": {
         "parent": {
-          "type": "has_one",
+          "type": "belongs_to",
           "description": null,
           "resource": "Event::TechnicalRequirementResource"
         }
@@ -3304,7 +3304,7 @@
       },
       "relationships": {
         "parent": {
-          "type": "has_one",
+          "type": "belongs_to",
           "description": null,
           "resource": "Event::TraitResource"
         }

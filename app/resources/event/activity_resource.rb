@@ -28,7 +28,7 @@ class Event::ActivityResource < ApplicationResource
     eq { |scope, event_ids| scope.includes(:events).where(events: {id: event_ids}) }
   end
 
-  has_one :parent, resource: self
+  belongs_to :parent, resource: self
 
   def base_scope
     Event::Activity.without_deleted
