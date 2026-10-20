@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -45,6 +45,36 @@ describe ExternalInvoice::SacMembership do
     it "is false when state is error" do
       invoice = Fabricate(:sac_membership_invoice, state: "error")
       expect(invoice).to_not be_payable
+    end
+  end
+
+  describe "#beitragskategorie" do
+    def create_invoice(person)
+      Fabricate(:sac_membership_invoice, person:, year: 2024)
+    end
+
+    it "is family for family main person" do
+      expect(create_invoice(people(:familienmitglied)).beitragskategorie).to eq "family"
+    end
+
+    it "is adult for adult family member" do
+      expect(create_invoice(people(:familienmitglied2)).beitragskategorie).to eq "adult"
+    end
+
+    it "is youth for youth family member" do
+      people(:familienmitglied2).update_column(:birthday, Date.new(2004, 1, 1))
+
+      expect(create_invoice(people(:familienmitglied2)).beitragskategorie).to eq "youth"
+    end
+
+    it "keeps family after family main person changed" do
+      invoice = create_invoice(people(:familienmitglied))
+      people(:familienmitglied).update_column(:sac_family_main_person, false)
+      people(:familienmitglied2).update_column(:sac_family_main_person, true)
+
+      invoice.reload.update!(state: :cancelled)
+
+      expect(invoice.reload.beitragskategorie).to eq "family"
     end
   end
 
