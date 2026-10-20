@@ -39,14 +39,14 @@ module Migrations
 
     def revoke_existing_qualifications(person, quali_events)
       quali_events.reverse_each do |event|
-        Event::Qualifier::RevokeAction.new(person, event, qualification_kinds).run
+        Event::Qualifier::RevokeAction.new(person, event, PARTICIPANT_ROLE).run
       end
     end
 
     def prolong_all_qualifications(person, quali_events)
       quali_events.each do |event|
-        Event::Qualifier::ProlongAction.new(person, event, qualification_kinds,
-          PARTICIPANT_ROLE).run
+        Event::Qualifier::QualifyAction.new(person, event, PARTICIPANT_ROLE).run
+        Event::Qualifier::ProlongAction.new(person, event, PARTICIPANT_ROLE).run
         flag_participation_qualified(person, event) if event.is_a?(Event::Course)
       end
     end
