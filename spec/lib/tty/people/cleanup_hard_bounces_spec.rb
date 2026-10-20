@@ -21,6 +21,7 @@ describe TTY::People::CleanupHardBounces do
   let(:input_path) { File.join(tmpdir, "hard_bounces.csv") }
   let(:output_path) { File.join(tmpdir, "report.csv") }
 
+  before { freeze_time }
   after { FileUtils.remove_entry(tmpdir) }
 
   def write_input(*rows, col_sep: ",")
