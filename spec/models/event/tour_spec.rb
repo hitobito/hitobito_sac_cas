@@ -105,15 +105,36 @@ describe Event::Tour do
       context "associated to activites" do
         before { tour.update!(state: :draft) }
 
-        it "is valid if matching activities technical requirment" do
+        it "is valid if matching activity technical requirment" do
           tour.association(:technical_requirements).target = [event_technical_requirements(:wandern_t2)]
 
           expect(tour).to be_valid
         end
 
-        it "is invalid if not matching a technical requirement of the tours activities" do
+        it "is invalid if not matching activity technical requirement" do
           tour.association(:technical_requirements).target = [event_technical_requirements(:klettern_9a)]
 
+          expect(tour).not_to be_valid
+          expect(tour.errors.full_messages).to eq [
+            "Technische Anforderung(en) müssen zu den ausgewählten Aktivitäten gehören"
+          ]
+        end
+
+        it "is valid if not matching activity technical requirement and state is not draft" do
+          # actually invalid combination, not validated in review
+          tour.update!(state: :review)
+          event_technical_requirements(:klettern_9a).events << tour
+          tour.reload
+          expect(tour.technical_requirements).to include(event_technical_requirements(:klettern_9a))
+          expect(tour).to be_valid
+
+          # still not validated while changing state
+          tour.state = :draft
+          expect(tour).to be_valid
+          tour.save!
+
+          # invalid in state draft
+          tour.reload
           expect(tour).not_to be_valid
           expect(tour.errors.full_messages).to eq [
             "Technische Anforderung(en) müssen zu den ausgewählten Aktivitäten gehören"
