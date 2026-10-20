@@ -17,7 +17,8 @@ describe Person::QueryExternalTrainingController do
       let(:person) { people(:tourenchef) }
       let!(:mitglied) {
         Fabricate(Group::SektionsMitglieder::Mitglied.sti_name.to_sym,
-          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder)).person
+          group: groups(:bluemlisalp_ortsgruppe_ausserberg_mitglieder),
+          person: Fabricate(:person, first_name: "Wendelin")).person
       }
 
       it "find mitglied" do
