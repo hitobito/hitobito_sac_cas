@@ -23,6 +23,10 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     Event::CachedLeader.backfill_all
+
+    [Person, Group].product(SacPhoneNumbers::FIXED_SLOT_KEYS).each do |model, key|
+      SacPhoneNumbers.category_id(model.sti_name, key)
+    end
   end
 
   config.seeds << {
