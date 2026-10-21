@@ -808,6 +808,11 @@ it:
                 deve essere un valore esadecimale valido a 6 cifre che inizi con #
             technical_requirement_id:
               must_be_main: deve essere un requisito fondamentale
+        event/course:
+          attributes:
+            base:
+              qualifications_not_assessed: >-
+                Der Kurs kann erst abgeschlossen werden, wenn alle Personen in der Qualifikation als bestanden oder nicht bestanden beurteilt wurden.
         event/participation:
           attributes:
             actual_days:
@@ -2971,25 +2976,25 @@ it:
             next_as_household_link: Continuare come affiliazione famigliare
 
           various_fields_title: Dati aggiuntivi
-          cornercard_fields_title: Cornèrcard
+          cornercard_fields_title: Vantaggi per i soci
           cornercard_fields:
             card_application: Richiedere una Cornèrcard
             benefit_heading: Vantaggio riservato ai soci
-            order_heading: Richiedi la SAC-Cornèrcard
+            order_heading: Ordina la Cornèrcard CAS
             order_description: >-
-              Completa la tua iscrizione con la Cornèrcard del CAS gratuita e approfitta di vantaggi esclusivi durante le tue attività con il CAS e nella vita di tutti i giorni.
-            benefits_heading: "I tuoi vantaggi in sintesi:"
-            benefit_1: Nessuna quota annuale
-            benefit_2: Cashback 20 volte superiore nello shop SAC (corrisponde a un ulteriore sconto del 6%)
-            benefit_3: Design esclusivo delle carte SAC
+              Completa la tua affiliazione con la carta gratuita Cornèrcard CAS e beneficia di vantaggi esclusivi per le tue attività con il CAS e nella vita quotidiana.
+            benefits_heading: "I tuoi vantaggi:"
+            benefit_1: Nessuna quota annua
+            benefit_2: Cashback 20 volte tanto nello shop CAS (corrisponde a un ulteriore ribasso del 6%)
+            benefit_3: Esclusivo design della carta CAS
             support_text: >-
-              Ogni volta che utilizzi la carta, sostieni contemporaneamente il CAS. In qualità di partner principale, Cornèrcard devolve allo SAC <strong>lo 0,2% del fatturato generato dalla carta</strong>, <strong>senza alcun costo aggiuntivo per te.</strong>
+              Con ogni utilizzo della carta sostieni al contempo il CAS. In quanto partner principale, Cornèrcard dona al CAS lo<strong> 0,2% del volume di spesa della carta </strong> – <strong>senza costi aggiuntivi per te.
             card_application_label: >-
-              Vorrei usufruire del vantaggio riservato ai soci e richiedere la Cornèrcard SAC gratuita.
+              Desidero beneficiare dei vantaggi per i soci e richiedo la carta gratuita Cornèrcard CAS.
             consent_label: >-
-              Sono d'accordo con %{data_processing_link}, ho letto %{agb_link} e ne accetto i termini.
-            data_processing_link_text: Trattamento dei miei dati
-            agb_link_text: Condizioni generali di contratto
+              Acconsento al %{data_processing_link}. Ho letto e accetto le %{agb_link}. 
+            data_processing_link_text: trattamento dei miei dati personali
+            agb_link_text: condizioni commerciali generali
           summary_fields_title: Riepilogo
           summary_fields:
             my_membership: "La mia affiliazione"

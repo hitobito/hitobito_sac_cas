@@ -805,6 +805,11 @@ de_CH:
                 muss ein zulässiger 6-stelliger Hexadezimal Wert beginnend mit # sein
             technical_requirement_id:
               must_be_main: muss eine Hauptanforderung sein
+        event/course:
+          attributes:
+            base:
+              qualifications_not_assessed: >-
+                Der Kurs kann erst abgeschlossen werden, wenn alle Personen in der Qualifikation als bestanden oder nicht bestanden beurteilt wurden.
         event/participation:
           attributes:
             actual_days:
@@ -2893,7 +2898,7 @@ de_CH:
             next_as_household_link: Weiter als Familienmitgliedschaft
 
           various_fields_title: Zusatzdaten
-          cornercard_fields_title: Cornèrcard
+          cornercard_fields_title: Mitgliedervorteil
           cornercard_fields:
             card_application: Cornèrcard beantragen
             benefit_heading: Mitgliedervorteil
@@ -2907,7 +2912,7 @@ de_CH:
             support_text: >-
               Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
             card_application_label: >-
-              Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC Cornèrcard beantragen.
+              Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC-Cornèrcard beantragen.
             consent_label: >-
               Ich stimme der %{data_processing_link} zu und habe die %{agb_link} gelesen und akzeptiere diese.
             data_processing_link_text: Verarbeitung meiner Daten
