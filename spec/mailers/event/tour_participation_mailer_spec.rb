@@ -53,7 +53,6 @@ describe Event::TourParticipationMailer do
       )
       event.dates.first.update!(finish_at: "6.2.2023")
       event.reload
-
       expect(mail.body.to_s).to include(
         "<dt>Daten</dt><dd>Sa 04.02.2023 07:30 - Mo 06.02.2023</dd>",
         "<dt>Kalendereintrag (ics)</dt><dd><a href=\"http://test.host/groups/#{section.id}/events/#{event.id}.ics\">Herunterladen</a></dd>",
@@ -64,7 +63,7 @@ describe Event::TourParticipationMailer do
         "<dt>Merkmal(e)</dt><dd>Anreise mit ÖV, Exkursion</dd>",
         "<dt>Konditionelle Anforderung</dt><dd>B - wenig anstrengend</dd>",
         "<dt>Technische Anforderung(en)</dt><dd>T3, T4</dd>",
-        "<dt>Beschreibung</dt><dd>Wichtige Infos<br/>auf mehreren Zeilen</dd>",
+        "<dt>Beschreibung</dt><dd><div class=\"trix-content\">\n  Wichtige Infos\nauf mehreren Zeilen\n</div>\n</dd>",
         "Bei Fragen kannst du dich jederzeit an Tenzing Norgay wenden " \
         "(#{contact.id}, +41 79 123 45 67, t.norgay@hitobito.example.com)."
       )

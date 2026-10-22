@@ -222,7 +222,7 @@ describe Event::CourseParticipationMailer do
 
       it "sanitizes html tags in event description" do
         event.update!(description: "Description<script>alert('XSS')</script>Text")
-        is_expected.to include("Description&lt;script&gt;alert(&#39;XSS&#39;)&lt;/script&gt;Text")
+        is_expected.to include("Descriptionalert('XSS')Text")
         is_expected.not_to include("<script>")
       end
 
