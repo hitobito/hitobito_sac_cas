@@ -167,7 +167,7 @@ module Wizards::Signup
     def too_young_for_household? = has_needed_age(MIN_ADULT_YEARS)
 
     def hide_cornercard_step?
-      Settings.cornercard.config.blank? || too_young_for_cornercard?
+      FeatureGate.disabled?("cornercard") || too_young_for_cornercard?
     end
 
     def too_young_for_cornercard? = has_needed_age(MIN_CORNERCARD_YEARS)

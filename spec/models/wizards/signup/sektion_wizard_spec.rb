@@ -124,8 +124,6 @@ describe Wizards::Signup::SektionWizard do
 
   describe "optional steps" do
     before { @current_step = 1 }
-    before { Settings.cornercard.config = {enabled: true} }
-    after { Settings.cornercard.config = nil }
 
     it "third step defaults to family_fields" do
       expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::FamilyFields)
@@ -156,9 +154,9 @@ describe Wizards::Signup::SektionWizard do
       expect(wizard.step_at(4)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
     end
 
-    it "skips cornercard when not configured" do
+    it "skips cornercard when feature is disabled" do
       required_attrs[:person_fields][:birthday] = 20.years.ago.to_date
-      Settings.cornercard.config = nil
+      allow(FeatureGate).to receive(:disabled?).with("cornercard").and_return(true)
       expect(wizard.step_at(2)).to be_instance_of(Wizards::Steps::Signup::Sektion::VariousFields)
       expect(wizard.step_at(3)).to be_instance_of(Wizards::Steps::Signup::Sektion::SummaryFields)
     end
@@ -271,9 +269,6 @@ describe Wizards::Signup::SektionWizard do
     end
 
     context "cornercard upload" do
-      before { Settings.cornercard.config = {enabled: true} }
-      after { Settings.cornercard.config = nil }
-
       it "creates CornercardUpload for main person when ordered" do
         required_attrs[:cornercard_fields] = {card_application: true, consent_given: true}
         expect { wizard.save! }.to change { CornercardUpload.count }.by(1)

@@ -11,7 +11,7 @@ class Export::CornercardApplicationsUploadJob < RecurringJob
   run_every 1.week
 
   def perform
-    return if sftp_config.blank?
+    return if FeatureGate.disabled?("cornercard") || sftp_config.blank?
 
     uploads = CornercardUpload.pending
     return if uploads.empty?
