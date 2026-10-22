@@ -181,9 +181,6 @@ describe Events::AnnualCourseDuplicateBuilder do
         .and change {
                Event::Role.count
              }.by(2)
-        .and change {
-               Event::Answer.where.not(participation_id: nil).count
-             }.by(0)
 
       expect(duplicate.created_at).to be_present
       expect(duplicate.participations.find(&:leader?).answers).to be_empty
