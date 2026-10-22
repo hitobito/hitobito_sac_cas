@@ -19,7 +19,7 @@ describe Group::SektionsMitglieder::Ehrenmitglied do
     before do
       travel_to("2024-06-01")
       member.roles.first.update!(start_on: "2024-01-01", end_on: "2024-12-01")
-      member.roles.last.destroy!
+      member.roles.last.really_destroy!
     end
 
     it "creates role if membership role covers all days" do
