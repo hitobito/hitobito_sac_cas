@@ -7,6 +7,8 @@
 
 class Export::Tabular::Event::SacCourseFinances
   class LeaderCompensations
+    include LocalDate
+
     def fetch(course_ids) # rubocop:disable Metrics/MethodLength
       CourseCompensationRate
         .with(event_starts:, event_durations:)
@@ -31,7 +33,7 @@ class Export::Tabular::Event::SacCourseFinances
     def event_starts
       Event::Date
         .group("event_id")
-        .select("event_id, MIN(DATE(start_at)) AS date_on")
+        .select("event_id, MIN(#{local_date(:start_at)}) AS date_on")
     end
 
     def event_durations
@@ -39,7 +41,7 @@ class Export::Tabular::Event::SacCourseFinances
         .group("event_id")
         .select("event_id, " \
           "SUM(CASE WHEN finish_at IS NULL THEN 1 " \
-          "ELSE DATE(finish_at) - DATE(start_at) + 1 END) AS days")
+          "ELSE #{local_date(:finish_at)} - #{local_date(:start_at)} + 1 END) AS days")
     end
 
     def highest_leader_role

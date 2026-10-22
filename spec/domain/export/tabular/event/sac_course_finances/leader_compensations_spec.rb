@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -81,6 +81,17 @@ describe Export::Tabular::Event::SacCourseFinances::LeaderCompensations do
     expect(described_class.new.fetch(course_ids)).to eq(
       @course1.id => 5 * (50 + 60) + 4 * (45 + 55), # rate1 + rate22, leader + assistant_leader
       @other_course.id => 4 * 50 # rate_other_kind
+    )
+  end
+
+  it "uses local dates of courses starting at midnight" do
+    course = Fabricate(:sac_open_course,
+      kind: @kind,
+      dates_attributes: [{start_at: "2024-01-01", finish_at: "2024-01-01 17:00"}])
+    create_participation(course, roles: [:"Event::Course::Role::Leader"])
+
+    expect(described_class.new.fetch([course.id])).to eq(
+      course.id => 1 * (50 + 60) # rate1 + rate22
     )
   end
 end

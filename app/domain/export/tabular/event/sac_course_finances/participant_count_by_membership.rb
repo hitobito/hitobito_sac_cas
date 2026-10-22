@@ -31,7 +31,7 @@ class Export::Tabular::Event::SacCourseFinances
     def event_starts
       Event::Date
         .where("event_id = event_participations.event_id")
-        .select("MIN(DATE(start_at)) AS date_on")
+        .select("MIN(#{local_date(:start_at)}) AS date_on")
     end
   end
 end

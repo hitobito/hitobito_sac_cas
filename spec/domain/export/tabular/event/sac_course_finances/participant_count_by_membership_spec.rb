@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -86,5 +86,12 @@ describe Export::Tabular::Event::SacCourseFinances::ParticipantCountByMembership
       @course1.id => {true => 2, false => 4},
       @other_course.id => {true => 2}
     )
+  end
+
+  it "uses local date of courses starting at midnight" do
+    course = Fabricate(:sac_open_course, dates: [Fabricate.build(:event_date, start_at: Time.zone.local(2024, 5, 1))])
+    create_participation_with_member_role(course, start_on: "2024-05-01")
+
+    expect(described_class.new.fetch([course.id])).to eq(course.id => {true => 1})
   end
 end

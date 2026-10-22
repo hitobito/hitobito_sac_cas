@@ -7,6 +7,8 @@
 
 class Export::Tabular::Event::SacCourseFinances
   class ParticipantCount
+    include LocalDate
+
     class_attribute :grouping, :states
     self.states = %w[attended]
 

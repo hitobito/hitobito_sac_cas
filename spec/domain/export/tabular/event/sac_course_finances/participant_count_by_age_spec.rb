@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -35,11 +35,23 @@ describe Export::Tabular::Event::SacCourseFinances::ParticipantCountByAge do
       **opts).tap { |p| p.person.update!(birthday: birthday) if birthday }
   end
 
-  it "summarizes age groups" do
+  def expect_summarized_age_groups
     course_ids = [@course1.id, @other_course.id]
     expect(described_class.new.fetch(course_ids)).to eq(
       @course1.id => {age_18_22: 3},
       @other_course.id => {age_0_17: 1, age_36_50: 1}
     )
+  end
+
+  it "summarizes age groups" do
+    expect_summarized_age_groups
+  end
+
+  context "with courses starting shortly after local midnight" do
+    around { |example| travel_to(Time.zone.local(2026, 10, 22, 0, 22)) { example.run } }
+
+    it "summarizes age groups by local start date" do
+      expect_summarized_age_groups
+    end
   end
 end
