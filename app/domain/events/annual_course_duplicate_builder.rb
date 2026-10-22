@@ -33,14 +33,13 @@ class Events::AnnualCourseDuplicateBuilder
   end
 
   def build
-    course = Event::Course.new(@source_course.attributes.except("id"))
+    course = Event::Course.new(@source_course.attributes.compact.except("id"))
 
     reset_state(course)
     course.number = determine_next_number(@source_course)
     course.groups = @source_course.groups
 
     build_dates(course)
-    build_translations(course)
     build_questions(course)
     build_leaders(course)
 
