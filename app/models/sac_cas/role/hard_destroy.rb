@@ -8,7 +8,7 @@
 module SacCas::Role::HardDestroy
   extend ActiveSupport::Concern
 
-  def destroy(*)
+  def destroy
     really_destroy!
   end
 end

@@ -19,37 +19,32 @@ shared_examples "Mitglied dependant destroy" do
       end_on: mitglied_role.end_on).tap(&:save!)
   }
 
-  let(:old_enough) { Settings.role.minimum_days_to_archive.days.ago - 1.second }
-  let(:not_old_enough) { Settings.role.minimum_days_to_archive.days.ago + 1.second }
-
   shared_examples "stays untouched with skip_destroy_dependent_roles set" do
     it do
       mitglied_role.skip_destroy_dependent_roles = true
-      expect { mitglied_role.destroy(always_soft_destroy: true) }
+      expect { mitglied_role.destroy }
         .not_to change { role.reload.end_on }
     end
   end
 
   context "with Mitglied role" do
-    it "gets ended if it is old enough" do
-      role.update!(created_at: old_enough)
-      expect { mitglied_role.destroy(always_soft_destroy: true) }
+    it "gets ended if it started before today" do
+      expect { mitglied_role.destroy }
         .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
       expect(role.reload.end_on).to eq(mitglied_role.end_on)
     end
 
-    it "gets hard deleted if it is not old enough" do
-      role.update!(created_at: not_old_enough)
-      expect { mitglied_role.destroy(always_soft_destroy: true) }
+    it "gets hard deleted if it starts today" do
+      role.update!(start_on: Date.current)
+      expect { mitglied_role.destroy }
         .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
       expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
-    it "gets hard deleted when Mitglied role is hard deleted even if old enough" do
-      role.update!(created_at: old_enough)
-      mitglied_role.destroy
+    it "gets hard deleted when Mitglied role is hard deleted even if it started before today" do
+      mitglied_role.really_destroy!
       expect(Role.with_inactive.where(id: role.id)).not_to exist
 
       expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)
@@ -66,16 +61,15 @@ shared_examples "Mitglied dependant destroy" do
         start_on: 1.year.ago)
     end
 
-    it "gets ended if it is old enough" do
-      role.update!(created_at: old_enough)
-      expect { mitglied_role.destroy(always_soft_destroy: true) }
+    it "gets ended if it started before today" do
+      expect { mitglied_role.destroy }
         .to change { mitglied_role.reload.end_on }.to(Date.current.yesterday)
 
       expect(role.reload.end_on).to eq(mitglied_role.end_on)
     end
 
-    it "gets hard deleted if it is not old enough" do
-      role.update!(created_at: not_old_enough)
+    it "gets hard deleted if it starts today" do
+      role.update!(start_on: Date.current)
       mitglied_role.destroy
       expect(Role.with_inactive.where(id: role.id)).not_to exist
 
@@ -83,7 +77,7 @@ shared_examples "Mitglied dependant destroy" do
     end
 
     it "gets hard deleted when MitgliedZusatzsektion role is hard deleted" do
-      mitglied_role.destroy
+      mitglied_role.really_destroy!
       expect(Role.with_inactive.where(id: role.id)).not_to exist
 
       expect { role.reload }.to raise_error(ActiveRecord::RecordNotFound)

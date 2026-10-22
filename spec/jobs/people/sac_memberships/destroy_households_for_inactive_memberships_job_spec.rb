@@ -45,7 +45,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
 
     context "with ended neuanmeldung roles" do
       before do
-        family_member.roles.destroy_all
+        family_member.roles.each(&:really_destroy!)
         family_member.update!(sac_family_main_person: true, household_key: "123")
         Fabricate(Group::SektionsNeuanmeldungenSektion::Neuanmeldung.sti_name.to_sym,
           person: family_member,
@@ -62,7 +62,7 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
 
     context "neuanmeldung nv roles" do
       before do
-        family_member.roles.destroy_all
+        family_member.roles.each(&:really_destroy!)
         family_member.update!(sac_family_main_person: true, household_key: "123")
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
           person: family_member,
