@@ -39,7 +39,7 @@ module People::Neuanmeldungen
 
     def destroy_role_or_person(role, person)
       if non_applicable_roles.any? { |r| r[:person_id] == person.id }
-        role.destroy!(always_soft_destroy: true)
+        role.destroy!
         add_note(person)
       else
         person.destroy!

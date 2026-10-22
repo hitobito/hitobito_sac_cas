@@ -27,7 +27,7 @@ describe Export::Tabular::People::PeopleFull do
 
   context "terminate_on" do
     before do
-      person.roles_unscoped.destroy_all
+      person.roles_unscoped.each(&:really_destroy!)
       create_membership_role(2.years.ago, 1.years.ago)
     end
 
@@ -42,7 +42,7 @@ describe Export::Tabular::People::PeopleFull do
 
   context "termination_reason" do
     before do
-      person.roles_unscoped.destroy_all
+      person.roles_unscoped.each(&:really_destroy!)
       create_membership_role(2.years.ago, 1.years.ago)
     end
 
