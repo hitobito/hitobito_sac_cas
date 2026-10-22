@@ -64,7 +64,7 @@ describe Invoices::AboMagazin::AbonnentManager do
 
   context "person has neuanmeldungs role" do
     before do
-      abonnent.destroy!
+      abonnent.really_destroy!
       Fabricate(:role, type: Group::AboMagazin::Neuanmeldung.sti_name,
         group: die_alpen,
         person: abonnent_person,
@@ -94,7 +94,7 @@ describe Invoices::AboMagazin::AbonnentManager do
 
   context "person has expired neuanmeldungs role" do
     before do
-      abonnent.destroy!
+      abonnent.really_destroy!
       Fabricate(:role, type: Group::AboMagazin::Neuanmeldung.sti_name,
         group: die_alpen,
         person: abonnent_person,

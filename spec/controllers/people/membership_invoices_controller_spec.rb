@@ -49,7 +49,7 @@ describe People::MembershipInvoicesController do
       let(:person) { people(:familienmitglied2) }
 
       before do
-        roles(:familienmitglied2_zweitsektion).destroy
+        roles(:familienmitglied2_zweitsektion).really_destroy!
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: person,
           group: groups(:matterhorn_neuanmeldungen_nv),
