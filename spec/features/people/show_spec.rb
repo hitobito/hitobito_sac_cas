@@ -53,17 +53,18 @@ describe "person show page" do
     describe "wizard managed roles" do
       let(:role) { roles(:mitglied) }
 
-      it "doesn't show delete button" do
+      it "doesn't show end or delete button" do
         visit group_person_path(group_id: role.group_id, id: role.person_id)
+        expect(page).not_to have_css("a[title=\"Beenden\"]")
         expect(page).not_to have_css("a[title=\"Löschen\"]")
       end
 
       describe "other roles" do
         let(:role) { roles(:tourenchef_bluemlisalp_ortsgruppe_ausserberg) }
 
-        it "shows delete button" do
+        it "shows end button" do
           visit group_person_path(group_id: role.group_id, id: role.person_id)
-          expect(page).to have_css("a[title=\"Löschen\"]")
+          expect(page).to have_css("a[title=\"Beenden\"]")
         end
       end
     end

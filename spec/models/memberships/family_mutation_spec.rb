@@ -162,7 +162,7 @@ describe Memberships::FamilyMutation do
       end
 
       it "ends existing neuanmeldung stammsektion role per end of yesterday" do
-        person.roles.destroy_all
+        person.roles.each(&:really_destroy!)
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.name.to_sym,
           group: groups(:bluemlisalp_neuanmeldungen_nv),
           person:,

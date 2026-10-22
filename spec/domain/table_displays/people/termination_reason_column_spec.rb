@@ -16,7 +16,7 @@ describe TableDisplays::People::TerminationReasonColumn, type: :helper do
   let(:table) { StandardTableBuilder.new([person], self) }
 
   before do
-    people(:mitglied).roles_unscoped.destroy_all
+    people(:mitglied).roles_unscoped.each(&:really_destroy!)
     allow_any_instance_of(ActionView::Base)
       .to receive(:parent).and_return(groups(:bluemlisalp_mitglieder))
   end

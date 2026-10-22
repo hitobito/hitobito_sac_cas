@@ -671,8 +671,8 @@ describe Invoices::SacMemberships::MembershipManager do
       before do
         membership = People::SacMembership.new(mitglied_person)
         membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
-        membership.zusatzsektion_roles.destroy_all
-        membership.membership_prolongable_roles.destroy_all
+        membership.zusatzsektion_roles.each(&:really_destroy!)
+        membership.membership_prolongable_roles.each(&:really_destroy!)
       end
 
       let!(:neuanmeldung) do
@@ -751,11 +751,11 @@ describe Invoices::SacMemberships::MembershipManager do
         familienmitglied_kind_person.destroy
 
         familienmitglied_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
-        familienmitglied_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied_person.sac_membership.membership_prolongable_roles.destroy_all
+        familienmitglied_person.sac_membership.zusatzsektion_roles.each(&:really_destroy!)
+        familienmitglied_person.sac_membership.membership_prolongable_roles.each(&:really_destroy!)
         familienmitglied2_person.sac_membership.stammsektion_role.update(end_on: end_of_next_year + 5.years)
-        familienmitglied2_person.sac_membership.zusatzsektion_roles.destroy_all
-        familienmitglied2_person.sac_membership.membership_prolongable_roles.destroy_all
+        familienmitglied2_person.sac_membership.zusatzsektion_roles.each(&:really_destroy!)
+        familienmitglied2_person.sac_membership.membership_prolongable_roles.each(&:really_destroy!)
 
         Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.sti_name.to_sym,
           person: familienmitglied_person,

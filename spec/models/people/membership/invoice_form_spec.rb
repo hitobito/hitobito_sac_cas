@@ -51,7 +51,7 @@ describe People::Membership::InvoiceForm do
       end
 
       it "is valid if person has neuanmeldung for stammsektion in chose section" do
-        person.roles.destroy_all
+        person.roles.each(&:really_destroy!)
         Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
           person: person,
           group: groups(:bluemlisalp_neuanmeldungen_nv),
@@ -177,7 +177,7 @@ describe People::Membership::InvoiceForm do
     end
 
     it "uses end of this year for max_send_date for people with neuanmeldung roles" do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name,
         person: person,
         group: groups(:bluemlisalp_neuanmeldungen_nv),
@@ -218,12 +218,12 @@ describe People::Membership::InvoiceForm do
     end
 
     it "is empty when zweitsektion role has been destroyed" do
-      roles(:mitglied_zweitsektion).destroy
+      roles(:mitglied_zweitsektion).really_destroy!
       expect(form.zusatzsektionen).to be_empty
     end
 
     it "return sektion of neuanmeldung_nv zusatzsektion role" do
-      roles(:mitglied_zweitsektion).destroy
+      roles(:mitglied_zweitsektion).really_destroy!
       Fabricate(Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion.name,
         person: person,
         group: groups(:matterhorn_neuanmeldungen_nv),
@@ -233,7 +233,7 @@ describe People::Membership::InvoiceForm do
     end
 
     it "is empty for neuanmeldung sektion zusatzsektion role" do
-      roles(:mitglied_zweitsektion).destroy
+      roles(:mitglied_zweitsektion).really_destroy!
       Fabricate(Group::SektionsNeuanmeldungenSektion::NeuanmeldungZusatzsektion.name,
         person: person,
         group: groups(:matterhorn_neuanmeldungen_sektion),

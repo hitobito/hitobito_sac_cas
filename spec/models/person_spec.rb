@@ -748,7 +748,7 @@ describe Person do
     let(:person) { people(:mitglied) }
 
     before do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       People::DataQualityChecker.new(person).check_data_quality
       person.reload
     end
@@ -881,14 +881,14 @@ describe Person do
     end
 
     it "enqueues the job with an existing abacus_subject_key but without an sac membership invoice" do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       expect {
         person.update!(first_name: "Abacus", abacus_subject_key: 42)
       }.to change(job, :count).by(1)
     end
 
     it "enqueues the job with an abonnent role" do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       Group::AboMagazin::Abonnent.create!(person: person, group: groups(:abo_die_alpen))
       Invoices::Abacus::TransmitPersonJob.new(person).delayed_jobs.destroy_all
       expect { person.update!(first_name: "Abacus") }.to change(job, :count).by(1)
@@ -913,7 +913,7 @@ describe Person do
     end
 
     it "doesn't enqueue the job without an sac membership invoice" do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       expect { person.update!(first_name: "Abacus") }.not_to change(job, :count)
     end
 
