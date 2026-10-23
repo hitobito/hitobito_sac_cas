@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -35,9 +35,11 @@ class ExternalInvoice::SacMembership < ExternalInvoice
     ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
     i18n_prefix: "roles.beitragskategorie"
 
+  scope :without_error, -> { where.not(state: :error) }
+
   attr_writer :invoice_kind
 
-  before_validation :set_beitragskategorie
+  before_validation :set_beitragskategorie, on: :create
   after_update :handle_state_change_to_payed
 
   def title
@@ -56,8 +58,14 @@ class ExternalInvoice::SacMembership < ExternalInvoice
     return if year.blank?
 
     date = Date.new(year, 1, 1)
+    category = People::SacMembership.new(person, date:).stammsektion_role&.beitragskategorie
     self.beitragskategorie =
-      People::SacMembership.new(person, date:).stammsektion_role&.beitragskategorie
+      if category.to_s == "family" && !person.sac_family_main_person?
+        SacCas::Beitragskategorie::Calculator.new(person, reference_date: date.end_of_year)
+          .calculate(for_sac_family: false)
+      else
+        category
+      end
   end
 
   private

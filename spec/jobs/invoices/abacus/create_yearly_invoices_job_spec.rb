@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -122,6 +122,44 @@ describe Invoices::Abacus::CreateYearlyInvoicesJob do
           ExternalInvoice.where(id: family_invoice.id).update_all(beitragskategorie: :adult)
 
           expect(subject.active_members).to include(new_family_person)
+        end
+
+        it "still returns sac_main_family_person if family invoice has error" do
+          family_invoice.update!(state: :error)
+
+          expect(subject.active_members).to include(new_family_person)
+        end
+      end
+
+      context "with membership invoice in this year" do
+        def create_invoice(state)
+          Fabricate(:sac_membership_invoice, person: people(:mitglied), year: invoice_year, state:)
+        end
+
+        it "returns person if invoice has error" do
+          create_invoice(:error)
+
+          expect(subject.active_members).to include(people(:mitglied))
+        end
+
+        it "does not return person if invoice is cancelled" do
+          create_invoice(:cancelled)
+
+          expect(subject.active_members).not_to include(people(:mitglied))
+        end
+      end
+
+      context "with invoice for single zusatzsektion of other family member" do
+        before do
+          Role.where(id: roles(:familienmitglied2_zweitsektion).id)
+            .update_all(beitragskategorie: :adult)
+
+          Fabricate(:sac_membership_invoice, person: people(:familienmitglied2),
+            year: invoice_year)
+        end
+
+        it "still returns sac_main_family_person" do
+          expect(subject.active_members).to include(people(:familienmitglied))
         end
       end
     end
