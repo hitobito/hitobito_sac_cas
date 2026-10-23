@@ -13,7 +13,8 @@
         = render "wizards/steps/signup/sektion/summary_family_member_card", person: family_member
 
     - if form.object.cornercard_ordered?
-      .m-3.fw-bold
+      .fw-bold
+        = icon(:check, class: "text-success")
         = t('.cornercard_will_be_ordered')
 
     = render "wizards/steps/signup/agreement_fields", form: form, sektion_statuten: form.object.requires_sektion_statuten?

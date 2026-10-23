@@ -652,8 +652,12 @@ describe "signup/sektion", :js do
     end
 
     it "creates cornercard upload when applying" do
+      complete_cornercard_step(apply: true)
+
+      expect(page).to have_css(".fw-bold", text: "SAC-Cornèrcard wird bestellt")
+      expect(page).to have_css(".fw-bold i.fa-check.text-success")
+
       expect do
-        complete_cornercard_step(apply: true)
         complete_last_page
       end.to change { CornercardUpload.count }.by(1)
 
@@ -661,8 +665,11 @@ describe "signup/sektion", :js do
     end
 
     it "does not create cornercard upload when skipping" do
+      complete_cornercard_step(apply: false)
+
+      expect(page).not_to have_text("SAC-Cornèrcard wird bestellt")
+
       expect do
-        complete_cornercard_step(apply: false)
         complete_last_page
       end.not_to change { CornercardUpload.count }
     end
