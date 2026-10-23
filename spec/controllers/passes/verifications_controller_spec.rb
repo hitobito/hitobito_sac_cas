@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -87,6 +87,23 @@ describe Passes::VerificationsController, type: :controller do
 
         expect(dom).to have_selector("#details .alert-danger", text: "Dieser Pass konnte nicht verifiziert werden.")
         expect(dom).to have_selector("#details .alert-danger span.fa-times-circle")
+      end
+
+      it "renders in the browser language" do
+        request.headers["Accept-Language"] = "it-CH,it;q=0.9"
+        get :show, params: {verify_token: verify_token}
+
+        expect(dom).to have_selector("#details .alert-success", text: "Iscrizione valida")
+        expect(dom).to have_selector("#sponsors img[src*='membership_verify_partner_ad_it']")
+      end
+
+      it "renders language links above the logo" do
+        get :show, params: {verify_token: verify_token}
+
+        expect(dom).to have_selector("#details > div:first-child .lang")
+        expect(dom).to have_selector("#details > div:first-child + header #logo")
+        expect(dom).to have_selector("#details .lang a", text: "FR")
+        expect(dom).to have_selector("#details .lang a.active", text: "DE")
       end
     end
   end
