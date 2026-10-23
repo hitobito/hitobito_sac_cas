@@ -35,6 +35,8 @@ class ExternalInvoice::SacMembership < ExternalInvoice
     ::SacCas::Beitragskategorie::Calculator::BEITRAGSKATEGORIEN,
     i18n_prefix: "roles.beitragskategorie"
 
+  scope :without_error, -> { where.not(state: :error) }
+
   attr_writer :invoice_kind
 
   before_validation :set_beitragskategorie, on: :create

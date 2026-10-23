@@ -154,6 +154,14 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
     end
   end
 
+  context "with invoice with error the same year as the specified prolongation_date" do
+    before { ExternalInvoice::SacMembership.create!(person: person, year: prolongation_date.year, state: :error) }
+
+    it "extends the role" do
+      expect { extend_roles }.to change { person_mitglied_role.reload.end_on }.to(prolongation_date)
+    end
+  end
+
   context "with invoice in a different year" do
     before {
       ExternalInvoice::SacMembership.create!(person: person, year: prolongation_date.year.next)
