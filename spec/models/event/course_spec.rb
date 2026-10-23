@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -62,13 +62,39 @@ describe Event::Course do
         :link_survey,
         :minimum_age,
         :reserve_accommodation, :season,
-        :start_point_of_time
+        :start_point_of_time,
+        :survey_auto_send,
+        :survey_hero_survey_key,
+        :survey_hero_collector_key
       )
     end
 
     it "has expected removals" do
       expect(described_class.used_attributes).not_to include(:cost)
       expect(described_class.used_attributes).not_to include(:guest_limit)
+    end
+  end
+
+  describe "#link_survey" do
+    let(:course) { events(:top_course) }
+
+    it "is cleared when survey_auto_send gets enabled" do
+      course.update!(survey_auto_send: false, link_survey: "https://example.com/survey")
+
+      expect { course.update!(survey_auto_send: true) }
+        .to change { course.reload.link_survey }.to(nil)
+    end
+
+    it "is kept when survey_auto_send stays enabled" do
+      course.update_columns(survey_auto_send: true, link_survey: "https://example.com/survey")
+
+      expect { course.update!(name: "Updated") }.not_to change { course.reload.link_survey }
+    end
+
+    it "is kept when survey_auto_send is disabled" do
+      course.update!(survey_auto_send: false, link_survey: "https://example.com/survey")
+
+      expect(course.reload.link_survey).to eq "https://example.com/survey"
     end
   end
 
