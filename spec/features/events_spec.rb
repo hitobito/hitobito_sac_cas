@@ -22,7 +22,9 @@ describe :events, js: true do
       training_days: 10,
       minimum_participants: 3,
       maximum_participants: 10,
-      application_conditions: "Vorraussetzungen sind .."
+      application_conditions: "Vorraussetzungen sind ..",
+      survey_hero_survey_key: "2132544",
+      survey_hero_collector_key: "2013394"
     }
   }
 
@@ -144,6 +146,39 @@ describe :events, js: true do
     end
   end
 
+  context "survey" do
+    let(:event) { events(:top_course) }
+
+    it "toggles survey fields with survey_auto_send" do
+      visit edit_group_event_path(group_id: group.id, id: event.id)
+      click_tab "Kommunikation"
+
+      expect(page).to have_checked_field "Umfrage automatisch versenden"
+      expect(page).to have_field "SurveyHero Survey ID", disabled: false
+      expect(page).to have_field "SurveyHero Collector ID", disabled: false
+      expect(page).to have_field "Link Umfrage", disabled: true
+
+      uncheck "Umfrage automatisch versenden"
+
+      expect(page).to have_field "SurveyHero Survey ID", disabled: true
+      expect(page).to have_field "SurveyHero Collector ID", disabled: true
+      expect(page).to have_field "Link Umfrage", disabled: false
+    end
+
+    it "saves manual survey link when survey_auto_send is disabled" do
+      visit edit_group_event_path(group_id: group.id, id: event.id)
+      click_tab "Kommunikation"
+      uncheck "Umfrage automatisch versenden"
+      fill_in "Link Umfrage", with: "https://example.com/survey"
+
+      click_on("Speichern", match: :first)
+
+      expect(page).to have_content("wurde erfolgreich aktualisiert")
+      expect(event.reload.survey_auto_send).to be false
+      expect(event.link_survey).to eq "https://example.com/survey"
+    end
+  end
+
   context "attendents" do
     let(:event) { events(:top_course) }
 
@@ -209,6 +244,9 @@ describe :events, js: true do
       expect(page).to have_field "Minimale Teilnehmendenzahl", with: "3"
       expect(page).to have_field "Mindestalter", with: "18"
       expect(page).to have_field "Aufnahmebedingungen", with: "Vorraussetzungen sind .."
+      click_tab "Kommunikation"
+      expect(page).to have_field "SurveyHero Survey ID", with: "2132544"
+      expect(page).to have_field "SurveyHero Collector ID", with: "2013394"
     end
 
     it "selecting kind leaves previous non default values untouched" do
@@ -230,6 +268,10 @@ describe :events, js: true do
       fill_in "Mindestalter", with: "12"
       fill_in "Aufnahmebedingungen", with: "keine Vorraussetzungen"
 
+      click_tab "Kommunikation"
+      fill_in "SurveyHero Survey ID", with: "111"
+      fill_in "SurveyHero Collector ID", with: "222"
+
       click_tab "Allgemein"
       select "DMY (Dummy)"
 
@@ -248,6 +290,10 @@ describe :events, js: true do
       expect(page).to have_field "Minimale Teilnehmendenzahl", with: "5"
       expect(page).to have_field "Mindestalter", with: "12"
       expect(page).to have_field "Aufnahmebedingungen", with: "keine Vorraussetzungen"
+
+      click_tab "Kommunikation"
+      expect(page).to have_field "SurveyHero Survey ID", with: "111"
+      expect(page).to have_field "SurveyHero Collector ID", with: "222"
     end
 
     it "overrides previous values when action is forced via explicit click" do
@@ -269,6 +315,10 @@ describe :events, js: true do
       fill_in "Mindestalter", with: "12"
       fill_in "Aufnahmebedingungen", with: "keine Vorraussetzungen"
 
+      click_tab "Kommunikation"
+      fill_in "SurveyHero Survey ID", with: "111"
+      fill_in "SurveyHero Collector ID", with: "222"
+
       click_on "Allgemein"
       select "DMY (Dummy)"
       click_on "Werte übernehmen"
@@ -287,6 +337,10 @@ describe :events, js: true do
       expect(page).to have_field "Minimale Teilnehmendenzahl", with: "3"
       expect(page).to have_field "Mindestalter", with: "18"
       fill_in "Aufnahmebedingungen", with: "Vorraussetzungen sind .."
+
+      click_tab "Kommunikation"
+      expect(page).to have_field "SurveyHero Survey ID", with: "2132544"
+      expect(page).to have_field "SurveyHero Collector ID", with: "2013394"
     end
   end
 

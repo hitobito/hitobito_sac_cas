@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -21,6 +21,8 @@
 #  reserve_accommodation  :boolean          default(TRUE), not null
 #  season                 :string(255)
 #  short_name             :string(255)
+#  survey_hero_collector_key :string
+#  survey_hero_survey_key :string
 #  training_days          :decimal(5, 2)
 #  vereinbarungs_id_fiver :string(255)
 #  created_at             :datetime
@@ -97,7 +99,9 @@ describe Event::Kind do
         accommodation: "hut",
         reserve_accommodation: false,
         cost_center_id: 1,
-        cost_unit_id: 1
+        cost_unit_id: 1,
+        survey_hero_survey_key: "2132544",
+        survey_hero_collector_key: "2013394"
       }
     }
 
@@ -199,7 +203,9 @@ describe Event::Kind do
         accommodation: "hut",
         reserve_accommodation: false,
         cost_center_id: 1,
-        cost_unit_id: 1
+        cost_unit_id: 1,
+        survey_hero_survey_key: "2132544",
+        survey_hero_collector_key: "2013394"
       }
     }
 
@@ -231,6 +237,14 @@ describe Event::Kind do
       expect do
         kind.push_down_inherited_attribute!("reserve_accommodation")
       end.to change { course.reload.reserve_accommodation }.to(kind_attrs[:reserve_accommodation])
+    end
+
+    it "updates course survey hero attributes" do
+      expect do
+        kind.push_down_inherited_attribute!("survey_hero_survey_key")
+        kind.push_down_inherited_attribute!("survey_hero_collector_key")
+      end.to change { course.reload.survey_hero_survey_key }.to("2132544")
+        .and change { course.survey_hero_collector_key }.to("2013394")
     end
 
     it "updates course enum attribute" do

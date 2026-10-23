@@ -90,6 +90,13 @@ hitobito_log:
 passes:
   membership_pass_definition_id: 1
 
+survey_hero:
+  config:
+    # user: 'username', password: 'api key'
+    <% if ENV['RAILS_SURVEY_HERO_CONFIG'].present? %>
+      <%= "{ #{ENV['RAILS_SURVEY_HERO_CONFIG']} }" %>
+    <% end %>
+
 #invoicing:
 #  abo_magazin:
 #    # Wenn true, dann wird für Abo Magazine bei der Neuanmeldung und beim
