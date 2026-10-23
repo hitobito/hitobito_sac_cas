@@ -2274,6 +2274,7 @@ de:
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: MV Jahresinkasso
+      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
     sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
 
