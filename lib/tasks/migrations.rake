@@ -17,5 +17,10 @@ namespace :migrations do
     task list_affected_people: :environment do
       puts Migrations::RoundExternalTrainingDays.new.list_affected_people
     end
+
+    desc "Export all currently active qualifications"
+    task list_active_qualifications: :environment do
+      puts Migrations::RoundExternalTrainingDays.new.list_active_qualifications
+    end
   end
 end

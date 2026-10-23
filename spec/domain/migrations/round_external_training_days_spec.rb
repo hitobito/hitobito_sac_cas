@@ -22,7 +22,7 @@ describe Migrations::RoundExternalTrainingDays do
 
   def scheduled_external_training_ids
     Delayed::Job.where("handler like '%ExternalTraining::QualifierIssueJob%'").map do |job|
-      job.payload_object.instance_variable_get(:@external_training_id)
+      job.payload_object.instance_variable_get(:@external_training_ids)
     end
   end
 
@@ -65,8 +65,8 @@ describe Migrations::RoundExternalTrainingDays do
       expect { migration.migrate }.not_to change { Delayed::Job.count }
     end
 
-    it "enqueues a qualifier issue job once per person and event_kind, using the earliest " \
-      "adjusted training" do
+    it "enqueues a single qualifier issue job per person, using the earliest adjusted training " \
+      "per event_kind" do
       earlier = create_invalid_external_training(4.7, finish_at: Date.new(2023, 6, 1))
       create_invalid_external_training(2.2, finish_at: Date.new(2024, 6, 1),
         person: earlier.person, event_kind: earlier.event_kind)
@@ -76,7 +76,7 @@ describe Migrations::RoundExternalTrainingDays do
       expect { migration.migrate }
         .to change { Delayed::Job.where("handler like '%QualifierIssueJob%'").count }.by(1)
 
-      expect(scheduled_external_training_ids).to eq [earlier.id]
+      expect(scheduled_external_training_ids).to eq [[earlier.id]]
     end
 
     it "enqueues qualifier issue jobs separately per person, each using their own earliest " \
@@ -94,19 +94,24 @@ describe Migrations::RoundExternalTrainingDays do
       migration.migrate
 
       expect(scheduled_external_training_ids).to contain_exactly(
-        mitglied_earliest.id, admin_earliest.id
+        [mitglied_earliest.id], [admin_earliest.id]
       )
     end
 
-    it "enqueues qualifier issue jobs separately per event_kind, even for the same person" do
-      training_a = create_invalid_external_training(2.2, finish_at: Date.new(2024, 1, 1),
+    it "enqueues a single qualifier issue job for a person with multiple event_kinds, " \
+      "using the earliest adjusted training of each" do
+      ski_earliest = create_invalid_external_training(2.2, finish_at: Date.new(2024, 1, 1),
         event_kind: event_kinds(:ski_course))
-      training_b = create_invalid_external_training(4.7, finish_at: Date.new(2024, 2, 1),
-        person: training_a.person, event_kind: event_kinds(:slk))
+      create_invalid_external_training(1.1, finish_at: Date.new(2024, 3, 1),
+        person: ski_earliest.person, event_kind: ski_earliest.event_kind)
+      slk_earliest = create_invalid_external_training(4.7, finish_at: Date.new(2024, 2, 1),
+        person: ski_earliest.person, event_kind: event_kinds(:slk))
 
       migration.migrate
 
-      expect(scheduled_external_training_ids).to contain_exactly(training_a.id, training_b.id)
+      expect(scheduled_external_training_ids.size).to eq 1
+      expect(scheduled_external_training_ids.first)
+        .to contain_exactly(ski_earliest.id, slk_earliest.id)
     end
 
     describe "with a real qualification" do

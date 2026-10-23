@@ -15,7 +15,7 @@ describe ExternalTraining::QualifierIssueJob do
     Fabricate(:external_training, person: person, event_kind: event_kind, training_days: 2)
   end
 
-  subject(:job) { described_class.new(training.id) }
+  subject(:job) { described_class.new([training.id]) }
 
   it "issues the qualifier for the training's person" do
     qualifier = instance_double(ExternalTrainings::Qualifier, issue: true)
@@ -25,6 +25,20 @@ describe ExternalTraining::QualifierIssueJob do
     job.perform
   end
 
+  it "issues the qualifier for each training, ordered by finish_at" do
+    later = Fabricate(:external_training, person: person, event_kind: event_kinds(:slk),
+      start_at: Date.new(2024, 2, 1), finish_at: Date.new(2024, 2, 1), training_days: 2)
+    earlier = Fabricate(:external_training, person: person, event_kind: event_kind,
+      start_at: Date.new(2024, 1, 1), finish_at: Date.new(2024, 1, 1), training_days: 2)
+    qualifier = instance_double(ExternalTrainings::Qualifier, issue: true)
+    allow(ExternalTrainings::Qualifier).to receive(:new).and_return(qualifier)
+
+    described_class.new([later.id, earlier.id]).perform
+
+    expect(ExternalTrainings::Qualifier).to have_received(:new).with(person, earlier).ordered
+    expect(ExternalTrainings::Qualifier).to have_received(:new).with(person, later).ordered
+  end
+
   it "prolongs an existing qualification when the training meets the requirement" do
     today = Date.new(2024, 3, 26)
     travel_to(today) do
@@ -32,7 +46,7 @@ describe ExternalTraining::QualifierIssueJob do
         start_at: today - 2.years, qualified_at: today - 2.years)
       training.update_columns(start_at: today, finish_at: today)
 
-      expect { described_class.new(training.id).perform }
+      expect { described_class.new([training.id]).perform }
         .to change { person.qualifications.count }.by(1)
     end
   end
