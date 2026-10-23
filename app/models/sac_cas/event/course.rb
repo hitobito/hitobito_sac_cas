@@ -52,6 +52,9 @@
 #  signature_confirmation_text      :string(255)
 #  start_point_of_time              :string(255)
 #  state                            :string(60)
+#  survey_auto_send                 :boolean          default(TRUE), not null
+#  survey_hero_collector_key        :string
+#  survey_hero_survey_key           :string
 #  teamer_count                     :integer          default(0)
 #  tentative_applications           :boolean          default(FALSE), not null
 #  training_days                    :decimal(5, 2)
@@ -131,6 +134,9 @@ module SacCas::Event::Course
       :link_participants,
       :link_leaders,
       :link_survey,
+      :survey_auto_send,
+      :survey_hero_survey_key,
+      :survey_hero_collector_key,
       :reserve_accommodation,
       :accommodation,
       :meals,
@@ -206,6 +212,8 @@ module SacCas::Event::Course
     validates :canceled_reason, presence: {if: -> { will_change_state_to?(:canceled) }}
     validate :assert_all_participations_assessed, if: -> { will_change_state_to?(:closed) }
 
+    before_save :clear_link_survey, if: -> { survey_auto_send_changed?(to: true) }
+
     delegate :level, to: :kind, allow_nil: true
   end
 
@@ -247,6 +255,10 @@ module SacCas::Event::Course
   end
 
   private
+
+  def clear_link_survey
+    self.link_survey = nil
+  end
 
   def weak_validation_state?
     state.blank? || WEAK_VALIDATION_STATES.include?(state)

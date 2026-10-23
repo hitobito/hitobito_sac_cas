@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -48,6 +48,9 @@
 #  signature_confirmation_text      :string(255)
 #  start_point_of_time              :string(255)
 #  state                            :string(60)
+#  survey_auto_send                 :boolean          default(TRUE), not null
+#  survey_hero_collector_key        :string
+#  survey_hero_survey_key           :string
 #  teamer_count                     :integer          default(0)
 #  tentative_applications           :boolean          default(FALSE), not null
 #  training_days                    :decimal(5, 2)

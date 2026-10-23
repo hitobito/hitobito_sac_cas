@@ -363,6 +363,8 @@ de:
         similar_tours: Vergleichstouren
         program: Programm
         seo_text: SEO Text
+        survey_hero_survey_key: SurveyHero Survey ID
+        survey_hero_collector_key: SurveyHero Collector ID
       event/course:
         accommodation: Unterkunft
         annual: Jährlich wiederkehrend
@@ -386,6 +388,9 @@ de:
         link_external_site: Link Externe Seite
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
+        survey_auto_send: Umfrage automatisch versenden
+        survey_hero_survey_key: SurveyHero Survey ID
+        survey_hero_collector_key: SurveyHero Collector ID
         meals: Verpflegung
         meals_options:
           breakfast: Frühstück
@@ -1886,6 +1891,10 @@ de:
       none: (keine)
 
   events:
+    courses:
+      survey_dispatcher:
+        link_creation_failed: Der Umfragelink konnte nicht erstellt werden
+
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
