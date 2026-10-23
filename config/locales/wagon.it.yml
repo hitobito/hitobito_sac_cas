@@ -2994,7 +2994,7 @@ it:
             consent_label: >-
               Acconsento al %{data_processing_link}. Ho letto e accetto le %{agb_link}. 
             data_processing_link_text: trattamento dei miei dati personali
-            agb_link_text: condizioni commerciali generali
+            agb_link_text: Condizioni commerciali generali
           summary_fields_title: Riepilogo
           summary_fields:
             my_membership: "La mia affiliazione"
