@@ -2,6 +2,7 @@
 
 * Google Tag Manager Support (HIT-1373, hitobito_sac_cas#2131)
 * Mitgliedschaftsrechnung kann manuell als 'bezahlt' markiert werden (hitobito_sac_cas#2581)
+* Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 
 
 ## Version 2.7.12
