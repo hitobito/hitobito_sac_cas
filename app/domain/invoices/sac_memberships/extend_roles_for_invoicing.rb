@@ -129,8 +129,9 @@ module Invoices::SacMemberships
         .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name,
                        terminated: false,
                        end_on: old_role_end_on..@prolongation_date})
-        .where.not(id: ExternalInvoice::SacMembership.where(year: @prolongation_date.year)
-        .select(:person_id))
+        .where.not(id: ExternalInvoice::SacMembership.without_error
+                                                     .where(year: @prolongation_date.year)
+                                                     .select(:person_id))
         .where.not(data_quality: :error)
         .select(:id)
     end
