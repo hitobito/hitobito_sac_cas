@@ -48,6 +48,9 @@ describe Groups::SelfRegistrationController do
     }
 
     context "anonymous" do
+      before { Settings.cornercard.config = {enabled: true} }
+      after { Settings.cornercard.config = nil }
+
       it "redirects to login" do
         post :create, params: required_params.merge(step: 5)
         expect(response).to redirect_to new_person_session_path
@@ -61,6 +64,8 @@ describe Groups::SelfRegistrationController do
       let(:user) { people(:abonnent) }
 
       before { sign_in(user) }
+      before { Settings.cornercard.config = {enabled: true} }
+      after { Settings.cornercard.config = nil }
 
       shared_examples "wizard completion redirects" do
         it "redirects to history_group_person_path" do

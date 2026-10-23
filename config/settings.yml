@@ -52,7 +52,6 @@ sftp:
     <% end %>
 
 cornercard:
-  enabled: true
   config:
     # host: ftp.example.com, user: 'username', password: 'password', port: 22
     <% if ENV['RAILS_CORNERCARD_CONFIG'].present? %>

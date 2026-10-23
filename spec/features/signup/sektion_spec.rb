@@ -12,6 +12,9 @@ describe "signup/sektion", :js do
   let(:self_registration_role) { group.decorate.allowed_roles_for_self_registration.first }
   let(:person) { Person.find_by(email: "max.muster@hitobito.example.com") }
 
+  before { Settings.cornercard.config = {enabled: true} }
+  after { Settings.cornercard.config = nil }
+
   before do
     group.self_registration_role_type = self_registration_role
     group.save!

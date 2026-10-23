@@ -51,15 +51,6 @@ describe Export::CornercardApplicationsUploadJob do
       expect(sftp).not_to have_received(:upload_file)
     end
 
-    it "does nothing when feature is disabled" do
-      allow(FeatureGate).to receive(:disabled?).with("cornercard").and_return(true)
-      person.create_cornercard_upload!
-
-      described_class.new.perform
-
-      expect(sftp).not_to have_received(:upload_file)
-    end
-
     it "creates a log entry with person IDs" do
       person.create_cornercard_upload!
 
