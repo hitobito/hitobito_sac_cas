@@ -9,5 +9,10 @@
                   :envelope,
                   method: :get)
 
+- if entry.sektion_or_ortsgruppe? && can?(:index_question_templates, entry)
+  = action_button(t('.edit_question_templates'),
+                  group_question_templates_path(@group),
+                  :edit)
+
 - if entry.root? && can?(:download_statistics, entry)
   = Dropdown::SacCasExports.new(self, entry).to_s

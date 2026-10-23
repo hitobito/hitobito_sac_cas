@@ -29,6 +29,8 @@ module SacCas::GroupAbility
       permission(:layer_read).may(:"export_event/tours").in_same_layer
       permission(:layer_and_below_read).may(:"export_event/tours").in_same_layer_or_below
 
+      permission(:layer_events_full).may(:index_question_templates).in_same_layer
+
       permission(:layer_and_below_full)
         .may(:create_yearly_membership_invoice)
         .if_backoffice
