@@ -163,6 +163,7 @@ module HitobitoSacCas
       Ability.store.register SectionOfferingAbility
       Ability.store.register TerminationReasonAbility
 
+      Event::QuestionTemplateAbility.prepend SacCas::Event::QuestionTemplateAbility
       Event::RoleAbility.prepend SacCas::Event::RoleAbility
       Event::ParticipationAbility.prepend SacCas::Event::ParticipationAbility
       EventAbility.prepend SacCas::EventAbility
