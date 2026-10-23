@@ -57,7 +57,9 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
       .joins(:roles_unscoped)
       .merge(Role.active(reference_date))
       .where(roles: {type: Group::SektionsMitglieder::Mitglied.sti_name})
-      .where.not(id: ExternalInvoice::SacMembership.where(year: @invoice_year).select(:person_id))
+      .where.not(id: ExternalInvoice::SacMembership.without_error
+                                                   .where(year: @invoice_year)
+                                                   .select(:person_id))
       .where.not(id: family_main_people_with_family_invoice.select(:id))
       .distinct
   end
@@ -213,10 +215,14 @@ class Invoices::Abacus::CreateYearlyInvoicesJob < BaseJob
   end
 
   def family_main_people_with_family_invoice
-    Person.where(sac_family_main_person: true,
-      household_key: ExternalInvoice::SacMembership.where(year: @invoice_year,
-        beitragskategorie: :family)
-      .joins(:person).select(:household_key))
+    Person.where(
+      sac_family_main_person: true,
+      household_key:
+        ExternalInvoice::SacMembership.without_error
+                                      .where(year: @invoice_year, beitragskategorie: :family)
+                                      .joins(:person)
+                                      .select(:household_key)
+    )
   end
 
   def reference_date
