@@ -40,7 +40,7 @@ describe Person::QueryHouseholdController do
     it "finds by birthday" do
       get :index, params: {q: "1993"}
 
-      expect(json).to have(2).items
+      expect(json).to have(3).items
       expect(response.body).to match(/Magazina Leserat/)
       expect(response.body).to match(/Ida Paschke/)
     end
@@ -48,28 +48,28 @@ describe Person::QueryHouseholdController do
     it "finds by id" do
       get :index, params: {q: "600004"}
 
-      expect(json).to have(1).item
+      expect(json).to have(2).item
       expect(response.body).to match(/Nima Norgay/)
     end
 
     it "finds by email" do
       get :index, params: {q: "e.hillary@hitobito.example.com"}
 
-      expect(json).to have(1).item
+      expect(json).to have(2).item
       expect(response.body).to match(/Edmund Hillary/)
     end
 
     it "finds by first name" do
       get :index, params: {q: "Tenzing"}
 
-      expect(json).to have(1).item
+      expect(json).to have(2).item
       expect(response.body).to match(/Tenzing Norgay/)
     end
 
     it "finds by last name" do
       get :index, params: {q: "Norgay"}
 
-      expect(json).to have(3).items
+      expect(json).to have(4).items
       expect(response.body).to match(/Tenzing Norgay/)
       expect(response.body).to match(/Frieda Norgay/)
       expect(response.body).to match(/Nima Norgay/)
