@@ -3004,12 +3004,20 @@ de:
               und im Alltag.
             benefits_heading: "Deine Vorteile auf einen Blick:"
             benefit_1: Keine Jahresgebühr
-            benefit_2: 20-faches Cashback im SAC-Shop (entspricht zusätzlichen 6% Preisvorteil)
+            benefit_2: >-
+              Willkommensgeschenk: 25% Rabatt bei La Sportiva, 10% Rabatt bei Bächli Bergsport,
+              25% Rabatt bei Peak Punk inkl. einem Goodie
             benefit_3: Exklusives SAC-Kartendesign
-            support_text: >-
+            support_text_html: >-
               Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als
               Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den
               SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+            info_text_html: >-
+              <strong>Die kostenlose SAC-Kreditkarte wird ohne Angabe deiner Finanzdaten ausgestellt.</strong>
+              Diese Karte verfügt über eine Limite von CHF 500.-. Es sind keine Bargeldbezüge
+              oder Ratenzahlungen möglich. Du kannst die Karte zu einem späteren Zeitpunkt
+              upgraden und damit Leistungen wie eine individuelle Limite, Bargeldbezüge oder Spenden
+              zugunsten des SAC freischalten.
             card_application_label: >-
               Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose
               SAC Cornèrcard beantragen.

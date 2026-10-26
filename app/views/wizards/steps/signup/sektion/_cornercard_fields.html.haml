@@ -17,7 +17,9 @@
       %li= t('.benefit_2')
       %li= t('.benefit_3')
 
-    %p= t('.support_text').html_safe
+    %p= t('.support_text_html')
+
+    %p.alert.alert-info= t('.info_text_html')
 
   .align-with-form.mt-3
     = form.label(:card_application, class: 'd-block mt-2 checkbox form-check-label') do
