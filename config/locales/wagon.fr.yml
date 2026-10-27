@@ -400,8 +400,8 @@ fr:
           day: Jour
           evening: Soir
         states:
-          created: Projet
-          draft: Projet
+          created: Conception
+          draft: Conception
           application_open: Publié
           application_paused: Inscription en pause
           application_closed: Inscription terminée
@@ -502,13 +502,13 @@ fr:
           summoned: Convoqué
           annulled: Annulé
           tentative: Provisoire
-          rejected: Refusé
-          canceled: Déconnecté
+          rejected: Refusé·e
+          canceled: Désinscrit·e
           attended: Participé
           absent: Non paru
       event/report:
         statuses:
-          draft: Projet
+          draft: Conception
           review: En attente de validation
           approved: Validé
           closed: Terminé
@@ -584,11 +584,11 @@ fr:
         states:
           draft: Conception
           review: En cours de validation
-          approved: Validé
-          published: Publié
-          ready: Clore la préparation
-          closed: Terminé
-          canceled: Annulé / Annulation
+          approved: Validée
+          published: Publiée
+          ready: Préparation terminée
+          closed: Terminée
+          canceled: Annulée / Annulation
       external_training:
         person: Personne
         event_kind: Type de cours
@@ -1876,7 +1876,7 @@ fr:
           success: Ton commentaire a été enregistré.
           review: Ton partage a été enregistré.
           approved: "Ta validation a été enregistrée, la tournée a maintenant le statut <i>Validé</i>."
-          draft: Ton refus a été enregistré et la visite est revenue à l'état de <i>projet</i>.
+          draft: Ton refus a été enregistré et la visite est revenue à l'état de <i>conception</i>.
       reports:
         title: "Compte-rendu de l’activité (%{status})"
         cost_summary_fields:
@@ -1982,7 +1982,7 @@ fr:
       popover_canceled:
         alert_info: Cette action conduira à l’annulation de l’activité
       popover_back_to_draft:
-        alert_info: "Une fois validé, le circuit repasse au statut « Brouillon »."
+        alert_info: "Une fois validé, la course repasse au statut \"Conception\""
       popover_approved:
         self_approve: Partager soi-même
         alert_warning: "Tu publies le circuit «%{event_name} (%{event_id}) » sans examen supplémentaire."
@@ -2016,14 +2016,14 @@ fr:
         application_closed: Retour à l'inscription clôturée
         approved: Retour à la validation
       event/tour:
-        draft: Retour à la conception
+        draft: Renvoyer à "Conception"
         ready: Retour à Préparation terminée
         approved: Renvoyer au stade « Validation »
         published: Retour à Publié
 
     state_buttons:
       event/course:
-        created: Retour en tant que projet
+        created: Retour en tant que conception
         application_open: Publier
         application_paused: Mettre en pause l'inscription
         application_closed: Terminer l'inscription
@@ -2037,7 +2037,7 @@ fr:
           Saisis les qualifications avant de clôturer le cours !
         canceled: annuler
       event/tour:
-        draft: Retour à la conception
+        draft: Renvoyer à "Conception"
         ready: Clore la préparation
         review: Transmettre pour validation
         approved: Partager soi-même
@@ -2149,7 +2149,7 @@ fr:
     male_count: Nombre d'hommes participants
     female_count: Nombre de participantes
     absent_count: Nombre de personnes absentes
-    canceled_count: Nombre de personnes ayant annulé leur inscription
+    canceled_count: Nombre de personnes désinscrits
     rejected_count: Nombre de refusés
 
   export/tabular/people/mitgliedschaft:
@@ -2986,10 +2986,13 @@ fr:
               En tant que membre du CAS, la Cornèrcard gratuite vous offre des avantages exclusifs lors de vos activités au sein du CAS et dans la vie quotidienne.
             benefits_heading: "Aperçu de vos avantages :"
             benefit_1: Pas de frais annuels
-            benefit_2: 20 fois plus de cashback dans le shop du CAS (soit un avantage supplémentaire de 6% sur les prix)
+            benefit_2: >-
+              Willkommensgeschenk: 25% Rabatt bei La Sportiva, 10% Rabatt bei Bächli Bergsport, 25% Rabatt bei Peak Punk inkl. einem Goodie
             benefit_3: Carte au design exclusif du CAS
-            support_text: >-
-              Vous soutenez aussi le CAS quand vous utilisez votre carte. En tant que partenaire principal, Cornèrcard reverse au CAS <strong>0,2% des montants payés avec la carte,</strong> <strong>sans frais supplémentaires pour vous.</strong>
+            support_text_html: >-
+              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+            info_text_html: >-
+              <strong>Die kostenlose SAC-Kreditkarte wird ohne Angabe deiner Finanzdaten ausgestellt.</strong> Diese Karte verfügt über eine Limite von CHF 500.-. Es sind keine Bargeldbezüge oder Ratenzahlungen möglich. Du kannst die Karte zu einem späteren Zeitpunkt upgraden und damit Leistungen wie eine individuelle Limite, Bargeldbezüge oder Spenden zugunsten des SAC freischalten.
             card_application_label: >-
               Je souhaite profiter de mon avantage réservé aux membres et recevoir la Cornèrcard gratuite du CAS.
             consent_label: >-

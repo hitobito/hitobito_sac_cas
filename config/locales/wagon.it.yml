@@ -500,8 +500,8 @@ it:
           summoned: Richiamato
           annulled: Annullato
           tentative: Provvisorio
-          rejected: Rifiutato
-          canceled: Annullato
+          rejected: Rifiutato/a
+          canceled: Disiscritto/a
           attended: Partecipato
           absent: Non pubblicato
       event/report:
@@ -582,11 +582,11 @@ it:
         states:
           draft: Bozza
           review: In corso di convalida
-          approved: Rilasciato
-          published: Pubblicato
+          approved: Rilasciata
+          published: Pubblicata
           ready: Preparazione completata
-          closed: Completato
-          canceled: Annullato / Annullato
+          closed: Conclusa
+          canceled: Annullata
       external_training:
         person: Persona
         event_kind: Tipo di corso
@@ -1784,7 +1784,7 @@ it:
         applied: Sei in lista d’attesa per questo corso (non vincolante). È possibile avanzare fino allo svolgimento del corso.
         assigned: La registrazione a questo corso è confermata.
         attended: Hai partecipato a questo corso.
-        canceled: Sei stato cancellato da questo corso.
+        canceled: Sei stato disiscritto da questo corso.
         rejected: "I criteri di ammissione non sono stati soddisfatti. Pertanto, purtroppo, siamo stati costretti a respingere la tua registrazione."
         summoned: Sei convocato per questo corso.
         unconfirmed: >-
@@ -1863,7 +1863,7 @@ it:
           approve: Rilascio
           reject: Rifiuto
           approved: "Pubblicato da %{creator} su %{at}"
-          rejected: "Respinto da %{creator} su %{at}"
+          rejected: "Rifiutato da %{creator} su %{at}"
           self_approval: "Autoapprovata da %{creator} il %{at}"
           email_send_to: Invia un'e-mail a
           receiver_options:
@@ -2014,7 +2014,7 @@ it:
         application_closed: Torna alla registrazione completata
         approved: Torna alla pubblicazione
       event/tour:
-        draft: Torna al design
+        draft: Torna a "Bozza"
         ready: Torna alla Preparazione completata
         approved: Torna a Rilasciato
         published: Torna a Pubblicato
@@ -2035,7 +2035,7 @@ it:
           Attenzione: inserisci le qualifiche prima della conclusione del corso!
         canceled: Cancellazioni
       event/tour:
-        draft: Torna al design
+        draft: Torna a "Bozza"
         ready: Preparazione completata
         review: Inoltrare per l'approvazione
         approved: Rilasciare se stessi
@@ -2147,8 +2147,8 @@ it:
     male_count: Numero di partecipanti di sesso maschile
     female_count: Numero di partecipanti donne
     absent_count: Numero di assenti
-    canceled_count: Numero di utenti che hanno annullato l'iscrizione
-    rejected_count: Numero di richieste respinte
+    canceled_count: Numero di utenti disiscritti
+    rejected_count: Numero di rifiutati
 
   export/tabular/people/mitgliedschaft:
     attributes:
@@ -2984,10 +2984,13 @@ it:
               Completa la tua affiliazione con la carta gratuita Cornèrcard CAS e beneficia di vantaggi esclusivi per le tue attività con il CAS e nella vita quotidiana.
             benefits_heading: "I tuoi vantaggi:"
             benefit_1: Nessuna quota annua
-            benefit_2: Cashback 20 volte tanto nello shop CAS (corrisponde a un ulteriore ribasso del 6%)
+            benefit_2: >-
+              Willkommensgeschenk: 25% Rabatt bei La Sportiva, 10% Rabatt bei Bächli Bergsport, 25% Rabatt bei Peak Punk inkl. einem Goodie
             benefit_3: Esclusivo design della carta CAS
-            support_text: >-
-              Con ogni utilizzo della carta sostieni al contempo il CAS. In quanto partner principale, Cornèrcard dona al CAS lo<strong> 0,2% del volume di spesa della carta </strong> – <strong>senza costi aggiuntivi per te.</strong>
+            support_text_html: >-
+              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+            info_text_html: >-
+              <strong>Die kostenlose SAC-Kreditkarte wird ohne Angabe deiner Finanzdaten ausgestellt.</strong> Diese Karte verfügt über eine Limite von CHF 500.-. Es sind keine Bargeldbezüge oder Ratenzahlungen möglich. Du kannst die Karte zu einem späteren Zeitpunkt upgraden und damit Leistungen wie eine individuelle Limite, Bargeldbezüge oder Spenden zugunsten des SAC freischalten.
             card_application_label: >-
               Desidero beneficiare dei vantaggi per i soci e richiedo la carta gratuita Cornèrcard CAS.
             consent_label: >-
