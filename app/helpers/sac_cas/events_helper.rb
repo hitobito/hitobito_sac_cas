@@ -163,7 +163,10 @@ module SacCas::EventsHelper
   end
 
   def event_essentials_list(association, wrap_children: true, separator: " ")
-    simple_list(event_essentials_with_children(association), class: "mb-0") do |main, children|
+    simple_list(
+      event_essentials_with_children(association),
+      class: "mb-0 list-unstyled"
+    ) do |main, children|
       parent = render_event_essential(main)
       if children.present?
         child_list = safe_join(children, ", ") { |c| render_event_essential(c) }
