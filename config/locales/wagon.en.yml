@@ -2223,6 +2223,7 @@ en:
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: MV Annual collection
+      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
     sektion_primary: Core section
     sektion_secondary: Additional section
 

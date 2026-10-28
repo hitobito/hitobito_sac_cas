@@ -73,11 +73,11 @@ fr:
         price_category: Catégorie de prix
         price: Prix
       event/tour/report_form:
-        tour_completed: "La visite a-t-elle eu lieu ?"
-        review: Rétrospective des circuits
+        tour_completed: "La course a-t-elle eu lieu ?"
+        review: Rétrospective des courses
         remarks: Remarques (par exemple concernant le versement ou le refus)
         submitter_id: Soumis
-        approver_id: Validé
+        approver_id: Validée
         payer_id: Versé
         status_action: Promotion
         mail_recipient_id: Destinataire de l'e-mail
@@ -319,7 +319,7 @@ fr:
       event:
         id: ID de l'événement
         internal_comment: Remarques internes
-        unconfirmed_count: Non confirmé
+        unconfirmed_count: Non confirmé·es
         maximum_age: Age maximal
         ideal_class_size: Taille de classe idéale
         maximum_class_size: Nombre maximal d’élèves par classe
@@ -356,7 +356,7 @@ fr:
         training_days: Journées de formation
         brief_description: Brève description
         specialities: Spécial
-        similar_tours: Randonnées comparables
+        similar_tours: Courses comparables
         program: Programm
         seo_text: Texte SEO
       event/course:
@@ -496,16 +496,16 @@ fr:
         external_invoices: Factures # uses include CapitalizedDependentErrors
         sac_membership_active?: Membre du CAS
         states:
-          unconfirmed: Non confirmé
+          unconfirmed: Non confirmé·e
           applied: Liste d'attente
-          assigned: Confirmé
-          summoned: Convoqué
+          assigned: Confirmé·e
+          summoned: Convoqué·e
           annulled: Annulé
           tentative: Provisoire
           rejected: Refusé·e
           canceled: Désinscrit·e
-          attended: Participé
-          absent: Non paru
+          attended: Participé·e
+          absent: No Show
       event/report:
         statuses:
           draft: Conception
@@ -577,16 +577,16 @@ fr:
         seasons:
           winter: Hiver
           summer: Été
-        subito: Est Subito Tour
+        subito: Est course Subito
         summit: Destination
-        tourenportal_link: Lien vers le portail des randonnées
+        tourenportal_link: Lien vers le portail des courses
         state_translated: Statut
         states:
           draft: Conception
           review: En cours de validation
           approved: Validée
           published: Publiée
-          ready: Préparation terminée
+          ready: Préparation conclus
           closed: Terminée
           canceled: Annulée / Annulation
       external_training:
@@ -645,7 +645,7 @@ fr:
         emergency_contact_2_name: "Contact en cas d'urgence 2 : Nom"
         emergency_contact_2_phone: "Contact d'urgence 2 : numéro de téléphone"
         emergency_contacts_privacy_notice_html: >-
-          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette randonnée ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nos <a href="https://www.sac-cas.ch/fr/meta/cg/formations/" target="_blank" rel="noreferrer">Conditions générales de formation | Club alpin suisse CAS</a>.
+          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette course ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nos <a href="https://www.sac-cas.ch/fr/meta/cg/formations/" target="_blank" rel="noreferrer">Conditions générales de formation | Club alpin suisse CAS</a>.
       person/phone_number_mobile:
         number: Téléphone mobile
       person/phone_number_landline:
@@ -674,7 +674,7 @@ fr:
           IT: Italien
         section_offerings: Offres de la section
         mitglied_termination_by_section_only: Résiliation uniquement par la section
-        tours_enabled: Activer l'offre d'excursions pour cette section
+        tours_enabled: Activer l'offre de courses pour cette section
       group/ortsgruppe:
         foundation_year: Année de création
         section_canton: Canton
@@ -683,7 +683,7 @@ fr:
           DE: Allemand
           FR: Français
           IT: Italien
-        tours_enabled: Activer l'offre de tours pour cette section locale
+        tours_enabled: Activer l'offre de courses pour cette section locale
       group/phone_number_mobile:
         number: Téléphone portable
       group/phone_number_landline:
@@ -814,7 +814,7 @@ fr:
           attributes:
             base:
               qualifications_not_assessed: >-
-                Der Kurs kann erst abgeschlossen werden, wenn alle Personen in der Qualifikation als bestanden oder nicht bestanden beurteilt wurden.
+                Le cours ne peut être terminé que lorsque toutes les personnes participant à la qualification ont été évaluées comme ayant réussi ou échoué.
         event/participation:
           attributes:
             actual_days:
@@ -829,7 +829,7 @@ fr:
               not_matching_activities: doivent faire partie des activités sélectionnées
               must_be_child: doivent être des exigences secondaires
             base:
-              report_must_be_closed: Le rapport de tournée doit être rempli au préalable
+              report_must_be_closed: Le rapport de course doit être rempli au préalable
 
         event/approval_commission_responsibility:
           not_in_layer: ne fait pas partie de la même section/du même groupe local.
@@ -925,7 +925,7 @@ fr:
       event/tour:
         one: Tour
         many: Tours
-        other: Tours
+        other: Courses
       event/trait:
         one: Caractéristique
         many: Caractéristiques
@@ -1528,7 +1528,7 @@ fr:
   admins:
     show:
       cost_accounting: Facturation
-      tours: Circuits
+      tours: Courses
 
   contactable:
     address_fields:
@@ -1598,7 +1598,7 @@ fr:
     custom_content: Modèles d'e-mail
     sac_membership_configs: Paramètres pour les factures des membres
     sac_section_membership_configs: Paramètres pour les factures des membres
-    event_approval_commission_responsibility: Responsabilités pour la validation des activités alpines
+    event_approval_commission_responsibility: Responsabilités pour la validation des courses alpines
 
   dropdown/sac_cas_exports:
     button: Exportations SAC
@@ -1624,10 +1624,10 @@ fr:
       status: Statut
       type: Typ
       types:
-        regular_tour: Reguläre Tour
-        subito_tour: Subito-Tour
+        regular_tour: Course normale
+        subito_tour: Course Subito
         regular_event: Anlass
-      subito: Subito-Tour
+      subito: Course Subito
       search: Recherche
       search_placeholder: "Rechercher par titre d'activité, description, type, etc."
     index:
@@ -1643,7 +1643,7 @@ fr:
       tours_found:
         one: "%{count} Circuit trouvé"
         many: "%{count} Circuits trouvés"
-        other: "%{count} Circuits trouvés"
+        other: "%{count} Courses trouvées"
       load_more: Weitere laden
       no_results:
         title: Aucun événement trouvé
@@ -1687,8 +1687,8 @@ fr:
     approval_commission_responsibilities:
       edit:
         title: Traiter les compétences de la commission de validation
-        normal_tours: Tours normaux
-        subito_tours: Tours Subito
+        normal_tours: Courses normaux
+        subito_tours: Courses Subito
     courses:
       invoices:
         new:
@@ -1708,7 +1708,7 @@ fr:
       form:
         help_inline_color: "Valeur de couleur hexadécimale valide (par ex. #fcba03)"
         help_inline_icon: >-
-          Icône représentant l'activité dans le programme d'excursions (SVG, GIF, JPG ou PNG).
+          Icône représentant l'activité dans le programme des courses (SVG, GIF, JPG ou PNG).
         upload_icon: Télécharger une icône
         remove_icon: Supprimer l'icône « Actualités »
     kinds:
@@ -1739,14 +1739,14 @@ fr:
           Voulez-vous vraiment transférer les valeurs enregistrées (centre de coûts et objet de coûts) à tous les types de cours ? Ce faisant, les valeurs actuelles seront écrasées.
     lists:
       nav_left_tours:
-        tours: Tours
+        tours: Courses
       tours:
         title: Courses ayant lieu prochainement
-        explanation: Ici sont affichées les randonnées des sections dont tu es membre. Tu trouveras d'autres tours auprès de la section organisatrice.
+        explanation: Ici sont affichées les courses des sections dont tu es membre. Tu trouveras d'autres tours auprès de la section organisatrice.
     participations:
       asides_sac_cas:
         recent_trainings: Historique de la formation
-        recent_tours: Historique des tours
+        recent_tours: Historique des courses
       fields:
         explain_required_checkmark: "* = réponse obligatoire"
       missing_information: >-
@@ -1849,7 +1849,7 @@ fr:
           Es-tu sûr·e de vouloir poursuivre ta désinscription? Une désinscription ne peut pas être annulée. Des frais de traitement et d’annulation d’un montant de CHF %{cancellation_cost} sont facturés avec l’annulation.
     participation_contact_datas:
       flash:
-        price_category_not_possible: "Seuls les groupes suivants sont autorisés à participer à cette visite : %{possible_categories}"
+        price_category_not_possible: "Seuls les groupes suivants sont autorisés à participer à cette course: %{possible_categories}"
       fields:
         overrides_person_data_info: >-
           Merci de noter que les adaptations saisies ici seront reprises dans ton profil.
@@ -1864,9 +1864,9 @@ fr:
           internal_comment: Remarques internes
           approve: Valider l’activité
           reject: Refuser
-          approved: "Partagé par %{creator} le %{at}"
+          approved: "Validée par %{creator} le %{at}"
           rejected: "Refusé par %{creator} le %{at}"
-          self_approval: "Auto-validé par %{creator} le %{at}"
+          self_approval: "Auto-validée par %{creator} le %{at}"
           email_send_to: Envoyer un e-mail à
           receiver_options:
             responsible_people: E-mail à la ou aux personnes concernées
@@ -1874,14 +1874,14 @@ fr:
             none: Ne pas envoyer d'e-mail
         update:
           success: Ton commentaire a été enregistré.
-          review: Ton partage a été enregistré.
-          approved: "Ta validation a été enregistrée, la tournée a maintenant le statut <i>Validé</i>."
-          draft: Ton refus a été enregistré et la visite est revenue à l'état de <i>conception</i>.
+          review: Ta validation a été enregistré.
+          approved: "Ta validation a été enregistrée, la course a maintenant le statut <i>Validée</i>."
+          draft: Ton refus a été enregistré et la course est revenue à l'état de <i>conception</i>.
       reports:
-        title: "Compte-rendu de l’activité (%{status})"
+        title: "Rapport de course (%{status})"
         cost_summary_fields:
           revenues: Recettes
-          add_tour_fees: Ajouter des frais de visite
+          add_tour_fees: Ajouter des frais de course
           expenses: Dépenses
           receipts: Justificatifs
         form_tabs:
@@ -1900,7 +1900,7 @@ fr:
             review: Valider le paiement à l'attention de
             approved: Paiement enregistré
           recipient_id: Personne
-        success_notice: Le compte-rendu de l’activité a été mis à jour avec succès
+        success_notice: Le rapport de course a été mis à jour avec succès
 
     tour_mailer:
       application_window: Fenêtre d'inscription
@@ -1920,10 +1920,10 @@ fr:
     actions_show_sac_cas:
       attach_key_data_sheets: Créer toutes les fiches techniques
       approval: Validation
-      report: Compte rendu de sortie
+      report: Rapport de course
 
     flash:
-      dates_changed: "Tour %{event_name} a été mis à jour avec succès. Assure-toi que les dates de départ et d'arrivée modifiées ont été approuvées par ta commission des tours."
+      dates_changed: "Course %{event_name} a été mis à jour avec succès. Assure-toi que les dates de départ et d'arrivée modifiées ont été approuvées par ta commission des tours."
 
     form_tabs:
       communication: Communication
@@ -1937,7 +1937,7 @@ fr:
         Les champs suivants sont repris: Description, Conditions d’admission, Nombre minimal de participant·e·s, Nombre maximal de participant·e·s, Age minimal, Saison, Jours de formation, Réservation de l’hébergement par le CAS, Hébergement, Centre de coûts, Support de coûts
     global:
       link:
-        add_event/tour: Créer un tour
+        add_event/tour: Créer une course
 
     minimum_age_with_years: "%{minimum_age} Années"
     maximum_age_with_years: "%{maximum_age} Années"
@@ -1964,32 +1964,32 @@ fr:
 
     tours:
       popover_review:
-        alert_info: "Tu lances la procédure de validation pour le circuit «%{event_name} (%{event_id}) »."
+        alert_info: "Tu lances la procédure de validation pour la course «%{event_name} (%{event_id}) »."
         change_to_review: Transmettre pour validation
         existing_approvals: Autorisations existantes
         existing_approval_options:
           destroy: Réinitialiser
           keep: Conserver
       popover_published:
-        alert_info: "L’activité sera publiée dans le programme des activités, accessible à tous."
-        alert_info_subito: "L’activité \"Subito\" sera publiée dans le programme des activités, accessible à tous."
+        alert_info: "La course sera publiée dans le programme des courses, accessible à tous."
+        alert_info_subito: "La course \"Subito\" sera publiée dans le programme des courses, accessible à tous."
       popover_back_to_published:
-        alert_info: "Une fois validé, le circuit retrouve le statut « Publié »."
+        alert_info: "Une fois validé, la course retrouve le statut « Publiée »."
       popover_ready:
-        alert_info: "La préparation de l’activité sera terminée au terme de cette étape. Il n’est plus possible de modifier les inscriptions ensuite. "
+        alert_info: "La préparation de la course sera conclus au terme de cette étape. Il n’est plus possible de modifier les inscriptions ensuite. "
       popover_closed:
-        alert_info: "L’activité sera clôturée. Assure-toi au préalable, dans la vue « Participants » du compte rendu de l’activité, de cocher les personnes qui ne se sont pas présentées."
+        alert_info: "La course sera terminée. Assure-toi au préalable, dans la vue « Participants » du rapport de course, de cocher les personnes qui ne se sont pas présentées."
       popover_canceled:
-        alert_info: Cette action conduira à l’annulation de l’activité
+        alert_info: Cette action conduira à l’annulation de la course.
       popover_back_to_draft:
         alert_info: "Une fois validé, la course repasse au statut \"Conception\""
       popover_approved:
         self_approve: Partager soi-même
-        alert_warning: "Tu publies le circuit «%{event_name} (%{event_id}) » sans examen supplémentaire."
+        alert_warning: "Tu publies la course «%{event_name} (%{event_id}) » sans examen supplémentaire."
       popover_back_to_approved:
-        alert_info: "Une fois validé, le circuit retrouve le statut « Validé »."
+        alert_info: "Une fois validée, la course retrouve le statut « Validée »."
       popover_back_to_ready:
-        alert_info: "Une fois confirmée, la visite repasse au statut « Préparation terminée »."
+        alert_info: "Une fois confirmée, la course repasse au statut \"Préparation conclus\"."
 
       popover_email_option:
         send_email: Envoyer un e-mail
@@ -2017,9 +2017,9 @@ fr:
         approved: Retour à la validation
       event/tour:
         draft: Renvoyer à "Conception"
-        ready: Retour à Préparation terminée
-        approved: Renvoyer au stade « Validation »
-        published: Retour à Publié
+        ready: Retour à "Préparation conclus"
+        approved: Renvoyer à "Validée"
+        published: Retour à "Publiée"
 
     state_buttons:
       event/course:
@@ -2031,19 +2031,19 @@ fr:
         ready: Prêt à débuter
         closed: Fermer
         closed_confirm_text: >-
-          La clôture fait passer toutes les inscriptions ayant le statut Convoqué au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut Non présenté.
+          La clôture fait passer toutes les inscriptions ayant le statut Convoqué·e au statut Participant. Une facture de frais d'annulation de 100% est générée pour toutes les inscriptions ayant le statut No Show.
 
 
           Saisis les qualifications avant de clôturer le cours !
         canceled: annuler
       event/tour:
         draft: Renvoyer à "Conception"
-        ready: Clore la préparation
-        review: Transmettre pour validation
-        approved: Partager soi-même
+        ready: Préparation conclus
+        review: Transmettre pour Validation
+        approved: Valider soi-même
         published: Publier
-        closed: Fermer l’activité
-        canceled: Annuler l’activité
+        closed: Terminer
+        canceled: Annuler
 
   events/filters:
     approval:
@@ -2066,7 +2066,7 @@ fr:
         nil: Tous les
         summer: Été
         winter: Hiver
-      subito: Type de tour
+      subito: Type de course
       subitos:
         nil: Tous les
         false: Régulièrement
@@ -2139,7 +2139,7 @@ fr:
       non_sac_member_count: Nombre de participants non membres du CAS
 
   export/tabular/events/tours/list:
-    leaders: Équipe de direction
+    leaders: Encadrement
     price_description: Remarque concernant les coûts
     group_names: "Organisateurs"
     duration: Période
@@ -2148,7 +2148,7 @@ fr:
     # youth columns
     male_count: Nombre d'hommes participants
     female_count: Nombre de participantes
-    absent_count: Nombre de personnes absentes
+    absent_count: Nombre de personnes "No Show"
     canceled_count: Nombre de personnes désinscrits
     rejected_count: Nombre de refusés
 
@@ -2295,12 +2295,13 @@ fr:
   filter_navigation/events:
     my_pending_approvals: Mes validations en attente
     my_approval_responsibilities: Mes responsabilités en matière de validation
-    my_main_leader: "Mon « %{event_type} » comme ligne principale"
+    my_main_leader: "Mon \"%{event_type}\" comme responsable principal-e"
     my_assistant_leader: "Mon « %{event_type} » comme ligne auxiliaire"
 
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: Encaissement annuel du service des membres
+      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
     sektion_primary: Section de base
     sektion_secondary: Section supplémentaire
 
@@ -2987,12 +2988,12 @@ fr:
             benefits_heading: "Aperçu de vos avantages :"
             benefit_1: Pas de frais annuels
             benefit_2: >-
-              Willkommensgeschenk: 25% Rabatt bei La Sportiva, 10% Rabatt bei Bächli Bergsport, 25% Rabatt bei Peak Punk inkl. einem Goodie
+              Cadeau de bienvenue: 25% de rabais chez La Sportiva, 10% de rabais chez Bächli Bergsport, 24% de rabais chez Peak Punk et un petit cadeau.
             benefit_3: Carte au design exclusif du CAS
             support_text_html: >-
               Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
             info_text_html: >-
-              <strong>Die kostenlose SAC-Kreditkarte wird ohne Angabe deiner Finanzdaten ausgestellt.</strong> Diese Karte verfügt über eine Limite von CHF 500.-. Es sind keine Bargeldbezüge oder Ratenzahlungen möglich. Du kannst die Karte zu einem späteren Zeitpunkt upgraden und damit Leistungen wie eine individuelle Limite, Bargeldbezüge oder Spenden zugunsten des SAC freischalten.
+              <strong>La carte de crédit gratuite du CAS est émise sans que vous ayez à fournir vos données financières.</strong> Cette carte est assortie d’un plafond de CHF 500.–. Les retraits en espèces et les paiements échelonnés ne sont pas possibles. Vous pourrez ultérieurement demander le surclassement de votre carte et bénéficier ainsi de prestations telles qu’un plafond personnalisé, des retraits en espèces ou des dons en faveur du CAS. 
             card_application_label: >-
               Je souhaite profiter de mon avantage réservé aux membres et recevoir la Cornèrcard gratuite du CAS.
             consent_label: >-

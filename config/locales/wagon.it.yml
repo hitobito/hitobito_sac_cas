@@ -34,7 +34,7 @@ it:
     sac_oauth:
       <<: *sac
       email_mv: "mv@sac-cas.ch"
-    title_event/tour: Tour
+    title_event/tour: Gita
     elevation_unit: Hm
     duration_format: "h:mm"
     token_invalid: Il token utilizzato non è valido.
@@ -73,11 +73,11 @@ it:
         price_category: Categoria di prezzo
         price: Prezzo
       event/tour/report_form:
-        tour_completed: "Il tour è stato effettuato?"
-        review: Resoconto dell'escursione
+        tour_completed: "La gita è stato effettuato?"
+        review: Resoconto della gita
         remarks: Osservazioni (ad es. relative al pagamento o al rifiuto)
         submitter_id: Presentato
-        approver_id: Approvato
+        approver_id: Rilasciata
         payer_id: Pagato
         status_action: Promozione
         mail_recipient_id: Destinatario/a dell'e-mail
@@ -317,7 +317,7 @@ it:
       event:
         id: ID evento
         internal_comment: Commenti interni
-        unconfirmed_count: Non confermato
+        unconfirmed_count: Non confermati
         maximum_age: Età massima
         ideal_class_size: Dimensione ideale della classe
         maximum_class_size: Dimensione massima della classe
@@ -354,7 +354,7 @@ it:
         training_days: Giornate di formazione
         brief_description: Breve descrizione
         specialities: Particolarità
-        similar_tours: Escursioni a confronto
+        similar_tours: Gite a confronto
         program: Programma
         seo_text: Testo SEO
       event/course:
@@ -392,7 +392,7 @@ it:
         reserve_accommodation: Prenotare l’alloggio tramite CAS
         season: Stagione
         specialities: Particolarità
-        similar_tours: Escursioni a confronto
+        similar_tours: Gite a confronto
         start_point_of_time: Inizio del corso
         start_point_of_times:
           day: Giorno
@@ -494,16 +494,16 @@ it:
         external_invoices: Fatture # uses include CapitalizedDependentErrors
         sac_membership_active?: Membro del SAC
         states:
-          unconfirmed: Non confermato
+          unconfirmed: Non confermato/a
           applied: Lista d'attesa
-          assigned: Confermato
-          summoned: Richiamato
+          assigned: Confermato/a
+          summoned: Convocato/a
           annulled: Annullato
           tentative: Provvisorio
           rejected: Rifiutato/a
           canceled: Disiscritto/a
-          attended: Partecipato
-          absent: Non pubblicato
+          attended: Partecipato/a
+          absent: No Show
       event/report:
         statuses:
           draft: Bozza
@@ -575,16 +575,16 @@ it:
         seasons:
           winter: Inverno
           summer: Estate
-        subito: È Subito Tour
+        subito: È gita Subito
         summit: Destinazione
-        tourenportal_link: Link al portale del tour
+        tourenportal_link: Link al portale delle gite
         state_translated: Stato
         states:
           draft: Bozza
-          review: In corso di convalida
+          review: In corso di rilasciazione
           approved: Rilasciata
           published: Pubblicata
-          ready: Preparazione completata
+          ready: Preparazione conclusa
           closed: Conclusa
           canceled: Annullata
       external_training:
@@ -643,7 +643,7 @@ it:
         emergency_contact_2_name: Contatto di emergenza 2 Nome
         emergency_contact_2_phone: "Contatto di emergenza 2: numero di telefono"
         emergency_contacts_privacy_notice_html: >-
-          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa escursione o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">le</a> nostre <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">Condizioni generali di contratto per la formazione | Club Alpino Svizzero CAS</a>.
+          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa gita o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">le</a> nostre <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">Condizioni generali di contratto per la formazione | Club Alpino Svizzero CAS</a>.
       person/phone_number_mobile:
         number: Telefono cellulare
       person/phone_number_landline:
@@ -659,7 +659,7 @@ it:
         course_admin_email: E-mail Amministrazione dei corsi
         abo_alpen_fee: Importo Abbonamento Le Alpi
         abo_alpen_postage_abroad: Importo Affrancatura estera Le Alpi
-        abo_touren_portal_fee: Importo Abbonamento Portale escursionistico
+        abo_touren_portal_fee: Importo Abbonamento Portale delle gite
         abo_alpen_fee_article_number: Codice articolo Abbonamento Le Alpi
         abo_alpen_postage_abroad_article_number: Codice articolo Affrancatura estera Le Alpi
       group/sektion:
@@ -672,7 +672,7 @@ it:
           IT: Italiano
         section_offerings: Offerte della sezione
         mitglied_termination_by_section_only: Disdetta solo tramite sezione
-        tours_enabled: Attivare l'offerta turistica per questa sezione
+        tours_enabled: Attivare l'offerta delle gite per questa sezione
       group/ortsgruppe:
         foundation_year: Anno di fondazione
         section_canton: Cantone
@@ -681,7 +681,7 @@ it:
           DE: Tedesco
           FR: Francese
           IT: Italiano
-        tours_enabled: Attivare l'offerta di tour per questo gruppo locale
+        tours_enabled: Attivare l'offerta delle gite per questo gruppo locale
       group/phone_number_mobile:
         number: Telefono cellulare
       group/phone_number_landline:
@@ -707,9 +707,9 @@ it:
               read_all_people: Letto da tutte le persone.
               layer_events_full: Gestire gli eventi nella sezione.
               layer_mitglieder_full: Gestire le persone del gruppo di appartenenza della sezione/gruppo locale.
-              layer_created_events_full: "Creare e modificare i propri eventi, corsi e visite guidate nella sezione"
+              layer_created_events_full: "Creare e modificare i propri eventi, corsi e gite guidate nella sezione"
       qualification_kind:
-        tourenchef_may_edit: Modificabile dal responsabile delle escursioni
+        tourenchef_may_edit: Modificabile dal responsabile delle gite
       qualification:
         finish_at: Fino al
       sac_membership_config:
@@ -812,7 +812,7 @@ it:
           attributes:
             base:
               qualifications_not_assessed: >-
-                Der Kurs kann erst abgeschlossen werden, wenn alle Personen in der Qualifikation als bestanden oder nicht bestanden beurteilt wurden.
+                Il corso può essere concluso solo quando per tutte le persone coinvolte nella qualificazione è stato espresso un giudizio di superamento o mancato superamento.
         event/participation:
           attributes:
             actual_days:
@@ -827,7 +827,7 @@ it:
               not_matching_activities: devono rientrare tra le attività selezionate
               must_be_child: devono essere requisiti secondari
             base:
-              report_must_be_closed: Il rapporto di viaggio deve essere compilato in anticipo
+              report_must_be_closed: Il rapporto di gita deve essere completato in anticipo
 
         event/approval_commission_responsibility:
           not_in_layer: non è nella stessa sezione/gruppo locale.
@@ -923,7 +923,7 @@ it:
       event/tour:
         one: Tour
         many: Tour
-        other: Tour
+        other: Gite
       event/trait:
         one: Caratteristica
         many: Caratteristiche
@@ -1009,7 +1009,7 @@ it:
       group/abo_touren_portal:
         one: Portale turistico SAC
         many: Portale turistico SAC
-        other: Portale escursionistico CAS
+        other: Portale delle gite CAS
       group/abo_basic_login:
         one: Accesso SAC/CAS
         many: Accesso SAC/CAS
@@ -1077,7 +1077,7 @@ it:
       group/sektions_kommission_touren:
         one: Visite della Commissione
         many: Commissioni Tour
-        other: Commissioni Escursioni
+        other: Commissioni Gite
       group/sektions_kommission_umwelt_und_kultur:
         one: Commissione Ambiente e Cultura
         many: Commissioni Ambiente e Cultura
@@ -1105,7 +1105,7 @@ it:
       group/sektions_touren_und_kurse:
         one: Visite e corsi
         many: Visite e corsi
-        other: Escursioni e corsi
+        other: Gite e corsi
       group/sektions_vorstand:
         one: Consiglio di amministrazione
         many: Consiglio di amministrazione
@@ -1526,7 +1526,7 @@ it:
   admins:
     show:
       cost_accounting: Fatturazione
-      tours: Itinerari
+      tours: Gite
 
   contactable:
     address_fields:
@@ -1596,7 +1596,7 @@ it:
     custom_content: Modelli di e-mail
     sac_membership_configs: Parametri per le fatture di affiliazione
     sac_section_membership_configs: Parametri per le fatture di affiliazione
-    event_approval_commission_responsibility: Responsabilità del rilascio del tour
+    event_approval_commission_responsibility: Responsabilità del rilascio delle gite
 
   dropdown/sac_cas_exports:
     button: Esportazioni SAC
@@ -1607,7 +1607,7 @@ it:
       Informazioni importanti sull’esportazione
   agenda:
     header:
-      title: Programma delle escursioni
+      title: Programma delle gite
       brand: Club Alpino Svizzero CAS
     filters:
       reset: Ripristina
@@ -1622,10 +1622,10 @@ it:
       status: Stato
       type: Typ
       types:
-        regular_tour: Reguläre Tour
-        subito_tour: Subito-Tour
+        regular_tour: Gita normale
+        subito_tour: Gita Subito
         regular_event: Anlass
-      subito: Subito-Tour
+      subito: Gita Subito
       search: Cerca
       search_placeholder: "Cerca per titolo dell'attività, descrizione, tipo, ecc."
     index:
@@ -1641,7 +1641,7 @@ it:
       tours_found:
         one: "%{count} Tour trovato"
         many: "%{count} Itinerari trovati"
-        other: "%{count} Itinerari trovati"
+        other: "%{count} gite trovate"
       load_more: Weitere laden
       no_results:
         title: Nessun evento trovato
@@ -1661,7 +1661,7 @@ it:
     show:
       back_to_overview: Torna alla panoramica
       contact: Contatti
-      leaders: Guida turistica
+      leaders: Guida delle gite
       elevation: Dislivello
     buttons:
       show_details: Dettagli
@@ -1679,14 +1679,14 @@ it:
     application_market:
       application:
         add_participant_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
-      event_canceled: "Questo evento è stato cancellato, le iscrizioni non possono più essere elaborate."
+      event_canceled: "Questo evento è stato cancellato, le registrazioni non possono più essere elaborate."
       participant:
         remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
     approval_commission_responsibilities:
       edit:
         title: Responsabilità Modifica della commissione di rilascio
-        normal_tours: Visite normali
-        subito_tours: Tour immediati
+        normal_tours: Gite normale
+        subito_tours: Gite Subito
     courses:
       invoices:
         new:
@@ -1706,7 +1706,7 @@ it:
       form:
         help_inline_color: "Valore di colore esadecimale valido (ad es. #fcba03)"
         help_inline_icon: >-
-          Icona che rappresenta l'attività nel programma delle escursioni (SVG, GIF, JPG o PNG).
+          Icona che rappresenta l'attività nel programma delle gite (SVG, GIF, JPG o PNG).
         upload_icon: Carica icona
         remove_icon: Rimuovi l'icona "Attualità"
     kinds:
@@ -1737,14 +1737,14 @@ it:
           Si desidera davvero trasferire i valori salvati (centro di costo e unità di costo) a tutti i tipi di corso? In questo modo si sovrascrivono i valori attuali.
     lists:
       nav_left_tours:
-        tours: Tour
+        tours: Gite
       tours:
-        title: Prossimi tour
-        explanation: I tour organizzati dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
+        title: Prossime gite
+        explanation: Le gite organizzate dalle sezioni di cui si è membri sono visualizzati qui. Altre gite sono disponibili nella sezione organizzativa.
     participations:
       asides_sac_cas:
         recent_trainings: Storia della formazione
-        recent_tours: Storia del tour
+        recent_tours: Storia delle gite
       fields:
         explain_required_checkmark: "* = risposta obbligatoria"
       missing_information: >-
@@ -1786,7 +1786,7 @@ it:
         attended: Hai partecipato a questo corso.
         canceled: Sei stato disiscritto da questo corso.
         rejected: "I criteri di ammissione non sono stati soddisfatti. Pertanto, purtroppo, siamo stati costretti a respingere la tua registrazione."
-        summoned: Sei convocato per questo corso.
+        summoned: Sei convocato/a per questo corso.
         unconfirmed: >-
           Sei pre-iscritto a questo corso. La registrazione non è ancora definitiva e deve essere confermata dall’amministrazione del corso.
       step_wizard:
@@ -1804,7 +1804,7 @@ it:
           Importante: la tariffa ridotta del corso verrà applicata solo dopo il ricevimento del modulo di richiesta della sovvenzione, debitamente compilato e firmato dalla tua sezione.
         detail_info_header: "Cosa devo fare per richiedere una sovvenzione?"
         detail_info_text: >-
-          Un’iscrizione firmata dal responsabile o dalla responsabile delle escursioni conferma lo status di guida SAC attiva o futura e dà diritto al prezzo sovvenzionato del corso (%{amount}). Ti preghiamo, se necessario, di compilare il modulo %{link} e <b>di restituircelo</b> il prima possibile, comunque entro <b>e non oltre 5 settimane prima dell’inizio del corso</b>.
+          Un’iscrizione firmata dal responsabile o dalla responsabile delle gite conferma lo status di guida SAC attiva o futura e dà diritto al prezzo sovvenzionato del corso (%{amount}). Ti preghiamo, se necessario, di compilare il modulo %{link} e <b>di restituircelo</b> il prima possibile, comunque entro <b>e non oltre 5 settimane prima dell’inizio del corso</b>.
       summary_step:
         annulation_remarks: |
           Si consiglia di stipulare un’assicurazione contro l’annullamento. In caso di ritiro prima dell’inizio del corso, i clienti dovranno sostenere i seguenti costi di recesso:
@@ -1818,7 +1818,7 @@ it:
         subscribe_newsletter: "Sì, desidero essere informato sulle novità del Club Alpino Svizzero CAS"
       fields_sac_cas:
         no_price_select: Nessun costo
-      summoned_notice: "%{participant} è stato convocato."
+      summoned_notice: "%{participant} è stato convocato/a."
       reactivated_notice: "%{participant} è stato riattivato."
       actions_show_youth:
         cancel_button: Disconnettersi
@@ -1847,7 +1847,7 @@ it:
           Sei sicuro di voler procedere con il ritiro? Il ritiro non può essere annullato. Al momento del ritiro sarà addebitato un importo pari a CHF %{cancellation_cost} per le spese di elaborazione e cancellazione.
     participation_contact_datas:
       flash:
-        price_category_not_possible: "Per questo tour sono ammessi solo i seguenti gruppi: %{possible_categories}"
+        price_category_not_possible: "Per questa gita sono ammessi solo i seguenti gruppi: %{possible_categories}"
       fields:
         overrides_person_data_info: >-
           Si noti che le modifiche qui inserite saranno trasferite al proprio profilo.
@@ -1862,9 +1862,9 @@ it:
           internal_comment: Commenti interni
           approve: Rilascio
           reject: Rifiuto
-          approved: "Pubblicato da %{creator} su %{at}"
+          approved: "Rilasciata da %{creator} su %{at}"
           rejected: "Rifiutato da %{creator} su %{at}"
-          self_approval: "Autoapprovata da %{creator} il %{at}"
+          self_approval: "Auto-rilasciata da %{creator} il %{at}"
           email_send_to: Invia un'e-mail a
           receiver_options:
             responsible_people: E-mail alla/e persona/e responsabile/i
@@ -1872,14 +1872,14 @@ it:
             none: Non inviare e-mail
         update:
           success: Il tuo commento è stato salvato.
-          review: La vostra approvazione è stata salvata.
-          approved: "La liberazione è stata salvata, il tour ha ora lo stato <i>Rilasciato</i>."
-          draft: Il vostro rifiuto è stato salvato e il tour è stato riportato allo stato di <i>bozza</i>.
+          review: La vostra rilasciazione è stata salvata.
+          approved: "La rilasciazione è stata salvata, la gita ha ora lo stato <i>Rilasciato</i>."
+          draft: Il vostro rifiuto è stato salvato e la gita è stato riportato allo stato di <i>bozza</i>.
       reports:
-        title: "Resoconto dell'escursione (%{status})"
+        title: "Rapporto di gita (%{status})"
         cost_summary_fields:
           revenues: Entrate
-          add_tour_fees: Aggiungere le tariffe delle escursioni
+          add_tour_fees: Aggiungere le tariffe delle gite
           expenses: Spese
           receipts: Documenti giustificativi
         form_tabs:
@@ -1898,7 +1898,7 @@ it:
             review: Autorizza il pagamento a
             approved: Pagamento registrato
           recipient_id: Persona
-        success_notice: Il rapporto sul tour è stato aggiornato con successo
+        success_notice: Il rapporto della gita è stato aggiornato con successo
 
     tour_mailer:
       application_window: Finestra di registrazione
@@ -1918,10 +1918,10 @@ it:
     actions_show_sac_cas:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
       approval: Rilascio
-      report: Resoconto dell'escursione
+      report: Rapporto della gita
 
     flash:
-      dates_changed: "Il tour %{event_name} è stato aggiornato con successo. Assicuratevi di aver concordato le date di partenza e di arrivo con il vostro comitato del tour."
+      dates_changed: "La gita %{event_name} è stato aggiornata con successo. Assicuratevi di aver concordato le date di partenza e di arrivo con il vostro comitato del tour."
 
     form_tabs:
       communication: Comunicazione
@@ -1935,7 +1935,7 @@ it:
         Vengono trasferiti i seguenti campi: Descrizione, Requisiti di ammissione, Numero minimo di partecipanti, Numero massimo di partecipanti, Età minima, Stagione, Giornate di formazione, Alloggio riservato dal CAS, Alloggio, Centro di costo, Unità di costo
     global:
       link:
-        add_event/tour: Crea tour
+        add_event/tour: Crea gita
 
     minimum_age_with_years: "%{minimum_age} anni"
     maximum_age_with_years: "%{maximum_age} anni"
@@ -1962,32 +1962,32 @@ it:
 
     tours:
       popover_review:
-        alert_info: "Avvii la procedura di approvazione per il tour “%{event_name} (%{event_id})”."
+        alert_info: "Avvii la procedura di approvazione per la gita “%{event_name} (%{event_id})”."
         change_to_review: Inoltrare per l'approvazione
         existing_approvals: Autorizzazioni esistenti
         existing_approval_options:
           destroy: Ripristina
           keep: Mantenere
       popover_published:
-        alert_info: "Una volta confermata, l'escursione verrà pubblicata sul programma delle escursioni."
-        alert_info_subito: "Una volta confermata, la Subito-Tour verrà pubblicata sul programma delle escursioni."
+        alert_info: "Una volta confermata, la gita verrà pubblicata sul programma delle gite."
+        alert_info_subito: "Una volta confermata, la gita \"Subito\" verrà pubblicata sul programma delle gite."
       popover_back_to_published:
-        alert_info: "Una volta confermata, la visita guidata torna allo stato “Pubblicata”."
+        alert_info: "Una volta confermata, la gita torna allo stato “Pubblicata”."
       popover_ready:
-        alert_info: "Una volta confermata, la preparazione dell'itinerario sarà completata."
+        alert_info: "Una volta confermata, la preparazione della gita sarà conclusa."
       popover_closed:
-        alert_info: "Confermando, il tour verrà completato. Assicurati prima di selezionare nella schermata “Partecipanti” le persone che non si sono presentate."
+        alert_info: "Confermando, la gita verrà completata. Assicurati prima di selezionare nella schermata “Partecipanti” le persone che non si sono presentate."
       popover_canceled:
-        alert_info: "Una volta confermata, l'escursione verrà annullata."
+        alert_info: "Una volta confermata, la gita verrà annullata."
       popover_back_to_draft:
-        alert_info: "Una volta confermata, la visita guidata torna allo stato “Bozza”."
+        alert_info: "Una volta confermata, la gita guidata torna allo stato “Bozza”."
       popover_approved:
         self_approve: Condividi autonomamente
-        alert_warning: "Pubblichi il tour “%{event_name} (%{event_id})” senza ulteriori verifiche."
+        alert_warning: "Pubblichi la gita “%{event_name} (%{event_id})” senza ulteriori verifiche."
       popover_back_to_approved:
-        alert_info: "Una volta confermata, la visita (torna) allo stato “Approvata”."
+        alert_info: "Una volta confermata, la gita (torna) allo stato “Rilasciata”."
       popover_back_to_ready:
-        alert_info: "Una volta confermata, la visita torna allo stato “Preparazione completata”."
+        alert_info: "Una volta confermata, la gita torna allo stato “Preparazione conclusa”."
 
       popover_email_option:
         send_email: Invia un'e-mail
@@ -2015,9 +2015,9 @@ it:
         approved: Torna alla pubblicazione
       event/tour:
         draft: Torna a "Bozza"
-        ready: Torna alla Preparazione completata
-        approved: Torna a Rilasciato
-        published: Torna a Pubblicato
+        ready: Torna a "Preparazione conclusa"
+        approved: Torna a "Rilasciata"
+        published: Torna a "Pubblicata"
 
     state_buttons:
       event/course:
@@ -2036,12 +2036,12 @@ it:
         canceled: Cancellazioni
       event/tour:
         draft: Torna a "Bozza"
-        ready: Preparazione completata
-        review: Inoltrare per l'approvazione
-        approved: Rilasciare se stessi
+        ready: Preparazione conclusa
+        review: Inoltrare per approvazione
+        approved: Approvare autonamente
         published: Pubblicare
-        closed: Finalizzare
-        canceled: Cancellazioni
+        closed: Concludere
+        canceled: Annullare
 
   events/filters:
     approval:
@@ -2064,7 +2064,7 @@ it:
         nil: Tutti
         summer: Estate
         winter: Inverno
-      subito: Tipo di tour
+      subito: Tipo di gita
       subitos:
         nil: Tutti
         false: Regolare
@@ -2137,7 +2137,7 @@ it:
       non_sac_member_count: Numero di partecipanti non soci del CAS
 
   export/tabular/events/tours/list:
-    leaders: Gruppo direttivo
+    leaders: Quadro di direttivo
     price_description: Nota sui costi
     group_names: "Organizzatori"
     duration: Periodo
@@ -2146,7 +2146,7 @@ it:
     # youth columns
     male_count: Numero di partecipanti di sesso maschile
     female_count: Numero di partecipanti donne
-    absent_count: Numero di assenti
+    absent_count: Numero di "No Show"
     canceled_count: Numero di utenti disiscritti
     rejected_count: Numero di rifiutati
 
@@ -2284,21 +2284,22 @@ it:
         success_multiple: "%{model} è stato creato con successo per %{names}."
 
   filter_navigation/people:
-    tour_guides_none: Nessuna guida escursionistica
-    tour_guides_active: Guide escursionistiche attive
-    tour_guides_stalled: Guide escursionistiche sospese
-    tour_guides_inactive: Guide escursionistiche non attive
-    tour_guides_expired: Guide escursionistiche precedenti
+    tour_guides_none: Nessun Capo/a Gita
+    tour_guides_active: Capi Gita attive
+    tour_guides_stalled: Capi Gita sospese
+    tour_guides_inactive: Capi Gita non attive
+    tour_guides_expired: Capi Gita precedenti
 
   filter_navigation/events:
     my_pending_approvals: Le mie approvazioni in sospeso
     my_approval_responsibilities: Le mie responsabilità in materia di approvazione
-    my_main_leader: "Il mio \" %{event_type} \" come linea principale"
+    my_main_leader: "Il mio \"%{event_type}\" come linea principale"
     my_assistant_leader: "Il mio \" %{event_type} \" come linea ausiliaria"
 
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: Incasso annuale AS
+      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
     sektion_primary: Sezione base
     sektion_secondary: Sezione aggiuntiva
 
@@ -2334,7 +2335,7 @@ it:
           Sei già titolare di un’affiliazione al CAS. Se la desideri modificare contatta il Segretariato centrale del CAS.
         can_login_already_notice: Si dispone già di un login. Non è quindi possibile creare un nuovo account CAS.
         already_subscribed_to_abo: "Stai già ricevendo questa rivista. Pertanto, non è possibile ordinare la rivista una seconda volta."
-        already_member_of_tourenportal: "Sei già socio del portale escursionistico del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
+        already_member_of_tourenportal: "Sei già socio del portale delle gite del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
 
         existing_family_notice: Siete stati assegnati a una famiglia. Contattare l'ufficio CAS.
         signed_up_notice: La tua registrazione è stata salvata con successo.
@@ -2495,7 +2496,7 @@ it:
         default: Attributi dei gruppi locali
 
   navigation:
-    tours: Tour
+    tours: Gite
 
   participations:
     key_data_sheet:
@@ -2504,7 +2505,7 @@ it:
       assistant_leader_file_prefix: Gestione della classe
       leader_aspirant_file_prefix: Corso_Aspirante
       assistant_leader_aspirant_file_prefix: Capoclasse_Aspirante
-      year_title: "Corsi / Escursioni CAS %{year}"
+      year_title: "Corsi / Gite CAS %{year}"
       title: Scheda tecnica chiave
       greeting: "Ciao %{name},\nti comunichiamo di seguito le informazioni più importanti:"
       table:
@@ -2527,22 +2528,22 @@ it:
         language: Lingua di svolgimento
         content:
           label: Contenuto / Programma
-          text: In base al programma degli argomenti del corso (se disponibile) o dell’escursione
+          text: In base al programma degli argomenti del corso (se disponibile) o delle gite
         participant_requirements:
           label: Requisiti di partecipazione
-          text: Secondo i corsi / tour SAC
+          text: Secondo i corsi / le gite SAC
         participant_program_course:
           label: Programma dettagliato partecipanti corsi
           text: Viene richiesto dall'ufficio 8 settimane prima dell'inizio dell'attività tramite e-mail alla direzione.
         participant_program_tour:
-          label: Programma dettagliato partecipanti escursioni
+          label: Programma dettagliato partecipanti gite
           text: Sarà creato dall'ufficio e depositato almeno 6 settimane prima dell'inizio.
         application_closing_at: Chiusura registrazioni
         minimum_participants: Numero minimo di partecipanti
         maximum_participants: Numero massimo di partecipanti
         participation_yes_no:
           label: "Svolgimento - sì/no?"
-          text: La decisione sarà presa congiuntamente in base al numero di iscrizioni alla data di scadenza delle iscrizioni.
+          text: La decisione sarà presa congiuntamente in base al numero di registrazioni alla data di scadenza delle iscrizioni.
         participation_cancellation:
           label: Svolgimento – Cancellazione
           text: Informare l'insegnante di classe e l'alloggio
@@ -2551,7 +2552,7 @@ it:
         class_teacher:
           label: Capoclasse
           text: >-
-            La gestione è responsabilità del responsabile della classe in anticipo in base al numero massimo di partecipanti - si prega di elencare nel programma dettagliato per i corsi e di inviare all'ufficio via e-mail per le visite guidate.
+            La gestione è responsabilità del responsabile della classe in anticipo in base al numero massimo di partecipanti - si prega di elencare nel programma dettagliato per i corsi e di inviare all'ufficio via e-mail per le gite guidate.
     participant_list:
       title: Elenco dei partecipanti
       link: www.sac-cas.ch
@@ -2587,7 +2588,7 @@ it:
     sac_membership:
       section: Sezione
       additional_sections: Sezioni aggiuntive
-      tour_guide: Accompagnatore/Accompagnatrice
+      tour_guide: Capo/a Gita
       tour_guide_active: Attivo
     templates:
       sac_membership:
@@ -2596,7 +2597,7 @@ it:
             membership_number: "Membro: %{membership_number}"
             membership_years: "Numero di anni di iscrizione: %{membership_years}"
           additional_infos:
-            tour_guide: Accompagnatore/Accompagnatrice attivo/a
+            tour_guide: Capo/a Gita attivo/a
           states:
             valid: Iscrizione valida
             invalid: Iscrizione non valida
@@ -2985,12 +2986,12 @@ it:
             benefits_heading: "I tuoi vantaggi:"
             benefit_1: Nessuna quota annua
             benefit_2: >-
-              Willkommensgeschenk: 25% Rabatt bei La Sportiva, 10% Rabatt bei Bächli Bergsport, 25% Rabatt bei Peak Punk inkl. einem Goodie
+              Regalo di benvenuto: 25% di sconto presso La Sportiva, 10% di sconto presso Bächli Sport di montagna, 24% di sconto presso Peak Punk con un piccolo regalo aggiuntivo.
             benefit_3: Esclusivo design della carta CAS
             support_text_html: >-
               Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
             info_text_html: >-
-              <strong>Die kostenlose SAC-Kreditkarte wird ohne Angabe deiner Finanzdaten ausgestellt.</strong> Diese Karte verfügt über eine Limite von CHF 500.-. Es sind keine Bargeldbezüge oder Ratenzahlungen möglich. Du kannst die Karte zu einem späteren Zeitpunkt upgraden und damit Leistungen wie eine individuelle Limite, Bargeldbezüge oder Spenden zugunsten des SAC freischalten.
+              <strong>La carta di credito CAS gratuita viene emessa senza indicazione dei tuoi dati finanziari.</strong> La carta ha un limite di CHF 500. Non sono possibili né prelievi di contanti né pagamenti rateali. Successivamente puoi fare un upgrade della carta e attivare servizi come il prelievo di contanti e donazioni a favore del CAS nonché impostare un limite individuale. 
             card_application_label: >-
               Desidero beneficiare dei vantaggi per i soci e richiedo la carta gratuita Cornèrcard CAS.
             consent_label: >-
