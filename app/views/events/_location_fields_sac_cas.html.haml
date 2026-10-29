@@ -58,6 +58,11 @@
           tom_select_selected_value: entry.technical_requirement_ids.to_json,
           tom_select_optgroups_value: tour_essentials_grouped_select_optgroups(@technical_requirements),
           tom_select_no_results_value: I18n.t('global.no_list_entries') })
+  - else
+    = f.labeled_readonly_value(:activities)
+    = f.labeled_readonly_value(:target_groups)
+    = f.labeled_readonly_value(:fitness_requirement)
+    = f.labeled_readonly_value(:technical_requirements)
 
   = f.labeled(:traits) do
     = f.select(:trait_ids, [], {},

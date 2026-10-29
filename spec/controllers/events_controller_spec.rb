@@ -134,10 +134,10 @@ describe EventsController do
         get :edit, params: params
 
         expect(dom).not_to have_text "Ist Subito-Tour"
-        expect(dom).not_to have_text "Aktivität(en)"
-        expect(dom).not_to have_text "Zielgruppe(n)"
-        expect(dom).not_to have_text "Konditionelle Anforderung"
-        expect(dom).not_to have_text "Technische Anforderung(en)"
+        expect(dom).not_to have_css "select#event_activity_ids"
+        expect(dom).not_to have_css "select#event_target_group_ids"
+        expect(dom).not_to have_css "select#event_fitness_requirement_id"
+        expect(dom).not_to have_css "select#event_technical_requirement_ids"
         expect(dom).not_to have_text "Saison"
       end
 

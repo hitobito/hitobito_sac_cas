@@ -105,5 +105,35 @@ describe "events/_form.html.haml" do
       expect(dom).to have_content "Kosten nicht-SAC-Mitglied (Gast)"
       expect(dom).to have_field "Beschreibung"
     end
+
+    context "in state review" do
+      before { event.update!(state: :review) }
+
+      context "renders tour essentials read-only, namely" do
+        it "the activity" do
+          expect(dom).not_to have_css "select#event_activity_ids"
+          expect(dom).to have_css "label", text: "Aktivität(en)"
+          expect(dom).to have_text "Wanderweg"
+        end
+
+        it "the target group / target audience" do
+          expect(dom).not_to have_css "select#event_target_group_ids"
+          expect(dom).to have_css "label", text: "Zielgruppe(n)"
+          expect(dom).to have_text "Kinder (KiBe)"
+        end
+
+        it "the required fitness" do
+          expect(dom).not_to have_css "select#event_fitness_requirement_id"
+          expect(dom).to have_css "label", text: "Konditionelle Anforderung"
+          expect(dom).to have_text "B - wenig anstrengend"
+        end
+
+        it "the required technical level" do
+          expect(dom).not_to have_css "select#event_technical_requirement_ids"
+          expect(dom).to have_css "label", text: "Technische Anforderung(en)"
+          expect(dom).to have_text "T3"
+        end
+      end
+    end
   end
 end
