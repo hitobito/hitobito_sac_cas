@@ -1984,7 +1984,7 @@ fr:
       popover_back_to_draft:
         alert_info: "Une fois validé, la course repasse au statut \"Conception\""
       popover_approved:
-        self_approve: Partager soi-même
+        self_approve: Valider soi-mème
         alert_warning: "Tu publies la course «%{event_name} (%{event_id}) » sans examen supplémentaire."
       popover_back_to_approved:
         alert_info: "Une fois validée, la course retrouve le statut « Validée »."
@@ -2301,7 +2301,7 @@ fr:
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: Encaissement annuel du service des membres
-      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
+      edit_question_templates: Modifier les modèles "Données pour l'inscription"
     sektion_primary: Section de base
     sektion_secondary: Section supplémentaire
 
@@ -2498,7 +2498,7 @@ fr:
         default: Attributs des groupes locaux
 
   navigation:
-    tours: courses
+    tours: Courses
 
   participations:
     key_data_sheet:
@@ -2991,7 +2991,7 @@ fr:
               Cadeau de bienvenue: 25% de rabais chez La Sportiva, 10% de rabais chez Bächli Bergsport, 24% de rabais chez Peak Punk et un petit cadeau.
             benefit_3: Carte au design exclusif du CAS
             support_text_html: >-
-              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+              Vous soutenez aussi le CAS quand vous utilisez votre carte. En tant que partenaire principal, Cornèrcard reverse au CAS <strong>0,2% des montants payés avec la carte, sans frais supplémentaires pour vous.</strong>
             info_text_html: >-
               <strong>La carte de crédit gratuite du CAS est émise sans que vous ayez à fournir vos données financières.</strong> Cette carte est assortie d’un plafond de CHF 500.–. Les retraits en espèces et les paiements échelonnés ne sont pas possibles. Vous pourrez ultérieurement demander le surclassement de votre carte et bénéficier ainsi de prestations telles qu’un plafond personnalisé, des retraits en espèces ou des dons en faveur du CAS. 
             card_application_label: >-

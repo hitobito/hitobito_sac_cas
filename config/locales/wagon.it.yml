@@ -402,7 +402,7 @@ it:
           draft: Bozza
           application_open: Pubblicato
           application_paused: Registrazione sospesa
-          application_closed: Registrazione completata
+          application_closed: Iscrizione completata
           assignment_closed: Assegnazione completata
           ready: Pronto per lo svolgimento
           published: Pubblicato
@@ -562,11 +562,11 @@ it:
         minimum_age: Età minima
         price_description: Descrizione del
         price_member: Costi Membro del SAC (esterno)
-        member_may_apply: È possibile registrarsi
+        member_may_apply: Iscrizioni possibili
         price_regular: Costi non socio SAC (ospite)
-        regular_may_apply: È possibile registrarsi
+        regular_may_apply: Iscrizioni possibili
         price_special: Costi Membro della sezione SAC
-        special_may_apply: È possibile registrarsi
+        special_may_apply: Iscrizioni possibili
         price_categories:
           price_special: Membri della sezione
           price_member: Soci del CAS
@@ -1678,10 +1678,10 @@ it:
   event:
     application_market:
       application:
-        add_participant_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
-      event_canceled: "Questo evento è stato cancellato, le registrazioni non possono più essere elaborate."
+        add_participant_confirm: "Desidera davvero confermare questa iscrizione? Sarà inviata un’e-mail alla persona partecipante."
+      event_canceled: "Questo evento è stato cancellato, le iscrizioni non possono più essere elaborate."
       participant:
-        remove_participant_confirm: "Desidera davvero eliminare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
+        remove_participant_confirm: "Desidera davvero eliminare questa iscrizione? Sarà inviata un’e-mail alla persona partecipante."
     approval_commission_responsibilities:
       edit:
         title: Responsabilità Modifica della commissione di rilascio
@@ -1761,7 +1761,7 @@ it:
           summary_course_price: Costo del corso
           summary_total: Totale
         contact_data_aside:
-          contact_title: Domande relative alla registrazione
+          contact_title: Domande relative all'iscrizione
           contact_text: |
             Puoi contattarci durante i nostri orari di apertura:
             dal lunedì al venerdì, dalle 09:00 alle 12:00 e dalle 14:00 alle 17:00.
@@ -1782,13 +1782,13 @@ it:
         absent: Nessuna partecipazione a questo corso.
         annulled: Questo corso è stato cancellato.
         applied: Sei in lista d’attesa per questo corso (non vincolante). È possibile avanzare fino allo svolgimento del corso.
-        assigned: La registrazione a questo corso è confermata.
+        assigned: L'iscrizione a questo corso è confermata.
         attended: Hai partecipato a questo corso.
         canceled: Sei stato disiscritto da questo corso.
-        rejected: "I criteri di ammissione non sono stati soddisfatti. Pertanto, purtroppo, siamo stati costretti a respingere la tua registrazione."
+        rejected: "I criteri di ammissione non sono stati soddisfatti. Pertanto, purtroppo, siamo stati costretti a respingere la tua iscrizione."
         summoned: Sei convocato/a per questo corso.
         unconfirmed: >-
-          Sei pre-iscritto a questo corso. La registrazione non è ancora definitiva e deve essere confermata dall’amministrazione del corso.
+          Sei pre-iscritto a questo corso. L'iscrizione non è ancora definitiva e deve essere confermata dall’amministrazione del corso.
       step_wizard:
         answers_title: Dati aggiuntivi
         subsidy_title: Contributo di sovvenzione
@@ -1823,7 +1823,7 @@ it:
       actions_show_youth:
         cancel_button: Disconnettersi
         summon_button: Convocare
-        assign_confirm: "Desidera davvero confermare questa registrazione? Sarà inviata un’e-mail alla persona partecipante."
+        assign_confirm: "Desidera davvero confermare questa iscrizione? Sarà inviata un’e-mail alla persona partecipante."
       actions_show_sac_cas:
         modal_title: "Desideri davvero convocare questa/o partecipante?"
         summon_and_send_mail: Convocare e inviare l’e-mail
@@ -1902,7 +1902,7 @@ it:
 
     tour_mailer:
       application_window: Finestra di registrazione
-      application: Registrazione
+      application: Iscrizione
       download_ics: Scarica
       ics_link: Voce del calendario (ics)
       application_link: Link per la registrazione
@@ -1955,7 +1955,7 @@ it:
       canceled_reason_label: Motivazione
 
     show:
-      application_link: Registrazione diretta
+      application_link: Iscrizione diretta
 
     state_details_sac_cas:
       approval_level: Livello di autorizzazione
@@ -1982,7 +1982,7 @@ it:
       popover_back_to_draft:
         alert_info: "Una volta confermata, la gita guidata torna allo stato “Bozza”."
       popover_approved:
-        self_approve: Condividi autonomamente
+        self_approve: Approvi autonomamente
         alert_warning: "Pubblichi la gita “%{event_name} (%{event_id})” senza ulteriori verifiche."
       popover_back_to_approved:
         alert_info: "Una volta confermata, la gita (torna) allo stato “Rilasciata”."
@@ -2011,7 +2011,7 @@ it:
     state_back_buttons:
       event/course:
         assignment_closed: Torna all'assegnazione
-        application_closed: Torna alla registrazione completata
+        application_closed: Torna alla iscrizione completata
         approved: Torna alla pubblicazione
       event/tour:
         draft: Torna a "Bozza"
@@ -2023,13 +2023,13 @@ it:
       event/course:
         created: Indietro come bozza
         application_open: Pubblicare
-        application_paused: Pausa registrazione
-        application_closed: Completare la registrazione
+        application_paused: Pausa iscrizione
+        application_closed: Completare l'iscrizione
         assignment_closed: Finalizzare l'assegnazione
         ready: Pronti per l'implementazione
         closed: Finalizzare
         closed_confirm_text: >-
-          Il completamento imposta tutte le registrazioni con lo stato Offerto allo stato Partecipato. Per tutte le registrazioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
+          Il completamento imposta tutte le iscrizioni con lo stato Offerto allo stato Partecipato. Per tutte le iscrizioni con lo stato Non è apparso viene generata una fattura con un costo di cancellazione del 100%.
 
 
           Attenzione: inserisci le qualifiche prima della conclusione del corso!
@@ -2299,7 +2299,7 @@ it:
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: Incasso annuale AS
-      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
+      edit_question_templates: Modificare i modelli "Dati per l'iscrizione"
     sektion_primary: Sezione base
     sektion_secondary: Sezione aggiuntiva
 
@@ -2338,7 +2338,7 @@ it:
         already_member_of_tourenportal: "Sei già socio del portale delle gite del CAS. Pertanto, non puoi richiedere un’altra affiliazione."
 
         existing_family_notice: Siete stati assegnati a una famiglia. Contattare l'ufficio CAS.
-        signed_up_notice: La tua registrazione è stata salvata con successo.
+        signed_up_notice: La tua iscrizione è stata salvata con successo.
 
       agreement_link:
         agb_text: "Ho letto %{link}e acconsento"
@@ -2543,7 +2543,7 @@ it:
         maximum_participants: Numero massimo di partecipanti
         participation_yes_no:
           label: "Svolgimento - sì/no?"
-          text: La decisione sarà presa congiuntamente in base al numero di registrazioni alla data di scadenza delle iscrizioni.
+          text: La decisione sarà presa congiuntamente in base al numero d'iscrizioni alla data di scadenza delle iscrizioni.
         participation_cancellation:
           label: Svolgimento – Cancellazione
           text: Informare l'insegnante di classe e l'alloggio
@@ -2734,13 +2734,13 @@ it:
       text:
         one: "Confermare il trasferimento dell'applicazione selezionata:"
         many: "Si prega di confermare il trasferimento delle registrazioni selezionate:"
-        other: "Si prega di confermare il trasferimento delle registrazioni selezionate:"
+        other: "Si prega di confermare il trasferimento delle iscrizioni selezionate:"
       submit: "%{count} Trasferire"
     create:
       success:
         one: La registrazione è stata rilevata
         many: "%{count} Le iscrizioni sono state accettate"
-        other: "%{count} registrazioni sono state trasferite"
+        other: "%{count} iscrizioni sono state trasferite"
 
   people/neuanmeldungen/rejects:
     new:
@@ -2748,13 +2748,13 @@ it:
       text:
         one: "Si prega di confermare il rifiuto della domanda selezionata:"
         many: "Si prega di confermare il rifiuto delle candidature selezionate:"
-        other: "Si prega di confermare il rifiuto delle registrazioni selezionate:"
+        other: "Si prega di confermare il rifiuto delle iscrizioni selezionate:"
       submit: "%{count} Rifiutare"
     create:
       success:
         one: La domanda è stata respinta
         many: "%{count} Le domande sono state respinte"
-        other: "%{count} registrazioni sono state rifiutate"
+        other: "%{count} iscrizioni sono state rifiutate"
 
   people_filters:
     invoice_receiver:
@@ -2989,7 +2989,7 @@ it:
               Regalo di benvenuto: 25% di sconto presso La Sportiva, 10% di sconto presso Bächli Sport di montagna, 24% di sconto presso Peak Punk con un piccolo regalo aggiuntivo.
             benefit_3: Esclusivo design della carta CAS
             support_text_html: >-
-              Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+              Con ogni utilizzo della carta sostieni al contempo il CAS. In quanto partner principale, Cornèrcard dona al CAS lo <strong>0,2% del volume di spesa della carta – senza costi aggiuntivi per te.</strong>
             info_text_html: >-
               <strong>La carta di credito CAS gratuita viene emessa senza indicazione dei tuoi dati finanziari.</strong> La carta ha un limite di CHF 500. Non sono possibili né prelievi di contanti né pagamenti rateali. Successivamente puoi fare un upgrade della carta e attivare servizi come il prelievo di contanti e donazioni a favore del CAS nonché impostare un limite individuale. 
             card_application_label: >-
