@@ -6,7 +6,7 @@
 = render 'event/participations/step_wizard', step: step
 
 .row
-  %main.col-lg
+  %main.col-lg-7.wizard-main
     = yield
-  .col-md
+  .col-lg-5
     = render 'event/participations/tours/signup_aside', price: entry.signup_price
