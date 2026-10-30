@@ -59,13 +59,13 @@ describe People::SektionsfunktionaereMailer do
   describe "#kulturbeauftragter_onboarding" do
     let(:role) { Group::SektionsFunktionaere::Kulturbeauftragter.new(person:, group: funktionaere) }
 
-    it_behaves_like "onboarding mail", :kulturbeauftragter_onboarding, SacCas::MV_EMAIL
+    it_behaves_like "onboarding mail", :kulturbeauftragter_onboarding, SacCas::KULTUR_MAIL
   end
 
   describe "#umweltbeauftragter_onboarding" do
     let(:role) { Group::SektionsFunktionaere::Umweltbeauftragter.new(person:, group: funktionaere) }
 
-    it_behaves_like "onboarding mail", :umweltbeauftragter_onboarding, SacCas::MV_EMAIL
+    it_behaves_like "onboarding mail", :umweltbeauftragter_onboarding, SacCas::UMWELT_MAIL
   end
 
   describe "#huettenobmann_onboarding" do
@@ -83,7 +83,7 @@ describe People::SektionsfunktionaereMailer do
   describe "#tourenleiter_onboarding" do
     let(:role) { Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.new(person:, group: touren_und_kurse) }
 
-    it_behaves_like "onboarding mail", :tourenleiter_onboarding, "course@coursecourse.course"
+    it_behaves_like "onboarding mail", :tourenleiter_onboarding, SacCas::BREITENSPORT_MAIL
   end
 
   describe "#kibe_chef_onboarding" do
