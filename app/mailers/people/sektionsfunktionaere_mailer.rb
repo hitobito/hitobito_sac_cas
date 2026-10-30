@@ -45,11 +45,11 @@ class People::SektionsfunktionaereMailer < ApplicationMailer
   end
 
   def kulturbeauftragter_onboarding(role)
-    send_mail(role, ONBOARDING_KULTURBEAUFTRAGTER, SacCas::MV_EMAIL)
+    send_mail(role, ONBOARDING_KULTURBEAUFTRAGTER, SacCas::KULTUR_MAIL)
   end
 
   def umweltbeauftragter_onboarding(role)
-    send_mail(role, ONBOARDING_UMWELTBEAUFTRAGTER, SacCas::MV_EMAIL)
+    send_mail(role, ONBOARDING_UMWELTBEAUFTRAGTER, SacCas::UMWELT_MAIL)
   end
 
   def huettenobmann_onboarding(role)
@@ -63,7 +63,7 @@ class People::SektionsfunktionaereMailer < ApplicationMailer
   alias_method :tourenchef_winter_onboarding, :tourenchef_onboarding
 
   def tourenleiter_onboarding(role)
-    send_mail(role, ONBOARDING_TOURENLEITER, Group.root.course_admin_email)
+    send_mail(role, ONBOARDING_TOURENLEITER, SacCas::BREITENSPORT_MAIL)
   end
   alias_method :tourenleiter_ohne_qualifikation_onboarding, :tourenleiter_onboarding
 
