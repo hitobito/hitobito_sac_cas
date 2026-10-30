@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -31,6 +31,8 @@ describe Event::KindsController do
       :similar_tours,
       :program,
       :seo_text,
+      :survey_hero_survey_key,
+      :survey_hero_collector_key,
       course_compensation_category_ids: []
     )
   end
@@ -47,6 +49,16 @@ describe Event::KindsController do
       link = dom.find_link "Werte auf Kurse übertragen"
       expect(link[:href]).to eq "/de/event_kinds/#{kind.id}/push_down"
       expect(link[:"data-method"]).to eq "put"
+    end
+
+    it "GET#edit has survey hero fields with push down links" do
+      get :edit, params: {id: kind.id}
+
+      %w[survey_hero_survey_key survey_hero_collector_key].each do |field|
+        expect(dom).to have_field("event_kind_#{field}")
+        expect(dom.find_field("event_kind_#{field}").ancestor(".row"))
+          .to have_link("Wert auf Kurse übertragen")
+      end
     end
   end
 

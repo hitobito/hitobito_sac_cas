@@ -67,9 +67,15 @@ module HitobitoSacCas
         JobManager.wagon_jobs += [Export::CornercardApplicationsUploadJob]
       end
 
+      # only schedule SurveyDispatchScheduleJob if survey_hero config is present
+      if Settings.survey_hero.config.present?
+        JobManager.wagon_jobs += [Event::SurveyDispatchScheduleJob]
+      end
+
       Doorkeeper::AuthorizationsController.prepend SacCas::Doorkeeper::AuthorizationsController
 
-      HitobitoLogEntry.categories += %w[neuanmeldungen rechnungen stapelverarbeitung cornercard]
+      HitobitoLogEntry.categories +=
+        %w[neuanmeldungen rechnungen stapelverarbeitung cornercard kursumfragen]
 
       MailingLists::Filter::Chain.types << Person::Filter::InvoiceReceiver
 

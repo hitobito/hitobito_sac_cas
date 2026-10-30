@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -24,6 +24,8 @@
 #  reserve_accommodation  :boolean          default(TRUE), not null
 #  season                 :string(255)
 #  short_name             :string(255)
+#  survey_hero_collector_key :string
+#  survey_hero_survey_key :string
 #  training_days          :decimal(5, 2)
 #  vereinbarungs_id_fiver :string(255)
 #  created_at             :datetime
@@ -46,6 +48,7 @@ module SacCas::Event::Kind
     minimum_participants maximum_participants minimum_age
     maximum_age ideal_class_size maximum_class_size season training_days
     reserve_accommodation accommodation cost_center_id cost_unit_id
+    survey_hero_survey_key survey_hero_collector_key
   ].freeze
 
   INHERITABLE_TRANSLATED_ATTRIBUTES = %w[
