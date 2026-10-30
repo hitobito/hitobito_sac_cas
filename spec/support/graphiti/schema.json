@@ -906,7 +906,7 @@
           "writable": false,
           "description": null
         },
-        "html_description": {
+        "description_html": {
           "type": "string",
           "readable": true,
           "writable": false,
@@ -2780,7 +2780,7 @@
           "writable": false,
           "description": null
         },
-        "html_description": {
+        "description_html": {
           "type": "string",
           "readable": true,
           "writable": false,
@@ -3393,7 +3393,7 @@
           "writable": false,
           "description": null
         },
-        "html_description": {
+        "description_html": {
           "type": "string",
           "readable": true,
           "writable": false,
