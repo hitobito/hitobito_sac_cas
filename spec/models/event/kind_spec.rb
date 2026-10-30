@@ -138,8 +138,8 @@ describe Event::Kind do
       end
       kind.save!
       expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
-      I18n.with_locale("de") { expect(course.description).to eq "de" }
-      I18n.with_locale("fr") { expect(course.description).to eq "fr" }
+      I18n.with_locale("de") { expect(course.description.to_plain_text).to eq "de" }
+      I18n.with_locale("fr") { expect(course.description.to_plain_text).to eq "fr" }
     end
 
     it "overrides existing values with blanks" do
@@ -274,8 +274,8 @@ describe Event::Kind do
       expect { kind.push_down_inherited_attribute!("general_information") }.to change {
         course.translations.count
       }.by(1)
-      I18n.with_locale("de") { expect(course.description).to eq "de" }
-      I18n.with_locale("fr") { expect(course.description).to eq "fr" }
+      I18n.with_locale("de") { expect(course.description.to_plain_text).to eq "de" }
+      I18n.with_locale("fr") { expect(course.description.to_plain_text).to eq "fr" }
     end
 
     it "overrides existing values with blanks" do
