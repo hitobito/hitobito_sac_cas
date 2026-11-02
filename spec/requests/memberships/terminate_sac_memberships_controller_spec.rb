@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -412,14 +412,22 @@ describe Memberships::TerminateSacMembershipsController do
             expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
           end
 
-          it "abouts if household has any errors" do
-            role = roles(:familienmitglied_kind)
-            Roles::Termination.new(role:, terminate_on: Time.zone.today.end_of_year).call
+          it "aborts if household has any errors" do
+            people(:familienmitglied_kind).update_attribute(:birthday, nil)
             expect do
               request(terminate_on: :now)
             end.to not_change(Role, :count)
               .and not_change { household_key_count }
-            expect_alert("Nima Norgay hat einen Austritt geplant", css: ".alert-danger ul li")
+            expect_alert("Nima Norgay hat kein Geburtsdatum", css: ".alert-danger ul li")
+          end
+
+          it "removes from household if other member has a planned termination" do
+            Roles::Termination.new(role: roles(:familienmitglied_kind),
+              terminate_on: Time.zone.today.end_of_year).call
+            expect do
+              request(terminate_on: :now)
+            end.to change { household_key_count }.by(-1)
+            expect(response).to redirect_to person_path(person, format: :html)
           end
         end
       end
@@ -449,6 +457,19 @@ describe Memberships::TerminateSacMembershipsController do
               .to not_change(Role, :count)
               .and change { role.terminated }.to(true)
               .and change { role.termination_reason_id }.from(nil).to(termination_reason_id)
+              .and not_change { household_key_count }
+            expect(response).to redirect_to person_path(person, format: :html)
+            expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."
+          end
+
+          it "terminates role if other member has a planned termination" do
+            Roles::Termination.new(role: roles(:familienmitglied_kind),
+              terminate_on: Time.zone.today.end_of_year).call
+            expect do
+              request
+              role.reload
+            end
+              .to change { role.terminated }.to(true)
               .and not_change { household_key_count }
             expect(response).to redirect_to person_path(person, format: :html)
             expect(flash[:notice]).to eq "Deine SAC-Mitgliedschaft wurde gekündet."

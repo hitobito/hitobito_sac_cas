@@ -34,10 +34,17 @@ describe Memberships::TerminateSacMembershipForm do
       end
 
       it "is invalid if household would be invalid when removing person" do
+        people(:familienmitglied_kind).update_attribute(:birthday, nil)
+        form = described_class.new(%w[now], person)
+        form.attributes = {termination_reason_id: termination_reasons(:moved).id, terminate_on: "now"}
+        expect(form).not_to be_valid
+        expect(form.errors.full_messages).to eq ["Nima Norgay hat kein Geburtsdatum."]
+      end
+
+      it "is valid if other family member has a planned termination" do
         role = roles(:familienmitglied_kind)
         Roles::Termination.new(role:, terminate_on: Time.zone.today.end_of_year).call
-        expect(form).not_to be_valid
-        expect(form.errors.full_messages).to eq ["Nima Norgay hat einen Austritt geplant."]
+        expect(form).to be_valid
       end
 
       it "is valid even if household would be invalid as only single person left" do
