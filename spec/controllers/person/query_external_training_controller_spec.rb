@@ -24,7 +24,7 @@ describe Person::QueryExternalTrainingController do
       it "find mitglied" do
         get :index, params: {q: mitglied.first_name}
 
-        expect(json).to have(1).items
+        expect(json).to have(2).items
         expect(response.body).to match(/#{mitglied.full_name}/)
       end
     end
