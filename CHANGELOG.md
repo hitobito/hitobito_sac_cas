@@ -4,6 +4,7 @@
 * Kursumfragen werden am Tag nach dem letzten Kurstag automatisch mit einem kursspezifischen SurveyHero Link an die Teilnehmenden versendet, Survey ID und Collector ID werden auf dem Kurstyp erfasst (HIT-1573 / hitobito_sac_cas#2695)
 * Die Alpen Export: Personen mit mehreren Abo Rollen oder mit Mitgliedschaft und Abo Rolle erscheinen pro Rolle auf einer eigenen Zeile (HIT-1675 / hitobito_sac_cas#2689)
 * Tourenleiter*innen werden beim Erfassen einer Tour als Leitung eingetragen und können die Leitung ihrer eigenen Touren verwalten (HIT-1768 / hitobito_sac_cas#2728)
+* Austritte mehrerer Familienmitglieder können direkt nacheinander erfasst werden (HIT-1726 / hitobito_sac_cas#2676)
 * Ehrenmitglied- und Begünstigt-Rollen einer Sektion werden bei Austritt und Stammsektionswechsel mitbeendet (HIT-1669 / hitobito_sac_cas#2726)
 
 ## Version 2.11
