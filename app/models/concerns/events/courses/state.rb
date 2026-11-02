@@ -147,7 +147,9 @@ module Events::Courses::State
   end
 
   def annul_participations
-    all_participants.update_all("previous_state = state, active = FALSE, state = 'annulled'")
+    all_participants.update_all(
+      "previous_state = event_participations.state, active = FALSE, state = 'annulled'"
+    )
     cancel_invoices(open_course_invoices)
   end
 

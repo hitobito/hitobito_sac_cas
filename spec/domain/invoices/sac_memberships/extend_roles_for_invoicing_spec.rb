@@ -50,7 +50,7 @@ describe Invoices::SacMemberships::ExtendRolesForInvoicing do
 
     it "only makes 5 database queries" do
       expect { extend_roles }.to make(5).db_queries.with(
-        SQL: 2, # SELECT in batches
+        "Role Eager Load": 2, # SELECT in batches
         "Role Pluck": 2, # SELECT for beitragskategorie change
         "Role Update All": 1
       )
