@@ -4,6 +4,7 @@
 * Mitgliedschaftsrechnung kann manuell als 'bezahlt' markiert werden (hitobito_sac_cas#2581)
 * Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
+* Austritte mehrerer Familienmitglieder können direkt nacheinander erfasst werden (HIT-1726 / hitobito_sac_cas#2676)
 
 ## Version 2.7.12
 
