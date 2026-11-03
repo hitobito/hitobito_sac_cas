@@ -58,13 +58,66 @@ describe Event::TourMailer do
         "<dt>Konditionelle Anforderung</dt><dd>B - wenig anstrengend</dd>",
         "<dt>Technische Anforderung(en)</dt><dd>T3, T4</dd>",
         "<dt>Beschreibung</dt><dd>Wichtige Infos<br/>auf mehreren Zeilen</dd>",
-        "Bei Fragen kannst du dich jederzeit an Tenzing Norgay wenden " \
-        "(#{contact.id}, +41 79 123 45 67, t.norgay@hitobito.example.com)."
+        "Bei Fragen kannst du dich jederzeit an Tenzing Norgay " \
+        "(+41 79 123 45 67, t.norgay@hitobito.example.com) wenden."
       )
 
       expect(mail.body.to_s).not_to include(
         "Zusatzinfo"
       )
+    end
+  end
+
+  describe "contact-info placeholder" do
+    let(:mail) { described_class.publication(event, person) }
+    let(:contact) { people(:familienmitglied) }
+    let(:sentence) { "Bei Fragen kannst du dich jederzeit an %s wenden." }
+
+    before do
+      contact.phone_numbers.create!(number: "079 123 45 67",
+        category: contact_account_categories(:phone_number_person_mobile))
+      event.update_columns(contact_id: contact.id)
+    end
+
+    def expect_contact_info(text)
+      expect(mail.body.to_s).to include(format(sentence, text))
+    end
+
+    it "renders name, phone and email if all are visible" do
+      event.update_columns(visible_contact_attributes: %w[name phone_number email])
+      expect_contact_info("Tenzing Norgay (+41 79 123 45 67, t.norgay@hitobito.example.com)")
+    end
+
+    it "renders only name without parentheses if phone and email are hidden" do
+      event.update_columns(visible_contact_attributes: %w[name address])
+      expect_contact_info("Tenzing Norgay")
+    end
+
+    it "renders phone and email without parentheses if name is hidden" do
+      event.update_columns(visible_contact_attributes: %w[phone_number email])
+      expect_contact_info("+41 79 123 45 67, t.norgay@hitobito.example.com")
+    end
+
+    it "renders only email if name and phone are hidden" do
+      event.update_columns(visible_contact_attributes: %w[email])
+      expect_contact_info("t.norgay@hitobito.example.com")
+    end
+
+    it "skips missing phone number" do
+      contact.phone_numbers.destroy_all
+      event.update_columns(visible_contact_attributes: %w[name phone_number email])
+      expect_contact_info("Tenzing Norgay (t.norgay@hitobito.example.com)")
+    end
+
+    it "renders nothing if no contact attribute is visible" do
+      event.update_columns(visible_contact_attributes: %w[address social_account])
+      expect(mail.body.to_s).not_to include("Tenzing", "079", "t.norgay")
+      expect_contact_info("")
+    end
+
+    it "renders nothing without contact" do
+      event.update_columns(contact_id: nil)
+      expect_contact_info("")
     end
   end
 
