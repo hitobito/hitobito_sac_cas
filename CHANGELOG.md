@@ -7,6 +7,7 @@
 * Austritte mehrerer Familienmitglieder können direkt nacheinander erfasst werden (HIT-1726 / hitobito_sac_cas#2676)
 * Ehrenmitglied- und Begünstigt-Rollen einer Sektion werden bei Austritt und Stammsektionswechsel mitbeendet (HIT-1669 / hitobito_sac_cas#2726)
 * Adressabgleich mit der Post: Der Adresszusatz wird nicht an die Post übermittelt. Liefert die Post einen Adresszusatz zurück, wird er übernommen, sonst bleibt der bestehende erhalten (hitobito_sww#292)
+* Tour-E-Mails zeigen Name, Telefon und E-Mail der Kontaktperson nur noch gemäss deren Anzeigeoptionen an. Dazu existiert der neue Platzhalter {contact-info} (HIT-1745 / hitobito_sac_cas#2679)
 
 ## Version 2.11
 

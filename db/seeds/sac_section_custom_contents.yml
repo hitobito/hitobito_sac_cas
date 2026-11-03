@@ -7,8 +7,8 @@ event_tour_approval_required:
   label: "Tour: E-Mail Freigabe notwendig"
   subject: "Aktion erforderlich: Tour {event-name} ({event-id}) zur Prüfung"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-names}
@@ -22,7 +22,7 @@ event_tour_approval_required:
 
     {event-dates}
 
-    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+    Fachlich ist {contact-info} verantwortlich.
 
     Beste Grüsse,
     SAC-Portal
@@ -31,8 +31,8 @@ event_tour_approval_rejected:
   label: "Tour: E-Mail Freigabe abgelehnt"
   subject: "Tour {event-name} ({event-id}) wurde abgelehnt"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -46,7 +46,7 @@ event_tour_approval_rejected:
 
     {event-dates}
 
-    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+    Fachlich ist {contact-info} verantwortlich.
 
     Beste Grüsse,
     SAC-Portal
@@ -55,8 +55,8 @@ event_tour_approval_granted:
   label: "Tour: E-Mail Freigabe erfolgt"
   subject: "Tour {event-name} ({event-id}) wurde freigegeben"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -71,7 +71,7 @@ event_tour_approval_granted:
 
     {event-dates}
 
-    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+    Fachlich ist {contact-info} verantwortlich.
 
     Beste Grüsse,
     SAC-Portal
@@ -80,8 +80,8 @@ event_tour_self_approved:
   label: "Tour: E-Mail Selbst freigegeben"
   subject: "Tour {event-name} ({event-id}) wurde selbst freigegeben"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-names}
@@ -95,7 +95,7 @@ event_tour_self_approved:
 
     {event-dates}
 
-    Fachlich ist {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}) verantwortlich.
+    Fachlich ist {contact-info} verantwortlich.
 
     Beste Grüsse,
     SAC-Portal
@@ -107,7 +107,7 @@ event_tour_publication:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
     event-name, event-id, event-link, event-dates, event-application, event-essentials,
     event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -126,7 +126,7 @@ event_tour_publication:
 
     {event-details}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -143,7 +143,7 @@ event_tour_publication_subito:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
     event-name, event-id, event-link, event-dates, event-application, event-essentials,
     event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -162,7 +162,7 @@ event_tour_publication_subito:
 
     {event-details}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -178,7 +178,7 @@ event_tour_closing:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link, participation-link,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -200,7 +200,7 @@ event_tour_closing:
     Deine Anmeldung kannst du unter folgendem Link einsehen:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -216,7 +216,7 @@ event_tour_canceled_minimum_participants:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link, participation-link,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -238,7 +238,7 @@ event_tour_canceled_minimum_participants:
     Deine abgesagte Anmeldung kannst du unter folgendem Link einsehen:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -252,7 +252,7 @@ event_tour_canceled_no_leader:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link, participation-link,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   label: "Tour: E-Mail Absage (Ausfall Leitung)"
   subject: "Absage der Tour {event-name}"
   body: |
@@ -276,7 +276,7 @@ event_tour_canceled_no_leader:
     Deine abgesagte Anmeldung kannst du unter folgendem Link einsehen:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -292,7 +292,7 @@ event_tour_canceled_weather:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link, participation-link,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -314,7 +314,7 @@ event_tour_canceled_weather:
     Deine abgesagte Anmeldung kannst du unter folgendem Link einsehen:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -330,7 +330,7 @@ event_tour_back_to_draft:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    contact-id, contact-info, section-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -352,7 +352,7 @@ event_tour_back_to_draft:
 
     {event-requirements}
 
-    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen wende dich bitte an {contact-info}.
 
     Bergsportliche Grüsse,
     {section-name}
@@ -363,7 +363,7 @@ event_tour_back_to_approved:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    contact-id, contact-info, section-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -385,7 +385,7 @@ event_tour_back_to_approved:
 
     {event-requirements}
 
-    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen wende dich bitte an {contact-info}.
 
     Bergsportliche Grüsse,
     {section-name}
@@ -396,7 +396,7 @@ event_tour_back_to_published:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    contact-id, contact-info, section-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -418,7 +418,7 @@ event_tour_back_to_published:
 
     {event-requirements}
 
-    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen wende dich bitte an {contact-info}.
 
     Bergsportliche Grüsse,
     {section-name}
@@ -429,7 +429,7 @@ event_tour_back_to_ready:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-internal-comment,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name,
+    contact-id, contact-info, section-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -451,7 +451,7 @@ event_tour_back_to_ready:
 
     {event-requirements}
 
-    Bei Fragen wende dich bitte an {contact-first-name} {contact-last-name} ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen wende dich bitte an {contact-info}.
 
     Bergsportliche Grüsse,
     {section-name}
@@ -463,7 +463,7 @@ event_tour_application_confirmation_assigned:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
     participation-link, participation-additional-information, participation-answers,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -491,7 +491,7 @@ event_tour_application_confirmation_assigned:
     Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -508,7 +508,7 @@ event_tour_application_confirmation_unconfirmed:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
     participation-link, participation-additional-information, participation-answers,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -537,7 +537,7 @@ event_tour_application_confirmation_unconfirmed:
     Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -555,7 +555,7 @@ event_tour_participation_summon:
     participation-link, participation-additional-information, participation-answers,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
     event-attachments,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -583,7 +583,7 @@ event_tour_participation_summon:
     Falls deine Anmeldeangaben nicht mehr aktuell sind, kannst du diese unter folgendem Link bearbeiten:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -599,7 +599,7 @@ event_tour_participation_reject:
   placeholders_optional:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link, participation-link,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -621,7 +621,7 @@ event_tour_participation_reject:
     Deine abgelehnte Anmeldung kannst du unter folgendem Link einsehen:
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -638,7 +638,7 @@ event_tour_participation_canceled:
     "recipient-id, recipient-first-name, recipient-last-name, recipient-link,
     participation-link, participation-additional-information, participation-answers,
     event-name, event-id, event-link, event-dates, event-essentials, event-requirements, event-details,
-    contact-id, contact-first-name, contact-last-name, contact-email, contact-phone, section-name"
+    contact-id, contact-info, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
 
@@ -665,7 +665,7 @@ event_tour_participation_canceled:
 
     {participation-link}
 
-    Bei Fragen kannst du dich jederzeit an {contact-first-name} {contact-last-name} wenden ({contact-id}, {contact-phone}, {contact-email}).
+    Bei Fragen kannst du dich jederzeit an {contact-info} wenden.
 
     Schon gewusst? Du kannst deine SAC Ausbildungs- und Weiterbildungshistorie sowie deine Tourenhistorie unter folgendem Link einsehen:
     {recipient-link}
@@ -679,8 +679,8 @@ event_tour_report_submitted:
   label: "Tour: E-Mail Tourenrapport eingereicht"
   subject: "Tourenrapport eingereicht: {event-name}"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -698,8 +698,8 @@ event_tour_report_rejected:
   label: "Tour: E-Mail Tourenrapport abgelehnt"
   subject: "Tourenrapport abgelehnt: {event-name}"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, report-remarks, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -719,8 +719,8 @@ event_tour_report_approved:
   label: "Tour: E-Mail Tourenrapport zur Auszahlung freigegeben"
   subject: "Tourenrapport zur Auszahlung freigegeben: {event-name}"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -738,8 +738,8 @@ event_tour_report_payout_rejected:
   label: "Tour: E-Mail Tourenrapport Auszahlung abgelehnt"
   subject: "Tourenrapport Auszahlung abgelehnt: {event-name}"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, report-remarks, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
@@ -759,8 +759,8 @@ event_tour_report_payout_recorded:
   label: "Tour: E-Mail Tourenrapport Auszahlung erfasst"
   subject: "Tourenrapport Auszahlung erfasst: {event-name}"
   placeholders_optional:
-    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-first-name,
-    contact-last-name, contact-email, contact-phone, recipient-names, recipient-id, recipient-first-name, recipient-last-name,
+    "event-name, event-id, event-link, event-internal-comment, event-dates, contact-id, contact-info,
+    recipient-names, recipient-id, recipient-first-name, recipient-last-name,
     updater-id, updater-first-name, updater-last-name, updater-email, updater-phone, section-name"
   body: |
     Hallo {recipient-first-name} {recipient-last-name} ({recipient-id})
