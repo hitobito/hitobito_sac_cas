@@ -60,7 +60,7 @@ describe "people/external_invoices/_actions_index.html.haml" do
     end
 
     it "renders abo magazin invoice button when person has neuanmeldung role" do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       Fabricate(Group::AboMagazin::Neuanmeldung.sti_name, person: person,
         group: groups(:abo_die_alpen), start_on: 1.day.ago, end_on: 20.days.from_now)
       expect(subject).to have_text "Die Alpen Rechnung erstellen"
@@ -74,7 +74,7 @@ describe "people/external_invoices/_actions_index.html.haml" do
     end
 
     it "does not render abo magazin when person does not have any role related to abo" do
-      person.roles.destroy_all
+      person.roles.each(&:really_destroy!)
       expect(subject).to have_no_text "Die Alpen Rechnung erstellen"
     end
 

@@ -74,7 +74,7 @@ describe TableDisplays::People::SektionMemberAdminVisible, type: :helper do
         end
 
         it "hides value when no zusatzsektion exists for that sektion" do
-          roles(:mitglied_zweitsektion).destroy
+          roles(:mitglied_zweitsektion).really_destroy!
           expect(column.value_for(mitglied, :terminated_on)).to eq "fehlende Berechtigung"
         end
       end
