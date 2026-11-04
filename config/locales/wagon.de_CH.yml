@@ -1016,8 +1016,8 @@ de_CH:
         one: Kommission
         other: Kommission
       group/sektions_kommission_huetten:
-        one: Kommission Hütten
-        other: Kommissionen Hütten
+        one: Commissione rifugi
+        other: Commissione rifugi
       group/sektions_kommission_touren:
         one: Kommission Touren
         other: Kommissionen Touren
@@ -1040,11 +1040,11 @@ de_CH:
         one: Ressort
         other: Ressorts
       group/sektions_touren_und_kurse:
-        one: Touren und Kurse
-        other: Touren und Kurse
+        one: Gite e corsi
+        other: Gite e corsi
       group/sektions_vorstand:
-        one: Vorstand
-        other: Vorstand
+        one: Comitato
+        other: Comitato
       group/sektionshuetten:
         one: Sektionshütten
         other: Sektionshütten

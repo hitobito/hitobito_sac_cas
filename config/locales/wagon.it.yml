@@ -1401,11 +1401,11 @@ it:
         one: Altro
         description: Altro
       group/sektions_touren_und_kurse/tourenleiter:
-        one: Capo Gita (con qualifica)
-        description: Capo Gita (con qualifica)
+        one: Capogita (con qualifica)
+        description: Capogita (con qualifica)
       group/sektions_touren_und_kurse/tourenleiter_ohne_qualifikation:
-        one: Capo Gita (senza qualifica)
-        description: Capo Gita (senza qualifica)
+        one: Capogita (senza qualifica)
+        description: Capogita (senza qualifica)
       group/sektions_touren_und_kurse/kibe_chef:
         one: Responsabile Alpinismo Bambini
         description: Responsabile Alpinismo Bambini
@@ -2284,11 +2284,11 @@ it:
         success_multiple: "%{model} è stato creato con successo per %{names}."
 
   filter_navigation/people:
-    tour_guides_none: Nessun Capo/a Gita
-    tour_guides_active: Capi Gita attive
-    tour_guides_stalled: Capi Gita sospese
-    tour_guides_inactive: Capi Gita non attive
-    tour_guides_expired: Capi Gita precedenti
+    tour_guides_none: Nessun capogita
+    tour_guides_active: Capigita attive
+    tour_guides_stalled: Capigita sospese
+    tour_guides_inactive: Capigita non attive
+    tour_guides_expired: Capigita precedenti
 
   filter_navigation/events:
     my_pending_approvals: Le mie approvazioni in sospeso
@@ -2588,7 +2588,7 @@ it:
     sac_membership:
       section: Sezione
       additional_sections: Sezioni aggiuntive
-      tour_guide: Capo/a Gita
+      tour_guide: Capogita
       tour_guide_active: Attivo
     templates:
       sac_membership:
@@ -2597,7 +2597,7 @@ it:
             membership_number: "Membro: %{membership_number}"
             membership_years: "Numero di anni di iscrizione: %{membership_years}"
           additional_infos:
-            tour_guide: Capo/a Gita attivo/a
+            tour_guide: Capogita attivo/a
           states:
             valid: Iscrizione valida
             invalid: Iscrizione non valida
