@@ -265,9 +265,12 @@ describe Event::ParticipationAbility do
 
   context "contact" do
     let(:contact) { Fabricate(:person) }
-    let(:participation) { Fabricate(:event_participation, event:, participant: Fabricate(:person)) }
+    let(:participation) do
+      Fabricate(:event_participation, event:, participant: Fabricate(:person),
+        application: Fabricate(:event_application, priority_1: event))
+    end
 
-    managing_actions = [:show, :show_full, :update, :update_full, :absent, :attend]
+    managing_actions = [:show, :show_details, :show_full, :print, :update, :update_full, :absent, :attend]
 
     subject(:ability) { Ability.new(contact.reload) }
 

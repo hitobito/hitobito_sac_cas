@@ -10,14 +10,21 @@ module SacCas::Event::ParticipationAbility
 
   include SacCas::AbilityDsl::Constraints::Event
 
-  prepended do
-    on(Event::Participation) do
-      permission(:any).may(:update).her_own_or_for_participations_full_events
-      permission(:any).may(:update_full).for_participations_full_events
+  prepended do # rubocop:todo Metrics/BlockLength
+    on(Event::Participation) do # rubocop:todo Metrics/BlockLength
+      permission(:any)
+        .may(:show)
+        .her_own_or_manager_or_for_participations_read_events_or_tour_leadership
+      permission(:any)
+        .may(:show_details, :print)
+        .her_own_or_manager_or_for_participations_read_details_events_or_tour_leadership
+      permission(:any).may(:update).her_own_or_for_participations_full_events_or_tour_leadership
+      permission(:any)
+        .may(:show_full, :update_full, :absent, :attend)
+        .for_participations_full_events_or_tour_leadership
 
       permission(:any).may(:cancel).her_own
       permission(:any).may(:assign, :summon).none
-      permission(:any).may(:absent, :attend).for_participations_full_events
       permission(:any).may(:reactivate).for_leaded_events
       permission(:any).may(:leader_settlement).for_herself_if_self_employed_leader
 
@@ -51,8 +58,20 @@ module SacCas::Event::ParticipationAbility
     !her_own
   end
 
-  def her_own_or_for_participations_full_events
-    her_own || for_participations_full_events
+  def her_own_or_manager_or_for_participations_read_events_or_tour_leadership
+    her_own_or_manager_or_for_participations_read_events || for_tour_leadership
+  end
+
+  def her_own_or_manager_or_for_participations_read_details_events_or_tour_leadership
+    her_own_or_manager_or_for_participations_read_details_events || for_tour_leadership
+  end
+
+  def her_own_or_for_participations_full_events_or_tour_leadership
+    her_own || for_participations_full_events_or_tour_leadership
+  end
+
+  def for_participations_full_events_or_tour_leadership
+    for_participations_full_events || for_tour_leadership
   end
 
   def in_same_layer_for_self_employed_leader
