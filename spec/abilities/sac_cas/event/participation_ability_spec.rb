@@ -263,6 +263,46 @@ describe Event::ParticipationAbility do
     end
   end
 
+  context "contact" do
+    let(:contact) { Fabricate(:person) }
+    let(:participation) { Fabricate(:event_participation, event:, participant: Fabricate(:person)) }
+
+    managing_actions = [:show, :show_full, :update, :update_full, :absent, :attend]
+
+    subject(:ability) { Ability.new(contact.reload) }
+
+    before do
+      event.update_columns(contact_id: contact.id)
+      event.role_types.find(&:participant?).create!(participation:)
+    end
+
+    context "of tour" do
+      let(:event) { events(:section_tour) }
+
+      managing_actions.each do |action|
+        it "may #{action}" do
+          expect(ability).to be_able_to(action, participation)
+        end
+      end
+
+      [:create, :destroy].each do |action|
+        it "may not #{action}" do
+          expect(ability).not_to be_able_to(action, participation)
+        end
+      end
+    end
+
+    context "of course" do
+      let(:event) { events(:top_course) }
+
+      managing_actions.each do |action|
+        it "may not #{action}" do
+          expect(ability).not_to be_able_to(action, participation)
+        end
+      end
+    end
+  end
+
   context "layer_and_below_full" do
     context "root" do
       let(:role) { build_role(:geschaeftsstelle, "Mitarbeiter") }
