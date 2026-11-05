@@ -96,6 +96,45 @@ describe EventAbility do
     end
   end
 
+  describe "tour leadership" do
+    let(:tour) { events(:section_tour) }
+    let(:tour_participation) { Event::Participation.create!(person:, event: tour) }
+
+    [Event::Role::Leader, Event::Role::AssistantLeader].each do |role|
+      it "may access application_market as #{role}" do
+        Fabricate(role.sti_name, participation: tour_participation)
+
+        expect(ability).to be_able_to(:application_market, tour)
+      end
+    end
+
+    it "may not access application_market as helper" do
+      Fabricate(Event::Role::Helper.sti_name, participation: tour_participation)
+
+      expect(ability).not_to be_able_to(:application_market, tour)
+    end
+
+    context "as contact" do
+      before { tour.update_columns(contact_id: person.id) }
+
+      [:application_market, :index_participations, :index_full_participations].each do |action|
+        it "may #{action}" do
+          expect(ability).to be_able_to(action, tour)
+        end
+      end
+
+      it "may not update" do
+        expect(ability).not_to be_able_to(:update, tour)
+      end
+    end
+
+    it "may not access application_market of course as leader" do
+      Fabricate(Event::Course::Role::Leader.sti_name, participation:)
+
+      expect(ability).not_to be_able_to(:application_market, events(:top_course))
+    end
+  end
+
   describe Group::FreigabeKomitee::Pruefer do
     let(:tour) { events(:section_tour) }
     let!(:pruefer_role) { Group::FreigabeKomitee::Pruefer.create!(group: freigabe_komitee, person: person) }

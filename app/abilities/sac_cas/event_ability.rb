@@ -55,6 +55,10 @@ module SacCas::EventAbility
       permission(:any)
         .may(:update)
         .for_assigned_freigabe_komitee
+
+      permission(:any)
+        .may(:application_market, :index_participations, :index_full_participations)
+        .for_tour_leadership
     end
   end
 

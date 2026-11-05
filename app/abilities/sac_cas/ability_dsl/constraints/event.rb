@@ -28,5 +28,9 @@ module SacCas::AbilityDsl::Constraints
     def in_tourenleiter_sektion_for_own
       in_tourenleiter_sektion && event.creator_id == user.id
     end
+
+    def for_tour_leadership
+      event.tour? && (for_participations_full_events || event.contact_id == user.id)
+    end
   end
 end
