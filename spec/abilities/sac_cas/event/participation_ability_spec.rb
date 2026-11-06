@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -258,6 +258,49 @@ describe Event::ParticipationAbility do
         it "may not update_full own" do
           participation = build(:bluemlisalp_funktionaere, event: top_course, person: role.person)
           expect(subject).not_to be_able_to(:update_full, participation)
+        end
+      end
+    end
+  end
+
+  context "contact" do
+    let(:contact) { Fabricate(:person) }
+    let(:participation) do
+      Fabricate(:event_participation, event:, participant: Fabricate(:person),
+        application: Fabricate(:event_application, priority_1: event))
+    end
+
+    managing_actions = [:show, :show_details, :show_full, :print, :update, :update_full, :absent, :attend]
+
+    subject(:ability) { Ability.new(contact.reload) }
+
+    before do
+      event.update_columns(contact_id: contact.id)
+      event.role_types.find(&:participant?).create!(participation:)
+    end
+
+    context "of tour" do
+      let(:event) { events(:section_tour) }
+
+      managing_actions.each do |action|
+        it "may #{action}" do
+          expect(ability).to be_able_to(action, participation)
+        end
+      end
+
+      [:create, :destroy].each do |action|
+        it "may not #{action}" do
+          expect(ability).not_to be_able_to(action, participation)
+        end
+      end
+    end
+
+    context "of course" do
+      let(:event) { events(:top_course) }
+
+      managing_actions.each do |action|
+        it "may not #{action}" do
+          expect(ability).not_to be_able_to(action, participation)
         end
       end
     end
