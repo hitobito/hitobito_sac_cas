@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -110,6 +110,34 @@ describe Memberships::LeaveZusatzsektion do
           expect(leave.save).to eq true
         end.to change { person.roles.count }.by(-2)
         expect { Role.find(role.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      context "with ehrenmitglied and beguenstigt roles" do
+        let!(:ehrenmitglied) { create_role(:bluemlisalp_mitglieder, "Ehrenmitglied", owner: person) }
+        let!(:beguenstigt) { create_role(:bluemlisalp_mitglieder, "Beguenstigt", owner: person) }
+        let!(:stammsektion_ehrenmitglied) do
+          create_role(:matterhorn_mitglieder, "Ehrenmitglied", owner: person)
+        end
+
+        it "ends roles of left zusatzsektion only" do
+          expect(leave.save).to eq true
+
+          expect(ehrenmitglied.reload.end_on).to eq now.to_date.yesterday
+          expect(beguenstigt.reload.end_on).to eq now.to_date.yesterday
+          expect(stammsektion_ehrenmitglied.reload.end_on).to eq now.to_date.end_of_year
+        end
+
+        context "with terminate_on at the end of year" do
+          let(:terminate_on) { now.end_of_year.to_date }
+
+          it "terminates roles of left zusatzsektion only" do
+            expect(leave.save).to eq true
+
+            expect(ehrenmitglied.reload).to be_terminated
+            expect(beguenstigt.reload).to be_terminated
+            expect(stammsektion_ehrenmitglied.reload).not_to be_terminated
+          end
+        end
       end
 
       context "with terminate_on at the end of year" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -30,6 +30,19 @@ describe Memberships::SwapStammZusatzsektion do
       expect(person.sac_membership.stammsektion_role.layer_group).to eq matterhorn
       expect(person.sac_membership.zusatzsektion_roles).to have(1).item
       expect(person.sac_membership.zusatzsektion_roles.first.layer_group).to eq bluemlisalp
+    end
+
+    it "keeps ehrenmitglied and beguenstigt roles in both sektionen" do
+      ehrenmitglied = Fabricate(Group::SektionsMitglieder::Ehrenmitglied.sti_name, person:,
+        group: groups(:bluemlisalp_mitglieder), start_on: 1.year.ago, end_on: now.end_of_year)
+      beguenstigt = Fabricate(Group::SektionsMitglieder::Beguenstigt.sti_name, person:,
+        group: matterhorn_mitglieder, start_on: 1.year.ago, end_on: now.end_of_year)
+
+      expect(switch.save!).to be_truthy
+      expect(ehrenmitglied.reload.end_on).to eq now.end_of_year.to_date
+      expect(beguenstigt.reload.end_on).to eq now.end_of_year.to_date
+      expect(ehrenmitglied).to be_valid
+      expect(beguenstigt).to be_valid
     end
   end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -493,6 +493,18 @@ describe Memberships::UndoTermination, versioning: true do
       subject.save!
 
       expect { Role.unscoped.find(created_role.id) }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "restores ehrenmitglied role ended by the termination" do
+      membership_end_on = role.end_on
+      ehrenmitglied = mutation do
+        Fabricate(Group::SektionsMitglieder::Ehrenmitglied.sti_name, person:,
+          group: groups(:bluemlisalp_mitglieder), start_on: role.start_on, end_on: membership_end_on)
+      end
+      terminate(role)
+
+      expect { subject.save! }
+        .to change { ehrenmitglied.reload.end_on }.from(Date.current.yesterday).to(membership_end_on)
     end
 
     context "for family membership" do
