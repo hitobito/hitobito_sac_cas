@@ -23,4 +23,14 @@ namespace :migrations do
       puts Migrations::RoundExternalTrainingDays.new.list_active_qualifications
     end
   end
+
+  namespace :contact_info_placeholders do
+    desc "Replace the contact name, phone and email placeholders with {contact-info} " \
+      "and reset the affected german section templates"
+    task migrate: :environment do
+      migrator = Migrations::ContactInfoPlaceholderMigrator.new
+      puts "Rewrote #{migrator.rewrite_placeholders} subjects and bodies"
+      puts "Reset #{migrator.reset_section_templates} section templates"
+    end
+  end
 end

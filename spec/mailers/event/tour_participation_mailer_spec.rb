@@ -28,7 +28,7 @@ describe Event::TourParticipationMailer do
         "Hallo Edmund Hillary (#{person.id})",
         "Es handelt sich hierbei um keine definitive Zusage.",
         "Bei Fragen kannst du dich jederzeit an " \
-  "#{admin.first_name} #{admin.last_name} wenden (#{admin.id}, , #{admin.email}).",
+        "#{admin.first_name} #{admin.last_name} (#{admin.email}) wenden.",
         "Bergsportliche Grüsse,<br>SAC Blüemlisalp",
         "<dt>Kommentar</dt><dd>(keine)</dd>"
       )
@@ -65,8 +65,8 @@ describe Event::TourParticipationMailer do
         "<dt>Konditionelle Anforderung</dt><dd>B - wenig anstrengend</dd>",
         "<dt>Technische Anforderung(en)</dt><dd>T3, T4</dd>",
         "<dt>Beschreibung</dt><dd>Wichtige Infos<br/>auf mehreren Zeilen</dd>",
-        "Bei Fragen kannst du dich jederzeit an Tenzing Norgay wenden " \
-        "(#{contact.id}, +41 79 123 45 67, t.norgay@hitobito.example.com)."
+        "Bei Fragen kannst du dich jederzeit an Tenzing Norgay " \
+        "(+41 79 123 45 67, t.norgay@hitobito.example.com) wenden."
       )
 
       expect(mail.body.to_s).not_to include(

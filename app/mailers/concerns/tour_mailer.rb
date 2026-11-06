@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module TourMailer
+module TourMailer # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include Rails.application.routes.url_helpers
 
@@ -18,10 +18,6 @@ module TourMailer
       else
         @person.public_send(attr)
       end
-    end
-
-    define_method :"placeholder_contact_#{attr}" do
-      @event.contact&.public_send(attr)
     end
 
     define_method :"placeholder_updater_#{attr}" do
@@ -41,8 +37,27 @@ module TourMailer
     link_to(person_url(@person))
   end
 
-  def placeholder_contact_phone
-    placeholder_phone_value(@event.contact)
+  def placeholder_contact_id
+    @event.contact&.id
+  end
+
+  def placeholder_contact_info
+    contact = @event.contact
+    return "" unless contact
+
+    name = contact.full_name if @event.contact_attribute_visible?(:name)
+    details = visible_contact_details(contact).join(", ")
+    return details if name.blank?
+    return name if details.blank?
+
+    "#{name} (#{details})"
+  end
+
+  def visible_contact_details(contact)
+    details = []
+    details << placeholder_phone_value(contact) if @event.contact_attribute_visible?(:phone_number)
+    details << contact.email if @event.contact_attribute_visible?(:email)
+    details.compact_blank
   end
 
   def placeholder_updater_phone
