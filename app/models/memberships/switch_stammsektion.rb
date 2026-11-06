@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -15,7 +15,8 @@ module Memberships
     private
 
     def prepare_roles(person)
-      previous_stammsektion_role = People::SacMembership.new(person).stammsektion_role
+      previous_membership = People::SacMembership.new(person)
+      previous_stammsektion_role = previous_membership.stammsektion_role
       mark_for_termination(previous_stammsektion_role) if previous_stammsektion_role
 
       new_stammsektion_role = build_role(
@@ -27,8 +28,16 @@ module Memberships
       )
 
       roles = [previous_stammsektion_role, new_stammsektion_role]
+      roles += terminate_membership_dependant_roles(previous_membership)
       roles += yield(previous_stammsektion_role) if block_given?
       roles.compact
+    end
+
+    def terminate_membership_dependant_roles(previous_membership)
+      stammsektion_group_id = previous_membership.stammsektion_role&.group_id
+      roles = previous_membership.membership_prolongable_roles
+        .select { |role| role.group_id == stammsektion_group_id }
+      roles.each { |role| mark_for_termination(role) }
     end
 
     def mark_for_termination(role)

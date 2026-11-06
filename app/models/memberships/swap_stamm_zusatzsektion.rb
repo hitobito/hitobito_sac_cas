@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -29,6 +29,8 @@ module Memberships
         [prev_zusatzsektion_role, new_zusatzsektion_role]
       end
     end
+
+    def terminate_membership_dependant_roles(_previous_membership) = []
 
     # NOTE: noop, as person _is_ member if joins section (i.e. zusatzsektion)
     def assert_person_not_member_of_join_section # noop
