@@ -5,6 +5,7 @@
 * Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)
+* Ehrenmitglied- und Begünstigt-Rollen einer Sektion werden bei Austritt und Stammsektionswechsel mitbeendet (HIT-1669 / hitobito_sac_cas#2726)
 
 ## Version 2.7.12
 

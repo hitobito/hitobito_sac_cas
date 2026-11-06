@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -177,6 +177,29 @@ describe Memberships::SwitchStammsektion do
         expect(matterhorn_mitglied.created_at).to eq now.to_fs(:db)
         expect(matterhorn_mitglied.end_on).to eq now.end_of_year.to_date
         expect(person.primary_group).to eq matterhorn_mitglieder
+      end
+
+      context "with ehrenmitglied and beguenstigt roles in previous stammsektion" do
+        let!(:ehrenmitglied) do
+          create_role(:bluemlisalp_mitglieder, "Ehrenmitglied", start_on: 1.year.ago,
+            end_on: now.end_of_year.to_date)
+        end
+        let!(:beguenstigt) do
+          create_role(:bluemlisalp_mitglieder, "Beguenstigt", start_on: 1.year.ago,
+            end_on: now.end_of_year.to_date)
+        end
+
+        it "ends roles per yesterday" do
+          expect(switch.save).to eq true
+          expect(ehrenmitglied.reload.end_on).to eq now.to_date.yesterday
+          expect(beguenstigt.reload.end_on).to eq now.to_date.yesterday
+        end
+
+        it "destroys roles when start_on is today" do
+          person.roles.update_all(start_on: Time.zone.today)
+          expect(switch.save).to eq true
+          expect(Role.with_inactive.where(id: [ehrenmitglied.id, beguenstigt.id])).not_to exist
+        end
       end
 
       it_behaves_like "can switch sektion on the same day repeatedly", :mitglied

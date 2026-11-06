@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -27,8 +27,19 @@ module Memberships
       )
 
       roles = [previous_stammsektion_role, new_stammsektion_role]
+      roles += terminate_membership_dependant_roles(previous_stammsektion_role)
       roles += yield(previous_stammsektion_role) if block_given?
       roles.compact
+    end
+
+    def terminate_membership_dependant_roles(previous_stammsektion_role)
+      return [] unless previous_stammsektion_role
+
+      roles = previous_stammsektion_role.person.roles
+        .where(type: SacCas::MEMBERSHIP_PROLONGABLE_ROLES.map(&:sti_name),
+          group_id: previous_stammsektion_role.group_id)
+        .to_a
+      roles.each { |role| mark_for_termination(role) }
     end
 
     def mark_for_termination(role)
