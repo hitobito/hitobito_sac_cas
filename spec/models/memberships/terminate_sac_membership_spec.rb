@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -353,8 +353,9 @@ describe Memberships::TerminateSacMembership do
           expect(described_class::ROLE_TYPES).to eq [
             Group::SektionsMitglieder::Mitglied,
             Group::SektionsMitglieder::MitgliedZusatzsektion,
-            Group::SektionsMitglieder::Beguenstigt,
             Group::Ehrenmitglieder::Ehrenmitglied,
+            Group::SektionsMitglieder::Ehrenmitglied,
+            Group::SektionsMitglieder::Beguenstigt,
 
             Group::SektionsNeuanmeldungenNv::Neuanmeldung,
             Group::SektionsNeuanmeldungenNv::NeuanmeldungZusatzsektion,
@@ -376,6 +377,48 @@ describe Memberships::TerminateSacMembership do
             .to change { person.roles.count }.by(-3)
             .and not_change { person.roles.with_inactive.count }
           expect(tourenleiter.reload).not_to be_terminated
+        end
+
+        describe "ehrenmitglied and beguenstigt" do
+          def create_membership_dependant(type, group)
+            Fabricate(type.sti_name, person:, group: groups(group),
+              start_on: role.start_on, end_on: role.end_on)
+          end
+
+          let!(:ehrenmitglied) do
+            create_membership_dependant(Group::SektionsMitglieder::Ehrenmitglied,
+              :bluemlisalp_mitglieder)
+          end
+          let!(:beguenstigt) do
+            create_membership_dependant(Group::SektionsMitglieder::Beguenstigt,
+              :matterhorn_mitglieder)
+          end
+
+          it "ends roles in stammsektion and zusatzsektion" do
+            termination.save!
+
+            expect(ehrenmitglied.reload.end_on).to eq yesterday
+            expect(beguenstigt.reload.end_on).to eq yesterday
+          end
+
+          it "ends roles at the end of the year" do
+            params[:terminate_on] = end_of_year
+            role.update_columns(end_on: end_of_year + 1.year)
+            [ehrenmitglied, beguenstigt].each { _1.update_columns(end_on: end_of_year + 1.year) }
+
+            termination.save!
+
+            expect(ehrenmitglied.reload.end_on).to eq end_of_year
+            expect(beguenstigt.reload.end_on).to eq end_of_year
+          end
+
+          it "destroys roles only existing since today" do
+            person.roles.update_all(start_on: today)
+
+            termination.save!
+
+            expect(Role.with_inactive.where(id: [ehrenmitglied.id, beguenstigt.id])).not_to exist
+          end
         end
 
         it "deletes future tourenleiter role" do
