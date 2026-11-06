@@ -1,0 +1,14 @@
+top_course_de_description:
+  record: top_course_de (Event::Translation)
+  name: description
+  body: Tourenleiter/in 1 Sommer
+
+application_closed_de_description:
+  record: application_closed_de (Event::Translation)
+  name: description
+  body: Tourenleiter/in 1 Winter
+
+section_tour_de_description:
+  record: section_tour_de (Event::Translation)
+  name: description
+  body: Winterzauber im wunderschönen Kiental
