@@ -20,7 +20,7 @@
             = event.class.model_name.human
 
       %h3.mb-2
-        = link_to event.name, agenda_show_path(group, event)
+        = link_to event.name, agenda_show_path(group, event), data: {turbo_frame: :_top}
 
       - if event.tour?
         .d-flex.flex-wrap.align-items-center.gap-2.mt-3
@@ -92,7 +92,7 @@
         .d-flex.align-items-center.gap-2.mt-1
           = agenda_apply_button(event, group)
           = link_to t("agenda.buttons.show_details"), agenda_show_path(group, event),
-              class: "btn btn-sm agenda-btn-cta agenda-btn-details"
+              class: "btn btn-sm agenda-btn-cta agenda-btn-details", data: {turbo_frame: :_top}
 
         - deadline = agenda_application_deadline(event)
         - if deadline

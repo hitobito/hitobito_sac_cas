@@ -395,6 +395,19 @@ describe "agenda page infinite scroll", js: true do
       expect(page).not_to have_link("Weitere laden")
     end
 
+    it "opens the details of a lazily loaded tour" do
+      visit agenda_index_path(group_id: group.id)
+      scroll_to_bottom
+      expect(page).to have_css(".agenda-tour-card", count: 25)
+
+      last_tour = all(".agenda-tour-card").last
+      tour_name = last_tour.find("h3").text
+      last_tour.click_link("Details")
+
+      expect(page).to have_css(".agenda-tour-detail-title", text: tour_name)
+      expect(page).not_to have_css(".agenda-tour-card")
+    end
+
     it "shows a load more button that reveals the remaining tours when clicked" do
       visit agenda_index_path(group_id: group.id)
 
