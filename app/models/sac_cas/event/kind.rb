@@ -133,7 +133,7 @@ module SacCas::Event::Kind
 
     action_content = description_as_html(description)
     translation_attrs = event_translation_ids.map { |id|
-      build_rich_text(action_content)
+      build_rich_text(id, action_content)
     }
     ActionText::RichText.upsert_all(
       translation_attrs,
@@ -156,7 +156,7 @@ module SacCas::Event::Kind
     end
   end
 
-  def build_rich_text(action_content)
+  def build_rich_text(id, action_content)
     {body: action_content,
      plain_text_body: action_content.to_plain_text,
      record_id: id,
