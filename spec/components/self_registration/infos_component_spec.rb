@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -44,7 +44,7 @@ describe SelfRegistration::InfosComponent, type: :component do
         Monbijoustrasse 61
         3000 Bern 14
         Tel: +41 31 370 18 18
-        #{SacCas::MV_EMAIL}
+        Kontakt
       TEXT
     end
 
@@ -52,8 +52,12 @@ describe SelfRegistration::InfosComponent, type: :component do
       expect(body).to have_link("+41 31 370 18 18", href: "tel:+41313701818")
     end
 
-    it "does render email as link" do
-      expect(body).to have_link(SacCas::MV_EMAIL)
+    it "renders contact form as link" do
+      expect(body).to have_link("Kontakt", href: "https://www.sac-cas.ch/de/kontakt")
+    end
+
+    it "does not render email" do
+      expect(body).not_to have_content(SacCas::MV_EMAIL)
     end
   end
 
