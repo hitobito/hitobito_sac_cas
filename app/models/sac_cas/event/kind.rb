@@ -128,14 +128,12 @@ module SacCas::Event::Kind
   def push_down_descriptions(translation)
     event_translation_ids = push_down_event_translations.where(locale: translation.locale)
       .pluck(:id)
+    description = translation.attributes["general_information"]
+    return if description.blank?
 
-    content = description_as_html(translation.attributes["general_information"])
+    action_content = description_as_html(description)
     translation_attrs = event_translation_ids.map { |id|
-      {body: content,
-       plain_text_body: content.to_plain_text,
-       record_id: id,
-       record_type: "Event::Translation",
-       name: "description"}
+      build_rich_text(action_content)
     }
     ActionText::RichText.upsert_all(
       translation_attrs,
@@ -156,6 +154,14 @@ module SacCas::Event::Kind
     if maximum_age < (minimum_age || 0)
       errors.add(:maximum_age, :greater_than_or_equal_to, count: minimum_age || 0)
     end
+  end
+
+  def build_rich_text(action_content)
+    {body: action_content,
+     plain_text_body: action_content.to_plain_text,
+     record_id: id,
+     record_type: "Event::Translation",
+     name: "description"}
   end
 
   def description_as_html(description)
