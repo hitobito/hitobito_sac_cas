@@ -128,10 +128,11 @@ module SacCas::Event::Kind
   def push_down_descriptions(translation)
     event_translation_ids = push_down_event_translations.where(locale: translation.locale)
       .pluck(:id)
-    description = translation.attributes["general_information"]
 
+    content = description_as_html(translation.attributes["general_information"])
     translation_attrs = event_translation_ids.map { |id|
-      {body: description,
+      {body: content,
+       plain_text_body: content.to_plain_text,
        record_id: id,
        record_type: "Event::Translation",
        name: "description"}
@@ -155,5 +156,10 @@ module SacCas::Event::Kind
     if maximum_age < (minimum_age || 0)
       errors.add(:maximum_age, :greater_than_or_equal_to, count: minimum_age || 0)
     end
+  end
+
+  def description_as_html(description)
+    lines = description.strip.split(/\r?\n/).map { |line| ERB::Util.html_escape(line) }
+    ActionText::Content.new("<div>#{lines.join("<br>")}</div>")
   end
 end

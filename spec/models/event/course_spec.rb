@@ -936,7 +936,7 @@ describe Event::Course do
       I18n.with_locale(:fr) do
         orig.update!(name: "Le cours", description: "description du cours", brief_description: "Un cours de test")
       end
-      # pry
+
       dup = orig.duplicate
       expect(dup).to be_a_new(Event::Course)
       excluded_attrs = %w[id created_at updated_at application_opening_at application_closing_at state
