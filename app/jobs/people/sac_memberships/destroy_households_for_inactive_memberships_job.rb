@@ -26,12 +26,16 @@ module People
       def remove_outgrown_family_members
         iterate_people(sac_family_main_person: false) do |person|
           household = Household.new(person, maintain_sac_family: false)
-          if household.members.size <= 2
+          if household.members.size <= 2 || no_active_member_remains?(household, person)
             household.destroy
           else
             household.remove(person).save!
           end
         end
+      end
+
+      def no_active_member_remains?(household, leaving_person)
+        (household.people - [leaving_person]).none?(&:sac_membership_active?)
       end
 
       def iterate_people(sac_family_main_person:, &block)
