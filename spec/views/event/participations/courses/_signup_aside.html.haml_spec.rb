@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -33,6 +33,11 @@ describe "event/participations/courses/_signup_aside.html.haml" do
     it "has static content" do
       expect(dom).to have_css "h2.card-title", text: "Fragen zur Anmeldung"
       expect(dom).to have_css "i", count: 2
+    end
+
+    it "links to contact form instead of email" do
+      expect(dom).to have_link "Kontakt", href: "https://www.sac-cas.ch/de/kontakt"
+      expect(dom).not_to have_text "alpin@sac-cas.ch"
     end
   end
 end
