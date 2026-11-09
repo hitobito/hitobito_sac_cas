@@ -109,7 +109,13 @@
           "description": null
         }
       },
-      "extra_attributes": {},
+      "extra_attributes": {
+        "category_name": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        }
+      },
       "sorts": {
         "id": {},
         "label": {},
@@ -426,7 +432,13 @@
           "description": null
         }
       },
-      "extra_attributes": {},
+      "extra_attributes": {
+        "category_name": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        }
+      },
       "sorts": {
         "id": {},
         "label": {},
@@ -5759,7 +5771,13 @@
           "description": null
         }
       },
-      "extra_attributes": {},
+      "extra_attributes": {
+        "category_name": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        }
+      },
       "sorts": {
         "id": {},
         "label": {},
@@ -6439,7 +6457,13 @@
           "description": null
         }
       },
-      "extra_attributes": {},
+      "extra_attributes": {
+        "category_name": {
+          "type": "string",
+          "readable": true,
+          "description": null
+        }
+      },
       "sorts": {
         "id": {},
         "label": {},
