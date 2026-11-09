@@ -1103,8 +1103,8 @@ it:
         many: Dipartimenti
         other: Dipartimenti
       group/sektions_touren_und_kurse:
-        one: Visite e corsi
-        many: Visite e corsi
+        one: Gite e corsi
+        many: Gite e corsi
         other: Gite e corsi
       group/sektions_vorstand:
         one: Consiglio di amministrazione

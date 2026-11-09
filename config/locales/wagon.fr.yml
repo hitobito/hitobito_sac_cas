@@ -1105,8 +1105,8 @@ fr:
         many: Ressorts
         other: Ressorts
       group/sektions_touren_und_kurse:
-        one: Randonnées et cours
-        many: Randonnées et cours
+        one: Courses et cours
+        many: Courses et cours
         other: Courses et cours
       group/sektions_vorstand:
         one: Comité
