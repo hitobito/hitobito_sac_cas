@@ -128,10 +128,7 @@ module SacCas::Event::Kind
   def push_down_descriptions(translation)
     event_translation_ids = push_down_event_translations.where(locale: translation.locale)
       .pluck(:id)
-    description = translation.attributes["general_information"]
-    return if description.blank?
-
-    action_content = description_as_html(description)
+    action_content = description_as_html(translation.attributes["general_information"])
     translation_attrs = event_translation_ids.map { |id|
       build_rich_text(id, action_content)
     }
@@ -158,13 +155,15 @@ module SacCas::Event::Kind
 
   def build_rich_text(id, action_content)
     {body: action_content,
-     plain_text_body: action_content.to_plain_text,
+     plain_text_body: action_content&.to_plain_text.presence,
      record_id: id,
      record_type: "Event::Translation",
      name: "description"}
   end
 
   def description_as_html(description)
+    return if description.blank?
+
     lines = description.strip.split(/\r?\n/).map { |line| ERB::Util.html_escape(line) }
     ActionText::Content.new("<div>#{lines.join("<br>")}</div>")
   end
