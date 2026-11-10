@@ -68,6 +68,13 @@ describe Event::TourMailer do
         "Zusatzinfo"
       )
     end
+
+    it "does not fail with blank description" do
+      event.update!(state: "draft", description: nil)
+      event.reload
+
+      expect { mail.body.to_s }.not_to raise_error
+    end
   end
 
   describe "publication_subito" do

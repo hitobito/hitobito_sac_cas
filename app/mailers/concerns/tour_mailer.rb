@@ -251,7 +251,7 @@ module TourMailer # rubocop:disable Metrics/ModuleLength
   def labeled_rich_text_attr(model, attr)
     label = model.class.human_attribute_name(attr)
     value = model.send(attr)
-    return if value.blank? && default.nil?
+    return if value.blank?
 
     labeled(label, escape_html(value))
   end
