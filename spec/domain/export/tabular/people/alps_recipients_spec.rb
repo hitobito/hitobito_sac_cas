@@ -66,6 +66,19 @@ describe Export::Tabular::People::AlpsRecipients do
       expect(row.last).to eq("de")
     end
 
+    it "contains one row per membership or subscription role" do
+      expect(rows_for(mitglied_and_abonnent).map(&:last)).to eq(%w[de de])
+      expect(rows_for(gratisabonnent_twice_de).map(&:last)).to eq(%w[de de])
+      expect(rows.pluck(9).uniq).to eq([1])
+    end
+
+    it "keeps all membership and subscription roles of a person when exporting in batches" do
+      table.batch_size = 2
+      expect(rows.map(&:first)).to eq(described_class.new(
+        scope.regular(:de), reference_date, abonnent_group_langs
+      ).data_rows.map(&:first))
+    end
+
     it "does not do N+1 queries" do
       expect { rows }.to make(4).db_queries
     end
@@ -247,12 +260,14 @@ describe Export::Tabular::People::AlpsRecipients do
       expect(row[13]).to eq("Abonnent")
       expect(row[14]).to eq("ja")
 
-      # mitglied and abonnent is considered mitglied
-      row = row_for(mitglied_and_abonnent)
-      expect(row[11]).to eq(mitglied_and_abonnent.birthday.strftime("%d.%m.%Y"))
-      expect(row[12]).to eq("22.04.2022")
-      expect(row[13]).to eq("Mitglied")
-      expect(row[14]).to eq("nein")
+      # mitglied and abonnent has a row for each
+      mitglied_row, abonnent_row = rows_for(mitglied_and_abonnent)
+      expect(mitglied_row[11]).to eq(mitglied_and_abonnent.birthday.strftime("%d.%m.%Y"))
+      expect(mitglied_row[12]).to eq("22.04.2022")
+      expect(mitglied_row[13]).to eq("Mitglied")
+      expect(mitglied_row[14]).to eq("nein")
+      expect(abonnent_row[12]).to eq("01.07.2025")
+      expect(abonnent_row[13]).to eq("Abonnent")
     end
 
     it "contains correct entry_on for special cases" do
@@ -286,18 +301,12 @@ describe Export::Tabular::People::AlpsRecipients do
       expect(row[12]).to eq("01.03.2025")
     end
 
-    it "contains first language for double abonnenten" do
-      row = row_for(old_mitglied_new_abonnent_fr)
-      expect(row[10]).to eq("fr")
-
-      row = row_for(new_entry_mitglied_de_and_abonnent_fr)
-      expect(row[10]).to eq("de")
-
-      row = row_for(abonnent_de_and_fr)
-      expect(row[10]).to eq("de")
-
-      row = row_for(magazin_abonnent_germany_fr)
-      expect(row[10]).to eq("fr")
+    it "contains language of each membership or subscription role for double abonnenten" do
+      expect(rows_for(old_mitglied_new_abonnent_fr).pluck(10)).to eq(%w[fr])
+      expect(rows_for(new_entry_mitglied_de_and_abonnent_fr).pluck(10)).to eq(%w[de fr])
+      expect(rows_for(abonnent_de_and_fr).pluck(10)).to eq(%w[de fr])
+      expect(rows_for(magazin_abonnent_germany_fr).pluck(10)).to eq(%w[fr])
+      expect(rows_for(gratisabonnent_twice_de).pluck(10)).to eq(%w[de de])
     end
 
     it "does not do N+1 queries" do
@@ -307,5 +316,9 @@ describe Export::Tabular::People::AlpsRecipients do
 
   def row_for(person)
     rows.find { |row| row.first == person.id }
+  end
+
+  def rows_for(person)
+    rows.select { |row| row.first == person.id }
   end
 end

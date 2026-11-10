@@ -35,8 +35,7 @@ class Export::Tabular::People::AlpsRecipientRow < Export::Tabular::Row
     if mitglied?
       entry.language
     else
-      role = current_role(SacCas::ABONNENT_MAGAZIN_ROLES)
-      abonnent_group_langs.fetch(role.group_id)
+      abonnent_group_langs.fetch(entry.alps_role_group_id)
     end
   end
 
@@ -55,22 +54,10 @@ class Export::Tabular::People::AlpsRecipientRow < Export::Tabular::Row
   end
 
   def mitglied?
-    current_role(SacCas::MITGLIED_ROLES).present?
-  end
-
-  def current_role(types)
-    @current_role ||= {}
-    return @current_role[types] if @current_role.key?(types)
-
-    @current_role[types] =
-      roles(types).find { |role| role.active?(reference_date) }
+    SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(entry.alps_role_type)
   end
 
   def roles(types)
-    roles ||= {}
-    roles[types] ||=
-      entry
-        .roles_unscoped
-        .select { |role| types.include?(role.class) }
+    entry.roles_unscoped.select { |role| types.include?(role.class) }
   end
 end
