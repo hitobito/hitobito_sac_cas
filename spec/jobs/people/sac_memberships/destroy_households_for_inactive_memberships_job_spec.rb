@@ -178,6 +178,25 @@ describe People::SacMemberships::DestroyHouseholdsForInactiveMembershipsJob do
       expect(family_member.reload.household_key).to be_nil
     end
 
+    it "destroys household of inactive children without main person" do
+      children = [10, 13, 16].map do |age|
+        Fabricate(:person, birthday: age.years.ago, household_key: "children-only").tap do |child|
+          Fabricate(Group::SektionsNeuanmeldungenNv::Neuanmeldung.sti_name.to_sym,
+            person: child,
+            beitragskategorie: :family,
+            group: groups(:bluemlisalp_neuanmeldungen_nv),
+            start_on: 50.days.ago,
+            end_on: 10.days.ago)
+        end
+      end
+
+      expect(Sentry).not_to receive(:capture_exception)
+
+      job.perform
+
+      expect(children.map { _1.reload.household_key }).to all(be_nil)
+    end
+
     def end_all_memberships(person, date)
       person.sac_membership.stammsektion_role.update!(end_on: date)
       person.sac_membership.zusatzsektion_roles.each { |r| r.update!(end_on: date) }
