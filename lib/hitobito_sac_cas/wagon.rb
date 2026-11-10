@@ -22,8 +22,8 @@ module HitobitoSacCas
       config.action_mailer.preview_paths = [config.root.join("spec", "mailers", "previews").to_s]
 
       if config.respond_to?(:view_component)
-        config.view_component.preview_paths << "#{config.root}/spec/components/previews"
-        config.view_component.preview_controller = "WizardsPreviewsController"
+        config.view_component.previews.paths << "#{config.root}/spec/components/previews"
+        config.view_component.previews.controller = "WizardsPreviewsController"
       end
 
       ActiveSupport::Inflector.inflections { |i| i.acronym("TTY") }
