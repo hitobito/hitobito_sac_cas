@@ -100,15 +100,6 @@ class Events::AnnualCourseDuplicateBuilder
     end
   end
 
-  def build_translations(course)
-    @source_course.translations.each do |source_translation|
-      translation = course.translations.build(source_translation.attributes.except("id",
-        "event_id"))
-      translation.description = ActionText::RichText.new(record: translation,
-        body: source_translation.description.body, name: "description")
-    end
-  end
-
   def build_questions(course)
     @source_course.questions.each do |source_question|
       question = course.questions.build(source_question.attributes.except("id"))

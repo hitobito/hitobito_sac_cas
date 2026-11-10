@@ -253,7 +253,7 @@ module TourMailer # rubocop:disable Metrics/ModuleLength
     value = model.send(attr)
     return if value.blank?
 
-    labeled(label, escape_html(value))
+    labeled(label, value.to_s)
   end
 
   def labeled(label, value)
