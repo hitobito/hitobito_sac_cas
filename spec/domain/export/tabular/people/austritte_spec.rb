@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -61,6 +61,7 @@ describe Export::Tabular::People::Austritte do
       :street,
       :housenumber,
       :address_care_of,
+      :address_addition,
       :zip_code,
       :town,
       :canton,
@@ -248,6 +249,7 @@ describe Export::Tabular::People::Austritte do
       it "contains all attributes" do
         mitglied.update!(
           address_care_of: "c/o Mami u Papi",
+          address_addition: "Hinterhaus",
           postbox: "Postfach 1",
           gender: "m",
           birthday: "21.04.1972",
@@ -286,6 +288,7 @@ describe Export::Tabular::People::Austritte do
           street: "Ophovenerstrasse",
           housenumber: "79a",
           address_care_of: "c/o Mami u Papi",
+          address_addition: "Hinterhaus",
           zip_code: "2843",
           town: "Neu Carlscheid",
           canton: "Bern",
