@@ -32,7 +32,7 @@ class Event::SurveyDispatchScheduleJob < RecurringJob
   end
 
   def course_end_range
-    (Time.zone.today - CATCH_UP_DAYS).beginning_of_day..Time.zone.today.end_of_day
+    (Time.zone.today - CATCH_UP_DAYS).beginning_of_day..Time.zone.yesterday.end_of_day
   end
 
   def next_run

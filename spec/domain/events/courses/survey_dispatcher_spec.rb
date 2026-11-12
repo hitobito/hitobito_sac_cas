@@ -42,10 +42,11 @@ describe Events::Courses::SurveyDispatcher do
 
   %w[unconfirmed applied rejected absent canceled annulled].each do |state|
     it "does not send survey to #{state} participant" do
-      top_familienmitglied.update_columns(state:)
+      top_familienmitglied.update!(state:, canceled_at: Time.zone.today)
 
       expect { dispatch }
-        .to have_enqueued_mail(Event::CourseParticipationMailer, :survey).once.with(top_mitglied)
+        .not_to have_enqueued_mail(Event::CourseParticipationMailer, :survey)
+        .with(top_familienmitglied)
     end
   end
 

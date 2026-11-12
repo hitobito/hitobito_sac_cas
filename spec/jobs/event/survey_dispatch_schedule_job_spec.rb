@@ -40,8 +40,8 @@ describe Event::SurveyDispatchScheduleJob do
     expect(next_job.run_at).to eq Time.zone.local(2023, 4, 11, 8)
   end
 
-  context "on last course day" do
-    around { |example| travel_to(Time.zone.local(2023, 4, 10, 8)) { example.run } }
+  context "on day after last course day" do
+    around { |example| travel_to(Time.zone.local(2023, 4, 11, 8)) { example.run } }
 
     it "schedules dispatch job for course" do
       job.perform
@@ -96,12 +96,12 @@ describe Event::SurveyDispatchScheduleJob do
 
       expect(scheduled_course_ids).to match_array [course.id, other.id]
       expect(dispatch_jobs.map(&:run_at))
-        .to eq [Time.zone.local(2023, 4, 10, 8), Time.zone.local(2023, 4, 10, 8, 0, 1)]
+        .to eq [Time.zone.local(2023, 4, 11, 8), Time.zone.local(2023, 4, 11, 8, 0, 1)]
     end
   end
 
-  it "does not schedule dispatch job before last course day" do
-    travel_to(Time.zone.local(2023, 4, 9, 8)) { job.perform }
+  it "does not schedule dispatch job on last course day" do
+    travel_to(Time.zone.local(2023, 4, 10, 8)) { job.perform }
 
     expect(scheduled_course_ids).to be_empty
   end
@@ -121,7 +121,7 @@ describe Event::SurveyDispatchScheduleJob do
   it "uses start of last date as course end when it has no finish" do
     event_dates(:top_course_second).update!(finish_at: nil)
 
-    travel_to(Time.zone.local(2023, 4, 3, 8)) { job.perform }
+    travel_to(Time.zone.local(2023, 4, 4, 8)) { job.perform }
 
     expect(scheduled_course_ids).to eq [course.id]
   end
