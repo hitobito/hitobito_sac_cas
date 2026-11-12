@@ -73,6 +73,10 @@ Ein Mitglied hat die Möglichkeit unter Person / Verlauf seine Mitgliedschaft zu
 
 [Schnittstellen Dokumentation Abacus](./abacus.md)
 
+## SurveyHero
+
+[Kursumfragen mit SurveyHero](./survey_hero.md)
+
 ## Mehrsprachigkeit / I18n
 
 Grundsätzlich gelten die [Guidelines aus dem Core Projekt](https://github.com/hitobito/hitobito/blob/master/doc/developer/guidelines.md#mehrsprachigkeit--i18n).

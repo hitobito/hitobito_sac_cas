@@ -22,8 +22,18 @@
         = f.labeled_input_field(:link_participants)
       - entry.used?(:link_leaders) do
         = f.labeled_input_field(:link_leaders)
-      - entry.used?(:link_survey) do
-        = f.labeled_input_field(:link_survey)
+      %div{data: {controller: 'disable-toggle'}}
+        - entry.used?(:survey_auto_send) do
+          = f.labeled_input_field(:survey_auto_send, data: {action: 'disable-toggle#toggle'})
+        - entry.used?(:survey_hero_survey_key) do
+          = f.labeled_input_field(:survey_hero_survey_key,
+            disabled: !entry.survey_auto_send?, data: {'disable-toggle-target': 'toggled'})
+        - entry.used?(:survey_hero_collector_key) do
+          = f.labeled_input_field(:survey_hero_collector_key,
+            disabled: !entry.survey_auto_send?, data: {'disable-toggle-target': 'toggled'})
+        - entry.used?(:link_survey) do
+          = f.labeled_input_field(:link_survey,
+            disabled: entry.survey_auto_send?, data: {'disable-toggle-target': 'inverted'})
       - entry.used?(:book_discount_code) do
         = f.labeled_input_field(:book_discount_code)
 
