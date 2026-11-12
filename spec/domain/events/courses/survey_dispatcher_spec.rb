@@ -28,6 +28,14 @@ describe Events::Courses::SurveyDispatcher do
       .to start_with("https://www.umfrageonline.com/c/abc?course-id=10")
   end
 
+  it "stores survey link and sends survey for otherwise invalid course" do
+    course.update_column(:contact_id, nil)
+    expect(course).not_to be_valid
+
+    expect { dispatch }.to have_enqueued_mail(Event::CourseParticipationMailer, :survey).twice
+    expect(course.reload.link_survey).to start_with("https://www.umfrageonline.com/c/abc?")
+  end
+
   it "sends survey to participants" do
     expect { dispatch }
       .to have_enqueued_mail(Event::CourseParticipationMailer, :survey).with(top_mitglied)

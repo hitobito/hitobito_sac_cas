@@ -16,7 +16,8 @@ class Events::Courses::SurveyDispatcher
   def dispatch
     return unless dispatchable?
 
-    course.update!(link_survey: Events::Courses::SurveyHero::CourseLink.new(course, client:).create)
+    course.update_attribute(:link_survey,
+      Events::Courses::SurveyHero::CourseLink.new(course, client:).create)
     course.participants_scope.each do |participation|
       Event::CourseParticipationMailer.survey(participation).deliver_later
     end
