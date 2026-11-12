@@ -7,8 +7,7 @@
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)
 * Kursumfragen werden am Tag nach dem letzten Kurstag automatisch mit einem kursspezifischen SurveyHero Link an die Teilnehmenden versendet, Survey ID und Collector ID werden auf dem Kurstyp erfasst (HIT-1573 / hitobito_sac_cas#2695)
 
-
-## Version 2.7.12
+## Version 2.7
 
 * Excel Export Wechsel Beitragskategorie (HIT-1321 / hitobito_sac_cas#2107)
 * Excel Export Eingetretene Mitglieder (HIT-984 / hitobito_sac_cas#1665)
