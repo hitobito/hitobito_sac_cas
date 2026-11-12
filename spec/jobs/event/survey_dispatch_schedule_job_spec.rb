@@ -81,6 +81,14 @@ describe Event::SurveyDispatchScheduleJob do
       expect(scheduled_course_ids).to be_empty
     end
 
+    it "does not schedule dispatch job without collector key" do
+      course.update!(survey_hero_collector_key: "")
+
+      job.perform
+
+      expect(scheduled_course_ids).to be_empty
+    end
+
     it "does not schedule dispatch job with existing survey link" do
       course.update_column(:link_survey, "https://example.com/survey")
 

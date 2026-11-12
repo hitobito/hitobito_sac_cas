@@ -31,7 +31,7 @@ aktiv) den Versand:
 
 - Ist im Status "Bereit zur Durchführung" oder "Abgeschlossen"
 - Hat die Checkbox "Umfrage automatisch versenden" aktiv
-- Hat eine Survey ID, aber noch keinen "Link Umfrage"
+- Hat eine Survey ID und eine Collector ID, aber noch keinen "Link Umfrage"
 - Hatte den letzten Kurstag vor 1 bis 7 Tagen
 
 `Events::Courses::SurveyDispatcher` erstellt pro Kurs den Umfragelink (siehe [API](#api)),

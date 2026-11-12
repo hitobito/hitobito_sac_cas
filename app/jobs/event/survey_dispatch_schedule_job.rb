@@ -25,6 +25,7 @@ class Event::SurveyDispatchScheduleJob < RecurringJob
       .where(state: Events::Courses::State::EMAIL_DISPATCH_CONDITIONS[:survey])
       .where(survey_auto_send: true, link_survey: [nil, ""])
       .where.not(survey_hero_survey_key: [nil, ""])
+      .where.not(survey_hero_collector_key: [nil, ""])
       .joins(:dates)
       .group(:id)
       .having("MAX(GREATEST(event_dates.start_at, event_dates.finish_at)) BETWEEN ? AND ?",
