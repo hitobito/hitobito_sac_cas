@@ -1,20 +1,24 @@
 ## Version unreleased
 
-* Google Tag Manager Support (HIT-1373, hitobito_sac_cas#2131)
-* Mitgliedschaftsrechnung kann manuell als 'bezahlt' markiert werden (hitobito_sac_cas#2581)
-* Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
-* Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)
 * Kursumfragen werden am Tag nach dem letzten Kurstag automatisch mit einem kursspezifischen SurveyHero Link an die Teilnehmenden versendet, Survey ID und Collector ID werden auf dem Kurstyp erfasst (HIT-1573 / hitobito_sac_cas#2695)
+
+## Version 2.11
+
+* Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
+* Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)
+
+## Version 2.10
+
+* Mitgliedschaftsrechnung kann manuell als 'bezahlt' markiert werden (hitobito_sac_cas#2581)
 
 ## Version 2.7
 
+* Google Tag Manager Support (HIT-1373, hitobito_sac_cas#2131)
 * Excel Export Wechsel Beitragskategorie (HIT-1321 / hitobito_sac_cas#2107)
 * Excel Export Eingetretene Mitglieder (HIT-984 / hitobito_sac_cas#1665)
 * Excel Export Mitgliederstatistik (HIT-1335 / hitobito_sac_cas#2061)
-* Excel Export Jubilare (HIT-1191 / hitobito_sac_cas#2014)
 * Neuer Gruppentyp Ressort (HIT-1011 / hitobito_sac_cas#2044)
-* Rechnungsempfänger*in kann neu alle Familienmitglieder verwalten (HIT-1297 / hitobito_sac_cas#2002)
 * Nächtliches Aufräumen von veralteten NV Neuanmeldungsrollen und Rechnungen (HIT-1337 / hitobito_sac_cas#2062)
 * Auf Personenlisten werden die Spalten Austrittsdatum und -grund neu auch für zukünftige Austritte angezeigt (HIT-1322 / hitobito_sac_cas#2033)
 
@@ -41,6 +45,8 @@
 * Kurs Durchführungsort wird im Eckdatenblatt ausgegeben (HIT-1068 / hitobito_sac_cas#1887)
 * Kursrechnung Texte werden in der Sprache des Teilnehmenden an Abacus übermittelt (HIT-1165 / hitobito_sac_cas#1896)
 * Neuer Button "Mitgliederstatistik" auf Sektion/Ortsgruppe/SacCas (HIT-1231 / hitobito_sac_cas#1900)
+* Excel Export Jubilare (HIT-1191 / hitobito_sac_cas#2014)
+* Rechnungsempfänger*in kann neu alle Familienmitglieder verwalten (HIT-1297 / hitobito_sac_cas#2002)
 
 ## Version 2.5
 
