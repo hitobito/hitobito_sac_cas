@@ -39,6 +39,10 @@ speichert ihn als "Link Umfrage" und verschickt die Umfrage-E-Mail an alle Teiln
 Status "Bestätigt", "Aufgeboten" und "Teilgenommen". Ein Kurs mit "Link Umfrage" gilt als erledigt
 und wird nicht erneut versendet.
 
+Wird "Umfrage automatisch versenden" nach dem Versand deaktiviert und wieder aktiviert, ist der
+"Link Umfrage" leer. Liegt das Kursende höchstens 7 Tage zurück, erstellt hitobito einen neuen
+Collector und die Teilnehmenden erhalten die Umfrage erneut.
+
 Sind Survey ID oder Collector ID ungültig oder liefert SurveyHero keinen Umfragelink
 (`Client::Error`), wird sofort ein Fehler mit Kategorie "kursumfragen" im Log auf dem Kurs erfasst.
 Da der Kurs weiterhin keinen "Link Umfrage" hat, wird er an den folgenden Tagen erneut versucht und
