@@ -7,6 +7,7 @@
 
 * Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)
+* Links zu FAQ, Kontakt und Anleitungen im Footer (HIT-1598 / hitobito_sac_cas#2532)
 
 ## Version 2.10
 
