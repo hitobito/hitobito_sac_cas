@@ -13,7 +13,5 @@ class AddSurveyHeroFieldsToEventKindsAndEvents < ActiveRecord::Migration[8.0]
     end
 
     add_column :events, :survey_auto_send, :boolean, default: true, null: false
-
-    Event.reset_column_information
   end
 end
