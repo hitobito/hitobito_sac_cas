@@ -44,25 +44,23 @@ module Export::Tabular::People
       if new_entries_from
         scope = scope.where.not(roles: {id: new_entries(lang).pluck("roles.id")})
       end
-      scope.preload(:roles_unscoped)
+      scope
     end
 
     def germany
       base_scope
         .where(language_condition(:de, abonnent_group_ids.fetch(:de)))
         .where("people.country = 'DE'")
-        .preload(:roles_unscoped)
     end
 
     def new_entries(lang)
       base_scope
         .where(new_entries_condition(lang, abonnent_group_ids.fetch(lang)))
         .where("people.country = 'CH'")
-        .preload(:roles_unscoped)
     end
 
     def all
-      base_scope.preload(:roles_unscoped)
+      base_scope
     end
 
     def abonnent_group_ids
@@ -89,6 +87,7 @@ module Export::Tabular::People
         .merge(Role.active(reference_date))
         .where(*mitglied_or_abonnent_condition)
         .order(:id, "roles.id")
+        .preload(:roles_unscoped)
     end
 
     def mitglied_or_abonnent_condition
