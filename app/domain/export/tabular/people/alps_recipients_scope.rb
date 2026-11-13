@@ -28,6 +28,7 @@ module Export::Tabular::People
       "roles.type AS alps_role_type",
       "roles.group_id AS alps_role_group_id"
     ].freeze
+    MITGLIED_TYPES = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).freeze
 
     attr_reader :reference_date, :new_entries_from
 
@@ -93,12 +94,12 @@ module Export::Tabular::People
     def mitglied_or_abonnent_condition
       [
         <<-SQL.squish,
-          (roles.type = :mitglied_type AND
+          (roles.type IN (:mitglied_types) AND
            (roles.beitragskategorie <> :beitragskategorie OR people.sac_family_main_person) AND
            NOT people.id IN (:excluded_from_mailing_list)) OR
           roles.type IN (:abonnent_types)
         SQL
-        mitglied_type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name),
+        mitglied_types: MITGLIED_TYPES,
         beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY,
         excluded_from_mailing_list:,
         abonnent_types: SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
@@ -118,11 +119,11 @@ module Export::Tabular::People
     def language_condition(lang, abo_group_ids)
       [
         <<-SQL.squish,
-          (roles.type = :mitglied_type AND
+          (roles.type IN (:mitglied_types) AND
            people.language = :lang) OR
           roles.group_id IN (:abo_group_ids)
         SQL
-        mitglied_type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name),
+        mitglied_types: MITGLIED_TYPES,
         lang:,
         abo_group_ids:
       ]
@@ -137,7 +138,7 @@ module Export::Tabular::People
           (roles.group_id IN (:abo_group_ids) AND
            people.id IN (:new_abonnenten_ids))
         SQL
-        mitglied_types: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name),
+        mitglied_types: MITGLIED_TYPES,
         abo_group_ids:,
         lang:,
         new_mitglieder_ids: new_mitglieder_ids,

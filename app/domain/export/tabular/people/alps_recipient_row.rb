@@ -54,7 +54,7 @@ class Export::Tabular::People::AlpsRecipientRow < Export::Tabular::Row
   end
 
   def mitglied?
-    SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).include?(entry.alps_role_type)
+    Export::Tabular::People::AlpsRecipientsScope::MITGLIED_TYPES.include?(entry.alps_role_type)
   end
 
   def roles(types)
