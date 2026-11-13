@@ -607,7 +607,6 @@ de_CH:
       person:
         id: Personennummer
         advertising: Werbesendungen
-        address_care_of: Adresszusatz
         correspondence: Rechnungsstellung
         confirmed_at: E-Mail bestätigt
         family_id: Familien ID
@@ -2133,7 +2132,6 @@ de_CH:
       postbox: Postfach
       street: Strasse
       housenumber: Hausnummer
-      address_care_of: Adresszusatz
       zip_code: PLZ
       town: Ort
       canton: Kanton
