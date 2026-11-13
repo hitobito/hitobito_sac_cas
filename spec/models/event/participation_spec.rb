@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -70,6 +70,48 @@ describe Event::Participation do
       course.state = "application_open"
       course.dates.first.start_at = 1.day.from_now
       expect(participation).to be_participant_cancelable
+    end
+  end
+
+  describe "#attendance_confirmable?" do
+    let(:course) { Fabricate.build(:sac_course, state: "closed") }
+    let(:role_type) { Event::Course::Role::Participant }
+
+    subject(:participation) do
+      Fabricate.build(:event_participation, event: course, state: "attended").tap do |p|
+        p.roles.build(type: role_type.sti_name)
+      end
+    end
+
+    it "is true for attended participant of closed course" do
+      expect(participation).to be_attendance_confirmable
+    end
+
+    it "is false if course is not closed" do
+      course.state = "ready"
+      expect(participation).not_to be_attendance_confirmable
+    end
+
+    it "is false if participation is not attended" do
+      participation.state = "absent"
+      expect(participation).not_to be_attendance_confirmable
+    end
+
+    context "as leader" do
+      let(:role_type) { Event::Course::Role::Leader }
+
+      it "is false" do
+        expect(participation).not_to be_attendance_confirmable
+      end
+    end
+
+    context "of tour" do
+      let(:course) { Fabricate.build(:sac_tour, state: "closed") }
+      let(:role_type) { Event::Tour::Role::Participant }
+
+      it "is false" do
+        expect(participation).not_to be_attendance_confirmable
+      end
     end
   end
 
