@@ -137,6 +137,18 @@ describe Memberships::LeaveZusatzsektion do
             expect(beguenstigt.reload).to be_terminated
             expect(stammsektion_ehrenmitglied.reload).not_to be_terminated
           end
+
+          it "does not extend roles of left zusatzsektion for invoicing" do
+            expect(leave.save).to eq true
+
+            Invoices::SacMemberships::ExtendRolesForInvoicing
+              .new(now.next_year.end_of_year.to_date, now.next_year.beginning_of_year.to_date)
+              .extend_roles
+
+            expect(ehrenmitglied.reload.end_on).to eq now.end_of_year.to_date
+            expect(beguenstigt.reload.end_on).to eq now.end_of_year.to_date
+            expect(stammsektion_ehrenmitglied.reload.end_on).to eq now.next_year.end_of_year.to_date
+          end
         end
       end
 
