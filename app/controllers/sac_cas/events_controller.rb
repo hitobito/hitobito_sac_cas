@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -22,12 +22,21 @@ module SacCas::EventsController
     before_render_form :preload_tour_essentials
     before_render_show :preload_leader_participations
 
+    after_create :assign_tour_guide_as_leader, if: :tour?
     after_update :display_warning_for_date_changes, if: :tour?
 
     helper_method :course?, :tour?
   end
 
   private
+
+  def assign_tour_guide_as_leader
+    return unless current_user.sac_tour_guide_in?(entry.groups.first)
+
+    participation = entry.participations.build(participant: current_user, state: "assigned")
+    participation.roles.build(type: Event::Role::Leader.sti_name)
+    participation.save!
+  end
 
   def display_warning_for_date_changes
     if entry.dates_changed? && entry.state_reached?(:review)
