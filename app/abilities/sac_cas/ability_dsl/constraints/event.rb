@@ -17,12 +17,7 @@ module SacCas::AbilityDsl::Constraints
     end
 
     def in_tourenleiter_sektion
-      tourenleiter_sektion_ids = user.roles.select do |r|
-        [Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
-          Group::SektionsTourenUndKurse::Tourenleiter].include?(r.class)
-      end.map { |r| r.group.layer_group_id }
-
-      tourenleiter_sektion_ids.include?(event.groups.first.id)
+      user.sac_tour_guide_in?(event.groups.first)
     end
 
     def in_tourenleiter_sektion_for_own

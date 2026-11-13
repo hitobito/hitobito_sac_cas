@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -16,10 +16,18 @@ module SacCas::Event::RoleAbility
       permission(:any).may(:destroy).for_participations_full_events_except_courses
 
       permission(:layer_events_full).may(:manage).in_same_layer_group_if_active
+
+      permission(:layer_created_events_full)
+        .may(:show, :create, :update, :destroy)
+        .in_tourenleiter_sektion_for_own_and_non_participant_role
     end
   end
 
   def for_participations_full_events_except_courses
     for_participations_full_events && !event.course?
+  end
+
+  def in_tourenleiter_sektion_for_own_and_non_participant_role
+    in_tourenleiter_sektion_for_own && !subject.class.participant?
   end
 end

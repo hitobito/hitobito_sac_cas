@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -152,6 +152,58 @@ describe EventsController do
         expect(dom).to have_text "Konditionelle Anforderung"
         expect(dom).to have_text "Technische Anforderung(en)"
         expect(dom).to have_text "Saison"
+      end
+    end
+
+    describe "POST#create" do
+      let(:tourenleiter) do
+        Fabricate(Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation.sti_name,
+          group: groups(:bluemlisalp_touren_und_kurse)).person
+      end
+
+      def create_tour
+        post :create, params: {
+          group_id: group.id,
+          event: {
+            type: "Event::Tour",
+            name: "Gantrisch",
+            dates_attributes: [{start_at_date: "01.06.2023", finish_at_date: "01.06.2023"}]
+          }
+        }
+        assigns(:event)
+      end
+
+      def leader_participations(tour)
+        tour.participations.joins(:roles).where(event_roles: {type: Event::Role::Leader.sti_name})
+      end
+
+      it "assigns tourenleiter as leader" do
+        sign_in(tourenleiter)
+
+        tour = create_tour
+
+        expect(tour).to be_persisted
+        expect(leader_participations(tour).map(&:participant)).to eq [tourenleiter]
+        expect(leader_participations(tour).first).to be_active
+      end
+
+      it "does not assign tourenchef as leader" do
+        sign_in(Fabricate(Group::SektionsTourenUndKurse::Tourenchef.sti_name,
+          group: groups(:bluemlisalp_touren_und_kurse)).person)
+
+        tour = create_tour
+
+        expect(tour).to be_persisted
+        expect(tour.participations).to be_empty
+      end
+
+      it "does not assign leader again on update" do
+        sign_in(tourenleiter)
+        tour = create_tour
+
+        put :update, params: {group_id: group.id, id: tour.id, event: {name: "Gantrisch 2"}}
+
+        expect(leader_participations(tour.reload).count).to eq 1
       end
     end
 

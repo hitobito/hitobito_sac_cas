@@ -1,6 +1,8 @@
 
+
 ## Version 2.11
 
+* Tourenleiter*innen werden beim Erfassen einer Tour als Leitung eingetragen und können die Leitung ihrer eigenen Touren verwalten (HIT-1768 / hitobito_sac_cas#2728)
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Teilnehmende hinzufügen (HIT-1803 / hitobito_sac_cas#2767)
 * Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)

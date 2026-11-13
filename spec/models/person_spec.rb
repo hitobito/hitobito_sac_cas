@@ -730,6 +730,42 @@ describe Person do
     end
   end
 
+  describe "#sac_tour_guide_in?" do
+    let(:person) { Fabricate(:person) }
+
+    def add_role(type, group)
+      Fabricate(type.sti_name, person:, group:)
+      person.roles.reload
+    end
+
+    it "is true for tour guide role in the same sektion" do
+      add_role(Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
+        groups(:bluemlisalp_touren_und_kurse))
+
+      expect(person.sac_tour_guide_in?(groups(:bluemlisalp))).to eq(true)
+    end
+
+    it "is false for tour guide role in another sektion" do
+      add_role(Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
+        groups(:matterhorn_touren_und_kurse))
+
+      expect(person.sac_tour_guide_in?(groups(:bluemlisalp))).to eq(false)
+    end
+
+    it "is false for other role in the same sektion" do
+      add_role(Group::SektionsTourenUndKurse::Tourenchef, groups(:bluemlisalp_touren_und_kurse))
+
+      expect(person.sac_tour_guide_in?(groups(:bluemlisalp))).to eq(false)
+    end
+
+    it "is false for a non-layer group of the same sektion" do
+      add_role(Group::SektionsTourenUndKurse::TourenleiterOhneQualifikation,
+        groups(:bluemlisalp_touren_und_kurse))
+
+      expect(person.sac_tour_guide_in?(groups(:bluemlisalp_touren_und_kurse))).to eq(false)
+    end
+  end
+
   describe "#backoffice?" do
     let(:geschaeftsstelle) { groups(:geschaeftsstelle) }
 

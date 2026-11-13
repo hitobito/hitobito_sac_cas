@@ -154,6 +154,13 @@ module SacCas::Person
     roles.exists?(type: SacCas::TOUR_GUIDE_ROLES.map(&:sti_name))
   end
 
+  def sac_tour_guide_in?(layer)
+    roles.any? do |role|
+      SacCas::TOUR_GUIDE_ROLES.include?(role.class) &&
+        role.group.layer_group_id == layer.id
+    end
+  end
+
   def backoffice?
     return @backoffice if defined?(@backoffice)
 
