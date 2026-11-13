@@ -22,7 +22,7 @@ module SacCas::EventsController
     before_render_form :preload_tour_essentials
     before_render_show :preload_leader_participations
 
-    after_create :assign_tourenleiter_as_leader, if: :tour?
+    after_create :assign_tour_guide_as_leader, if: :tour?
     after_update :display_warning_for_date_changes, if: :tour?
 
     helper_method :course?, :tour?
@@ -30,19 +30,12 @@ module SacCas::EventsController
 
   private
 
-  def assign_tourenleiter_as_leader
-    return unless tourenleiter_in_sektion?
+  def assign_tour_guide_as_leader
+    return unless current_user.sac_tour_guide_in?(entry.groups.first)
 
     participation = entry.participations.build(participant: current_user, state: "assigned")
-    participation.roles.build(type: Event::Role::Leader.sti_name, participation:)
+    participation.roles.build(type: Event::Role::Leader.sti_name)
     participation.save!
-  end
-
-  def tourenleiter_in_sektion?
-    current_user.roles.any? do |role|
-      role.permissions.include?(:layer_created_events_full) &&
-        role.group.layer_group_id == entry.groups.first.layer_group_id
-    end
   end
 
   def display_warning_for_date_changes
