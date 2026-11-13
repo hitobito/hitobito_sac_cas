@@ -350,7 +350,7 @@ describe Memberships::TerminateSacMembership do
         end
 
         it "has expected relevant roles" do
-          expect(described_class::RELEVANT_ROLES).to eq [
+          expect(described_class::ROLE_TYPES).to eq [
             Group::SektionsMitglieder::Mitglied,
             Group::SektionsMitglieder::MitgliedZusatzsektion,
             Group::SektionsMitglieder::Beguenstigt,
