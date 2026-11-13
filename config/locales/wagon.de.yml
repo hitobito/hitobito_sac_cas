@@ -1791,6 +1791,7 @@ de:
         summon_and_send_no_mail: Aufbieten ohne E-Mail
         create_invoice_button: Rechnung erstellen
         attach_key_data_sheet: Eckdatenblatt erzeugen
+        attendance_confirmation: Teilnahmebestätigung
         create_invoice_confirmation: Bitte bestätige die Rechnungserstellung.
         create_course_leader_invoice_button: Kurskaderabrechnung erstellen
         reactivate: Reaktivieren
@@ -2494,6 +2495,25 @@ de:
     tours: Touren
 
   participations:
+    attendance_confirmation:
+      file_name_prefix: Teilnahmebestaetigung
+      link: www.sac-cas.ch
+      url: https://www.sac-cas.ch
+      title: KURSBESTÄTIGUNG
+      intro: Hiermit bestätigen wir, dass
+      course_attended: den Kurs %{course} des Schweizer Alpen-Club SAC besucht hat.
+      location: Kursort
+      dates: Kursdatum
+      number: Kursnummer
+      price: Kurspreis
+      date_range: "%{start} bis %{finish}"
+      date_format: "%-d. %B %Y"
+      date_format_without_year: "%-d. %B"
+      purpose: Diese Kursbestätigung dient als Nachweis über den Besuch des oben genannten Kurses.
+      greeting: Sportliche Grüsse
+      sender: Schweizer Alpen-Club SAC
+      signature: Kursadministration
+      place_and_date: Bern, %{date}
     key_data_sheet:
       file_name_prefix: Eckdatenblatt
       leader_file_prefix: Kursleitung

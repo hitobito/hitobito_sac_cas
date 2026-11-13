@@ -5,6 +5,7 @@
 * Die Alpen Export: Personen mit mehreren Abo Rollen oder mit Mitgliedschaft und Abo Rolle erscheinen pro Rolle auf einer eigenen Zeile (HIT-1675 / hitobito_sac_cas#2689)
 * Tourenleiter*innen werden beim Erfassen einer Tour als Leitung eingetragen und können die Leitung ihrer eigenen Touren verwalten (HIT-1768 / hitobito_sac_cas#2728)
 * Ehrenmitglied- und Begünstigt-Rollen einer Sektion werden bei Austritt und Stammsektionswechsel mitbeendet (HIT-1669 / hitobito_sac_cas#2726)
+* Teilnahmebestätigung als PDF für Teilnehmende abgeschlossener Kurse (HIT-1076 / hitobito_sac_cas#2692)
 
 ## Version 2.11
 

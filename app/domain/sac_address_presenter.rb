@@ -10,6 +10,8 @@ class SacAddressPresenter
       self_registration_format
     when :key_data_sheet
       key_data_sheet_format
+    when :attendance_confirmation
+      attendance_confirmation_format
     when :mail
       mail_format
     when :leader_settlement_invoice_attributes
@@ -32,6 +34,14 @@ class SacAddressPresenter
   def key_data_sheet_format
     "#{data[:name]}, #{data[:address]}, #{data[:postbox]}, " \
       "CH-#{data[:zip_code_and_town]}, #{data[:phone_self_registration]}, #{data[:email]}"
+  end
+
+  def attendance_confirmation_format
+    <<~TEXT.strip
+      <b>#{@data[:name]}</b>
+      #{@data[:address]}, #{@data[:postbox]}, CH-#{@data[:zip_code_and_town]}
+      #{@data[:phone]}, #{@data[:email]}
+    TEXT
   end
 
   def mail_format
