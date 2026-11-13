@@ -28,8 +28,11 @@ describe Export::Tabular::People::AlpsRecipientsScope do
           :magazin_abonnent_company,
           :new_entry_abonnent_with_old_abo,
           :mitglied_and_abonnent,
+          :mitglied_and_abonnent,
           :abonnent_de_and_fr,
           :new_entry_mitglied_de_and_abonnent_fr,
+          :gratisabonnent_twice_de,
+          :gratisabonnent_twice_de,
           people(:familienmitglied).id
         ])
       end
@@ -66,9 +69,13 @@ describe Export::Tabular::People::AlpsRecipientsScope do
     end
 
     context "#all" do
-      it "contains all people" do
+      it "contains all people once per membership or subscription role" do
         expect(map_people_keys(scope.all.pluck(:id))).to match_array([
           *people_map.values - [:terminated, :future, :mitglied_with_excluded_subscription],
+          :mitglied_and_abonnent,
+          :new_entry_mitglied_de_and_abonnent_fr,
+          :abonnent_de_and_fr,
+          :gratisabonnent_twice_de,
           people(:familienmitglied).id
         ])
       end
@@ -78,7 +85,7 @@ describe Export::Tabular::People::AlpsRecipientsScope do
   context "with new entries" do
     let(:new_entries_from) { Date.new(2025, 1, 1) }
 
-    it "includes all people exactly once" do
+    it "includes every membership or subscription role exactly once" do
       regulars = {}
       new_entries = {}
       [:de, :fr, :it].each do |lang|
@@ -88,9 +95,7 @@ describe Export::Tabular::People::AlpsRecipientsScope do
       germans = map_people_keys(scope.germany.pluck(:id))
       all = map_people_keys(scope.all.pluck(:id))
 
-      # people with two abonnements are only included once in `all`
-      expect(regulars.values.flatten + new_entries.values.flatten + germans)
-        .to match_array(all + [:abonnent_de_and_fr, :new_entry_mitglied_de_and_abonnent_fr])
+      expect(regulars.values.flatten + new_entries.values.flatten + germans).to match_array(all)
     end
 
     context "#regular" do
@@ -102,6 +107,9 @@ describe Export::Tabular::People::AlpsRecipientsScope do
           :magazin_abonnent,
           :magazin_abonnent_company,
           :abonnent_de_and_fr,
+          :mitglied_and_abonnent,
+          :gratisabonnent_twice_de,
+          :gratisabonnent_twice_de,
           people(:familienmitglied).id
         ])
       end
@@ -134,9 +142,13 @@ describe Export::Tabular::People::AlpsRecipientsScope do
     end
 
     context "#all" do
-      it "contains all people" do
+      it "contains all people once per membership or subscription role" do
         expect(map_people_keys(scope.all.pluck(:id))).to match_array([
           *people_map.values - [:terminated, :future, :mitglied_with_excluded_subscription],
+          :mitglied_and_abonnent,
+          :new_entry_mitglied_de_and_abonnent_fr,
+          :abonnent_de_and_fr,
+          :gratisabonnent_twice_de,
           people(:familienmitglied).id
         ])
       end

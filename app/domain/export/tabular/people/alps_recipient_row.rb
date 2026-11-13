@@ -35,42 +35,27 @@ class Export::Tabular::People::AlpsRecipientRow < Export::Tabular::Row
     if mitglied?
       entry.language
     else
-      role = current_role(SacCas::ABONNENT_MAGAZIN_ROLES)
-      abonnent_group_langs.fetch(role.group_id)
+      abonnent_group_langs.fetch(entry.alps_role_group_id)
     end
   end
 
   def entry_on
-    if mitglied?
-      role_start_on(SacCas::MITGLIED_ROLES)
-    else
-      role_start_on(SacCas::ABONNENT_MAGAZIN_ROLES)
-    end
+    relevant_roles = mitglied? ? roles(SacCas::MITGLIED_ROLES) : abo_roles_in_row_group
+    relevant_roles.min_by(&:start_on).start_on
   end
 
   private
 
-  def role_start_on(types)
-    roles(types).min_by(&:start_on).start_on
+  def abo_roles_in_row_group
+    roles(SacCas::ABONNENT_MAGAZIN_ROLES)
+      .select { |role| role.group_id == entry.alps_role_group_id }
   end
 
   def mitglied?
-    current_role(SacCas::MITGLIED_ROLES).present?
-  end
-
-  def current_role(types)
-    @current_role ||= {}
-    return @current_role[types] if @current_role.key?(types)
-
-    @current_role[types] =
-      roles(types).find { |role| role.active?(reference_date) }
+    Export::Tabular::People::AlpsRecipientsScope::MITGLIED_TYPES.include?(entry.alps_role_type)
   end
 
   def roles(types)
-    roles ||= {}
-    roles[types] ||=
-      entry
-        .roles_unscoped
-        .select { |role| types.include?(role.class) }
+    entry.roles_unscoped.select { |role| types.include?(role.class) }
   end
 end

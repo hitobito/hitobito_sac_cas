@@ -24,6 +24,11 @@ module Export::Tabular::People
       birthday
       company
     ].freeze
+    ROLE_COLUMNS = [
+      "roles.type AS alps_role_type",
+      "roles.group_id AS alps_role_group_id"
+    ].freeze
+    MITGLIED_TYPES = SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name).freeze
 
     attr_reader :reference_date, :new_entries_from
 
@@ -38,28 +43,25 @@ module Export::Tabular::People
         scope = scope.where("people.country IS NULL OR people.country <> 'DE'")
       end
       if new_entries_from
-        scope = scope.where.not(people: {id: new_entries(lang).pluck("people.id")})
+        scope = scope.where.not(roles: {id: new_entries(lang).pluck("roles.id")})
       end
-      scope.includes(:roles_unscoped)
+      scope
     end
 
     def germany
       base_scope
         .where(language_condition(:de, abonnent_group_ids.fetch(:de)))
         .where("people.country = 'DE'")
-        .includes(:roles_unscoped)
     end
 
     def new_entries(lang)
       base_scope
         .where(new_entries_condition(lang, abonnent_group_ids.fetch(lang)))
         .where("people.country = 'CH'")
-        .includes(:roles_unscoped)
     end
 
     def all
-      # do preload to get all roles for correct entry_on date
-      base_scope.preload(:roles_unscoped)
+      base_scope
     end
 
     def abonnent_group_ids
@@ -82,23 +84,22 @@ module Export::Tabular::People
     def base_scope
       Person
         .joins(:roles_unscoped)
-        .select(SELECTED_COLUMNS)
-        .left_joins(:subscriptions)
+        .select(*SELECTED_COLUMNS, *ROLE_COLUMNS)
         .merge(Role.active(reference_date))
         .where(*mitglied_or_abonnent_condition)
-        .order(:id)
-        .distinct
+        .order(:id, "roles.id")
+        .preload(:roles_unscoped)
     end
 
     def mitglied_or_abonnent_condition
       [
         <<-SQL.squish,
-          (roles.type = :mitglied_type AND
+          (roles.type IN (:mitglied_types) AND
            (roles.beitragskategorie <> :beitragskategorie OR people.sac_family_main_person) AND
            NOT people.id IN (:excluded_from_mailing_list)) OR
           roles.type IN (:abonnent_types)
         SQL
-        mitglied_type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name),
+        mitglied_types: MITGLIED_TYPES,
         beitragskategorie: SacCas::Beitragskategorie::Calculator::CATEGORY_FAMILY,
         excluded_from_mailing_list:,
         abonnent_types: SacCas::ABONNENT_MAGAZIN_ROLES.map(&:sti_name)
@@ -118,35 +119,44 @@ module Export::Tabular::People
     def language_condition(lang, abo_group_ids)
       [
         <<-SQL.squish,
-          (roles.type = :mitglied_type AND
+          (roles.type IN (:mitglied_types) AND
            people.language = :lang) OR
           roles.group_id IN (:abo_group_ids)
         SQL
-        mitglied_type: SacCas::MITGLIED_STAMMSEKTION_ROLES.map(&:sti_name),
+        mitglied_types: MITGLIED_TYPES,
         lang:,
         abo_group_ids:
       ]
     end
 
     def new_entries_condition(lang, abo_group_ids)
-      # using pluck is a lot more performant than using this query as a subquery,
-      # also especially because the main query is processed in batches in the export jobs,
-      # multiplying the saved time by the number of batches.
-      new_mitglieder_ids = eintritte_scope(SacCas::MITGLIED_STAMMSEKTION_ROLES).pluck(:person_id)
-      new_abonnenten_ids = eintritte_scope(SacCas::ABONNENT_MAGAZIN_ROLES)
-        .where(roles: {group_id: abo_group_ids})
-        .pluck(:person_id)
-
       [
         <<-SQL.squish,
-          (people.language = :lang AND
+          (roles.type IN (:mitglied_types) AND
+           people.language = :lang AND
            people.id IN (:new_mitglieder_ids)) OR
-          people.id IN (:new_abonnenten_ids)
+          (roles.group_id IN (:abo_group_ids) AND
+           people.id IN (:new_abonnenten_ids))
         SQL
+        mitglied_types: MITGLIED_TYPES,
+        abo_group_ids:,
         lang:,
-        new_mitglieder_ids:,
-        new_abonnenten_ids:
+        new_mitglieder_ids: new_mitglieder_ids,
+        new_abonnenten_ids: new_abonnenten_ids(abo_group_ids)
       ]
+    end
+
+    # using pluck is a lot more performant than using these queries as subqueries,
+    # also especially because the main query is processed in batches in the export jobs,
+    # multiplying the saved time by the number of batches.
+    def new_mitglieder_ids
+      eintritte_scope(SacCas::MITGLIED_STAMMSEKTION_ROLES).pluck(:person_id)
+    end
+
+    def new_abonnenten_ids(abo_group_ids)
+      eintritte_scope(SacCas::ABONNENT_MAGAZIN_ROLES)
+        .where(roles: {group_id: abo_group_ids})
+        .pluck(:person_id)
     end
 
     def eintritte_scope(types)

@@ -2,11 +2,13 @@
 
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
 * Kursumfragen werden am Tag nach dem letzten Kurstag automatisch mit einem kursspezifischen SurveyHero Link an die Teilnehmenden versendet, Survey ID und Collector ID werden auf dem Kurstyp erfasst (HIT-1573 / hitobito_sac_cas#2695)
+* Die Alpen Export: Personen mit mehreren Abo Rollen oder mit Mitgliedschaft und Abo Rolle erscheinen pro Rolle auf einer eigenen Zeile (HIT-1675 / hitobito_sac_cas#2689)
 
 ## Version 2.11
 
 * Neuer Button "Vorlagen Anmeldeangaben Anlässe bearbeiten" auf Sektion/Ortsgruppe, Bearbeiten auch mit Berechtigung "Touren verwalten" möglich (HIT-1729 / hitobito_sac_cas#2682)
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Anmeldungen verwalten (HIT-1796)
+
 * Links zu FAQ, Kontakt und Anleitungen im Footer (HIT-1598 / hitobito_sac_cas#2532)
 
 ## Version 2.10

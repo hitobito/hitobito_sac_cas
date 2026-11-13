@@ -223,6 +223,16 @@ shared_context "alps recipients test data" do
       start_on: "2025-03-03")
     p
   end
+  let_it_be(:gratisabonnent_twice_de) do
+    p = Fabricate("Group::AboMagazin::Gratisabonnent",
+      group: abo_de,
+      start_on: "2022-02-14").person
+    Fabricate("Group::AboMagazin::Gratisabonnent",
+      person: p,
+      group: abo_de,
+      start_on: "2023-05-09")
+    p
+  end
 
   let(:people_map) do
     [
@@ -251,7 +261,8 @@ shared_context "alps recipients test data" do
       :mitglied_and_abonnent,
       :old_mitglied_new_abonnent_fr,
       :new_entry_mitglied_de_and_abonnent_fr,
-      :abonnent_de_and_fr
+      :abonnent_de_and_fr,
+      :gratisabonnent_twice_de
     ].index_by { |key| send(key).id }
   end
 
