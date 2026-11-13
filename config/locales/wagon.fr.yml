@@ -611,7 +611,6 @@ fr:
       person:
         id: Numéro de personne
         advertising: Envoi de publicité
-        address_care_of: Complément d’adresse
         correspondence: Facturation
         confirmed_at: E-mail confirmé
         family_id: ID de la famille
@@ -2205,7 +2204,6 @@ fr:
       postbox: Boîte postale
       street: Rue
       housenumber: Numéro de maison
-      address_care_of: Complément d'adresse
       zip_code: CODE POSTAL
       town: Lieu
       canton: Canton

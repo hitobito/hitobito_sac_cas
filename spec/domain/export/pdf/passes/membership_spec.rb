@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2023-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -181,12 +181,12 @@ describe SacCas::Export::Pdf::Passes::Membership do
     end
 
     it "does include the countries name in full" do
-      expect(text_with_position(analyzer).flatten).to include "Deutschland"
+      expect(text_with_position(analyzer).flatten).to include "DEUTSCHLAND"
     end
 
     it "does translate the country" do
       I18n.with_locale(:fr) do
-        expect(text_with_position(analyzer).flatten).to include "Allemagne"
+        expect(text_with_position(analyzer).flatten).to include "ALLEMAGNE"
       end
     end
 

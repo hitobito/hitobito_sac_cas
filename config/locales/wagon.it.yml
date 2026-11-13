@@ -609,7 +609,6 @@ it:
       person:
         id: Numero personale
         advertising: Invio di pubblicità
-        address_care_of: Complemento di indirizzo
         correspondence: Fatturazione
         confirmed_at: E-mail verificata
         family_id: ID famiglia
@@ -2203,7 +2202,6 @@ it:
       postbox: Casella postale
       street: Via
       housenumber: Numero civico
-      address_care_of: Suffisso dell'indirizzo
       zip_code: CAP
       town: Posizione
       canton: Cantone
