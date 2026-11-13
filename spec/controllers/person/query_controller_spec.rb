@@ -18,7 +18,8 @@ describe Person::QueryController do
     it "finds by birthday" do
       get :index, params: {q: "1993"}
 
-      expect(json).to have(2).items
+      expect(json).to have(1).items
+      expect(json["data"].length).to eq 2
       expect(response.body).to match(/Magazina Leserat/)
       expect(response.body).to match(/Ida Paschke/)
     end
@@ -33,7 +34,8 @@ describe Person::QueryController do
     it "returns 20 matches most" do
       25.times { Fabricate(:person, birthday: Date.new(2000, 1, 1)) }
       get :index, params: {q: "2000"}
-      expect(json).to have(20).items
+      expect(json).to have(2).items
+      expect(json["data"].length).to eq 20
     end
   end
 end
