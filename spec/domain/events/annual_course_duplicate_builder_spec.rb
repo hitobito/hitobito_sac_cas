@@ -33,6 +33,7 @@ describe Events::AnnualCourseDuplicateBuilder do
       translation.attributes = translated_attributes.index_with {
         [Faker::Lorem.words.join, locale].join(" ")
       }
+      translation.description = "<div>#{Faker::Lorem.words.join} <strong>#{locale}</strong></div>"
       translation.save!
     end
 
@@ -83,12 +84,6 @@ describe Events::AnnualCourseDuplicateBuilder do
       "program"
     ]
   }
-  let(:rich_text_attributes) {
-    [
-      "body",
-      "record_type"
-    ]
-  }
 
   context "#build" do
     it "builds duplicate" do
@@ -114,9 +109,8 @@ describe Events::AnnualCourseDuplicateBuilder do
         translated_attributes.each do |attr|
           expect(duplicate_translations.send(attr)).to eq(source_translations.send(attr))
         end
-        rich_text_attributes.each do |attr|
-          expect(duplicate_translations.description.send(attr)).to eq(source_translations.description.send(attr))
-        end
+        expect(duplicate_translations.description.body.to_html)
+          .to eq(source_translations.description.body.to_html)
       end
 
       expect(duplicate.questions.size).to eq(5)
@@ -166,21 +160,12 @@ describe Events::AnnualCourseDuplicateBuilder do
         duplicate = builder.create!
       end.to change { Event::Course.count }.by(1)
         .and change { Event::Date.count }.by(1)
-        .and change {
-               Event::Translation.count
-             }.by(3)
-        .and change {
-               Event::Question.count
-             }.by(5)
-        .and change {
-               Event::Question::Translation.count
-             }.by(15)
-        .and change {
-               Event::Participation.count
-             }.by(2)
-        .and change {
-               Event::Role.count
-             }.by(2)
+        .and change { Event::Translation.count }.by(3)
+        .and change { Event::Question.count }.by(5)
+        .and change { Event::Question::Translation.count }.by(15)
+        .and change { Event::Participation.count }.by(2)
+        .and change { Event::Role.count }.by(2)
+        .and change { Event::Answer.where.not(participation_id: nil).count }.by(0)
 
       expect(duplicate.created_at).to be_present
       expect(duplicate.participations.find(&:leader?).answers).to be_empty
