@@ -5,7 +5,7 @@
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
 
-module TourMailer
+module TourMailer # rubocop:disable Metrics/ModuleLength
   extend ActiveSupport::Concern
   include Rails.application.routes.url_helpers
 
@@ -218,7 +218,7 @@ module TourMailer
 
   def placeholder_event_details
     join_lines([
-      labeled_text_attr(@event, :description),
+      labeled_rich_text_attr(@event, :description),
       labeled_text_attr(@event, :additional_info)
     ].compact, "\n")
   end
@@ -246,6 +246,14 @@ module TourMailer
 
     value = value.present? ? convert_newlines_to_breaks(value) : default
     labeled(label, escape_html(value))
+  end
+
+  def labeled_rich_text_attr(model, attr)
+    label = model.class.human_attribute_name(attr)
+    value = model.send(attr)
+    return if value.blank?
+
+    labeled(label, value.to_s)
   end
 
   def labeled(label, value)

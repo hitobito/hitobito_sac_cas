@@ -142,8 +142,8 @@ describe Event::Kind do
       end
       kind.save!
       expect { kind.push_down_inherited_attributes! }.to change { course.translations.count }.by(1)
-      I18n.with_locale("de") { expect(course.description).to eq "de" }
-      I18n.with_locale("fr") { expect(course.description).to eq "fr" }
+      I18n.with_locale("de") { expect(course.description.to_plain_text).to eq "de" }
+      I18n.with_locale("fr") { expect(course.description.to_plain_text).to eq "fr" }
     end
 
     it "overrides existing values with blanks" do
@@ -288,8 +288,28 @@ describe Event::Kind do
       expect { kind.push_down_inherited_attribute!("general_information") }.to change {
         course.translations.count
       }.by(1)
-      I18n.with_locale("de") { expect(course.description).to eq "de" }
-      I18n.with_locale("fr") { expect(course.description).to eq "fr" }
+      I18n.with_locale("de") { expect(course.description.to_plain_text).to eq "de" }
+      I18n.with_locale("fr") { expect(course.description.to_plain_text).to eq "fr" }
+    end
+
+    it "updates description with general_information as escaped html" do
+      kind.update!(general_information: "Erste Zeile <b>x</b> & y\nZweite Zeile")
+
+      kind.push_down_inherited_attribute!("general_information")
+
+      description = course.reload.description
+      expect(description.body.to_html)
+        .to eq "<div>Erste Zeile &lt;b&gt;x&lt;/b&gt; &amp; y<br>Zweite Zeile</div>"
+      expect(description.plain_text_body).to eq "Erste Zeile <b>x</b> & y\nZweite Zeile"
+    end
+
+    it "updates description with blank general_information" do
+      kind.update!(general_information: nil)
+
+      expect { kind.push_down_inherited_attribute!("general_information") }
+        .to change { course.reload.plain_text_description }.from("Tourenleiter/in 1 Winter").to(nil)
+      rich_text = ActionText::RichText.find_by!(record: course.translations.find_by!(locale: "de"))
+      expect(rich_text.plain_text_body).to be_nil
     end
 
     it "overrides existing values with blanks" do

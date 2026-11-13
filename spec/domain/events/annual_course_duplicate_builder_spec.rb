@@ -33,6 +33,7 @@ describe Events::AnnualCourseDuplicateBuilder do
       translation.attributes = translated_attributes.index_with {
         [Faker::Lorem.words.join, locale].join(" ")
       }
+      translation.description = "<div>#{Faker::Lorem.words.join} <strong>#{locale}</strong></div>"
       translation.save!
     end
 
@@ -75,7 +76,6 @@ describe Events::AnnualCourseDuplicateBuilder do
   let(:translated_attributes) {
     [
       "name",
-      "description",
       "application_conditions",
       "signature_confirmation_text",
       "brief_description",
@@ -109,6 +109,8 @@ describe Events::AnnualCourseDuplicateBuilder do
         translated_attributes.each do |attr|
           expect(duplicate_translations.send(attr)).to eq(source_translations.send(attr))
         end
+        expect(duplicate_translations.description.body.to_html)
+          .to eq(source_translations.description.body.to_html)
       end
 
       expect(duplicate.questions.size).to eq(5)

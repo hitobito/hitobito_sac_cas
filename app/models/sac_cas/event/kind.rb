@@ -112,18 +112,32 @@ module SacCas::Event::Kind
     translations.each do |t|
       fields = attr ? [attr] : INHERITABLE_TRANSLATED_ATTRIBUTES
       attrs = t.attributes.slice("locale", *fields)
-      if attrs.key?("general_information")
-        attrs["description"] =
-          attrs.delete("general_information")
-      end
 
-      translation_attrs = event_ids.map { |id| attrs.merge(event_id: id) }
+      translation_attrs = event_ids.map { |id|
+        attrs.except("general_information").merge(event_id: id)
+      }
       Event::Translation.upsert_all(
         translation_attrs,
         unique_by: [:event_id, :locale],
         returning: false
       )
+      push_down_descriptions(t, event_ids) if attrs.key?("general_information")
     end
+  end
+
+  def push_down_descriptions(translation, event_ids)
+    event_translation_ids = Event::Translation
+      .where(event_id: event_ids, locale: translation.locale)
+      .pluck(:id)
+    action_content = description_as_html(translation.attributes["general_information"])
+    translation_attrs = event_translation_ids.map { |id|
+      build_rich_text(id, action_content)
+    }
+    ActionText::RichText.upsert_all(
+      translation_attrs,
+      unique_by: [:record_type, :record_id, :name],
+      returning: false
+    )
   end
 
   def push_down_events
@@ -134,5 +148,20 @@ module SacCas::Event::Kind
     if maximum_age < (minimum_age || 0)
       errors.add(:maximum_age, :greater_than_or_equal_to, count: minimum_age || 0)
     end
+  end
+
+  def build_rich_text(id, action_content)
+    {body: action_content,
+     plain_text_body: action_content&.to_plain_text.presence,
+     record_id: id,
+     record_type: "Event::Translation",
+     name: "description"}
+  end
+
+  def description_as_html(description)
+    return if description.blank?
+
+    lines = description.strip.split(/\r?\n/).map { |line| ERB::Util.html_escape(line) }
+    ActionText::Content.new("<div>#{lines.join("<br>")}</div>")
   end
 end

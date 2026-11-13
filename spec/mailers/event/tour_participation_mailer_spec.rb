@@ -48,7 +48,7 @@ describe Event::TourParticipationMailer do
         application_closing_at: "15.12.2022",
         activities: event_activities(:skihochtour, :wanderweg, :bergtour),
         target_groups: event_target_groups(:familien, :senioren_b),
-        description: "Wichtige Infos\nauf mehreren Zeilen",
+        description: "<div>Wichtige Infos<br>auf mehreren Zeilen</div>",
         additional_info: nil
       )
       event.dates.first.update!(finish_at: "6.2.2023")
@@ -64,7 +64,8 @@ describe Event::TourParticipationMailer do
         "<dt>Merkmal(e)</dt><dd>Anreise mit ÖV, Exkursion</dd>",
         "<dt>Konditionelle Anforderung</dt><dd>B - wenig anstrengend</dd>",
         "<dt>Technische Anforderung(en)</dt><dd>T3, T4</dd>",
-        "<dt>Beschreibung</dt><dd>Wichtige Infos<br/>auf mehreren Zeilen</dd>",
+        "<dt>Beschreibung</dt><dd><div class=\"trix-content\">\n  " \
+        "<div>Wichtige Infos<br>auf mehreren Zeilen</div>\n</div>\n</dd>",
         "Bei Fragen kannst du dich jederzeit an Tenzing Norgay wenden " \
         "(#{contact.id}, +41 79 123 45 67, t.norgay@hitobito.example.com)."
       )

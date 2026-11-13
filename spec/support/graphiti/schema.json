@@ -906,6 +906,12 @@
           "writable": false,
           "description": null
         },
+        "description_html": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "application_conditions": {
           "type": "string",
           "readable": true,
@@ -2774,6 +2780,12 @@
           "writable": false,
           "description": null
         },
+        "description_html": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
         "application_conditions": {
           "type": "string",
           "readable": true,
@@ -3376,6 +3388,12 @@
           "description": null
         },
         "description": {
+          "type": "string",
+          "readable": true,
+          "writable": false,
+          "description": null
+        },
+        "description_html": {
           "type": "string",
           "readable": true,
           "writable": false,

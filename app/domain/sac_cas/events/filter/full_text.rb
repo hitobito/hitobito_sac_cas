@@ -61,6 +61,7 @@ module SacCas::Events::Filter::FullText
   def full_text_search(scope)
     scope
       .joins(:translations)
+      .left_outer_joins(translations: :rich_text_description)
       .joins(join_essentials("target_group"))
       .joins(join_essentials("trait"))
       .joins(join_essentials_and_parents("activity"))
