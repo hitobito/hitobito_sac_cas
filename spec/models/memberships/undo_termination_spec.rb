@@ -507,6 +507,21 @@ describe Memberships::UndoTermination, versioning: true do
         .to change { ehrenmitglied.reload.end_on }.from(Date.current.yesterday).to(membership_end_on)
     end
 
+    it "restores ehrenmitglied role ended by leaving the zusatzsektion" do
+      zusatzsektion_role, ehrenmitglied = mutation do
+        [Group::SektionsMitglieder::MitgliedZusatzsektion, Group::SektionsMitglieder::Ehrenmitglied]
+          .map do |type|
+            Fabricate(type.sti_name, person:, group: groups(:matterhorn_mitglieder),
+              start_on: role.start_on, end_on: role.end_on)
+          end
+      end
+      Memberships::LeaveZusatzsektion.new(zusatzsektion_role, terminate_on: Date.current.yesterday,
+        termination_reason_id: termination_reasons(:deceased).id).save!
+
+      expect { described_class.new(zusatzsektion_role.reload).save! }
+        .to change { ehrenmitglied.reload.end_on }.from(Date.current.yesterday).to(role.end_on)
+    end
+
     context "for family membership" do
       let(:role) { familienmitglied }
       let(:person) { role.person }
