@@ -291,7 +291,7 @@ describe Export::Tabular::People::AlpsRecipients do
       row = row_for(new_entry_with_old_membership)
       expect(row[12]).to eq("28.09.2015")
 
-      # current abonnent start_on is used as entry_on
+      # first abonnent start_on is used as entry_on with old abos
       row = row_for(new_entry_abonnent_with_old_abo)
       expect(row[12]).to eq("11.01.2023")
 
