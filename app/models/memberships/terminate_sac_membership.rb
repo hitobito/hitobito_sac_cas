@@ -13,7 +13,7 @@ module Memberships
 
     include CommonApi
 
-    RELEVANT_ROLES = [
+    ROLE_TYPES = [
       Group::SektionsMitglieder::Mitglied,
       Group::SektionsMitglieder::MitgliedZusatzsektion,
       Group::SektionsMitglieder::Beguenstigt,
@@ -97,7 +97,7 @@ module Memberships
     end
 
     def relevant_roles(person)
-      types = RELEVANT_ROLES.map(&:to_s)
+      types = ROLE_TYPES.map(&:to_s)
       person.roles.select { |role| types.include?(role.type) }
     end
 
@@ -125,7 +125,7 @@ module Memberships
 
     def destroy_future_roles
       Role.future
-        .where(person: affected_people, type: RELEVANT_ROLES.map(&:sti_name))
+        .where(person: affected_people, type: ROLE_TYPES.map(&:sti_name))
         .destroy_all
     end
 
