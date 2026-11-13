@@ -40,17 +40,15 @@ class Export::Tabular::People::AlpsRecipientRow < Export::Tabular::Row
   end
 
   def entry_on
-    if mitglied?
-      role_start_on(SacCas::MITGLIED_ROLES)
-    else
-      role_start_on(SacCas::ABONNENT_MAGAZIN_ROLES)
-    end
+    relevant_roles = mitglied? ? roles(SacCas::MITGLIED_ROLES) : abo_roles_in_row_group
+    relevant_roles.min_by(&:start_on).start_on
   end
 
   private
 
-  def role_start_on(types)
-    roles(types).min_by(&:start_on).start_on
+  def abo_roles_in_row_group
+    roles(SacCas::ABONNENT_MAGAZIN_ROLES)
+      .select { |role| role.group_id == entry.alps_role_group_id }
   end
 
   def mitglied?

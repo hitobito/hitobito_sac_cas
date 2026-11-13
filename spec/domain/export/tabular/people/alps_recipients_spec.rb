@@ -309,6 +309,11 @@ describe Export::Tabular::People::AlpsRecipients do
       expect(rows_for(gratisabonnent_twice_de).pluck(10)).to eq(%w[de de])
     end
 
+    it "contains entry_on of the subscription group for double abonnenten" do
+      expect(rows_for(abonnent_de_and_fr).pluck(12)).to eq(%w[07.03.2023 03.03.2025])
+      expect(rows_for(new_entry_mitglied_de_and_abonnent_fr).pluck(12)).to eq(%w[23.04.2025 11.04.2022])
+    end
+
     it "does not do N+1 queries" do
       expect { rows }.to make(4).db_queries
     end
