@@ -15,7 +15,7 @@ it:
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
-    sac: &sac
+    sac:
       name: "Club Alpino Svizzero CAS"
       zentralverband: "Associazione centrale"
       address: "Monbijoustrasse 61"
@@ -29,11 +29,9 @@ it:
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
-      email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-    sac_oauth:
-      <<: *sac
-      email_mv: "mv@sac-cas.ch"
+      contact_form_label: Kontakt
+      contact_form_url: "https://www.sac-cas.ch/de/kontakt"
     title_event/tour: Gita
     elevation_unit: Hm
     duration_format: "h:mm"

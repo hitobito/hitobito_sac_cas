@@ -15,7 +15,7 @@ de_CH:
     links:
       faq: "https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/"
       membership: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
-    sac: &sac
+    sac:
       name: "Schweizer Alpen-Club SAC"
       zentralverband: "Zentralverband"
       address: "Monbijoustrasse 61"
@@ -29,11 +29,9 @@ de_CH:
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
-      email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-    sac_oauth:
-      <<: *sac
-      email_mv: "mv@sac-cas.ch"
+      contact_form_label: Kontakt
+      contact_form_url: "https://www.sac-cas.ch/de/kontakt"
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: "h:mm"
