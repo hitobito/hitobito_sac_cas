@@ -355,6 +355,8 @@ de_CH:
         similar_tours: Vergleichstouren
         program: Programm
         seo_text: SEO Text
+        survey_hero_survey_key: SurveyHero Survey ID
+        survey_hero_collector_key: SurveyHero Collector ID
       event/course:
         accommodation: Unterkunft
         annual: Jährlich wiederkehrend
@@ -378,6 +380,9 @@ de_CH:
         link_external_site: Link Externe Seite
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
+        survey_auto_send: Umfrage automatisch versenden
+        survey_hero_survey_key: SurveyHero Survey ID
+        survey_hero_collector_key: SurveyHero Collector ID
         meals: Verpflegung
         meals_options:
           breakfast: Frühstück
@@ -1016,8 +1021,8 @@ de_CH:
         one: Kommission
         other: Kommission
       group/sektions_kommission_huetten:
-        one: Kommission Hütten
-        other: Kommissionen Hütten
+        one: Commissione rifugi
+        other: Commissione rifugi
       group/sektions_kommission_touren:
         one: Kommission Touren
         other: Kommissionen Touren
@@ -1043,8 +1048,8 @@ de_CH:
         one: Touren und Kurse
         other: Touren und Kurse
       group/sektions_vorstand:
-        one: Vorstand
-        other: Vorstand
+        one: Comitato
+        other: Comitato
       group/sektionshuetten:
         one: Sektionshütten
         other: Sektionshütten
@@ -1845,6 +1850,10 @@ de_CH:
       none: (keine)
 
   events:
+    courses:
+      survey_dispatcher:
+        link_creation_failed: Der Umfragelink konnte nicht erstellt werden
+
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
@@ -2229,6 +2238,7 @@ de_CH:
   groups:
     actions_show_sac_cas:
       create_yearly_membership_invoice: MV Jahresinkasso
+      edit_question_templates: Vorlagen Anmeldeangaben Anlässe bearbeiten
     sektion_primary: Stammsektion
     sektion_secondary: Zusatzsektion
 
@@ -2906,10 +2916,13 @@ de_CH:
               Ergänze deine Mitgliedschaft mit der kostenlosen SAC-Cornèrcard und profitiere von exklusiven Vorteilen bei deinen SAC-Aktivitäten und im Alltag.
             benefits_heading: "Deine Vorteile auf einen Blick:"
             benefit_1: Keine Jahresgebühr
-            benefit_2: 20-faches Cashback im SAC-Shop (entspricht zusätzlichen 6% Preisvorteil)
+            benefit_2: >-
+              Willkommensgeschenk: 25% Rabatt bei La Sportiva, 10% Rabatt bei Bächli Bergsport, 25% Rabatt bei Peak Punk inkl. einem Goodie
             benefit_3: Exklusives SAC-Kartendesign
-            support_text: >-
+            support_text_html: >-
               Mit jedem Karteneinsatz unterstützt du gleichzeitig den SAC. Als Hauptpartnerin spendet Cornèrcard <strong>0,2% des Kartenumsatzes</strong> an den SAC – <strong>ohne zusätzliche Kosten für dich.</strong>
+            info_text_html: >-
+              <strong>Die kostenlose SAC-Kreditkarte wird ohne Angabe deiner Finanzdaten ausgestellt.</strong> Diese Karte verfügt über eine Limite von CHF 500.-. Es sind keine Bargeldbezüge oder Ratenzahlungen möglich. Du kannst die Karte zu einem späteren Zeitpunkt upgraden und damit Leistungen wie eine individuelle Limite, Bargeldbezüge oder Spenden zugunsten des SAC freischalten.
             card_application_label: >-
               Ich möchte meinen Mitgliedervorteil nutzen und die kostenlose SAC-Cornèrcard beantragen.
             consent_label: >-
