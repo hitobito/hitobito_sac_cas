@@ -1,7 +1,8 @@
-## Version unreleased
+## unreleased
 
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
 * Kursumfragen werden am Tag nach dem letzten Kurstag automatisch mit einem kursspezifischen SurveyHero Link an die Teilnehmenden versendet, Survey ID und Collector ID werden auf dem Kurstyp erfasst (HIT-1573 / hitobito_sac_cas#2695)
+* Adressabgleich mit der Post: Der Adresszusatz wird nicht an die Post übermittelt. Liefert die Post einen Adresszusatz zurück, wird er übernommen, sonst bleibt der bestehende erhalten (hitobito_sww#292)
 
 ## Version 2.11
 
