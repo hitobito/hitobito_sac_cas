@@ -121,12 +121,13 @@ module SacCas::Event::Kind
         unique_by: [:event_id, :locale],
         returning: false
       )
-      push_down_descriptions(t) if attrs.key?("general_information")
+      push_down_descriptions(t, event_ids) if attrs.key?("general_information")
     end
   end
 
-  def push_down_descriptions(translation)
-    event_translation_ids = push_down_event_translations.where(locale: translation.locale)
+  def push_down_descriptions(translation, event_ids)
+    event_translation_ids = Event::Translation
+      .where(event_id: event_ids, locale: translation.locale)
       .pluck(:id)
     action_content = description_as_html(translation.attributes["general_information"])
     translation_attrs = event_translation_ids.map { |id|
@@ -141,10 +142,6 @@ module SacCas::Event::Kind
 
   def push_down_events
     events.where.not(state: %w[closed canceled])
-  end
-
-  def push_down_event_translations
-    Event::Translation.where(event_id: push_down_events.pluck(:id))
   end
 
   def maximum_age_greater_than_minimum_age
