@@ -1,5 +1,6 @@
 ## unreleased
 
+* Mail "Fehlende Administrationsangaben" führt jede fehlende Angabe nur noch einmal in der Sprache der Mail auf (HIT-1746 / hitobito_sac_cas#2690)
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
 * Kursumfragen werden am Tag nach dem letzten Kurstag automatisch mit einem kursspezifischen SurveyHero Link an die Teilnehmenden versendet, Survey ID und Collector ID werden auf dem Kurstyp erfasst (HIT-1573 / hitobito_sac_cas#2695)
 * Die Alpen Export: Personen mit mehreren Abo Rollen oder mit Mitgliedschaft und Abo Rolle erscheinen pro Rolle auf einer eigenen Zeile (HIT-1675 / hitobito_sac_cas#2689)
