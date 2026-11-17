@@ -57,10 +57,13 @@ module Migrations
     def reset_section_templates
       templates = CustomContent.section_specific_templates
 
-      I18n.with_locale(:de) do
-        rewrite_each(section_contents(RESET_KEYS)) do |content|
-          reset(content, templates.fetch(content.key))
-        end
+      RESET_KEYS.sum do |key|
+        template = templates.fetch(key)
+        translations = CustomContent::Translation.where(locale: "de",
+          custom_content_id: section_contents(key).select(:id))
+        translations.update_all(subject: template["subject"], updated_at: Time.current)
+        section_bodies.where(record_id: translations.select(:id))
+          .update_all(["body = ?, updated_at = ?", template_body(template), Time.current])
       end
     end
 
@@ -74,29 +77,30 @@ module Migrations
       )
     end
 
+    def section_bodies
+      ActionText::RichText.where(record_type: CustomContent::Translation.polymorphic_name, name: "body")
+    end
+
     def rewrite_subjects
       translations = CustomContent::Translation.where("subject ~ ?", LEGACY_PLACEHOLDER_SQL)
 
-      rewrite_each(translations) do |translation|
-        translation.update_columns(subject: rewrite(translation.subject))
+      translations.distinct.pluck(:subject).sum do |subject|
+        translations.where(subject:)
+          .update_all(subject: rewrite(subject), updated_at: Time.current)
       end
     end
 
     def rewrite_bodies
-      rich_texts = ActionText::RichText
-        .where(record_type: CustomContent::Translation.polymorphic_name, name: "body")
-        .where("body ~ ?", LEGACY_PLACEHOLDER_SQL)
+      rich_texts = section_bodies.where("body ~ ?", LEGACY_PLACEHOLDER_SQL)
 
-      rewrite_each(rich_texts) do |rich_text|
-        rich_text.update!(body: rewrite(rich_text.body.to_html))
+      rich_texts.distinct.pluck(Arel.sql("body::text AS raw_body")).sum do |body|
+        rich_texts.where("body = ?", body)
+          .update_all(["body = ?, updated_at = ?", rewrite(body), Time.current])
       end
     end
 
-    def reset(content, template)
-      content.update!(
-        subject: template["subject"],
-        body: template["body"].split("\n").join("\n<br>\n")
-      )
+    def template_body(template)
+      ActionText::Content.new(template["body"].split("\n").join("\n<br>\n")).to_html
     end
 
     def rewrite_each(scope, &)
