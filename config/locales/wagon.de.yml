@@ -613,7 +613,6 @@ de:
       person:
         id: Personennummer
         advertising: Werbesendungen
-        address_care_of: Adresszusatz
         correspondence: Mitgliederausweis & Rechnungsstellung
         confirmed_at: E-Mail bestätigt
         family_id: Familien ID
@@ -2176,7 +2175,8 @@ de:
       postbox: Postfach
       street: Strasse
       housenumber: Hausnummer
-      address_care_of: Adresszusatz
+      address_care_of: c/o-Adresse
+      address_addition: Adresszusatz
       zip_code: PLZ
       town: Ort
       canton: Kanton

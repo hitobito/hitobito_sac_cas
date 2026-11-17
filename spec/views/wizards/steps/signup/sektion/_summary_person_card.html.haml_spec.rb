@@ -1,4 +1,4 @@
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -38,7 +38,7 @@ describe "wizards/steps/signup/sektion/_summary_person_card.html.haml" do
   it "renders summary card with all attributes" do
     expect(dom).to have_text "Kontaktperson"
     expect(dom).to have_css(".fw-bold", text: "Max Muster")
-    expect(dom).to have_text "Adresszusatz"
+    expect(dom).to have_text "c/o-Adresse"
     expect(dom).to have_text "2.Stock"
     expect(dom).to have_text "Strasse und Nr."
     expect(dom).to have_text "Musterplatz 23"

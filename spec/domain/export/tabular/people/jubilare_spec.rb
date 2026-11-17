@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -31,6 +31,7 @@ describe Export::Tabular::People::Jubilare do
     it "contains all attributes" do
       people(:mitglied).update!(
         address_care_of: "c/o Mami u Papi",
+        address_addition: "Hinterhaus",
         postbox: "Postfach 1",
         gender: "m",
         birthday: "21.04.1972",
@@ -80,6 +81,7 @@ describe Export::Tabular::People::Jubilare do
         "Ophovenerstrasse",
         "79a",
         "c/o Mami u Papi",
+        "Hinterhaus",
         "2843",
         "Neu Carlscheid",
         "Bern",
@@ -109,6 +111,7 @@ describe Export::Tabular::People::Jubilare do
         nil,
         "Ophovenerstrasse",
         "79a",
+        nil,
         nil,
         "2843",
         "Neu Carlscheid",

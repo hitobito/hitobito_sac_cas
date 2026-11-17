@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -22,7 +22,7 @@ describe Export::Tabular::People::SacRecipientHouseholds do
       salutation: "Anrede",
       first_name: "Vorname",
       last_name: "Name",
-      address_care_of: "Adresszusatz",
+      address_care_of: "c/o-Adresse",
       address: "Strasse",
       postbox: "Postfach",
       zip_code: "PLZ",
