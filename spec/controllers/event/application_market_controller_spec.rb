@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -87,6 +87,42 @@ describe Event::ApplicationMarketController do
         get :index, params: params
         expect(dom).to have_css "tbody#participants tr:nth-of-type(1) td", text: "Aufgeboten"
       end
+    end
+  end
+
+  describe "add participant button on tour" do
+    render_views
+    subject(:dom) { Capybara::Node::Simple.new(response.body) }
+
+    let(:event) { events(:section_tour) }
+    let(:user) { Fabricate(:person) }
+    let(:add_participant_link) { "a[href*='for_someone_else=true']" }
+
+    before { sign_in(user) }
+
+    def assign_role(role_type)
+      Fabricate(role_type.sti_name, participation: Event::Participation.create!(person: user, event:))
+    end
+
+    it "is shown to leader" do
+      assign_role(Event::Role::Leader)
+
+      get :index, params: params
+      expect(dom).to have_css add_participant_link
+    end
+
+    it "is shown to assistant leader" do
+      assign_role(Event::Role::AssistantLeader)
+
+      get :index, params: params
+      expect(dom).to have_css add_participant_link
+    end
+
+    it "is shown to contact" do
+      event.update_columns(contact_id: user.id)
+
+      get :index, params: params
+      expect(dom).to have_css add_participant_link
     end
   end
 

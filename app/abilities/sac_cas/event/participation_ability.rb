@@ -22,6 +22,7 @@ module SacCas::Event::ParticipationAbility
       permission(:any)
         .may(:show_full, :update_full, :absent, :attend)
         .for_participations_full_events_or_tour_leadership
+      permission(:any).may(:create).her_own_if_application_possible_or_tour_leadership
 
       permission(:any).may(:cancel).her_own
       permission(:any).may(:assign, :summon).none
@@ -64,6 +65,10 @@ module SacCas::Event::ParticipationAbility
 
   def her_own_or_manager_or_for_participations_read_details_events_or_tour_leadership
     her_own_or_manager_or_for_participations_read_details_events || for_tour_leadership
+  end
+
+  def her_own_if_application_possible_or_tour_leadership
+    her_own_if_application_possible || for_tour_leadership
   end
 
   def her_own_or_for_participations_full_events_or_tour_leadership
