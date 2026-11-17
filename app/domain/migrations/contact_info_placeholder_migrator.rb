@@ -44,20 +44,35 @@ module Migrations
       rewrite_subjects + rewrite_bodies
     end
 
+    def update_section_placeholders
+      templates = CustomContent.section_specific_templates
+
+      rewrite_each(section_contents(templates.keys)) do |content|
+        content.update_columns(
+          templates.fetch(content.key).slice("placeholders_optional", "placeholders_required")
+        )
+      end
+    end
+
     def reset_section_templates
       templates = CustomContent.section_specific_templates
-      contents = CustomContent.unscoped.where(
-        key: RESET_KEYS,
-        context_type: Group.sti_name,
-        context_id: Group.where(type: SacCas::MEMBERSHIP_OPERATIONS_GROUP_TYPES).select(:id)
-      )
 
       I18n.with_locale(:de) do
-        rewrite_each(contents) { |content| reset(content, templates.fetch(content.key)) }
+        rewrite_each(section_contents(RESET_KEYS)) do |content|
+          reset(content, templates.fetch(content.key))
+        end
       end
     end
 
     private
+
+    def section_contents(keys)
+      CustomContent.unscoped.where(
+        key: keys,
+        context_type: Group.sti_name,
+        context_id: Group.where(type: SacCas::MEMBERSHIP_OPERATIONS_GROUP_TYPES).select(:id)
+      )
+    end
 
     def rewrite_subjects
       translations = CustomContent::Translation.where("subject ~ ?", LEGACY_PLACEHOLDER_SQL)

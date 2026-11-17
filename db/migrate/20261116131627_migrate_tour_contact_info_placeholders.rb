@@ -8,6 +8,10 @@
 class MigrateTourContactInfoPlaceholders < ActiveRecord::Migration[8.0]
   def up
     migrator = Migrations::ContactInfoPlaceholderMigrator.new
+    say_with_time("update placeholders of section templates") do
+      migrator.update_section_placeholders
+    end
+
     say_with_time("replace contact placeholders with {contact-info}") do
       migrator.rewrite_placeholders
     end

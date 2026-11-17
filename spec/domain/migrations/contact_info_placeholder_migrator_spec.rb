@@ -125,4 +125,44 @@ describe Migrations::ContactInfoPlaceholderMigrator do
       expect(migrator.reset_section_templates).to eq(2 * described_class::RESET_KEYS.size)
     end
   end
+
+  describe "#update_section_placeholders" do
+    let(:legacy_placeholders) do
+      "event-name, contact-id, contact-first-name, contact-last-name, contact-email, contact-phone"
+    end
+
+    before do
+      CustomContent.init_section_specific_contents(group)
+      group.custom_contents.update_all(placeholders_optional: legacy_placeholders)
+    end
+
+    def placeholders(key)
+      group.custom_contents.find_by(key:).placeholders_optional
+    end
+
+    it "sets placeholders of all section templates from seed" do
+      migrator.update_section_placeholders
+
+      templates = CustomContent.section_specific_templates
+      expect(placeholders(:event_tour_publication))
+        .to eq(templates["event_tour_publication"]["placeholders_optional"])
+      expect(placeholders(:event_tour_report_approved))
+        .to eq(templates["event_tour_report_approved"]["placeholders_optional"])
+    end
+
+    it "allows to send tour mails again" do
+      mail = Event::TourMailer.publication(events(:section_tour), people(:mitglied))
+      expect { mail.body }.to raise_error(NoMethodError, /placeholder_contact_first_name/)
+
+      migrator.update_section_placeholders
+
+      mail = Event::TourMailer.publication(events(:section_tour), people(:mitglied))
+      expect(mail.body.to_s).to include("Gerne informieren wir dich")
+    end
+
+    it "returns number of updated templates" do
+      expect(migrator.update_section_placeholders)
+        .to eq(CustomContent.section_specific_templates.size)
+    end
+  end
 end
