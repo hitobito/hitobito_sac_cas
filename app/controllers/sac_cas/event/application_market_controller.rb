@@ -8,8 +8,6 @@
 module SacCas::Event::ApplicationMarketController
   extend ActiveSupport::Concern
 
-  SORT_EXPRESSION = "event_participations.created_at ASC"
-
   prepended do
     delegate :canceled?, to: :event, prefix: true
 
@@ -19,11 +17,7 @@ module SacCas::Event::ApplicationMarketController
   private
 
   def load_participants
-    super.reorder(SORT_EXPRESSION)
-  end
-
-  def load_applications
-    super.reorder(SORT_EXPRESSION)
+    super.reorder(:created_at)
   end
 
   def set_canceled_flash = flash.now[:warning] = t(".event_canceled")
