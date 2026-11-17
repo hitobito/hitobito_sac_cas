@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas
@@ -1018,6 +1018,49 @@ describe Event::ParticipationsController do
             expect(participation.price_category).to eq "price_regular"
           end
         end
+      end
+    end
+
+    context "POST#create for someone else as tour leadership" do
+      let(:user) { Fabricate(:person) }
+      let(:person) { people(:mitglied) }
+      let(:participation_path) { group_event_participation_path(id: assigns(:participation).id) }
+      let(:create_params) do
+        params.merge(
+          event_participation: {person_id: person.id},
+          event_role: {type: "Event::Tour::Role::Participant"}
+        )
+      end
+
+      def assign_role(role_type)
+        Fabricate(role_type.sti_name,
+          participation: Event::Participation.create!(person: user, event:))
+      end
+
+      it "creates participation as leader" do
+        assign_role(Event::Role::Leader)
+
+        expect do
+          post :create, params: create_params
+          expect(response).to redirect_to(participation_path)
+        end.to change { Event::Participation.count }.by(1)
+
+        expect(assigns(:participation).person).to eq person
+      end
+
+      it "creates participation as contact" do
+        event.update_columns(contact_id: user.id)
+
+        expect do
+          post :create, params: create_params
+          expect(response).to redirect_to(participation_path)
+        end.to change { Event::Participation.count }.by(1)
+      end
+
+      it "denies access as helper" do
+        assign_role(Event::Role::Helper)
+
+        expect { post :create, params: create_params }.to raise_error(CanCan::AccessDenied)
       end
     end
 

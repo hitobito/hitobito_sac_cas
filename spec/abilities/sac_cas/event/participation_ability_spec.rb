@@ -270,7 +270,8 @@ describe Event::ParticipationAbility do
         application: Fabricate(:event_application, priority_1: event))
     end
 
-    managing_actions = [:show, :show_details, :show_full, :print, :update, :update_full, :absent, :attend]
+    managing_actions = [:show, :show_details, :show_full, :print, :update, :update_full, :absent,
+      :attend, :create]
 
     subject(:ability) { Ability.new(contact.reload) }
 
@@ -288,10 +289,12 @@ describe Event::ParticipationAbility do
         end
       end
 
-      [:create, :destroy].each do |action|
-        it "may not #{action}" do
-          expect(ability).not_to be_able_to(action, participation)
-        end
+      it "may not destroy" do
+        expect(ability).not_to be_able_to(:destroy, participation)
+      end
+
+      it "may create participation for someone else" do
+        expect(ability).to be_able_to(:create, event.participations.new)
       end
     end
 
@@ -303,6 +306,54 @@ describe Event::ParticipationAbility do
           expect(ability).not_to be_able_to(action, participation)
         end
       end
+    end
+  end
+
+  context "tour leadership" do
+    let(:tour) { events(:section_tour) }
+    let(:person) { Fabricate(:person) }
+    let(:new_participation) { tour.participations.new }
+
+    subject(:ability) { Ability.new(person.reload) }
+
+    def assign_role(role_type, event: tour)
+      Fabricate(role_type.sti_name, participation: Event::Participation.create!(person:, event:))
+    end
+
+    [Event::Role::Leader, Event::Role::AssistantLeader].each do |role_type|
+      context "as #{role_type}" do
+        before { assign_role(role_type) }
+
+        it "may create participation for someone else" do
+          expect(ability).to be_able_to(:create, new_participation)
+        end
+
+        it "may not destroy participation" do
+          participation = Fabricate(:event_participation, event: tour)
+
+          expect(ability).not_to be_able_to(:destroy, participation)
+        end
+      end
+    end
+
+    it "may not create participation for someone else as helper" do
+      assign_role(Event::Role::Helper)
+
+      expect(ability).not_to be_able_to(:create, new_participation)
+    end
+
+    it "may not create participation for someone else on other tour" do
+      assign_role(Event::Role::Leader)
+      other_tour = Fabricate(:sac_tour, groups: tour.groups)
+
+      expect(ability).not_to be_able_to(:create, other_tour.participations.new)
+    end
+
+    it "may not create participation for someone else on course as course leader" do
+      course = events(:top_course)
+      assign_role(Event::Course::Role::Leader, event: course)
+
+      expect(ability).not_to be_able_to(:create, course.participations.new)
     end
   end
 

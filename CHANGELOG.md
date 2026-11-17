@@ -1,5 +1,6 @@
 ## unreleased
 
+* Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Teilnehmende hinzufügen (HIT-1803 / hitobito_sac_cas#2767)
 * Markdown-Tabellen in Mailvorlagen werden auch dargestellt, wenn die Zeilen mit Enter statt Shift+Enter getrennt sind (HIT-1746 / hitobito_sac_cas#2690)
 * Mail "Fehlende Administrationsangaben" führt jede fehlende Angabe nur noch einmal in der Sprache der Mail auf (HIT-1746 / hitobito_sac_cas#2690)
 * Aktivitäten, Zielgruppen und Anforderungen einer Tour sind in der Bearbeitungsmaske stets ersichtlich (hitobito_sac_cas#2681)
