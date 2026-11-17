@@ -25,10 +25,23 @@ describe Sheet::Event::Participation do
 
     %w[new create].each do |action|
       context "#{action} action" do
-        before { allow(view_context).to receive(:action_name).and_return(action) }
+        let(:params) { {} }
+
+        before do
+          allow(view_context).to receive(:action_name).and_return(action)
+          allow(view_context).to receive(:params).and_return(ActionController::Parameters.new(params))
+        end
 
         it "#parent_sheet_for returns nil" do
           expect(described_class.parent_sheet_for(view_context)).to be_nil
+        end
+
+        context "for someone else" do
+          let(:params) { {for_someone_else: "true"} }
+
+          it "#parent_sheet_for returns Sheet::Event" do
+            expect(described_class.parent_sheet_for(view_context)).to eq Sheet::Event
+          end
         end
       end
     end

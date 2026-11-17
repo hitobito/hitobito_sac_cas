@@ -26,7 +26,8 @@ module SacCas::Sheet::Event::Participation
 
       def signup?(view_context)
         view_context.controller.is_a?(Event::ParticipationsController) &&
-          %w[new create].include?(view_context.action_name)
+          %w[new create].include?(view_context.action_name) &&
+          view_context.params[:for_someone_else].blank?
       end
     end
   end
