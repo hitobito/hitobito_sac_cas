@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2012-2023, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -250,6 +250,27 @@ describe PersonAbility do
       Group::SektionsKommissionTouren::Mitglied.create!(group: kommission_touren,
         person: person)
       expect(ability).to be_able_to(:query, Person)
+    end
+
+    context "as contact of tour" do
+      let(:tour) { events(:section_tour) }
+
+      before { tour.update_columns(contact_id: person.id) }
+
+      it "is allowed if tour has not finished yet" do
+        tour.dates.first.update!(start_at: Time.zone.today, finish_at: nil)
+        expect(ability).to be_able_to(:query, Person)
+      end
+
+      it "is not allowed if tour has finished" do
+        tour.dates.first.update!(start_at: 2.days.ago, finish_at: 1.day.ago)
+        expect(ability).not_to be_able_to(:query, Person)
+      end
+    end
+
+    it "is not allowed as contact of course" do
+      events(:top_course).update_columns(contact_id: person.id)
+      expect(ability).not_to be_able_to(:query, Person)
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club.
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club.
 #  This file is part of hitobito_sac_cas and
 #  licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
@@ -50,6 +50,10 @@ module SacCas::PersonAbility
 
   def if_any_writing_permissions
     contains_any?(WRITE_PERMISSIONS, user_context.all_permissions)
+  end
+
+  def if_any_writing_permissions_or_any_leaded_events
+    super || ::Event::Tour.where(contact_id: user.id).upcoming.exists?
   end
 
   def if_backoffice_or_functionary
