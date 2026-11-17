@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -25,7 +25,7 @@ module SacCas::CustomContent
 
   def body_with_values(placeholders = {})
     body.to_s.html_safe
-      .then { RenderMarkdownTables.replace_markdown_tables(_1) }
+      .then { MarkdownTables.new(_1).to_html }
       .then { replace_placeholders(_1, placeholders) }
   end
 
