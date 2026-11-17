@@ -112,12 +112,22 @@ describe Event::ParticipationsController do
         expect(dom).not_to have_css "aside"
       end
 
+      it "renders event sheet for someone else" do
+        get :new, params: {group_id: group.id, event_id: event.id, for_someone_else: true}
+        expect(dom).to have_css ".sheet.parent"
+      end
+
       it "renders aside" do
         get :new, params: {group_id: group.id, event_id: event.id}
         expect(dom).to have_css "main form"
         expect(dom).to have_css ".stepwizard-step", count: 3
         expect(dom).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
         expect(dom).to have_css "aside.card", count: 2
+      end
+
+      it "does not render event sheet" do
+        get :new, params: {group_id: group.id, event_id: event.id}
+        expect(dom).not_to have_css ".sheet.parent"
       end
     end
 
@@ -898,6 +908,17 @@ describe Event::ParticipationsController do
         expect(dom).to have_css ".stepwizard-step.is-current", text: "Zusatzdaten"
         expect(dom).to have_css "aside.card", count: 2
       end
+
+      it "does not render event sheet" do
+        get :new, params: {group_id: group.id, event_id: event.id}
+        expect(dom).not_to have_css ".sheet.parent"
+      end
+
+      it "renders event sheet without aside for someone else" do
+        get :new, params: {group_id: group.id, event_id: event.id, for_someone_else: true}
+        expect(dom).to have_css ".sheet.parent"
+        expect(dom).not_to have_css "aside"
+      end
     end
 
     context "POST#create" do
@@ -1055,6 +1076,25 @@ describe Event::ParticipationsController do
           post :create, params: create_params
           expect(response).to redirect_to(participation_path)
         end.to change { Event::Participation.count }.by(1)
+      end
+
+      context "with validation errors" do
+        render_views
+        let(:dom) { Capybara::Node::Simple.new(response.body) }
+
+        it "renders event sheet" do
+          assign_role(Event::Role::Leader)
+
+          expect do
+            post :create, params: params.merge(
+              for_someone_else: true,
+              event_role: {type: "Event::Tour::Role::Participant"}
+            )
+          end.not_to change { Event::Participation.count }
+
+          expect(response).to have_http_status(:unprocessable_content)
+          expect(dom).to have_css ".sheet.parent"
+        end
       end
 
       it "denies access as helper" do
