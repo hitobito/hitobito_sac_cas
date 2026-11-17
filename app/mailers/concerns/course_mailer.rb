@@ -97,10 +97,9 @@ module CourseMailer
   end
 
   def placeholder_missing_information
-    missing_questions = join_lines(Event::Question.admin.joins(:answers)
+    missing_questions = join_lines(Event::Question.admin.list.joins(:answers)
       .where(answers: {participation: @participation, answer: Event::Answer::MISSING})
-      .pluck(:question)
-      .map { |question| content_tag(:li, question) }, nil)
+      .map { |question| content_tag(:li, question.question) }, nil)
 
     return "" if missing_questions.blank?
 

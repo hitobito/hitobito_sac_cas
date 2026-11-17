@@ -56,6 +56,13 @@ describe Event::CourseParticipationMailer do
           "<ul><li>AHV-Nummer</li></ul>"
         )
       end
+
+      it "lists each question once in the mail language, ignoring other and blank translations" do
+        event.questions.create!(admin: true, question: "Notfallkontakt", question_fr: "Contact d'urgence",
+          question_it: "")
+
+        expect(mail.body.to_s).to include("<ul><li>AHV-Nummer</li><li>Notfallkontakt</li></ul>")
+      end
     end
 
     context "missing price" do
