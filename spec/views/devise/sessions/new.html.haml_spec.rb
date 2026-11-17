@@ -1,4 +1,4 @@
-#  Copyright (c) 2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2025-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -25,7 +25,10 @@ describe "devise/sessions/new.html.haml" do
   end
 
   describe "oauth" do
-    before { params[:oauth] = "true" }
+    before do
+      params[:oauth] = "true"
+      allow(view).to receive(:oauth_application).and_return(nil)
+    end
 
     it "does render custom helpful links" do
       render
