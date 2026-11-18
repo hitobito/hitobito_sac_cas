@@ -78,7 +78,8 @@ module Migrations
     end
 
     def section_bodies
-      ActionText::RichText.where(record_type: CustomContent::Translation.polymorphic_name, name: "body")
+      ActionText::RichText.where(record_type: CustomContent::Translation.polymorphic_name,
+        name: "body")
     end
 
     def rewrite_subjects
@@ -94,7 +95,7 @@ module Migrations
       rich_texts = section_bodies.where("body ~ ?", LEGACY_PLACEHOLDER_SQL)
 
       rich_texts.distinct.pluck(Arel.sql("body::text AS raw_body")).sum do |body|
-        rich_texts.where("body = ?", body)
+        rich_texts.where(body: body)
           .update_all(["body = ?, updated_at = ?", rewrite(body), Time.current])
       end
     end
