@@ -98,47 +98,72 @@ module SacCas::Events::Filter::FullText
     end.reduce(:and)
   end
 
+  # Labels matching no search word cannot satisfy the search condition, but would multiply rows.
   def join_essentials(name)
-    <<-SQL
-      LEFT JOIN events_#{name.pluralize} AS events_#{name.pluralize}_ft ON
-        events_#{name.pluralize}_ft.event_id = events.id
-      LEFT JOIN event_#{name}_translations AS event_#{name}_translations_ft ON
-        event_#{name}_translations_ft.event_#{name}_id = events_#{name.pluralize}_ft.#{name}_id
+    <<~SQL
+      LEFT JOIN (
+        SELECT events_#{name.pluralize}.event_id, event_#{name}_translations_ft.label
+        FROM events_#{name.pluralize}
+        INNER JOIN event_#{name}_translations AS event_#{name}_translations_ft ON
+          event_#{name}_translations_ft.event_#{name}_id = events_#{name.pluralize}.#{name}_id
+        WHERE #{any_word_matches("event_#{name}_translations_ft.label")}
+      ) AS event_#{name}_translations_ft ON event_#{name}_translations_ft.event_id = events.id
     SQL
   end
 
   def join_essentials_and_parents(name)
-    <<-SQL
-      LEFT JOIN events_#{name.pluralize} AS events_#{name.pluralize}_ft ON
-        events_#{name.pluralize}_ft.event_id = events.id
-      LEFT JOIN event_#{name.pluralize} AS event_#{name.pluralize}_ft ON
-        event_#{name.pluralize}_ft.id = events_#{name.pluralize}_ft.#{name}_id
-      LEFT JOIN event_#{name}_translations AS event_#{name}_translations_ft ON
-        event_#{name}_translations_ft.event_#{name}_id = event_#{name.pluralize}_ft.id OR
-        event_#{name}_translations_ft.event_#{name}_id = event_#{name.pluralize}_ft.parent_id
+    label = "event_#{name}_translations_ft.label"
+    <<~SQL
+      LEFT JOIN (
+        SELECT events_#{name.pluralize}.event_id, #{label}
+        FROM events_#{name.pluralize}
+        INNER JOIN event_#{name.pluralize} ON
+          event_#{name.pluralize}.id = events_#{name.pluralize}.#{name}_id
+        INNER JOIN event_#{name}_translations AS event_#{name}_translations_ft ON
+          event_#{name}_translations_ft.event_#{name}_id IN
+            (event_#{name.pluralize}.id, event_#{name.pluralize}.parent_id)
+        WHERE #{any_word_matches(label)} OR #{any_code_equals(label)}
+      ) AS event_#{name}_translations_ft ON event_#{name}_translations_ft.event_id = events.id
     SQL
   end
 
   def join_fitness_requirement
-    <<-SQL
-      LEFT JOIN event_fitness_requirement_translations AS
-        event_fitness_requirement_translations_ft ON
+    <<~SQL
+      LEFT JOIN event_fitness_requirement_translations AS event_fitness_requirement_translations_ft ON
         event_fitness_requirement_translations_ft.event_fitness_requirement_id =
-          events.fitness_requirement_id
+          events.fitness_requirement_id AND
+        (#{any_word_matches("event_fitness_requirement_translations_ft.label")} OR
+          #{any_code_equals("event_fitness_requirement_translations_ft.short_label")})
     SQL
   end
 
   def join_leaders
-    <<-SQL
-      LEFT JOIN event_cached_leaders AS event_cached_leaders_ft ON
-        event_cached_leaders_ft.event_id = events.id
-      LEFT JOIN people AS leaders_ft ON
-        leaders_ft.id = event_cached_leaders_ft.person_id
+    <<~SQL
+      LEFT JOIN (
+        SELECT event_cached_leaders.event_id, leaders_ft.first_name, leaders_ft.last_name
+        FROM event_cached_leaders
+        INNER JOIN people AS leaders_ft ON leaders_ft.id = event_cached_leaders.person_id
+        WHERE #{any_word_matches("leaders_ft.first_name", "leaders_ft.last_name")}
+      ) AS leaders_ft ON leaders_ft.event_id = events.id
     SQL
+  end
+
+  def any_word_matches(*columns)
+    any_of(columns.product(long_words).map do |column, word|
+      SearchStrategies::SqlConditionBuilder.new(word, [column]).search_conditions.to_sql
+    end)
+  end
+
+  def any_code_equals(column)
+    any_of(short_words.map { |code| code_equals(column, code).to_sql })
   end
 
   def code_equals(column, code)
     table, field = column.split(".")
     Arel::Table.new(table)[field].lower.eq(code)
+  end
+
+  def any_of(conditions)
+    conditions.empty? ? "FALSE" : conditions.map { |condition| "(#{condition})" }.join(" OR ")
   end
 end
