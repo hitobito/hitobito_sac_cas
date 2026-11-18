@@ -30,8 +30,8 @@ fr:
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-      contact_form_label: Kontakt
-      contact_form_url: "https://www.sac-cas.ch/de/kontakt"
+      contact_form_label: Contact
+      contact_form_url: "https://www.sac-cas.ch/fr/contact/"
     title_event/tour: course
     elevation_unit: Hm
     duration_format: "h:mm"
@@ -2202,6 +2202,8 @@ fr:
       postbox: Boîte postale
       street: Rue
       housenumber: Numéro de maison
+      address_care_of: c/o-Adresse
+      address_addition: Adresszusatz
       zip_code: CODE POSTAL
       town: Lieu
       canton: Canton

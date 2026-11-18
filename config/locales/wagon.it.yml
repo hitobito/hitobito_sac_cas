@@ -30,8 +30,8 @@ it:
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-      contact_form_label: Kontakt
-      contact_form_url: "https://www.sac-cas.ch/de/kontakt"
+      contact_form_label: Contatto
+      contact_form_url: "https://www.sac-cas.ch/it/contatto/"
     title_event/tour: Gita
     elevation_unit: Hm
     duration_format: "h:mm"
@@ -2200,6 +2200,8 @@ it:
       postbox: Casella postale
       street: Via
       housenumber: Numero civico
+      address_care_of: c/o-Adresse
+      address_addition: Adresszusatz
       zip_code: CAP
       town: Posizione
       canton: Cantone
