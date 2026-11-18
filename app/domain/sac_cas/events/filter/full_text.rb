@@ -83,24 +83,19 @@ module SacCas::Events::Filter::FullText
     @short_words ||= search_words.select { |word| word.size < MIN_QUERY_LENGTH }.map(&:downcase)
   end
 
+  def long_words
+    @long_words ||= search_words.select { |word| word.size >= MIN_QUERY_LENGTH }
+  end
+
   def query
-    @query ||= search_words.select { |word| word.size >= MIN_QUERY_LENGTH }.join(" ")
+    @query ||= long_words.join(" ")
   end
 
-  # search short requirments with equality condition
+  # search short requirements with equality condition
   def requirements_condition
-    short_words.map do |word|
-      requirement_columns
-        .map { |column| column.eq(word) }
-        .reduce { |query, condition| query.or(condition) }
-    end.reduce { |query, condition| query.and(condition) }
-  end
-
-  def requirement_columns
-    REQUIREMENT_ATTRS.map do |attr|
-      table, field = attr.split(".")
-      Arel::Table.new(table)[field].lower
-    end
+    short_words.map do |code|
+      REQUIREMENT_ATTRS.map { |column| code_equals(column, code) }.reduce(:or)
+    end.reduce(:and)
   end
 
   def join_essentials(name)
@@ -140,5 +135,10 @@ module SacCas::Events::Filter::FullText
       LEFT JOIN people AS leaders_ft ON
         leaders_ft.id = event_cached_leaders_ft.person_id
     SQL
+  end
+
+  def code_equals(column, code)
+    table, field = column.split(".")
+    Arel::Table.new(table)[field].lower.eq(code)
   end
 end
