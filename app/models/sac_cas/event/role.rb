@@ -16,11 +16,13 @@ module SacCas::Event::Role
   private
 
   def update_event_cached_leaders
-    return unless self.class.leader?
+    return unless leader_type_affected?
 
-    # event (has_one through) joins event_participations, which is
-    # already deleted after destroying the participation's last role
-    # so we use the in-memory participation
+    # event (through participation) is nil once the last role has deleted the participation
     participation.event.update_cached_leaders
+  end
+
+  def leader_type_affected?
+    [type, type_before_last_save].compact.any? { |t| t.safe_constantize&.leader? }
   end
 end

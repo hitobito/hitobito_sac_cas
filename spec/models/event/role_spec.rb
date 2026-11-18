@@ -30,6 +30,22 @@ describe Event::Role do
       expect(cached_leaders).to eq [[people(:mitglied).id, "Event::Role::AssistantLeader"]]
     end
 
+    it "caches leader when type changes from non-leader to leader" do
+      role = Event::Role::Helper.create!(participation:)
+
+      role.update!(type: Event::Role::Leader.sti_name)
+
+      expect(cached_leaders).to eq [[people(:mitglied).id, "Event::Role::Leader"]]
+    end
+
+    it "removes cached leader when type changes from leader to non-leader" do
+      role = Event::Role::Leader.create!(participation:)
+
+      role.update!(type: Event::Role::Helper.sti_name)
+
+      expect(cached_leaders).to be_empty
+    end
+
     it "removes cached leader when destroying last role of participation" do
       role = Event::Role::Leader.create!(participation:)
 
