@@ -179,6 +179,15 @@ describe Event::Activity do
       expect(main_activity.icon_svg).to include 'fill="#237100"'
     end
 
+    it "#icon_svg is nil and reports the error when the file is missing in the storage" do
+      main_activity.icon.attach(svg)
+      ActiveStorage::Blob.service.delete(main_activity.icon.blob.key)
+
+      expect(Sentry).to receive(:capture_exception)
+        .with(instance_of(ActiveStorage::FileNotFoundError), anything)
+      expect(main_activity.icon_svg).to be_nil
+    end
+
     it "#remove_icon= schedules the icon for purging" do
       main_activity.icon.attach(png)
 

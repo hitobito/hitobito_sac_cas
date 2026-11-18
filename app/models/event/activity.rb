@@ -65,6 +65,9 @@ class Event::Activity < ActiveRecord::Base
     Rails.cache.fetch(["event_activity_icon_svg", blob.key, attributes]) do
       SanitizedSvg.new(blob.download).to_svg(**attributes)
     end&.html_safe # rubocop:disable Rails/OutputSafety sanitized by SanitizedSvg
+  rescue ActiveStorage::FileNotFoundError => e
+    Sentry.capture_exception(e, extra: {event_activity_id: id, blob_key: blob.key})
+    nil
   end
 
   def remove_icon

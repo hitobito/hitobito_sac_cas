@@ -13,16 +13,16 @@ module AgendaHelper
   def agenda_activity_icon(activity)
     return unless activity.parent&.icon&.attached?
 
+    icon = event_activity_icon(activity.parent, class: "agenda-icon")
+    return if icon.blank?
+
     options = {"aria-hidden": "true"}
     if activity.description?
       options[:title] =
         "<strong class='text-black'>#{activity.label}</strong><br>#{activity.description}"
       options[:data] = {bs_toggle: :tooltip, bs_placement: :top, bs_html: "true"}
     end
-    content_tag(:span,
-      event_activity_icon(activity.parent, class: "agenda-icon"),
-      class: "agenda-activity-icon",
-      **options)
+    content_tag(:span, icon, class: "agenda-activity-icon", **options)
   end
 
   def tour_accent_color(event)
