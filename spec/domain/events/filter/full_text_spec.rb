@@ -21,7 +21,8 @@ describe Events::Filter::FullText do
       groups: [section],
       activities: [event_activities(:felsklettern)], # label "Fels", parent label "Klettern"
       target_groups: [event_target_groups(:senioren_b)], # label "Senioren B"
-      fitness_requirement: event_fitness_requirements(:b), # short_label "B"
+      traits: [event_traits(:guided)], # label "Mit Bergführer", parent label "Organisation & Durchführung"
+      fitness_requirement: event_fitness_requirements(:b), # short_label "B", label "B - wenig anstrengend"
       additional_info: "Verpflegung aus dem Rucksack")
   end
 
@@ -30,18 +31,19 @@ describe Events::Filter::FullText do
       groups: [section],
       activities: [event_activities(:wanderweg)], # label "Wanderweg", parent label "Wandern"
       target_groups: [senioren_ue70],
-      fitness_requirement: event_fitness_requirements(:d)) # short_label "D"
+      technical_requirements: [event_technical_requirements(:wandern_t3)], # label "T3", parent label "Wanderskala"
+      fitness_requirement: event_fitness_requirements(:d)) # short_label "D", label "D - anstrengend"
   end
 
   def filter_entries(query)
     described_class.new(:full_text, q: query).apply(base_scope).distinct
   end
 
-  def add_leader(event, last_name, role_type: Event::Role::Leader, state: "assigned")
+  def add_leader(event, last_name, first_name: nil, role_type: Event::Role::Leader, state: "assigned")
     participation = Fabricate(:event_participation,
       event: event,
       state: state,
-      participant: Fabricate(:person, last_name: last_name))
+      participant: Fabricate(:person, {last_name:, first_name:}.compact))
     Fabricate(role_type.sti_name.to_sym, participation: participation)
     # creating a role activates the participation
     participation.reload.update!(state: state)
@@ -84,6 +86,30 @@ describe Events::Filter::FullText do
     end
   end
 
+  context "with trait label" do
+    it "includes events with matching trait label" do
+      expect(filter_entries("Bergführer")).to match_array([fels])
+    end
+
+    it "excludes events matching only the parent trait label" do
+      expect(filter_entries("Organisation")).to be_empty
+    end
+  end
+
+  context "with fitness requirement label" do
+    it "includes events with matching fitness requirement label" do
+      expect(filter_entries("wenig")).to match_array([fels])
+      expect(filter_entries("anstrengend")).to match_array([fels, wanderung])
+    end
+  end
+
+  context "with leaders first_name" do
+    it "includes events with matching leader" do
+      add_leader(fels, "Hämmerli", first_name: "Ueli")
+      expect(filter_entries("Ueli")).to match_array([fels])
+    end
+  end
+
   context "with leaders last_name" do
     it "includes events with matching leader" do
       add_leader(fels, "Hämmerli")
@@ -103,6 +129,41 @@ describe Events::Filter::FullText do
     it "excludes events with inactive leader participation" do
       add_leader(fels, "Hämmerli", state: "canceled")
       expect(filter_entries("Hämmerli")).to be_empty
+    end
+  end
+
+  context "with multiple words" do
+    before do
+      add_leader(fels, "Hämmerli")
+      add_leader(fels, "Zürcher")
+    end
+
+    it "includes events where the words match different lists" do
+      expect(filter_entries("Fels Hämmerli")).to match_array([fels])
+    end
+
+    it "includes events where the words match a list and the event itself" do
+      expect(filter_entries("Hämmerli Rucksack")).to match_array([fels])
+    end
+
+    it "excludes events where the words match only different entries of the same list" do
+      expect(filter_entries("Hämmerli Zürcher")).to be_empty
+    end
+  end
+
+  context "with technical requirement label" do
+    it "includes only events with equal label" do
+      expect(filter_entries("t3")).to match_array([wanderung])
+      expect(filter_entries("t2")).to be_empty
+    end
+
+    it "includes events matching the parent label" do
+      expect(filter_entries("Wanderskala")).to match_array([wanderung])
+    end
+
+    it "combines with full text search" do
+      expect(filter_entries("T3 Wanderweg")).to match_array([wanderung])
+      expect(filter_entries("T3 Rucksack")).to be_empty
     end
   end
 
