@@ -39,6 +39,13 @@ describe AgendaHelper do
       expect(markup).not_to include "<img"
     end
 
+    it "is nothing when the uploaded svg is missing in the storage" do
+      activity.parent.icon.attach(fixture_file_upload("icon.svg", "image/svg+xml"))
+      ActiveStorage::Blob.service.delete(activity.parent.icon.blob.key)
+
+      expect(helper.agenda_activity_icon(activity)).to be_nil
+    end
+
     it "links an uploaded raster icon, which cannot take the badge colour" do
       activity.parent.icon.attach(fixture_file_upload("icon.png", "image/png"))
 
