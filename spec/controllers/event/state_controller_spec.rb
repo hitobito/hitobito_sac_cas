@@ -126,6 +126,37 @@ describe Event::StateController do
             expect(event.reload.internal_comment).to eq "Some internal info"
           end
 
+          context "with previous self approval" do
+            let!(:previous_approval) do
+              event.approvals.create!(approved: true, creator: people(:admin))
+            end
+
+            before { event.update!(state: :draft) }
+
+            it "replaces it with a new self approval" do
+              put :update, params: {group_id: group.id, id: event.id, state: "approved"}
+
+              expect(event.reload.state).to eq("approved")
+              approval = event.approvals.sole
+              expect(approval.id).not_to eq(previous_approval.id)
+              expect(approval.creator).to eq(user)
+            end
+
+            it "keeps it if the event cannot be saved" do
+              allow_any_instance_of(Event::Tour).to receive(:valid?) do |tour|
+                tour.errors.add(:base, "Ungültig")
+                false
+              end
+
+              put :update, params: {group_id: group.id, id: event.id, state: "approved"}
+
+              expect(response).to redirect_to(group_event_path(group, event))
+              expect(flash[:alert]).to eq("Ungültig")
+              expect(event.reload.state).to eq("draft")
+              expect(event.approvals).to eq([previous_approval])
+            end
+          end
+
           it "updates state, clears existing approvals, creates self approval and sets internal comment" do
             create_approval(:professional)
             create_approval(:security, approved: false)
