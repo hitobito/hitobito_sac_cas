@@ -11,7 +11,9 @@ class Event::StateController < ApplicationController
 
     return head :unprocessable_content unless valid_receiver_options?
 
-    save_next_state if state_possible?
+    entry.with_lock do
+      save_next_state if state_possible?
+    end
 
     redirect_to group_event_path
   end
@@ -28,6 +30,7 @@ class Event::StateController < ApplicationController
       set_success_notice
     else
       set_failure_notice
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -93,7 +96,7 @@ class Event::StateController < ApplicationController
   def build_self_approval
     return unless entry.state_comes_before?(entry.state_was, :approved)
 
-    entry.approvals.each(&:mark_for_destruction)
+    entry.approvals.destroy_all
     entry.approvals.build(approved: true)
   end
 
