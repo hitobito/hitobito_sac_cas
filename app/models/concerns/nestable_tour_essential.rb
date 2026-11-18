@@ -13,6 +13,8 @@ module NestableTourEssential
   included do
     attr_readonly :parent_id
 
+    has_paper_trail on: []
+
     translates :label, :description, :short_description
 
     belongs_to :parent, optional: true, class_name: name
