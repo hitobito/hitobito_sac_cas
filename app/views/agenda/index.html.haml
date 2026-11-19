@@ -20,6 +20,7 @@
         scope: :filters,
         data: { controller: "autosubmit",
           action: "change->autosubmit#submit",
+          autosubmit_delay_value: 200,
           turbo_frame: :agenda_events_list,
           turbo_action: "advance" }) do |f|
       = render "filter_bar", f: f
