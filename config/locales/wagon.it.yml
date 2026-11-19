@@ -15,7 +15,7 @@ it:
     links:
       faq: "https://www.sac-cas.ch/it/meta/faq/faq-mitgliedschaft/"
       membership: "https://www.sac-cas.ch/it/affiliazione/diventasocio"
-    sac:
+    sac: &sac
       name: "Club Alpino Svizzero CAS"
       zentralverband: "Associazione centrale"
       address: "Monbijoustrasse 61"
@@ -29,9 +29,11 @@ it:
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
+      email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-      contact_form_label: Contatto
-      contact_form_url: "https://www.sac-cas.ch/it/contatto/"
+    sac_oauth:
+      <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: Gita
     elevation_unit: Hm
     duration_format: "h:mm"
@@ -355,8 +357,6 @@ it:
         similar_tours: Gite a confronto
         program: Programma
         seo_text: Testo SEO
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
       event/course:
         accommodation: Alloggio
         annual: Annuale
@@ -380,9 +380,6 @@ it:
         link_external_site: Collegamento a pagina esterna
         link_participants: Link partecipanti
         link_survey: Link sondaggio
-        survey_auto_send: Umfrage automatisch versenden
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
         meals: Vitto
         meals_options:
           breakfast: Colazione
@@ -607,6 +604,7 @@ it:
       person:
         id: Numero personale
         advertising: Invio di pubblicità
+        address_care_of: Complemento di indirizzo
         correspondence: Fatturazione
         confirmed_at: E-mail verificata
         family_id: ID famiglia
@@ -645,7 +643,7 @@ it:
         emergency_contact_2_name: Contatto di emergenza 2 Nome
         emergency_contact_2_phone: "Contatto di emergenza 2: numero di telefono"
         emergency_contacts_privacy_notice_html: >-
-          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa gita o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate le nostre <a href="https://www.sac-cas.ch/it/datenschutz/" target="_blank" rel="noreferrer">Protezione dei dati | Club Alpino Svizzero CAS</a>.
+          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa gita o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">le</a> nostre <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">Condizioni generali di contratto per la formazione | Club Alpino Svizzero CAS</a>.
       person/phone_number_mobile:
         number: Telefono cellulare
       person/phone_number_landline:
@@ -1917,10 +1915,6 @@ it:
       none: (nessuna)
 
   events:
-    courses:
-      survey_dispatcher:
-        link_creation_failed: Der Umfragelink konnte nicht erstellt werden
-
     actions_show_sac_cas:
       attach_key_data_sheets: Creare tutte le schede dei dati di riferimento
       approval: Rilascio
@@ -2200,8 +2194,7 @@ it:
       postbox: Casella postale
       street: Via
       housenumber: Numero civico
-      address_care_of: c/o-Adresse
-      address_addition: Adresszusatz
+      address_care_of: Suffisso dell'indirizzo
       zip_code: CAP
       town: Posizione
       canton: Cantone

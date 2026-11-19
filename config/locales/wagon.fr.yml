@@ -15,7 +15,7 @@ fr:
     links:
       faq: "https://www.sac-cas.ch/fr/meta/faq/membres/"
       membership: "https://www.sac-cas.ch/fr/affiliation/devenir-membre/"
-    sac:
+    sac: &sac
       name: "Club Alpin Suisse CAS"
       zentralverband: "Association centrale"
       address: "Monbijoustrasse 61"
@@ -29,9 +29,11 @@ fr:
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
+      email_mv: "info@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-      contact_form_label: Contact
-      contact_form_url: "https://www.sac-cas.ch/fr/contact/"
+    sac_oauth:
+      <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: course
     elevation_unit: Hm
     duration_format: "h:mm"
@@ -357,8 +359,6 @@ fr:
         similar_tours: Courses comparables
         program: Programm
         seo_text: Texte SEO
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
       event/course:
         accommodation: Hébergement
         annual: Récurrent chaque année
@@ -382,9 +382,6 @@ fr:
         link_external_site: Lien page externe
         link_participants: Lien Participant·e·s
         link_survey: Lien Sondage
-        survey_auto_send: Umfrage automatisch versenden
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
         meals: Restauration
         meals_options:
           breakfast: Déjeuner
@@ -609,6 +606,7 @@ fr:
       person:
         id: Numéro de personne
         advertising: Envoi de publicité
+        address_care_of: Complément d’adresse
         correspondence: Facturation
         confirmed_at: E-mail confirmé
         family_id: ID de la famille
@@ -647,7 +645,7 @@ fr:
         emergency_contact_2_name: "Contact en cas d'urgence 2 : Nom"
         emergency_contact_2_phone: "Contact d'urgence 2 : numéro de téléphone"
         emergency_contacts_privacy_notice_html: >-
-          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette course ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nôtre <a href="https://www.sac-cas.ch/fr/meta/protection-des-donnees/" target="_blank" rel="noreferrer">Protection des données | Club alpin suisse CAS</a>.
+          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette course ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nos <a href="https://www.sac-cas.ch/fr/meta/cg/formations/" target="_blank" rel="noreferrer">Conditions générales de formation | Club alpin suisse CAS</a>.
       person/phone_number_mobile:
         number: Téléphone mobile
       person/phone_number_landline:
@@ -1919,10 +1917,6 @@ fr:
       none: (aucune)
 
   events:
-    courses:
-      survey_dispatcher:
-        link_creation_failed: Der Umfragelink konnte nicht erstellt werden
-
     actions_show_sac_cas:
       attach_key_data_sheets: Créer toutes les fiches techniques
       approval: Validation
@@ -2202,8 +2196,7 @@ fr:
       postbox: Boîte postale
       street: Rue
       housenumber: Numéro de maison
-      address_care_of: c/o-Adresse
-      address_addition: Adresszusatz
+      address_care_of: Complément d'adresse
       zip_code: CODE POSTAL
       town: Lieu
       canton: Canton

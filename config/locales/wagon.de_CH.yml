@@ -15,7 +15,7 @@ de_CH:
     links:
       faq: "https://www.sac-cas.ch/de/meta/faq/mitgliedschaft/"
       membership: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
-    sac:
+    sac: &sac
       name: "Schweizer Alpen-Club SAC"
       zentralverband: "Zentralverband"
       address: "Monbijoustrasse 61"
@@ -29,9 +29,11 @@ de_CH:
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 18"
       email: "alpin@sac-cas.ch"
+      email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-      contact_form_label: Kontakt
-      contact_form_url: "https://www.sac-cas.ch/de/kontakt"
+    sac_oauth:
+      <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: "h:mm"
@@ -353,8 +355,6 @@ de_CH:
         similar_tours: Vergleichstouren
         program: Programm
         seo_text: SEO Text
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
       event/course:
         accommodation: Unterkunft
         annual: Jährlich wiederkehrend
@@ -378,9 +378,6 @@ de_CH:
         link_external_site: Link Externe Seite
         link_participants: Link Teilnehmer
         link_survey: Link Umfrage
-        survey_auto_send: Umfrage automatisch versenden
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
         meals: Verpflegung
         meals_options:
           breakfast: Frühstück
@@ -605,6 +602,7 @@ de_CH:
       person:
         id: Personennummer
         advertising: Werbesendungen
+        address_care_of: Adresszusatz
         correspondence: Rechnungsstellung
         confirmed_at: E-Mail bestätigt
         family_id: Familien ID
@@ -643,7 +641,7 @@ de_CH:
         emergency_contact_2_name: Notfallkontakt 2 Name
         emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
         emergency_contacts_privacy_notice_html: >-
-          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unserer <a href="https://www.sac-cas.ch/de/meta/datenschutz/" target="_blank" rel="noreferrer">Datenschutzerklärung | Schweizer Alpen-Club SAC.</a>
+          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unseren <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
       person/phone_number_mobile:
         number: Mobiltelefon
       person/phone_number_landline:
@@ -1847,10 +1845,6 @@ de_CH:
       none: (keine)
 
   events:
-    courses:
-      survey_dispatcher:
-        link_creation_failed: Der Umfragelink konnte nicht erstellt werden
-
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
@@ -2130,8 +2124,7 @@ de_CH:
       postbox: Postfach
       street: Strasse
       housenumber: Hausnummer
-      address_care_of: c/o-Adresse
-      address_addition: Adresszusatz
+      address_care_of: Adresszusatz
       zip_code: PLZ
       town: Ort
       canton: Kanton

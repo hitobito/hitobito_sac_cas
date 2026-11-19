@@ -15,7 +15,7 @@ en:
     links:
       faq: "https://www.sac-cas.ch/en/meta/faq/faq-membership/"
       membership: "https://www.sac-cas.ch/de/mitgliedschaft/mitglied-werden/"
-    sac:
+    sac: &sac
       name: "Schweizer Alpen-Club SAC"
       zentralverband: "Zentralverband"
       address: "Monbijoustrasse 61"
@@ -29,9 +29,11 @@ en:
       phone: "+41 31 370 18 18"
       phone_self_registration: "+41 31 370 18 43/44"
       email: "alpin@sac-cas.ch"
+      email_mv: "mv@sac-cas.ch"
       website: "https://www.sac-cas.ch"
-      contact_form_label: Kontakt
-      contact_form_url: "https://www.sac-cas.ch/de/kontakt"
+    sac_oauth:
+      <<: *sac
+      email_mv: "mv@sac-cas.ch"
     title_event/tour: Tour
     elevation_unit: Hm
     duration_format: "h:mm"
@@ -353,8 +355,6 @@ en:
         similar_tours: Vergleichstouren
         program: Programm
         seo_text: SEO Text
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
       event/course:
         accommodation: Accommodation
         annual: Annually recurring
@@ -378,9 +378,6 @@ en:
         link_external_site: Link Externe Seite
         link_participants: Link participants
         link_survey: Link Survey
-        survey_auto_send: Umfrage automatisch versenden
-        survey_hero_survey_key: SurveyHero Survey ID
-        survey_hero_collector_key: SurveyHero Collector ID
         meals: Catering
         meals_options:
           breakfast: Breakfast
@@ -605,6 +602,7 @@ en:
       person:
         id: Personennummer
         advertising: Werbesendungen
+        address_care_of: Adresszusatz
         correspondence: Invoicing
         confirmed_at: E-Mail bestätigt
         family_id: Family ID
@@ -1844,10 +1842,6 @@ en:
       none: (keine)
 
   events:
-    courses:
-      survey_dispatcher:
-        link_creation_failed: Der Umfragelink konnte nicht erstellt werden
-
     actions_show_sac_cas:
       attach_key_data_sheets: Alle Eckdatenblätter erzeugen
       approval: Freigabe
@@ -2124,8 +2118,7 @@ en:
       postbox: Postfach
       street: Strasse
       housenumber: Hausnummer
-      address_care_of: c/o-Adresse
-      address_addition: Adresszusatz
+      address_care_of: Adresszusatz
       zip_code: PLZ
       town: Ort
       canton: Kanton
