@@ -645,7 +645,7 @@ it:
         emergency_contact_2_name: Contatto di emergenza 2 Nome
         emergency_contact_2_phone: "Contatto di emergenza 2: numero di telefono"
         emergency_contacts_privacy_notice_html: >-
-          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa gita o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">le</a> nostre <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">Condizioni generali di contratto per la formazione | Club Alpino Svizzero CAS</a>.
+          I dati di contatto saranno utilizzati esclusivamente per casi di emergenza relativi a questa gita o a questo corso. Si prega di informare la persona indicata che ci state fornendo i suoi dati come contatto di emergenza. Per ulteriori informazioni, consultate le nostre <a href="https://www.sac-cas.ch/it/datenschutz/" target="_blank" rel="noreferrer">Protezione dei dati | Club Alpino Svizzero CAS</a>.
       person/phone_number_mobile:
         number: Telefono cellulare
       person/phone_number_landline:
