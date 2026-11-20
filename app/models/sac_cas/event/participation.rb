@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -43,6 +43,13 @@ module SacCas::Event::Participation
 
     has_many :external_invoices, as: :link, dependent: :restrict_with_error # rubocop:disable Rails/InverseOf
 
+    scope :attendance_confirmable, -> {
+      participant_roles = Event::Role.where(type: Event::Course.participant_types.map(&:sti_name))
+      joins(:event)
+        .where(state: "attended", events: {type: Event::Course.sti_name, state: "closed"})
+        .where(id: participant_roles.select(:participation_id))
+    }
+
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
     validate :assert_actual_days_size, if: :actual_days_changed?
@@ -51,6 +58,10 @@ module SacCas::Event::Participation
   def participant_cancelable?
     event.applications_cancelable? && event.state != "annulled" &&
       event.dates.map(&:start_at).min.future?
+  end
+
+  def attendance_confirmable?
+    self.class.attendance_confirmable.exists?(id)
   end
 
   def check_root_conditions!

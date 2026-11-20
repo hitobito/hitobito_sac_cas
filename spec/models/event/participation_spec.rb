@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito.
@@ -70,6 +70,60 @@ describe Event::Participation do
       course.state = "application_open"
       course.dates.first.start_at = 1.day.from_now
       expect(participation).to be_participant_cancelable
+    end
+  end
+
+  describe "#attendance_confirmable?" do
+    let(:participation) { event_participations(:top_mitglied) }
+
+    before do
+      participation.event.update_columns(state: "closed")
+      participation.update_columns(state: "attended")
+    end
+
+    it "is true if participation is in attendance_confirmable scope" do
+      expect(participation).to be_attendance_confirmable
+    end
+
+    it "is false if participation is not in attendance_confirmable scope" do
+      participation.update_columns(state: "absent")
+      expect(participation).not_to be_attendance_confirmable
+    end
+  end
+
+  describe ".attendance_confirmable" do
+    let(:course) { events(:top_course) }
+    let(:participation) { event_participations(:top_mitglied) }
+
+    subject(:confirmable) { Event::Participation.attendance_confirmable }
+
+    before do
+      course.update_columns(state: "closed")
+      participation.update_columns(state: "attended")
+    end
+
+    it "includes attended participant of closed course" do
+      expect(confirmable).to include(participation)
+    end
+
+    it "excludes participations of course that is not closed" do
+      course.update_columns(state: "ready")
+      expect(confirmable).not_to include(participation)
+    end
+
+    it "excludes participation that is not attended" do
+      participation.update_columns(state: "absent")
+      expect(confirmable).not_to include(participation)
+    end
+
+    it "excludes leader" do
+      participation.roles.update_all(type: Event::Course::Role::Leader.sti_name)
+      expect(confirmable).not_to include(participation)
+    end
+
+    it "excludes participations of tour" do
+      course.update_columns(type: Event::Tour.sti_name)
+      expect(confirmable).not_to include(participation)
     end
   end
 
