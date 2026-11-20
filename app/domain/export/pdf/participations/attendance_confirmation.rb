@@ -32,9 +32,10 @@ class Export::Pdf::Participations::AttendanceConfirmation
     parts = [I18n.t("participations.attendance_confirmation.file_name_prefix", locale:)]
     parts << event.name.parameterize(separator: "_", preserve_case: true)
     parts << person.full_name.parameterize(separator: "_", preserve_case: true)
-    parts << Time.zone.now.strftime("%Y_%m_%d_%H%M")
     [parts.join("_"), :pdf].join(".")
   end
+
+  private
 
   def locale
     language = if event.language == "de_fr"
@@ -44,8 +45,6 @@ class Export::Pdf::Participations::AttendanceConfirmation
     end
     (language.presence || :de).to_sym
   end
-
-  private
 
   def pdf
     @pdf ||= Export::Pdf::Document.new(margin: MARGIN).pdf

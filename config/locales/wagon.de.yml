@@ -2499,7 +2499,7 @@ de:
       file_name_prefix: Teilnahmebestaetigung
       link: www.sac-cas.ch
       url: https://www.sac-cas.ch
-      title: KURSBESTÄTIGUNG
+      title: TEILNAHMEBESTÄTIGUNG
       intro: Hiermit bestätigen wir, dass
       course_attended: den Kurs %{course} des Schweizer Alpen-Club SAC besucht hat.
       location: Kursort
@@ -2509,7 +2509,8 @@ de:
       date_range: "%{start} bis %{finish}"
       date_format: "%-d. %B %Y"
       date_format_without_year: "%-d. %B"
-      purpose: Diese Kursbestätigung dient als Nachweis über den Besuch des oben genannten Kurses.
+      date_format_day_only: "%-d."
+      purpose: Diese Teilnahmebestätigung dient als Nachweis über den Besuch des oben genannten Kurses.
       greeting: Sportliche Grüsse
       sender: Schweizer Alpen-Club SAC
       signature: Kursadministration

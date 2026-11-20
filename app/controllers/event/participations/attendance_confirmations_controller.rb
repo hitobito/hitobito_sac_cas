@@ -9,8 +9,6 @@ class Event::Participations::AttendanceConfirmationsController < ApplicationCont
   before_action :authorize_action
 
   def show
-    raise ActiveRecord::RecordNotFound unless participation.attendance_confirmable?
-
     pdf = Export::Pdf::Participations::AttendanceConfirmation.new(participation)
     send_data pdf.render, type: :pdf, disposition: "attachment", filename: pdf.filename
   end
@@ -18,7 +16,9 @@ class Event::Participations::AttendanceConfirmationsController < ApplicationCont
   private
 
   def participation
-    @participation ||= Event::Participation.where(event_id: params[:event_id]).find(params[:id])
+    @participation ||= Event::Participation.attendance_confirmable
+      .where(event_id: params[:event_id])
+      .find(params[:id])
   end
 
   def authorize_action

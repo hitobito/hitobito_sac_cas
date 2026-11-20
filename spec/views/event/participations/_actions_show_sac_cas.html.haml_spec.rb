@@ -22,8 +22,8 @@ describe "event/participations/_actions_show_sac_cas.html.haml" do
     assign(:participation, participation)
     allow(view).to receive(:can?).and_return(true)
     allow(view).to receive_messages(entry: Event::ParticipationDecorator.decorate(participation))
-    event.state = "closed"
-    participation.state = "attended"
+    event.update_columns(state: "closed")
+    participation.update_columns(state: "attended")
   end
 
   it "renders attendance confirmation button" do
@@ -32,7 +32,7 @@ describe "event/participations/_actions_show_sac_cas.html.haml" do
   end
 
   it "does not render attendance confirmation button if participation is not attendance confirmable" do
-    participation.state = "absent"
+    participation.update_columns(state: "absent")
     expect(dom).to have_no_link "Teilnahmebestätigung"
   end
 

@@ -27,7 +27,7 @@ describe Event::Participations::AttendanceConfirmationsController do
       expect(response).to have_http_status(:success)
       expect(response.media_type).to eq "application/pdf"
       expect(response.headers["Content-Disposition"])
-        .to include("Teilnahmebestaetigung_Tourenleiter_in_1_Sommer_Edmund_Hillary_")
+        .to include("Teilnahmebestaetigung_Tourenleiter_in_1_Sommer_Edmund_Hillary.pdf")
     end
 
     it "as person with show_details permission returns pdf" do

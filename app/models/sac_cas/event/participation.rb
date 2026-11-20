@@ -43,6 +43,13 @@ module SacCas::Event::Participation
 
     has_many :external_invoices, as: :link, dependent: :restrict_with_error # rubocop:disable Rails/InverseOf
 
+    scope :attendance_confirmable, -> {
+      participant_roles = Event::Role.where(type: Event::Course.participant_types.map(&:sti_name))
+      joins(:event)
+        .where(state: "attended", events: {type: Event::Course.sti_name, state: "closed"})
+        .where(id: participant_roles.select(:participation_id))
+    }
+
     validates :adult_consent, :terms_and_conditions, acceptance: {if: :check_root_conditions}
     validates :actual_days, numericality: {greater_than_or_equal_to: 0, allow_blank: true}
     validate :assert_actual_days_size, if: :actual_days_changed?
@@ -54,8 +61,7 @@ module SacCas::Event::Participation
   end
 
   def attendance_confirmable?
-    event.course? && event.state == "closed" && state == "attended" &&
-      roles.any? { |r| r.class.participant? }
+    self.class.attendance_confirmable.exists?(id)
   end
 
   def check_root_conditions!

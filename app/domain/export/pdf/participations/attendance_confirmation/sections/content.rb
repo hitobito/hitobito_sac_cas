@@ -21,8 +21,8 @@ class Export::Pdf::Participations::AttendanceConfirmation::Sections::Content < E
     render_title
     render_confirmation
     render_course_details
-    paragraph(PARAGRAPH_SPACING) { text(event.plain_text_description.to_s) }
-    paragraph(PARAGRAPH_SPACING) { text(t(:purpose)) }
+    render_description
+    render_purpose
     render_closing
   end
 
@@ -50,6 +50,14 @@ class Export::Pdf::Participations::AttendanceConfirmation::Sections::Content < E
     end
   end
 
+  def render_description
+    paragraph(PARAGRAPH_SPACING) { text(event.plain_text_description.to_s) }
+  end
+
+  def render_purpose
+    paragraph(PARAGRAPH_SPACING) { text(t(:purpose)) }
+  end
+
   def render_closing
     paragraph(CLOSING_SPACING) { text(t(:greeting), style: :bold) }
     text(t(:sender))
@@ -66,16 +74,30 @@ class Export::Pdf::Participations::AttendanceConfirmation::Sections::Content < E
   end
 
   def dates
-    start_on = event.start_at.to_date
-    finish_on = event.finish_at.to_date
+    event.dates.map { |date| date_range(date) }.join(", ")
+  end
+
+  def date_range(date)
+    start_on = date.start_at.to_date
+    finish_on = (date.finish_at || date.start_at).to_date
     return format_date(finish_on) if start_on == finish_on
 
-    t(:date_range, start: format_date(start_on, with_year: start_on.year != finish_on.year),
+    t(:date_range, start: format_date(start_on, range_start_format(start_on, finish_on)),
       finish: format_date(finish_on))
   end
 
-  def format_date(date, with_year: true)
-    I18n.l(date, format: t(with_year ? :date_format : :date_format_without_year))
+  def range_start_format(start_on, finish_on)
+    if start_on.year != finish_on.year
+      :date_format
+    elsif start_on.month != finish_on.month
+      :date_format_without_year
+    else
+      :date_format_day_only
+    end
+  end
+
+  def format_date(date, format = :date_format)
+    I18n.l(date, format: t(format))
   end
 
   def paragraph(spacing = LINE_SPACING)
