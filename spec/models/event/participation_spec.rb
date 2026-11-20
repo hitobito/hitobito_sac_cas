@@ -74,44 +74,56 @@ describe Event::Participation do
   end
 
   describe "#attendance_confirmable?" do
-    let(:course) { Fabricate.build(:sac_course, state: "closed") }
-    let(:role_type) { Event::Course::Role::Participant }
+    let(:participation) { event_participations(:top_mitglied) }
 
-    subject(:participation) do
-      Fabricate.build(:event_participation, event: course, state: "attended").tap do |p|
-        p.roles.build(type: role_type.sti_name)
-      end
+    before do
+      participation.event.update_columns(state: "closed")
+      participation.update_columns(state: "attended")
     end
 
-    it "is true for attended participant of closed course" do
+    it "is true if participation is in attendance_confirmable scope" do
       expect(participation).to be_attendance_confirmable
     end
 
-    it "is false if course is not closed" do
-      course.state = "ready"
+    it "is false if participation is not in attendance_confirmable scope" do
+      participation.update_columns(state: "absent")
       expect(participation).not_to be_attendance_confirmable
     end
+  end
 
-    it "is false if participation is not attended" do
-      participation.state = "absent"
-      expect(participation).not_to be_attendance_confirmable
+  describe ".attendance_confirmable" do
+    let(:course) { events(:top_course) }
+    let(:participation) { event_participations(:top_mitglied) }
+
+    subject(:confirmable) { Event::Participation.attendance_confirmable }
+
+    before do
+      course.update_columns(state: "closed")
+      participation.update_columns(state: "attended")
     end
 
-    context "as leader" do
-      let(:role_type) { Event::Course::Role::Leader }
-
-      it "is false" do
-        expect(participation).not_to be_attendance_confirmable
-      end
+    it "includes attended participant of closed course" do
+      expect(confirmable).to include(participation)
     end
 
-    context "of tour" do
-      let(:course) { Fabricate.build(:sac_tour, state: "closed") }
-      let(:role_type) { Event::Tour::Role::Participant }
+    it "excludes participations of course that is not closed" do
+      course.update_columns(state: "ready")
+      expect(confirmable).not_to include(participation)
+    end
 
-      it "is false" do
-        expect(participation).not_to be_attendance_confirmable
-      end
+    it "excludes participation that is not attended" do
+      participation.update_columns(state: "absent")
+      expect(confirmable).not_to include(participation)
+    end
+
+    it "excludes leader" do
+      participation.roles.update_all(type: Event::Course::Role::Leader.sti_name)
+      expect(confirmable).not_to include(participation)
+    end
+
+    it "excludes participations of tour" do
+      course.update_columns(type: Event::Tour.sti_name)
+      expect(confirmable).not_to include(participation)
     end
   end
 
