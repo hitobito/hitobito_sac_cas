@@ -647,7 +647,7 @@ fr:
         emergency_contact_2_name: "Contact en cas d'urgence 2 : Nom"
         emergency_contact_2_phone: "Contact d'urgence 2 : numéro de téléphone"
         emergency_contacts_privacy_notice_html: >-
-          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette course ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nôtre <a href="https://www.sac-cas.ch/fr/meta/protection-des-donnees/" target="_blank" rel="noreferrer">Protection des données | Club alpin suisse CAS</a>.
+          Les coordonnées seront utilisées exclusivement en cas d'urgence liée à cette randonnée ou à ce cours. Veuillez informer la personne indiquée que vous nous transmettez ses coordonnées en tant que contact d'urgence. Vous trouverez de plus amples informations dans nos <a href="https://www.sac-cas.ch/fr/meta/cg/formations/" target="_blank" rel="noreferrer">Conditions générales de formation | Club alpin suisse CAS</a>.
       person/phone_number_mobile:
         number: Téléphone mobile
       person/phone_number_landline:
