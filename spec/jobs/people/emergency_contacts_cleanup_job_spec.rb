@@ -24,7 +24,7 @@ describe People::EmergencyContactsCleanupJob do
   before do
     allow(Settings.event.participations)
       .to receive(:delete_emergency_contacts_after_months)
-      .and_return(6)
+      .and_return("P6M")
   end
 
   def with_dates(event, **dates)

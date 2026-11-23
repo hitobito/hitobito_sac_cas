@@ -59,7 +59,7 @@ class People::EmergencyContactsCleanupJob < RecurringJob
   def cutoff
     @cutoff ||= begin
       duration = Settings.event.participations.delete_emergency_contacts_after_months
-      duration&.months&.ago
+      ActiveSupport::Duration.parse(duration.to_s).ago if duration
     end
   end
 end
