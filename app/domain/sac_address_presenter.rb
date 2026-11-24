@@ -4,6 +4,8 @@
 #  https://github.com/hitobito/hitobito_sac_cas
 
 class SacAddressPresenter
+  delegate :link_to, :safe_join, :tag, to: "ActionController::Base.helpers"
+
   def format(format_type)
     case format_type
     when :self_registration
@@ -19,14 +21,14 @@ class SacAddressPresenter
 
   private
 
-  def self_registration_format
-    <<~HTML.strip
-      #{data[:name]}
-      #{data[:address]}
-      #{data[:zip_code_and_town]}
-      Tel: <a href="tel:#{telephone_link(data[:phone])}">#{data[:phone]}</a>
-      <a href="#{data[:contact_form_url]}" target="_blank" rel="noopener">#{data[:contact_form_label]}</a>
-    HTML
+  def self_registration_format # rubocop:disable Metrics/AbcSize
+    safe_join([
+      data[:name],
+      data[:address],
+      data[:zip_code_and_town],
+      safe_join(["Tel: ", link_to(data[:phone], "tel:#{telephone_link(data[:phone])}")]),
+      link_to(data[:contact_form_label], data[:contact_form_url], target: "_blank", rel: "noopener")
+    ], tag.br)
   end
 
   def key_data_sheet_format
