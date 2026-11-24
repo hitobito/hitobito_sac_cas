@@ -39,13 +39,15 @@ describe Login::InfosComponent, type: :component do
     end
 
     it "renders address" do
-      expect(body).to have_content <<~TEXT
-        Schweizer Alpen-Club SAC
-        Monbijoustrasse 61
-        3000 Bern 14
-        Tel: +41 31 370 18 18
-        Kontakt
-      TEXT
+      address = body.at_css("address")
+      address.css("br").each { |br| br.replace("\n") }
+      expect(address.text.strip.lines(chomp: true)).to eq [
+        "Schweizer Alpen-Club SAC",
+        "Monbijoustrasse 61",
+        "3000 Bern 14",
+        "Tel: +41 31 370 18 18",
+        "Kontakt"
+      ]
     end
 
     it "renders phone number as link" do
@@ -53,7 +55,7 @@ describe Login::InfosComponent, type: :component do
     end
 
     it "renders contact form as link" do
-      expect(body).to have_link("Kontakt", href: "https://www.sac-cas.ch/de/kontakt")
+      expect(body).to have_link("Kontakt", href: "https://www.sac-cas.ch/de/kontakt", target: "_blank")
     end
 
     it "does not render email" do
