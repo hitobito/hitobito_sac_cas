@@ -10,4 +10,4 @@
 
   .card-body
     %h2.card-title=t('.title_contact')
-    %address.card-text=simple_format(SacAddressPresenter.new.format(:self_registration))
+    %address.card-text=simple_format(SacAddressPresenter.new(I18n.t("global.sac_oauth")).format(:self_registration))
