@@ -2300,8 +2300,8 @@ it:
   filter_navigation/events:
     my_pending_approvals: Le mie approvazioni in sospeso
     my_approval_responsibilities: Le mie responsabilità in materia di approvazione
-    my_main_leader: "Il mio \"%{event_type}\" come linea principale"
-    my_assistant_leader: "Il mio \" %{event_type} \" come linea ausiliaria"
+    my_main_leader: "Le mie \"%{event_type}\" come linea principale"
+    my_assistant_leader: "Le mie \" %{event_type} \" come linea ausiliaria"
 
   groups:
     actions_show_sac_cas:

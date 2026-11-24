@@ -2302,8 +2302,8 @@ fr:
   filter_navigation/events:
     my_pending_approvals: Mes validations en attente
     my_approval_responsibilities: Mes responsabilités en matière de validation
-    my_main_leader: "Mon \"%{event_type}\" comme responsable principal-e"
-    my_assistant_leader: "Mon « %{event_type} » comme ligne auxiliaire"
+    my_main_leader: "Mes \"%{event_type}\" comme responsable principal-e"
+    my_assistant_leader: "Mes « %{event_type} » comme ligne auxiliaire"
 
   groups:
     actions_show_sac_cas:

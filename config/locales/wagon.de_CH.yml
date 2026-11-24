@@ -1018,8 +1018,8 @@ de_CH:
         one: Kommission
         other: Kommission
       group/sektions_kommission_huetten:
-        one: Commissione rifugi
-        other: Commissione rifugi
+        one: Kommissionen Hütten
+        other: Kommissionen Hütten
       group/sektions_kommission_touren:
         one: Kommission Touren
         other: Kommissionen Touren
