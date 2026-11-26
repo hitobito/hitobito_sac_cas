@@ -94,27 +94,6 @@ module SacCas::Event::Course
   PRICE_ATTRIBUTES = %i[price_member price_regular price_subsidized price_special]
 
   prepended do # rubocop:disable Metrics/BlockLength
-    self.manually_sendable_participant_mails = [
-      Event::CourseParticipationMailer::SUMMONED_PARTICIPATION,
-      Event::CourseParticipationMailer::ASSIGNED,
-      Event::CourseParticipationMailer::UNCONFIRMED,
-      Event::CourseParticipationMailer::APPLIED,
-      Event::CourseParticipationMailer::REJECT_REJECTED_PARTICIPATION,
-      Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION,
-      Event::CourseParticipationMailer::CANCELED_PARTICIPATION,
-      Event::CourseParticipationMailer::REMINDER,
-      Event::CourseParticipationMailer::SURVEY,
-      Event::CourseParticipationMailer::EVENT_CANCELED_NO_LEADER,
-      Event::CourseParticipationMailer::EVENT_CANCELED_MINIMUM_PARTICIPANTS,
-      Event::CourseParticipationMailer::EVENT_CANCELED_WEATHER
-    ]
-
-    self.manually_sendable_leader_mails = [
-      Event::CourseMailer::PUBLISHED,
-      Event::CourseParticipationMailer::LEADER_REMINDER_NEXT_WEEK,
-      Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS
-    ]
-
     include I18nEnums
     # all course state specific callbacks are defined here
     include Events::Courses::State
@@ -181,6 +160,27 @@ module SacCas::Event::Course
     self.revoked_participation_states = %w[rejected canceled absent annulled]
 
     self.countable_participation_states = %w[unconfirmed applied assigned summoned attended absent]
+
+    self.manually_sendable_participant_mails = [
+      Event::CourseParticipationMailer::SUMMONED_PARTICIPATION,
+      Event::CourseParticipationMailer::ASSIGNED,
+      Event::CourseParticipationMailer::UNCONFIRMED,
+      Event::CourseParticipationMailer::APPLIED,
+      Event::CourseParticipationMailer::REJECT_REJECTED_PARTICIPATION,
+      Event::CourseParticipationMailer::REJECT_APPLIED_PARTICIPATION,
+      Event::CourseParticipationMailer::CANCELED_PARTICIPATION,
+      Event::CourseParticipationMailer::REMINDER,
+      Event::CourseParticipationMailer::SURVEY,
+      Event::CourseParticipationMailer::EVENT_CANCELED_NO_LEADER,
+      Event::CourseParticipationMailer::EVENT_CANCELED_MINIMUM_PARTICIPANTS,
+      Event::CourseParticipationMailer::EVENT_CANCELED_WEATHER
+    ]
+
+    self.manually_sendable_leader_mails = [
+      Event::CourseMailer::PUBLISHED,
+      Event::CourseParticipationMailer::LEADER_REMINDER_NEXT_WEEK,
+      Event::CourseParticipationMailer::LEADER_REMINDER_8_WEEKS
+    ]
 
     i18n_enum :language, LANGUAGES
     i18n_enum :season, Event::Kind::SEASONS, i18n_prefix: "#{I18N_KIND}.seasons"

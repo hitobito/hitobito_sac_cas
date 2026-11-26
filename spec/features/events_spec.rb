@@ -444,7 +444,6 @@ describe :events, js: true do
           expect(page).to have_no_selector(".ts-dropdown")
         end
 
-        click_tab "Daten"
         expect(page).to have_select "Saison", selected: "Sommer"
         select "Winter"
         expect(page).to have_select "Saison", selected: "Winter"
