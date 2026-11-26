@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -76,10 +76,19 @@ describe "event/participation_contact_datas/_fields.html.haml" do
       expect(dom).not_to have_css "label.required", text: "Notfallkontakt 2 Telefonnummer"
     end
 
-    it "renders privacy notice" do
-      expect(dom).to have_text "ausschliesslich für Notfälle"
+    it "renders privacy notice linking course terms for courses" do
+      expect(dom).to have_text "ausschliesslich für Notfälle im Zusammenhang mit diesem Kurs"
       expect(dom).to have_link "AGB Ausbildung | Schweizer Alpen-Club SAC",
         href: "https://www.sac-cas.ch/de/meta/agb/ausbildung/"
+    end
+
+    it "renders privacy notice linking privacy policy for tours" do
+      allow(view).to receive_messages(event: events(:section_tour))
+
+      expect(dom).to have_text "ausschliesslich für Notfälle im Zusammenhang mit dieser Tour"
+      expect(dom).to have_link "Datenschutzerklärung",
+        href: "https://www.sac-cas.ch/de/meta/datenschutz"
+      expect(dom).not_to have_link "AGB Ausbildung | Schweizer Alpen-Club SAC"
     end
 
     it "hides emergency contacts for events that are neither course nor tour" do

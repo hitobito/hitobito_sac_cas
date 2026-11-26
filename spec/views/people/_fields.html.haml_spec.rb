@@ -1,4 +1,4 @@
-#  Copyright (c) 2012-2025, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2012-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -52,8 +52,8 @@ describe "people/_fields.html.haml" do
 
     it "renders privacy notice" do
       expect(dom).to have_text "ausschliesslich für Notfälle"
-      expect(dom).to have_link "AGB Ausbildung | Schweizer Alpen-Club SAC",
-        href: "https://www.sac-cas.ch/de/meta/agb/ausbildung/"
+      expect(dom).to have_link "Datenschutzerklärung",
+        href: "https://www.sac-cas.ch/de/meta/datenschutz"
     end
 
     it "fills fields with stored values" do
