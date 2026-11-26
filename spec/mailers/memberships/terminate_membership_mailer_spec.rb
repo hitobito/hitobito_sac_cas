@@ -20,8 +20,7 @@ describe Memberships::TerminateMembershipMailer do
 
     it "sends confirmation email to person" do
       expect(mail.to).to match_array(["e.hillary@hitobito.example.com"])
-      expect(mail.bcc).to include(SacCas::MV_EMAIL)
-      expect(mail.bcc).to include("bluemlisalp@sac.ch")
+      expect(mail.bcc).to match_array([SacCas::MV_EMAIL, "bluemlisalp@sac.ch", "matterhorn@sac.ch"])
       expect(mail.subject).to eq "Der SAC Austritt wurde per #{I18n.l(today)} vorgenommen"
       expect(mail.body).to match("Hallo Edmund Hillary,")
       expect(mail.body).to match("Der SAC Austritt wurde per #{I18n.l(today)} vorgenommen.")
@@ -59,6 +58,7 @@ describe Memberships::TerminateMembershipMailer do
 
       it "only sends email to sektion" do
         expect(mail.to).to match_array(["bluemlisalp@sac.ch"])
+        expect(mail.bcc).to match_array([SacCas::MV_EMAIL, "matterhorn@sac.ch"])
       end
     end
   end
