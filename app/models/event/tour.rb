@@ -9,19 +9,6 @@ class Event::Tour < Event # rubocop:disable Metrics/ClassLength
   include ::Events::Tours::State
   include I18nEnums
 
-  self.manually_sendable_participant_mails = [
-    Event::TourParticipationMailer::UNCONFIRMED,
-    Event::TourParticipationMailer::ASSIGNED,
-    Event::TourParticipationMailer::REJECT_PARTICIPATION,
-    Event::TourParticipationMailer::SUMMONED_PARTICIPATION,
-    Event::TourParticipationMailer::CLOSING,
-    Event::TourParticipationMailer::CANCELED_NO_LEADER,
-    Event::TourParticipationMailer::CANCELED_MINIMUM_PARTICIPANTS,
-    Event::TourParticipationMailer::CANCELED_WEATHER,
-    Event::TourParticipationMailer::CANCELED_PARTICIPATION
-  ]
-  self.manually_sendable_leader_mails = manually_sendable_participant_mails
-
   FREIGABE_PENDING_STATES = %w[draft review].freeze
   CANCELED_REASONS = %w[minimum_participants no_leader weather].freeze
 
@@ -55,12 +42,26 @@ class Event::Tour < Event # rubocop:disable Metrics/ClassLength
 
   self.supports_applications = true
   self.supports_invitations = false
+  self.allow_multiple_dates = false
 
   self.possible_participation_states = %w[unconfirmed rejected assigned summoned
     attended absent canceled annulled]
   self.active_participation_states = %w[assigned summoned attended]
   self.revoked_participation_states = %w[rejected canceled absent annulled]
   self.countable_participation_states = %w[unconfirmed assigned summoned attended absent]
+
+  self.manually_sendable_participant_mails = [
+    Event::TourParticipationMailer::UNCONFIRMED,
+    Event::TourParticipationMailer::ASSIGNED,
+    Event::TourParticipationMailer::REJECT_PARTICIPATION,
+    Event::TourParticipationMailer::SUMMONED_PARTICIPATION,
+    Event::TourParticipationMailer::CLOSING,
+    Event::TourParticipationMailer::CANCELED_NO_LEADER,
+    Event::TourParticipationMailer::CANCELED_MINIMUM_PARTICIPANTS,
+    Event::TourParticipationMailer::CANCELED_WEATHER,
+    Event::TourParticipationMailer::CANCELED_PARTICIPATION
+  ]
+  self.manually_sendable_leader_mails = manually_sendable_participant_mails
 
   # Used for Event::TourResource
   attr_accessor :leaders
