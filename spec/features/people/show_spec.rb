@@ -101,9 +101,9 @@ describe "person show page" do
 
     it "shows full person view and can view history" do
       visit group_person_path(group_id: groups(:root).id, id: person_without_role.id)
-      expect(page).to have_link "Mitgliedschaften / Verlauf"
+      expect(page).to have_link "Mitgliedschaft / Biografie"
       expect(page).to have_css "h2", text: "Weitere Angaben"
-      click_on "Mitgliedschaften / Verlauf"
+      click_on "Mitgliedschaft / Biografie"
       expect(page).to have_text "Hier kannst du deine Mitgliedschaften verwalten"
     end
   end

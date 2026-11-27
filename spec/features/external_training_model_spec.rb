@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-#  Copyright (c) 2024, Schweizer Alpen-Club. This file is part of
+#  Copyright (c) 2024-2026, Schweizer Alpen-Club. This file is part of
 #  hitobito_sac_cas and licensed under the Affero General Public License version 3
 #  or later. See the COPYING file at the top-level directory or at
 #  https://github.com/hitobito/hitobito_sac_cas.
@@ -34,6 +34,18 @@ describe "external_training model", js: true do
     accept_alert
     expect(page).to have_css(".alert-success",
       text: "Externe Ausbildung Schwimmkurs wurde erfolgreich gelöscht.")
+  end
+
+  it "shows create button only when section is expanded" do
+    allow_any_instance_of(Person::HistoryController)
+      .to receive(:history_sections_collapsed?).and_return(true)
+    visit history_group_person_path(group_id: mitglieder, id: mitglied)
+
+    section = find("section#external_trainings")
+    expect(section).to have_no_link "Erstellen"
+
+    section.click_button "Externe Ausbildungen"
+    expect(section).to have_link "Erstellen"
   end
 
   it "can multiselect people" do
