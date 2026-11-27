@@ -184,9 +184,16 @@ describe SacCas::Export::Pdf::Passes::Membership do
       expect(text_with_position(analyzer).flatten).to include "DEUTSCHLAND"
     end
 
-    it "does translate the country" do
+    it "does include neighbouring countries in their own language" do
       I18n.with_locale(:fr) do
-        expect(text_with_position(analyzer).flatten).to include "ALLEMAGNE"
+        expect(text_with_position(analyzer).flatten).to include "DEUTSCHLAND"
+      end
+    end
+
+    it "does include other countries in english" do
+      member.update!(country: "ES", zip_code: "28001")
+      I18n.with_locale(:fr) do
+        expect(text_with_position(analyzer).flatten).to include "SPAIN"
       end
     end
 
