@@ -1,5 +1,6 @@
 ## unreleased
 
+* Beim Exportieren von E-Mail Adressen bei Abos werden für Personen ohne eigene E-Mail diejenigen des Familienoberhaupts mit einbezogen. Dadurch entsprechen die exportierten E-Mails denjenigen, an welche ein Mailing-Listen E-Mail weitergeleitet wird (#2710)
 * Der Hinweis zu den Notfallkontakten verlinkt bei der Tour-Anmeldung und auf dem Personenformular zur Datenschutzerklärung statt der AGB Ausbildung (HIT-1816 / hitobito_sac_cas#2779)
 * Haupt- und Hilfsleitung sowie Kontaktperson einer Tour können Teilnehmende hinzufügen (HIT-1803 / hitobito_sac_cas#2767)
 * Markdown-Tabellen in Mailvorlagen werden auch dargestellt, wenn die Zeilen mit Enter statt Shift+Enter getrennt sind (HIT-1746 / hitobito_sac_cas#2690)

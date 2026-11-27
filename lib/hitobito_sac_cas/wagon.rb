@@ -196,6 +196,7 @@ module HitobitoSacCas
 
       ## Domain
       People::UpdateAfterRoleChange.prepend SacCas::People::UpdateAfterRoleChange
+      MailRelay::AddressList.prepend SacCas::MailRelay::AddressList
       OidcClaimSetup.prepend SacCas::OidcClaimSetup
       SearchStrategies::SqlConditionBuilder.matchers["people.birthday"] =
         SearchStrategies::SqlConditionBuilder::BirthdayMatcher
