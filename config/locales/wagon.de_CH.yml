@@ -642,8 +642,6 @@ de_CH:
         emergency_contact_2: Notfallkontakt 2
         emergency_contact_2_name: Notfallkontakt 2 Name
         emergency_contact_2_phone: Notfallkontakt 2 Telefonnummer
-        emergency_contacts_privacy_notice_html: >-
-          Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour bzw. diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unseren <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
       person/phone_number_mobile:
         number: Mobiltelefon
       person/phone_number_landline:
@@ -1783,6 +1781,11 @@ de_CH:
       fields:
         overrides_person_data_info: >-
           Bitte beachte, dass die hier eingegebenen Anpassungen in dein Profil übernommen werden.
+        emergency_contacts_privacy_notice:
+          course_html: >-
+            Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit diesem Kurs verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unseren <a href="https://www.sac-cas.ch/de/meta/agb/ausbildung/" target="_blank" rel="noreferrer">AGB Ausbildung | Schweizer Alpen-Club SAC</a>.
+          tour_html: >-
+            Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit dieser Tour verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unserer <a href="https://www.sac-cas.ch/de/meta/datenschutz" target="_blank" rel="noreferrer">Datenschutzerklärung</a>.
     register:
       email_check:
         enter_email: "" # to not display in sac wagon
@@ -2537,6 +2540,9 @@ de_CH:
             expired: Mitgliedschaft abgelaufen
 
   people:
+    fields_sac_cas:
+      emergency_contacts_privacy_notice_html: >-
+        Die Kontaktdaten werden ausschliesslich für Notfälle im Zusammenhang mit Touren und Kursen verwendet. Bitte informieren Sie die angegebene Person darüber, dass Sie uns ihre Daten als Notfallkontakt übermitteln. Weitere Informationen finden Sie in unserer <a href="https://www.sac-cas.ch/de/meta/datenschutz" target="_blank" rel="noreferrer">Datenschutzerklärung</a>.
     abo_magazin_invoices:
       new:
         title: Die Alpen Rechnung erstellen
