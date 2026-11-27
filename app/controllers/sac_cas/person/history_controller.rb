@@ -8,6 +8,10 @@
 module SacCas::Person::HistoryController
   extend ActiveSupport::Concern
 
+  included do
+    self.event_type_order = [Event, Event::Tour, Event::Course]
+  end
+
   def index
     @external_trainings = ExternalTraining.where(person_id: @person.id)
       .includes(event_kind: :translations)
