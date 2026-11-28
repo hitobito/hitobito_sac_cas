@@ -471,7 +471,12 @@ describe Event::ParticipationsController do
           end
 
           it "sets participation state to applied if no places are available" do
-            event.update!(maximum_participants: 2, participant_count: 2)
+            event.update!(maximum_participants: 2)
+            2.times do
+              participant = Fabricate(:event_participation, event: event, active: true)
+              Fabricate(event.participant_types.first.name.to_sym, participation: participant)
+            end
+            expect(event.reload.participant_count).to eq 2
 
             post :create, params: params.merge(event_participation: {person_id: user.id})
             expect(participation.state).to eq "applied"
